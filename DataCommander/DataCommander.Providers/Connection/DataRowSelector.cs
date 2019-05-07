@@ -20,13 +20,7 @@ namespace DataCommander.Providers.Connection
         {
             var s = row[_column].ToString();
             var length = s.Length;
-            float width;
-
-            if (length <= 256)
-                width = _graphics.MeasureString(s, _font).Width;
-            else
-                width = 100;
-
+            var width = length <= 256 ? _graphics.MeasureString(s, _font).Width : 100;
             return width;
         }
     }

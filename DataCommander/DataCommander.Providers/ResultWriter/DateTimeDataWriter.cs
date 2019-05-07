@@ -8,7 +8,6 @@ namespace DataCommander.Providers.ResultWriter
         public override string ToString(object value)
         {
             string result;
-
             if (value == DBNull.Value)
                 result = new string(' ', Width);
             else

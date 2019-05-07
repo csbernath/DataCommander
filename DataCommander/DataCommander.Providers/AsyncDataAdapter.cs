@@ -156,9 +156,9 @@ namespace DataCommander.Providers
 
                     if (read)
                     {
-                        _rowCount++;
+                        ++_rowCount;
                         dataReaderHelper.GetValues(rows[i]);
-                        i++;
+                        ++i;
 
                         if (i == _rowBlockSize || stopwatch.ElapsedMilliseconds >= 5000)
                         {
@@ -174,9 +174,7 @@ namespace DataCommander.Providers
                         }
                     }
                     else
-                    {
                         exitFromWhile = true;
-                    }
                 }
 
                 if (i != _rowBlockSize)
@@ -189,7 +187,7 @@ namespace DataCommander.Providers
                 _resultWriter.WriteTableEnd();
 
                 if (_rowCount > 0)
-                    _tableCount++;
+                    ++_tableCount;
 
                 if (exception != null)
                     throw exception;

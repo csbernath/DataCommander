@@ -10,7 +10,6 @@ namespace DataCommander.Providers.Connection
     public abstract class ConnectionBase
     {
         public IDbConnection Connection { get; protected set; }
-
         public abstract Task OpenAsync(CancellationToken cancellationToken);
 
         public void Close()
@@ -20,15 +19,10 @@ namespace DataCommander.Providers.Connection
         }
 
         public abstract IDbCommand CreateCommand();
-
         public abstract string ConnectionName { get; set; }
-
         public string ConnectionString => Connection.ConnectionString;
-
         public abstract string Caption { get; }
-
         public abstract string DataSource { get; }
-
         protected abstract void SetDatabase(string database);
 
         public string Database
@@ -54,18 +48,7 @@ namespace DataCommander.Providers.Connection
         }
 
         public abstract int TransactionCount { get; }
-
         protected void InvokeInfoMessage(IEnumerable<InfoMessage> messages) => InfoMessage?.Invoke(messages);
-
-        protected void InvokeDatabaseChanged(string database)
-        {
-            if (DatabaseChanged != null)
-            {
-                var args = new DatabaseChangedEventArgs {Database = database};
-                DatabaseChanged(this, args);
-            }
-        }
-
         public event InfoMessageEventHandler InfoMessage;
         public event EventHandler<DatabaseChangedEventArgs> DatabaseChanged;
     }

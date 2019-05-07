@@ -9,19 +9,12 @@ using Foundation.Linq;
 
 namespace DataCommander.Providers.Query
 {
-    /// <summary>
-    /// Summary description for MemberListBox.
-    /// </summary>
     internal sealed class MemberListBox : UserControl, IKeyboardHandler
     {
         private readonly CompletionForm _completionForm;
         private readonly QueryTextBox _textBox;
         private GetCompletionResponse _response;
         private string _prefix = string.Empty;
-
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
         private readonly Container _components = null;
 
         public MemberListBox(CompletionForm completionForm, QueryTextBox textBox, ColorTheme colorTheme)
@@ -194,15 +187,9 @@ namespace DataCommander.Providers.Query
             var hWnd = ListBox.Handle.ToInt32();
             NativeMethods.SendMessage(hWnd, (int) NativeMethods.Message.Keyboard.KeyDown, (int) e.KeyCode, 0);
 
-            if (e.KeyCode == Keys.Down ||
-                e.KeyCode == Keys.Up ||
-                e.KeyCode == Keys.PageDown ||
-                e.KeyCode == Keys.PageUp ||
-                e.KeyCode == Keys.Home ||
-                e.KeyCode == Keys.End)
+            if (e.KeyCode.In(Keys.Down, Keys.Up, Keys.PageDown, Keys.PageUp, Keys.Home, Keys.End))
             {
                 handled = true;
-
                 if (e.KeyCode == Keys.Down && e.Shift)
                 {
                     var startIndex = ListBox.SelectedIndex + 1;
@@ -253,7 +240,6 @@ namespace DataCommander.Providers.Query
             if (index >= 0)
             {
                 ListBox.SelectedIndex = index;
-
                 if (index >= 3)
                 {
                     // scrolling 3 items up
@@ -280,35 +266,33 @@ namespace DataCommander.Providers.Query
 
         private static string GetCamelHumps(string source)
         {
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
             for (var i = 0; i < source.Length; ++i)
             {
                 var c = source[i];
 
                 if (i == 0)
-                    sb.Append(c);
+                    stringBuilder.Append(c);
                 else
                 {
                     if (char.GetUnicodeCategory(c) == UnicodeCategory.UppercaseLetter)
-                        sb.Append(c);
+                        stringBuilder.Append(c);
                 }
             }
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
 
         private void FindNext(int startIndex)
         {
             var items = ListBox.Items.Cast<ListBoxItem<IObjectName>>().ToList();
-
             var index = LinearSearch.IndexOf(startIndex, items.Count - 1, currentIndex =>
             {
                 var item = items[currentIndex];
                 var name = item.Item.UnquotedName;
                 return name.IndexOf(_prefix) >= 0;
             });
-
             if (index >= 0)
                 ListBox.SelectedIndex = index;
         }
@@ -322,7 +306,6 @@ namespace DataCommander.Providers.Query
                 var name = item.Item.UnquotedName;
                 return name.IndexOf(_prefix) >= 0;
             });
-
             if (index >= 0)
                 ListBox.SelectedIndex = index;
         }

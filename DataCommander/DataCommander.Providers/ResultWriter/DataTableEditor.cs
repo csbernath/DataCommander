@@ -60,7 +60,7 @@ namespace DataCommander.Providers.ResultWriter
             GarbageMonitor.Default.Add("DataTableEditor", this);
 
             if (colorTheme != null)
-                ColorThemeApplyer.Apply(_dataGrid, colorTheme);
+                ColorThemeApplier.Apply(_dataGrid, colorTheme);
         }
 
         #endregion

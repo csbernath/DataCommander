@@ -8,21 +8,9 @@ using System.Web.UI.HtmlControls;
 
 namespace DataCommander.Providers.ResultWriter
 {
-    /// <summary>
-    /// Summary description for HtmlFormatter.
-    /// </summary>
     internal static class HtmlFormatter
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataView"></param>
-        /// <param name="columnIndexes"></param>
-        /// <param name="textWriter"></param>
-        public static void Write(
-            DataView dataView,
-            int[] columnIndexes,
-            TextWriter textWriter)
+        public static void Write(DataView dataView, int[] columnIndexes, TextWriter textWriter)
         {
             var htmlTable = new HtmlTable();
             htmlTable.Border = 1;
@@ -79,10 +67,10 @@ namespace DataCommander.Providers.ResultWriter
                     var cell = new HtmlTableCell();
                     var columnIndex = columnIndexes[i];
                     var dataColumn = columns[columnIndex];
-                    var type = (Type)dataColumn.ExtendedProperties[0];
+                    var type = (Type) dataColumn.ExtendedProperties[0];
                     if (type == null)
                     {
-                        type = (Type)dataColumn.DataType;
+                        type = (Type) dataColumn.DataType;
                     }
 
                     var typeCode = Type.GetTypeCode(type);

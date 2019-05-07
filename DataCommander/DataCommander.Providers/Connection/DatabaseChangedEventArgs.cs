@@ -4,6 +4,7 @@ namespace DataCommander.Providers.Connection
 {
     public class DatabaseChangedEventArgs : EventArgs
     {
-        public string Database;
+        public readonly string Database;
+        public DatabaseChangedEventArgs(string database) => Database = database;
     }
 }

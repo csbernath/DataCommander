@@ -6,17 +6,14 @@ namespace DataCommander.Providers.Query
     {
         private readonly Func<T, string> _toString;
 
+        public readonly T Item;
+
         public ListBoxItem(T item, Func<T, string> toString)
         {
             Item = item;
             _toString = toString;
         }
 
-        public T Item { get; }
-
-        public override string ToString()
-        {
-            return _toString(Item);
-        }
+        public override string ToString() => _toString(Item);
     }
 }

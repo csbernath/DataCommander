@@ -4,45 +4,24 @@ using System.Windows.Forms;
 
 namespace DataCommander.Providers.Connection
 {
-    /// <summary>
-    /// Summary description for PasswordForm.
-    /// </summary>
     public class PasswordForm : Form
     {
         private TextBox _tbPassword;
         private Button _btnOk;
         private Button _btnCancel;
         private Label _label1;
-
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private readonly Container _components = null;
 
         public PasswordForm()
         {
-            //
-            // Required for Windows Form Designer support
-            //
             InitializeComponent();
-
-            //
-            // TODO: Add any constructor code after InitializeComponent call
-            //
         }
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 if (_components != null)
-                {
                     _components.Dispose();
-                }
-            }
 
             base.Dispose(disposing);
         }

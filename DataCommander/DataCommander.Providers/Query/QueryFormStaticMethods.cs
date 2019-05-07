@@ -20,31 +20,18 @@ namespace DataCommander.Providers.Query
             {
                 var columnIndexes = new int[dataTable.Columns.Count];
                 for (var i = 0; i < columnIndexes.Length; i++)
-                {
                     columnIndexes[i] = i;
-                }
                 HtmlFormatter.Write(dataTable.DefaultView, columnIndexes, streamWriter);
             }
+
             var htmlTextBox = new HtmlTextBox();
             htmlTextBox.Navigate(fileName);
 
-            //while (webBrowser.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
-            //{
-            //    Application.DoEvents();
-            //}
-
-            //File.Delete(fileName);
             return htmlTextBox;
         }
 
-        public static Control CreateControlFromDataTable(
-            DbCommandBuilder commandBuilder,
-            DataTable dataTable,
-            GetTableSchemaResult getTableSchemaResult,
-            ResultWriterType tableStyle,
-            bool readOnly,
-            ToolStripStatusLabel toolStripStatusLabel,
-            ColorTheme colorTheme)
+        public static Control CreateControlFromDataTable(DbCommandBuilder commandBuilder, DataTable dataTable, GetTableSchemaResult getTableSchemaResult,
+            ResultWriterType tableStyle, bool readOnly, ToolStripStatusLabel toolStripStatusLabel, ColorTheme colorTheme)
         {
             Control control;
 
@@ -65,6 +52,7 @@ namespace DataCommander.Providers.Query
                 default:
                     throw new NotImplementedException();
             }
+
             return control;
         }
 
@@ -104,7 +92,7 @@ namespace DataCommander.Providers.Query
                     Width = -2
                 };
 
-                var type = (Type)dataColumn.ExtendedProperties[0];
+                var type = (Type) dataColumn.ExtendedProperties[0];
 
                 if (type == null)
                 {
@@ -237,7 +225,7 @@ namespace DataCommander.Providers.Query
                         break;
                     }
 
-                    if ((columnIndex + 1)%columnCount != 0)
+                    if ((columnIndex + 1) % columnCount != 0)
                     {
                         columnIndex++;
                     }

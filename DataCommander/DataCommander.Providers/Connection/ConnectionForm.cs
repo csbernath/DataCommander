@@ -25,10 +25,6 @@ namespace DataCommander.Providers.Connection
         private StatusStrip _statusBar;
         private readonly DataTable _dataTable = new DataTable();
         private bool _isDirty;
-
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private readonly Container _components = new Container();
 
         public ConnectionForm(StatusStrip statusBar, ColorTheme colorTheme)
@@ -101,15 +97,12 @@ namespace DataCommander.Providers.Connection
                 BackColor = colorTheme.BackColor;
                 ForeColor = colorTheme.ForeColor;
 
-                ColorThemeApplyer.Apply(_dataGrid, colorTheme);
+                ColorThemeApplier.Apply(_dataGrid, colorTheme);
             }
         }
 
         public ConnectionProperties ConnectionProperties { get; private set; }
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -235,14 +228,10 @@ namespace DataCommander.Providers.Connection
         private void Copy_Click(object sender, EventArgs e)
         {
             var stringWriter = new StringWriter();
-            var xmlTextWriter = new XmlTextWriter(stringWriter);
-            xmlTextWriter.Formatting = Formatting.Indented;
+            var xmlTextWriter = new XmlTextWriter(stringWriter) {Formatting = Formatting.Indented};
 
             foreach (var node in SelectedConfigurationNodes)
-            {
-                var connectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(node);
                 ConfigurationWriter.WriteNode(xmlTextWriter, node);
-            }
 
             var s = stringWriter.ToString();
             Clipboard.SetText(s);
@@ -266,16 +255,10 @@ namespace DataCommander.Providers.Connection
                 var configurationReader = new ConfigurationReader();
                 var propertyFolder = configurationReader.Read(xmlTextReader);
                 propertyFolder.Write(TraceWriter.Instance);
-                IEnumerable<ConfigurationNode> configurationNodes;
 
-                if (propertyFolder.ChildNodes.Count > 0)
-                {
-                    configurationNodes = propertyFolder.ChildNodes;
-                }
-                else
-                {
-                    configurationNodes = new[] {propertyFolder};
-                }
+                var configurationNodes = propertyFolder.ChildNodes.Count > 0
+                    ? (IEnumerable<ConfigurationNode>) propertyFolder.ChildNodes
+                    : new[] {propertyFolder};
 
                 foreach (var configurationNode in configurationNodes)
                 {
@@ -341,15 +324,11 @@ namespace DataCommander.Providers.Connection
             }
         }
 
-        private void MoveDown_Click(object sender, EventArgs e)
-        {
-            MoveDown();
-        }
+        private void MoveDown_Click(object sender, EventArgs e) => MoveDown();
 
         private void MoveUp()
         {
             var index = SelectedIndex;
-
             if (index > 0)
             {
                 var connectionsFolder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
@@ -366,10 +345,7 @@ namespace DataCommander.Providers.Connection
             }
         }
 
-        private void MoveUp_Click(object sender, EventArgs e)
-        {
-            MoveUp();
-        }
+        private void MoveUp_Click(object sender, EventArgs e) => MoveUp();
 
         private void dataGrid_MouseClick(object sender, MouseEventArgs e)
         {
@@ -393,8 +369,11 @@ namespace DataCommander.Providers.Connection
                     contextMenu.Items.Add(menuItem);
                 }
 
-                menuItem = new ToolStripMenuItem("&Paste", null, Paste_Click);
-                contextMenu.Items.Add(menuItem);
+                if (Clipboard.ContainsText())
+                {
+                    menuItem = new ToolStripMenuItem("&Paste", null, Paste_Click);
+                    contextMenu.Items.Add(menuItem);
+                }
 
                 if (rowIndex >= 0)
                 {
@@ -600,24 +579,6 @@ namespace DataCommander.Providers.Connection
         {
             Delete();
             e.Cancel = true;
-        }
-    }
-
-    internal static class ColorThemeApplyer
-    {
-        public static void Apply(DataGridView dataGridView, ColorTheme colorTheme)
-        {
-            dataGridView.BackgroundColor = colorTheme.BackColor;
-            dataGridView.BackColor = colorTheme.BackColor;
-            dataGridView.ForeColor = colorTheme.ForeColor;
-
-            dataGridView.EnableHeadersVisualStyles = true;
-            dataGridView.ColumnHeadersDefaultCellStyle.BackColor = colorTheme.BackColor;
-            dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = colorTheme.ForeColor;
-            dataGridView.RowsDefaultCellStyle.BackColor = colorTheme.BackColor;
-            dataGridView.RowsDefaultCellStyle.ForeColor = colorTheme.ForeColor;
-            dataGridView.RowHeadersDefaultCellStyle.BackColor = colorTheme.BackColor;
-            dataGridView.RowHeadersDefaultCellStyle.ForeColor = colorTheme.BackColor;
         }
     }
 }
