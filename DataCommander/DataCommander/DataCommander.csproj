@@ -192,6 +192,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\.NetFramework-4.8\Foundation.NetFramework-4.8.csproj">
+      <Project>{b8934b63-d579-4ee8-b352-13134eb8cc54}</Project>
+      <Name>Foundation.NetFramework-4.8</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataCommander.Providers\DataCommander.Providers.csproj">
       <Project>{31A30A80-D1B6-4867-A65E-188DE9E912C8}</Project>
       <Name>DataCommander.Providers</Name>
@@ -223,10 +227,6 @@
     <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Log\Foundation.Log.csproj">
       <Project>{6f50a714-af20-480e-a6ca-548ab4e27e28}</Project>
       <Name>Foundation.Log</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\.NetFramework-4.7.2\Foundation.NetFramework-4.8.csproj">
-      <Project>{b8934b63-d579-4ee8-b352-13134eb8cc54}</Project>
-      <Name>Foundation.NetFramework-4.8</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
