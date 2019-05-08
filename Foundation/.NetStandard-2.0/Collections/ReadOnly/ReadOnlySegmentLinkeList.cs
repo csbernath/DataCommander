@@ -4,12 +4,12 @@ using Foundation.Assertions;
 
 namespace Foundation.Collections.ReadOnly
 {
-    public class ReadOnlySegmentLinkedList<T> : IEnumerable<T>
+    public class ReadOnlySegmentLinkedList<T> : IReadOnlyCollection<T>
     {
         private readonly LinkedList<T[]> _linkedList;
         private readonly int _count;
 
-        public ReadOnlySegmentLinkedList(LinkedList<T[]> linkedList, int count)
+        internal ReadOnlySegmentLinkedList(LinkedList<T[]> linkedList, int count)
         {
             Assert.IsNotNull(linkedList);
             Assert.IsInRange(count >= 0);
