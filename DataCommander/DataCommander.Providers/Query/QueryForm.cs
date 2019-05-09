@@ -1732,15 +1732,21 @@ namespace DataCommander.Providers.Query
                     configurationEnd = commandText.LastIndexOf("}", configurationEnd);
                     var configuration = commandText.Substring(configurationStart, configurationEnd - configurationStart + 1);
                     query = JsonConvert.DeserializeObject<QueryConfiguration.Query>(configuration);
-
-                    var parametersStart = configurationEnd + 7;
-                    var parametersEnd = commandText.IndexOf("-- CommandText", parametersStart) - 3;
-                    if (parametersEnd >= 0)
+                    var commentEnd = commandText.IndexOf("*/", configurationEnd);
+                    if (commentEnd >= 0)
                     {
-                        var parametersCommandText = commandText.Substring(parametersStart, parametersEnd - parametersStart + 1);
-                        var tokens = SqlParser.Tokenize(parametersCommandText);
-                        parameters = ToDbQueryParameters(tokens);
-                        resultCommandText = commandText.Substring(parametersEnd + 19);
+                        var parametersStart = commentEnd + 2;
+                        var parametersEnd = commandText.IndexOf("\r\n-- CommandText\r\n", parametersStart);
+                        if (parametersStart < parametersEnd)
+                        {
+                            var parametersCommandText = commandText.Substring(parametersStart, parametersEnd - parametersStart + 1);
+                            var tokens = SqlParser.Tokenize(parametersCommandText);
+                            parameters = ToDbQueryParameters(tokens);
+                        }
+                        else
+                            parameters = ReadOnlyList<DbRequestParameter>.Empty;
+
+                        resultCommandText = commandText.Substring(parametersEnd + 18);
                         succeeded = true;
                     }
                 }
@@ -4160,10 +4166,10 @@ namespace DataCommander.Providers.Query
         {
             const string text = @"/* Query Configuration
 {
-  ""Using"": ""using Nexon.Foundation.Assertions;
-using Nexon.Foundation.Collections.ReadOnly;
-using Nexon.Foundation.Data;
-using Nexon.Foundation.Data.SqlClient;"",
+  ""Using"": ""using Foundation.Assertions;
+using Foundation.Collections.ReadOnly;
+using Foundation.Data;
+using Foundation.Data.SqlClient;"",
   ""Namespace"": ""Company.Product.CommandOrQueryName"",
   ""Name"": ""CommandOrQueryName"",
   ""Results"": [
