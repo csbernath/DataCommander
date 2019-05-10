@@ -5,6 +5,7 @@
         Text,
         DataGrid,
         Html,
+        HtmlFile,
         Rtf,
         ListView,
         Excel,

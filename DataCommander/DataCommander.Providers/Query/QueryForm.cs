@@ -1622,6 +1622,11 @@ namespace DataCommander.Providers.Query
                         resultWriter = _dataSetResultWriter;
                         break;
 
+                    case ResultWriterType.HtmlFile:
+                        maxRecords = int.MaxValue;
+                        resultWriter = new HtmlResultWriter(AddInfoMessage);
+                        break;
+
                     case ResultWriterType.Rtf:
                         maxRecords = _wordMaxRecords;
                         _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
