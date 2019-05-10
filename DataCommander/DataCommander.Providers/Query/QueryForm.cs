@@ -1398,9 +1398,7 @@ namespace DataCommander.Providers.Query
                     //treeNode.ImageIndex
 
                     if (!child.IsLeaf)
-                    {
                         treeNode.Nodes.Add(new TreeNode());
-                    }
 
                     parent.Add(treeNode);
                     count++;
@@ -1417,20 +1415,16 @@ namespace DataCommander.Providers.Query
             WriteInfoMessageToLog(infoMessage);
 
             if (infoMessage.Severity == InfoMessageSeverity.Error)
-            {
                 _errorCount++;
-            }
 
             _infoMessages.Enqueue(infoMessage);
             _enqueueEvent.Set();
         }
 
-        private void AddInfoMessages(IEnumerable<InfoMessage> infoMessages)
+        private void AddInfoMessages(IReadOnlyCollection<InfoMessage> infoMessages)
         {
             foreach (var infoMessage in infoMessages)
-            {
                 WriteInfoMessageToLog(infoMessage);
-            }
 
             var errorCount =
                 (from infoMessage in infoMessages
@@ -1439,9 +1433,7 @@ namespace DataCommander.Providers.Query
             _errorCount += errorCount;
 
             foreach (var infoMessage in infoMessages)
-            {
                 _infoMessages.Enqueue(infoMessage);
-            }
 
             _enqueueEvent.Set();
         }
@@ -1466,7 +1458,7 @@ namespace DataCommander.Providers.Query
             _messagesTextBox.AppendText(stringBuilder.ToString());
         }
 
-        private void Connection_InfoMessage(IEnumerable<InfoMessage> messages) => AddInfoMessages(messages);
+        private void Connection_InfoMessage(IReadOnlyCollection<InfoMessage> messages) => AddInfoMessages(messages);
 
         internal static string DbValue(object value)
         {
@@ -1501,9 +1493,7 @@ namespace DataCommander.Providers.Query
             sb.Append(Connection.Caption);
 
             if (_fileName != null)
-            {
                 sb.AppendFormat(" - {0}", _fileName);
-            }
 
             Text = sb.ToString();
 
@@ -1616,6 +1606,18 @@ namespace DataCommander.Providers.Query
                         resultWriter = new DataGridViewResultWriter();
                         break;
 
+                    case ResultWriterType.Excel:
+                        maxRecords = int.MaxValue;
+                        resultWriter = new ExcelResultWriter(Provider, AddInfoMessage);
+                        _tabControl.SelectedTab = _messagesTabPage;
+                        break;
+
+                    case ResultWriterType.File:
+                        maxRecords = int.MaxValue;
+                        resultWriter = new FileResultWriter(_textBoxWriter);
+                        _tabControl.SelectedTab = _messagesTabPage;
+                        break;
+
                     case ResultWriterType.Html:
                         maxRecords = _htmlMaxRecords;
                         _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
@@ -1627,42 +1629,39 @@ namespace DataCommander.Providers.Query
                         resultWriter = new HtmlResultWriter(AddInfoMessage);
                         break;
 
-                    case ResultWriterType.Rtf:
-                        maxRecords = _wordMaxRecords;
-                        _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
-                        resultWriter = _dataSetResultWriter;
-                        break;
-
-                    case ResultWriterType.File:
+                    case ResultWriterType.JsonFile:
                         maxRecords = int.MaxValue;
-                        resultWriter = new FileResultWriter(_textBoxWriter);
-                        _tabControl.SelectedTab = _messagesTabPage;
-                        break;
-
-                    case ResultWriterType.SqLite:
-                        maxRecords = int.MaxValue;
-                        var tableName = _sqlStatement.FindTableName();
-                        resultWriter = new SqLiteResultWriter(_textBoxWriter, tableName);
-                        _tabControl.SelectedTab = _messagesTabPage;
+                        resultWriter = new JsonResultWriter(AddInfoMessage);
                         break;
 
                     case ResultWriterType.InsertScriptFile:
+                    {
                         maxRecords = int.MaxValue;
-                        tableName = _sqlStatement.FindTableName();
+                        var tableName = _sqlStatement.FindTableName();
                         resultWriter = new InsertScriptFileWriter(tableName, _textBoxWriter);
                         _tabControl.SelectedTab = _messagesTabPage;
-                        break;
-
-                    case ResultWriterType.Excel:
-                        maxRecords = int.MaxValue;
-                        resultWriter = new ExcelResultWriter(Provider, AddInfoMessage);
-                        _tabControl.SelectedTab = _messagesTabPage;
+                    }
                         break;
 
                     case ResultWriterType.Log:
                         maxRecords = int.MaxValue;
                         resultWriter = new LogResultWriter(AddInfoMessage);
                         _tabControl.SelectedTab = _messagesTabPage;
+                        break;
+
+                    case ResultWriterType.Rtf:
+                        maxRecords = _wordMaxRecords;
+                        _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
+                        resultWriter = _dataSetResultWriter;
+                        break;
+
+                    case ResultWriterType.SqLite:
+                    {
+                        maxRecords = int.MaxValue;
+                        var tableName = _sqlStatement.FindTableName();
+                        resultWriter = new SqLiteResultWriter(_textBoxWriter, tableName);
+                        _tabControl.SelectedTab = _messagesTabPage;
+                    }
                         break;
 
                     default:

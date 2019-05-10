@@ -14,10 +14,7 @@ namespace DataCommander.Providers.ResultWriter
         private readonly IResultWriter _logResultWriter;
         private HtmlTextWriter _htmlTextWriter;
 
-        public HtmlResultWriter(Action<InfoMessage> addInfoMessage)
-        {
-            _logResultWriter = new LogResultWriter(addInfoMessage);
-        }
+        public HtmlResultWriter(Action<InfoMessage> addInfoMessage) => _logResultWriter = new LogResultWriter(addInfoMessage);
 
         void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);
         void IResultWriter.AfterExecuteReader(int fieldCount) => _logResultWriter.AfterExecuteReader(fieldCount);

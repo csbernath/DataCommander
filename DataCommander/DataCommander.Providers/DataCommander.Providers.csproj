@@ -323,6 +323,7 @@
     <Compile Include="ResultWriter\FieldTypeDictionary.cs" />
     <Compile Include="ResultWriter\HtmlEntity.cs" />
     <Compile Include="ResultWriter\HtmlResultWriter.cs" />
+    <Compile Include="ResultWriter\JsonResultWriter.cs" />
     <Compile Include="ResultWriter\MyDataObject.cs" />
     <Compile Include="QueryConfiguration\Query.cs" />
     <Compile Include="ResultWriter\SqlBulkCopyResultWriter.cs" />

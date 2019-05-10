@@ -2,5 +2,5 @@
 
 namespace DataCommander.Providers.Connection
 {
-    public delegate void InfoMessageEventHandler(IEnumerable<InfoMessage> messages);
+    public delegate void InfoMessageEventHandler(IReadOnlyCollection<InfoMessage> messages);
 }

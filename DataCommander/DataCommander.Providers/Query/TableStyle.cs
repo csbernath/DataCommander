@@ -2,17 +2,18 @@
 {
     public enum ResultWriterType
     {
-        Text,
         DataGrid,
-        Html,
-        HtmlFile,
-        Rtf,
-        ListView,
+        DataGridView,
         Excel,
         File,
-        SqLite,
+        Html,
+        HtmlFile,
         InsertScriptFile,
-        DataGridView,
-        Log
+        JsonFile,
+        ListView,
+        Log,
+        Rtf,
+        SqLite,
+        Text
     }
 }

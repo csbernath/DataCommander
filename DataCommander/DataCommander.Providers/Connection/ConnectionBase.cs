@@ -48,7 +48,7 @@ namespace DataCommander.Providers.Connection
         }
 
         public abstract int TransactionCount { get; }
-        protected void InvokeInfoMessage(IEnumerable<InfoMessage> messages) => InfoMessage?.Invoke(messages);
+        protected void InvokeInfoMessage(IReadOnlyCollection<InfoMessage> messages) => InfoMessage?.Invoke(messages);
         public event InfoMessageEventHandler InfoMessage;
         public event EventHandler<DatabaseChangedEventArgs> DatabaseChanged;
     }
