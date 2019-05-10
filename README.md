@@ -16,12 +16,15 @@ Create insert statements from select|Yes|No
 Drag & drop: file to binary constant|Yes|No
 Edit rows: generate change script|Yes|No
 Object explorer: find item|Yes|No
-DbQuery (C# micro-ORM query generator)|Yes|No
+C# result schema viewer|Yes|No	
+Command/Query builder (C# micro-ORM query generator)|Yes|No
 Performance: startup|Fast|Slow
-Result: save as Excel|Yes|No
-Result: save as HTML|Yes|No
-Result: filter in memory|Yes|No
-Result: sort in memory|Yes|No
+Results to HTML File|Yes|No
+Results to JSON File|Yes|No
+Save as Excel|Yes|No
+Save as HTML|Yes|No
+Result filter in memory|Yes|No
+Result sort in memory|Yes|No
 
 ## [Object-relational mapping (ORM)](https://en.wikipedia.org/wiki/Object-relational_mapping)
 
