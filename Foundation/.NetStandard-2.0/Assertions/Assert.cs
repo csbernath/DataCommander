@@ -528,6 +528,12 @@ namespace Foundation.Assertions
                 throw new ArgumentNullException(paramName);
         }
 
+        public static void IsNull<T>(T value) where T : class
+        {
+            if (value != null)
+                throw new ArgumentException();
+        }
+
         public static void IsInRange(bool condition)
         {
             if (!condition)

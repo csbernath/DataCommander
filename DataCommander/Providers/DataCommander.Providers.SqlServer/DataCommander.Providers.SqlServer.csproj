@@ -211,7 +211,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects">
-      <Version>140.17283.0</Version>
+      <Version>150.18118.0</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

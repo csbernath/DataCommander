@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SqlTypes;
 using System.Globalization;
+using Foundation.Core;
 
 namespace Foundation.Data.SqlClient
 {
@@ -10,6 +11,13 @@ namespace Foundation.Data.SqlClient
         private const byte False = 0;
 
         public static byte ToTSqlBit(this bool source) => source ? True : False;
+
+        public static string ToTSqlDate(this SmallDate source)
+        {
+            var dateTime = source.ToDateTime();
+            const string format = "yyyyMMdd";
+            return $"'{dateTime.ToString(format, CultureInfo.InvariantCulture)}'";
+        }
 
         public static string ToTSqlDateTime(this DateTime source)
         {

@@ -1,7 +1,7 @@
 ﻿namespace Foundation.Data
 {
-    internal static class SqlNull
+    public static class SqlNull
     {
-        internal const string NullString = "null";
+        public const string NullString = "null";
     }
 }
