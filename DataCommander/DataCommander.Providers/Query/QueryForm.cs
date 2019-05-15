@@ -1785,7 +1785,7 @@ namespace DataCommander.Providers.Query
 
                 isNullable = true;
 
-                for (var i = 5; i < declaration.Count; ++i)
+                for (var i = 3; i < declaration.Count; ++i)
                 {
                     if (declaration[i].Value == "/" && declaration[i + 1].Value == "*" &&
                         declaration[i + 2].Value.ToLower() == "not" && declaration[i + 3].Value.ToLower() == "null" &&

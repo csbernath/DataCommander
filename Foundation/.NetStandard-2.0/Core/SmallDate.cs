@@ -103,6 +103,8 @@ namespace Foundation.Core
         }
 
         public int CompareTo(SmallDate other) => _value.CompareTo(other._value);
+
+        [Pure]
         private static DateTime ToDateTime(ushort value) => MinDateTime.AddDays(value);
 
         private static ushort ToSmallDateValue(DateTime dateTime)
