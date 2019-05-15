@@ -38,7 +38,11 @@ namespace Foundation.Data
             var baseColumnName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.BaseColumnName);
             var baseSchemaName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.BaseSchemaName);
             var baseTableName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.BaseTableName);
-            var dataType = (Type) schemaTableRow[SchemaTableColumn.DataType];
+
+            var dataTypeObject = schemaTableRow[SchemaTableColumn.DataType];
+            var dataType = dataTypeObject != DBNull.Value
+                ? (Type) dataTypeObject
+                : null;
             var allowDbNull = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.AllowDBNull);
             var providerType = schemaTableRow.GetValueField<int>(SchemaTableColumn.ProviderType);
 
