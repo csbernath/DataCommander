@@ -1736,10 +1736,10 @@ namespace DataCommander.Providers.Query
                     configurationEnd = commandText.LastIndexOf("}", configurationEnd);
                     var configuration = commandText.Substring(configurationStart, configurationEnd - configurationStart + 1);
                     query = JsonConvert.DeserializeObject<QueryConfiguration.Query>(configuration);
-                    var commentEnd = commandText.IndexOf("*/", configurationEnd);
+                    var commentEnd = commandText.IndexOf("*/\r\n", configurationEnd);
                     if (commentEnd >= 0)
                     {
-                        var parametersStart = commentEnd + 2;
+                        var parametersStart = commentEnd + 4;
                         var parametersEnd = commandText.IndexOf("\r\n-- CommandText\r\n", parametersStart);
                         if (parametersStart < parametersEnd)
                         {
@@ -1785,7 +1785,7 @@ namespace DataCommander.Providers.Query
 
                 isNullable = true;
 
-                for (var i = 0; i < declaration.Count - 6; ++i)
+                for (var i = 5; i < declaration.Count; ++i)
                 {
                     if (declaration[i].Value == "/" && declaration[i + 1].Value == "*" &&
                         declaration[i + 2].Value.ToLower() == "not" && declaration[i + 3].Value.ToLower() == "null" &&

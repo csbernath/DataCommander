@@ -16,7 +16,7 @@ Create insert statements from select|Yes|No
 Drag & drop: file to binary constant|Yes|No
 Edit rows: generate change script|Yes|No
 Object explorer: find item|Yes|No
-C# result schema viewer|Yes|No	
+C# result schema viewer|Yes|No
 Command/Query builder (C# micro-ORM query generator)|Yes|No
 Performance: startup|Fast|Slow
 Results to HTML File|Yes|No
@@ -28,11 +28,20 @@ Result sort in memory|Yes|No
 
 ## [Object-relational mapping (ORM)](https://en.wikipedia.org/wiki/Object-relational_mapping)
 
-The program generates C# (requires .NET Standard 2.0 + Foundation assembly) source code wrapper for a SQL query. The query is similar to a CQRS Command/Query:
+The program generates C# (requires .NET Standard 2.0 + Foundation assembly) source code wrapper for a SQL command/query. The query is similar to a CQRS Command/Query:
 - Command/Query class (command/query input parameters)
 - QueryResult class (query output/result)
 - (Command/Query)Handler class (the handler which executes the command/query)
 
+### Special features of Data Commander ORM
+ORM Feature|Data Commander|Dapper|NHibernate
+---|---|---|---
+Typed input parameters|Yes|No|No
+Typed result set|Yes|No|No
+Debuggable|Yes|No|No
+Performance|Yes|No|No
+
+### How to use the ORM generator
 Download and restore the SQL Server 2016 sample database from https://github.com/microsoft/sql-server-samples
 
 Open the database with Data Commander and execute the following command:
@@ -40,6 +49,10 @@ Open the database with Data Commander and execute the following command:
 ```SQL
 /* Query Configuration
 {
+  "Using": "using Foundation.Assertions;
+using Foundation.Collections.ReadOnly;
+using Foundation.Data;
+using Foundation.Data.SqlClient;",
   "Namespace": "Foundation.NetStandard20.Test.GetPersonQueryNamespace",
   "Name": "GetCustomerInvoices",
   "Results": [
@@ -48,7 +61,7 @@ Open the database with Data Commander and execute the following command:
   ]
 }
 */
-declare @customerId int = 1
+declare @customerId int = 1 /*not null*/
 declare @invoiceDate date = '20160101'
 -- CommandText
 select
@@ -65,38 +78,40 @@ from Sales.Invoices i
 where
     i.CustomerID = @customerId
     and i.InvoiceDate >= @invoiceDate
-order by i.CustomerID,i.InvoiceID```
+order by i.CustomerID,i.InvoiceID
 ```
 The program generates C# classes in one file:
 ```C#
 using System;
-using System.Collections.ObjectModel;
 using System.Data;
+using System.Data.Common;
 using System.Threading;
+using System.Threading.Tasks;
 using Foundation.Assertions;
+using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 
-namespace Foundation.NetStandard20.Test.GetCustomerInvoicesNamespace
+namespace Foundation.NetStandard20.Test.GetPersonQueryNamespace
 {
-    public sealed class GetCustomerInvoicesQuery
+    public sealed class GetCustomerInvoicesDbQuery
     {
         public readonly int CustomerId;
-        public readonly DateTime InvoiceDate;
-    
-        public GetCustomerInvoicesQuery(int customerId, DateTime invoiceDate)
+        public readonly DateTime? InvoiceDate;
+
+        public GetCustomerInvoicesDbQuery(int customerId, DateTime? invoiceDate)
         {
             CustomerId = customerId;
             InvoiceDate = invoiceDate;
         }
     }
 
-    public sealed class GetCustomerInvoicesQueryResult
+    public sealed class GetCustomerInvoicesDbQueryResult
     {
-        public readonly ReadOnlyCollection<Customer> Customer;
-        public readonly ReadOnlyCollection<Invoice> Invoice;
-    
-        public GetCustomerInvoicesQueryResult(ReadOnlyCollection<Customer> customer, ReadOnlyCollection<Invoice> invoice)
+        public readonly ReadOnlySegmentLinkedList<Customer> Customer;
+        public readonly ReadOnlySegmentLinkedList<Invoice> Invoice;
+
+        public GetCustomerInvoicesDbQueryResult(ReadOnlySegmentLinkedList<Customer> customer, ReadOnlySegmentLinkedList<Invoice> invoice)
         {
             Customer = customer;
             Invoice = invoice;
@@ -107,33 +122,31 @@ namespace Foundation.NetStandard20.Test.GetCustomerInvoicesNamespace
     {
         public readonly int CustomerID;
         public readonly string CustomerName;
-    
+
         public Customer(int customerID, string customerName)
         {
             CustomerID = customerID;
             CustomerName = customerName;
         }
     }
-    
+
     public sealed class Invoice
     {
         public readonly int InvoiceID;
         public readonly int CustomerID;
         public readonly DateTime InvoiceDate;
-    
+
         public Invoice(int invoiceID, int customerID, DateTime invoiceDate)
         {
             InvoiceID = invoiceID;
             CustomerID = customerID;
             InvoiceDate = invoiceDate;
         }
-    }    
-    
-    public sealed class GetCustomerInvoicesHandler
-    {
-        private const string CommandText = @"use WideWorldImporters
+    }
 
-select
+    public sealed class GetCustomerInvoicesDbQueryHandler
+    {
+        private const string CommandText = @"select
     c.CustomerID,
     c.CustomerName
 from Sales.Customers c
@@ -148,62 +161,94 @@ where
     i.CustomerID = @customerId
     and i.InvoiceDate >= @invoiceDate
 order by i.CustomerID,i.InvoiceID";
+        private static int? CommandTimeout = 0;
         private readonly IDbConnection _connection;
         private readonly IDbTransaction _transaction;
-    
-        public GetCustomerInvoicesHandler(IDbConnection connection, IDbTransaction transaction)
+
+        public GetCustomerInvoicesDbQueryHandler(IDbConnection connection, IDbTransaction transaction)
         {
             Assert.IsNotNull(connection);
             _connection = connection;
             _transaction = transaction;
         }
-    
-        public GetCustomerInvoicesQueryResult Handle(GetCustomerInvoicesQuery query)
+
+        public GetCustomerInvoicesDbQueryResult Handle(GetCustomerInvoicesDbQuery query)
         {
             Assert.IsNotNull(query);
-            var parameters = CreateParameters(query);
-            const int commandTimeout = 0;
-            var createCommandRequest = new CreateCommandRequest(CommandText, parameters, CommandType.Text, commandTimeout, _transaction);
-            var executeReaderRequest = new ExecuteReaderRequest(createCommandRequest, CommandBehavior.Default, CancellationToken.None);
-            return Handle(executeReaderRequest);
+            var request = ToExecuteReaderRequest(query, CancellationToken.None);
+            return ExecuteReader(request);
         }
-    
-        private static ReadOnlyCollection<object> CreateParameters(GetPersonQuery query)
+
+        public Task<GetCustomerInvoicesDbQueryResult> HandleAsync(GetCustomerInvoicesDbQuery query, CancellationToken cancellationToken)
+        {
+            Assert.IsNotNull(query);
+            var request = ToExecuteReaderRequest(query, cancellationToken);
+            return ExecuteReaderAsync(request);
+        }
+
+        private CreateCommandRequest ToCreateCommandRequest(GetCustomerInvoicesDbQuery query)
+        {
+            var parameters = ToParameters(query);
+            return new CreateCommandRequest(CommandText, parameters, CommandType.Text, CommandTimeout, _transaction);
+        }
+
+        private static ReadOnlyList<object> ToParameters(GetCustomerInvoicesDbQuery query)
         {
             var parameters = new SqlParameterCollectionBuilder();
             parameters.Add("customerId", query.CustomerId);
-            parameters.AddDate("invoiceDate", query.InvoiceDate);
-            return parameters.ToReadOnlyCollection();
+            parameters.AddNullableDate("invoiceDate", query.InvoiceDate);
+            return parameters.ToReadOnlyList();
         }
-    
-        private GetCustomerInvoicesQueryResult Handle(ExecuteReaderRequest request)
+
+        private ExecuteReaderRequest ToExecuteReaderRequest(GetCustomerInvoicesDbQuery query, CancellationToken cancellationToken)
+        {    
+            var createCommandRequest = ToCreateCommandRequest(query);
+            return new ExecuteReaderRequest(createCommandRequest, CommandBehavior.Default, cancellationToken);
+        }
+
+        private GetCustomerInvoicesDbQueryResult ExecuteReader(ExecuteReaderRequest request)
         {
-            GetCustomerInvoicesQueryResult result = null;
+            GetCustomerInvoicesDbQueryResult result = null;
             var executor = _connection.CreateCommandExecutor();
             executor.ExecuteReader(request, dataReader =>
             {
-                var customer = dataReader.ReadResult(ReadCustomer).AsReadOnly();
-                var invoice = dataReader.ReadNextResult(ReadInvoice).AsReadOnly();
-                result = new GetCustomerInvoicesQueryResult(customer, invoice);
+                var customer = dataReader.ReadResult(ReadCustomer).ToReadOnlySegmentLinkedList(128);
+                var invoice = dataReader.ReadNextResult(ReadInvoice).ToReadOnlySegmentLinkedList(128);
+                result = new GetCustomerInvoicesDbQueryResult(customer, invoice);
             });
-        
+
             return result;
         }
-    
+
+        private async Task<GetCustomerInvoicesDbQueryResult> ExecuteReaderAsync(ExecuteReaderRequest request)
+        {
+            GetCustomerInvoicesDbQueryResult result = null;
+            var connection = (DbConnection)_connection;
+            var executor = connection.CreateCommandAsyncExecutor();
+            await executor.ExecuteReaderAsync(request, async dataReader =>
+            {
+                var customer = (await dataReader.ReadResultAsync(ReadCustomer, request.CancellationToken)).ToReadOnlySegmentLinkedList(128);
+                var invoice = (await dataReader.ReadNextResultAsync(ReadInvoice, request.CancellationToken)).ToReadOnlySegmentLinkedList(128);
+                result = new GetCustomerInvoicesDbQueryResult(customer, invoice);
+            });
+
+            return result;
+        }
+
         private static Customer ReadCustomer(IDataRecord dataRecord)
         {
             var customerID = dataRecord.GetInt32(0);
             var customerName = dataRecord.GetString(1);
-        
+
             return new Customer(customerID, customerName);
         }
-    
+
         private static Invoice ReadInvoice(IDataRecord dataRecord)
         {
             var invoiceID = dataRecord.GetInt32(0);
             var customerID = dataRecord.GetInt32(1);
             var invoiceDate = dataRecord.GetDateTime(2);
-        
+
             return new Invoice(invoiceID, customerID, invoiceDate);
         }
     }

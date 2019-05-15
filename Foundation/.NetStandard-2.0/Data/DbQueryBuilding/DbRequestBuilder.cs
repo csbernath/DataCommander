@@ -27,7 +27,6 @@ namespace Foundation.Data.DbQueryBuilding
             stringBuilder.Append($@"using System;
 using System.Data;
 using System.Data.Common;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 {_request.Using}
