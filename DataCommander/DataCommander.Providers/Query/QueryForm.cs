@@ -1736,11 +1736,11 @@ namespace DataCommander.Providers.Query
                     configurationEnd = commandText.LastIndexOf("}", configurationEnd);
                     var configuration = commandText.Substring(configurationStart, configurationEnd - configurationStart + 1);
                     query = JsonConvert.DeserializeObject<QueryConfiguration.Query>(configuration);
-                    var commentEnd = commandText.IndexOf("*/\r\n", configurationEnd);
+                    var commentEnd = commandText.IndexOf("*/", configurationEnd);
                     if (commentEnd >= 0)
                     {
                         var parametersStart = commentEnd + 4;
-                        var parametersEnd = commandText.IndexOf("\r\n-- CommandText\r\n", parametersStart);
+                        var parametersEnd = commandText.IndexOf("-- CommandText\r\n", parametersStart);
                         if (parametersStart < parametersEnd)
                         {
                             var parametersCommandText = commandText.Substring(parametersStart, parametersEnd - parametersStart + 1);
@@ -1750,7 +1750,7 @@ namespace DataCommander.Providers.Query
                         else
                             parameters = ReadOnlyList<DbRequestParameter>.Empty;
 
-                        resultCommandText = commandText.Substring(parametersEnd + 18);
+                        resultCommandText = commandText.Substring(parametersEnd + 16);
                         succeeded = true;
                     }
                 }
