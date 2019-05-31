@@ -21,7 +21,7 @@ namespace Foundation.Data.PTypes
 
         public PDateTime(DateTime? value)
         {
-            _sql = value.ToSqlDateTime();
+            _sql = ToSqlDateTime(value);
             ValueType = value == null ? PValueType.Null : PValueType.Value;
         }
 
@@ -133,5 +133,7 @@ namespace Foundation.Data.PTypes
         }
 
         public override string ToString() => _sql.ToString();
+
+        private static SqlDateTime ToSqlDateTime(DateTime? value) => value ?? SqlDateTime.Null;
     }
 }

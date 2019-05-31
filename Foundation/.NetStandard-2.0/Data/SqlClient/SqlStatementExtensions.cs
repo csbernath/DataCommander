@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.SqlTypes;
 using System.Globalization;
 using Foundation.Core;
 
@@ -12,12 +11,22 @@ namespace Foundation.Data.SqlClient
 
         public static byte ToTSqlBit(this bool source) => source ? True : False;
 
+        public static string ToTSqlBit(this bool? source) =>
+            source != null
+                ? source.Value.ToTSqlBit().ToString()
+                : SqlNull.NullString;
+
         public static string ToTSqlDate(this SmallDate source)
         {
             var dateTime = source.ToDateTime();
             const string format = "yyyyMMdd";
             return $"'{dateTime.ToString(format, CultureInfo.InvariantCulture)}'";
         }
+
+        public static string ToTSqlDate(this DateTime? source) =>
+            source != null
+                ? ToTSqlDateTime(source.Value)
+                : SqlNull.NullString;
 
         public static string ToTSqlDateTime(this DateTime source)
         {
@@ -35,7 +44,16 @@ namespace Foundation.Data.SqlClient
         }
 
         public static string ToTSqlDecimal(this decimal source) => source.ToString(NumberFormatInfo.InvariantInfo);
-        public static string ToTSqlInt(this int? source) => source != null ? source.ToString() : SqlNull.NullString;
+
+        public static string ToTSqlFloat(this double? source) => source != null
+            ? source.Value.ToString(CultureInfo.InvariantCulture)
+            : SqlNull.NullString;
+
+        public static string ToTSqlInt(this int? source) => source != null
+            ? source.ToString()
+            : SqlNull.NullString;
+
+        public static string ToTSqlUniqueIdentifier(this Guid source) => $"'{source}'";
 
         public static string ToTSqlVarChar(this string source)
         {
@@ -58,8 +76,5 @@ namespace Foundation.Data.SqlClient
 
             return target;
         }
-
-        public static SqlDateTime ToSqlDateTime(this DateTime? value) => value ?? SqlDateTime.Null;
-        public static SqlInt32 ToSqlInt32(this int? value) => value ?? SqlInt32.Null;
     }
 }

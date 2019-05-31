@@ -38,6 +38,14 @@ namespace Foundation.Data
                 : dataRecord.GetDecimal(fieldIndex);
         }
 
+        public static double? GetNullableDouble(this IDataRecord dataRecord, int fieldIndex)
+        {
+            Assert.IsNotNull(dataRecord, nameof(dataRecord));
+            return dataRecord.IsDBNull(fieldIndex)
+                ? (double?) null
+                : dataRecord.GetDouble(fieldIndex);
+        }
+
         public static Guid? GetNullableGuid(this IDataRecord dataRecord, int fieldIndex)
         {
             Assert.IsNotNull(dataRecord, nameof(dataRecord));
