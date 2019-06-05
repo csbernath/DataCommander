@@ -43,9 +43,9 @@ namespace Foundation.Data.SqlClient.SqlLog
                     "exec LogConnectionOpen {0},{1},{2},{3},{4},{5},{6}",
                     ApplicationId,
                     ConnectionNo,
-                    _name.ToTSqlVarChar(),
-                    _userName.ToTSqlVarChar(),
-                    _hostName.ToTSqlVarChar(),
+                    _name.ToTSqlNullableVarChar(),
+                    _userName.ToTSqlNullableVarChar(),
+                    _hostName.ToTSqlNullableVarChar(),
                     _startDate.ToTSqlDateTime(),
                     microseconds );
 

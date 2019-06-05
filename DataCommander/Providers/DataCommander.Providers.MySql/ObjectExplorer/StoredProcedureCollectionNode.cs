@@ -23,7 +23,7 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
             var commandText = $@"select r.ROUTINE_NAME
 from information_schema.ROUTINES r
 where
-    r.ROUTINE_SCHEMA = {_databaseNode.Name.ToTSqlVarChar()}
+    r.ROUTINE_SCHEMA = {_databaseNode.Name.ToTSqlNullableVarChar()}
     and r.ROUTINE_TYPE = 'PROCEDURE'
 order by r.ROUTINE_NAME";
 

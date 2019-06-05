@@ -36,8 +36,8 @@ namespace Foundation.Data.SqlClient
                         var parametersString = GetSpExecuteSqlParameters(parameters);
                         sb.AppendFormat(
                             "exec sp_executesql {0},{1}",
-                            command.CommandText.ToTSqlNVarChar(),
-                            parametersString.ToTSqlNVarChar());
+                            command.CommandText.ToTSqlNullableNVarChar(),
+                            parametersString.ToTSqlNullableNVarChar());
 
                         sb.Append(',');
                         sb.Append(command.Parameters.ToLogString());

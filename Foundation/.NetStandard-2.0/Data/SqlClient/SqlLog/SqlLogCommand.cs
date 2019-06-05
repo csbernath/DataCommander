@@ -95,7 +95,7 @@ namespace Foundation.Data.SqlClient.SqlLog
 
                 if (isNew)
                 {
-                    sb.AppendFormat( "exec LogCommand {0},{1},{2},{3}\r\n", _applicationId, command.CommandNo, _database.ToTSqlVarChar(), _commandText.ToTSqlVarChar() );
+                    sb.AppendFormat( "exec LogCommand {0},{1},{2},{3}\r\n", _applicationId, command.CommandNo, _database.ToTSqlNullableVarChar(), _commandText.ToTSqlNullableVarChar() );
                 }
 
                 sb.AppendFormat(
@@ -106,7 +106,7 @@ namespace Foundation.Data.SqlClient.SqlLog
                     command.CommandNo,
                     command.ExecutionNo);
 
-                sb.Append(_parameters.ToTSqlVarChar() );
+                sb.Append(_parameters.ToTSqlNullableVarChar() );
                 sb.Append(',');
                 sb.Append(_startDate.ToTSqlDateTime() );
 

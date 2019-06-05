@@ -103,7 +103,7 @@ namespace Foundation.Data.SqlClient
         {
             Assert.IsNotNull(commandText);
 
-            var s = value.ToTSqlNVarChar();
+            var s = value.ToTSqlNullableNVarChar();
             commandText.Append(s);
         }
 

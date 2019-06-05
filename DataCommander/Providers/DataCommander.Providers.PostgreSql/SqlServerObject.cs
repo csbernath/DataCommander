@@ -22,7 +22,7 @@ order by schema_name";
 from information_schema.tables
 where
     table_schema = '{schema}'
-    and table_type in({string.Join(",",tableTypes.Select(o => o.ToTSqlVarChar()))})
+    and table_type in({string.Join(",",tableTypes.Select(o => o.ToTSqlNullableVarChar()))})
 order by table_name";
         }
 
@@ -46,7 +46,7 @@ begin
     where
         o.schema_id = @schema_id
         and o.type in({
-                    string.Join(",", objectTypes.Select(o => o.ToTSqlVarChar()))})
+                    string.Join(",", objectTypes.Select(o => o.ToTSqlNullableVarChar()))})
     order by o.name
 end";
         }
@@ -77,7 +77,7 @@ begin
             and o.type in({2})
         order by o.name
     end
-end", database, schema, string.Join(",", objectTypes.Select(t => t.ToTSqlVarChar())));
+end", database, schema, string.Join(",", objectTypes.Select(t => t.ToTSqlNullableVarChar())));
         }
     }
 }

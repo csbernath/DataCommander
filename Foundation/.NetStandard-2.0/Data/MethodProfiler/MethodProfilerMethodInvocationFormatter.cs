@@ -13,7 +13,7 @@ namespace Foundation.Data.MethodProfiler
             var parentId = parent != null ? parent.Id : (int?)null;
             sb.AppendFormat("exec MethodProfilerMethodInvocation_Add @applicationId,{0},{1},{2},{3},{4}\r\n",
                 item.Id,
-                parentId.ToTSqlInt(),
+                parentId.ToTSqlNullableInt(),
                 item.MethodId,
                 item.BeginTime,
                 item.EndTime);

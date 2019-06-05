@@ -156,7 +156,7 @@ namespace DataCommander.Providers.ResultWriter
 
                     case FieldType.StringField:
                         var stringField = (StringField) value;
-                        s = stringField.Value.ToTSqlNVarChar();
+                        s = stringField.Value.ToTSqlNullableNVarChar();
                         break;
 
                     case FieldType.DateTimeField:
@@ -201,13 +201,9 @@ namespace DataCommander.Providers.ResultWriter
                                 s = (string) value;
 
                                 if (s == "NULL")
-                                {
                                     s = "null";
-                                }
                                 else
-                                {
-                                    s = s.ToTSqlNVarChar();
-                                }
+                                    s = s.ToTSqlNullableNVarChar();
 
                                 break;
 

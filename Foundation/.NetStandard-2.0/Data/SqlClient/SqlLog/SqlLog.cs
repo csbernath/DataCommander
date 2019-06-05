@@ -213,7 +213,7 @@ namespace Foundation.Data.SqlClient.SqlLog
         {
             var sb = new StringBuilder();
             sb.Append("exec LogApplicationStart ");
-            sb.Append(name.ToTSqlVarChar());
+            sb.Append(name.ToTSqlNullableVarChar());
             sb.Append(',');
             sb.Append(startDate.ToTSqlDateTime());
             var commandText = sb.ToString();

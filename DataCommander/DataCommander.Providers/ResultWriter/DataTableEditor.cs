@@ -364,14 +364,14 @@ namespace DataCommander.Providers.ResultWriter
 
                     case TypeCode.String:
                         var stringValue = (string) value;
-                        valueString = stringValue.ToTSqlNVarChar();
+                        valueString = stringValue.ToTSqlNullableNVarChar();
                         break;
 
                     default:
                         if (type == typeof(Guid))
                         {
                             var guid = (Guid) value;
-                            valueString = guid.ToString().ToTSqlVarChar();
+                            valueString = guid.ToString().ToTSqlNullableVarChar();
                         }
                         else
                             valueString = value.ToString();

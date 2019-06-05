@@ -39,7 +39,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         {
             get
             {
-                var commandText = $@"msdb..sp_help_job @job_name = {_name.ToTSqlNVarChar()}";
+                var commandText = $@"msdb..sp_help_job @job_name = {_name.ToTSqlNullableNVarChar()}";
                 DataSet dataSet;
 
                 using (var connection = new SqlConnection(_jobs.Server.ConnectionString))

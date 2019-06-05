@@ -103,25 +103,9 @@ namespace DataCommander.Providers
                         startTokenIndex++;
                         provider.DeriveParameters(command);
 
-                        var i = startTokenIndex;
-                        var tokenList = new List<Token>();
-                        var parameters = new List<Parameter>();
-                        while (i < Tokens.Count)
-                        {
-                            var token = Tokens[i];
-                            if (token.Type == TokenType.OperatorOrPunctuator && token.Value == ",")
-                            {
-                                parameters.Add(ToParameter(tokenList));
-                                tokenList.Clear();
-                            }
-                            else
-                                tokenList.Add(token);
-
-                            i++;
-                        }
-
-                        if (tokenList.Count > 0)
-                            parameters.Add(ToParameter(tokenList));
+                        var tokens = Tokens.GetRange(startTokenIndex, Tokens.Count - startTokenIndex);
+                        var parameterTokens = tokens.Split(t => t.Type == TokenType.OperatorOrPunctuator && t.Value == ",").ToList();
+                        var parameters = parameterTokens.Select(t => ToParameter(t.ToList())).ToList();
 
                         var defaultValues = new List<IDataParameter>();
                         foreach (IDataParameter parameter in command.Parameters)
