@@ -17,11 +17,11 @@ namespace Foundation.Data.MethodProfiler
             var assemblyName = assembly.GetName().Name;
             var typeName = type.FullName;
             var methodName = method.Name;
-            sb.Append(assemblyName.ToTSqlNullableNVarChar());
+            sb.Append(assemblyName.ToNullableNVarChar());
             sb.Append(',');
-            sb.Append(typeName.ToTSqlNullableNVarChar());
+            sb.Append(typeName.ToNullableNVarChar());
             sb.Append(',');
-            sb.Append(methodName.ToTSqlNullableNVarChar());
+            sb.Append(methodName.ToNullableNVarChar());
             sb.AppendLine();
         }
     }

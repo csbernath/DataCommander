@@ -299,7 +299,7 @@ namespace DataCommander.Providers.ResultWriter
                         {
                             case DbType.DateTime:
                                 var dateTime = (DateTime) value;
-                                valueString = dateTime.ToTSqlDateTime();
+                                valueString = dateTime.ToSqlConstant();
                                 break;
 
                             default:

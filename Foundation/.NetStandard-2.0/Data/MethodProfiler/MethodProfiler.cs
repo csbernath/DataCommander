@@ -50,8 +50,8 @@ namespace Foundation.Data.MethodProfiler
             sb.AppendFormat(@"declare @applicationId int
 
 exec MethodProfilerApplication_Add {0},{1}",
-                applicationName.ToTSqlNullableNVarChar(),
-                now.ToTSqlDateTime()
+                applicationName.ToNullableNVarChar(),
+                now.ToSqlConstant()
             );
             sb.AppendFormat(",{0},{1}\r\n", beginTime, Stopwatch.Frequency);
             sb.Append("set @applicationId    = @@identity\r\n");

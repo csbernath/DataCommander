@@ -82,7 +82,7 @@ namespace Foundation.Data.SqlClient
                                             case SqlDbType.DateTime:
                                                 var sqlDateTime = (SqlDateTime) value;
                                                 var dateTime = sqlDateTime.Value;
-                                                s = dateTime.ToTSqlDateTime();
+                                                s = dateTime.ToSqlConstant();
                                                 break;
 
                                             case SqlDbType.Float:
@@ -117,7 +117,7 @@ namespace Foundation.Data.SqlClient
                                             case SqlDbType.SmallDateTime:
                                                 sqlDateTime = (SqlDateTime) value;
                                                 dateTime = sqlDateTime.Value;
-                                                s = dateTime.ToTSqlDateTime();
+                                                s = dateTime.ToSqlConstant();
                                                 break;
 
                                             default:
@@ -164,7 +164,7 @@ namespace Foundation.Data.SqlClient
 
                                             case TypeCode.DateTime:
                                                 var dateTime = (DateTime) value;
-                                                s = dateTime.ToTSqlDateTime();
+                                                s = dateTime.ToSqlConstant();
                                                 break;
 
                                             case TypeCode.Decimal:

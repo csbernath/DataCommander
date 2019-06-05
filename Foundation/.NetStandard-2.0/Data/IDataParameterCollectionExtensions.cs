@@ -56,7 +56,7 @@ namespace Foundation.Data
                                 {
                                     case DbType.DateTime:
                                         var dateTime = (DateTime) value;
-                                        valueString = dateTime.ToTSqlDateTime();
+                                        valueString = dateTime.ToSqlConstant();
                                         break;
 
                                     case DbType.Int32:

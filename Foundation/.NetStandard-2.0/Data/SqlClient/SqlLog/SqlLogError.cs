@@ -52,7 +52,7 @@ namespace Foundation.Data.SqlClient.SqlLog
                 else
                 {
                     var text = _exception.ToString();
-                    sb.AppendFormat("exec LogException {0},{1},{2},{3},{4}", _applicationId, _connectionNo, _commandNo, _executionNo, text.ToTSqlNullableVarChar());
+                    sb.AppendFormat("exec LogException {0},{1},{2},{3},{4}", _applicationId, _connectionNo, _commandNo, _executionNo, text.ToNullableVarChar());
                 }
 
                 return sb.ToString();
@@ -71,8 +71,8 @@ namespace Foundation.Data.SqlClient.SqlLog
                 error,
                 severity,
                 state,
-                procedure.ToTSqlNullableVarChar(),
-                message.ToTSqlNullableVarChar());
+                procedure.ToNullableVarChar(),
+                message.ToNullableVarChar());
         }
     }
 }

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Xml;
 using DataCommander.Providers.Connection;
-using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 
 namespace DataCommander.Providers
@@ -49,42 +47,5 @@ namespace DataCommander.Providers
         List<InfoMessage> ToInfoMessages(Exception e);
 
         #endregion
-    }
-
-    public class GetTableSchemaResult
-    {
-        public readonly ReadOnlyList<Column> Columns;
-        public readonly ReadOnlyList<UniqueIndexColumn> UniqueIndexColumns;
-
-        public GetTableSchemaResult(ReadOnlyList<Column> columns, ReadOnlyList<UniqueIndexColumn> uniqueIndexColumns)
-        {
-            Columns = columns;
-            UniqueIndexColumns = uniqueIndexColumns;
-        }
-    }
-
-    public class Column
-    {
-        public readonly string ColumnName;
-        public readonly int ColumnId;
-        public readonly bool HasDefault;
-        public readonly bool IsNullable;
-        public readonly bool HasAutomaticValue;
-
-        public Column(string columnName, int columnId, bool hasDefault, bool isNullable, bool hasAutomaticValue)
-        {
-            ColumnName = columnName;
-            ColumnId = columnId;
-            HasDefault = hasDefault;
-            IsNullable = isNullable;
-            HasAutomaticValue = hasAutomaticValue;
-        }
-    }
-
-    public class UniqueIndexColumn
-    {
-        public readonly int ColumnId;
-
-        public UniqueIndexColumn(int columnId) => ColumnId = columnId;
     }
 }

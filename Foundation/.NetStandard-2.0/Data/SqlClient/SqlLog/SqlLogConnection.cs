@@ -43,10 +43,10 @@ namespace Foundation.Data.SqlClient.SqlLog
                     "exec LogConnectionOpen {0},{1},{2},{3},{4},{5},{6}",
                     ApplicationId,
                     ConnectionNo,
-                    _name.ToTSqlNullableVarChar(),
-                    _userName.ToTSqlNullableVarChar(),
-                    _hostName.ToTSqlNullableVarChar(),
-                    _startDate.ToTSqlDateTime(),
+                    _name.ToNullableVarChar(),
+                    _userName.ToNullableVarChar(),
+                    _hostName.ToNullableVarChar(),
+                    _startDate.ToSqlConstant(),
                     microseconds );
 
                 if (_exception != null)

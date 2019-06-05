@@ -225,6 +225,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AsyncDataAdapterCommand.cs" />
+    <Compile Include="Column.cs" />
     <Compile Include="Connection\ColorThemeApplier.cs" />
     <Compile Include="Connection\ConnectionPropertiesRepository.cs" />
     <Compile Include="Connection\ConnectionStringKeyword.cs" />
@@ -239,6 +240,7 @@
     <Compile Include="Connection\InfoMessageEventHandler.cs" />
     <Compile Include="Connection\InfoMessageSeverity.cs" />
     <Compile Include="GetCompletionResponse.cs" />
+    <Compile Include="GetTableSchemaResult.cs" />
     <Compile Include="IAsyncDataAdapter.cs" />
     <Compile Include="IDataReaderHelper.cs" />
     <Compile Include="IDbConnectionStringBuilder.cs" />
@@ -429,6 +431,7 @@
     <Compile Include="TextBoxWriter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UniqueIndexColumn.cs" />
     <EmbeddedResource Include="AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>

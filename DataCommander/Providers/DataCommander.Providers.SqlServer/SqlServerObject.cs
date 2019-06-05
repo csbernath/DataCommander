@@ -42,7 +42,7 @@ begin
     from sys.all_objects o (nolock)
     where
         o.schema_id = @schema_id
-        and o.type in({string.Join(",", objectTypes.Select(o => o.ToTSqlNullableVarChar()))})
+        and o.type in({string.Join(",", objectTypes.Select(o => o.ToNullableVarChar()))})
     order by o.name
 end";
         }
@@ -70,7 +70,7 @@ begin
             and o.type in({2})
         order by o.name
     end
-end", database, schema, string.Join(",", objectTypes.Select(t => t.ToTSqlNullableVarChar())));
+end", database, schema, string.Join(",", objectTypes.Select(t => t.ToNullableVarChar())));
         }
     }
 }

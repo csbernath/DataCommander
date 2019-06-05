@@ -156,12 +156,12 @@ namespace DataCommander.Providers.ResultWriter
 
                     case FieldType.StringField:
                         var stringField = (StringField) value;
-                        s = stringField.Value.ToTSqlNullableNVarChar();
+                        s = stringField.Value.ToNullableNVarChar();
                         break;
 
                     case FieldType.DateTimeField:
                         var dateTimeField = (DateTimeField) value;
-                        s = dateTimeField.Value.ToTSqlDateTime();
+                        s = dateTimeField.Value.ToSqlConstant();
                         break;
 
                     default:
@@ -203,7 +203,7 @@ namespace DataCommander.Providers.ResultWriter
                                 if (s == "NULL")
                                     s = "null";
                                 else
-                                    s = s.ToTSqlNullableNVarChar();
+                                    s = s.ToNullableNVarChar();
 
                                 break;
 

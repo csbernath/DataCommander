@@ -21,8 +21,8 @@ namespace DataCommander.Providers.MySql
             return $@"select TABLE_NAME
 from information_schema.TABLES
 where
-    TABLE_SCHEMA = {tableSchema.ToTSqlNullableVarChar()}
-    and TABLE_TYPE in({string.Join(",", tableTypes.Select(o => o.ToTSqlNullableVarChar()))})
+    TABLE_SCHEMA = {tableSchema.ToNullableVarChar()}
+    and TABLE_TYPE in({string.Join(",", tableTypes.Select(o => o.ToNullableVarChar()))})
 order by TABLE_NAME";
         }
 
@@ -31,8 +31,8 @@ order by TABLE_NAME";
             return $@"select COLUMN_NAME
 from information_schema.COLUMNS
 where
-    TABLE_SCHEMA = {tableSchema.ToTSqlNullableVarChar()}
-    and TABLE_NAME = {tableName.ToTSqlNullableVarChar()}
+    TABLE_SCHEMA = {tableSchema.ToNullableVarChar()}
+    and TABLE_NAME = {tableName.ToNullableVarChar()}
 order by ORDINAL_POSITION";
         }
     }

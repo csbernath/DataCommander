@@ -213,9 +213,9 @@ namespace Foundation.Data.SqlClient.SqlLog
         {
             var sb = new StringBuilder();
             sb.Append("exec LogApplicationStart ");
-            sb.Append(name.ToTSqlNullableVarChar());
+            sb.Append(name.ToNullableVarChar());
             sb.Append(',');
-            sb.Append(startDate.ToTSqlDateTime());
+            sb.Append(startDate.ToSqlConstant());
             var commandText = sb.ToString();
 
             if (_connection.State != ConnectionState.Open)

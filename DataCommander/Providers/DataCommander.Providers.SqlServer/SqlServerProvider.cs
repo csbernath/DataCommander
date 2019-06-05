@@ -920,8 +920,8 @@ where
     and ic.index_id = @index_id
 order by ic.index_column_id",
                 sqlCommandBuilder.QuoteIdentifier(fourPartName.Database),
-                owner.ToTSqlNullableNVarChar(),
-                fourPartName.Name.ToTSqlNullableNVarChar());
+                owner.ToNullableNVarChar(),
+                fourPartName.Name.ToNullableNVarChar());
             Log.Write(LogLevel.Trace, commandText);
 
             var executor = DbCommandExecutorFactory.Create(connection);

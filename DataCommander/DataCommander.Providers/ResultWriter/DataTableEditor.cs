@@ -358,20 +358,20 @@ namespace DataCommander.Providers.ResultWriter
                         var succeeded = DateTimeField.TryParse(valueString, out var dateTime);
 
                         if (succeeded)
-                            valueString = dateTime.ToTSqlDateTime();
+                            valueString = dateTime.ToSqlConstant();
 
                         break;
 
                     case TypeCode.String:
                         var stringValue = (string) value;
-                        valueString = stringValue.ToTSqlNullableNVarChar();
+                        valueString = stringValue.ToNullableNVarChar();
                         break;
 
                     default:
                         if (type == typeof(Guid))
                         {
                             var guid = (Guid) value;
-                            valueString = guid.ToString().ToTSqlNullableVarChar();
+                            valueString = guid.ToString().ToNullableVarChar();
                         }
                         else
                             valueString = value.ToString();

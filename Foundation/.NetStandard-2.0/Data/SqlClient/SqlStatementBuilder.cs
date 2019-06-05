@@ -87,7 +87,7 @@ namespace Foundation.Data.SqlClient
 
                     case SqlDbType.Decimal:
                         var d = (decimal) value;
-                        sb.Append(d.ToTSqlDecimal());
+                        sb.Append(d.ToSqlConstant());
                         break;
 
                     default:
@@ -103,7 +103,7 @@ namespace Foundation.Data.SqlClient
         {
             Assert.IsNotNull(commandText);
 
-            var s = value.ToTSqlNullableNVarChar();
+            var s = value.ToNullableNVarChar();
             commandText.Append(s);
         }
 

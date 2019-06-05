@@ -13,6 +13,6 @@ namespace Foundation.Data.SqlClient.SqlLog
             _endDate = endDate;
         }
 
-        public string CommandText => $"exec LogApplicationEnd {_applicationId},{_endDate.ToTSqlDateTime()}\r\n";
+        public string CommandText => $"exec LogApplicationEnd {_applicationId},{_endDate.ToSqlConstant()}\r\n";
     }
 }

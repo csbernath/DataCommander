@@ -89,8 +89,8 @@ begin
     raiserror(15471,-1,-1,@name)    
 end",
                 database,
-                schema.ToTSqlNullableNVarChar(),
-                name.ToTSqlNullableNVarChar());
+                schema.ToNullableNVarChar(),
+                name.ToNullableNVarChar());
 
             var sb = new StringBuilder();
             var executor = connection.CreateCommandExecutor();

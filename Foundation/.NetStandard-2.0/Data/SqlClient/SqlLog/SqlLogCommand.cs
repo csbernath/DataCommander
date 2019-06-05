@@ -40,7 +40,7 @@ namespace Foundation.Data.SqlClient.SqlLog
             _database = command.Connection.Database;
             _commandType = command.CommandType;
             _commandText = command.CommandText;
-            var parameters = (SqlParameterCollection)command.Parameters;
+            var parameters = (SqlParameterCollection) command.Parameters;
 
             if (parameters.Count > 0)
             {
@@ -95,7 +95,8 @@ namespace Foundation.Data.SqlClient.SqlLog
 
                 if (isNew)
                 {
-                    sb.AppendFormat( "exec LogCommand {0},{1},{2},{3}\r\n", _applicationId, command.CommandNo, _database.ToTSqlNullableVarChar(), _commandText.ToTSqlNullableVarChar() );
+                    sb.AppendFormat("exec LogCommand {0},{1},{2},{3}\r\n", _applicationId, command.CommandNo, _database.ToNullableVarChar(),
+                        _commandText.ToNullableVarChar());
                 }
 
                 sb.AppendFormat(
@@ -106,9 +107,9 @@ namespace Foundation.Data.SqlClient.SqlLog
                     command.CommandNo,
                     command.ExecutionNo);
 
-                sb.Append(_parameters.ToTSqlNullableVarChar() );
+                sb.Append(_parameters.ToNullableVarChar());
                 sb.Append(',');
-                sb.Append(_startDate.ToTSqlDateTime() );
+                sb.Append(_startDate.ToSqlConstant());
 
                 var microseconds = StopwatchTimeSpan.ToInt32(_duration, 1000000);
                 sb.AppendFormat(",{0}\r\n", microseconds);
@@ -134,15 +135,15 @@ namespace Foundation.Data.SqlClient.SqlLog
 
             lock (_commands)
             {
-                if (_commands.TryGetValue( key, out command ))
+                if (_commands.TryGetValue(key, out command))
                 {
                     command.ExecutionNo++;
                 }
                 else
                 {
                     var commandNo = _commands.Count + 1;
-                    command = new SqLoglCommandExecution( commandNo );
-                    _commands.Add( key, command );
+                    command = new SqLoglCommandExecution(commandNo);
+                    _commands.Add(key, command);
                     isNew = true;
                 }
             }
