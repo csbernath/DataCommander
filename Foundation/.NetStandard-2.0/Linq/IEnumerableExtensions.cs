@@ -10,6 +10,7 @@ namespace Foundation.Linq
 {
     public static class IEnumerableExtensions
     {
+        [Pure]
         public static bool CountIsGreaterThan<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate, int count)
         {
             Assert.IsNotNull(source, nameof(source));
@@ -36,6 +37,7 @@ namespace Foundation.Linq
         [Pure]
         public static IEnumerable<TSource> EmptyIfNull<TSource>(this IEnumerable<TSource> source) => source ?? Enumerable.Empty<TSource>();
 
+        [Pure]
         public static TSource? FirstOrNull<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) where TSource : struct
         {
             TSource? result = null;
@@ -52,6 +54,7 @@ namespace Foundation.Linq
             return result;
         }
 
+        [Pure]
         public static IEnumerable<List<TSource>> GetPartitions<TSource>(this IEnumerable<TSource> source, int count, int partitionCount)
         {
             Assert.IsNotNull(source);
@@ -86,6 +89,7 @@ namespace Foundation.Linq
             }
         }
 
+        [Pure]
         public static LinerSearchResult<TSource, TResult> LinearSearch<TSource, TResult>(
             this IEnumerable<TSource> source,
             Func<TSource, TResult> selector,
@@ -126,6 +130,7 @@ namespace Foundation.Linq
             return new LinerSearchResult<TSource, TResult>(selectedIndex, selectedSource, selectedResult);
         }
 
+        [Pure]
         public static string ToString<T>(this IEnumerable<T> source, string separator, Func<T, string> toString)
         {
             Assert.IsNotNull(toString);
@@ -151,8 +156,10 @@ namespace Foundation.Linq
             return result;
         }
 
+        [Pure]
         public static bool IsNullOrEmpty<TSource>(this IEnumerable<TSource> source) => source == null || !source.Any();
 
+        [Pure]
         public static IOrderedEnumerable<TSource> OrderBy<TSource>(this IEnumerable<TSource> source) => source.OrderBy(IdentityFunction<TSource>.Instance);
 
         [Pure]
@@ -178,6 +185,7 @@ namespace Foundation.Linq
             }
         }
 
+        [Pure]
         public static IEnumerable<TSource[]> Split<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> isSeparator)
         {
             var list = new List<TSource>();
@@ -196,6 +204,7 @@ namespace Foundation.Linq
                 yield return list.ToArray();
         }
 
+        [Pure]
         public static IEnumerable<List<TSource>> TakeRanges<TSource>(this IEnumerable<TSource> source, int rangeSize)
         {
             using (var enumerator = source.GetEnumerator())
@@ -210,6 +219,7 @@ namespace Foundation.Linq
             }
         }
 
+        [Pure]
         public static string ToLogString<TSource>(this IEnumerable<TSource> source, Func<TSource, string> toString)
         {
             var stringBuilder = new StringBuilder();
@@ -226,18 +236,21 @@ namespace Foundation.Linq
             return stringBuilder.ToString();
         }
 
+        [Pure]
         public static ReadOnlyCollection<TSource> ToReadOnlyCollection<TSource>(this IEnumerable<TSource> source)
         {
             Assert.IsNotNull(source);
             return new ReadOnlyCollection<TSource>(source.ToList());
         }
 
+        [Pure]
         public static ReadOnlyDictionary<TKey, TSource> ToReadOnlyDictionary<TKey, TSource>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             var dictionary = source.ToDictionary(keySelector);
             return new ReadOnlyDictionary<TKey, TSource>(dictionary);
         }
 
+        [Pure]
         public static SortedDictionary<TKey, TValue> ToSortedDictionary<TKey, TValue>(this IEnumerable<TValue> source, Func<TValue, TKey> keySelector)
         {
             Assert.IsNotNull(source);
@@ -248,6 +261,7 @@ namespace Foundation.Linq
             return dictionary;
         }
 
+        [Pure]
         public static SortedDictionary<TKey, TElement> ToSortedDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source,
             Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
         {
@@ -262,6 +276,7 @@ namespace Foundation.Linq
             return dictionary;
         }
 
+        [Pure]
         public static SortedList<TKey, TValue> ToSortedList<TKey, TValue>(this IEnumerable<TValue> source, Func<TValue, TKey> keySelector)
         {
             Assert.IsNotNull(source);
@@ -277,6 +292,26 @@ namespace Foundation.Linq
             return list;
         }
 
+        [Pure]
         public static SortedSet<T> ToSortedSet<T>(this IEnumerable<T> source, IComparer<T> comparer) => new SortedSet<T>(source, comparer);
+
+        [Pure]
+        public static bool TryGetFirst<T>(this IEnumerable<T> source, Func<T, bool> predicate, out T first)
+        {
+            var succeeded = false;
+            first = default(T);
+
+            foreach (var item in source)
+            {
+                if (predicate(item))
+                {
+                    first = item;
+                    succeeded = true;
+                    break;
+                }
+            }
+
+            return succeeded;
+        }
     }
 }
