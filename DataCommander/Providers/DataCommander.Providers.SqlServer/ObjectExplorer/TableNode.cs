@@ -100,19 +100,16 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             Assert.IsNotNull(connection);
             Assert.IsNotNull(databaseObjectMultipartName);
 
-            var commandText = string.Format(@"select  c.name
-from    [{0}].sys.schemas s (nolock)
-join    [{0}].sys.objects o (nolock)
+            var commandText = $@"select  c.name
+from    [{databaseObjectMultipartName.Database}].sys.schemas s (nolock)
+join    [{databaseObjectMultipartName.Database}].sys.objects o (nolock)
     on s.schema_id = o.schema_id
-join    [{0}].sys.columns c (nolock)
+join    [{databaseObjectMultipartName.Database}].sys.columns c (nolock)
     on o.object_id = c.object_id
 where
-    s.name = '{1}'
-    and o.name = '{2}'
-order by c.column_id",
-                databaseObjectMultipartName.Database,
-                databaseObjectMultipartName.Schema,
-                databaseObjectMultipartName.Name);
+    s.name = '{databaseObjectMultipartName.Schema}'
+    and o.name = '{databaseObjectMultipartName.Name}'
+order by c.column_id";
 
             var columnNames = new StringBuilder();
             var first = true;

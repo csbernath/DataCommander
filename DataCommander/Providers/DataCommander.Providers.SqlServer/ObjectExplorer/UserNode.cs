@@ -24,14 +24,16 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         {
             get
             {
-                var query = string.Format(@"declare @uid smallint
-select @uid = uid from {0}..sysusers where name = '{1}'
+                var query = $@"declare @uid smallint
+select @uid = uid
+from {_database.Name}..sysusers
+where name = '{Name}'
 
-select u.name from {0}..sysmembers m
-join {0}..sysusers u
-on m.groupuid = u.uid
+select u.name from {_database.Name}..sysmembers m
+join {_database.Name}..sysusers u
+    on m.groupuid = u.uid
 where memberuid = @uid
-group by u.name", _database.Name, Name);
+group by u.name";
 
                 return query;
             }

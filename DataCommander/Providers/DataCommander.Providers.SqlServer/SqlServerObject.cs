@@ -15,12 +15,12 @@ namespace DataCommander.Providers.SqlServer
         {
             Assert.IsTrue(!database.IsNullOrWhiteSpace());
 
-            return string.Format(@"if exists(select * from sys.databases (nolock) where name = '{0}')
+            return $@"if exists(select * from sys.databases (nolock) where name = '{database}')
 begin
     select null,name
-    from [{0}].sys.schemas (nolock)
+    from [{database}].sys.schemas (nolock)
     order by name
-end", database);
+end";
         }
 
         public static string GetObjects(string schema, IEnumerable<string> objectTypes)
@@ -29,8 +29,7 @@ end", database);
             Assert.IsNotNull(objectTypes);
             Assert.IsTrue(objectTypes.Any());
 
-            return
-                $@"declare @schema_id int
+            return $@"declare @schema_id int
 
 select @schema_id = schema_id
 from sys.schemas (nolock)
@@ -53,24 +52,24 @@ end";
             Assert.IsTrue(!schema.IsNullOrWhiteSpace());
             Assert.IsTrue(objectTypes != null && objectTypes.Any());
 
-            return string.Format(@"if exists(select * from sys.databases (nolock) where name = '{0}')
+            return $@"if exists(select * from sys.databases (nolock) where name = '{database}')
 begin
     declare @schema_id int
 
     select @schema_id = schema_id
-    from [{0}].sys.schemas (nolock)
-    where name = '{1}'
+    from [{database}].sys.schemas (nolock)
+    where name = '{schema}'
 
     if @schema_id is not null
     begin
         select o.name
-        from [{0}].sys.all_objects o (nolock)
+        from [{database}].sys.all_objects o (nolock)
         where
             o.schema_id = @schema_id
-            and o.type in({2})
+            and o.type in({string.Join(",", objectTypes.Select(t => t.ToNullableVarChar()))})
         order by o.name
     end
-end", database, schema, string.Join(",", objectTypes.Select(t => t.ToNullableVarChar())));
+end";
         }
     }
 }

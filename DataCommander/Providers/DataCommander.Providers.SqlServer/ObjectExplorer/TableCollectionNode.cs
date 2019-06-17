@@ -18,12 +18,12 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             var childNodes = new List<ITreeNode>();
             childNodes.Add(new SystemTableCollectionNode(DatabaseNode));
 
-            var commandText = string.Format(@"select
+            var commandText = $@"select
     s.name,
     tbl.name,
     tbl.object_id
-from [{0}].sys.tables as tbl (nolock)
-join [{0}].sys.schemas s (nolock)
+from [{DatabaseNode.Name}].sys.tables as tbl (nolock)
+join [{DatabaseNode.Name}].sys.schemas s (nolock)
     on tbl.schema_id = s.schema_id
 where
 (CAST(
@@ -33,7 +33,7 @@ where
         select 
             major_id 
         from 
-            [{0}].sys.extended_properties 
+            [{DatabaseNode.Name}].sys.extended_properties 
         where 
             major_id = tbl.object_id and 
             minor_id = 0 and 
@@ -43,7 +43,7 @@ where
     else 0
 end          
              AS bit)=0)
-order by 1,2", DatabaseNode.Name);
+order by 1,2";
             var connectionString = DatabaseNode.Databases.Server.ConnectionString;
             SqlClientFactory.Instance.ExecuteReader(connectionString, new ExecuteReaderRequest(commandText), dataReader =>
             {

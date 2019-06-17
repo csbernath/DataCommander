@@ -16,8 +16,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            var commandText = "select name from {0}..sysusers where issqlrole = 1 order by name";
-            commandText = string.Format(commandText, _database.Name);
+            var commandText = $"select name from {_database.Name}..sysusers where issqlrole = 1 order by name";
             var connectionString = _database.Databases.Server.ConnectionString;
             var executor = new SqlCommandExecutor(connectionString);
             var roleNodes = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>

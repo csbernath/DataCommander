@@ -7,28 +7,20 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         private readonly DatabaseNode _database;
 
-        public FunctionCollectionNode(DatabaseNode database)
-        {
-            _database = database;
-        }
+        public FunctionCollectionNode(DatabaseNode database) => _database = database;
 
         public string Name => "Functions";
-
         public bool IsLeaf => false;
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
-        {
-            return new ITreeNode[]
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) =>
+            new ITreeNode[]
             {
                 new TableValuedFunctionCollectionNode(_database),
                 new ScalarValuedFunctionCollectionNode(_database)
             };
-        }
 
         public bool Sortable => false;
-
         public string Query => null;
-
         public ContextMenuStrip ContextMenu => null;
     }
 }

@@ -17,8 +17,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            var commandText = "select name from {0}..sysusers where islogin = 1 order by name";
-            commandText = string.Format(commandText, _database.Name);
+            var commandText = $"select name from {_database.Name}..sysusers where islogin = 1 order by name";
             var connectionString = _database.Databases.Server.ConnectionString;
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))

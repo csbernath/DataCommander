@@ -10,17 +10,13 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         public JobCollectionNode(ServerNode server)
         {
-            Assert.IsTrue(server != null);
-
+            Assert.IsNotNull(server);
             Server = server;
         }
 
         public ServerNode Server { get; }
 
-        #region ITreeNode Members
-
         string ITreeNode.Name => "Jobs";
-
         bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
@@ -38,7 +34,5 @@ order by j.name";
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
         ContextMenuStrip ITreeNode.ContextMenu => null;
-
-        #endregion
     }
 }

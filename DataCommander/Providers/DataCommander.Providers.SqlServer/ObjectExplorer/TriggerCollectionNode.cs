@@ -29,7 +29,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     name,
     object_id
 from {databaseName}.sys.triggers
-where object_id = {_id}
+where object_id = {_id.ToSqlConstant()}
 order by name";
 
             var connectionString = _databaseNode.Databases.Server.ConnectionString;
