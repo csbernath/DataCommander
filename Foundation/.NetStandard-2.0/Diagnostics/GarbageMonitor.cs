@@ -27,8 +27,10 @@ namespace Foundation.Diagnostics
                 StringTableColumnInfo.CreateLeft<MonitoredObjectState>("Name", i => i.MonitoredObject.Name),
                 StringTableColumnInfo.CreateLeft<MonitoredObjectState>("TypeName", i => i.MonitoredObject.TypeName),
                 StringTableColumnInfo.CreateRight<MonitoredObjectState, int>("Size", i => i.MonitoredObject.Size),
-                StringTableColumnInfo.CreateRight<MonitoredObjectState>("Time", i => i.MonitoredObject.Time.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture)),
-                StringTableColumnInfo.CreateRight<MonitoredObjectState>("DisposeTime", i => i.MonitoredObject.DisposeTime?.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture)),
+                StringTableColumnInfo.CreateRight<MonitoredObjectState>("Time",
+                    i => i.MonitoredObject.Time.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture)),
+                StringTableColumnInfo.CreateRight<MonitoredObjectState>("DisposeTime",
+                    i => i.MonitoredObject.DisposeTime?.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture)),
                 StringTableColumnInfo.CreateRight<MonitoredObjectState>("Age", i => StopwatchTimeSpan.ToString(i.GetAge(), 3)),
                 StringTableColumnInfo.CreateLeft<MonitoredObjectState, bool>("IsAlive", i => i.MonitoredObject.WeakReference.IsAlive),
                 StringTableColumnInfo.CreateRight<MonitoredObjectState, int?>("Generation", i => i.GetGeneration())
@@ -128,6 +130,5 @@ namespace Foundation.Diagnostics
                 node = nextNode;
             }
         }
-
     }
 }
