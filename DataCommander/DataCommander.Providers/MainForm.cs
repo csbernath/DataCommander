@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data.Common;
@@ -641,11 +642,8 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
         private void CreateRecentFileListMenu()
         {
-            var menuItems = _mnuRecentFileList.DropDownItems;
-            menuItems.Clear();
-
+            var menuItems = new List<ToolStripMenuItem>();
             var count = _recentFileList.Count;
-
             for (var i = 0; i < count; i++)
             {
                 var path = _recentFileList[count - i - 1];
@@ -653,6 +651,9 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                 var menuItem = new ToolStripMenuItem(text, null, mnuRecentFile_Click);
                 menuItems.Add(menuItem);
             }
+
+            _mnuRecentFileList.DropDownItems.Clear();
+            _mnuRecentFileList.DropDownItems.AddRange(menuItems.ToArray());
         }
 
         private void LoadLayout()
