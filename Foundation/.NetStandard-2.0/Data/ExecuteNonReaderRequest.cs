@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.ObjectModel;
+using System.Threading;
 using Foundation.Collections.ReadOnly;
 
 namespace Foundation.Data
@@ -19,7 +20,7 @@ namespace Foundation.Data
         {
         }
 
-        public ExecuteNonReaderRequest(string commandText, ReadOnlyList<object> parameters)
+        public ExecuteNonReaderRequest(string commandText, ReadOnlyCollection<object> parameters)
             : this(new CreateCommandRequest(commandText, parameters), CancellationToken.None)
         {
         }

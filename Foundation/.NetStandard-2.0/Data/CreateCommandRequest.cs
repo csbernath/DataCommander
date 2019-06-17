@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Collections.ObjectModel;
+using System.Data;
 using Foundation.Collections.ReadOnly;
 
 namespace Foundation.Data
@@ -6,12 +7,13 @@ namespace Foundation.Data
     public class CreateCommandRequest
     {
         public readonly string CommandText;
-        public readonly ReadOnlyList<object> Parameters;
+        public readonly ReadOnlyCollection<object> Parameters;
         public readonly CommandType CommandType;
         public readonly int? CommandTimeout;
         public readonly IDbTransaction Transaction;
 
-        public CreateCommandRequest(string commandText, ReadOnlyList<object> parameters, CommandType commandType, int? commandTimeout, IDbTransaction transaction)
+        public CreateCommandRequest(string commandText, ReadOnlyCollection<object> parameters, CommandType commandType, int? commandTimeout,
+            IDbTransaction transaction)
         {
             CommandText = commandText;
             Parameters = parameters;
@@ -20,7 +22,7 @@ namespace Foundation.Data
             Transaction = transaction;
         }
 
-        public CreateCommandRequest(string commandText, ReadOnlyList<object> parameters)
+        public CreateCommandRequest(string commandText, ReadOnlyCollection<object> parameters)
             : this(commandText, parameters, CommandType.Text, null, null)
         {
         }

@@ -25,6 +25,7 @@ namespace Foundation.Data.DbQueryBuilding
             var stringBuilder = new StringBuilder();
 
             stringBuilder.Append($@"using System;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.Common;
 using System.Threading;
@@ -597,7 +598,7 @@ namespace {_request.Namespace}
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append(
-                $"private static ReadOnlyList<object> ToParameters({_request.Name}Db{GetRequestType()} {ToLower(GetRequestType())})\r\n");
+                $"private static ReadOnlyCollection<object> ToParameters({_request.Name}Db{GetRequestType()} {ToLower(GetRequestType())})\r\n");
             stringBuilder.Append("{\r\n");
             stringBuilder.Append("    var parameters = new SqlParameterCollectionBuilder();\r\n");
 
@@ -653,7 +654,7 @@ namespace {_request.Namespace}
                 }
             }
 
-            stringBuilder.Append("    return parameters.ToReadOnlyList();\r\n");
+            stringBuilder.Append("    return parameters.ToReadOnlyCollection();\r\n");
             stringBuilder.Append("}");
 
             return stringBuilder.ToString();

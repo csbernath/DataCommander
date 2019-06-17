@@ -40,7 +40,7 @@ order by i.name",
 
             var parameters = new SqlParameterCollectionBuilder();
             parameters.Add("object_id", _id);
-            var request = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyList());
+            var request = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
 
             var connectionString = _databaseNode.Databases.Server.ConnectionString;
             var executor = new SqlCommandExecutor(connectionString);

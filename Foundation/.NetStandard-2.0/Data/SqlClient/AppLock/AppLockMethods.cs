@@ -6,7 +6,8 @@ namespace Foundation.Data.SqlClient.AppLock
 {
     public sealed class AppLockMethods
     {
-        public static GetAppLockReturnCode GetAppLock(IDbConnection connection, IDbTransaction transaction, string resourceName, LockMode lockMode, LockOwner? lockOwner,
+        public static GetAppLockReturnCode GetAppLock(IDbConnection connection, IDbTransaction transaction, string resourceName, LockMode lockMode,
+            LockOwner? lockOwner,
             TimeSpan? lockTimeout, string databasePrincipal)
         {
             const string commandText = "sp_getapplock";
@@ -31,7 +32,7 @@ namespace Foundation.Data.SqlClient.AppLock
                 Direction = ParameterDirection.ReturnValue
             };
             builder.Add(returnCodeParameter);
-            var parameters = builder.ToReadOnlyList();
+            var parameters = builder.ToReadOnlyCollection();
 
             var createCommandRequest = new CreateCommandRequest(commandText, parameters, CommandType.StoredProcedure, null, transaction);
             connection.CreateCommandExecutor().ExecuteNonQuery(createCommandRequest);
