@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
+using Foundation.Collections.ReadOnly;
 
 namespace Foundation.Data
 {
@@ -47,23 +48,24 @@ namespace Foundation.Data
             return scalar;
         }
 
-        public static Task ExecuteReaderAsync(this IDbCommandAsyncExecutor executor, ExecuteReaderRequest request, Func<DbDataReader, Task> read)
+        public static Task ExecuteReaderAsync(this IDbCommandAsyncExecutor executor, ExecuteReaderRequest request, Func<DbDataReader, Task> readResults)
         {
             return executor.ExecuteAsync(
                 new ExecuteNonReaderRequest(request.CreateCommandRequest, request.CancellationToken),
                 async command =>
                 {
                     using (var dataReader = await command.ExecuteReaderAsync(request.CommandBehavior, request.CancellationToken))
-                        await read(dataReader);
+                        await readResults(dataReader);
                 });
         }
 
-        public static async Task<List<T>> ExecuteReaderAsync<T>(this IDbCommandAsyncExecutor executor, ExecuteReaderRequest request, Func<IDataRecord, T> read)
+        public static async Task<ReadOnlySegmentLinkedList<T>> ExecuteReaderAsync<T>(this IDbCommandAsyncExecutor executor, ExecuteReaderRequest request,
+            int segmentLength, Func<IDataRecord, T> read)
         {
-            List<T> records = null;
+            ReadOnlySegmentLinkedList<T> records = null;
             await executor.ExecuteReaderAsync(
                 request,
-                async dataReader => records = await dataReader.ReadResultAsync(read, request.CancellationToken));
+                async dataReader => records = await dataReader.ReadResultAsync(segmentLength, read, request.CancellationToken));
             return records;
         }
     }

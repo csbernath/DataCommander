@@ -289,7 +289,7 @@ namespace {_request.Namespace}
                 }
 
                 stringBuilder.Append(
-                    $"        var {ToLower(result.FieldName)} = dataReader.Read{next}Result(Read{result.Name}).ToReadOnlySegmentLinkedList(128);");
+                    $"        var {ToLower(result.FieldName)} = dataReader.Read{next}Result(128, Read{result.Name});");
             }
 
             stringBuilder.Append($"\r\n        result = new {_request.Name}DbQueryResult(");
@@ -370,7 +370,7 @@ namespace {_request.Namespace}
             {
                 var next = sequence.Next() == 0 ? null : "Next";
                 stringBuilder.Append(
-                    $"var {ToLower(result.FieldName)} = (await dataReader.Read{next}ResultAsync(Read{result.Name}, request.CancellationToken)).ToReadOnlySegmentLinkedList(128);\r\n");
+                    $"var {ToLower(result.FieldName)} = (await dataReader.Read{next}ResultAsync(128, Read{result.Name}, request.CancellationToken));\r\n");
             }
 
             stringBuilder.Append($"result = new {_request.Name}DbQueryResult({GetResultVariableNames()});");
