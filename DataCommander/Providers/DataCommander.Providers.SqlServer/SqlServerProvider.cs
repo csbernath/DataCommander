@@ -613,10 +613,9 @@ order by 1", name.Database);
                         {
                             while (true)
                             {
-                                dataReader.ReadResult(() =>
+                                var fieldCount = dataReader.FieldCount;
+                                while (dataReader.Read())
                                 {
-                                    var fieldCount = dataReader.FieldCount;
-
                                     string schemaName;
                                     string objectName;
 
@@ -632,7 +631,7 @@ order by 1", name.Database);
                                     }
 
                                     list.Add(new ObjectName(schemaName, objectName));
-                                });
+                                }
 
                                 if (!dataReader.NextResult())
                                     break;
