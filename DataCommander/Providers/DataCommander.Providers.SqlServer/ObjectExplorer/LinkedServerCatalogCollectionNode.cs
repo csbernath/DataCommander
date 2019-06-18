@@ -66,8 +66,8 @@ drop table #catalog";
 
                 var executor = connection.CreateCommandExecutor();
                 var executeReaderRequest = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
-                var nodes = executor.ExecuteReader(executeReaderRequest, dataRecord => new LinkedServerCatalogNode(_linkedServer, dataRecord.GetString(0)));
-                return nodes;
+                return executor.ExecuteReader(executeReaderRequest, 128,
+                    dataRecord => new LinkedServerCatalogNode(_linkedServer, dataRecord.GetString(0)));
             }
         }
 

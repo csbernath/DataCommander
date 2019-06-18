@@ -53,6 +53,7 @@ from {_databaseNode.Name}.{_name}";
             var createTableStatement = MySqlClientFactory.Instance.ExecuteReader(
                 _databaseNode.ObjectExplorer.ConnectionString,
                 new ExecuteReaderRequest(commandText),
+                128,
                 dataRecord => dataRecord.GetString(0)).First();
 
             Clipboard.SetText(createTableStatement);

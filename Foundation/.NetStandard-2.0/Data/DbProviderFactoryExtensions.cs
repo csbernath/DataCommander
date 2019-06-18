@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Common;
 using System.Globalization;
 using Foundation.Assertions;
+using Foundation.Collections.ReadOnly;
 
 namespace Foundation.Data
 {
@@ -48,11 +49,11 @@ namespace Foundation.Data
             }
         }
 
-        public static List<T> ExecuteReader<T>(this DbProviderFactory dbProviderFactory, string connectionString, ExecuteReaderRequest request,
-            Func<IDataRecord, T> read)
+        public static ReadOnlySegmentLinkedList<T> ExecuteReader<T>(this DbProviderFactory dbProviderFactory, string connectionString,
+            ExecuteReaderRequest request, int segmentLength, Func<IDataRecord, T> readRecord)
         {
-            List<T> rows = null;
-            dbProviderFactory.ExecuteReader(connectionString, request, dataReader => rows = dataReader.ReadResult(read));
+            ReadOnlySegmentLinkedList<T> rows = null;
+            dbProviderFactory.ExecuteReader(connectionString, request, dataReader => rows = dataReader.ReadResult(segmentLength, readRecord));
             return rows;
         }
 

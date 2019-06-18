@@ -63,11 +63,11 @@ order by line";
 
             executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
             {
-                dataReader.ReadResult(() =>
+                while (dataReader.Read())
                 {
                     var text = dataReader.GetString(0);
                     sb.Append(text);
-                });
+                }
             });
 
             QueryForm.ShowText(sb.ToString());

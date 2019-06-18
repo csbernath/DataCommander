@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using Foundation.Data;
+using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.OracleBase.ObjectExplorer
 {
@@ -23,12 +24,12 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         {
             var commandText = $@"select	OBJECT_NAME
 from SYS.ALL_OBJECTS
-where OWNER	= '{_schemaNode.Name}'
+where OWNER	= {_schemaNode.Name.ToVarChar()}
     and OBJECT_TYPE	= 'FUNCTION'
 order by OBJECT_NAME";
             var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
 
-            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
+            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
             {
                 var procedureName = dataRecord.GetString(0);
                 return new FunctionNode(_schemaNode, null, procedureName);

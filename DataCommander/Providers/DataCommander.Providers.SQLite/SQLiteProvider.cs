@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using DataCommander.Providers.Connection;
@@ -190,11 +191,11 @@ order by name collate nocase";
                 if (commandText != null)
                 {
                     var executor = DbCommandExecutorFactory.Create(connection.Connection);
-                    response.Items = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
+                    response.Items = executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
                     {
                         var name = dataRecord.GetStringOrDefault(0);
                         return (IObjectName) new ObjectName(name);
-                    });
+                    }).ToList();
                 }
             }
 

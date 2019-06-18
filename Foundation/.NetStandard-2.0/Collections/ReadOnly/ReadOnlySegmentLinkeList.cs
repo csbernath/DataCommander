@@ -26,7 +26,16 @@ namespace Foundation.Collections.ReadOnly
             while (linkedListNode != null)
             {
                 var segment = linkedListNode.Value;
-                var count = linkedListNode != _linkedList.Last ? segment.Length : _count % segment.Length;
+
+                int count;
+                if (linkedListNode == _linkedList.Last)
+                {
+                    var remainder = _count % segment.Length;
+                    count = remainder == 0 ? segment.Length : remainder;
+                }
+                else
+                    count = segment.Length;
+
                 for (var i = 0; i < count; ++i)
                     yield return segment[i];
                 linkedListNode = linkedListNode.Next;

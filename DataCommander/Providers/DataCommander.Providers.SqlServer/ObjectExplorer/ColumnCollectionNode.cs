@@ -91,21 +91,22 @@ order by fkc.parent_column_id";
                     var executor = DbCommandExecutorFactory.Create(connection);
                     executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
                     {
-                        columnNodes = dataReader.ReadResult(() => ToColumnNode(dataReader)).ToSortedDictionary(c => c.Id);
+                        columnNodes = dataReader.ReadResult(128, ToColumnNode).ToSortedDictionary(c => c.Id);
                         dataReader.NextResult();
-                        dataReader.ReadResult(() =>
+                        while (dataReader.Read())
                         {
                             var columnId = dataReader.GetInt32(0);
                             var columnNode = columnNodes[columnId];
                             columnNode.IsPrimaryKey = true;
-                        });
+                        }
+
                         dataReader.NextResult();
-                        dataReader.ReadResult(() =>
+                        while (dataReader.Read())
                         {
                             var columnId = dataReader.GetInt32(0);
                             var columnNode = columnNodes[columnId];
                             columnNode.IsForeignKey = true;
-                        });
+                        }
                     });
                 }
             }

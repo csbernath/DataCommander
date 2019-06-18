@@ -16,8 +16,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             _server = server;
         }
 
-        #region ITreeNode Members
-
         string ITreeNode.Name => "Logins";
         bool ITreeNode.IsLeaf => false;
 
@@ -29,14 +27,11 @@ where   sp.type in('S','U','G')
 order by name";
             var request = new ExecuteReaderRequest(commandText);
             var executor = new SqlCommandExecutor(_server.ConnectionString);
-            var loginNodes = executor.ExecuteReader(request, dataRecord => new LoginNode(dataRecord.GetString(0)));
-            return loginNodes;
+            return executor.ExecuteReader(request, 128, dataRecord => new LoginNode(dataRecord.GetString(0)));
         }
 
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
         ContextMenuStrip ITreeNode.ContextMenu => null;
-
-        #endregion
     }
 }

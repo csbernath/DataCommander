@@ -44,9 +44,11 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
         {
             var commandText = $"show create function {_databaseNode.Name}.{_name}";
             var statement = MySqlClientFactory.Instance.ExecuteReader(
-                _databaseNode.ObjectExplorer.ConnectionString,
-                new ExecuteReaderRequest(commandText),
-                dataRecord => dataRecord.GetString(2)).First();
+                    _databaseNode.ObjectExplorer.ConnectionString,
+                    new ExecuteReaderRequest(commandText),
+                    128,
+                    dataRecord => dataRecord.GetString(2))
+                .First();
 
             Clipboard.SetText(statement);
             var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;

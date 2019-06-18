@@ -19,12 +19,11 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             var commandText = $"select name from {_database.Name}..sysusers where issqlrole = 1 order by name";
             var connectionString = _database.Databases.Server.ConnectionString;
             var executor = new SqlCommandExecutor(connectionString);
-            var roleNodes = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
+            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
             {
                 var name = dataRecord.GetString(0);
                 return new RoleNode(_database, name);
             });
-            return roleNodes;
         }
 
         public bool Sortable => false;

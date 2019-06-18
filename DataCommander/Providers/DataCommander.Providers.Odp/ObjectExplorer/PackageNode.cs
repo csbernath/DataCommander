@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using DataCommander.Providers.Query;
@@ -36,7 +37,7 @@ where	owner = '{_schemaNode.Name}'
 order by procedure_name";
             var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
 
-            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
+            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
             {
                 var procedureName = dataRecord.GetString(0);
                 return new ProcedureNode(_schemaNode, this, procedureName);

@@ -30,13 +30,13 @@ join {databaseName}.sys.views v (nolock)
 order by 1,2";
             SqlClientFactory.Instance.ExecuteReader(_database.Databases.Server.ConnectionString, new ExecuteReaderRequest(commandText), dataReader =>
             {
-                dataReader.ReadResult(() =>
+                while (dataReader.Read())
                 {
                     var schema = dataReader.GetString(0);
                     var name = dataReader.GetString(1);
                     var id = dataReader.GetInt32(2);
                     treeNodes.Add(new ViewNode(_database, id, schema, name));
-                });
+                }
             });
             return treeNodes;
         }

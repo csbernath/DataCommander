@@ -29,20 +29,16 @@ from    sys.servers s (nolock)
 where   s.is_linked = 1
 order by s.name";
 
-            List<ITreeNode> treeNodes;
-
             using (var connection = new SqlConnection(Server.ConnectionString))
             {
                 connection.Open();
                 var executor = connection.CreateCommandExecutor();
-                treeNodes = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
+                return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataReader =>
                 {
                     var name = dataReader.GetString(0);
                     return (ITreeNode) new LinkedServerNode(this, name);
                 });
             }
-
-            return treeNodes;
         }
 
         bool ITreeNode.Sortable => false;

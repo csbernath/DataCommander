@@ -30,6 +30,7 @@ order by TABLE_NAME";
             return MySqlClientFactory.Instance.ExecuteReader(
                 _databaseNode.ObjectExplorer.ConnectionString,
                 new ExecuteReaderRequest(commandText),
+                128,
                 dataRecord =>
                 {
                     var name = dataRecord.GetString(0);

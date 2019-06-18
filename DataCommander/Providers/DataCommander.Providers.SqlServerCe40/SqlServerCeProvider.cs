@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlServerCe;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using DataCommander.Providers.Connection;
@@ -139,7 +140,7 @@ ORDER BY ORDINAL_POSITION";
                     try
                     {
                         var executor = connection.Connection.CreateCommandExecutor();
-                        list = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord => dataRecord.GetString(0));
+                        list = executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord => dataRecord.GetString(0)).ToList();
                     }
                     catch
                     {

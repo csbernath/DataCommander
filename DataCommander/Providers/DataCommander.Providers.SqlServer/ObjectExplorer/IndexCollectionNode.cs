@@ -45,7 +45,7 @@ order by i.name",
             var connectionString = _databaseNode.Databases.Server.ConnectionString;
             var executor = new SqlCommandExecutor(connectionString);
 
-            var indexNodes = executor.ExecuteReader(request, dataRecord =>
+            return executor.ExecuteReader(request, 128, dataRecord =>
             {
                 var name = dataRecord.GetStringOrDefault(0);
                 var indexId = dataRecord.GetInt32(1);
@@ -53,8 +53,6 @@ order by i.name",
                 var isUnique = dataRecord.GetBoolean(3);
                 return new IndexNode(_databaseNode, _id, indexId, name, type, isUnique);
             });
-
-            return indexNodes;
         }
 
         public bool Sortable => false;

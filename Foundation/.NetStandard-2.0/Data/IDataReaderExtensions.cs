@@ -1,61 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Threading;
 using Foundation.Assertions;
+using Foundation.Collections;
+using Foundation.Collections.ReadOnly;
 
 namespace Foundation.Data
 {
-    public static class DataReaderExtensions
+    public static class IDataReaderExtensions
     {
-        public static void ReadResult(this IDataReader dataReader, Action readRecord)
+        public static ReadOnlySegmentLinkedList<T> ReadResult<T>(this IDataReader dataReader, int segmentLength, Func<IDataRecord, T> readRecord)
         {
+            var segmentLinkedListBuilder = new SegmentLinkedListBuilder<T>(segmentLength);
             while (dataReader.Read())
-                readRecord();
-        }
-
-        public static void ReadResults(this IDataReader dataReader, IEnumerable<Action> readRecords)
-        {
-            foreach (var readRecord in readRecords)
-            {
-                dataReader.ReadResult(readRecord);
-                var nextResult = dataReader.NextResult();
-                Assert.IsTrue(nextResult);
-            }
-        }
-
-        public static List<T> ReadResult<T>(this IDataReader dataReader, Func<IDataRecord, T> readRecord)
-        {
-            var records = new List<T>();
-
-            dataReader.ReadResult(() =>
             {
                 var record = readRecord(dataReader);
-                records.Add(record);
-            });
+                segmentLinkedListBuilder.Add(record);
+            }
 
-            return records;
+            return segmentLinkedListBuilder.ToReadOnlySegmentLinkedList();
         }
 
-        public static List<T> ReadNextResult<T>(this IDataReader dataReader, Func<IDataRecord, T> readRecord)
+        public static ReadOnlySegmentLinkedList<T> ReadNextResult<T>(this IDataReader dataReader, int segmentLength, Func<IDataRecord, T> readRecord)
         {
             var nextResult = dataReader.NextResult();
             Assert.IsTrue(nextResult);
-            return dataReader.ReadResult(readRecord);
-        }
-
-        public static List<T> ReadResult<T>(this IDataReader dataReader, Func<T> readRecord)
-        {
-            var records = new List<T>();
-
-            dataReader.ReadResult(() =>
-            {
-                var record = readRecord();
-                records.Add(record);
-            });
-
-            return records;
+            return dataReader.ReadResult(segmentLength, readRecord);
         }
 
         public static int Fill(this IDataReader dataReader, DataSet dataSet, CancellationToken cancellationToken)

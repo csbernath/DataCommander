@@ -34,13 +34,12 @@ order by name";
 
             var connectionString = _databaseNode.Databases.Server.ConnectionString;
             var executor = new SqlCommandExecutor(connectionString);
-            var triggerNodes = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
+            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
             {
                 var name = dataRecord.GetString(0);
                 var id = dataRecord.GetInt32(1);
                 return new TriggerNode(_databaseNode, id, name);
             });
-            return triggerNodes;
         }
 
         public bool Sortable => false;

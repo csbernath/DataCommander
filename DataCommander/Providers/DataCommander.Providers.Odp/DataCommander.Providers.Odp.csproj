@@ -109,6 +109,10 @@
     <Compile Include="ObjectExplorer\ViewCollectionNode.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Foundation\.NetStandard-2.0\Collections\Foundation.Collections.csproj">
+      <Project>{61b48d70-b14f-462c-8a07-e9db585d3869}</Project>
+      <Name>Foundation.Collections</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Foundation\.NetStandard-2.0\Core\Foundation.Core.csproj">
       <Project>{5B3A35C4-CDC3-4CE6-AFDE-41F980A5A7EC}</Project>
       <Name>Foundation.Core</Name>

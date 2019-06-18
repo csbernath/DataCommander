@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Foundation.Data;
+using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.OracleBase.ObjectExplorer
 {
@@ -22,15 +23,12 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            var commandText =
-                $@"select	s.SEQUENCE_NAME
-from	SYS.ALL_SEQUENCES s
-where	s.SEQUENCE_OWNER	= '{_schemaNode.Name}'
-order by s.SEQUENCE_NAME
-";
+            var commandText = $@"select s.SEQUENCE_NAME
+from SYS.ALL_SEQUENCES s
+where s.SEQUENCE_OWNER	= {_schemaNode.Name.ToVarChar()}
+order by s.SEQUENCE_NAME";
             var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
-
-            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
+            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
             {
                 var name = dataRecord.GetString(0);
                 return (ITreeNode) new SequenceNode(_schemaNode, name);

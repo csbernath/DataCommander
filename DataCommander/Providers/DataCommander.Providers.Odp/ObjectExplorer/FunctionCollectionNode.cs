@@ -30,7 +30,7 @@ order by OBJECT_NAME";
 
 
             var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
-            var functionNodes = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
+            var functionNodes = executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
             {
                 var procedureName = dataRecord.GetString(0);
                 return new FunctionNode(_schemaNode, null, procedureName);

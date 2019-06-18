@@ -62,11 +62,11 @@ order by line";
 
             executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
             {
-                dataReader.ReadResult(() =>
+                while (dataReader.Read())
                 {
                     text = dataReader.GetString(0);
                     sb.Append(text);
-                });
+                }
             });
 
             text = sb.ToString();

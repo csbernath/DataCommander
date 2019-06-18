@@ -15,8 +15,6 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
             _tableNode = tableNode;
         }
 
-        #region ITreeNode Members
-
         string ITreeNode.Name => "Indexes";
         bool ITreeNode.IsLeaf => false;
 
@@ -24,18 +22,15 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
         {
             var commandText = $"PRAGMA index_list({_tableNode.Name});";
             var executor = DbCommandExecutorFactory.Create(_tableNode.Database.Connection);
-            var indexNodes = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
+            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
             {
                 var name = dataRecord.GetString(0);
                 return new IndexNode(_tableNode, name);
             });
-            return indexNodes;
         }
 
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
         ContextMenuStrip ITreeNode.ContextMenu => null;
-
-        #endregion
     }
 }

@@ -27,13 +27,14 @@ where o.type = 'FN'
 order by 1,2";
             commandText = string.Format(commandText, _database.Name);
 
-            return SqlClientFactory.Instance.ExecuteReader(_database.Databases.Server.ConnectionString, new ExecuteReaderRequest(commandText), dataRecord =>
-            {
-                var owner = dataRecord.GetString(0);
-                var name = dataRecord.GetString(1);
-                var xtype = dataRecord.GetString(2);
-                return new FunctionNode(_database, owner, name, xtype);
-            });
+            return SqlClientFactory.Instance.ExecuteReader(_database.Databases.Server.ConnectionString, new ExecuteReaderRequest(commandText), 128,
+                dataRecord =>
+                {
+                    var owner = dataRecord.GetString(0);
+                    var name = dataRecord.GetString(1);
+                    var xtype = dataRecord.GetString(2);
+                    return new FunctionNode(_database, owner, name, xtype);
+                });
         }
 
         public bool Sortable => false;

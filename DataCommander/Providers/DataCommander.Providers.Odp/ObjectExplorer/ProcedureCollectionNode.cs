@@ -27,7 +27,7 @@ where	OWNER	= '{_schemaNode.Name}'
 order by OBJECT_NAME";
             var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
 
-            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
+            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
             {
                 var procedureName = dataRecord.GetString(0);
                 return new ProcedureNode(_schemaNode, null, procedureName);

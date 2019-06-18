@@ -20,7 +20,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            var childNodes = new List<ITreeNode>();
             var commandText = $@"select
     s.name,
     tbl.name,
@@ -52,20 +51,14 @@ order by 1,2";
             {
                 connection.Open();
                 var executor = connection.CreateCommandExecutor();
-                executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
+                return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataReader =>
                 {
-                    dataReader.ReadResult(() =>
-                    {
-                        var schema = dataReader.GetString(0);
-                        var name = dataReader.GetString(1);
-                        var id = dataReader.GetInt32(2);
-                        var tableNode = new TableNode(DatabaseNode, schema, name, id);
-                        childNodes.Add(tableNode);
-                    });
+                    var schema = dataReader.GetString(0);
+                    var name = dataReader.GetString(1);
+                    var id = dataReader.GetInt32(2);
+                    return new TableNode(DatabaseNode, schema, name, id);
                 });
             }
-
-            return childNodes;
         }
 
         bool ITreeNode.Sortable => false;

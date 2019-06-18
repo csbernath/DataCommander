@@ -928,8 +928,8 @@ order by ic.index_column_id",
             GetTableSchemaResult getTableSchemaResult = null;
             executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
             {
-                var columns = dataReader.ReadResult(ReadColumn).ToReadOnlyList();
-                var uniqueIndexColumns = dataReader.ReadNextResult(ReadUniqueIndexColumn).ToReadOnlyList();
+                var columns = dataReader.ReadResult(128, ReadColumn).ToReadOnlyList();
+                var uniqueIndexColumns = dataReader.ReadNextResult(128, ReadUniqueIndexColumn).ToReadOnlyList();
                 getTableSchemaResult = new GetTableSchemaResult(columns, uniqueIndexColumns);
             });
             return getTableSchemaResult;

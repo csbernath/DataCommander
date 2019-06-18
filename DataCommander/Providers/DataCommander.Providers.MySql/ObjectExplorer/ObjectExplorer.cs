@@ -23,6 +23,7 @@ order by SCHEMA_NAME";
             return MySqlClientFactory.Instance.ExecuteReader(
                 ConnectionString,
                 new ExecuteReaderRequest(commandText),
+                128,
                 dataRecord =>
                 {
                     var name = dataRecord.GetString(0);

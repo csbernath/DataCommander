@@ -104,6 +104,10 @@
     <Compile Include="ObjectExplorer\ViewNode.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Foundation\.NetStandard-2.0\Collections\Foundation.Collections.csproj">
+      <Project>{61B48D70-B14F-462C-8A07-E9DB585D3869}</Project>
+      <Name>Foundation.Collections</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\DataCommander.Providers\DataCommander.Providers.csproj">
       <Project>{31A30A80-D1B6-4867-A65E-188DE9E912C8}</Project>
       <Name>DataCommander.Providers</Name>

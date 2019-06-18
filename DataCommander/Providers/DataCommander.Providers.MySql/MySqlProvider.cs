@@ -171,9 +171,10 @@ namespace DataCommander.Providers.MySql
                 var executor = DbCommandExecutorFactory.Create(connection.Connection);
                 foreach (var statement in statements)
                 {
-                    var items = executor.ExecuteReader(new ExecuteReaderRequest(statement), dataRecord => new ObjectName(null, dataRecord.GetString(0)));
+                    var items = executor.ExecuteReader(new ExecuteReaderRequest(statement), 128, dataRecord => new ObjectName(null, dataRecord.GetString(0)));
                     objectNames.AddRange(items);
                 }
+
                 response.Items = objectNames;
             }
 

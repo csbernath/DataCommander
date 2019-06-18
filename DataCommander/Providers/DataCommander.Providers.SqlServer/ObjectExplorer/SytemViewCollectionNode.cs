@@ -30,26 +30,19 @@ join {databaseName}.sys.system_views v (nolock)
     on s.schema_id = v.schema_id
 order by 1,2";
             commandText = string.Format(commandText, _databaseNode.Name);
-            var treeNodes = new List<ViewNode>();
             var connectionString = _databaseNode.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 var executor = connection.CreateCommandExecutor();
-                executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
+                return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataReader =>
                 {
-                    dataReader.ReadResult(() =>
-                    {
-                        var schema = dataReader.GetString(0);
-                        var name = dataReader.GetString(1);
-                        var id = dataReader.GetInt32(2);
-                        var viewNode = new ViewNode(_databaseNode, id, schema, name);
-                        treeNodes.Add(viewNode);
-                    });
+                    var schema = dataReader.GetString(0);
+                    var name = dataReader.GetString(1);
+                    var id = dataReader.GetInt32(2);
+                    return new ViewNode(_databaseNode, id, schema, name);
                 });
             }
-
-            return treeNodes;
         }
 
         public bool Sortable => false;

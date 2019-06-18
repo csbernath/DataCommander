@@ -23,7 +23,7 @@ from	SYS.ALL_SEQUENCES s
 where	s.SEQUENCE_OWNER	= '{_schemaNode.Name}'
 order by s.SEQUENCE_NAME";
             var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
-            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
+            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataReader =>
             {
                 var name = dataReader.GetString(0);
                 return new SequenceNode(_schemaNode, name);

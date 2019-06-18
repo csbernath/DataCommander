@@ -29,18 +29,12 @@ order by s.name";
             {
                 connection.Open();
                 var executor = connection.CreateCommandExecutor();
-                executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
+                return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
                 {
-                    dataReader.ReadResult(() =>
-                    {
-                        var name = dataReader.GetString(0);
-                        var treeNode = new SchemaNode(_database, name);
-                        treeNodes.Add(treeNode);
-                    });
+                    var name = dataRecord.GetString(0);
+                    return new SchemaNode(_database, name);
                 });
             }
-
-            return treeNodes;
         }
 
         public bool Sortable => false;

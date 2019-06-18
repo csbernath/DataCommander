@@ -20,31 +20,23 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            var nodes = new List<ITreeNode>();
-
             using (var connection = new NpgsqlConnection(_schemaNode.SchemaCollectionNode.ObjectExplorer.ConnectionString))
             {
                 connection.Open();
                 var executor = connection.CreateCommandExecutor();
-                executor.ExecuteReader(new ExecuteReaderRequest($@"select table_name
+                return executor.ExecuteReader(new ExecuteReaderRequest($@"select table_name
 from information_schema.views
 where table_schema = '{_schemaNode.Name}'
-order by table_name"), dataReader => dataReader.ReadResult(
-                    () =>
-                    {
-                        var name = dataReader.GetString(0);
-                        var viewNode = new ViewNode(this, name);
-                        nodes.Add(viewNode);
-                    }));
+order by table_name"), 128, dataReader =>
+                {
+                    var name = dataReader.GetString(0);
+                    return new ViewNode(this, name);
+                });
             }
-
-            return nodes;
         }
 
         bool ITreeNode.Sortable => false;
-
         string ITreeNode.Query => null;
-
         ContextMenuStrip ITreeNode.ContextMenu => null;
     }
 }

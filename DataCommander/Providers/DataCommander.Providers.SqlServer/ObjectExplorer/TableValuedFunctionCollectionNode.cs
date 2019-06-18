@@ -30,6 +30,7 @@ order by 1,2";
             return SqlClientFactory.Instance.ExecuteReader(
                 _database.Databases.Server.ConnectionString,
                 new ExecuteReaderRequest(commandText),
+                128,
                 dataRecord =>
                 {
                     var owner = dataRecord.GetString(0);

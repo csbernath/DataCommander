@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using DataCommander.Providers.Query;
 using Foundation.Data;
+using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
 {
@@ -45,23 +46,23 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         {
             var commandText = $@"select	text
 from all_source
-where owner = '{_schemaNode.Name}'
-    and name = '{_name}'
+where owner = {_schemaNode.Name.ToVarChar()}
+    and name = {_name.ToVarChar()}
     and type = 'PROCEDURE'
 order by line";
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
 
             executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
             {
-                dataReader.ReadResult(() =>
+                while (dataReader.Read())
                 {
                     var s = dataReader.GetString(0);
-                    sb.Append(s);
-                });
+                    stringBuilder.Append(s);
+                }
             });
 
-            var text = sb.ToString();
+            var text = stringBuilder.ToString();
             QueryForm.ShowText(text);
         }
 

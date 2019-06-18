@@ -33,7 +33,7 @@ from sys.databases d (nolock)
 where name not in('master','model','msdb','tempdb')
 order by d.name";
 
-            var rows = SqlClientFactory.Instance.ExecuteReader(Server.ConnectionString, new ExecuteReaderRequest(commandText), dataRecord =>
+            var rows = SqlClientFactory.Instance.ExecuteReader(Server.ConnectionString, new ExecuteReaderRequest(commandText), 128, dataRecord =>
             {
                 var name = dataRecord.GetString(0);
                 return new DatabaseNode(this, name);

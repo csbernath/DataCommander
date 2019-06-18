@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using DataCommander.Providers.Query;
 using Foundation.Data;
+using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.OracleBase.ObjectExplorer
 {
@@ -28,12 +29,12 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
             var commandText =
                 $@"select	procedure_name
 from	all_procedures
-where	owner = '{_schemaNode.Name}'
-	and object_name = '{_name}'
+where	owner = {_schemaNode.Name.ToVarChar()}
+	and object_name = {_name.ToVarChar()}
 order by procedure_name";
             var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
 
-            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
+            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
             {
                 var procedureName = dataRecord.GetString(0);
                 return new ProcedureNode(_schemaNode, this, procedureName);

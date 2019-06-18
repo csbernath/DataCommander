@@ -44,6 +44,7 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
             var statement = MySqlClientFactory.Instance.ExecuteReader(
                 _databaseNode.ObjectExplorer.ConnectionString,
                 new ExecuteReaderRequest(commandText),
+                128,
                 dataRecord => dataRecord.GetString(2)).First();
 
             Clipboard.SetText(statement);

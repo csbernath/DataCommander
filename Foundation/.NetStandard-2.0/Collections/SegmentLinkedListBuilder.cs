@@ -8,7 +8,7 @@ namespace Foundation.Collections
     {
         private readonly LinkedList<T[]> _linkedList = new LinkedList<T[]>();
         private readonly int _segmentLength;
-        private int _count = 0;
+        private int _count;
 
         public SegmentLinkedListBuilder(int segmentLength)
         {

@@ -27,12 +27,11 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
         {
             const string commandText = @"PRAGMA database_list;";
             var executor = DbCommandExecutorFactory.Create(_connection);
-            var databaseNodes = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
+            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
             {
                 var name = dataRecord.GetString(1);
                 return new DatabaseNode(_connection, name);
             });
-            return databaseNodes;
         }
 
         bool ITreeNode.Sortable => false;

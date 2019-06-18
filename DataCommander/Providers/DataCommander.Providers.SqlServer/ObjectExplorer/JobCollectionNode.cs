@@ -24,7 +24,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             const string commandText = @"select  j.name
 from    msdb.dbo.sysjobs j (nolock)
 order by j.name";
-            return SqlClientFactory.Instance.ExecuteReader(Server.ConnectionString, new ExecuteReaderRequest(commandText), dataRecord =>
+            return SqlClientFactory.Instance.ExecuteReader(Server.ConnectionString, new ExecuteReaderRequest(commandText), 128, dataRecord =>
             {
                 var name = dataRecord.GetString(0);
                 return (ITreeNode) new JobNode(this, name);

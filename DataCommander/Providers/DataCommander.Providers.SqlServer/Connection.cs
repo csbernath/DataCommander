@@ -7,6 +7,7 @@ using Foundation.Data.SqlClient;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
@@ -272,11 +273,11 @@ namespace DataCommander.Providers.SqlServer
 set arithabort on";
 
                 var executor = DbCommandExecutorFactory.Create(_sqlConnection);
-                var item = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord => new
+                var item = executor.ExecuteReader(new ExecuteReaderRequest(commandText), 1, dataRecord => new
                 {
                     ServerName = dataRecord.GetString(0),
                     Spid = dataRecord.GetInt16(1)
-                })[0];
+                }).First();
                 _serverName = item.ServerName;
                 _spid = item.Spid;
             }

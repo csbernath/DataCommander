@@ -20,8 +20,6 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            var nodes = new List<ITreeNode>();
-
             using (var connection = new NpgsqlConnection(_schemaNode.SchemaCollectionNode.ObjectExplorer.ConnectionString))
             {
                 connection.Open();
@@ -30,18 +28,12 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 from information_schema.sequences
 where sequence_schema = '{_schemaNode.Name}'
 order by sequence_name";
-                executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
+                return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataReader =>
                 {
-                    dataReader.ReadResult(() =>
-                    {
-                        var name = dataReader.GetString(0);
-                        var schemaNode = new SequenceNode(this, name);
-                        nodes.Add(schemaNode);
-                    });
+                    var name = dataReader.GetString(0);
+                    return new SequenceNode(this, name);
                 });
             }
-
-            return nodes;
         }
 
         bool ITreeNode.Sortable => false;

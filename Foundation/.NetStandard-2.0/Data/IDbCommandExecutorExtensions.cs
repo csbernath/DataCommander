@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using Foundation.Collections.ReadOnly;
 using Foundation.Linq;
 
 namespace Foundation.Data
@@ -37,19 +38,20 @@ namespace Foundation.Data
             return scalar;
         }
 
-        public static void ExecuteReader(this IDbCommandExecutor executor, ExecuteReaderRequest request, Action<IDataReader> read)
+        public static void ExecuteReader(this IDbCommandExecutor executor, ExecuteReaderRequest request, Action<IDataReader> readResults)
         {
             executor.Execute(request.CreateCommandRequest, command =>
             {
                 using (var dataReader = command.ExecuteReader(request.CommandBehavior))
-                    read(dataReader);
+                    readResults(dataReader);
             });
         }
 
-        public static List<T> ExecuteReader<T>(this IDbCommandExecutor executor, ExecuteReaderRequest request, Func<IDataRecord, T> read)
+        public static ReadOnlySegmentLinkedList<T> ExecuteReader<T>(this IDbCommandExecutor executor, ExecuteReaderRequest request, int segmentLength,
+            Func<IDataRecord, T> readRecord)
         {
-            List<T> rows = null;
-            executor.ExecuteReader(request, dataReader => rows = dataReader.ReadResult(() => read(dataReader)));
+            ReadOnlySegmentLinkedList<T> rows = null;
+            executor.ExecuteReader(request, dataReader => rows = dataReader.ReadResult(segmentLength, readRecord));
             return rows;
         }
 
