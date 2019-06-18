@@ -58,40 +58,6 @@ namespace Foundation.Data
             return records;
         }
 
-        public static ExecuteReaderResponse<T1, T2> Read<T1, T2>(this IDataReader dataReader, Func<T1> read1, Func<T2> read2)
-        {
-            List<T1> result1 = null;
-            List<T2> result2 = null;
-
-            var readRecords = new Action[]
-            {
-                () => result1 = dataReader.ReadResult(read1),
-                () => result2 = dataReader.ReadResult(read2)
-            };
-
-            dataReader.ReadResults(readRecords);
-
-            return ExecuteReaderResponse.Create(result1, result2);
-        }
-
-        public static ExecuteReaderResponse<T1, T2, T3> Read<T1, T2, T3>(this IDataReader dataReader, Func<T1> read1, Func<T2> read2, Func<T3> read3)
-        {
-            List<T1> result1 = null;
-            List<T2> result2 = null;
-            List<T3> result3 = null;
-
-            var reads = new Action[]
-            {
-                () => result1 = dataReader.ReadResult(read1),
-                () => result2 = dataReader.ReadResult(read2),
-                () => result3 = dataReader.ReadResult(read3)
-            };
-
-            dataReader.ReadResults(reads);
-
-            return ExecuteReaderResponse.Create(result1, result2, result3);
-        }
-
         public static int Fill(this IDataReader dataReader, DataSet dataSet, CancellationToken cancellationToken)
         {
             Assert.IsNotNull(dataReader);

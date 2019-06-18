@@ -9,7 +9,8 @@ namespace Foundation.Data
 {
     public static class IDbCommandAsyncExecutorExtensions
     {
-        private static Task ExecuteAsync(this IDbCommandAsyncExecutor executor, IEnumerable<ExecuteCommandAsyncRequest> requests, CancellationToken cancellationToken)
+        private static Task ExecuteAsync(this IDbCommandAsyncExecutor executor, IEnumerable<ExecuteCommandAsyncRequest> requests,
+            CancellationToken cancellationToken)
         {
             return executor.ExecuteAsync(async connection =>
             {
@@ -64,26 +65,6 @@ namespace Foundation.Data
                 request,
                 async dataReader => records = await dataReader.ReadResultAsync(read, request.CancellationToken));
             return records;
-        }
-
-        public static async Task<ExecuteReaderResponse<T1, T2>> ExecuteReaderAsync<T1, T2>(this IDbCommandAsyncExecutor executor,
-            ExecuteReaderRequest request, Func<IDataRecord, T1> read1, Func<IDataRecord, T2> read2)
-        {
-            ExecuteReaderResponse<T1, T2> response = null;
-            await executor.ExecuteReaderAsync(
-                request,
-                async dataReader => response = await dataReader.ReadResultAsync(read1, read2, request.CancellationToken));
-            return response;
-        }
-
-        public static async Task<ExecuteReaderResponse<T1, T2, T3>> ExecuteReaderAsync<T1, T2, T3>(this IDbCommandAsyncExecutor executor,
-            ExecuteReaderRequest request, Func<IDataRecord, T1> read1, Func<IDataRecord, T2> read2, Func<IDataRecord, T3> read3)
-        {
-            ExecuteReaderResponse<T1, T2, T3> response = null;
-            await executor.ExecuteReaderAsync(
-                request,
-                async dataReader => response = await dataReader.ReadResultAsync(read1, read2, read3, request.CancellationToken));
-            return response;
         }
     }
 }

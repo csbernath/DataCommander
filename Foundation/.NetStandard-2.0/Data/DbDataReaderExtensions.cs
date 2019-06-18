@@ -46,55 +46,13 @@ namespace Foundation.Data
             return records;
         }
 
-        public static async Task<List<T>> ReadNextResultAsync<T>(this DbDataReader dataReader, Func<IDataRecord, T> readRecord, CancellationToken cancellationToken)
+        public static async Task<List<T>> ReadNextResultAsync<T>(this DbDataReader dataReader, Func<IDataRecord, T> readRecord,
+            CancellationToken cancellationToken)
         {
             var nextResult = await dataReader.NextResultAsync(cancellationToken);
             Assert.IsTrue(nextResult);
             var records = await dataReader.ReadResultAsync(readRecord, cancellationToken);
             return records;
-        }
-
-        public static async Task<ExecuteReaderResponse<T1, T2>> ReadResultAsync<T1, T2>(
-            this DbDataReader dataReader,
-            Func<IDataRecord, T1> read1,
-            Func<IDataRecord, T2> read2,
-            CancellationToken cancellationToken)
-        {
-            List<T1> objects1 = null;
-            List<T2> objects2 = null;
-
-            var readResults = new Func<Task>[]
-            {
-                async () => objects1 = await dataReader.ReadResultAsync(read1, cancellationToken),
-                async () => objects2 = await dataReader.ReadResultAsync(read2, cancellationToken),
-            };
-
-            await dataReader.ReadResultAsync(readResults, cancellationToken);
-
-            return ExecuteReaderResponse.Create(objects1, objects2);
-        }
-
-        public static async Task<ExecuteReaderResponse<T1, T2, T3>> ReadResultAsync<T1, T2, T3>(
-            this DbDataReader dataReader,
-            Func<IDataRecord, T1> read1,
-            Func<IDataRecord, T2> read2,
-            Func<IDataRecord, T3> read3,
-            CancellationToken cancellationToken)
-        {
-            List<T1> objects1 = null;
-            List<T2> objects2 = null;
-            List<T3> objects3 = null;
-
-            var reads = new Func<Task>[]
-            {
-                async () => objects1 = (await dataReader.ReadResultAsync(read1, cancellationToken)),
-                async () => objects2 = (await dataReader.ReadResultAsync(read2, cancellationToken)),
-                async () => objects3 = (await dataReader.ReadResultAsync(read3, cancellationToken)),
-            };
-
-            await dataReader.ReadResultAsync(reads, cancellationToken);
-
-            return ExecuteReaderResponse.Create(objects1, objects2, objects3);
         }
     }
 }
