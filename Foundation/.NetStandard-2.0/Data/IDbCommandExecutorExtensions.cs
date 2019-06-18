@@ -6,7 +6,7 @@ using Foundation.Linq;
 
 namespace Foundation.Data
 {
-    public static class DbCommandExecutorExtensions
+    public static class IDbCommandExecutorExtensions
     {
         private static void Execute(this IDbCommandExecutor executor, IEnumerable<ExecuteCommandRequest> requests)
         {
