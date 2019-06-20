@@ -28,6 +28,7 @@ namespace Foundation.Data.DbQueryBuilding
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 {_request.Using}
@@ -63,7 +64,7 @@ namespace {_request.Namespace}
             else
             {
                 csharpTypeName = SqlDataTypeArray.SqlDataTypes.First(i => i.SqlDbType == sqlDbType).CSharpTypeName;
-                if (isNullable)
+                if (csharpTypeName != CSharpTypeName.String && isNullable)
                     csharpTypeName += "?";
             }
 
