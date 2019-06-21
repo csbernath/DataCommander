@@ -27,10 +27,13 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         {
             var list = new List<ITreeNode>();
             list.Add(new SystemDatabaseCollectionNode(this));
+            list.Add(new DatabaseSnapshotCollectionNode(this));
 
             const string commandText = @"select d.name
 from sys.databases d (nolock)
-where name not in('master','model','msdb','tempdb')
+where
+    source_database_id is null
+    and name not in('master','model','msdb','tempdb')
 order by d.name";
 
             var rows = SqlClientFactory.Instance.ExecuteReader(Server.ConnectionString, new ExecuteReaderRequest(commandText), 128, dataRecord =>

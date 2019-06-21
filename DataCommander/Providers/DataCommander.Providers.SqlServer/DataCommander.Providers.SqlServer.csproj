@@ -72,6 +72,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ObjectExplorer\DatabaseSnapshotCollectionNode.cs" />
     <Compile Include="ObjectExplorer\ExtendedStoreProcedureCollectionNode.cs" />
     <Compile Include="ObjectExplorer\ExtendedStoreProcedureNode.cs" />
     <Compile Include="ObjectExplorer\SqlServerSystemType.cs" />
