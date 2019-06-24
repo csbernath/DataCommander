@@ -45,5 +45,8 @@ namespace Foundation.Core
                 return debuggerDisplay;
             }
         }
+
+        public bool Equals(MinuteSpan other) => _value == other._value;
+        public override int GetHashCode() => _value;
     }
 }

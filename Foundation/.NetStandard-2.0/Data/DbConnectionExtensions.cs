@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using Foundation.Assertions;
 
 namespace Foundation.Data
 {
@@ -6,6 +7,7 @@ namespace Foundation.Data
     {
         public static DbCommand CreateCommand(this DbConnection connection, CreateCommandRequest request)
         {
+            Assert.IsNotNull(connection);
             var command = connection.CreateCommand();
             command.Initialize(request);
             return command;

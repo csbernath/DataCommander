@@ -96,7 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.TeamFoundationServer.ExtendedClient">
-      <Version>16.143.1</Version>
+      <Version>16.143.2</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

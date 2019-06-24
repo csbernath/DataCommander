@@ -12,9 +12,7 @@ namespace Foundation.Data
         /// </summary>
         /// <param name="dataTable"></param>
         /// <param name="textWriter"></param>
-        public static void Write(
-            DataTable dataTable,
-            TextWriter textWriter)
+        public static void Write(DataTable dataTable, TextWriter textWriter)
         {
             Assert.IsNotNull(dataTable);
             Assert.IsNotNull(textWriter);
@@ -51,18 +49,7 @@ namespace Foundation.Data
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataView"></param>
-        /// <param name="columnSeparator"></param>
-        /// <param name="lineSeparator"></param>
-        /// <param name="textWriter"></param>
-        public static void Write(
-            DataView dataView,
-            char columnSeparator,
-            string lineSeparator,
-            TextWriter textWriter)
+        public static void Write(DataView dataView, char columnSeparator, string lineSeparator, TextWriter textWriter)
         {
             Assert.IsValidOperation(!string.IsNullOrEmpty(lineSeparator));
             Assert.IsNotNull(textWriter);
