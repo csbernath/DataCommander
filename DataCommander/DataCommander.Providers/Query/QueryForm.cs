@@ -376,6 +376,8 @@ namespace DataCommander.Providers.Query
 
         #region Properties
 
+        public ColorTheme ColorTheme => _colorTheme;
+
         public CommandState ButtonState { get; private set; }
 
         public ConnectionBase Connection { get; private set; }
@@ -915,8 +917,8 @@ namespace DataCommander.Providers.Query
             this._mnuOpenTable.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.O)));
             this._mnuOpenTable.Size = new System.Drawing.Size(298, 22);
-            this._mnuOpenTable.Text = "Open Table";
-            this._mnuOpenTable.Click += new System.EventHandler(this.mnuOpenTable_Click);
+            this._mnuOpenTable.Text = "Edit Rows";
+            this._mnuOpenTable.Click += new System.EventHandler(this.EditRows_Click);
             // 
             // _mnuCancel
             // 
@@ -1316,8 +1318,8 @@ namespace DataCommander.Providers.Query
             // 
             this._openTableToolStripMenuItem.Name = "_openTableToolStripMenuItem";
             this._openTableToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this._openTableToolStripMenuItem.Text = "Open Table";
-            this._openTableToolStripMenuItem.Click += new System.EventHandler(this.openTableToolStripMenuItem_Click);
+            this._openTableToolStripMenuItem.Text = "Edit Rows2";
+            this._openTableToolStripMenuItem.Click += new System.EventHandler(this.editRowsToolStripMenuItem_Click);
             // 
             // _cancelQueryButton
             // 
@@ -1406,8 +1408,8 @@ namespace DataCommander.Providers.Query
             }
 
             ticks = Stopwatch.GetTimestamp() - ticks;
-            _sbPanelText.Text = $"{count} item(s) added to Object Explorer in {StopwatchTimeSpan.ToString(ticks, 3)}.";
-            _sbPanelText.ForeColor = SystemColors.ControlText;
+            SetStatusbarPanelText($"{count} item(s) added to Object Explorer in {StopwatchTimeSpan.ToString(ticks, 3)}.",
+                _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
         }
 
         public void AddInfoMessage(InfoMessage infoMessage)
@@ -1553,8 +1555,7 @@ namespace DataCommander.Providers.Query
 
             try
             {
-                _sbPanelText.Text = "Executing query...";
-                _sbPanelText.ForeColor = _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText;
+                SetStatusbarPanelText("Executing query...", _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
                 var statements = Provider.GetStatements(query);
                 Log.Write(LogLevel.Trace, "Query:\r\n{0}", query);
                 IEnumerable<AsyncDataAdapterCommand> commands;
@@ -1979,11 +1980,7 @@ namespace DataCommander.Providers.Query
         {
             try
             {
-                _sbPanelText.Text = "Creating Word document...";
-                _sbPanelText.ForeColor = SystemColors.ControlText;
-
-                _sbPanelText.Text = "Word document created.";
-                _sbPanelText.ForeColor = SystemColors.ControlText;
+                SetStatusbarPanelText("Creating Word document...", SystemColors.ControlText);
 
                 var fileName = WordDocumentCreator.CreateWordDocument(dataTable);
 
@@ -1992,6 +1989,8 @@ namespace DataCommander.Providers.Query
                 richTextBox.WordWrap = false;
                 richTextBox.LoadFile(fileName);
                 File.Delete(fileName);
+
+                SetStatusbarPanelText("Word document created.", SystemColors.ControlText);
 
                 ShowTabPage(dataTable.TableName, GetToolTipText(dataTable), richTextBox);
             }
@@ -2073,7 +2072,7 @@ namespace DataCommander.Providers.Query
 
             _tabControl.SelectedTab = _messagesTabPage;
 
-            _sbPanelText.Text = "Query batch completed with errors.";
+            SetStatusbarPanelText("Query batch completed with errors.", Color.Red);
             _sbPanelRows.Text = null;
         }
 
@@ -2244,22 +2243,15 @@ namespace DataCommander.Providers.Query
             if (_cancel)
             {
                 AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Query was cancelled by user."));
-                _sbPanelText.Text = "Query was cancelled by user.";
-                _sbPanelText.ForeColor = _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText;
+                SetStatusbarPanelText("Query was cancelled by user.", _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
                 _cancel = false;
             }
             else
             {
                 if (_errorCount == 0)
-                {
-                    _sbPanelText.ForeColor = _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText;
-                    _sbPanelText.Text = "Query executed successfully.";
-                }
+                    SetStatusbarPanelText("Query executed successfully.", _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
                 else
-                {
-                    _sbPanelText.ForeColor = _colorTheme != null ? _colorTheme.ProviderKeyWordColor : Color.Red;
-                    _sbPanelText.Text = "Query completed with errors.";
-                }
+                    SetStatusbarPanelText("Query completed with errors.", _colorTheme != null ? _colorTheme.ProviderKeyWordColor : Color.Red);
             }
 
             _dataAdapter = null;
@@ -2310,10 +2302,7 @@ namespace DataCommander.Providers.Query
             _cancelQueryButton.Enabled = cancel;
         }
 
-        private void mnuOpenTable_Click(object sender, EventArgs e)
-        {
-            OpenTable(Query);
-        }
+        private void EditRows_Click(object sender, EventArgs e) => EditRows(Query);
 
         private static void WriteInfoMessageToLog(InfoMessage infoMessage)
         {
@@ -2549,8 +2538,7 @@ namespace DataCommander.Providers.Query
 
             _tabControl.SelectedTab = _messagesTabPage;
             _messagesTextBox.Clear();
-            _sbPanelText.Text = null;
-            _sbPanelText.ForeColor = SystemColors.ControlText;
+            SetStatusbarPanelText(null, SystemColors.ControlText);
 
             if (_dataAdapter == null)
             {
@@ -2566,8 +2554,7 @@ namespace DataCommander.Providers.Query
             Log.Trace(ThreadMonitor.ToStringTableString());
             const string message = "Cancelling command...";
             AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, message));
-            _sbPanelText.Text = "Cancel Executing Command/Query...";
-            _sbPanelText.ForeColor = SystemColors.ControlText;
+            SetStatusbarPanelText("Cancel Executing Command/Query...", _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
             _cancel = true;
             SetGui(CommandState.None);
             _dataAdapter.Cancel();
@@ -2830,8 +2817,7 @@ namespace DataCommander.Providers.Query
                 else
                 {
                     var count = treeNode.GetNodeCount(false);
-                    _sbPanelText.Text = treeNode.Text + " node has " + count + " children.";
-                    _sbPanelText.ForeColor = SystemColors.ControlText;
+                    SetStatusbarPanelText(treeNode.Text + " node has " + count + " children.", SystemColors.ControlText);
                 }
             }
         }
@@ -3034,8 +3020,7 @@ namespace DataCommander.Providers.Query
             try
             {
                 Cursor = Cursors.WaitCursor;
-                _sbPanelText.Text = $"Finding {text}...";
-                _sbPanelText.ForeColor = SystemColors.ControlText;
+                SetStatusbarPanelText($"Finding {text}...", SystemColors.ControlText);
                 StringComparison comparison;
                 var options = _findTextForm.RichTextBoxFinds;
                 switch (options)
@@ -3108,16 +3093,14 @@ namespace DataCommander.Providers.Query
                                 dataView.RowFilter = rowFilter;
                                 var count = dataView.Count;
                                 found = count > 0;
-                                _sbPanelText.Text = $"{count} rows found. RowFilter: {rowFilter}";
-                                _sbPanelText.ForeColor = SystemColors.ControlText;
+                                SetStatusbarPanelText($"{count} rows found. RowFilter: {rowFilter}", SystemColors.ControlText);
                             }
                             else if (text.StartsWith("Sort="))
                             {
                                 var sort = text.Substring(5);
                                 var dataView = dataTable.DefaultView;
                                 dataView.Sort = sort;
-                                _sbPanelText.Text = $"Rows sorted by {sort}.";
-                                _sbPanelText.ForeColor = SystemColors.ControlText;
+                                SetStatusbarPanelText($"Rows sorted by {sort}.", SystemColors.ControlText);
                             }
                             else
                             {
@@ -3155,8 +3138,7 @@ namespace DataCommander.Providers.Query
             }
             finally
             {
-                _sbPanelText.Text = null;
-                _sbPanelText.ForeColor = SystemColors.ControlText;
+                SetStatusbarPanelText(null, SystemColors.ControlText);
                 Cursor = Cursors.Default;
             }
 
@@ -3226,9 +3208,7 @@ namespace DataCommander.Providers.Query
 
             try
             {
-                _sbPanelText.Text = $"Saving file {fileName}...";
-                _sbPanelText.ForeColor = SystemColors.ControlText;
-
+                SetStatusbarPanelText($"Saving file {fileName}...", SystemColors.ControlText);
                 const RichTextBoxStreamType type = RichTextBoxStreamType.UnicodePlainText;
                 var encoding = Encoding.Unicode;
 
@@ -3241,8 +3221,7 @@ namespace DataCommander.Providers.Query
 
                 _fileName = fileName;
                 SetText();
-                _sbPanelText.Text = $"File {fileName} saved successfully.";
-                _sbPanelText.ForeColor = SystemColors.ControlText;
+                SetStatusbarPanelText($"File {fileName} saved successfully.", SystemColors.ControlText);
             }
             finally
             {
@@ -3311,8 +3290,8 @@ namespace DataCommander.Providers.Query
             var from = response.FromCache ? "cache" : "data source";
             ticks = Stopwatch.GetTimestamp() - ticks;
             var length = response.Items != null ? response.Items.Count : 0;
-            _sbPanelText.Text = $"GetCompletion returned {length} items from {@from} in {StopwatchTimeSpan.ToString(ticks, 3)} seconds.";
-            _sbPanelText.ForeColor = SystemColors.ControlText;
+            SetStatusbarPanelText($"GetCompletion returned {length} items from {@from} in {StopwatchTimeSpan.ToString(ticks, 3)} seconds.",
+                SystemColors.ControlText);
             return response;
         }
 
@@ -3761,8 +3740,7 @@ namespace DataCommander.Providers.Query
             QueryTextBox.Text = text;
             _fileName = path;
             SetText();
-            _sbPanelText.Text = $"File {_fileName} loaded successfully.";
-            _sbPanelText.ForeColor = SystemColors.ControlText;
+            SetStatusbarPanelText($"File {_fileName} loaded successfully.", SystemColors.ControlText);
         }
 
         private void tvObjectBrowser_ItemDrag(object sender, ItemDragEventArgs e)
@@ -3796,7 +3774,7 @@ namespace DataCommander.Providers.Query
             queryForm.Show();
         }
 
-        public void OpenTable(string query)
+        public void EditRows(string query)
         {
             try
             {
@@ -3990,8 +3968,7 @@ namespace DataCommander.Providers.Query
                 var maxRecords = int.MaxValue;
                 var rowBlockSize = 10000;
                 AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, "Copying table..."));
-                _sbPanelText.Text = "Copying table...";
-                _sbPanelText.ForeColor = SystemColors.ControlText;
+                SetStatusbarPanelText("Copying table...", _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
                 SetGui(CommandState.Cancel);
                 _errorCount = 0;
                 _stopwatch.Start();
@@ -4026,8 +4003,7 @@ namespace DataCommander.Providers.Query
                 var maxRecords = int.MaxValue;
                 var rowBlockSize = 10000;
                 AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, "Copying table..."));
-                _sbPanelText.Text = "Copying table...";
-                _sbPanelText.ForeColor = SystemColors.ControlText;
+                SetStatusbarPanelText("Copying table...", SystemColors.ControlText);
                 SetGui(CommandState.Cancel);
                 _errorCount = 0;
                 _stopwatch.Start();
@@ -4119,7 +4095,7 @@ namespace DataCommander.Providers.Query
         private void aToolStripMenuItem_Click(object sender, EventArgs e) => ExecuteQuery();
         private void cancelExecutingQueryButton_Click(object sender, EventArgs e) => CancelCommandQuery();
         private void toolStripMenuItem1_Click(object sender, EventArgs e) => ExecuteQuery();
-        private void openTableToolStripMenuItem_Click(object sender, EventArgs e) => OpenTable(Query);
+        private void editRowsToolStripMenuItem_Click(object sender, EventArgs e) => EditRows(Query);
 
         private void parseToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -4161,7 +4137,7 @@ namespace DataCommander.Providers.Query
         {
             _sbPanelText.Text = text;
             _sbPanelText.ForeColor = color;
-            Refresh();
+            //Refresh();
         }
 
         #endregion

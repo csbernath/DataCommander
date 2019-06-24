@@ -73,22 +73,19 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             get
             {
                 var menu = new ContextMenuStrip();
-                var item = new ToolStripMenuItem("Open", null, Open_Click);
+                var item = new ToolStripMenuItem("Edit Rows", null, EditRows);
                 menu.Items.Add(item);
 
-                item = new ToolStripMenuItem("Script Table", null, ScriptTable_Click);
-                menu.Items.Add(item);
+                var scriptTableAs = new ToolStripMenuItem("Script Table as");
+                scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("CREATE to clipboard", null, ScriptTable_Click));
+                scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("SELECT to clipboard", null, SelectScript_Click));
+                scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("INSERT to clipboard", null, InsertScript_Click));
+                menu.Items.Add(scriptTableAs);
 
                 item = new ToolStripMenuItem("Schema", null, Schema_Click);
                 menu.Items.Add(item);
 
                 item = new ToolStripMenuItem("Indexes", null, Indexes_Click);
-                menu.Items.Add(item);
-
-                item = new ToolStripMenuItem("Select script", null, SelectScript_Click);
-                menu.Items.Add(item);
-
-                item = new ToolStripMenuItem("Insert script", null, InsertScript_Click);
                 menu.Items.Add(item);
 
                 return menu;
@@ -141,13 +138,13 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
             return query;
         }
 
-        private void Open_Click(object sender, EventArgs e)
+        private void EditRows(object sender, EventArgs e)
         {
             var mainForm = DataCommanderApplication.Instance.MainForm;
             var queryForm = (QueryForm) mainForm.ActiveMdiChild;
             var name = DatabaseNode.Name + "." + _owner + "." + _name;
             var query = "select * from " + name;
-            queryForm.OpenTable(query);
+            queryForm.EditRows(query);
         }
 
         private void Schema_Click(object sender, EventArgs e)
@@ -273,7 +270,8 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
             using (new CursorManager(Cursors.WaitCursor))
             {
                 var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-                queryForm.SetStatusbarPanelText("Copying table script to clipboard...", SystemColors.ControlText);
+                queryForm.SetStatusbarPanelText("Copying table script to clipboard...",
+                    queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
                 var stopwatch = Stopwatch.StartNew();
 
                 var connectionString = DatabaseNode.Databases.Server.ConnectionString;
@@ -327,7 +325,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                 stopwatch.Stop();
                 queryForm.SetStatusbarPanelText(
                     $"Copying table script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.",
-                    SystemColors.ControlText);
+                    queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
             }
         }
 
@@ -360,7 +358,10 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                 selectStatement = GetSelectStatement(connection, name);
             }
 
-            QueryForm.ShowText(selectStatement);
+            Clipboard.SetText(selectStatement);
+            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
+                queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
         }
 
         private void InsertScript_Click(object sender, EventArgs e)
@@ -469,7 +470,9 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
 
             Clipboard.SetText(stringBuilder.ToString());
             var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-            queryForm.SetStatusbarPanelText("Copying script to clipboard finished.", SystemColors.ControlText);
+
+            queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
+                queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
         }
     }
 }

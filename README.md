@@ -604,7 +604,7 @@ How to show a field as XML in Internet Explorer
 How to edit data in a table
 
 1.	Type the query statement into the query textbox.
-2.	Click the Query/Open Table menu item.
+2.	Click the Query/Edit Rows menu item.
 3.	Modify the data in the data table editor.
 4.	The generated SQL script (insert, update, delete) will be added to the query textbox.
 
@@ -618,16 +618,17 @@ Object Explorer
 Server
     Databases
         System Databases
-        Database              
+        Database Snapshots
+        <Database>
             Tables
 		        System Tables
-                Table
+                <Table>
                     Columns
                     Triggers
                     Indexes
             Views
 			    System Views
-                View
+                <View>
                     Columns
                     Triggers
             Programmability
@@ -646,7 +647,12 @@ Server
     Jobs
 ```
 
-Query textbox – code completion
+### Object Explorer - Table node
+How to script table to clipboard?
+1. Right click to table
+2. Script table as CREATE/SELECT/INSERT to clipboard.
+
+### Query textbox – code completion
 
 How to list databases
   
