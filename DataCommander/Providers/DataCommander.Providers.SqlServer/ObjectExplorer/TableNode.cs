@@ -20,7 +20,7 @@ using Foundation.Text;
 using Foundation.Windows.Forms;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
-
+using Sequence = Foundation.Core.Sequence;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -453,7 +453,6 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             first = true;
 
             var stringTable = new StringTable(3);
-            var last = table.Rows.Count - 1;
 
             for (var i = 0; i < table.Rows.Count; ++i)
             {
@@ -488,10 +487,64 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                     return new DataTransferObjectField(name, csharpTypeName);
                 })
                 .ToReadOnlyCollection();
-            var dataTransferObject = DataTransferObjectFactory.CreateDataTransferObject(_name, dataTransferObjectFields).ToString("    ");
+            var dataTransferObject = DataTransferObjectFactory.CreateDataTransferObject(_name+"Row", dataTransferObjectFields).ToString("    ");
             stringBuilder.AppendLine();
             stringBuilder.AppendLine();
             stringBuilder.Append(dataTransferObject);
+
+            var indentedTextBuilder= new IndentedTextBuilder();
+            indentedTextBuilder.Add($"public static ReadOnlyCollection<IndentedLine> Insert({_name}Row row)");
+            using (indentedTextBuilder.AddCSharpBlock())
+            {
+                indentedTextBuilder.Add($"var sqlTable = new SqlTable(\"{_owner}\",\"{_name}\", new[]");
+                using (indentedTextBuilder.AddBlock("{", "}.ToReadOnlyCollection());"))
+                {
+                    var sequence = new Sequence();
+                    foreach (DataRow row in table.Rows)
+                    {
+                        var last = sequence.Next() == table.Rows.Count - 1;
+                        var name = (string) row["name"];
+                        var separator = !last ? "," : null;
+                        indentedTextBuilder.Add($"\"{name}\"{separator}");
+                    }
+                }
+
+                indentedTextBuilder.Add();
+                indentedTextBuilder.Add($"var sqlConstants = new[]");
+                using (indentedTextBuilder.AddBlock("{","};"))
+                {
+                    var sequence = new Sequence();
+                    foreach (DataRow row in table.Rows)
+                    {
+                        var name = (string) row["name"];
+                        var typeName = (string) row["TypeName"];
+                        var isNullable = (bool) row["is_nullable"];
+                        string methodName;
+                        switch (typeName)
+                        {
+                            case SqlDataTypeName.NVarChar:
+                                methodName = isNullable ? "ToNullableNVarChar" : "ToNVarChar";
+                                break;
+                            case SqlDataTypeName.VarChar:
+                                methodName = isNullable ? "ToNullableVarChar" : "ToVarChar";
+                                break;
+                            default:
+                                methodName = "ToSqlConstant";
+                                break;
+                        }
+                        var last = sequence.Next() == table.Rows.Count - 1;
+                        var separator = !last ? "," : null;
+                        indentedTextBuilder.Add($"row.{name}.{methodName}(){separator}");
+                    }
+                }
+
+                indentedTextBuilder.Add(
+                    "var insertSqlStatement = InsertSqlStatementFactory.Row(sqlTable.SchemaName, sqlTable.TableName, sqlTable.ColumnNames, sqlConstants);");
+                indentedTextBuilder.Add("return insertSqlStatement.ToReadOnlyCollection();");
+            }
+
+            stringBuilder.AppendLine();
+            stringBuilder.Append(indentedTextBuilder.ToReadOnlyCollection().ToString("    "));
 
             Clipboard.SetText(stringBuilder.ToString());
             var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;

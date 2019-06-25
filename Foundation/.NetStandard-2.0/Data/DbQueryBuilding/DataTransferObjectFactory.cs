@@ -1,26 +1,10 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using Foundation.Core;
 using Foundation.Text;
 
 namespace Foundation.Data.DbQueryBuilding
 {
-    internal static class CSharpExtensions
-    {
-        public static IDisposable AddBlock(this IndentedTextBuilder indentedTextBuilder)
-        {
-            indentedTextBuilder.Add("{");
-            var indentation = indentedTextBuilder.Indent(1);
-
-            return new Disposer(() =>
-            {
-                indentation.Dispose();
-                indentedTextBuilder.Add("}");
-            });
-        }
-    }
-
     public static class DataTransferObjectFactory
     {
         public static ReadOnlyCollection<IndentedLine> CreateDataTransferObject(string name, ReadOnlyCollection<DataTransferObjectField> fields)
@@ -28,7 +12,7 @@ namespace Foundation.Data.DbQueryBuilding
             var indentedTextBuilder = new IndentedTextBuilder();
 
             indentedTextBuilder.Add($"public sealed class {name}");
-            using (indentedTextBuilder.AddBlock())
+            using (indentedTextBuilder.AddCSharpBlock())
             {
                 foreach (var field in fields)
                     indentedTextBuilder.Add($"public readonly {field.Type} {field.Name};");
@@ -47,7 +31,7 @@ namespace Foundation.Data.DbQueryBuilding
 
             var parameters = fields.Select(field => $"{field.Type} {ToCamelCase(field.Name)}").Join(", ");
             indentedTextBuilder.Add($"public {name}({parameters})");
-            using (indentedTextBuilder.AddBlock())
+            using (indentedTextBuilder.AddCSharpBlock())
             {
                 foreach (var field in fields)
                     indentedTextBuilder.Add($"{field.Name} = {ToCamelCase(field.Name)};");
