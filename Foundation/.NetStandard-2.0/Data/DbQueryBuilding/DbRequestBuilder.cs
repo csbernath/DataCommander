@@ -28,7 +28,6 @@ namespace Foundation.Data.DbQueryBuilding
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.Common;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 {_request.Using}
@@ -73,65 +72,10 @@ namespace {_request.Namespace}
 
         private static string GetCSharpTypeName(Type dbColumnDataType, bool isNullable)
         {
-            var typeCode = Type.GetTypeCode(dbColumnDataType);
-            string csharpTypeName;
-            switch (typeCode)
-            {
-                case TypeCode.Boolean:
-                    csharpTypeName = CSharpTypeName.Boolean;
-                    break;
-                case TypeCode.Char:
-                    csharpTypeName = CSharpTypeName.Char;
-                    break;
-                case TypeCode.SByte:
-                    csharpTypeName = CSharpTypeName.SByte;
-                    break;
-                case TypeCode.Byte:
-                    csharpTypeName = CSharpTypeName.Byte;
-                    break;
-                case TypeCode.Int16:
-                    csharpTypeName = CSharpTypeName.Int16;
-                    break;
-                case TypeCode.UInt16:
-                    csharpTypeName = CSharpTypeName.UInt16;
-                    break;
-                case TypeCode.Int32:
-                    csharpTypeName = CSharpTypeName.Int32;
-                    break;
-                case TypeCode.UInt32:
-                    csharpTypeName = CSharpTypeName.UInt32;
-                    break;
-                case TypeCode.Int64:
-                    csharpTypeName = CSharpTypeName.Int64;
-                    break;
-                case TypeCode.UInt64:
-                    csharpTypeName = CSharpTypeName.UInt64;
-                    break;
-                case TypeCode.Single:
-                    csharpTypeName = CSharpTypeName.Single;
-                    break;
-                case TypeCode.Double:
-                    csharpTypeName = CSharpTypeName.Double;
-                    break;
-                case TypeCode.Decimal:
-                    csharpTypeName = CSharpTypeName.Decimal;
-                    break;
-                case TypeCode.String:
-                    csharpTypeName = CSharpTypeName.String;
-                    break;
-                case TypeCode.DateTime:
-                    csharpTypeName = nameof(DateTime);
-                    break;
-                default:
-                    if (dbColumnDataType == typeof(byte[]))
-                        csharpTypeName = "byte[]";
-                    else
-                        csharpTypeName = dbColumnDataType.Name;
+            var csharpType = CSharpTypeArray.CSharpTypes.First(i => i.Type == dbColumnDataType);
+            var csharpTypeName = csharpType.Name;
 
-                    break;
-            }
-
-            if (isNullable && IsValueType(dbColumnDataType))
+            if (isNullable && dbColumnDataType.IsValueType)
                 csharpTypeName += '?';
 
             return csharpTypeName;
@@ -659,39 +603,6 @@ namespace {_request.Namespace}
             stringBuilder.Append("}");
 
             return stringBuilder.ToString();
-        }
-
-        private static bool IsValueType(Type dbColumnDataType)
-        {
-            var typeCode = Type.GetTypeCode(dbColumnDataType);
-            var isValueType = false;
-
-            switch (typeCode)
-            {
-                case TypeCode.Boolean:
-                case TypeCode.Char:
-                case TypeCode.SByte:
-                case TypeCode.Byte:
-                case TypeCode.Int16:
-                case TypeCode.UInt16:
-                case TypeCode.Int32:
-                case TypeCode.UInt32:
-                case TypeCode.Int64:
-                case TypeCode.UInt64:
-                case TypeCode.Single:
-                case TypeCode.Double:
-                case TypeCode.Decimal:
-                case TypeCode.DateTime:
-                    isValueType = true;
-                    break;
-
-                case TypeCode.Object:
-                    if (dbColumnDataType == typeof(Guid))
-                        isValueType = true;
-                    break;
-            }
-
-            return isValueType;
         }
 
         private static string ToLower(string pascalCase)

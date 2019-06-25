@@ -488,10 +488,10 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                     return new DataTransferObjectField(name, csharpTypeName);
                 })
                 .ToReadOnlyCollection();
-            var x = DataTransferObjectFactory.CreateDataTransferObject(_name, dataTransferObjectFields).ToString("    ");
+            var dataTransferObject = DataTransferObjectFactory.CreateDataTransferObject(_name, dataTransferObjectFields).ToString("    ");
             stringBuilder.AppendLine();
             stringBuilder.AppendLine();
-            stringBuilder.Append(x);
+            stringBuilder.Append(dataTransferObject);
 
             Clipboard.SetText(stringBuilder.ToString());
             var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
