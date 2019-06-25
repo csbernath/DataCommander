@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Threading;
@@ -16,23 +15,6 @@ namespace Foundation.Data
         {
             while (await dataReader.ReadAsync(cancellationToken))
                 readRecord();
-        }
-
-        public static async Task ReadResultAsync(this DbDataReader dataReader, IEnumerable<Func<Task>> reads, CancellationToken cancellationToken)
-        {
-            var first = true;
-            foreach (var read in reads)
-            {
-                if (first)
-                    first = false;
-                else
-                {
-                    var nextResult = await dataReader.NextResultAsync(cancellationToken);
-                    Assert.IsTrue(nextResult);
-                }
-
-                await read();
-            }
         }
 
         public static async Task<ReadOnlySegmentLinkedList<T>> ReadResultAsync<T>(this DbDataReader dataReader, int segmentLength,

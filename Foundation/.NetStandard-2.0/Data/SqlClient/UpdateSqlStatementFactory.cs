@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Foundation.Assertions;
+using Foundation.Text;
 
 namespace Foundation.Data.SqlClient
 {
     public static class UpdateSqlStatementFactory
     {
-        public static SqlStatement Row(string tableName, IReadOnlyCollection<string> columnNames, IReadOnlyCollection<string> row, string where)
+        public static IReadOnlyCollection<IndentedLine> Row(string tableName, IReadOnlyCollection<string> columnNames, IReadOnlyCollection<string> row,
+            IReadOnlyCollection<IndentedLine> where)
         {
             Assert.IsNotNull(tableName);
             Assert.IsNotNull(columnNames);
@@ -14,21 +16,24 @@ namespace Foundation.Data.SqlClient
             Assert.IsTrue(columnNames.Count > 0);
             Assert.IsTrue(columnNames.Count == row.Count);
 
-            var sqlStatementBuilder = new SqlStatementBuilder();
-            sqlStatementBuilder.Add($"update {tableName}");
-            sqlStatementBuilder.Add("set");
-
-            var columns = columnNames.Zip(row, (columnName, value) => new
+            var indentedTextBuilder = new IndentedTextBuilder();
+            indentedTextBuilder.Add($"update {tableName}");
+            indentedTextBuilder.Add("set");
+            using (indentedTextBuilder.Indent(1))
+            {
+                var items = columnNames.Zip(row, (columnName, value) => new
                 {
                     ColumnName = columnName,
                     Value = value
-                })
-                .Select(i => $"    {i.ColumnName} = {i.Value}")
-                .ToList();
-            sqlStatementBuilder.AddRange(columns);
-            sqlStatementBuilder.Add(where);
+                }).ToList();
 
-            return sqlStatementBuilder.ToSqlStatement();
+                foreach (var item in items)
+                    indentedTextBuilder.Add($"{item.ColumnName} = {item.Value}");
+            }
+
+            indentedTextBuilder.Add(where);
+
+            return indentedTextBuilder.ToReadOnlyCollection();
         }
     }
 }

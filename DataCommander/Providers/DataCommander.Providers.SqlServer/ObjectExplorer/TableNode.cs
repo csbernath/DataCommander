@@ -9,14 +9,18 @@ using System.Text;
 using System.Windows.Forms;
 using DataCommander.Providers.Query;
 using Foundation.Assertions;
+using Foundation.Collections;
 using Foundation.Core;
 using Foundation.Data;
+using Foundation.Data.DbQueryBuilding;
 using Foundation.Data.SqlClient;
+using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
 using Foundation.Windows.Forms;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
+
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -367,11 +371,12 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
         private void InsertScript_Click(object sender, EventArgs e)
         {
             var commandText = string.Format(@"select
-     c.name
-    ,t.name as TypeName
-    ,c.max_length
-    ,c.precision
-    ,c.scale
+    c.name,
+    t.name as TypeName,
+    c.max_length,
+    c.precision,
+    c.scale,
+    c.is_nullable
 from [{0}].sys.schemas s (nolock)
 join [{0}].sys.objects o (nolock)
 	on s.schema_id = o.schema_id
@@ -467,6 +472,53 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             }
 
             stringBuilder.Append(stringTable.ToString(4));
+
+            var dataTransferObjectFields = table.Rows
+                .Cast<DataRow>()
+                .Select(row =>
+                {
+                    var name = (string) row["name"];
+                    var typeName = (string) row["TypeName"];
+                    var isNullable = (bool) row["is_nullable"];
+                    string csharpTypeName;
+
+                    switch (typeName)
+                    {
+                        case SqlDataTypeName.Bit:
+                            csharpTypeName = CSharpTypeName.Boolean;
+                            if (isNullable)
+                                csharpTypeName += "?";
+                            break;
+
+                        case SqlDataTypeName.DateTime:
+                            csharpTypeName = nameof(DateTime);
+                            if (isNullable)
+                                csharpTypeName += "?";
+                            break;
+
+                        case SqlDataTypeName.Int:
+                            csharpTypeName = CSharpTypeName.Int32;
+                            if (isNullable)
+                                csharpTypeName += "?";
+                            break;
+
+                        case SqlDataTypeName.NVarChar:
+                        case SqlDataTypeName.VarChar:
+                            csharpTypeName = CSharpTypeName.String;
+                            break;
+
+                        default:
+                            csharpTypeName = "???" + typeName;
+                            break;
+                    }
+
+                    return new DataTransferObjectField(name, csharpTypeName);
+                })
+                .ToReadOnlyCollection();
+            var x = DataTransferObjectFactory.CreateDataTransferObject(_name, dataTransferObjectFields).ToString("    ");
+            stringBuilder.AppendLine();
+            stringBuilder.AppendLine();
+            stringBuilder.Append(x);
 
             Clipboard.SetText(stringBuilder.ToString());
             var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;

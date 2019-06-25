@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Foundation.Assertions;
 using Foundation.Text;
@@ -7,10 +8,10 @@ namespace Foundation.Data.SqlClient
 {
     public static class InsertSqlStatementFactory
     {
-        public static SqlStatement Row(string tableName, IReadOnlyCollection<string> columnNames, IReadOnlyCollection<string> row) =>
+        public static ReadOnlyCollection<IndentedLine> Row(string tableName, IReadOnlyCollection<string> columnNames, IReadOnlyCollection<string> row) =>
             Rows(tableName, columnNames, new[] {row});
 
-        public static SqlStatement Rows(string tableName, IReadOnlyCollection<string> columnNames,
+        public static ReadOnlyCollection<IndentedLine> Rows(string tableName, IReadOnlyCollection<string> columnNames,
             IReadOnlyCollection<IReadOnlyCollection<string>> rows)
         {
             Assert.IsNotNull(tableName);
@@ -20,12 +21,20 @@ namespace Foundation.Data.SqlClient
             Assert.IsTrue(rows.Count > 0);
             Assert.IsTrue(rows.All(row => row.Count == columnNames.Count));
 
-            var sqlStatementBuilder = new SqlStatementBuilder();
-            sqlStatementBuilder.Add($"insert into {tableName}({columnNames.Join(",")})");
-            sqlStatementBuilder.Add("values");
-            var rowLines = rows.Select(row => $"    ({row.Join(",")})").ToList();
-            sqlStatementBuilder.AddRange(rowLines);
-            return sqlStatementBuilder.ToSqlStatement();
+            var indentedTextBuilder = new IndentedTextBuilder();
+            indentedTextBuilder.Add($"insert into {tableName}({columnNames.Join(",")})");
+            indentedTextBuilder.Add("values");
+
+            using (indentedTextBuilder.Indent(1))
+            {
+                foreach (var row in rows)
+                {
+                    var values = row.Join(",");
+                    indentedTextBuilder.Add($"({values})");
+                }
+            }
+
+            return indentedTextBuilder.ToReadOnlyCollection();
         }
     }
 }
