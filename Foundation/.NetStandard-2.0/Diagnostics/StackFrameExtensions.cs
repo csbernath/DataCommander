@@ -32,6 +32,7 @@ namespace Foundation.Diagnostics
             }
 
             stringBuilder.Append(')');
+            stringBuilder.Append($" ILOffset: 0x{frame.GetILOffset().ToString("x")}, ");
 
             var fileName = frame.GetFileName();
 
