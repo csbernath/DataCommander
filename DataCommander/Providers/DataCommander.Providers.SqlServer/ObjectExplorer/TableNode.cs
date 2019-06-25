@@ -480,37 +480,10 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                     var name = (string) row["name"];
                     var typeName = (string) row["TypeName"];
                     var isNullable = (bool) row["is_nullable"];
-                    string csharpTypeName;
-
-                    switch (typeName)
-                    {
-                        case SqlDataTypeName.Bit:
-                            csharpTypeName = CSharpTypeName.Boolean;
-                            if (isNullable)
-                                csharpTypeName += "?";
-                            break;
-
-                        case SqlDataTypeName.DateTime:
-                            csharpTypeName = nameof(DateTime);
-                            if (isNullable)
-                                csharpTypeName += "?";
-                            break;
-
-                        case SqlDataTypeName.Int:
-                            csharpTypeName = CSharpTypeName.Int32;
-                            if (isNullable)
-                                csharpTypeName += "?";
-                            break;
-
-                        case SqlDataTypeName.NVarChar:
-                        case SqlDataTypeName.VarChar:
-                            csharpTypeName = CSharpTypeName.String;
-                            break;
-
-                        default:
-                            csharpTypeName = "???" + typeName;
-                            break;
-                    }
+                    var csharpTypeName = SqlDataTypeArray.SqlDataTypes.First(i => i.SqlDataTypeName == typeName).CSharpTypeName;
+                    var csharpType = CSharpTypeArray.CSharpTypes.First(i => i.Name == csharpTypeName);
+                    if (isNullable && csharpType.Type.IsValueType)
+                        csharpTypeName += "?";
 
                     return new DataTransferObjectField(name, csharpTypeName);
                 })
