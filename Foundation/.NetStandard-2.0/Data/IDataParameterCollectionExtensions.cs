@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Text;
 using Foundation.Assertions;
 using Foundation.Data.SqlClient;
-using Foundation.Linq;
 
 namespace Foundation.Data
 {
@@ -26,12 +24,10 @@ namespace Foundation.Data
             string s;
 
             if (sqlParameters != null)
-            {
                 s = SqlParameterCollectionExtensions.ToLogString(sqlParameters);
-            }
             else
             {
-                var sb = new StringBuilder();
+                var stringBuilder = new StringBuilder();
                 var first = true;
 
                 foreach (IDataParameter parameter in parameters)
@@ -79,21 +75,18 @@ namespace Foundation.Data
                             }
                             else
                             {
-                                sb.AppendLine(",");
+                                stringBuilder.AppendLine(",");
                             }
 
-                            sb.AppendFormat("  {0} = {1}", parameter.ParameterName, valueString);
+                            stringBuilder.AppendFormat("  {0} = {1}", parameter.ParameterName, valueString);
                         }
                     }
                 }
 
-                s = sb.ToString();
+                s = stringBuilder.ToString();
             }
 
             return s;
         }
-
-        public static List<object> ToObjectList(this IEnumerable<IDataParameter> parameters) => new List<object>(parameters);
-        public static IReadOnlyCollection<object> ToObjectReadOnlyCollection(this IEnumerable<IDataParameter> parameters) => parameters.Cast<object>().ToReadOnlyCollection();
     }
 }

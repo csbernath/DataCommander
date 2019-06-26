@@ -8,10 +8,10 @@ namespace Foundation.Data.SqlClient
 {
     public static class InsertSqlStatementFactory
     {
-        public static ReadOnlyCollection<IndentedLine> Row(string schemaName, string tableName, IReadOnlyCollection<string> columnNames,
+        public static ReadOnlyCollection<Line> Row(string schemaName, string tableName, IReadOnlyCollection<string> columnNames,
             IReadOnlyCollection<string> row) => Rows(schemaName, tableName, columnNames, new[] {row});
 
-        public static ReadOnlyCollection<IndentedLine> Rows(string schemaName, string tableName, IReadOnlyCollection<string> columnNames,
+        public static ReadOnlyCollection<Line> Rows(string schemaName, string tableName, IReadOnlyCollection<string> columnNames,
             IReadOnlyCollection<IReadOnlyCollection<string>> rows)
         {
             Assert.IsNotNull(tableName);
@@ -21,7 +21,7 @@ namespace Foundation.Data.SqlClient
             Assert.IsTrue(rows.Count > 0);
             Assert.IsTrue(rows.All(row => row.Count == columnNames.Count));
 
-            var indentedTextBuilder = new IndentedTextBuilder();
+            var indentedTextBuilder = new TextBuilder();
             indentedTextBuilder.Add($"insert into {schemaName}.{tableName}({columnNames.Join(",")})");
             indentedTextBuilder.Add("values");
 

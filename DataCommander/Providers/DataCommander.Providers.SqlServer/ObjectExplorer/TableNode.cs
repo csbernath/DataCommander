@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using DataCommander.Providers.Query;
 using Foundation.Assertions;
 using Foundation.Collections;
+using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Data.DbQueryBuilding;
@@ -368,6 +369,38 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                 queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
         }
 
+        private sealed class Column
+        {
+            public readonly string ColumnName;
+            public readonly string TypeName;
+            public readonly short MaxLength;
+            public readonly byte Precision;
+            public readonly byte Scale;
+            public readonly bool? IsNullable;
+
+            public Column(string columnName, string typeName, short maxLength, byte precision, byte scale, bool? isNullable)
+            {
+                ColumnName = columnName;
+                TypeName = typeName;
+                MaxLength = maxLength;
+                Precision = precision;
+                Scale = scale;
+                IsNullable = isNullable;
+            }
+        }
+
+        private static Column ReadColumn(IDataRecord dataRecord)
+        {
+            var columnName = dataRecord.GetStringOrDefault(0);
+            var typeName = dataRecord.GetString(1);
+            var maxLength = dataRecord.GetInt16(2);
+            var precision = dataRecord.GetByte(3);
+            var scale = dataRecord.GetByte(4);
+            var isNullable = dataRecord.GetNullableBoolean(5);
+
+            return new Column(columnName, typeName, maxLength, precision, scale, isNullable);
+        }
+
         private void InsertScript_Click(object sender, EventArgs e)
         {
             var commandText = string.Format(@"select
@@ -390,16 +423,11 @@ where
 order by c.column_id", DatabaseNode.Name, _owner, _name);
             Log.Write(LogLevel.Trace, commandText);
             var connectionString = DatabaseNode.Databases.Server.ConnectionString;
-            DataTable table;
-            using (var connection = new SqlConnection(connectionString))
-            {
-                var executor = connection.CreateCommandExecutor();
-                table = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
-            }
+            var columns = SqlClientFactory.Instance.ExecuteReader(connectionString, new ExecuteReaderRequest(commandText), 128, ReadColumn);
 
             var stringBuilder = new StringBuilder();
             var first = true;
-            foreach (DataRow row in table.Rows)
+            foreach (var column in columns)
             {
                 if (first)
                 {
@@ -409,9 +437,9 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                 else
                     stringBuilder.Append(",\r\n");
 
-                var variableName = (string) row["name"];
+                var variableName = column.ColumnName;
                 variableName = char.ToLower(variableName[0]) + variableName.Substring(1);
-                var typeName = (string) row["TypeName"];
+                var typeName = column.TypeName;
 
                 switch (typeName)
                 {
@@ -419,17 +447,18 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                     case SqlDataTypeName.NChar:
                     case SqlDataTypeName.NVarChar:
                     case SqlDataTypeName.VarChar:
-                        var precision = row.Field<short>("max_length");
-                        var precisionString = precision >= 0 ? precision.ToString() : "max";
+                        var maxLength = column.MaxLength;
+                        var precisionString = maxLength >= 0 ? maxLength.ToString() : "max";
                         typeName += "(" + precisionString + ")";
                         break;
 
                     case SqlDataTypeName.Decimal:
-                        var scale = row.Field<byte>("scale");
+                        var precision = column.Precision;
+                        var scale = column.Scale;
                         if (scale == 0)
-                            typeName += "(" + row["precision"] + ")";
+                            typeName += "(" + precision + ")";
                         else
-                            typeName += "(" + row["precision"] + ',' + scale + ")";
+                            typeName += "(" + precision + ',' + scale + ")";
                         break;
                 }
 
@@ -439,31 +468,30 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             stringBuilder.AppendFormat("\r\n\r\ninsert into {0}.{1}\r\n(\r\n    ", _owner, _name);
             first = true;
 
-            foreach (DataRow row in table.Rows)
+            foreach (var column in columns)
             {
                 if (first)
                     first = false;
                 else
                     stringBuilder.Append(',');
 
-                stringBuilder.Append(row["name"]);
+                stringBuilder.Append(column.ColumnName);
             }
 
             stringBuilder.Append("\r\n)\r\nselect\r\n");
             first = true;
 
             var stringTable = new StringTable(3);
-
-            for (var i = 0; i < table.Rows.Count; ++i)
+            var sequence = new Sequence();
+            foreach (var column in columns)
             {
-                var dataRow = table.Rows[i];
                 var stringTableRow = stringTable.NewRow();
-                var variableName = (string) dataRow["name"];
+                var variableName = column.ColumnName;
                 variableName = char.ToLower(variableName[0]) + variableName.Substring(1);
                 stringTableRow[1] = $"@{variableName}";
 
-                var text = $"as {dataRow["name"]}";
-                if (i < table.Rows.Count - 1)
+                var text = $"as {column.ColumnName}";
+                if (sequence.Next() < columns.Count - 1)
                     text += ',';
 
                 stringTableRow[2] = text;
@@ -472,16 +500,15 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
 
             stringBuilder.Append(stringTable.ToString(4));
 
-            var dataTransferObjectFields = table.Rows
-                .Cast<DataRow>()
-                .Select(row =>
+            var dataTransferObjectFields = columns
+                .Select(column =>
                 {
-                    var name = (string) row["name"];
-                    var typeName = (string) row["TypeName"];
-                    var isNullable = (bool) row["is_nullable"];
+                    var name = column.ColumnName;
+                    var typeName = column.TypeName;
+                    var isNullable = column.IsNullable;
                     var csharpTypeName = SqlDataTypeArray.SqlDataTypes.First(i => i.SqlDataTypeName == typeName).CSharpTypeName;
                     var csharpType = CSharpTypeArray.CSharpTypes.First(i => i.Name == csharpTypeName);
-                    if (isNullable && csharpType.Type.IsValueType)
+                    if (isNullable == true && csharpType.Type.IsValueType)
                         csharpTypeName += "?";
 
                     return new DataTransferObjectField(name, csharpTypeName);
@@ -492,59 +519,62 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             stringBuilder.AppendLine();
             stringBuilder.Append(dataTransferObject);
 
-            var indentedTextBuilder= new IndentedTextBuilder();
-            indentedTextBuilder.Add($"public static ReadOnlyCollection<IndentedLine> Insert({_name}Row row)");
-            using (indentedTextBuilder.AddCSharpBlock())
+            var textBuilder= new TextBuilder();
+            textBuilder.Add($"public static ReadOnlyCollection<IndentedLine> Insert({_name}Row row)");
+            using (textBuilder.AddCSharpBlock())
             {
-                indentedTextBuilder.Add($"var sqlTable = new SqlTable(\"{_owner}\",\"{_name}\", new[]");
-                using (indentedTextBuilder.AddBlock("{", "}.ToReadOnlyCollection());"))
+                textBuilder.Add($"var sqlTable = new SqlTable(\"{_owner}\",\"{_name}\", new[]");
+                using (textBuilder.AddCSharpBlock())
                 {
-                    var sequence = new Sequence();
-                    foreach (DataRow row in table.Rows)
+                    sequence = new Sequence();
+                    foreach (var column in columns)
                     {
-                        var last = sequence.Next() == table.Rows.Count - 1;
-                        var name = (string) row["name"];
+                        var last = sequence.Next() == columns.Count - 1;
+                        var name = column.ColumnName;
                         var separator = !last ? "," : null;
-                        indentedTextBuilder.Add($"\"{name}\"{separator}");
+                        textBuilder.Add($"\"{name}\"{separator}");
                     }
                 }
 
-                indentedTextBuilder.Add();
-                indentedTextBuilder.Add($"var sqlConstants = new[]");
-                using (indentedTextBuilder.AddBlock("{","};"))
+                textBuilder.AddToLastLine(".ToReadOnlyCollection());");
+                textBuilder.Add(Line.Empty);
+                textBuilder.Add($"var sqlConstants = new[]");
+                using (textBuilder.AddCSharpBlock())
                 {
-                    var sequence = new Sequence();
-                    foreach (DataRow row in table.Rows)
+                    sequence = new Sequence();
+                    foreach (var column in columns)
                     {
-                        var name = (string) row["name"];
-                        var typeName = (string) row["TypeName"];
-                        var isNullable = (bool) row["is_nullable"];
+                        var name = column.ColumnName;
+                        var typeName = column.TypeName;
+                        var isNullable = column.IsNullable;
                         string methodName;
                         switch (typeName)
                         {
                             case SqlDataTypeName.NVarChar:
-                                methodName = isNullable ? "ToNullableNVarChar" : "ToNVarChar";
+                                methodName = isNullable == true ? "ToNullableNVarChar" : "ToNVarChar";
                                 break;
                             case SqlDataTypeName.VarChar:
-                                methodName = isNullable ? "ToNullableVarChar" : "ToVarChar";
+                                methodName = isNullable == true ? "ToNullableVarChar" : "ToVarChar";
                                 break;
                             default:
                                 methodName = "ToSqlConstant";
                                 break;
                         }
-                        var last = sequence.Next() == table.Rows.Count - 1;
+
+                        var last = sequence.Next() == columns.Count - 1;
                         var separator = !last ? "," : null;
-                        indentedTextBuilder.Add($"row.{name}.{methodName}(){separator}");
+                        textBuilder.Add($"row.{name}.{methodName}(){separator}");
                     }
                 }
 
-                indentedTextBuilder.Add(
+                textBuilder.AddToLastLine(";");
+                textBuilder.Add(
                     "var insertSqlStatement = InsertSqlStatementFactory.Row(sqlTable.SchemaName, sqlTable.TableName, sqlTable.ColumnNames, sqlConstants);");
-                indentedTextBuilder.Add("return insertSqlStatement.ToReadOnlyCollection();");
+                textBuilder.Add("return insertSqlStatement.ToReadOnlyCollection();");
             }
 
             stringBuilder.AppendLine();
-            stringBuilder.Append(indentedTextBuilder.ToReadOnlyCollection().ToString("    "));
+            stringBuilder.Append(textBuilder.ToReadOnlyCollection().ToString("    "));
 
             Clipboard.SetText(stringBuilder.ToString());
             var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;

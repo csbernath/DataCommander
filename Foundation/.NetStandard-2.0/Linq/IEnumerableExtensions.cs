@@ -237,13 +237,6 @@ namespace Foundation.Linq
         }
 
         [Pure]
-        public static ReadOnlyCollection<TSource> ToReadOnlyCollection<TSource>(this IEnumerable<TSource> source)
-        {
-            Assert.IsNotNull(source);
-            return new ReadOnlyCollection<TSource>(source.ToList());
-        }
-
-        [Pure]
         public static ReadOnlyDictionary<TKey, TSource> ToReadOnlyDictionary<TKey, TSource>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             var dictionary = source.ToDictionary(keySelector);

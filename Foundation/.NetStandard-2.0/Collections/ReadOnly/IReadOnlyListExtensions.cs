@@ -1,25 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Foundation.Assertions;
 
 namespace Foundation.Collections.ReadOnly
 {
     public static class IReadOnlyListExtensions
     {
-        public static TSource First<TSource>(this IReadOnlyList<TSource> source)
-        {
-            Assert.IsNotNull(source);
-            Assert.IsTrue(source.Count > 0);
-            return source[0];
-        }
-
-        public static TSource FirstOrDefault<TSource>(this IReadOnlyList<TSource> source)
-        {
-            return source != null && source.Count > 0
-                ? source[0]
-                : default(TSource);
-        }
-
         public static ReadOnlyList<T> ToReadOnlyList<T>(this IReadOnlyList<T> source) =>
             source.Count > 0
                 ? new ReadOnlyList<T>(source)

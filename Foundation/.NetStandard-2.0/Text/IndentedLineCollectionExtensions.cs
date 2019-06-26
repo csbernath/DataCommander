@@ -6,7 +6,7 @@ namespace Foundation.Text
 {
     public static class IndentedLineCollectionExtensions
     {
-        public static string ToString(this IEnumerable<IndentedLine> indentedLines, string indentation)
+        public static string ToString(this IEnumerable<Line> indentedLines, string indentation)
         {
             Assert.IsNotNull(indentedLines);
 
