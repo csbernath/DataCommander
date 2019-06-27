@@ -9,10 +9,10 @@ namespace Foundation.Data.SqlClient
 {
     public static class InsertSqlStatementFactory
     {
-        public static ReadOnlyCollection<Line> CreateInsertSqlStatement(string schema, string table, IReadOnlyCollection<string> columns,
+        public static ReadOnlyCollection<Line> CreateInsertSqlStatement(string table, IReadOnlyCollection<string> columns,
             IReadOnlyCollection<IReadOnlyCollection<string>> rows)
         {
-            Assert.IsTrue(!schema.IsNullOrEmpty());
+            Assert.IsTrue(!table.IsNullOrEmpty());
             Assert.IsTrue(!table.IsNullOrEmpty());
             Assert.IsNotNull(columns);
             Assert.IsNotNull(rows);
@@ -20,7 +20,7 @@ namespace Foundation.Data.SqlClient
             Assert.IsTrue(rows.All(row => row.Count == columns.Count));
 
             var textBuilder = new TextBuilder();
-            textBuilder.Add($"insert into {schema}.{table}({columns.Join(",")})");
+            textBuilder.Add($"insert into {table}({columns.Join(",")})");
             textBuilder.Add("values");
 
             using (textBuilder.Indent(1))

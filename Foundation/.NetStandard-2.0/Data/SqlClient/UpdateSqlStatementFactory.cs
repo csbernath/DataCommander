@@ -1,39 +1,52 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Foundation.Assertions;
+using Foundation.Core;
+using Foundation.Linq;
 using Foundation.Text;
 
 namespace Foundation.Data.SqlClient
 {
     public static class UpdateSqlStatementFactory
     {
-        public static IReadOnlyCollection<Line> Row(string tableName, IReadOnlyCollection<string> columnNames, IReadOnlyCollection<string> row,
-            IReadOnlyCollection<Line> where)
+        public sealed class Column
         {
-            Assert.IsNotNull(tableName);
-            Assert.IsNotNull(columnNames);
-            Assert.IsNotNull(row);
-            Assert.IsTrue(columnNames.Count > 0);
-            Assert.IsTrue(columnNames.Count == row.Count);
+            public readonly string Name;
+            public readonly string Value;
 
-            var indentedTextBuilder = new TextBuilder();
-            indentedTextBuilder.Add($"update {tableName}");
-            indentedTextBuilder.Add("set");
-            using (indentedTextBuilder.Indent(1))
+            public Column(string name, string value)
             {
-                var items = columnNames.Zip(row, (columnName, value) => new
-                {
-                    ColumnName = columnName,
-                    Value = value
-                }).ToList();
+                Assert.IsTrue(!name.IsNullOrEmpty());
 
-                foreach (var item in items)
-                    indentedTextBuilder.Add($"{item.ColumnName} = {item.Value}");
+                Name = name;
+                Value = value;
             }
+        }
 
-            indentedTextBuilder.Add(where);
+        public static IReadOnlyCollection<Line> Create(string table, Column identifier, IReadOnlyCollection<Column> columns)
+        {
+            Assert.IsTrue(!table.IsNullOrEmpty());
+            Assert.IsNotNull(identifier);
+            Assert.IsTrue(!identifier.Value.IsNullOrEmpty());
+            Assert.IsNotNull(columns);
+            Assert.IsTrue(columns.Count > 0);
 
-            return indentedTextBuilder.ToLines();
+            var textBuilder = new TextBuilder();
+            textBuilder.Add($"update {table}");
+            textBuilder.Add("set");
+            using (textBuilder.Indent(1))
+                foreach (var item in columns.SelectIndexed())
+                {
+                    if (item.Index > 0)
+                        textBuilder.AddToLastLine(",");
+                    var column = item.Value;
+                    textBuilder.Add($"{column.Name} = {column.Value}");
+                }
+
+            textBuilder.Add($"where");
+            using (textBuilder.Indent(1))
+                textBuilder.Add($"{identifier.Name} = {identifier.Value}");
+
+            return textBuilder.ToLines();
         }
     }
 }

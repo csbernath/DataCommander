@@ -1,6 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using Foundation.Assertions;
-using Foundation.Core;
 using Foundation.Data.SqlClient;
 using Foundation.Linq;
 using Foundation.Text;

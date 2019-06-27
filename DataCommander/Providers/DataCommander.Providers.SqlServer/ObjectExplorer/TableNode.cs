@@ -523,10 +523,13 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                 .Select(i => new CreateSqlInsertStatementMethodFactory.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
                 .ToReadOnlyCollection();
             var createSqlInsertSqlStatementMethod = CreateSqlInsertStatementMethodFactory.Create(_owner, _name, columns2);
+            var createSqlUpdateStatementMethod = CreateSqlUpdateStatementMethodFactory.Create(_owner, _name);
 
             stringBuilder.AppendLine();
-            stringBuilder.AppendLine();
             stringBuilder.Append(createSqlInsertSqlStatementMethod.ToIndentedString("    "));
+            stringBuilder.AppendLine();
+            stringBuilder.AppendLine();
+            stringBuilder.Append(createSqlUpdateStatementMethod.ToIndentedString("    "));
 
             Clipboard.SetText(stringBuilder.ToString());
             var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
