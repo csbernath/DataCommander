@@ -15,6 +15,7 @@ namespace Foundation.Data.SqlClient
             new SqlDataType(SqlDbType.Int, SqlDataTypeName.Int, CSharpTypeName.Int32),
             new SqlDataType(SqlDbType.Date, SqlDataTypeName.Date, CSharpTypeName.DateTime),
             new SqlDataType(SqlDbType.DateTime, SqlDataTypeName.DateTime, CSharpTypeName.DateTime),
+            new SqlDataType(SqlDbType.DateTime2, SqlDataTypeName.DateTime2, CSharpTypeName.DateTime),
             new SqlDataType(SqlDbType.Decimal, SqlDataTypeName.Decimal, CSharpTypeName.Decimal),
             new SqlDataType(SqlDbType.NChar, SqlDataTypeName.NChar, CSharpTypeName.String),
             new SqlDataType(SqlDbType.NVarChar, SqlDataTypeName.NVarChar, CSharpTypeName.String),

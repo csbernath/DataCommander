@@ -514,67 +514,19 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                     return new DataTransferObjectField(name, csharpTypeName);
                 })
                 .ToReadOnlyCollection();
-            var dataTransferObject = DataTransferObjectFactory.CreateDataTransferObject(_name+"Row", dataTransferObjectFields).ToString("    ");
+            var dataTransferObject = DataTransferObjectFactory.CreateDataTransferObject(_name, dataTransferObjectFields).ToIndentedString("    ");
             stringBuilder.AppendLine();
             stringBuilder.AppendLine();
             stringBuilder.Append(dataTransferObject);
 
-            var textBuilder= new TextBuilder();
-            textBuilder.Add($"public static ReadOnlyCollection<IndentedLine> Insert({_name}Row row)");
-            using (textBuilder.AddCSharpBlock())
-            {
-                textBuilder.Add($"var sqlTable = new SqlTable(\"{_owner}\",\"{_name}\", new[]");
-                using (textBuilder.AddCSharpBlock())
-                {
-                    sequence = new Sequence();
-                    foreach (var column in columns)
-                    {
-                        var last = sequence.Next() == columns.Count - 1;
-                        var name = column.ColumnName;
-                        var separator = !last ? "," : null;
-                        textBuilder.Add($"\"{name}\"{separator}");
-                    }
-                }
-
-                textBuilder.AddToLastLine(".ToReadOnlyCollection());");
-                textBuilder.Add(Line.Empty);
-                textBuilder.Add($"var sqlConstants = new[]");
-                using (textBuilder.AddCSharpBlock())
-                {
-                    sequence = new Sequence();
-                    foreach (var column in columns)
-                    {
-                        var name = column.ColumnName;
-                        var typeName = column.TypeName;
-                        var isNullable = column.IsNullable;
-                        string methodName;
-                        switch (typeName)
-                        {
-                            case SqlDataTypeName.NVarChar:
-                                methodName = isNullable == true ? "ToNullableNVarChar" : "ToNVarChar";
-                                break;
-                            case SqlDataTypeName.VarChar:
-                                methodName = isNullable == true ? "ToNullableVarChar" : "ToVarChar";
-                                break;
-                            default:
-                                methodName = "ToSqlConstant";
-                                break;
-                        }
-
-                        var last = sequence.Next() == columns.Count - 1;
-                        var separator = !last ? "," : null;
-                        textBuilder.Add($"row.{name}.{methodName}(){separator}");
-                    }
-                }
-
-                textBuilder.AddToLastLine(";");
-                textBuilder.Add(
-                    "var insertSqlStatement = InsertSqlStatementFactory.Row(sqlTable.SchemaName, sqlTable.TableName, sqlTable.ColumnNames, sqlConstants);");
-                textBuilder.Add("return insertSqlStatement.ToReadOnlyCollection();");
-            }
+            var columns2 = columns
+                .Select(i => new CreateSqlInsertStatementMethodFactory.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
+                .ToReadOnlyCollection();
+            var createSqlInsertSqlStatementMethod = CreateSqlInsertStatementMethodFactory.Create(_owner, _name, columns2);
 
             stringBuilder.AppendLine();
-            stringBuilder.Append(textBuilder.ToReadOnlyCollection().ToString("    "));
+            stringBuilder.AppendLine();
+            stringBuilder.Append(createSqlInsertSqlStatementMethod.ToIndentedString("    "));
 
             Clipboard.SetText(stringBuilder.ToString());
             var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;

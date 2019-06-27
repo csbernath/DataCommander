@@ -186,6 +186,9 @@ namespace Foundation.Linq
         }
 
         [Pure]
+        public static IEnumerable<IndexedItem<T>> SelectIndexed<T>(this IEnumerable<T> source) => source.Select((item, i) => IndexedItem.Create(i, item));
+
+        [Pure]
         public static IEnumerable<TSource[]> Split<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> isSeparator)
         {
             var list = new List<TSource>();

@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using Foundation.Core;
 using Foundation.Text;
 
 namespace Foundation.Data.DbQueryBuilding
@@ -22,36 +21,22 @@ namespace Foundation.Data.DbQueryBuilding
                 textBuilder.Add(constructor);
             }
 
-            return textBuilder.ToReadOnlyCollection();
+            return textBuilder.ToLines();
         }
 
         private static ReadOnlyCollection<Line> GetConstructor(string name, ReadOnlyCollection<DataTransferObjectField> fields)
         {
             var textBuilder = new TextBuilder();
 
-            var parameters = fields.Select(field => $"{field.Type} {ToCamelCase(field.Name)}").Join(", ");
+            var parameters = fields.Select(field => $"{field.Type} {field.Name.ToCamelCase()}").Join(", ");
             textBuilder.Add($"public {name}({parameters})");
             using (textBuilder.AddCSharpBlock())
             {
                 foreach (var field in fields)
-                    textBuilder.Add($"{field.Name} = {ToCamelCase(field.Name)};");
+                    textBuilder.Add($"{field.Name} = {field.Name.ToCamelCase()};");
             }
 
-            return textBuilder.ToReadOnlyCollection();
-        }
-
-        private static string ToCamelCase(string pascalCase)
-        {
-            return !pascalCase.IsNullOrEmpty()
-                ? char.ToLower(pascalCase[0]) + pascalCase.Substring(1)
-                : pascalCase;
-        }
-
-        private static string ToPascalCase(string camelCase)
-        {
-            return !camelCase.IsNullOrEmpty()
-                ? char.ToUpper(camelCase[0]) + camelCase.Substring(1)
-                : camelCase;
+            return textBuilder.ToLines();
         }
     }
 }

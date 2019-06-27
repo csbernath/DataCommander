@@ -2,39 +2,43 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using Foundation.Assertions;
+using Foundation.Core;
 using Foundation.Text;
 
 namespace Foundation.Data.SqlClient
 {
     public static class InsertSqlStatementFactory
     {
-        public static ReadOnlyCollection<Line> Row(string schemaName, string tableName, IReadOnlyCollection<string> columnNames,
-            IReadOnlyCollection<string> row) => Rows(schemaName, tableName, columnNames, new[] {row});
-
-        public static ReadOnlyCollection<Line> Rows(string schemaName, string tableName, IReadOnlyCollection<string> columnNames,
+        public static ReadOnlyCollection<Line> CreateInsertSqlStatement(string schema, string table, IReadOnlyCollection<string> columns,
             IReadOnlyCollection<IReadOnlyCollection<string>> rows)
         {
-            Assert.IsNotNull(tableName);
-            Assert.IsNotNull(columnNames);
+            Assert.IsTrue(!schema.IsNullOrEmpty());
+            Assert.IsTrue(!table.IsNullOrEmpty());
+            Assert.IsNotNull(columns);
             Assert.IsNotNull(rows);
-            Assert.IsTrue(columnNames.Count > 0);
-            Assert.IsTrue(rows.Count > 0);
-            Assert.IsTrue(rows.All(row => row.Count == columnNames.Count));
+            Assert.IsTrue(columns.Count > 0);
+            Assert.IsTrue(rows.All(row => row.Count == columns.Count));
 
-            var indentedTextBuilder = new TextBuilder();
-            indentedTextBuilder.Add($"insert into {schemaName}.{tableName}({columnNames.Join(",")})");
-            indentedTextBuilder.Add("values");
+            var textBuilder = new TextBuilder();
+            textBuilder.Add($"insert into {schema}.{table}({columns.Join(",")})");
+            textBuilder.Add("values");
 
-            using (indentedTextBuilder.Indent(1))
+            using (textBuilder.Indent(1))
             {
+                var first = true;
                 foreach (var row in rows)
                 {
+                    if (first)
+                        first = false;
+                    else
+                        textBuilder.AddToLastLine(",");
+
                     var values = row.Join(",");
-                    indentedTextBuilder.Add($"({values})");
+                    textBuilder.Add($"({values})");
                 }
             }
 
-            return indentedTextBuilder.ToReadOnlyCollection();
+            return textBuilder.ToLines();
         }
     }
 }

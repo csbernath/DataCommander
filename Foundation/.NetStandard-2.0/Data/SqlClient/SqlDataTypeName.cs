@@ -8,6 +8,7 @@
         public const string NChar = "nchar";
         public const string Date = "date";
         public const string DateTime = "datetime";
+        public const string DateTime2 = "datetime2";
         public const string Decimal = "decimal";
         public const string Float = "float";
         public const string Int = "int";

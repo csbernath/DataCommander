@@ -33,7 +33,7 @@ namespace Foundation.Data.SqlClient
 
             indentedTextBuilder.Add(where);
 
-            return indentedTextBuilder.ToReadOnlyCollection();
+            return indentedTextBuilder.ToLines();
         }
     }
 }

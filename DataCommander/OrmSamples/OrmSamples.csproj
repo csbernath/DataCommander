@@ -43,6 +43,7 @@
     <Compile Include="Class1.cs" />
     <Compile Include="GetInvoices\GetInvoices.generated.cs" />
     <Compile Include="SqlConnectionFactory.cs" />
+    <Compile Include="UnitTest1.cs" />
     <Content Include="GetInvoices\GetInvoices.sql" />
     <Content Include="GetCustomerInvoices\GetCustomerInvoices.sql" />
     <Compile Include="GetInvoices\GetInvoicesUnitTest.cs" />

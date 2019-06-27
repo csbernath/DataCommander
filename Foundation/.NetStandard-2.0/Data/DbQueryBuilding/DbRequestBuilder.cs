@@ -234,7 +234,7 @@ namespace {_request.Namespace}
                 }
 
                 stringBuilder.Append(
-                    $"        var {ToLower(result.FieldName)} = dataReader.Read{next}Result(128, Read{result.Name});");
+                    $"        var {result.FieldName.ToCamelCase()} = dataReader.Read{next}Result(128, Read{result.Name});");
             }
 
             stringBuilder.Append($"\r\n        result = new {_request.Name}DbQueryResult(");
@@ -245,7 +245,7 @@ namespace {_request.Namespace}
                 if (sequence.Next() > 0)
                     stringBuilder.Append(", ");
 
-                stringBuilder.Append($"{ToLower(result.FieldName)}");
+                stringBuilder.Append($"{result.FieldName.ToCamelCase()}");
             }
 
             stringBuilder.Append(");\r\n");
@@ -268,7 +268,7 @@ namespace {_request.Namespace}
 
             if (_request.Results.Count == 0)
             {
-                stringBuilder.Append($@"    var request = ToCreateCommandRequest({ToLower(GetRequestType())});
+                stringBuilder.Append($@"    var request = ToCreateCommandRequest({GetRequestType().ToCamelCase()});
     var executor = _connection.CreateCommandExecutor();
     return executor.ExecuteNonQuery(request);");
             }
@@ -315,7 +315,7 @@ namespace {_request.Namespace}
             {
                 var next = sequence.Next() == 0 ? null : "Next";
                 stringBuilder.Append(
-                    $"var {ToLower(result.FieldName)} = (await dataReader.Read{next}ResultAsync(128, Read{result.Name}, request.CancellationToken));\r\n");
+                    $"var {result.FieldName.ToCamelCase()} = (await dataReader.Read{next}ResultAsync(128, Read{result.Name}, request.CancellationToken));\r\n");
             }
 
             stringBuilder.Append($"result = new {_request.Name}DbQueryResult({GetResultVariableNames()});");
@@ -353,21 +353,21 @@ namespace {_request.Namespace}
                 if (sequence.Next() > 0)
                     stringBuilder.Append(", ");
 
-                stringBuilder.Append($"ReadOnlySegmentLinkedList<{result.Name}> {ToLower(result.FieldName)}");
+                stringBuilder.Append($"ReadOnlySegmentLinkedList<{result.Name}> {result.FieldName.ToCamelCase()}");
             }
 
             stringBuilder.Append(")\r\n");
             stringBuilder.Append("{\r\n");
 
             foreach (var result in results)
-                stringBuilder.Append($"    {result.FieldName} = {ToLower(result.FieldName)};\r\n");
+                stringBuilder.Append($"    {result.FieldName} = {result.FieldName.ToCamelCase()};\r\n");
 
             stringBuilder.Append("}");
 
             return stringBuilder.ToString();
         }
 
-        private string GetResultVariableNames() => string.Join(", ", _request.Results.Select(i => ToLower(i.FieldName)));
+        private string GetResultVariableNames() => string.Join(", ", _request.Results.Select(i => i.FieldName.ToCamelCase()));
 
         private string GetRecordClasses()
         {
@@ -397,7 +397,7 @@ namespace {_request.Namespace}
             {
                 foreach (var parameter in _request.Parameters)
                     stringBuilder.Append(
-                        $"    public readonly {GetCSharpTypeName(parameter.SqlDbType, parameter.DataType, parameter.IsNullable)} {ToUpper(parameter.Name)};\r\n");
+                        $"    public readonly {GetCSharpTypeName(parameter.SqlDbType, parameter.DataType, parameter.IsNullable)} {parameter.Name.ToPascalCase()};\r\n");
 
                 stringBuilder.Append("\r\n");
             }
@@ -426,7 +426,7 @@ namespace {_request.Namespace}
             stringBuilder.Append(")\r\n{\r\n");
 
             foreach (var parameter in _request.Parameters)
-                stringBuilder.Append($"    {ToUpper(parameter.Name)} = {parameter.Name};\r\n");
+                stringBuilder.Append($"    {parameter.Name.ToPascalCase()} = {parameter.Name};\r\n");
 
             stringBuilder.Append("}");
 
@@ -444,7 +444,7 @@ namespace {_request.Namespace}
             foreach (var field in result.Fields)
             {
                 var index = sequence.Next();
-                stringBuilder.Append($"    var {ToLower(field.Name)} = dataRecord.{GetDataRecordMethodName(field)}({index});\r\n");
+                stringBuilder.Append($"    var {field.Name.ToCamelCase()} = dataRecord.{GetDataRecordMethodName(field)}({index});\r\n");
             }
 
             stringBuilder.Append("\r\n");
@@ -456,7 +456,7 @@ namespace {_request.Namespace}
                 if (sequence.Next() > 0)
                     stringBuilder.Append(", ");
 
-                stringBuilder.Append($"{ToLower(field.Name)}");
+                stringBuilder.Append($"{field.Name.ToCamelCase()}");
             }
 
             stringBuilder.Append(");\r\n");
@@ -505,14 +505,14 @@ namespace {_request.Namespace}
                 if (sequence.Next() > 0)
                     stringBuilder.Append(", ");
 
-                stringBuilder.Append($"{GetCSharpTypeName(field.DataType, field.IsNullable)} {ToLower(field.Name)}");
+                stringBuilder.Append($"{GetCSharpTypeName(field.DataType, field.IsNullable)} {field.Name.ToCamelCase()}");
             }
 
             stringBuilder.Append(")\r\n");
             stringBuilder.Append("{\r\n");
 
             foreach (var field in result.Fields)
-                stringBuilder.Append($"    {field.Name} = {ToLower(field.Name)};\r\n");
+                stringBuilder.Append($"    {field.Name} = {field.Name.ToCamelCase()};\r\n");
 
             stringBuilder.Append("}");
 
@@ -521,9 +521,9 @@ namespace {_request.Namespace}
 
         private string GetToCreateCommandRequestMethod()
         {
-            return $@"private CreateCommandRequest ToCreateCommandRequest({_request.Name}Db{GetRequestType()} {ToLower(GetRequestType())})
+            return $@"private CreateCommandRequest ToCreateCommandRequest({_request.Name}Db{GetRequestType()} {GetRequestType().ToCamelCase()})
 {{
-    var parameters = ToParameters({ToLower(GetRequestType())});
+    var parameters = ToParameters({GetRequestType().ToCamelCase()});
     return new CreateCommandRequest(CommandText, parameters, CommandType.Text, CommandTimeout, _transaction);
 }}";
         }
@@ -543,7 +543,7 @@ namespace {_request.Namespace}
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append(
-                $"private static ReadOnlyCollection<object> ToParameters({_request.Name}Db{GetRequestType()} {ToLower(GetRequestType())})\r\n");
+                $"private static ReadOnlyCollection<object> ToParameters({_request.Name}Db{GetRequestType()} {GetRequestType().ToCamelCase()})\r\n");
             stringBuilder.Append("{\r\n");
             stringBuilder.Append("    var parameters = new SqlParameterCollectionBuilder();\r\n");
 
@@ -551,16 +551,16 @@ namespace {_request.Namespace}
             {
                 if (parameter.SqlDbType == SqlDbType.Structured)
                     stringBuilder.Append(
-                        $"    parameters.AddStructured(\"{parameter.Name}\", \"{parameter.DataType}\", {ToLower(GetRequestType())}.{ToUpper(parameter.Name)}.Select(i => i.ToSqlDataRecord()).ToReadOnlyList());\r\n");
+                        $"    parameters.AddStructured(\"{parameter.Name}\", \"{parameter.DataType}\", {GetRequestType().ToCamelCase()}.{parameter.Name.ToPascalCase()}.Select(i => i.ToSqlDataRecord()).ToReadOnlyList());\r\n");
                 else if (parameter.SqlDbType == SqlDbType.Char)
                     stringBuilder.Append(
-                        $"    parameters.AddChar(\"{parameter.Name}\", {parameter.Size}, {ToLower(GetRequestType())}.{ToUpper(parameter.Name)});\r\n");
+                        $"    parameters.AddChar(\"{parameter.Name}\", {parameter.Size}, {GetRequestType().ToCamelCase()}.{parameter.Name.ToPascalCase()});\r\n");
                 else if (parameter.SqlDbType == SqlDbType.NVarChar)
                     stringBuilder.Append(
-                        $"    parameters.AddNVarChar(\"{parameter.Name}\", {parameter.Size}, {ToLower(GetRequestType())}.{ToUpper(parameter.Name)});\r\n");
+                        $"    parameters.AddNVarChar(\"{parameter.Name}\", {parameter.Size}, {GetRequestType().ToCamelCase()}.{parameter.Name.ToPascalCase()});\r\n");
                 else if (parameter.SqlDbType == SqlDbType.VarChar)
                     stringBuilder.Append(
-                        $"    parameters.AddVarChar(\"{parameter.Name}\", {parameter.Size}, {ToLower(GetRequestType())}.{ToUpper(parameter.Name)});\r\n");
+                        $"    parameters.AddVarChar(\"{parameter.Name}\", {parameter.Size}, {GetRequestType().ToCamelCase()}.{parameter.Name.ToPascalCase()});\r\n");
                 else
                 {
                     string method;
@@ -595,7 +595,7 @@ namespace {_request.Namespace}
                             break;
                     }
 
-                    stringBuilder.Append($"    parameters.{method}(\"{parameter.Name}\", {ToLower(GetRequestType())}.{ToUpper(parameter.Name)});\r\n");
+                    stringBuilder.Append($"    parameters.{method}(\"{parameter.Name}\", {GetRequestType().ToCamelCase()}.{parameter.Name.ToPascalCase()});\r\n");
                 }
             }
 
@@ -603,20 +603,6 @@ namespace {_request.Namespace}
             stringBuilder.Append("}");
 
             return stringBuilder.ToString();
-        }
-
-        private static string ToLower(string pascalCase)
-        {
-            return !pascalCase.IsNullOrEmpty()
-                ? char.ToLower(pascalCase[0]) + pascalCase.Substring(1)
-                : pascalCase;
-        }
-
-        private static string ToUpper(string camelCase)
-        {
-            return !camelCase.IsNullOrEmpty()
-                ? char.ToUpper(camelCase[0]) + camelCase.Substring(1)
-                : camelCase;
         }
     }
 }

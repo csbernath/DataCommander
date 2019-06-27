@@ -6,7 +6,6 @@ using System.Linq;
 using Foundation.Assertions;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
-using Foundation.Linq;
 
 namespace Foundation.Text
 {
@@ -41,9 +40,10 @@ namespace Foundation.Text
         public void AddToLastLine(string text)
         {
             Assert.IsValidOperation(_lines.Count > 0);
-
-            var line = _lines.Last();
-            line = new Line(line.Indentation, line.Text + text);
+            var last = _lines.Count - 1;
+            var line = _lines[last];
+            var modifiedLine = new Line(line.Indentation, line.Text + text);
+            _lines[last] = modifiedLine;
         }
 
         public IDisposable Indent(int indentation)
@@ -52,8 +52,8 @@ namespace Foundation.Text
             return new Disposer(() => _indentation -= indentation);
         }
 
-        public ReadOnlyCollection<Line> ToReadOnlyCollection() => _lines.ToReadOnlyCollection();
+        public ReadOnlyCollection<Line> ToLines() => _lines.ToReadOnlyCollection();
 
-        private string DebuggerDisplay => _lines.ToString("    ");
+        private string DebuggerDisplay => _lines.ToIndentedString("    ");
     }
 }

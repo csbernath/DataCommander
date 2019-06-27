@@ -6,13 +6,13 @@ namespace Foundation.Text
 {
     public static class IndentedLineCollectionExtensions
     {
-        public static string ToString(this IEnumerable<Line> indentedLines, string indentation)
+        public static string ToIndentedString(this IEnumerable<Line> lines, string indentation)
         {
-            Assert.IsNotNull(indentedLines);
+            Assert.IsNotNull(lines);
 
             var stringBuilder = new StringBuilder();
             var first = true;
-            foreach (var indentedLine in indentedLines)
+            foreach (var indentedLine in lines)
             {
                 if (first)
                     first = false;
