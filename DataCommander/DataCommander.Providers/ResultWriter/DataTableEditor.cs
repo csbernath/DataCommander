@@ -431,15 +431,15 @@ namespace DataCommander.Providers.ResultWriter
             foreach (var column in _tableSchema.Columns)
             {
                 var columnName = column.ColumnName;
-                var hasDefault = column.HasDefault;
-                var isNullable = column.IsNullable;
-                var hasAutomaticValue = column.HasAutomaticValue;
+                var hasDefault = column.DefaultObjectId != 0;
+                var isNullable = column.IsNullable == true;
+                var isComputed = column.IsComputed;
                 var value = dataRow[columnName];
 
-                if (value == DBNull.Value && !isNullable && !hasDefault && !hasAutomaticValue)
+                if (value == DBNull.Value && !isNullable && !hasDefault && !isComputed)
                 {
                     valid = false;
-                    stringBuilder.AppendFormat("Column '{0}' is not nullable, has not default, has not automatic value.\r\n", columnName);
+                    stringBuilder.AppendFormat("Column '{0}' is not nullable, has not default, is not computed.\r\n", columnName);
                 }
             }
 
@@ -451,7 +451,7 @@ namespace DataCommander.Providers.ResultWriter
                 var first = true;
                 foreach (var column in _tableSchema.Columns)
                 {
-                    if (!column.HasAutomaticValue)
+                    if (!column.IsComputed)
                     {
                         if (first)
                             first = false;
@@ -469,9 +469,9 @@ namespace DataCommander.Providers.ResultWriter
                 foreach (var column in _tableSchema.Columns)
                 {
                     var columnIndex = sequence.Next();
-                    if (!column.HasAutomaticValue)
+                    if (!column.IsComputed)
                     {
-                        var hasDeafult = column.HasDefault;
+                        var hasDeafult = column.DefaultObjectId != 0;
 
                         if (first)
                             first = false;

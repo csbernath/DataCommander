@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Linq;
@@ -22,7 +23,7 @@ namespace Foundation.Data.SqlClient
             }
         }
 
-        public static IReadOnlyCollection<Line> Create(string table, Column identifier, IReadOnlyCollection<Column> columns)
+        public static ReadOnlyCollection<Line> Create(string table, Column identifier, IReadOnlyCollection<Column> columns)
         {
             Assert.IsTrue(!table.IsNullOrEmpty());
             Assert.IsNotNull(identifier);

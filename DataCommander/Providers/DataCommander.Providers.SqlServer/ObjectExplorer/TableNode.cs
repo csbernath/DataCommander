@@ -85,6 +85,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
                 scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("CREATE to clipboard", null, ScriptTable_Click));
                 scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("SELECT to clipboard", null, SelectScript_Click));
                 scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("INSERT to clipboard", null, InsertScript_Click));
+                scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("C# ORM to clipboard", null, Orm));
                 menu.Items.Add(scriptTableAs);
 
                 item = new ToolStripMenuItem("Schema", null, Schema_Click);
@@ -500,7 +501,25 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
 
             stringBuilder.Append(stringTable.ToString(4));
 
-            var dataTransferObjectFields = columns
+            Clipboard.SetText(stringBuilder.ToString());
+            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+
+            queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
+                queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
+        }
+
+        private void Orm(object sender, EventArgs e)
+        {
+            var connectionString = DatabaseNode.Databases.Server.ConnectionString;
+            GetTableSchemaResult getTableSchemaResult;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var tableName = $"{DatabaseNode.Name}.{_owner}.{_name}";
+                getTableSchemaResult = TableSchema.GetTableSchema(connection, tableName);
+            }
+
+            var dataTransferObjectFields = getTableSchemaResult.Columns
                 .Select(column =>
                 {
                     var name = column.ColumnName;
@@ -515,24 +534,27 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                 })
                 .ToReadOnlyCollection();
             var dataTransferObject = DataTransferObjectFactory.CreateDataTransferObject(_name, dataTransferObjectFields).ToIndentedString("    ");
-            stringBuilder.AppendLine();
-            stringBuilder.AppendLine();
-            stringBuilder.Append(dataTransferObject);
 
-            var columns2 = columns
-                .Select(i => new CreateSqlInsertStatementMethodFactory.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
+            var columns2 = getTableSchemaResult.Columns
+                .Select(i => new Foundation.Data.DbQueryBuilding.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
                 .ToReadOnlyCollection();
             var createSqlInsertSqlStatementMethod = CreateSqlInsertStatementMethodFactory.Create(_owner, _name, columns2);
-            var createSqlUpdateStatementMethod = CreateSqlUpdateStatementMethodFactory.Create(_owner, _name);
 
-            stringBuilder.AppendLine();
-            stringBuilder.Append(createSqlInsertSqlStatementMethod.ToIndentedString("    "));
-            stringBuilder.AppendLine();
-            stringBuilder.AppendLine();
-            stringBuilder.Append(createSqlUpdateStatementMethod.ToIndentedString("    "));
+            var identifierColumnId = getTableSchemaResult.UniqueIndexColumns.First().ColumnId;
+            var identifierColumn = getTableSchemaResult.Columns.First(i => i.ColumnId == identifierColumnId);
+            var identifierColumn2 =
+                new Foundation.Data.DbQueryBuilding.Column(identifierColumn.ColumnName, identifierColumn.TypeName, identifierColumn.IsNullable == true);
+            var createSqlUpdateStatementMethod = CreateSqlUpdateStatementMethodFactory.Create(_owner, _name, identifierColumn2, columns2);
 
-            Clipboard.SetText(stringBuilder.ToString());
-            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            var textBuilder = new TextBuilder();
+            textBuilder.Add(dataTransferObject);
+            textBuilder.Add(Line.Empty);
+            textBuilder.Add(createSqlInsertSqlStatementMethod);
+            textBuilder.Add(Line.Empty);
+            textBuilder.Add(createSqlUpdateStatementMethod);
+
+            Clipboard.SetText(textBuilder.ToLines().ToIndentedString("    "));
+            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
 
             queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
                 queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);

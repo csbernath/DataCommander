@@ -3,14 +3,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Foundation.Assertions;
 using Foundation.Core;
+using Foundation.Linq;
 using Foundation.Text;
 
 namespace Foundation.Data.SqlClient
 {
     public static class InsertSqlStatementFactory
     {
-        public static ReadOnlyCollection<Line> CreateInsertSqlStatement(string table, IReadOnlyCollection<string> columns,
-            IReadOnlyCollection<IReadOnlyCollection<string>> rows)
+        public static ReadOnlyCollection<Line> Create(string table, IReadOnlyCollection<string> columns, IReadOnlyCollection<IReadOnlyCollection<string>> rows)
         {
             Assert.IsTrue(!table.IsNullOrEmpty());
             Assert.IsTrue(!table.IsNullOrEmpty());
@@ -25,15 +25,12 @@ namespace Foundation.Data.SqlClient
 
             using (textBuilder.Indent(1))
             {
-                var first = true;
-                foreach (var row in rows)
+                foreach (var indexedRow in rows.SelectIndexed())
                 {
-                    if (first)
-                        first = false;
-                    else
+                    if (indexedRow.Index > 0)
                         textBuilder.AddToLastLine(",");
 
-                    var values = row.Join(",");
+                    var values = indexedRow.Value.Join(",");
                     textBuilder.Add($"({values})");
                 }
             }

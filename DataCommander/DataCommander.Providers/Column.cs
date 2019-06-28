@@ -4,17 +4,19 @@
     {
         public readonly string ColumnName;
         public readonly int ColumnId;
-        public readonly bool HasDefault;
-        public readonly bool IsNullable;
-        public readonly bool HasAutomaticValue;
+        public readonly string TypeName;
+        public readonly bool? IsNullable;
+        public readonly bool IsComputed;
+        public readonly int DefaultObjectId;
 
-        public Column(string columnName, int columnId, bool hasDefault, bool isNullable, bool hasAutomaticValue)
+        public Column(string columnName, int columnId, string typeName, bool? isNullable, bool isComputed, int defaultObjectId)
         {
             ColumnName = columnName;
             ColumnId = columnId;
-            HasDefault = hasDefault;
+            TypeName = typeName;
             IsNullable = isNullable;
-            HasAutomaticValue = hasAutomaticValue;
+            IsComputed = isComputed;
+            DefaultObjectId = defaultObjectId;
         }
     }
 }

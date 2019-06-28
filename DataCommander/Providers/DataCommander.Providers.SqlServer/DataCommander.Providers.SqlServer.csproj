@@ -139,6 +139,7 @@
     <Compile Include="ObjectExplorer\ViewNode.cs" />
     <Compile Include="FieldReader\TimeStampDataFieldReader.cs" />
     <Compile Include="FieldReader\VariantDataFieldReader.cs" />
+    <Compile Include="TableSchema.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Foundation\.NetStandard-2.0\.NetFramework-4.8\Foundation.NetFramework-4.8.csproj">
