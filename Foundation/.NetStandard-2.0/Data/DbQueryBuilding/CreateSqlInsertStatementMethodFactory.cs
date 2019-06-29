@@ -41,7 +41,7 @@ namespace Foundation.Data.DbQueryBuilding
                 }
 
                 textBuilder.AddToLastLine(";");
-                textBuilder.Add($"var rows = records.Select(item => new[]");
+                textBuilder.Add($"var rows = records.Select(record => new[]");
                 using (textBuilder.AddCSharpBlock())
                 {
                     foreach (var indexedColumn in columns.SelectIndexed())
@@ -55,7 +55,7 @@ namespace Foundation.Data.DbQueryBuilding
                 }
 
                 textBuilder.AddToLastLine(").ToReadOnlyCollection();");
-                textBuilder.Add($"var insertSqlStatement = InsertSqlStatementFactory.CreateInsertSqlStatement(\"{schema}.{table}\", columns, rows);");
+                textBuilder.Add($"var insertSqlStatement = InsertSqlStatementFactory.Create(\"{schema}.{table}\", columns, rows);");
                 textBuilder.Add("return insertSqlStatement;");
             }
 

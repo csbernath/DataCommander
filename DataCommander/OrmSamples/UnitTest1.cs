@@ -18,76 +18,57 @@ namespace OrmSamples
         }
     }
 
-    public sealed class DictionaryItem
+    public sealed class OrmSampleEntity
     {
-        public readonly int InternalId;
-        public readonly string Code;
-        public readonly string DictionaryId;
-        public readonly int ExternalId;
-        public readonly string Name;
-        public readonly DateTime? Start;
-        public readonly DateTime? End;
-        public readonly int? SzotarElemId;
+        public readonly Guid Id;
+        public readonly string Value;
+        public readonly int Version;
 
-        public DictionaryItem(int internalId, string code, string dictionaryId, int externalId, string name, DateTime? start, DateTime? end, int? szotarElemId)
+        public OrmSampleEntity(Guid id, string value, int version)
         {
-            InternalId = internalId;
-            Code = code;
-            DictionaryId = dictionaryId;
-            ExternalId = externalId;
-            Name = name;
-            Start = start;
-            End = end;
-            SzotarElemId = szotarElemId;
+            Id = id;
+            Value = value;
+            Version = version;
         }
     }
 
-    public static class Orm
+    public static class OrmSampleEntitySqlStatementFactory
     {
-        public static ReadOnlyCollection<Line> CreateInsertSqlStatement(IEnumerable<DictionaryItem> source)
+        public static ReadOnlyCollection<Line> CreateInsertSqlStatement(IEnumerable<OrmSampleEntity> records)
         {
             var columns = new[]
             {
-                "InternalId",
-                "Code",
-                "DictionaryId",
-                "ExternalId",
-                "Name",
-                "Start",
-                "End",
-                "SzotarElemId"
+                "Id",
+                "Value",
+                "Version"
             };
-            var rows = source.Select(item => new[]
+            var rows = records.Select(record => new[]
             {
-                item.InternalId.ToSqlConstant(),
-                item.Code.ToNullableNVarChar(),
-                item.DictionaryId.ToNVarChar(),
-                item.ExternalId.ToSqlConstant(),
-                item.Name.ToNullableNVarChar(),
-                item.Start.ToSqlConstant(),
-                item.End.ToSqlConstant(),
-                item.SzotarElemId.ToSqlConstant()
+                record.Id.ToSqlConstant(),
+                record.Value.ToNullableNVarChar(),
+                record.Version.ToSqlConstant()
             }).ToReadOnlyCollection();
-            var insertSqlStatement = InsertSqlStatementFactory.Create("BUSINESSPARAMETERDATABASE.DictionaryItem", columns, rows);
+            var insertSqlStatement = InsertSqlStatementFactory.Create("dbo.OrmSampleEntity", columns, rows);
             return insertSqlStatement;
         }
 
-        public static ReadOnlyCollection<Line> CreateSqlUpdateStatement(DictionaryItem record)
+        public static ReadOnlyCollection<Line> CreateSqlUpdateStatement(OrmSampleEntity record)
         {
-            var identifier = new UpdateSqlStatementFactory.Column("ExternalId", record.ExternalId.ToSqlConstant());
+            var identifier = new UpdateSqlStatementFactory.Column("Id", record.Id.ToSqlConstant());
             var columns = new[]
             {
-                new UpdateSqlStatementFactory.Column("InternalId", record.InternalId.ToSqlConstant()),
-                new UpdateSqlStatementFactory.Column("Code", record.Code.ToNullableNVarChar()),
-                new UpdateSqlStatementFactory.Column("DictionaryId", record.DictionaryId.ToNVarChar()),
-                new UpdateSqlStatementFactory.Column("ExternalId", record.ExternalId.ToSqlConstant()),
-                new UpdateSqlStatementFactory.Column("Name", record.Name.ToNullableNVarChar()),
-                new UpdateSqlStatementFactory.Column("Start", record.Start.ToSqlConstant()),
-                new UpdateSqlStatementFactory.Column("End", record.End.ToSqlConstant()),
-                new UpdateSqlStatementFactory.Column("SzotarElemId", record.SzotarElemId.ToSqlConstant())
+                new UpdateSqlStatementFactory.Column("Value", record.Value.ToNullableNVarChar()),
+                new UpdateSqlStatementFactory.Column("Version", record.Version.ToSqlConstant())
             };
-            var updateSqlStatement = UpdateSqlStatementFactory.Create("BUSINESSPARAMETERDATABASE.DictionaryItem", identifier, columns);
+            var updateSqlStatement = UpdateSqlStatementFactory.Create("dbo.OrmSampleEntity", identifier, columns);
             return updateSqlStatement;
+        }
+
+        public static ReadOnlyCollection<Line> CreateDeleteSqlStatement(int identifierValue)
+        {
+            var identifier = new UpdateSqlStatementFactory.Column("Id", identifierValue.ToSqlConstant());
+            var deleteSqlStatement = DeleteSqlStatementFactory.Create("dbo.OrmSampleEntity", identifier);
+            return deleteSqlStatement;
         }
     }
 }

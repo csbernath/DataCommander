@@ -545,13 +545,20 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             var identifierColumn2 =
                 new Foundation.Data.DbQueryBuilding.Column(identifierColumn.ColumnName, identifierColumn.TypeName, identifierColumn.IsNullable == true);
             var createSqlUpdateStatementMethod = CreateSqlUpdateStatementMethodFactory.Create(_owner, _name, identifierColumn2, columns2);
+            var createSqlDeleteStatementMethod = CreateSqlDeleteStatementMethodFactory.Create(_owner, _name, identifierColumn2);
 
             var textBuilder = new TextBuilder();
             textBuilder.Add(dataTransferObject);
             textBuilder.Add(Line.Empty);
-            textBuilder.Add(createSqlInsertSqlStatementMethod);
-            textBuilder.Add(Line.Empty);
-            textBuilder.Add(createSqlUpdateStatementMethod);
+            textBuilder.Add($"public static class {_name}SqlStatementFactory");
+            using (textBuilder.AddCSharpBlock())
+            {
+                textBuilder.Add(createSqlInsertSqlStatementMethod);
+                textBuilder.Add(Line.Empty);
+                textBuilder.Add(createSqlUpdateStatementMethod);
+                textBuilder.Add(Line.Empty);
+                textBuilder.Add(createSqlDeleteStatementMethod);
+            }
 
             Clipboard.SetText(textBuilder.ToLines().ToIndentedString("    "));
             var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
