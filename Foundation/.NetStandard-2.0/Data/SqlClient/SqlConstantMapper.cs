@@ -60,6 +60,14 @@ namespace Foundation.Data.SqlClient
             : SqlNull.NullString;
 
         [Pure]
+        public static string ToSqlConstant(this long source) => source.ToString();
+
+        [Pure]
+        public static string ToSqlConstant(this long? source) => source != null
+            ? source.Value.ToSqlConstant()
+            : SqlNull.NullString;
+
+        [Pure]
         public static string ToSqlConstant(this double? source) => source != null
             ? source.Value.ToString(CultureInfo.InvariantCulture)
             : SqlNull.NullString;

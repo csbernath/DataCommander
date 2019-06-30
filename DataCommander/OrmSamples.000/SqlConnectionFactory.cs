@@ -1,10 +1,10 @@
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 
 namespace OrmSamples
 {
     public static class SqlConnectionFactory
     {
-        public static SqlConnection Create()
+        public static SqlConnection CreateSqlConnection()
         {
             var sqlConnectionString = GetSqlConnectionString();
             return new SqlConnection(sqlConnectionString);

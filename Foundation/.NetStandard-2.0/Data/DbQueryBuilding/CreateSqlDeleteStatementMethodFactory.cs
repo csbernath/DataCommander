@@ -17,10 +17,11 @@ namespace Foundation.Data.DbQueryBuilding
 
             var textBuilder = new TextBuilder();
             textBuilder.Add(
-                $"public static ReadOnlyCollection<Line> CreateDeleteSqlStatement({MethodName.GetToSqlConstantMethodName(identifier.SqlDataTypeName, identifier.IsNullable)} identifierValue)");
+                $"public static ReadOnlyCollection<Line> CreateDeleteSqlStatement({csharpTypeName} identifierValue)");
             using (textBuilder.AddCSharpBlock())
             {
-                textBuilder.Add($"var identifier = new UpdateSqlStatementFactory.Column(\"{identifier.ColumnName}\", identifierValue);");
+                textBuilder.Add(
+                    $"var identifier = new UpdateSqlStatementFactory.Column(\"{identifier.ColumnName}\", identifierValue.{MethodName.GetToSqlConstantMethodName(identifier.SqlDataTypeName, identifier.IsNullable)}());");
                 textBuilder.Add($"var deleteSqlStatement = DeleteSqlStatementFactory.Create(\"{schema}.{table}\", identifier);");
                 textBuilder.Add("return deleteSqlStatement;");
             }

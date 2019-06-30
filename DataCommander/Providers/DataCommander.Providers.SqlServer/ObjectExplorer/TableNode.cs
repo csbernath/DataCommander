@@ -85,7 +85,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
                 scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("CREATE to clipboard", null, ScriptTable_Click));
                 scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("SELECT to clipboard", null, SelectScript_Click));
                 scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("INSERT to clipboard", null, InsertScript_Click));
-                scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("C# ORM to clipboard", null, Orm));
+                scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("C# ORM to clipboard", null, CsharpOrm_Click));
                 menu.Items.Add(scriptTableAs);
 
                 item = new ToolStripMenuItem("Schema", null, Schema_Click);
@@ -508,7 +508,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                 queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
         }
 
-        private void Orm(object sender, EventArgs e)
+        private void CsharpOrm_Click(object sender, EventArgs e)
         {
             var connectionString = DatabaseNode.Databases.Server.ConnectionString;
             GetTableSchemaResult getTableSchemaResult;

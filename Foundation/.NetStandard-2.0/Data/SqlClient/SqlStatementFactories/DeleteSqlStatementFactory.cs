@@ -3,7 +3,7 @@ using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Text;
 
-namespace Foundation.Data.SqlClient
+namespace Foundation.Data.SqlClient.SqlStatementFactories
 {
     public static class DeleteSqlStatementFactory
     {
