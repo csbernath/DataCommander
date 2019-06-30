@@ -6,7 +6,7 @@ using Foundation.Text;
 
 namespace Foundation.Data.DbQueryBuilding
 {
-    public static class CreateSqlDeleteStatementMethodFactory
+    public static class CreateDeleteSqlStatementMethodFactory
     {
         public static ReadOnlyCollection<Line> Create(string schema, string table, Column identifier)
         {

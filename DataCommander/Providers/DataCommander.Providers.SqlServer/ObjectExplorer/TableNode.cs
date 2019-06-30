@@ -538,14 +538,14 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             var columns2 = getTableSchemaResult.Columns
                 .Select(i => new Foundation.Data.DbQueryBuilding.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
                 .ToReadOnlyCollection();
-            var createSqlInsertSqlStatementMethod = CreateSqlInsertStatementMethodFactory.Create(_owner, _name, columns2);
+            var createInsertSqlSqlStatementMethod = CreateInsertSqlStatementMethodFactory.Create(_owner, _name, columns2);
 
             var identifierColumnId = getTableSchemaResult.UniqueIndexColumns.First().ColumnId;
             var identifierColumn = getTableSchemaResult.Columns.First(i => i.ColumnId == identifierColumnId);
             var identifierColumn2 =
                 new Foundation.Data.DbQueryBuilding.Column(identifierColumn.ColumnName, identifierColumn.TypeName, identifierColumn.IsNullable == true);
-            var createSqlUpdateStatementMethod = CreateSqlUpdateStatementMethodFactory.Create(_owner, _name, identifierColumn2, columns2);
-            var createSqlDeleteStatementMethod = CreateSqlDeleteStatementMethodFactory.Create(_owner, _name, identifierColumn2);
+            var createUpdateSqlStatementMethod = CreateUpdateSqlStatementMethodFactory.Create(_owner, _name, identifierColumn2, columns2);
+            var createDeleteSqlStatementMethod = CreateDeleteSqlStatementMethodFactory.Create(_owner, _name, identifierColumn2);
 
             var textBuilder = new TextBuilder();
             textBuilder.Add(dataTransferObject);
@@ -553,11 +553,11 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             textBuilder.Add($"public static class {_name}SqlStatementFactory");
             using (textBuilder.AddCSharpBlock())
             {
-                textBuilder.Add(createSqlInsertSqlStatementMethod);
+                textBuilder.Add(createInsertSqlSqlStatementMethod);
                 textBuilder.Add(Line.Empty);
-                textBuilder.Add(createSqlUpdateStatementMethod);
+                textBuilder.Add(createUpdateSqlStatementMethod);
                 textBuilder.Add(Line.Empty);
-                textBuilder.Add(createSqlDeleteStatementMethod);
+                textBuilder.Add(createDeleteSqlStatementMethod);
             }
 
             Clipboard.SetText(textBuilder.ToLines().ToIndentedString("    "));

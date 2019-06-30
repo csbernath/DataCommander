@@ -6,13 +6,13 @@ using Foundation.Text;
 
 namespace Foundation.Data.DbQueryBuilding
 {
-    public static class CreateSqlUpdateStatementMethodFactory
+    public static class CreateUpdateSqlStatementMethodFactory
     {
         public static ReadOnlyCollection<Line> Create(string schema, string table, Column identifier, IReadOnlyCollection<Column> columns)
         {
             var textBuilder = new TextBuilder();
 
-            textBuilder.Add($"public static ReadOnlyCollection<Line> CreateSqlUpdateStatement({table} record)");
+            textBuilder.Add($"public static ReadOnlyCollection<Line> CreateUpdateSqlStatement({table} record)");
             using (textBuilder.AddCSharpBlock())
             {
                 textBuilder.Add(

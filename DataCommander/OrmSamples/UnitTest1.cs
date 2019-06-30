@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
-using Foundation.Data.DbQueryBuilding;
 using Foundation.Data.SqlClient;
 using Foundation.Data.SqlClient.SqlStatementFactories;
 using Foundation.Text;
@@ -29,7 +28,7 @@ namespace OrmSamples
                     var text = record.Text + version;
                     return new OrmSampleTable(record.Id, text, version, DateTime.Now);
                 })
-                .Select(record => OrmSampleTableSqlStatementFactory.CreateSqlUpdateStatement(record))
+                .Select(OrmSampleTableSqlStatementFactory.CreateUpdateSqlStatement)
                 .ToList();
             var deleteSqlStatements = records
                 .Select(record => OrmSampleTableSqlStatementFactory.CreateDeleteSqlStatement(record.Id))
@@ -86,7 +85,7 @@ namespace OrmSamples
                 return insertSqlStatement;
             }
 
-            public static ReadOnlyCollection<Line> CreateSqlUpdateStatement(OrmSampleTable record)
+            public static ReadOnlyCollection<Line> CreateUpdateSqlStatement(OrmSampleTable record)
             {
                 var identifier = new ColumnNameValue("Id", record.Id.ToSqlConstant());
                 var columns = new[]

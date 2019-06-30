@@ -4,7 +4,7 @@ using Foundation.Text;
 
 namespace Foundation.Data.DbQueryBuilding
 {
-    public static class CreateSqlInsertStatementMethodFactory
+    public static class CreateInsertSqlStatementMethodFactory
     {
         public static ReadOnlyCollection<Line> Create(string schema, string table, ReadOnlyCollection<Column> columns)
         {
