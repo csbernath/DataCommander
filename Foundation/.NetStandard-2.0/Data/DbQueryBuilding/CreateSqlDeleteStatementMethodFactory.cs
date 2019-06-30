@@ -21,7 +21,7 @@ namespace Foundation.Data.DbQueryBuilding
             using (textBuilder.AddCSharpBlock())
             {
                 textBuilder.Add(
-                    $"var identifier = new UpdateSqlStatementFactory.Column(\"{identifier.ColumnName}\", identifierValue.{MethodName.GetToSqlConstantMethodName(identifier.SqlDataTypeName, identifier.IsNullable)}());");
+                    $"var identifier = new ColumnNameValue(\"{identifier.ColumnName}\", identifierValue.{MethodName.GetToSqlConstantMethodName(identifier.SqlDataTypeName, identifier.IsNullable)}());");
                 textBuilder.Add($"var deleteSqlStatement = DeleteSqlStatementFactory.Create(\"{schema}.{table}\", identifier);");
                 textBuilder.Add("return deleteSqlStatement;");
             }

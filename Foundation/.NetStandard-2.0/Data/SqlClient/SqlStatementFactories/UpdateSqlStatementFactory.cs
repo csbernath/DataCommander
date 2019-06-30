@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using Foundation.Assertions;
 using Foundation.Core;
+using Foundation.Data.DbQueryBuilding;
 using Foundation.Linq;
 using Foundation.Text;
 
@@ -9,21 +10,7 @@ namespace Foundation.Data.SqlClient.SqlStatementFactories
 {
     public static class UpdateSqlStatementFactory
     {
-        public sealed class Column
-        {
-            public readonly string Name;
-            public readonly string Value;
-
-            public Column(string name, string value)
-            {
-                Assert.IsTrue(!name.IsNullOrEmpty());
-
-                Name = name;
-                Value = value;
-            }
-        }
-
-        public static ReadOnlyCollection<Line> Create(string table, Column identifier, IReadOnlyCollection<Column> columns)
+        public static ReadOnlyCollection<Line> Create(string table, ColumnNameValue identifier, IReadOnlyCollection<ColumnNameValue> columns)
         {
             Assert.IsTrue(!table.IsNullOrEmpty());
             Assert.IsNotNull(identifier);

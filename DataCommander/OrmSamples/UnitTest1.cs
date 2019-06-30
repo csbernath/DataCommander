@@ -88,12 +88,12 @@ namespace OrmSamples
 
             public static ReadOnlyCollection<Line> CreateSqlUpdateStatement(OrmSampleTable record)
             {
-                var identifier = new UpdateSqlStatementFactory.Column("Id", record.Id.ToSqlConstant());
+                var identifier = new ColumnNameValue("Id", record.Id.ToSqlConstant());
                 var columns = new[]
                 {
-                    new UpdateSqlStatementFactory.Column("Text", record.Text.ToNVarChar()),
-                    new UpdateSqlStatementFactory.Column("Version", record.Version.ToSqlConstant()),
-                    new UpdateSqlStatementFactory.Column("Timestamp", record.Timestamp.ToSqlConstant())
+                    new ColumnNameValue("Text", record.Text.ToNVarChar()),
+                    new ColumnNameValue("Version", record.Version.ToSqlConstant()),
+                    new ColumnNameValue("Timestamp", record.Timestamp.ToSqlConstant())
                 };
                 var updateSqlStatement = UpdateSqlStatementFactory.Create("dbo.OrmSampleTable", identifier, columns);
                 return updateSqlStatement;
@@ -101,7 +101,7 @@ namespace OrmSamples
 
             public static ReadOnlyCollection<Line> CreateDeleteSqlStatement(Guid identifierValue)
             {
-                var identifier = new UpdateSqlStatementFactory.Column("Id", identifierValue.ToSqlConstant());
+                var identifier = new ColumnNameValue("Id", identifierValue.ToSqlConstant());
                 var deleteSqlStatement = DeleteSqlStatementFactory.Create("dbo.OrmSampleTable", identifier);
                 return deleteSqlStatement;
             }

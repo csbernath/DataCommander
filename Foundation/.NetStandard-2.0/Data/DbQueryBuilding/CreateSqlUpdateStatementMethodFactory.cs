@@ -16,7 +16,7 @@ namespace Foundation.Data.DbQueryBuilding
             using (textBuilder.AddCSharpBlock())
             {
                 textBuilder.Add(
-                    $"var identifier = new UpdateSqlStatementFactory.Column(\"{identifier.ColumnName}\", record.{identifier.ColumnName}.{MethodName.GetToSqlConstantMethodName(identifier.SqlDataTypeName, identifier.IsNullable)}());");
+                    $"var identifier = new ColumnNameValue(\"{identifier.ColumnName}\", record.{identifier.ColumnName}.{MethodName.GetToSqlConstantMethodName(identifier.SqlDataTypeName, identifier.IsNullable)}());");
                 textBuilder.Add("var columns = new[]");
                 using (textBuilder.AddCSharpBlock())
                 {
@@ -29,7 +29,7 @@ namespace Foundation.Data.DbQueryBuilding
                             textBuilder.AddToLastLine(",");
                         var column = indexedColumn.Value;
                         textBuilder.Add(
-                            $"new UpdateSqlStatementFactory.Column(\"{column.ColumnName}\", record.{column.ColumnName}.{MethodName.GetToSqlConstantMethodName(column.SqlDataTypeName, column.IsNullable)}())");
+                            $"new ColumnNameValue(\"{column.ColumnName}\", record.{column.ColumnName}.{MethodName.GetToSqlConstantMethodName(column.SqlDataTypeName, column.IsNullable)}())");
                     }
                 }
 

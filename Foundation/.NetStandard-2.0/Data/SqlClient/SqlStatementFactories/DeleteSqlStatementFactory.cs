@@ -7,7 +7,7 @@ namespace Foundation.Data.SqlClient.SqlStatementFactories
 {
     public static class DeleteSqlStatementFactory
     {
-        public static ReadOnlyCollection<Line> Create(string table, UpdateSqlStatementFactory.Column identifier)
+        public static ReadOnlyCollection<Line> Create(string table, ColumnNameValue identifier)
         {
             Assert.IsTrue(!table.IsNullOrEmpty());
             Assert.IsNotNull(identifier);
