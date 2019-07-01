@@ -17,7 +17,8 @@ Drag & drop: file to binary constant|Yes|No
 Edit rows: generate change script|Yes|No
 Object explorer: find item|Yes|No
 C# result schema viewer|Yes|No
-Command/Query builder (C# micro-ORM query generator)|Yes|No
+C# ORM: record and insert/update/delete builder|Yes|No
+C# ORM: command/query builder|Yes|No
 Performance: startup|Fast|Slow
 Results to HTML File|Yes|No
 Results to JSON File|Yes|No
@@ -439,8 +440,20 @@ order by i.CustomerID,i.InvoiceID";
 }
 
 ```
+## How to use ORM in DDD
+### Write model
+ - Create the event sourced aggregate. The events will be replayed when saving agregate to the SQL database.
+ - Create the aggregate repository:
+	 - Save aggregate: replay events in SQL
+		 - Create insert/update/delete SQL statements with Data Commander
+	 - Get aggregate by id:
+		 - create SQL statement manually
+		 - generate C# wrapper with Data Commander
+### Read model
+ - Create SQL statement manually
+ - Generate C# wrapper with Data Commander
 
-The following plugins are already implemented:
+### The following plugins are already implemented:
 
 SQL databases (client/server):
 
@@ -922,8 +935,9 @@ This program is freeware and released under the [GNU General Public License](htt
 
 - Microsoft Visual Studio Community 2019 Version 16.0.3
 - Resharper 2019.1.1
-- Microsoft .NET Framework 4.7.2
-- .NET Standard 2.0
+- Microsoft .NET Framework 4.8 (Windows Forms UI)
+- .NET Standard 2.0 (Foundation class libraries)
+- .NET Core 2.2 (unit tests)
 - C# 7.2
 
 ## Credits
@@ -932,7 +946,7 @@ This program is freeware and released under the [GNU General Public License](htt
 
 ## References
 
-- [Microsoft SQL Server Management Studio v17.9.1](https://msdn.microsoft.com/en-us/library/hh213248.aspx)
+- [Microsoft SQL Server Management Studio v18.1](https://msdn.microsoft.com/en-us/library/hh213248.aspx)
 - [pgAdmin: PostgreSQL Tools](http://www.pgadmin.org/)
 - [TOAD for SQL Server](http://www.quest.com/toad-for-sql-server/)
 - [PL/SQL Developer](http://www.allroundautomations.com/plsqldev.html)
