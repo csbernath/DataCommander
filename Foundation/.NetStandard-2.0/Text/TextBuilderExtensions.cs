@@ -7,7 +7,7 @@ namespace Foundation.Text
     {
         public static IDisposable AddCSharpBlock(this TextBuilder indentedTextBuilder) => indentedTextBuilder.AddBlock("{", "}");
 
-        private static IDisposable AddBlock(this TextBuilder indentedTextBuilder, string begin, string end)
+        public static IDisposable AddBlock(this TextBuilder indentedTextBuilder, string begin, string end)
         {
             indentedTextBuilder.Add(begin);
             var indentation = indentedTextBuilder.Indent(1);

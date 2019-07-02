@@ -535,17 +535,25 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                 .ToReadOnlyCollection();
             var dataTransferObject = DataTransferObjectFactory.CreateDataTransferObject(_name, dataTransferObjectFields).ToIndentedString("    ");
 
-            var columns2 = getTableSchemaResult.Columns
+            var columns = getTableSchemaResult.Columns
                 .Select(i => new Foundation.Data.DbQueryBuilding.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
                 .ToReadOnlyCollection();
-            var createInsertSqlSqlStatementMethod = CreateInsertSqlStatementMethodFactory.Create(_owner, _name, columns2);
+            var createInsertSqlSqlStatementMethod = CreateInsertSqlStatementMethodFactory.Create(_owner, _name, columns);
 
-            var identifierColumnId = getTableSchemaResult.UniqueIndexColumns.First().ColumnId;
-            var identifierColumn = getTableSchemaResult.Columns.First(i => i.ColumnId == identifierColumnId);
-            var identifierColumn2 =
-                new Foundation.Data.DbQueryBuilding.Column(identifierColumn.ColumnName, identifierColumn.TypeName, identifierColumn.IsNullable == true);
-            var createUpdateSqlStatementMethod = CreateUpdateSqlStatementMethodFactory.Create(_owner, _name, identifierColumn2, columns2);
-            var createDeleteSqlStatementMethod = CreateDeleteSqlStatementMethodFactory.Create(_owner, _name, identifierColumn2);
+            var identifierColumn = getTableSchemaResult.UniqueIndexColumns
+                .Select(i => getTableSchemaResult.Columns.First(j => j.ColumnId == i.ColumnId))
+                .Select(i => new Foundation.Data.DbQueryBuilding.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
+                .First();
+            var setColumns = columns.Where(i => i.ColumnName != identifierColumn.ColumnName).ToReadOnlyCollection();
+            var versionColumn = columns.FirstOrDefault(i => i.ColumnName == "Version");
+            
+            var whereColumns = new List<Foundation.Data.DbQueryBuilding.Column>();
+            whereColumns.Add(identifierColumn);
+            if (versionColumn != null)
+                whereColumns.Add(versionColumn);
+
+            var createUpdateSqlStatementMethod = CreateUpdateSqlStatementMethodFactory.Create(_owner, _name, setColumns, whereColumns);
+            var createDeleteSqlStatementMethod = CreateDeleteSqlStatementMethodFactory.Create(_owner, _name, whereColumns);
 
             var textBuilder = new TextBuilder();
             textBuilder.Add(dataTransferObject);

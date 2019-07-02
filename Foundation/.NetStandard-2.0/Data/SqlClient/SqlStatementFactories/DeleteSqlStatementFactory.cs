@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Text;
@@ -7,18 +8,16 @@ namespace Foundation.Data.SqlClient.SqlStatementFactories
 {
     public static class DeleteSqlStatementFactory
     {
-        public static ReadOnlyCollection<Line> Create(string table, ColumnNameValue identifier)
+        public static ReadOnlyCollection<Line> Create(string table, IReadOnlyCollection<ColumnNameValue> whereColumns)
         {
             Assert.IsTrue(!table.IsNullOrEmpty());
-            Assert.IsNotNull(identifier);
-            Assert.IsTrue(!identifier.Value.IsNullOrEmpty());
+            Assert.IsNotNull(whereColumns);
+            Assert.IsTrue(whereColumns.Count > 0);
             var textBuilder = new TextBuilder();
             textBuilder.Add($"delete {table}");
             textBuilder.Add("where");
-
             using (textBuilder.Indent(1))
-                textBuilder.Add($"{identifier.Name} = {identifier.Value}");
-
+                textBuilder.Add(whereColumns.Join(" and"));
             return textBuilder.ToLines();
         }
     }

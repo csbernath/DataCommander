@@ -17,27 +17,25 @@ namespace OrmSamples
         [TestMethod]
         public void TestMethod1()
         {
-            var records = Enumerable.Range(0, 100)
-                .Select(i => new OrmSampleTable(Guid.NewGuid(), i.ToString(), i, DateTime.Now))
-                .ToList();
-            var insertSqlStatement = OrmSampleTableSqlStatementFactory.CreateInsertSqlStatement(records);
-            var updateSqlStatements = records
-                .Select(record =>
-                {
-                    var version = record.Version + 1;
-                    var text = record.Text + version;
-                    return new OrmSampleTable(record.Id, text, version, DateTime.Now);
-                })
-                .Select(OrmSampleTableSqlStatementFactory.CreateUpdateSqlStatement)
-                .ToList();
-            var deleteSqlStatements = records
-                .Select(record => OrmSampleTableSqlStatementFactory.CreateDeleteSqlStatement(record.Id))
-                .ToList();
-            var textBuilder = new TextBuilder();
-            textBuilder.Add(insertSqlStatement);
-            textBuilder.Add(updateSqlStatements.SelectMany(i => i));
-            textBuilder.Add(deleteSqlStatements.SelectMany(i => i));
-            var commandText = textBuilder.ToLines().ToIndentedString("    ");
+            //var records = Enumerable.Range(0, 100)
+            //    .Select(i => new OrmSampleTable(Guid.NewGuid(), 0, i.ToString(), DateTime.Now))
+            //    .ToList();
+            //var insertSqlStatement = OrmSampleTableSqlStatementFactory.CreateInsertSqlStatement(records);
+            //var updateSqlStatements = records
+            //    .Select(record => new OrmSampleTable(record.Id, record.Version + 1, record.Text + ".updated", DateTime.Now))
+            //    .Select(record => OrmSampleTableSqlStatementFactory.CreateUpdateSqlStatement(record, 0))
+            //    .ToList();
+            //var deleteSqlStatements = records
+            //    .Select(record => OrmSampleTableSqlStatementFactory.CreateDeleteSqlStatement(record.Id, record.Version))
+            //    .ToList();
+            //var textBuilder = new TextBuilder();
+            //textBuilder.Add(insertSqlStatement);
+            //textBuilder.Add(updateSqlStatements.SelectMany(i => i));
+            //textBuilder.Add(deleteSqlStatements.SelectMany(i => i));
+            //var commandText = textBuilder.ToLines().ToIndentedString("    ");
+
+            var updateSqlStatement = OrmSampleTableSqlStatementFactory.CreateUpdateSqlStatement(new OrmSampleTable(Guid.NewGuid(), 0, null, DateTime.Now), 0);
+            var commandText = updateSqlStatement.ToIndentedString("    ");
 
             using (var connection = SqlConnectionFactory.Create())
             {
@@ -50,15 +48,15 @@ namespace OrmSamples
         public sealed class OrmSampleTable
         {
             public readonly Guid Id;
-            public readonly string Text;
             public readonly long Version;
+            public readonly string Text;
             public readonly DateTime Timestamp;
 
-            public OrmSampleTable(Guid id, string text, long version, DateTime timestamp)
+            public OrmSampleTable(Guid id, long version, string text, DateTime timestamp)
             {
                 Id = id;
-                Text = text;
                 Version = version;
+                Text = text;
                 Timestamp = timestamp;
             }
         }
@@ -85,23 +83,41 @@ namespace OrmSamples
                 return insertSqlStatement;
             }
 
-            public static ReadOnlyCollection<Line> CreateUpdateSqlStatement(OrmSampleTable record)
+            public static ReadOnlyCollection<Line> CreateUpdateSqlStatement(OrmSampleTable record, long expectedVersion)
             {
-                var identifier = new ColumnNameValue("Id", record.Id.ToSqlConstant());
-                var columns = new[]
+                var setColumns = new[]
                 {
-                    new ColumnNameValue("Text", record.Text.ToNVarChar()),
                     new ColumnNameValue("Version", record.Version.ToSqlConstant()),
+                    new ColumnNameValue("Text", record.Text.ToNullableNVarChar()),
                     new ColumnNameValue("Timestamp", record.Timestamp.ToSqlConstant())
                 };
-                var updateSqlStatement = UpdateSqlStatementFactory.Create("dbo.OrmSampleTable", identifier, columns);
-                return updateSqlStatement;
+                var whereColumns = new[]
+                {
+                    new ColumnNameValue("Id", record.Id.ToSqlConstant()),
+                    new ColumnNameValue("Version", expectedVersion.ToSqlConstant())
+                };
+                var updateSqlStatement = UpdateSqlStatementFactory.Create("dbo.OrmSampleTable", setColumns, whereColumns);
+
+                var textBuilder = new TextBuilder();
+                textBuilder.Add(updateSqlStatement);
+                textBuilder.Add("if @@rowcount = 0");
+                using (textBuilder.AddBlock("begin", "end"))
+                {
+                    textBuilder.Add("raiserror('update failed',16,1)");
+                    textBuilder.Add("return");
+                }
+
+                return textBuilder.ToLines();
             }
 
-            public static ReadOnlyCollection<Line> CreateDeleteSqlStatement(Guid identifierValue)
+            public static ReadOnlyCollection<Line> CreateDeleteSqlStatement(Guid id, long version)
             {
-                var identifier = new ColumnNameValue("Id", identifierValue.ToSqlConstant());
-                var deleteSqlStatement = DeleteSqlStatementFactory.Create("dbo.OrmSampleTable", identifier);
+                var whereColumns = new[]
+                {
+                    new ColumnNameValue("Id", id.ToSqlConstant()),
+                    new ColumnNameValue("Version", version.ToSqlConstant())
+                };
+                var deleteSqlStatement = DeleteSqlStatementFactory.Create("dbo.OrmSampleTable", whereColumns);
                 return deleteSqlStatement;
             }
         }

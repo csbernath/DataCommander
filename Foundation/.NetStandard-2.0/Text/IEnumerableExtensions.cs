@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Text;
 using Foundation.Assertions;
 
 namespace Foundation.Text
 {
     public static class IEnumerableExtensions
     {
+        [Pure]
         public static string ToString<TSource>(this IEnumerable<TSource> source, IReadOnlyCollection<StringTableColumnInfo<TSource>> columns)
         {
             Assert.IsNotNull(source);
@@ -65,6 +69,7 @@ namespace Foundation.Text
             return table.ToString(columnWidths, " ");
         }
 
+        [Pure]
         public static string Join(this IEnumerable<string> source, string separator) => string.Join(separator, source);
     }
 }
