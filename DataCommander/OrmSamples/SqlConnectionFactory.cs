@@ -14,7 +14,7 @@ namespace OrmSamples
         {
             var sqlConnectionStringBuilder = new SqlConnectionStringBuilder();
             sqlConnectionStringBuilder.DataSource = @".\SQL2017_001";
-            sqlConnectionStringBuilder.InitialCatalog = "Sandbox";
+            sqlConnectionStringBuilder.InitialCatalog = "OrmSample";
             sqlConnectionStringBuilder.IntegratedSecurity = true;
             return sqlConnectionStringBuilder.ConnectionString;
         }

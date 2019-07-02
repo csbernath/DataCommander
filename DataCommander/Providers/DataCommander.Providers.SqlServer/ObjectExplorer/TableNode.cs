@@ -544,16 +544,10 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                 .Select(i => getTableSchemaResult.Columns.First(j => j.ColumnId == i.ColumnId))
                 .Select(i => new Foundation.Data.DbQueryBuilding.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
                 .First();
-            var setColumns = columns.Where(i => i.ColumnName != identifierColumn.ColumnName).ToReadOnlyCollection();
             var versionColumn = columns.FirstOrDefault(i => i.ColumnName == "Version");
-            
-            var whereColumns = new List<Foundation.Data.DbQueryBuilding.Column>();
-            whereColumns.Add(identifierColumn);
-            if (versionColumn != null)
-                whereColumns.Add(versionColumn);
-
-            var createUpdateSqlStatementMethod = CreateUpdateSqlStatementMethodFactory.Create(_owner, _name, setColumns, whereColumns);
-            var createDeleteSqlStatementMethod = CreateDeleteSqlStatementMethodFactory.Create(_owner, _name, whereColumns);
+            columns = columns.Where(i => i.ColumnName != identifierColumn.ColumnName).ToReadOnlyCollection();
+            var createUpdateSqlStatementMethod = CreateUpdateSqlStatementMethodFactory.Create(_owner, _name, identifierColumn, versionColumn, columns);
+            var createDeleteSqlStatementMethod = CreateDeleteSqlStatementMethodFactory.Create(_owner, _name, identifierColumn, versionColumn);
 
             var textBuilder = new TextBuilder();
             textBuilder.Add(dataTransferObject);

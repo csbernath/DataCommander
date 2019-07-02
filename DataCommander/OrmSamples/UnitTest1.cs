@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
+using Foundation.Data.DbQueryBuilding;
 using Foundation.Data.SqlClient;
 using Foundation.Data.SqlClient.SqlStatementFactories;
 using Foundation.Text;
@@ -40,8 +42,12 @@ namespace OrmSamples
             using (var connection = SqlConnectionFactory.Create())
             {
                 connection.Open();
-                var executor = connection.CreateCommandExecutor();
-                executor.ExecuteNonQuery(new CreateCommandRequest(commandText));
+                using (var transaction = connection.BeginTransaction())
+                {
+                    var executor = connection.CreateCommandExecutor();
+                    executor.ExecuteNonQuery(new CreateCommandRequest(commandText, null, CommandType.Text, null, transaction));
+                    transaction.Commit();
+                }
             }
         }
 
@@ -68,15 +74,15 @@ namespace OrmSamples
                 var columns = new[]
                 {
                     "Id",
-                    "Text",
                     "Version",
+                    "Text",
                     "Timestamp"
                 };
                 var rows = records.Select(record => new[]
                 {
                     record.Id.ToSqlConstant(),
-                    record.Text.ToNVarChar(),
                     record.Version.ToSqlConstant(),
+                    record.Text.ToNullableNVarChar(),
                     record.Timestamp.ToSqlConstant()
                 }).ToReadOnlyCollection();
                 var insertSqlStatement = InsertSqlStatementFactory.Create("dbo.OrmSampleTable", columns, rows);
@@ -97,16 +103,10 @@ namespace OrmSamples
                     new ColumnNameValue("Version", expectedVersion.ToSqlConstant())
                 };
                 var updateSqlStatement = UpdateSqlStatementFactory.Create("dbo.OrmSampleTable", setColumns, whereColumns);
-
+                var validation = ValidationFactory.Create("update dbo.OrmSampleTable failed");
                 var textBuilder = new TextBuilder();
                 textBuilder.Add(updateSqlStatement);
-                textBuilder.Add("if @@rowcount = 0");
-                using (textBuilder.AddBlock("begin", "end"))
-                {
-                    textBuilder.Add("raiserror('update failed',16,1)");
-                    textBuilder.Add("return");
-                }
-
+                textBuilder.Add(validation);
                 return textBuilder.ToLines();
             }
 
@@ -118,7 +118,11 @@ namespace OrmSamples
                     new ColumnNameValue("Version", version.ToSqlConstant())
                 };
                 var deleteSqlStatement = DeleteSqlStatementFactory.Create("dbo.OrmSampleTable", whereColumns);
-                return deleteSqlStatement;
+                var validation = ValidationFactory.Create("delete dbo.OrmSampleTable failed");
+                var textBuilder = new TextBuilder();
+                textBuilder.Add(deleteSqlStatement);
+                textBuilder.Add(validation);
+                return textBuilder.ToLines();
             }
         }
     }
