@@ -6,7 +6,7 @@ The program has a plugin architecture for adding arbitrary data providers.
 ## How to build executable from source code
 Open <git repository>\DataCommander\DataCommander.sln in Visual Studio 2019. Build the solution.
 ## Special features of Data Commander
-Feature|Data Commander|SQL Server Management Studio v17.9.1
+Feature|Data Commander|SQL Server Management Studio v18.1
 ---|---|---
 Audit: log commands to file|Yes|No
 Auto completion: Pascal case filtering|Yes|No
@@ -16,7 +16,7 @@ Create insert statements from select|Yes|No
 Drag & drop: file to binary constant|Yes|No
 Edit rows: generate change script|Yes|No
 Object explorer: find item|Yes|No
-C# result schema viewer|Yes|No
+C# ORM: result schema viewer|Yes|No
 C# ORM: record and insert/update/delete builder|Yes|No
 C# ORM: command/query builder|Yes|No
 Performance: startup|Fast|Slow
@@ -29,18 +29,30 @@ Result sort in memory|Yes|No
 
 ## [Object-relational mapping (ORM)](https://en.wikipedia.org/wiki/Object-relational_mapping)
 
-### How to generate C# INSERT/UPDATE/DELETE wrapper to a SQL table
+### Basic concepts of Data Commander C# ORM
+ORM Feature|Data Commander|Dapper|NHibernate
+---|---|---|---
+C# source code|Generated|Manual|Manual
+C# source code: typed input parameters|Yes|No|No
+C# source code: typed result set|Yes|No|No
+Magic framework|No|Reflection|Reflection
+Magic SQL statement manipulation|No|No|Yes
+Compile vs runtime errors|Compile time|Runtime|Runtime
+Debuggable|Yes|No|No
+Performance|Yes|No|No
+
+### How to generate insert/update/delete SQL statements to a SQL table
 #### Requirements
- - The table must have a row identifier.
- - All columns must have value before inserting (including the row identifier).
+- The SQL table must have an identifier column (uniqueidentifier). The identifier column should have a unique constraint.
+- The SQL table can have a version column (bigint) for optimistic concurrency control.
+- All columns (including identifier and version) must have value before inserting. 
 #### Description of generated C# entity class
- - Immutable record class
+ - Immutable record class for inserting and updating rows.
 #### Description of generated C# methods
- - The "insert" C# method inserts multiple rows.
- - The "update" C# method updates one row by the row identifer.
- - The "delete" C# method deletes multiple rows.
- 
+- The SQL table row is updated by identifier and expected version. The record class contains new values of the row. The additional 'expected version' parameter is used for optimistic concurrency control.
+- The SQL table row is deleted by identifier and expected version.
 Data Commander generates C# (requires .NET Standard 2.0 + Foundation assembly) source code wrapper to a SQL table.
+#### How to generate C# ORM source code
 1. Right click on a table in object explorer.
 2. Navigate to 'Script table as' menu item.
 3. Click 'C# ORM to clipboard' menu item.
@@ -99,15 +111,15 @@ namespace OrmSamples
         public sealed class OrmSampleTable
         {
             public readonly Guid Id;
-            public readonly string Text;
             public readonly long Version;
+            public readonly string Text;
             public readonly DateTime Timestamp;
 
-            public OrmSampleTable(Guid id, string text, long version, DateTime timestamp)
+            public OrmSampleTable(Guid id, long version, string text, DateTime timestamp)
             {
                 Id = id;
-                Text = text;
                 Version = version;
+                Text = text;
                 Timestamp = timestamp;
             }
         }
@@ -119,39 +131,55 @@ namespace OrmSamples
                 var columns = new[]
                 {
                     "Id",
-                    "Text",
                     "Version",
+                    "Text",
                     "Timestamp"
                 };
                 var rows = records.Select(record => new[]
                 {
                     record.Id.ToSqlConstant(),
-                    record.Text.ToNVarChar(),
                     record.Version.ToSqlConstant(),
+                    record.Text.ToNullableNVarChar(),
                     record.Timestamp.ToSqlConstant()
                 }).ToReadOnlyCollection();
                 var insertSqlStatement = InsertSqlStatementFactory.Create("dbo.OrmSampleTable", columns, rows);
                 return insertSqlStatement;
             }
 
-            public static ReadOnlyCollection<Line> CreateUpdateSqlStatement(OrmSampleTable record)
+            public static ReadOnlyCollection<Line> CreateUpdateSqlStatement(OrmSampleTable record, long expectedVersion)
             {
-                var identifier = new ColumnNameValue("Id", record.Id.ToSqlConstant());
-                var columns = new[]
+                var setColumns = new[]
                 {
-                    new ColumnNameValue("Text", record.Text.ToNVarChar()),
                     new ColumnNameValue("Version", record.Version.ToSqlConstant()),
+                    new ColumnNameValue("Text", record.Text.ToNullableNVarChar()),
                     new ColumnNameValue("Timestamp", record.Timestamp.ToSqlConstant())
                 };
-                var updateSqlStatement = UpdateSqlStatementFactory.Create("dbo.OrmSampleTable", identifier, columns);
-                return updateSqlStatement;
+                var whereColumns = new[]
+                {
+                    new ColumnNameValue("Id", record.Id.ToSqlConstant()),
+                    new ColumnNameValue("Version", expectedVersion.ToSqlConstant())
+                };
+                var updateSqlStatement = UpdateSqlStatementFactory.Create("dbo.OrmSampleTable", setColumns, whereColumns);
+                var validation = ValidationFactory.Create("update dbo.OrmSampleTable failed");
+                var textBuilder = new TextBuilder();
+                textBuilder.Add(updateSqlStatement);
+                textBuilder.Add(validation);
+                return textBuilder.ToLines();
             }
 
-            public static ReadOnlyCollection<Line> CreateDeleteSqlStatement(Guid identifierValue)
+            public static ReadOnlyCollection<Line> CreateDeleteSqlStatement(Guid id, long version)
             {
-                var identifier = new ColumnNameValue("Id", identifierValue.ToSqlConstant());
-                var deleteSqlStatement = DeleteSqlStatementFactory.Create("dbo.OrmSampleTable", identifier);
-                return deleteSqlStatement;
+                var whereColumns = new[]
+                {
+                    new ColumnNameValue("Id", id.ToSqlConstant()),
+                    new ColumnNameValue("Version", version.ToSqlConstant())
+                };
+                var deleteSqlStatement = DeleteSqlStatementFactory.Create("dbo.OrmSampleTable", whereColumns);
+                var validation = ValidationFactory.Create("delete dbo.OrmSampleTable failed");
+                var textBuilder = new TextBuilder();
+                textBuilder.Add(deleteSqlStatement);
+                textBuilder.Add(validation);
+                return textBuilder.ToLines();
             }
         }
     }
@@ -159,18 +187,10 @@ namespace OrmSamples
 ```
 
 ### How to generate C# Command/Query wrapper to a SQL command/query
-The program generates C# (requires .NET Standard 2.0 + Foundation assembly) source code wrapper for a SQL command/query. The query is similar to a CQRS Command/Query:
+Data Commander generates C# (requires .NET Standard 2.0 + Foundation assembly) source code wrapper for a SQL command/query. The query is similar to a CQRS Command/Query:
 - Command/Query class (command/query input parameters)
 - QueryResult class (query output/result)
 - (Command/Query)Handler class (the handler which executes the command/query)
-
-### Special features of Data Commander ORM
-ORM Feature|Data Commander|Dapper|NHibernate
----|---|---|---
-Typed input parameters|Yes|No|No
-Typed result set|Yes|No|No
-Debuggable|Yes|No|No
-Performance|Yes|No|No
 
 ### How to use the ORM generator
 Download and restore the SQL Server 2016 sample database from https://github.com/microsoft/sql-server-samples
@@ -933,8 +953,8 @@ This program is freeware and released under the [GNU General Public License](htt
 
 ## Development environment
 
-- Microsoft Visual Studio Community 2019 Version 16.0.3
-- Resharper 2019.1.1
+- Microsoft Visual Studio Community 2019 Version 16.1.4
+- Resharper 2019.1.2
 - Microsoft .NET Framework 4.8 (Windows Forms UI)
 - .NET Standard 2.0 (Foundation class libraries)
 - .NET Core 2.2 (unit tests)
