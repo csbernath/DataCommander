@@ -959,6 +959,8 @@ This program is freeware and released under the [GNU General Public License](htt
 - .NET Standard 2.0 (Foundation class libraries)
 - .NET Core 2.2 (unit tests)
 - C# 7.2
+## Screenshots
+<img src="MainMenu.png" alt="Main menu">
 
 ## Credits
 
