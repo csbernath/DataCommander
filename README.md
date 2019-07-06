@@ -961,6 +961,9 @@ This program is freeware and released under the [GNU General Public License](htt
 - C# 7.2
 ## Screenshots
 <img src="MainMenu.png" alt="Main menu">
+<img src="ObjectExplorer.png" alt="Object Explorer">
+<img src="DataGridView.png" alt="Data Grid View">
+
 
 ## Credits
 
