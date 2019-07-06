@@ -323,6 +323,7 @@
     <Compile Include="ResultWriter\ExcelResultWriter.cs" />
     <Compile Include="ResultWriter\FieldType.cs" />
     <Compile Include="ResultWriter\FieldTypeDictionary.cs" />
+    <Compile Include="ResultWriter\ForJsonAutoResultWriter.cs" />
     <Compile Include="ResultWriter\HtmlEntity.cs" />
     <Compile Include="ResultWriter\HtmlResultWriter.cs" />
     <Compile Include="ResultWriter\JsonResultWriter.cs" />

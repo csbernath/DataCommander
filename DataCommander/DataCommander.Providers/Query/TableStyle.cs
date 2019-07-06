@@ -6,6 +6,7 @@
         DataGridView,
         Excel,
         File,
+        ForJsonAuto,
         Html,
         HtmlFile,
         InsertScriptFile,

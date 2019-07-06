@@ -157,7 +157,6 @@ namespace DataCommander.Providers.Query
         private ToolStripMenuItem createCCommandQueryToolStripMenuItem;
         private ToolStripMenuItem undoToolStripMenuItem;
         private ToolStripMenuItem redoToolStripMenuItem;
-        private ToolStripMenuItem executeQueryJSONToolStripMenuItem;
         private readonly ColorTheme _colorTheme;
 
         #endregion
@@ -627,7 +626,6 @@ namespace DataCommander.Providers.Query
             this._openTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._cancelQueryButton = new System.Windows.Forms.ToolStripButton();
             this._queryTextBox = new DataCommander.Providers.Query.QueryTextBox();
-            this.executeQueryJSONToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._mainMenu.SuspendLayout();
             this._statusBar.SuspendLayout();
             this._toolStrip.SuspendLayout();
@@ -645,7 +643,6 @@ namespace DataCommander.Providers.Query
             this._mainMenu.Size = new System.Drawing.Size(1016, 24);
             this._mainMenu.TabIndex = 0;
             this._mainMenu.Visible = false;
-            this._mainMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this._mainMenu_ItemClicked);
             // 
             // _menuItem9
             // 
@@ -794,7 +791,6 @@ namespace DataCommander.Providers.Query
             this._mnuExecuteQuerySchemaOnly,
             this._mnuExecuteQueryKeyInfo,
             this._mnuExecuteQueryXml,
-            this.executeQueryJSONToolStripMenuItem,
             this._mnuOpenTable,
             this._mnuCancel,
             this._parseToolStripMenuItem,
@@ -1346,15 +1342,6 @@ namespace DataCommander.Providers.Query
             this._queryTextBox.TabIndex = 1;
             this._queryTextBox.TabSize = 4;
             // 
-            // executeQueryJSONToolStripMenuItem
-            // 
-            this.executeQueryJSONToolStripMenuItem.Name = "executeQueryJSONToolStripMenuItem";
-            this.executeQueryJSONToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.J)));
-            this.executeQueryJSONToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
-            this.executeQueryJSONToolStripMenuItem.Text = "Execute Query (JSON)";
-            this.executeQueryJSONToolStripMenuItem.Click += new System.EventHandler(this.ExecuteQueryJSONToolStripMenuItem_Click);
-            // 
             // QueryForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(7, 15);
@@ -1630,6 +1617,11 @@ namespace DataCommander.Providers.Query
                         maxRecords = int.MaxValue;
                         resultWriter = new FileResultWriter(_textBoxWriter);
                         _tabControl.SelectedTab = _messagesTabPage;
+                        break;
+
+                    case ResultWriterType.ForJsonAuto:
+                        maxRecords = int.MaxValue;
+                        resultWriter = new ForJsonAutoResultWriter(AddInfoMessage);
                         break;
 
                     case ResultWriterType.Html:
@@ -4210,11 +4202,6 @@ select
             //}
 
             _queryTextBox.Redo();
-        }
-
-        private void ExecuteQueryJSONToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }
