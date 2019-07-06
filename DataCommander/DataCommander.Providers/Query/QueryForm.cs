@@ -157,6 +157,7 @@ namespace DataCommander.Providers.Query
         private ToolStripMenuItem createCCommandQueryToolStripMenuItem;
         private ToolStripMenuItem undoToolStripMenuItem;
         private ToolStripMenuItem redoToolStripMenuItem;
+        private ToolStripMenuItem executeQueryJSONToolStripMenuItem;
         private readonly ColorTheme _colorTheme;
 
         #endregion
@@ -626,6 +627,7 @@ namespace DataCommander.Providers.Query
             this._openTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._cancelQueryButton = new System.Windows.Forms.ToolStripButton();
             this._queryTextBox = new DataCommander.Providers.Query.QueryTextBox();
+            this.executeQueryJSONToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._mainMenu.SuspendLayout();
             this._statusBar.SuspendLayout();
             this._toolStrip.SuspendLayout();
@@ -643,6 +645,7 @@ namespace DataCommander.Providers.Query
             this._mainMenu.Size = new System.Drawing.Size(1016, 24);
             this._mainMenu.TabIndex = 0;
             this._mainMenu.Visible = false;
+            this._mainMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this._mainMenu_ItemClicked);
             // 
             // _menuItem9
             // 
@@ -707,7 +710,7 @@ namespace DataCommander.Providers.Query
             this._mnuPaste.MergeIndex = 0;
             this._mnuPaste.Name = "_mnuPaste";
             this._mnuPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this._mnuPaste.Size = new System.Drawing.Size(180, 22);
+            this._mnuPaste.Size = new System.Drawing.Size(166, 22);
             this._mnuPaste.Text = "&Paste";
             // 
             // _mnuFind
@@ -716,7 +719,7 @@ namespace DataCommander.Providers.Query
             this._mnuFind.MergeIndex = 1;
             this._mnuFind.Name = "_mnuFind";
             this._mnuFind.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            this._mnuFind.Size = new System.Drawing.Size(180, 22);
+            this._mnuFind.Size = new System.Drawing.Size(166, 22);
             this._mnuFind.Text = "&Find";
             // 
             // _mnuFindNext
@@ -724,7 +727,7 @@ namespace DataCommander.Providers.Query
             this._mnuFindNext.MergeIndex = 2;
             this._mnuFindNext.Name = "_mnuFindNext";
             this._mnuFindNext.ShortcutKeys = System.Windows.Forms.Keys.F3;
-            this._mnuFindNext.Size = new System.Drawing.Size(180, 22);
+            this._mnuFindNext.Size = new System.Drawing.Size(166, 22);
             this._mnuFindNext.Text = "Find &Next";
             // 
             // _mnuCodeCompletion
@@ -734,7 +737,7 @@ namespace DataCommander.Providers.Query
             this._mnuClearCache});
             this._mnuCodeCompletion.MergeIndex = 3;
             this._mnuCodeCompletion.Name = "_mnuCodeCompletion";
-            this._mnuCodeCompletion.Size = new System.Drawing.Size(180, 22);
+            this._mnuCodeCompletion.Size = new System.Drawing.Size(166, 22);
             this._mnuCodeCompletion.Text = "&Code completion";
             // 
             // _mnuListMembers
@@ -760,14 +763,14 @@ namespace DataCommander.Providers.Query
             this._mnuGoTo.MergeIndex = 4;
             this._mnuGoTo.Name = "_mnuGoTo";
             this._mnuGoTo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-            this._mnuGoTo.Size = new System.Drawing.Size(180, 22);
+            this._mnuGoTo.Size = new System.Drawing.Size(166, 22);
             this._mnuGoTo.Text = "Go To...";
             // 
             // undoToolStripMenuItem
             // 
             this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
             this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.undoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.undoToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.undoToolStripMenuItem.Text = "Undo";
             this.undoToolStripMenuItem.Click += new System.EventHandler(this.undoToolStripMenuItem_Click);
             // 
@@ -775,7 +778,7 @@ namespace DataCommander.Providers.Query
             // 
             this.redoToolStripMenuItem.Name = "redoToolStripMenuItem";
             this.redoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.redoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.redoToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.redoToolStripMenuItem.Text = "Redo";
             this.redoToolStripMenuItem.Click += new System.EventHandler(this.redoToolStripMenuItem_Click);
             // 
@@ -791,6 +794,7 @@ namespace DataCommander.Providers.Query
             this._mnuExecuteQuerySchemaOnly,
             this._mnuExecuteQueryKeyInfo,
             this._mnuExecuteQueryXml,
+            this.executeQueryJSONToolStripMenuItem,
             this._mnuOpenTable,
             this._mnuCancel,
             this._parseToolStripMenuItem,
@@ -1341,6 +1345,15 @@ namespace DataCommander.Providers.Query
             this._queryTextBox.Size = new System.Drawing.Size(713, 279);
             this._queryTextBox.TabIndex = 1;
             this._queryTextBox.TabSize = 4;
+            // 
+            // executeQueryJSONToolStripMenuItem
+            // 
+            this.executeQueryJSONToolStripMenuItem.Name = "executeQueryJSONToolStripMenuItem";
+            this.executeQueryJSONToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.J)));
+            this.executeQueryJSONToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
+            this.executeQueryJSONToolStripMenuItem.Text = "Execute Query (JSON)";
+            this.executeQueryJSONToolStripMenuItem.Click += new System.EventHandler(this.ExecuteQueryJSONToolStripMenuItem_Click);
             // 
             // QueryForm
             // 
@@ -4197,6 +4210,11 @@ select
             //}
 
             _queryTextBox.Redo();
+        }
+
+        private void ExecuteQueryJSONToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
