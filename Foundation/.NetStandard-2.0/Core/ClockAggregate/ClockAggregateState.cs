@@ -4,15 +4,17 @@ namespace Foundation.Core.ClockAggregate
 {
     internal sealed class ClockAggregateState
     {
-        public readonly DateTime UniversalTime;
-        public readonly int EnvironmentTickCount;
         public readonly long StopwatchTimestamp;
+        public readonly int EnvironmentTickCount;
+        public readonly DateTime UniversalTime;
+        public readonly DateTime LocalTime;
 
-        public ClockAggregateState(DateTime universalTime, int environmentTickCount, long stopwatchTimestamp)
+        public ClockAggregateState(long stopwatchTimestamp, int environmentTickCount, DateTime universalTime, DateTime localTime)
         {
-            UniversalTime = universalTime;
-            EnvironmentTickCount = environmentTickCount;
             StopwatchTimestamp = stopwatchTimestamp;
+            EnvironmentTickCount = environmentTickCount;
+            UniversalTime = universalTime;
+            LocalTime = localTime;
         }
     }
 }

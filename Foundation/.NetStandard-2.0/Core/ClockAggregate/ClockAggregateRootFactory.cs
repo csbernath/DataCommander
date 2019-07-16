@@ -7,10 +7,12 @@ namespace Foundation.Core.ClockAggregate
     {
         public static ClockAggregateRoot Now()
         {
-            var utcDateTime = DateTime.UtcNow;
-            var environmentTickCount = Environment.TickCount;
             var stopwatchTimestamp = Stopwatch.GetTimestamp();
-            return new ClockAggregateRoot(new ClockAggregateState(utcDateTime, environmentTickCount, stopwatchTimestamp));
+            var environmentTickCount = Environment.TickCount;
+            var universalTime = DateTime.UtcNow;
+            var localTime = universalTime.ToLocalTime();
+            var clockAggregateState = new ClockAggregateState(stopwatchTimestamp, environmentTickCount, universalTime, localTime);
+            return new ClockAggregateRoot(clockAggregateState);
         }
     }
 }

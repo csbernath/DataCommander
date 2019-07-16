@@ -5,6 +5,16 @@ namespace Foundation.Core.ClockAggregate
 {
     public static class ClockAggregateRootQueries
     {
+        public static void Get(this ClockAggregateRoot clock, out long stopwatchTimestamp, out int environmentTickCount, out DateTime universalTime,
+            out DateTime localTime)
+        {
+            var clockState = clock.GetAggregateState();
+            stopwatchTimestamp = clockState.StopwatchTimestamp;
+            environmentTickCount = clockState.EnvironmentTickCount;
+            universalTime = clockState.UniversalTime;
+            localTime = clockState.LocalTime;
+        }
+
         public static DateTime GetLocalTimeFromCurrentEnvironmentTickCount(this ClockAggregateRoot clock)
         {
             var universalTime = clock.GetUniversalTimeFromCurrentEnvironmentTickCount();
@@ -26,7 +36,8 @@ namespace Foundation.Core.ClockAggregate
             return universalTime;
         }
 
-        public static void GetFromStopwatchTimestamp(this ClockAggregateRoot clock, long stopwatchTimestamp, out int environmentTickCount, out DateTime universalTime)
+        public static void GetFromStopwatchTimestamp(this ClockAggregateRoot clock, long stopwatchTimestamp, out int environmentTickCount,
+            out DateTime universalTime)
         {
             Assert.IsNotNull(clock);
             var clockState = clock.GetAggregateState();
