@@ -2574,7 +2574,7 @@ namespace DataCommander.Providers.Query
         {
             var ticks = _stopwatch.ElapsedTicks;
             _sbPanelTimer.Text = StopwatchTimeSpan.ToString(ticks, scale);
-            var text = rowCount + " row(s).";
+            var text = rowCount + " rows.";
             if (rowCount > 0)
             {
                 var seconds = (double) ticks / Stopwatch.Frequency;

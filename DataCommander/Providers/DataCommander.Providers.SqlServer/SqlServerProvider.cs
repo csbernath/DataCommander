@@ -586,11 +586,15 @@ order by 1", name.Database);
                                         where = $"where {columnName} like N'{like}'";
                                     }
                                     else
-                                    {
                                         where = null;
-                                    }
 
-                                    commandText = $"select distinct top 100 {columnName} from {tableName} (readpast) {where} order by 1";
+                                    commandText = $@"select distinct {columnName}
+from
+(
+    select top 1000 {columnName}
+    from {tableName} (readpast)
+    {where}
+) t";
                                 }
                             }
 
