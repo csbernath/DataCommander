@@ -2,7 +2,6 @@
 using System.Diagnostics.Contracts;
 using System.Text;
 using Foundation.Assertions;
-using Foundation.Linq;
 
 namespace Foundation.Text
 {
@@ -37,14 +36,19 @@ namespace Foundation.Text
             Assert.IsNotNull(lineGroups);
             Assert.IsNotNull(separator);
 
-            foreach (var item in lineGroups.SelectIndexed())
+            var first = true;
+            foreach (var lineGroup in lineGroups)
             {
-                if (item.Index > 0)
+                if (!first)
                     yield return separator;
 
-                var paragraph = item.Value;
-                foreach (var line in paragraph)
+                foreach (var line in lineGroup)
+                {
+                    if (first)
+                        first = false;
+
                     yield return line;
+                }
             }
         }
     }
