@@ -1,7 +1,14 @@
 ﻿namespace Foundation.Linq
 {
-    public static class IndexedItem
+    public struct IndexedItem<T>
     {
-        public static IndexedItem<T> Create<T>(int index, T value) => new IndexedItem<T>(index, value);
+        public readonly int Index;
+        public readonly T Value;
+
+        public IndexedItem(int index, T value)
+        {
+            Index = index;
+            Value = value;
+        }
     }
 }

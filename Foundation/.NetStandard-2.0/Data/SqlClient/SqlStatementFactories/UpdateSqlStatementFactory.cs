@@ -27,7 +27,7 @@ namespace Foundation.Data.SqlClient.SqlStatementFactories
 
             textBuilder.Add($"where");
             using (textBuilder.Indent(1))
-                textBuilder.Add(whereColumns.Join("and"));
+                textBuilder.Add(whereColumns.Join(" and"));
 
             return textBuilder.ToLines();
         }

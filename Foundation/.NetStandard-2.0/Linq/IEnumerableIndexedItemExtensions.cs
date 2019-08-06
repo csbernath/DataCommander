@@ -26,7 +26,7 @@ namespace Foundation.Linq
                 }
             }
 
-            return IndexedItem.Create(firstIndex, firstItem);
+            return IndexedItemFactory.Create(firstIndex, firstItem);
         }
 
         [Pure]
@@ -50,7 +50,7 @@ namespace Foundation.Linq
                 ++itemIndex;
             }
 
-            return IndexedItem.Create(extremumIndex, extremumItem);
+            return IndexedItemFactory.Create(extremumIndex, extremumItem);
         }
 
         public static IndexedItem<TSource> MinIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, int> selector)
@@ -77,7 +77,7 @@ namespace Foundation.Linq
                 ++itemIndex;
             }
 
-            return IndexedItem.Create(minIndex, minItem);
+            return IndexedItemFactory.Create(minIndex, minItem);
         }
     }
 }

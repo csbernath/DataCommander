@@ -186,7 +186,7 @@ namespace Foundation.Linq
         }
 
         [Pure]
-        public static IEnumerable<IndexedItem<T>> SelectIndexed<T>(this IEnumerable<T> source) => source.Select((item, i) => IndexedItem.Create(i, item));
+        public static IEnumerable<IndexedItem<T>> SelectIndexed<T>(this IEnumerable<T> source) => source.Select((item, i) => IndexedItemFactory.Create(i, item));
 
         [Pure]
         public static IEnumerable<TSource[]> Split<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> isSeparator)
@@ -244,6 +244,14 @@ namespace Foundation.Linq
         {
             var dictionary = source.ToDictionary(keySelector);
             return new ReadOnlyDictionary<TKey, TSource>(dictionary);
+        }
+
+        [Pure]
+        public static ReadOnlyDictionary<TKey, TElement> ToReadOnlyDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
+        {
+            var dictionary = source.ToDictionary(keySelector, elementSelector);
+            return new ReadOnlyDictionary<TKey, TElement>(dictionary);
         }
 
         [Pure]
