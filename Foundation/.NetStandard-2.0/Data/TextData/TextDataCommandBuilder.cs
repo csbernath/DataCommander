@@ -3,23 +3,9 @@ using System.IO;
 
 namespace Foundation.Data.TextData
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class TextDataCommandBuilder
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="columns"></param>
-        /// <param name="converters"></param>
-        /// <param name="rows"></param>
-        /// <param name="getTextWriter"></param>
-        /// <returns></returns>
-        public static TextDataCommand GetInsertCommand(
-            IList<TextDataColumn> columns,
-            IList<ITextDataConverter> converters,
-            IEnumerable<object[]> rows,
+        public static TextDataCommand GetInsertCommand(IList<TextDataColumn> columns, IList<ITextDataConverter> converters, IEnumerable<object[]> rows,
             IConverter<TextDataCommand, TextWriter> getTextWriter)
         {
             var command = new TextDataCommand();
@@ -31,16 +17,7 @@ namespace Foundation.Data.TextData
             return command;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="columns"></param>
-        /// <param name="converters"></param>
-        /// <param name="getTextReader"></param>
-        /// <returns></returns>
-        public static TextDataCommand GetSelectCommand(
-            IList<TextDataColumn> columns,
-            IList<ITextDataConverter> converters,
+        public static TextDataCommand GetSelectCommand(IList<TextDataColumn> columns, IList<ITextDataConverter> converters,
             IConverter<TextDataCommand, TextReader> getTextReader)
         {
             var command = new TextDataCommand();

@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Foundation.Collections;
 using Foundation.Data.SqlClient;
-using Foundation.Linq;
 using Foundation.Text;
 
 namespace Foundation.Data.DbQueryBuilding

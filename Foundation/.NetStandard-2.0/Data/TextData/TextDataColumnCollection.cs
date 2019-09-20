@@ -8,18 +8,12 @@ using Foundation.Collections.IndexableCollection;
 
 namespace Foundation.Data.TextData
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class TextDataColumnCollection : IList<TextDataColumn>
     {
         private readonly IndexableCollection<TextDataColumn> _collection;
         private readonly ListIndex<TextDataColumn> _listIndex;
         private readonly UniqueIndex<string, TextDataColumn> _nameIndex;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public TextDataColumnCollection()
         {
             _listIndex = new ListIndex<TextDataColumn>("List");
@@ -32,11 +26,6 @@ namespace Foundation.Data.TextData
             _collection = new IndexableCollection<TextDataColumn>(_listIndex);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="columnName"></param>
-        /// <returns></returns>
         public TextDataColumn this[string columnName]
         {
             get
@@ -47,35 +36,21 @@ namespace Foundation.Data.TextData
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="columnName"></param>
-        /// <returns></returns>
         [Pure]
         public bool Contains(string columnName)
         {
             return _nameIndex.ContainsKey(columnName);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="columnName"></param>
-        /// <returns></returns>
         public int IndexOf(string columnName)
         {
             var contains = _nameIndex.TryGetValue(columnName, out var column);
             int index;
 
             if (contains)
-            {
                 index = _listIndex.IndexOf(column);
-            }
             else
-            {
                 index = -1;
-            }
 
             return index;
         }
@@ -105,11 +80,6 @@ namespace Foundation.Data.TextData
             return index;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
         public TextDataColumn this[int index]
         {
             get

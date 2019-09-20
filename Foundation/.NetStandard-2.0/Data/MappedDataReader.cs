@@ -6,26 +6,13 @@ using Foundation.Assertions;
 
 namespace Foundation.Data
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="values"></param>
-    /// <returns></returns>
     public delegate int GetValues(object[] values);
 
-    /// <summary>
-    /// 
-    /// </summary>
     public class MappedDataReader : DbDataReader
     {
         private readonly IDataReader _dataReader;
         private readonly GetValues _getValues;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataReader"></param>
-        /// <param name="getValues"></param>
         public MappedDataReader(IDataReader dataReader, GetValues getValues)
         {
             Assert.IsNotNull(dataReader);
@@ -35,111 +22,27 @@ namespace Foundation.Data
             _getValues = getValues;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public override void Close()
-        {
-            _dataReader.Close();
-        }
+        public override void Close() => _dataReader.Close();
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override int Depth => _dataReader.Depth;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override int FieldCount => _dataReader.FieldCount;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <returns></returns>
-        public override bool GetBoolean(int ordinal)
-        {
-            throw new NotImplementedException();
-        }
+        public override bool GetBoolean(int ordinal) => throw new NotImplementedException();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <returns></returns>
-        public override byte GetByte(int ordinal)
-        {
-            throw new NotImplementedException();
-        }
+        public override byte GetByte(int ordinal) => throw new NotImplementedException();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <param name="dataOffset"></param>
-        /// <param name="buffer"></param>
-        /// <param name="bufferOffset"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
-        public override long GetBytes(int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length)
-        {
-            throw new NotImplementedException();
-        }
+        public override long GetBytes(int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length) => throw new NotImplementedException();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <returns></returns>
-        public override char GetChar(int ordinal)
-        {
-            throw new NotImplementedException();
-        }
+        public override char GetChar(int ordinal) => throw new NotImplementedException();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <param name="dataOffset"></param>
-        /// <param name="buffer"></param>
-        /// <param name="bufferOffset"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
-        public override long GetChars(int ordinal, long dataOffset, char[] buffer, int bufferOffset, int length)
-        {
-            throw new NotImplementedException();
-        }
+        public override long GetChars(int ordinal, long dataOffset, char[] buffer, int bufferOffset, int length) => throw new NotImplementedException();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <returns></returns>
-        public override string GetDataTypeName(int ordinal)
-        {
-            throw new NotImplementedException();
-        }
+        public override string GetDataTypeName(int ordinal) => throw new NotImplementedException();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <returns></returns>
-        public override DateTime GetDateTime(int ordinal)
-        {
-            throw new NotImplementedException();
-        }
+        public override DateTime GetDateTime(int ordinal) => throw new NotImplementedException();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <returns></returns>
-        public override decimal GetDecimal(int ordinal)
-        {
-            throw new NotImplementedException();
-        }
+        public override decimal GetDecimal(int ordinal) => throw new NotImplementedException();
 
         /// <summary>
         /// 
