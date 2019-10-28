@@ -67,6 +67,7 @@ namespace Foundation.Configuration
 
         [Pure]
         public bool ContainsKey(string name) => _nameIndex.ContainsKey(name);
+
         public int IndexOf(ConfigurationAttribute item) => _listIndex.IndexOf(item);
 
         public void Insert(int index, ConfigurationAttribute item)
@@ -121,84 +122,25 @@ namespace Foundation.Configuration
 
         #region ICollection<Attribute> Members
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        public void Add(ConfigurationAttribute item)
-        {
-            _collection.Add(item);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Clear()
-        {
-            _collection.Clear();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public bool Contains(ConfigurationAttribute item)
-        {
-            return _collection.Contains(item);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="array"></param>
-        /// <param name="arrayIndex"></param>
-        public void CopyTo(ConfigurationAttribute[] array, int arrayIndex)
-        {
-            _collection.CopyTo(array, arrayIndex);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
+        public void Add(ConfigurationAttribute item) => _collection.Add(item);
+        public void Clear() => _collection.Clear();
+        public bool Contains(ConfigurationAttribute item) => _collection.Contains(item);
+        public void CopyTo(ConfigurationAttribute[] array, int arrayIndex) => _collection.CopyTo(array, arrayIndex);
         public int Count => _collection.Count;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsReadOnly => _collection.IsReadOnly;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public bool Remove(ConfigurationAttribute item)
-        {
-            return _collection.Remove(item);
-        }
+        public bool Remove(ConfigurationAttribute item) => _collection.Remove(item);
 
         #endregion
 
         #region IEnumerable<Attribute> Members
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator<ConfigurationAttribute> GetEnumerator()
-        {
-            return _collection.GetEnumerator();
-        }
+        public IEnumerator<ConfigurationAttribute> GetEnumerator() => _collection.GetEnumerator();
 
         #endregion
 
         #region IEnumerable Members
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _collection.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => _collection.GetEnumerator();
 
         #endregion
     }

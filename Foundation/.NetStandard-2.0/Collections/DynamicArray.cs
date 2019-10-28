@@ -44,37 +44,13 @@ namespace Foundation.Collections
 
         #region IList<T> Members
 
-        /// <summary>
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public int IndexOf(T item)
-        {
-            return _array.IndexOf(item);
-        }
+        public int IndexOf(T item) => _array.IndexOf(item);
+        void IList<T>.Insert(int index, T item) => throw new NotSupportedException();
+        void IList<T>.RemoveAt(int index) => throw new NotSupportedException();
 
-        /// <summary>
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="item"></param>
-        void IList<T>.Insert(int index, T item)
-        {
-            throw new NotSupportedException();
-        }
-
-        void IList<T>.RemoveAt(int index)
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
         public T this[int index]
         {
             get => _array[index];
-
             set => _array[index] = value;
         }
 
@@ -105,8 +81,6 @@ namespace Foundation.Collections
             Count++;
         }
 
-        /// <summary>
-        /// </summary>
         public void Clear()
         {
             if (Count > 0)
@@ -115,32 +89,11 @@ namespace Foundation.Collections
             Count = 0;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public bool Contains(T item)
-        {
-            return _array.Contains(item);
-        }
-
-        void ICollection<T>.CopyTo(T[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// </summary>
+        public bool Contains(T item) => _array.Contains(item);
+        void ICollection<T>.CopyTo(T[] array, int arrayIndex) => throw new NotImplementedException();
         public int Count { get; private set; }
-
-        /// <summary>
-        /// </summary>
         public bool IsReadOnly => _array.IsReadOnly;
-
-        bool ICollection<T>.Remove(T item)
-        {
-            throw new NotSupportedException();
-        }
+        bool ICollection<T>.Remove(T item) => throw new NotSupportedException();
 
         #endregion
     }

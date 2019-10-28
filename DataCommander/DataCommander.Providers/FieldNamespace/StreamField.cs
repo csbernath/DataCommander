@@ -3,12 +3,12 @@
 namespace DataCommander.Providers.FieldNamespace
 {
     public sealed class StreamField
-	{
-        public StreamField( Stream stream )
-		{
-			Stream = stream;
-		}
+    {
+        public StreamField(Stream stream)
+        {
+            Stream = stream;
+        }
 
-		public Stream Stream { get; }
-	}
+        public Stream Stream { get; }
+    }
 }

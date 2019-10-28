@@ -134,6 +134,7 @@ namespace DataCommander.Providers.ResultWriter
                 schemaTable.TableName = $"Schema {_tableIndex}";
                 DataSet.Tables.Add(schemaTable);
             }
+
             _dataTable = DataSet.Tables.Add();
             if (!string.IsNullOrEmpty(tableName))
                 _dataTable.TableName = tableName;

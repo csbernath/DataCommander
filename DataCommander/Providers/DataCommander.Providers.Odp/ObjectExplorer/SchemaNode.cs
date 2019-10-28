@@ -3,9 +3,6 @@ using System.Windows.Forms;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
 {
-    /// <summary>
-    /// Summary description for SchemaNode.
-    /// </summary>
     internal sealed class SchemaNode : ITreeNode
     {
 		private readonly SchemaCollectionNode _schemasNode;

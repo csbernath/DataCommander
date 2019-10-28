@@ -57,9 +57,7 @@ namespace Foundation.Data.PTypes
             if (isEqual)
             {
                 if (x.ValueType == PValueType.Value)
-                {
                     isEqual = x._sql.Value == y._sql.Value;
-                }
             }
 
             return isEqual;
@@ -69,27 +67,17 @@ namespace Foundation.Data.PTypes
 
         public static PInt32 Parse(string s, PValueType type)
         {
-            PInt32 sp;
-
-            if (string.IsNullOrEmpty(s))
-            {
-                sp = new PInt32(type);
-            }
-            else
-            {
-                sp = SqlInt32.Parse(s);
-            }
-
+            var sp = string.IsNullOrEmpty(s)
+                ? new PInt32(type)
+                : SqlInt32.Parse(s);
             return sp;
         }
 
         public override bool Equals(object obj)
         {
             var equals = obj is PInt32;
-
             if (equals)
                 equals = this == (PInt32) obj;
-
             return equals;
         }
 
@@ -100,11 +88,8 @@ namespace Foundation.Data.PTypes
         }
 
         public PValueType ValueType { get; private set; }
-
         public bool IsNull => ValueType == PValueType.Null;
-
         public bool IsValue => ValueType == PValueType.Value;
-
         public bool IsEmpty => ValueType == PValueType.Empty;
 
         public object Value

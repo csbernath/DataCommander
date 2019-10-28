@@ -1,34 +1,16 @@
 ﻿namespace Foundation.Collections
 {
-    /// <summary>
-    /// </summary>
     public sealed class CommandLineArgument
     {
-        /// <summary>
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        public CommandLineArgument(
-            int index,
-            string name,
-            string value)
+        public readonly int Index;
+        public readonly string Name;
+        public readonly string Value;
+
+        public CommandLineArgument(int index, string name, string value)
         {
             Index = index;
             Name = name;
             Value = value;
         }
-
-        /// <summary>
-        /// </summary>
-        public int Index { get; }
-
-        /// <summary>
-        /// </summary>
-        public string Name { get; }
-
-        /// <summary>
-        /// </summary>
-        public string Value { get; }
     }
 }

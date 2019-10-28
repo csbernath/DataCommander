@@ -23,21 +23,13 @@ namespace Foundation.Collections.IndexableCollection
 
         #region ICollectionIndex<T> Members
 
-        /// <summary>
-        /// </summary>
         public string Name { get; }
 
         #endregion
 
         #region IEnumerable<T> Members
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator<T> GetEnumerator()
-        {
-            return _list.GetEnumerator();
-        }
+        public IEnumerator<T> GetEnumerator() => _list.GetEnumerator();
 
         #endregion
 

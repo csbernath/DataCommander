@@ -3,27 +3,16 @@ using System.Data.SqlTypes;
 
 namespace Foundation.Data.PTypes
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public struct PByte : INullable
     {
         private SqlByte _sql;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
         public PByte(byte value)
         {
             _sql = value;
             ValueType = PValueType.Value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
         public PByte(SqlByte value)
         {
             _sql = value;
@@ -36,52 +25,11 @@ namespace Foundation.Data.PTypes
             _sql = SqlByte.Null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static implicit operator PByte(byte value)
-        {
-            return new PByte(value);
-        }
+        public static implicit operator PByte(byte value) => new PByte(value);
+        public static implicit operator PByte(byte? value) => value != null ? new PByte(value.Value) : Null;
+        public static implicit operator PByte(SqlByte value) => new PByte(value);
+        public static implicit operator byte(PByte value) => (byte) value._sql;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static implicit operator PByte(byte? value)
-        {
-            return value != null ? new PByte(value.Value) : Null;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static implicit operator PByte(SqlByte value)
-        {
-            return new PByte(value);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static implicit operator byte(PByte value)
-        {
-            return (byte) value._sql;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
         public static bool operator ==(PByte x, PByte y)
         {
             var isEqual = x.ValueType == y.ValueType;
@@ -97,34 +45,17 @@ namespace Foundation.Data.PTypes
             return isEqual;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
         public static bool operator !=(PByte x, PByte y)
         {
             return !(x == y);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="s"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
         public static PByte Parse(string s, PValueType type)
         {
             var sp = string.IsNullOrEmpty(s) ? new PByte(type) : SqlByte.Parse(s);
             return sp;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="y"></param>
-        /// <returns></returns>
         public override bool Equals(object y)
         {
             var equals = y is PByte;
@@ -135,43 +66,18 @@ namespace Foundation.Data.PTypes
             return equals;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public override int GetHashCode()
         {
             var hashCode = _sql.GetHashCode();
             return hashCode;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public PValueType ValueType
-        {
-            get;
-            private set;
-        }
+        public PValueType ValueType { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsNull => ValueType == PValueType.Null;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsValue => ValueType == PValueType.Value;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsEmpty => ValueType == PValueType.Empty;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public object Value
         {
             get
@@ -213,28 +119,9 @@ namespace Foundation.Data.PTypes
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return _sql.ToString();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
+        public override string ToString() => _sql.ToString();
         public static readonly PByte Null = new PByte(PValueType.Null);
-
-        /// <summary>
-        /// 
-        /// </summary>
         public static readonly PByte Default = new PByte(PValueType.Default);
-
-        /// <summary>
-        /// 
-        /// </summary>
         public static readonly PByte Empty = new PByte(PValueType.Empty);
     }
 }

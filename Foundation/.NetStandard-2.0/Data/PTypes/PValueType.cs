@@ -5,24 +5,9 @@
     /// </summary>
     public enum PValueType
     {
-        /// <summary>
-        /// 
-        /// </summary>        
         Default,
-
-        /// <summary>
-        /// 
-        /// </summary>        
         Empty,
-
-        /// <summary>
-        /// 
-        /// </summary>
         Null,
-
-        /// <summary>
-        /// 
-        /// </summary>
         Value
     }
 }

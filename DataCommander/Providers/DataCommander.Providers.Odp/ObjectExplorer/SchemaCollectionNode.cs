@@ -5,9 +5,6 @@ using Oracle.ManagedDataAccess.Client;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
 {
-    /// <summary>
-    /// Summary description for SchemaNode.
-    /// </summary>
     internal sealed class SchemaCollectionNode : ITreeNode
     {
         public SchemaCollectionNode(OracleConnection connection)

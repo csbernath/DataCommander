@@ -4,17 +4,9 @@ using System.Xml;
 
 namespace Foundation.Data.SqlClient
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class SqlCommandHelper : IDbCommandHelper
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
-        public XmlDocument ExecuteXmlDocument( IDbCommand command )
+        public XmlDocument ExecuteXmlDocument(IDbCommand command)
         {
             var sqlCommand = (SqlCommand) command;
             var xmlDocument = new XmlDocument();
@@ -23,14 +15,12 @@ namespace Foundation.Data.SqlClient
             try
             {
                 xmlReader = sqlCommand.ExecuteXmlReader();
-                xmlDocument.Load( xmlReader );
+                xmlDocument.Load(xmlReader);
             }
             finally
             {
                 if (xmlReader != null)
-                {
                     xmlReader.Close();
-                }
             }
 
             return xmlDocument;

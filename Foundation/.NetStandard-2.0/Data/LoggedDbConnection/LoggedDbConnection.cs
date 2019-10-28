@@ -22,9 +22,6 @@ namespace Foundation.Data.LoggedDbConnection
 
         #region Public Events
 
-        /// <summary>
-        /// 
-        /// </summary>
         public event EventHandler<BeforeOpenDbConnectionEventArgs> BeforeOpen
         {
             add => _beforeOpen += value;
@@ -32,39 +29,24 @@ namespace Foundation.Data.LoggedDbConnection
             remove => _beforeOpen -= value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public event EventHandler<AfterOpenDbConnectionEventArgs> AfterOpen
         {
             add => _afterOpen += value;
-
             remove => _afterOpen -= value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public event EventHandler<BeforeExecuteCommandEventArgs> BeforeExecuteReader
         {
             add => _beforeExecuteCommand += value;
-
             remove => _beforeExecuteCommand -= value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public event EventHandler<AfterExecuteCommandEventArgs> AfterExecuteReader
         {
             add => _afterExecuteCommand += value;
-
             remove => _afterExecuteCommand -= value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public event EventHandler<AfterReadEventArgs> AfterRead
         {
             add => _afterRead += value;
@@ -76,30 +58,14 @@ namespace Foundation.Data.LoggedDbConnection
 
         #region IDbConnection Members
 
-        IDbTransaction IDbConnection.BeginTransaction(IsolationLevel il)
-        {
-            return _connection.BeginTransaction(il);
-        }
-
-        IDbTransaction IDbConnection.BeginTransaction()
-        {
-            return _connection.BeginTransaction();
-        }
-
-        void IDbConnection.ChangeDatabase(string databaseName)
-        {
-            _connection.ChangeDatabase(databaseName);
-        }
-
-        void IDbConnection.Close()
-        {
-            _connection.Close();
-        }
+        IDbTransaction IDbConnection.BeginTransaction(IsolationLevel il) => _connection.BeginTransaction(il);
+        IDbTransaction IDbConnection.BeginTransaction() => _connection.BeginTransaction();
+        void IDbConnection.ChangeDatabase(string databaseName) => _connection.ChangeDatabase(databaseName);
+        void IDbConnection.Close() => _connection.Close();
 
         string IDbConnection.ConnectionString
         {
             get => _connection.ConnectionString;
-
             set => _connection.ConnectionString = value;
         }
 
@@ -151,10 +117,7 @@ namespace Foundation.Data.LoggedDbConnection
 
         #region IDisposable Members
 
-        void IDisposable.Dispose()
-        {
-            _connection.Dispose();
-        }
+        void IDisposable.Dispose() => _connection.Dispose();
 
         #endregion
     }

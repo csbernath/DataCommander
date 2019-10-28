@@ -13,7 +13,7 @@ namespace DataCommander.Providers.FieldNamespace
         public DecimalField(
             NumberFormatInfo numberFormatInfo,
             decimal decimalValue,
-            string stringValue )
+            string stringValue)
         {
             _numberFormatInfo = numberFormatInfo;
             DecimalValue = decimalValue;
@@ -26,15 +26,15 @@ namespace DataCommander.Providers.FieldNamespace
 
         public override string ToString()
         {
-            return DecimalValue.ToString( "N", _numberFormatInfo );
+            return DecimalValue.ToString("N", _numberFormatInfo);
         }
 
         #region IComparable Members
 
-        int IComparable.CompareTo( object obj )
+        int IComparable.CompareTo(object obj)
         {
             var other = (DecimalField) obj;
-            return DecimalValue.CompareTo( other.DecimalValue );
+            return DecimalValue.CompareTo(other.DecimalValue);
         }
 
         #endregion

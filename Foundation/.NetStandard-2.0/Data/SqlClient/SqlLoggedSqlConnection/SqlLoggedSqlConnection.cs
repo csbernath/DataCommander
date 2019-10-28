@@ -16,21 +16,7 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
         private int _connectionNo;
         private readonly SqlLog.SqlLog _sqlLog;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sqlLog"></param>
-        /// <param name="applicationId"></param>
-        /// <param name="userName"></param>
-        /// <param name="hostName"></param>
-        /// <param name="connectionString"></param>
-        /// <param name="filter"></param>
-        public SqlLoggedSqlConnection(
-            SqlLog.SqlLog sqlLog,
-            int applicationId,
-            string userName,
-            string hostName,
-            string connectionString,
+        public SqlLoggedSqlConnection(SqlLog.SqlLog sqlLog, int applicationId, string userName, string hostName, string connectionString,
             ISqlLoggedSqlCommandFilter filter)
         {
             Assert.IsNotNull(sqlLog);
@@ -43,54 +29,22 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             Connection = new SqlConnection(connectionString);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="disposing"></param>
         private void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 _sqlLog.DisposeConnection(Connection);
-            }
         }
 
-        IDbTransaction IDbConnection.BeginTransaction()
-        {
-            return Connection.BeginTransaction();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="il"></param>
-        /// <returns></returns>
-        public IDbTransaction BeginTransaction(IsolationLevel il)
-        {
-            return Connection.BeginTransaction(il);
-        }
-
-        void IDbConnection.ChangeDatabase(string databaseName)
-        {
-            Connection.ChangeDatabase(databaseName);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Close()
-        {
-            _sqlLog.CloseConnection(Connection);
-        }
+        IDbTransaction IDbConnection.BeginTransaction() => Connection.BeginTransaction();
+        public IDbTransaction BeginTransaction(IsolationLevel il) => Connection.BeginTransaction(il);
+        void IDbConnection.ChangeDatabase(string databaseName) => Connection.ChangeDatabase(databaseName);
+        public void Close() => _sqlLog.CloseConnection(Connection);
 
         IDbCommand IDbConnection.CreateCommand()
         {
@@ -98,9 +52,6 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             return new SqlLoggedSqlCommand(this, command);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Open()
         {
             Exception exception = null;
@@ -123,29 +74,14 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public string ConnectionString
         {
             get => Connection.ConnectionString;
-
             set => Connection.ConnectionString = value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public int ConnectionTimeout => Connection.ConnectionTimeout;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public string Database => Connection.Database;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public ConnectionState State => Connection.State;
 
         internal void CommandExeucte(
@@ -218,21 +154,9 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             return scalar;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public ISqlLoggedSqlCommandFilter Filter { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public string UserName { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public string HostName { get; }
-
         internal SqlConnection Connection { get; }
     }
 }

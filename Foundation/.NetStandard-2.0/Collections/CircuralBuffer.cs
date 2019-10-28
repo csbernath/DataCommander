@@ -213,10 +213,6 @@ namespace Foundation.Collections
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
         public T this[int index]
         {
             get
@@ -236,36 +232,16 @@ namespace Foundation.Collections
 
         #region ICollection<T> Members
 
-        void ICollection<T>.Add(T item)
-        {
-            throw new NotImplementedException();
-        }
+        void ICollection<T>.Add(T item) => throw new NotImplementedException();
+        void ICollection<T>.Clear() => throw new NotImplementedException();
+        bool ICollection<T>.Contains(T item) => throw new NotImplementedException();
+        void ICollection<T>.CopyTo(T[] array, int arrayIndex) => throw new NotImplementedException();
 
-        void ICollection<T>.Clear()
-        {
-            throw new NotImplementedException();
-        }
-
-        bool ICollection<T>.Contains(T item)
-        {
-            throw new NotImplementedException();
-        }
-
-        void ICollection<T>.CopyTo(T[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// </summary>
         public int Count { get; private set; }
 
         bool ICollection<T>.IsReadOnly => false;
 
-        bool ICollection<T>.Remove(T item)
-        {
-            throw new NotImplementedException();
-        }
+        bool ICollection<T>.Remove(T item) => throw new NotImplementedException();
 
         #endregion
     }

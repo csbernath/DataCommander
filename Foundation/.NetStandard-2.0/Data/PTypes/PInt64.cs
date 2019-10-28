@@ -51,52 +51,11 @@ namespace Foundation.Data.PTypes
             _sql = SqlInt64.Null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static implicit operator PInt64(long value)
-        {
-            return new PInt64(value);
-        }
+        public static implicit operator PInt64(long value) => new PInt64(value);
+        public static implicit operator PInt64(long? value) => value != null ? new PInt64(value.Value) : Null;
+        public static implicit operator PInt64(SqlInt64 value) => new PInt64(value);
+        public static implicit operator long(PInt64 value) => (long) value._sql;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static implicit operator PInt64(long? value)
-        {
-            return value != null ? new PInt64(value.Value) : Null;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static implicit operator PInt64(SqlInt64 value)
-        {
-            return new PInt64(value);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static implicit operator long(PInt64 value)
-        {
-            return (long) value._sql;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
         public static bool operator ==(PInt64 x, PInt64 y)
         {
             var isEqual = x.ValueType == y.ValueType;
@@ -104,97 +63,41 @@ namespace Foundation.Data.PTypes
             if (isEqual)
             {
                 if (x.ValueType == PValueType.Value)
-                {
                     isEqual = x._sql.Value == y._sql.Value;
-                }
             }
 
             return isEqual;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public static bool operator !=(PInt64 x, PInt64 y)
-        {
-            return !(x == y);
-        }
+        public static bool operator !=(PInt64 x, PInt64 y) => !(x == y);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="s"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
         public static PInt64 Parse(string s, PValueType type)
         {
-            PInt64 sp;
-
-            if (string.IsNullOrEmpty(s))
-            {
-                sp = new PInt64(type);
-            }
-            else
-            {
-                sp = SqlInt64.Parse(s);
-            }
-
+            var sp = string.IsNullOrEmpty(s)
+                ? new PInt64(type)
+                : SqlInt64.Parse(s);
             return sp;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="y"></param>
-        /// <returns></returns>
         public override bool Equals(object y)
         {
             var equals = y is PInt64;
-
             if (equals)
-            {
                 equals = this == (PInt64) y;
-            }
-
             return equals;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public override int GetHashCode()
         {
             var hashCode = _sql.GetHashCode();
             return hashCode;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public PValueType ValueType { get; private set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsNull => ValueType == PValueType.Null;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsValue => ValueType == PValueType.Value;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsEmpty => ValueType == PValueType.Empty;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public object Value
         {
             get
@@ -236,13 +139,6 @@ namespace Foundation.Data.PTypes
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return _sql.ToString();
-        }
+        public override string ToString() => _sql.ToString();
     }
 }

@@ -6,105 +6,57 @@ using System.Data;
 namespace DataCommander.Providers.Msi
 {
     internal sealed class MsiParameterCollection : IDataParameterCollection
-	{
-		private readonly List<object> _parameters = new List<object>();
+    {
+        private readonly List<object> _parameters = new List<object>();
 
-		#region IDataParameterCollection Members
+        #region IDataParameterCollection Members
 
-		bool IDataParameterCollection.Contains( string parameterName )
-		{
-			throw new NotImplementedException();
-		}
+        bool IDataParameterCollection.Contains(string parameterName) => throw new NotImplementedException();
+        int IDataParameterCollection.IndexOf(string parameterName) => throw new NotImplementedException();
+        void IDataParameterCollection.RemoveAt(string parameterName) => throw new NotImplementedException();
 
-		int IDataParameterCollection.IndexOf( string parameterName )
-		{
-			throw new NotImplementedException();
-		}
+        object IDataParameterCollection.this[string parameterName]
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+        }
 
-		void IDataParameterCollection.RemoveAt( string parameterName )
-		{
-			throw new NotImplementedException();
-		}
+        #endregion
 
-		object IDataParameterCollection.this[ string parameterName ]
-		{
-			get => throw new NotImplementedException();
-		    set => throw new NotImplementedException();
-		}
+        #region IList Members
 
-		#endregion
+        int IList.Add(object value) => throw new NotImplementedException();
+        void IList.Clear() => throw new NotImplementedException();
+        bool IList.Contains(object value) => throw new NotImplementedException();
+        int IList.IndexOf(object value) => throw new NotImplementedException();
 
-		#region IList Members
+        void IList.Insert(int index, object value) => throw new NotImplementedException();
+        bool IList.IsFixedSize => throw new NotImplementedException();
+        bool IList.IsReadOnly => throw new NotImplementedException();
+        void IList.Remove(object value) => throw new NotImplementedException();
+        void IList.RemoveAt(int index) => throw new NotImplementedException();
 
-		int IList.Add( object value )
-		{
-			throw new NotImplementedException();
-		}
+        object IList.this[int index]
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+        }
 
-		void IList.Clear()
-		{
-			throw new NotImplementedException();
-		}
+        #endregion
 
-		bool IList.Contains( object value )
-		{
-			throw new NotImplementedException();
-		}
+        #region ICollection Members
 
-		int IList.IndexOf( object value )
-		{
-			throw new NotImplementedException();
-		}
-
-		void IList.Insert( int index, object value )
-		{
-			throw new NotImplementedException();
-		}
-
-		bool IList.IsFixedSize => throw new NotImplementedException();
-
-	    bool IList.IsReadOnly => throw new NotImplementedException();
-
-	    void IList.Remove( object value )
-		{
-			throw new NotImplementedException();
-		}
-
-		void IList.RemoveAt( int index )
-		{
-			throw new NotImplementedException();
-		}
-
-		object IList.this[ int index ]
-		{
-			get => throw new NotImplementedException();
-		    set => throw new NotImplementedException();
-		}
-
-		#endregion
-
-		#region ICollection Members
-
-		void ICollection.CopyTo( Array array, int index )
-		{
-			throw new NotImplementedException();
-		}
-
-		int ICollection.Count => _parameters.Count;
-
+        void ICollection.CopyTo(Array array, int index) => throw new NotImplementedException();
+        int ICollection.Count => _parameters.Count;
         bool ICollection.IsSynchronized => throw new NotImplementedException();
+        object ICollection.SyncRoot => throw new NotImplementedException();
 
-	    object ICollection.SyncRoot => throw new NotImplementedException();
+        #endregion
 
-	    #endregion
+        #region IEnumerable Members
 
-		#region IEnumerable Members
+        IEnumerator IEnumerable.GetEnumerator() => throw new NotImplementedException();
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			throw new NotImplementedException();
-		}
-
-		#endregion
-	}
+        #endregion
+    }
 }

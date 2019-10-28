@@ -83,160 +83,23 @@ namespace Foundation.Data
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <returns></returns>
-        public override Guid GetGuid(int ordinal)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <returns></returns>
-        public override short GetInt16(int ordinal)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <returns></returns>
-        public override int GetInt32(int ordinal)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <returns></returns>
-        public override long GetInt64(int ordinal)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <returns></returns>
-        public override string GetName(int ordinal)
-        {
-            return _dataReader.GetName(ordinal);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public override int GetOrdinal(string name)
-        {
-            return _dataReader.GetOrdinal(name);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override DataTable GetSchemaTable()
-        {
-            return _dataReader.GetSchemaTable();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <returns></returns>
-        public override string GetString(int ordinal)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <returns></returns>
-        public override object GetValue(int ordinal)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        public override int GetValues(object[] values)
-        {
-            return _getValues(values);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
+        public override Guid GetGuid(int ordinal) => throw new NotImplementedException();
+        public override short GetInt16(int ordinal) => throw new NotImplementedException();
+        public override int GetInt32(int ordinal) => throw new NotImplementedException();
+        public override long GetInt64(int ordinal) => throw new NotImplementedException();
+        public override string GetName(int ordinal) => _dataReader.GetName(ordinal);
+        public override int GetOrdinal(string name) => _dataReader.GetOrdinal(name);
+        public override DataTable GetSchemaTable() => _dataReader.GetSchemaTable();
+        public override string GetString(int ordinal) => throw new NotImplementedException();
+        public override object GetValue(int ordinal) => throw new NotImplementedException();
+        public override int GetValues(object[] values) => _getValues(values);
         public override bool HasRows => throw new NotImplementedException();
-
-        /// <summary>
-        /// 
-        /// </summary>
         public override bool IsClosed => _dataReader.IsClosed;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <returns></returns>
-        public override bool IsDBNull(int ordinal)
-        {
-            return _dataReader.IsDBNull(ordinal);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override bool NextResult()
-        {
-            return _dataReader.NextResult();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override bool Read()
-        {
-            return _dataReader.Read();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
+        public override bool IsDBNull(int ordinal) => _dataReader.IsDBNull(ordinal);
+        public override bool NextResult() => _dataReader.NextResult();
+        public override bool Read() => _dataReader.Read();
         public override int RecordsAffected => _dataReader.RecordsAffected;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
         public override object this[string name] => throw new NotImplementedException();
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <returns></returns>
         public override object this[int ordinal] => throw new NotImplementedException();
     }
 }

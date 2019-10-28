@@ -10,9 +10,6 @@ using Foundation.Threading;
 
 namespace Foundation.Data
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class AsyncDbConnection : IDbConnection
     {
         #region Private Fields
@@ -26,11 +23,6 @@ namespace Foundation.Data
 
         #endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cloneableConnection"></param>
-        /// <param name="threadName"></param>
         public AsyncDbConnection(IDbConnection cloneableConnection, string threadName)
         {
             _cloneableConnection = cloneableConnection;
@@ -42,20 +34,11 @@ namespace Foundation.Data
 
         #region IDbConnection Members
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="databaseName"></param>
         public void ChangeDatabase(string databaseName)
         {
             // TODO:  Add AsyncSqlConnection.ChangeDatabase implementation
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="il"></param>
-        /// <returns></returns>
         public IDbTransaction BeginTransaction(IsolationLevel il)
         {
             // TODO:  Add AsyncSqlConnection.BeginTransaction implementation
@@ -68,69 +51,39 @@ namespace Foundation.Data
             return null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public ConnectionState State => _cloneableConnection.State;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public string ConnectionString
         {
             get => _cloneableConnection.ConnectionString;
-
             set => _cloneableConnection.ConnectionString = value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public IDbCommand CreateCommand()
         {
             var command = _cloneableConnection.CreateCommand();
             return new AsyncDbCommand(this, command);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Open()
         {
             // TODO:  Add AsyncSqlConnection.Open implementation
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Close()
         {
             _thread.Stop();
             _thread.Join();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public string Database => _cloneableConnection.Database;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public int ConnectionTimeout => _cloneableConnection.ConnectionTimeout;
 
         #endregion
 
         #region IDisposable Members
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Dispose()
-        {
-            Close();
-        }
+        public void Dispose() => Close();
 
         #endregion
 
@@ -141,9 +94,7 @@ namespace Foundation.Data
             var commandText = ToString(command);
 
             lock (_commands)
-            {
                 _commands.Add(commandText);
-            }
 
             _queueEvent.Set();
 
@@ -201,9 +152,7 @@ namespace Foundation.Data
                 Flush();
 
                 if (_thread.IsStopRequested)
-                {
                     break;
-                }
 
                 WaitHandle.WaitAny(waitHandles, timeout, false);
             }
@@ -239,7 +188,7 @@ namespace Foundation.Data
                     var commandText = sb.ToString();
                     Exception exception = null;
 
-                    using (var connection = (IDbConnection)_cloneable.Clone())
+                    using (var connection = (IDbConnection) _cloneable.Clone())
                     {
                         var command = connection.CreateCommand();
                         command.CommandText = commandText;
@@ -258,17 +207,9 @@ namespace Foundation.Data
 
                     if (exception != null)
                     {
-                        string message;
-                        var sqlException = exception as SqlException;
-
-                        if (sqlException != null)
-                        {
-                            message = sqlException.Errors.ToLogString();
-                        }
-                        else
-                        {
-                            message = exception.ToLogString();
-                        }
+                        var message = exception is SqlException sqlException
+                            ? sqlException.Errors.ToLogString()
+                            : exception.ToLogString();
 
                         Log.Write(LogLevel.Error, message);
                     }

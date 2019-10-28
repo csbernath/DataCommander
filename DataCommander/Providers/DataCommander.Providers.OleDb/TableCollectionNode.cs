@@ -5,10 +5,7 @@ using System.Windows.Forms;
 
 namespace DataCommander.Providers.OleDb
 {
-    /// <summary>
-    /// Summary description for TablesNode.
-    /// </summary>
-    sealed class TableCollectionNode : ITreeNode
+    internal sealed class TableCollectionNode : ITreeNode
     {
         public TableCollectionNode(SchemaNode schema)
         {

@@ -6,18 +6,12 @@ using Foundation.Collections.IndexableCollection;
 
 namespace Foundation.Configuration
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class ConfigurationNodeCollection : ICollection<ConfigurationNode>
     {
         private readonly IndexableCollection<ConfigurationNode> _collection;
         private readonly ListIndex<ConfigurationNode> _listIndex;
         private readonly UniqueIndex<string, ConfigurationNode> _nameIndex;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public ConfigurationNodeCollection()
         {
             _listIndex = new ListIndex<ConfigurationNode>("List");
@@ -27,114 +21,38 @@ namespace Foundation.Configuration
             _collection.Indexes.Add(_nameIndex);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
         public ConfigurationNode this[string name] => _nameIndex[name];
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
         public ConfigurationNode this[int index] => _listIndex[index];
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public bool TryGetValue(string name, out ConfigurationNode item)
-        {
-            return _nameIndex.TryGetValue(name, out item);
-        }
+        public bool TryGetValue(string name, out ConfigurationNode item) => _nameIndex.TryGetValue(name, out item);
 
         #region ICollection<ConfigurationNode> Members
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
         public void Add(ConfigurationNode item)
         {
             Assert.IsTrue(item != null);
             _collection.Add(item);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Clear()
-        {
-            _collection.Clear();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public bool Contains(ConfigurationNode item)
-        {
-            return _nameIndex.Contains(item);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="array"></param>
-        /// <param name="arrayIndex"></param>
-        public void CopyTo(ConfigurationNode[] array, int arrayIndex)
-        {
-            _collection.CopyTo(array, arrayIndex);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
+        public void Clear() => _collection.Clear();
+        public bool Contains(ConfigurationNode item) => _nameIndex.Contains(item);
+        public void CopyTo(ConfigurationNode[] array, int arrayIndex) => _collection.CopyTo(array, arrayIndex);
         public int Count => _collection.Count;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsReadOnly => false;
+        public bool Remove(ConfigurationNode item) => _collection.Remove(item);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public bool Remove(ConfigurationNode item)
-        {
-            return _collection.Remove(item);
-        }
+        #endregion
 
-#endregion
+        #region IEnumerable<ConfigurationNode> Members
 
-#region IEnumerable<ConfigurationNode> Members
+        public IEnumerator<ConfigurationNode> GetEnumerator() => _collection.GetEnumerator();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator<ConfigurationNode> GetEnumerator()
-        {
-            return _collection.GetEnumerator();
-        }
+        #endregion
 
-#endregion
+        #region IEnumerable Members
 
-#region IEnumerable Members
+        IEnumerator IEnumerable.GetEnumerator() => _collection.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _collection.GetEnumerator();
-        }
-
-#endregion
+        #endregion
 
         internal void Insert(int index, ConfigurationNode item)
         {
@@ -142,9 +60,7 @@ namespace Foundation.Configuration
             _listIndex.Insert(index, item);
 
             foreach (var current in where)
-            {
                 current.Add(item);
-            }
         }
     }
 }

@@ -159,15 +159,10 @@ namespace Foundation.Collections.IndexableCollection
 
         #region ICollectionIndex<T> Members
 
-        /// <summary>
-        /// </summary>
         public int Count => _dictionary.Count;
 
         bool ICollection<T>.IsReadOnly => false;
 
-        /// <summary>
-        /// </summary>
-        /// <param name="item"></param>
         public void Add(T item)
         {
             var response = _getKey(item);
@@ -187,17 +182,8 @@ namespace Foundation.Collections.IndexableCollection
             }
         }
 
-        /// <summary>
-        /// </summary>
-        void ICollection<T>.Clear()
-        {
-            _dictionary.Clear();
-        }
+        void ICollection<T>.Clear() => _dictionary.Clear();
 
-        /// <summary>
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
         public bool Contains(T item)
         {
             var response = _getKey(item);
@@ -208,29 +194,17 @@ namespace Foundation.Collections.IndexableCollection
                 var key = response.Key;
                 contains = _dictionary.TryGetValue(key, out var collection);
 
-                if (contains) contains = collection.Contains(item);
+                if (contains)
+                    contains = collection.Contains(item);
             }
             else
-            {
                 contains = false;
-            }
 
             return contains;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="array"></param>
-        /// <param name="arrayIndex"></param>
-        void ICollection<T>.CopyTo(T[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
+        void ICollection<T>.CopyTo(T[] array, int arrayIndex) => throw new NotImplementedException();
 
-        /// <summary>
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
         public bool Remove(T item)
         {
             var response = _getKey(item);
@@ -263,43 +237,16 @@ namespace Foundation.Collections.IndexableCollection
 
         #region IDictionary<TKey,ICollection<T>> Members
 
-        void IDictionary<TKey, ICollection<T>>.Add(TKey key, ICollection<T> value)
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public bool ContainsKey(TKey key)
-        {
-            return _dictionary.ContainsKey(key);
-        }
-
+        void IDictionary<TKey, ICollection<T>>.Add(TKey key, ICollection<T> value) => throw new NotSupportedException();
+        public bool ContainsKey(TKey key) => _dictionary.ContainsKey(key);
         ICollection<TKey> IDictionary<TKey, ICollection<T>>.Keys => _dictionary.Keys;
-
-        bool IDictionary<TKey, ICollection<T>>.Remove(TKey key)
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public bool TryGetValue(TKey key, out ICollection<T> value)
-        {
-            return _dictionary.TryGetValue(key, out value);
-        }
-
+        bool IDictionary<TKey, ICollection<T>>.Remove(TKey key) => throw new NotSupportedException();
+        public bool TryGetValue(TKey key, out ICollection<T> value) => _dictionary.TryGetValue(key, out value);
         ICollection<ICollection<T>> IDictionary<TKey, ICollection<T>>.Values => _dictionary.Values;
 
         ICollection<T> IDictionary<TKey, ICollection<T>>.this[TKey key]
         {
             get => _dictionary[key];
-
             set => throw new NotSupportedException();
         }
 
@@ -307,34 +254,16 @@ namespace Foundation.Collections.IndexableCollection
 
         #region ICollection<KeyValuePair<TKey,ICollection<T>>> Members
 
-        void ICollection<KeyValuePair<TKey, ICollection<T>>>.Add(KeyValuePair<TKey, ICollection<T>> item)
-        {
-            throw new NotSupportedException();
-        }
+        void ICollection<KeyValuePair<TKey, ICollection<T>>>.Add(KeyValuePair<TKey, ICollection<T>> item) => throw new NotSupportedException();
+        void ICollection<KeyValuePair<TKey, ICollection<T>>>.Clear() => throw new NotSupportedException();
+        bool ICollection<KeyValuePair<TKey, ICollection<T>>>.Contains(KeyValuePair<TKey, ICollection<T>> item) => throw new NotSupportedException();
 
-        void ICollection<KeyValuePair<TKey, ICollection<T>>>.Clear()
-        {
+        void ICollection<KeyValuePair<TKey, ICollection<T>>>.CopyTo(KeyValuePair<TKey, ICollection<T>>[] array, int arrayIndex) =>
             throw new NotSupportedException();
-        }
-
-        bool ICollection<KeyValuePair<TKey, ICollection<T>>>.Contains(KeyValuePair<TKey, ICollection<T>> item)
-        {
-            throw new NotSupportedException();
-        }
-
-        void ICollection<KeyValuePair<TKey, ICollection<T>>>.CopyTo(KeyValuePair<TKey, ICollection<T>>[] array, int arrayIndex)
-        {
-            throw new NotSupportedException();
-        }
 
         int ICollection<KeyValuePair<TKey, ICollection<T>>>.Count => _dictionary.Count;
-
         bool ICollection<KeyValuePair<TKey, ICollection<T>>>.IsReadOnly => _dictionary.IsReadOnly;
-
-        bool ICollection<KeyValuePair<TKey, ICollection<T>>>.Remove(KeyValuePair<TKey, ICollection<T>> item)
-        {
-            throw new NotSupportedException();
-        }
+        bool ICollection<KeyValuePair<TKey, ICollection<T>>>.Remove(KeyValuePair<TKey, ICollection<T>> item) => throw new NotSupportedException();
 
         #endregion
     }

@@ -6,13 +6,9 @@ namespace Foundation.Collections
 {
     public sealed class SegmentedListBuilder<T>
     {
-        /// <summary>
-        /// </summary>
-        /// <param name="segmentItemCapacity"></param>
         public SegmentedListBuilder(int segmentItemCapacity)
         {
             Assert.IsInRange(segmentItemCapacity > 0);
-
             _segmentItemCapacity = segmentItemCapacity;
         }
 
@@ -29,9 +25,6 @@ namespace Foundation.Collections
             }
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="item"></param>
         public void Add(T item)
         {
             T[] currentSegment;
