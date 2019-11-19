@@ -28,6 +28,12 @@ namespace Foundation.Data.SqlClient
         }
 
         [Pure]
+        public static string ToSqlConstant(this SmallDate? source) =>
+            source != null
+                ? source.Value.ToSqlConstant()
+                : SqlNull.NullString;
+
+        [Pure]
         public static string ToSqlConstant(this DateTime source)
         {
             var timeOfDay = source.TimeOfDay;
