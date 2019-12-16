@@ -1,4 +1,4 @@
-﻿using System.Data.SqlClient;
+﻿using System.Data;
 using System.Data.SqlTypes;
 using System.Globalization;
 using System.Text;
@@ -10,9 +10,6 @@ namespace Foundation.Data.SqlClient
     /// </summary>
     public static class SqlDatabase
     {
-        /// <summary>
-        /// 
-        /// </summary>
         public static readonly SqlDateTime SqlDateTimeZero = new SqlDateTime(1900, 1, 1);
 
 #if FOUNDATION_4_7
@@ -34,19 +31,7 @@ namespace Foundation.Data.SqlClient
         }
 #endif
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="database"></param>
-        /// <param name="schema"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static string GetSysComments(
-            SqlConnection connection,
-            string database,
-            string schema,
-            string name)
+        public static string GetSysComments(IDbConnection connection, string database, string schema, string name)
         {
             var commandText = string.Format(
                 CultureInfo.InvariantCulture,

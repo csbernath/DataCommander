@@ -4,7 +4,7 @@
     {
         public const string Boolean = "bool";
         public const string Byte = "byte";
-        public const string ByteArray = CSharpTypeName.Byte + "[]";
+        public const string ByteArray = Byte + "[]";
         public const string Char = "char";
         public const string DateTime = nameof(DateTime);
         public const string Decimal = "decimal";
