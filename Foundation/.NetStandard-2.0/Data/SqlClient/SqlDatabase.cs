@@ -77,18 +77,18 @@ end",
                 schema.ToNullableNVarChar(),
                 name.ToNullableNVarChar());
 
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             var executor = connection.CreateCommandExecutor();
             executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
             {
                 while (dataReader.Read())
                 {
                     var s = dataReader.GetString(0);
-                    sb.Append(s);
+                    stringBuilder.Append(s);
                 }
             });
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
     }
 }

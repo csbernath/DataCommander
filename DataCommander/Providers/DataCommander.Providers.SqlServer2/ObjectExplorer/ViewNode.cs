@@ -54,7 +54,7 @@ namespace DataCommander.Providers.SqlServer2.ObjectExplorer
         {
             get
             {
-                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, menuItemScriptObject_Click);
+                var menuItemScriptObject = new ToolStripMenuItem("Script View as CREATE to clipboard", null, menuItemScriptObject_Click);
                 var contextMenu = new ContextMenuStrip();
                 contextMenu.Items.Add(menuItemScriptObject);
                 return contextMenu;
@@ -71,7 +71,7 @@ namespace DataCommander.Providers.SqlServer2.ObjectExplorer
                 text = SqlDatabase.GetSysComments(connection, _database.Name, _schema, _name);
             }
 
-            QueryForm.ShowText(text);
+            Clipboard.SetText(text);
         }
     }
 }
