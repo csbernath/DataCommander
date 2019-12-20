@@ -9,14 +9,12 @@ using ThreadState = System.Threading.ThreadState;
 
 namespace Foundation.Threading
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class WorkerThread
     {
         #region Private Fields
 
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly Thread _thread;
         private ThreadStart _start;
         private readonly WorkerEvent _stopRequest = new WorkerEvent(WorkerEventState.NonSignaled);
         private bool _isStopAccepted;
@@ -29,55 +27,37 @@ namespace Foundation.Threading
 
         #region Constructors
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="start"></param>
         public WorkerThread(ThreadStart start)
         {
             Assert.IsNotNull(start);
 
             _start = start;
-            Thread = new Thread(PrivateStart);
+            _thread = new Thread(PrivateStart);
             ThreadMonitor.Add(this);
         }
 
-#endregion
+        #endregion
 
-#region Public Events
+        #region Public Events
 
-        /// <summary>
-        /// 
-        /// </summary>
         public event EventHandler Started
         {
             add => _started += value;
-
             remove => _started -= value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public event EventHandler Stopped
         {
             add => _stopped += value;
-
             remove => _stopped -= value;
         }
 
-#endregion
+        #endregion
 
-#region Public Properties
+        #region Public Properties
 
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsPauseRequested => _pauseRequest.State == WorkerEventState.Signaled;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsStopRequested
         {
             get
@@ -92,8 +72,7 @@ namespace Foundation.Threading
                         if (Log.IsTraceEnabled())
                         {
                             var stackTrace = new StackTrace(1, true);
-                            Log.Trace("WorkerThread({0},{1}) accepted stop request.\r\n{2}", Thread.Name,
-                                Thread.ManagedThreadId, stackTrace);
+                            Log.Trace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) accepted stop request.\r\n{stackTrace}");
                         }
                     }
                 }
@@ -102,121 +81,75 @@ namespace Foundation.Threading
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public ThreadState ThreadState => Thread.ThreadState;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public WaitHandle PauseRequest => _pauseRequest;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public WaitHandle StopRequest => _stopRequest;
-
-        /// <summary>
-        ///  Gets a unique identifier for the current managed thread.
-        /// </summary>
         public int ManagedThreadId => Thread.ManagedThreadId;
 
-        /// <summary>
-        ///  Gets or sets the name of the thread.
-        /// </summary>
         public string Name
         {
             get => Thread.Name;
-
             set => Thread.Name = value;
         }
 
-        /// <summary>
-        ///  Gets or sets a value indicating the scheduling priority of a thread.
-        /// </summary>
         public ThreadPriority Priority
         {
             get => Thread.Priority;
-
             set => Thread.Priority = value;
         }
 
-        /// <summary>
-        ///  Gets or sets a value indicating whether or not a thread is a background thread.
-        /// </summary>
         public bool IsBackground
         {
             get => Thread.IsBackground;
-
             set => Thread.IsBackground = value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Thread Thread { get; }
+        public Thread Thread => _thread;
 
-#endregion
+        #endregion
 
-#region Internal Properties
+        #region Internal Properties
 
         internal DateTime StartTime { get; private set; }
 
         internal DateTime StopTime { get; private set; }
 
-#endregion
+        #endregion
 
-#region Public Methods
+        #region Public Methods
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Start()
         {
-            Log.Trace("Starting WorkerThread({0})...", Thread.Name);
+            Log.Trace($"Starting WorkerThread({Thread.Name})...");
             StartTime = LocalTime.Default.Now;
             Thread.Start();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Stop()
         {
-            Log.Trace("Stopping WorkerThread({0},{1})...", Thread.Name, Thread.ManagedThreadId);
+            Log.Trace($"Stopping WorkerThread({Thread.Name},{Thread.ManagedThreadId})...");
             StopTime = LocalTime.Default.Now;
             _stopRequest.Set();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Pause()
         {
-            Log.Trace("WorkerThread({0},{1}) is requested to pause.", Thread.Name, Thread.ManagedThreadId);
+            Log.Trace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) is requested to pause.");
             _pauseRequest.Set();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Continue()
         {
-            Log.Trace("WorkerThread({0},{1}) is requested to continue.", Thread.Name, Thread.ManagedThreadId);
+            Log.Trace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) is requested to continue.");
             _pauseRequest.Reset();
             _continueRequest.Set();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void WaitForStopOrContinue()
         {
-            Log.Write(LogLevel.Error, "WorkerThread({0},{1}) is waiting for stop or continue request...",
-                Thread.Name, Thread.ManagedThreadId);
+            Log.Write(LogLevel.Error, $"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) is waiting for stop or continue request...");
             var ticks = Stopwatch.GetTimestamp();
-            WaitHandle[] waitHandles = { _stopRequest, _continueRequest };
+            WaitHandle[] waitHandles = {_stopRequest, _continueRequest};
             var index = WaitHandle.WaitAny(waitHandles);
             ticks = Stopwatch.GetTimestamp() - ticks;
             string request;
@@ -236,61 +169,29 @@ namespace Foundation.Threading
                     break;
             }
 
-            Log.Trace("WorkerThread({0},{1}) accepted {2} request in {3} seconds.", Thread.Name,
-                Thread.ManagedThreadId, request, StopwatchTimeSpan.ToString(ticks, 6));
+            Log.Trace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) accepted {request} request in {StopwatchTimeSpan.ToString(ticks, 6)} seconds.");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Join()
-        {
-            Thread.Join();
-        }
+        public void Join() => Thread.Join();
+        public bool Join(int millisecondsTimeout) => Thread.Join(millisecondsTimeout);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="millisecondsTimeout"></param>
-        /// <returns></returns>
-        public bool Join(int millisecondsTimeout)
-        {
-            return Thread.Join(millisecondsTimeout);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="timeout"></param>
-        /// <returns></returns>
         public bool WaitForStop(TimeSpan timeout)
         {
             var signaled = _stopRequest.WaitOne(timeout, false);
             return signaled;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="timeout"></param>
-        /// <returns></returns>
         public bool WaitForStop(int timeout)
         {
             var signaled = _stopRequest.WaitOne(timeout, false);
             return signaled;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Abort()
-        {
-            Thread.Abort();
-        }
+        public void Abort() => Thread.Abort();
 
-#endregion
+        #endregion
 
-#region Private Methods
+        #region Private Methods
 
         private void PrivateStart()
         {
@@ -298,15 +199,12 @@ namespace Foundation.Threading
             var elapsed = now - StartTime;
             var win32ThreadId = NativeMethods.GetCurrentThreadId();
 
-            Log.Trace("WorkerThread({0},{1}) started in {2} seconds. Win32ThreadId: {3}", Thread.Name, Thread.ManagedThreadId, elapsed,
-                win32ThreadId);
+            Log.Trace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) started in {elapsed} seconds. Win32ThreadId: {win32ThreadId}");
 
             Thread.CurrentUICulture = CultureInfo.InvariantCulture;
 
             if (_started != null)
-            {
                 _started(this, null);
-            }
 
             try
             {
@@ -314,36 +212,25 @@ namespace Foundation.Threading
             }
             catch (Exception e)
             {
-                Log.Write(LogLevel.Error, "WorkerThread({0},{1}) unhandled exception:\r\n{2}", Thread.Name,
-                    Thread.ManagedThreadId, e);
+                Log.Write(LogLevel.Error, $"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) unhandled exception:\r\n{e}");
             }
 
             now = LocalTime.Default.Now;
             if (_stopRequest.State == WorkerEventState.Signaled)
-            {
                 elapsed = now - StopTime;
-            }
             else
-            {
                 elapsed = TimeSpan.Zero;
-            }
 
             StopTime = now;
 
-            Log.Trace(
-                "WorkerThread({0},{1}) stopped in {2} seconds.",
-                Thread.Name,
-                Thread.ManagedThreadId,
-                elapsed);
+            Log.Trace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) stopped in {elapsed} seconds.");
 
             if (_stopped != null)
-            {
                 _stopped(this, null);
-            }
 
             _start = null;
         }
 
-#endregion
+        #endregion
     }
 }
