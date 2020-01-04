@@ -113,17 +113,9 @@
       <Project>{61b48d70-b14f-462c-8a07-e9db585d3869}</Project>
       <Name>Foundation.Collections</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Foundation\.NetStandard-2.0\Core\Foundation.Core.csproj">
-      <Project>{5B3A35C4-CDC3-4CE6-AFDE-41F980A5A7EC}</Project>
-      <Name>Foundation.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\DataCommander.Providers\DataCommander.Providers.csproj">
       <Project>{31A30A80-D1B6-4867-A65E-188DE9E912C8}</Project>
       <Name>DataCommander.Providers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Foundation\.NetStandard-2.0\Assertions\Foundation.Assertions.csproj">
-      <Project>{3640355A-6D7C-45B4-8377-1D011DAFD8AA}</Project>
-      <Name>Foundation.Assertions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Foundation\.NetStandard-2.0\Configuration\Foundation.Configuration.csproj">
       <Project>{513D0094-7D6B-4453-9D43-23223C51EC4C}</Project>
