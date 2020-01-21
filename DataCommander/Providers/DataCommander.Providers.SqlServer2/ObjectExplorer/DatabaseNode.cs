@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Text;
 using Microsoft.Data.SqlClient;
 using System.Windows.Forms;
 using DataCommander.Providers.Query;
@@ -10,14 +11,34 @@ namespace DataCommander.Providers.SqlServer2.ObjectExplorer
 {
     internal sealed class DatabaseNode : ITreeNode
     {
-        public DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string name)
+        private string _name;
+        private byte _state;
+
+        public DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string name, byte state)
         {
             Databases = databaseCollectionNode;
-            Name = name;
+            _name = name;
+            _state = state;
         }
 
         public DatabaseCollectionNode Databases { get; }
-        public string Name { get; }
+
+        public string Name => _name;
+
+        string ITreeNode.Name
+        {
+            get
+            {
+                var sb = new StringBuilder();
+                sb.Append(_name);
+
+                if (_state == 6)
+                    sb.Append(" (Offline)");
+
+                return sb.ToString();
+            }
+        }
+
         bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
@@ -69,7 +90,7 @@ select
 	convert(decimal(15,4),fileproperty(f.name, 'SpaceUsed') * 8096.0 / 1000000)		as [Used (MB)],
 	convert(decimal(15,2),convert(float,fileproperty(name, 'SpaceUsed')) * 100.0 / size)	as [Used%],
 	convert(decimal(15,4),(f.size-fileproperty(name, 'SpaceUsed')) * 8096.0 / 1000000)	as [Free (MB)]
-from	[{0}].sys.database_files f", Name);
+from	[{0}].sys.database_files f", _name);
             var connectionString = Databases.Server.ConnectionString;
             var mainForm = DataCommanderApplication.Instance.MainForm;
             var queryForm = (QueryForm) mainForm.ActiveMdiChild;

@@ -29,7 +29,9 @@ namespace DataCommander.Providers.SqlServer2.ObjectExplorer
             list.Add(new SystemDatabaseCollectionNode(this));
             list.Add(new DatabaseSnapshotCollectionNode(this));
 
-            const string commandText = @"select d.name
+            const string commandText = @"select
+    d.name,
+    d.state
 from sys.databases d (nolock)
 where
     source_database_id is null
@@ -39,7 +41,8 @@ order by d.name";
             var rows = SqlClientFactory.Instance.ExecuteReader(Server.ConnectionString, new ExecuteReaderRequest(commandText), 128, dataRecord =>
             {
                 var name = dataRecord.GetString(0);
-                return new DatabaseNode(this, name);
+                var state = dataRecord.GetByte(1);
+                return new DatabaseNode(this, name, state);
             });
             list.AddRange(rows);
             return list;

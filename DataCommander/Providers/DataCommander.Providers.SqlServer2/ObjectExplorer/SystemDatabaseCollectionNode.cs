@@ -41,7 +41,7 @@ order by d.name";
             foreach (DataRow dataRow in dataTable.Rows)
             {
                 var name = (string) dataRow[0];
-                var node = new DatabaseNode(_databaseCollectionNode, name);
+                var node = new DatabaseNode(_databaseCollectionNode, name, 0);
                 list.Add(node);
             }
 

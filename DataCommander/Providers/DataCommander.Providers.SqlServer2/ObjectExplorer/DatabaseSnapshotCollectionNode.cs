@@ -33,7 +33,7 @@ order by 1";
         private DatabaseNode ReadDatabaseNode(IDataRecord dataRecord)
         {
             var name = dataRecord.GetString(0);
-            return new DatabaseNode(_databaseCollectionNode, name);
+            return new DatabaseNode(_databaseCollectionNode, name, 0);
         }
 
         bool ITreeNode.Sortable => false;
