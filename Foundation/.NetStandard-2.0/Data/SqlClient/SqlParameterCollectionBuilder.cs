@@ -69,7 +69,7 @@ namespace Foundation.Data.SqlClient
             Add(parameter);
         }
 
-        public void AddStructured(string parameterName, string typeName, ReadOnlyList<SqlDataRecord> sqlDataRecords)
+        public void AddStructured(string parameterName, string typeName, IReadOnlyCollection<SqlDataRecord> sqlDataRecords)
         {
             var parameter = SqlParameterFactory.CreateStructured(parameterName, typeName, sqlDataRecords);
             Add(parameter);

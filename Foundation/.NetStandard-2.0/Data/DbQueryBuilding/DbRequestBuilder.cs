@@ -28,6 +28,7 @@ namespace Foundation.Data.DbQueryBuilding
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 {_request.Using}
@@ -58,7 +59,7 @@ namespace {_request.Namespace}
             if (sqlDbType == SqlDbType.Structured)
             {
                 var userDefinedTableType = dataType.Split('.')[1];
-                csharpTypeName = $"ReadOnlyList<{userDefinedTableType}>";
+                csharpTypeName = $"ReadOnlyCollection<{userDefinedTableType}>";
             }
             else
             {
@@ -551,7 +552,7 @@ namespace {_request.Namespace}
             {
                 if (parameter.SqlDbType == SqlDbType.Structured)
                     stringBuilder.Append(
-                        $"    parameters.AddStructured(\"{parameter.Name}\", \"{parameter.DataType}\", {GetRequestType().ToCamelCase()}.{parameter.Name.ToPascalCase()}.Select(i => i.ToSqlDataRecord()).ToReadOnlyList());\r\n");
+                        $"    parameters.AddStructured(\"{parameter.Name}\", \"{parameter.DataType}\", {GetRequestType().ToCamelCase()}.{parameter.Name.ToPascalCase()}.Select(i => i.ToSqlDataRecord()).ToReadOnlyCollection());\r\n");
                 else if (parameter.SqlDbType == SqlDbType.Char)
                     stringBuilder.Append(
                         $"    parameters.AddChar(\"{parameter.Name}\", {parameter.Size}, {GetRequestType().ToCamelCase()}.{parameter.Name.ToPascalCase()});\r\n");

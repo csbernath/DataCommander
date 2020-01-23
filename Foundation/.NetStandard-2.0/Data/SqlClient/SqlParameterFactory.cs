@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using Foundation.Assertions;
-using Foundation.Collections.ReadOnly;
 using Microsoft.SqlServer.Server;
 
 namespace Foundation.Data.SqlClient
@@ -58,7 +58,7 @@ namespace Foundation.Data.SqlClient
             return parameter;
         }
 
-        public static SqlParameter CreateStructured(string parameterName, string typeName, ReadOnlyList<SqlDataRecord> sqlDataRecords)
+        public static SqlParameter CreateStructured(string parameterName, string typeName, IReadOnlyCollection<SqlDataRecord> sqlDataRecords)
         {
             Assert.IsNotNull(sqlDataRecords);
             var parameter = new SqlParameter

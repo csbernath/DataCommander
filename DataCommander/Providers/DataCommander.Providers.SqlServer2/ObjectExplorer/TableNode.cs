@@ -444,12 +444,21 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                 switch (typeName)
                 {
                     case SqlDataTypeName.Char:
+                    case SqlDataTypeName.VarChar:
+                    {
+                        var maxLength = column.MaxLength;
+                        var maxLengthString = maxLength >= 0 ? maxLength.ToString() : "max";
+                        typeName += "(" + maxLengthString + ")";
+                    }
+                        break;
+
                     case SqlDataTypeName.NChar:
                     case SqlDataTypeName.NVarChar:
-                    case SqlDataTypeName.VarChar:
+                    {
                         var maxLength = column.MaxLength;
-                        var precisionString = maxLength >= 0 ? maxLength.ToString() : "max";
-                        typeName += "(" + precisionString + ")";
+                        var maxLengthString = maxLength >= 0 ? (maxLength / 2).ToString() : "max";
+                        typeName += "(" + maxLengthString + ")";
+                    }
                         break;
 
                     case SqlDataTypeName.Decimal:
