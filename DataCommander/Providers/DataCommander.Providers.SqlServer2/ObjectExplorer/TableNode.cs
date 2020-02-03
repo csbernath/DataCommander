@@ -15,6 +15,7 @@ using Foundation.Core;
 using Foundation.Data;
 using Foundation.Data.DbQueryBuilding;
 using Foundation.Data.SqlClient;
+using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
 using Foundation.Windows.Forms;
@@ -84,6 +85,7 @@ namespace DataCommander.Providers.SqlServer2.ObjectExplorer
                 scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("CREATE to clipboard", null, ScriptTable_Click));
                 scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("SELECT to clipboard", null, SelectScript_Click));
                 scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("INSERT to clipboard", null, InsertScript_Click));
+                scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("UPDATE to clipboard", null, UpdateScript_Click));
                 scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("C# ORM to clipboard", null, CsharpOrm_Click));
                 menu.Items.Add(scriptTableAs);
 
@@ -512,6 +514,67 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             Clipboard.SetText(stringBuilder.ToString());
             var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
 
+            queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
+                queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
+        }
+
+        private string CreateUpdateScript()
+        {
+            var connectionString = DatabaseNode.Databases.Server.ConnectionString;
+            GetTableSchemaResult getTableSchemaResult;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var tableName = $"{DatabaseNode.Name}.{_owner}.{_name}";
+                getTableSchemaResult = TableSchema.GetTableSchema(connection, tableName);
+            }
+
+            var textBuilder = new TextBuilder();
+
+            textBuilder.Add($"update {Name}");
+            textBuilder.Add("set");
+            using (textBuilder.Indent(1))
+            {
+                var last = getTableSchemaResult.Columns.Count - 1;
+                foreach (var item in getTableSchemaResult.Columns.SelectIndexed())
+                {
+                    var column = item.Value;
+                    var line = new StringBuilder();
+                    line.Append($"{column.ColumnName} = @{column.ColumnName}");
+                    if (item.Index < last)
+                        line.Append(',');
+                    textBuilder.Add(line.ToString());
+                }
+            }
+
+            if (getTableSchemaResult.UniqueIndexColumns.Count > 0)
+            {
+                textBuilder.Add("where");
+                using (textBuilder.Indent(1))
+                {
+                    var last = getTableSchemaResult.UniqueIndexColumns.Count - 1;
+                    foreach (var item in getTableSchemaResult.UniqueIndexColumns.SelectIndexed())
+                    {
+                        var columnId = item.Value.ColumnId;
+                        var column = getTableSchemaResult.Columns.First(i => i.ColumnId == columnId);
+                        var line = new StringBuilder();
+                        line.Append($"{column.ColumnName} = @{column.ColumnName}");
+                        if (item.Index < last)
+                            line.Append(',');
+                        textBuilder.Add(line.ToString());
+                    }
+                }
+            }
+
+            var script = textBuilder.ToLines().ToIndentedString("    ");
+            return script;
+        }
+
+        private void UpdateScript_Click(object sender, EventArgs e)
+        {
+            var script = CreateUpdateScript();
+            Clipboard.SetText(script);
+            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
             queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
                 queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
         }
