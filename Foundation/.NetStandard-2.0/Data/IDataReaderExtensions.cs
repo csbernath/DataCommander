@@ -29,6 +29,28 @@ namespace Foundation.Data
             return dataReader.ReadResult(segmentLength, readRecord);
         }
 
+        public static T ReadScalar<T>(this IDataReader dataReader, Func<IDataRecord, T> readScalar)
+        {
+            var read = dataReader.Read();
+            Assert.IsTrue(read);
+
+            var scalar = readScalar(dataReader);
+
+            read = dataReader.Read();
+            Assert.IsTrue(!read);
+
+            return scalar;
+        }
+
+        public static T ReadNextScalar<T>(this IDataReader dataReader, Func<IDataRecord, T> readScalar)
+        {
+            var nextResult = dataReader.NextResult();
+            Assert.IsTrue(nextResult);
+
+            var scalar = dataReader.ReadScalar(readScalar);
+            return scalar;
+        }
+
         public static int Fill(this IDataReader dataReader, DataSet dataSet, CancellationToken cancellationToken)
         {
             Assert.IsNotNull(dataReader);
