@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using DataCommander.Providers2;
 
 namespace DataCommander.Providers.Query
 {

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DataCommander.Providers
+namespace DataCommander.Providers2
 {
-    internal sealed class StringMatcher : IStringMatcher
+    public sealed class StringMatcher : IStringMatcher
     {
         private readonly string _subString;
         private readonly StringComparison _comparison;

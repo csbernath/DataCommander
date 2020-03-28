@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
 using DataCommander.Providers.FieldNamespace;
+using DataCommander.Providers2;
 
 namespace DataCommander.Providers.SQLite
 {

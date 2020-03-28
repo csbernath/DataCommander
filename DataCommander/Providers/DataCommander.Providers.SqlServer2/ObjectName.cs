@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Text;
+using DataCommander.Providers2;
 
 namespace DataCommander.Providers.SqlServer2
 {

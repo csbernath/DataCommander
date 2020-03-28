@@ -35,6 +35,7 @@ using Foundation.Threading;
 using Foundation.Windows.Forms;
 using Newtonsoft.Json;
 using Timer = System.Windows.Forms.Timer;
+using DataCommander.Providers2;
 
 namespace DataCommander.Providers.Query
 {

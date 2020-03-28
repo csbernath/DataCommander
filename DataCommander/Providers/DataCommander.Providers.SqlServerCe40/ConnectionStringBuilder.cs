@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlServerCe;
+using DataCommander.Providers2;
 
 namespace DataCommander.Providers.SqlServerCe40
 {

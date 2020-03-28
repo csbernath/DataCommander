@@ -1,5 +1,6 @@
 ﻿using System.Data.SqlClient;
 using System.Text;
+using DataCommander.Providers2;
 
 namespace DataCommander.Providers.PostgreSql
 {

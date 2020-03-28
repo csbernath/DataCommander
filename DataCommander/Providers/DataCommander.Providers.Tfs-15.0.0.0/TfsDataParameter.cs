@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.Tfs
+﻿using DataCommander.Providers2;
+
+namespace DataCommander.Providers.Tfs
 {
     internal sealed class TfsDataParameter : DataParameterBase
     {

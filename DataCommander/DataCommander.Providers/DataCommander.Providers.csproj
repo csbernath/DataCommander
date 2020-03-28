@@ -242,13 +242,9 @@
     <Compile Include="GetCompletionResponse.cs" />
     <Compile Include="GetTableSchemaResult.cs" />
     <Compile Include="IAsyncDataAdapter.cs" />
-    <Compile Include="IDataReaderHelper.cs" />
-    <Compile Include="IDbConnectionStringBuilder.cs" />
-    <Compile Include="IObjectName.cs" />
     <Compile Include="IQueryForm.cs" />
-    <Compile Include="IStringMatcher.cs" />
+    <Compile Include="IResultWriter.cs" />
     <Compile Include="ITreeNode.cs" />
-    <Compile Include="ObjectName.cs" />
     <Compile Include="OptionsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -256,7 +252,6 @@
       <DependentUpon>OptionsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ProviderName.cs" />
-    <Compile Include="DataParameterBase.cs" />
     <Compile Include="FieldNamespace\BinaryDataFieldReader.cs" />
     <Compile Include="FieldNamespace\BooleanDataFieldReader.cs" />
     <Compile Include="FieldNamespace\BooleanField.cs" />
@@ -373,9 +368,6 @@
     <Compile Include="FieldNamespace\IDataFieldReader.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IStandardOutput.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -402,14 +394,11 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ResultWriter\InsertScriptFileWriter.cs" />
-    <Compile Include="ResultWriter\IResultWriter.cs" />
     <Compile Include="ResultWriter\LogResultWriter.cs" />
     <Compile Include="ResultWriter\SqlCeResultWriter.cs" />
     <Compile Include="ResultWriter\SQLiteResultWriter.cs" />
     <Compile Include="ResultWriter\StringDataWriter.cs" />
     <Compile Include="SqlBulkCopyAsyncDataAdapter.cs" />
-    <Compile Include="SqlObject.cs" />
-    <Compile Include="SqlObjectTypes.cs" />
     <Compile Include="SqlParser.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -420,8 +409,6 @@
     <Compile Include="FieldNamespace\StringField.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Statement.cs" />
-    <Compile Include="StringMatcher.cs" />
     <Compile Include="Query\TableStyle.cs" />
     <Compile Include="ResultWriter\TextResultWriter.cs">
       <SubType>Code</SubType>
@@ -561,6 +548,10 @@
     <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Threading\Foundation.Threading.csproj">
       <Project>{AB3458F4-97B4-42E5-9E48-FA001AE29A2E}</Project>
       <Name>Foundation.Threading</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataCommander.Providers2\DataCommander.Providers2.csproj">
+      <Project>{caad5102-f178-4bb9-971b-78213991882d}</Project>
+      <Name>DataCommander.Providers2</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

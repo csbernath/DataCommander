@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.Query;
+using DataCommander.Providers2;
 using Foundation.Data;
 using Foundation.Log;
 using Npgsql;

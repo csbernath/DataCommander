@@ -1,4 +1,5 @@
 ﻿using System.Data.OracleClient;
+using DataCommander.Providers2;
 
 namespace DataCommander.Providers.OracleClient
 {

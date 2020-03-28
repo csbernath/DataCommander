@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Common;
 using System.Xml;
 using DataCommander.Providers.Connection;
+using DataCommander.Providers2;
 using Foundation.Data;
 
 namespace DataCommander.Providers.Msi

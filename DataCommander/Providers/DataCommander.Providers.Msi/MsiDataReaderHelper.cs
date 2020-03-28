@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using DataCommander.Providers.FieldNamespace;
+using DataCommander.Providers2;
 using Foundation.Assertions;
 
 namespace DataCommander.Providers.Msi

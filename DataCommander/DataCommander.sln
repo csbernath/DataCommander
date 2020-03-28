@@ -83,7 +83,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrmSamples", "OrmSamples\Or
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.SqlServer2", "Providers\DataCommander.Providers.SqlServer2\DataCommander.Providers.SqlServer2.csproj", "{F0749A12-A13F-4978-8177-1B69A62F51DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.Data.SqlClient2", "..\Foundation\.NetStandard-2.0\Foundation.Data.SqlClient2\Foundation.Data.SqlClient2.csproj", "{8897B0EC-1DF2-4699-96E2-1978FCA632A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Data.SqlClient2", "..\Foundation\.NetStandard-2.0\Foundation.Data.SqlClient2\Foundation.Data.SqlClient2.csproj", "{8897B0EC-1DF2-4699-96E2-1978FCA632A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers2", "DataCommander.Providers2\DataCommander.Providers2.csproj", "{CAAD5102-F178-4BB9-971B-78213991882D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -771,6 +773,26 @@ Global
 		{8897B0EC-1DF2-4699-96E2-1978FCA632A2}.Test|Any CPU.Build.0 = Debug|Any CPU
 		{8897B0EC-1DF2-4699-96E2-1978FCA632A2}.Test|x86.ActiveCfg = Debug|Any CPU
 		{8897B0EC-1DF2-4699-96E2-1978FCA632A2}.Test|x86.Build.0 = Debug|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.ClientRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.ClientRelease|Any CPU.Build.0 = Release|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.ClientRelease|x86.ActiveCfg = Release|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.ClientRelease|x86.Build.0 = Release|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.Debug|x86.Build.0 = Debug|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.NDoc|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.NDoc|Any CPU.Build.0 = Debug|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.NDoc|x86.ActiveCfg = Debug|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.NDoc|x86.Build.0 = Debug|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.Release|x86.ActiveCfg = Release|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.Release|x86.Build.0 = Release|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.Test|Any CPU.Build.0 = Debug|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.Test|x86.ActiveCfg = Debug|Any CPU
+		{CAAD5102-F178-4BB9-971B-78213991882D}.Test|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

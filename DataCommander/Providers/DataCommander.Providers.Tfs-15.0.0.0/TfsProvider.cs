@@ -6,6 +6,7 @@ using System.Linq;
 using System.Xml;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.Query;
+using DataCommander.Providers2;
 using Foundation.Data;
 using Microsoft.TeamFoundation.VersionControl.Client;
 

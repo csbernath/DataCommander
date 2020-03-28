@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace DataCommander.Providers
+namespace DataCommander.Providers2
 {
     public abstract class DataParameterBase
     {

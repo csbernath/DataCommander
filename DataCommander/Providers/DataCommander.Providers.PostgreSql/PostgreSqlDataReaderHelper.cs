@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using DataCommander.Providers2;
+using Npgsql;
 
 namespace DataCommander.Providers.PostgreSql
 {

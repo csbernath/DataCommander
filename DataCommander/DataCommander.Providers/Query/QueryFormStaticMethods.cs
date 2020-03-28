@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.ResultWriter;
+using DataCommander.Providers2;
 
 namespace DataCommander.Providers.Query
 {
@@ -158,11 +159,7 @@ namespace DataCommander.Providers.Query
             return align;
         }
 
-        public static bool FindText(
-            DataView dataView,
-            IStringMatcher matcher,
-            ref int rowIndex,
-            ref int columnIndex)
+        public static bool FindText(DataView dataView, IStringMatcher matcher, ref int rowIndex, ref int columnIndex)
         {
             var found = false;
             var dataTable = dataView.Table;

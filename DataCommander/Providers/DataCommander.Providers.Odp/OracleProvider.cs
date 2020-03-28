@@ -7,6 +7,7 @@ using System.Xml;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.Odp.DataFieldReader;
 using DataCommander.Providers.Query;
+using DataCommander.Providers2;
 using Foundation.Configuration;
 using Foundation.Data;
 using Oracle.ManagedDataAccess.Client;

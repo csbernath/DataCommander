@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using DataCommander.Providers2;
+using Microsoft.Data.SqlClient;
 using Foundation.Linq;
 
 namespace DataCommander.Providers.SqlServer2

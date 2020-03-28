@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using DataCommander.Providers.Connection;
+using DataCommander.Providers2;
 using Foundation.Data;
 
 namespace DataCommander.Providers

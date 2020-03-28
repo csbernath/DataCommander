@@ -6,6 +6,7 @@ using System.Data.OleDb;
 using System.Text;
 using System.Xml;
 using DataCommander.Providers.Connection;
+using DataCommander.Providers2;
 using Foundation.Data;
 
 namespace DataCommander.Providers.OleDb

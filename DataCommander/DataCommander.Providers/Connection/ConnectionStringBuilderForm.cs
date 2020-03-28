@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Data.OleDb;
 using System.Text;
 using System.Windows.Forms;
+using DataCommander.Providers2;
 using Foundation.Core;
 using Foundation.Data;
 

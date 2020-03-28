@@ -9,6 +9,7 @@ using System.Xml;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.Query;
+using DataCommander.Providers2;
 using Foundation.Configuration;
 using Foundation.Data;
 using Foundation.Data.SqlClient;

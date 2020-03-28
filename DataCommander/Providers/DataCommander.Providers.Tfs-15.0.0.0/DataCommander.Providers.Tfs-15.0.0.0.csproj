@@ -69,6 +69,10 @@
     <Compile Include="TfsQueryWorkspacesDataReader.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DataCommander.Providers2\DataCommander.Providers2.csproj">
+      <Project>{CAAD5102-F178-4BB9-971B-78213991882D}</Project>
+      <Name>DataCommander.Providers2</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\DataCommander.Providers\DataCommander.Providers.csproj">
       <Project>{31A30A80-D1B6-4867-A65E-188DE9E912C8}</Project>
       <Name>DataCommander.Providers</Name>

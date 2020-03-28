@@ -146,6 +146,10 @@
       <Project>{b8934b63-d579-4ee8-b352-13134eb8cc54}</Project>
       <Name>Foundation.NetFramework-4.8</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\DataCommander.Providers2\DataCommander.Providers2.csproj">
+      <Project>{CAAD5102-F178-4BB9-971B-78213991882D}</Project>
+      <Name>DataCommander.Providers2</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\DataCommander.Providers\DataCommander.Providers.csproj">
       <Project>{31a30a80-d1b6-4867-a65e-188de9e912c8}</Project>
       <Name>DataCommander.Providers</Name>

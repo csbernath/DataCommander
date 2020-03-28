@@ -1,5 +1,6 @@
 ﻿using System.Data.Common;
 using System.Data.SqlClient;
+using DataCommander.Providers2;
 
 namespace DataCommander.Providers.Msi
 {

@@ -11,6 +11,7 @@ using DataCommander.Providers.Connection;
 using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.Query;
 using DataCommander.Providers.SqlServer2.FieldReader;
+using DataCommander.Providers2;
 using Foundation.Assertions;
 using Foundation.Configuration;
 using Foundation.Core;

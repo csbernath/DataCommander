@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Providers
+﻿namespace DataCommander.Providers2
 {
     public interface IObjectName
     {

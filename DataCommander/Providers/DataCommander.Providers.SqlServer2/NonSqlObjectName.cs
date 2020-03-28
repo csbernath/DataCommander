@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.SqlServer2
+﻿using DataCommander.Providers2;
+
+namespace DataCommander.Providers.SqlServer2
 {
     internal sealed class NonSqlObjectName : IObjectName
     {
