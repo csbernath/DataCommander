@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers2;
+using DataCommander.Providers2.FieldNamespace;
 using Foundation.Assertions;
 
 namespace DataCommander.Providers.Msi

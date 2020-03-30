@@ -2,6 +2,7 @@
 using System.Data;
 using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers2;
+using DataCommander.Providers2.FieldNamespace;
 using Oracle.ManagedDataAccess.Client;
 
 namespace DataCommander.Providers.Odp.DataFieldReader

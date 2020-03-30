@@ -15,6 +15,7 @@ using System.Threading;
 using System.Windows.Forms;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.Query;
+using DataCommander.Providers2;
 using Foundation.Assertions;
 using Foundation.Configuration;
 using Foundation.Core;

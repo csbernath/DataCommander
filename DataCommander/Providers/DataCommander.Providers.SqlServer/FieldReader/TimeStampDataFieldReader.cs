@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 using DataCommander.Providers.FieldNamespace;
+using DataCommander.Providers2.FieldNamespace;
 
 namespace DataCommander.Providers.SqlServer.FieldReader
 {

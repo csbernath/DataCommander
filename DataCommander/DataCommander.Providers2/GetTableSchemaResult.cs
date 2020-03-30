@@ -1,7 +1,6 @@
-﻿using DataCommander.Providers2;
-using Foundation.Collections.ReadOnly;
+﻿using Foundation.Collections.ReadOnly;
 
-namespace DataCommander.Providers
+namespace DataCommander.Providers2
 {
     public class GetTableSchemaResult
     {

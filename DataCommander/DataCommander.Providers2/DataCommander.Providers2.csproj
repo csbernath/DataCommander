@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Collections\Foundation.Collections.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="FieldNamespace\IDataFieldReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="IStandardOutput.cs">
       <SubType>Code</SubType>
     </Compile>

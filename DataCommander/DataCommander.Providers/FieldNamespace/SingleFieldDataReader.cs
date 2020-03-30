@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using DataCommander.Providers2.FieldNamespace;
 
 namespace DataCommander.Providers.FieldNamespace
 {

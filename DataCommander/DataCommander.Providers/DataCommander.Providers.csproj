@@ -225,7 +225,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AsyncDataAdapterCommand.cs" />
-    <Compile Include="Column.cs" />
     <Compile Include="Connection\ColorThemeApplier.cs" />
     <Compile Include="Connection\ConnectionPropertiesRepository.cs" />
     <Compile Include="Connection\ConnectionStringKeyword.cs" />
@@ -251,7 +250,6 @@
     <Compile Include="OptionsForm.Designer.cs">
       <DependentUpon>OptionsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProviderName.cs" />
     <Compile Include="FieldNamespace\BinaryDataFieldReader.cs" />
     <Compile Include="FieldNamespace\BooleanDataFieldReader.cs" />
     <Compile Include="FieldNamespace\BooleanField.cs" />
@@ -365,9 +363,6 @@
     <Compile Include="ResultWriter\HtmlTextBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FieldNamespace\IDataFieldReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -419,7 +414,6 @@
     <Compile Include="TextBoxWriter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UniqueIndexColumn.cs" />
     <EmbeddedResource Include="AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
