@@ -10,6 +10,7 @@ using System.Xml;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.SqlServerCe40.ObjectExplorer;
 using DataCommander.Providers2;
+using DataCommander.Providers2.Connection;
 using DataCommander.Providers2.FieldNamespace;
 using Foundation.Data;
 using Foundation.Data.SqlClient;

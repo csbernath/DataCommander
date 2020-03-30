@@ -2,6 +2,7 @@
 using System.Data.Common;
 using System.Management;
 using DataCommander.Providers.Connection;
+using DataCommander.Providers2.Connection;
 
 namespace DataCommander.Providers.Wmi
 {

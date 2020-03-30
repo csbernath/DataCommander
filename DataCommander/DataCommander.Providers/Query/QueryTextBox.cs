@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using DataCommander.Providers2.Query;
 using Foundation.Core;
 using Foundation.Data.MethodProfiler;
 using Foundation.Linq;

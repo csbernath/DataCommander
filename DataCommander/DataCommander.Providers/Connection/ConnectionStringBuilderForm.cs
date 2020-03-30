@@ -6,6 +6,7 @@ using System.Data.OleDb;
 using System.Text;
 using System.Windows.Forms;
 using DataCommander.Providers2;
+using DataCommander.Providers2.Connection;
 using Foundation.Core;
 using Foundation.Data;
 

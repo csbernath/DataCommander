@@ -6,7 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using DataCommander.Providers.Connection;
-using DataCommander.Providers.QueryConfiguration;
+using DataCommander.Providers2.Connection;
+using DataCommander.Providers2.QueryConfiguration;
 using Foundation.Assertions;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
@@ -31,7 +32,7 @@ namespace DataCommander.Providers.ResultWriter
         private long _firstRowReadBeginTimestamp;
 
         private string _fileName;
-        private QueryConfiguration.Query _query;
+        private Providers2.QueryConfiguration.Query _query;
         private ReadOnlyList<DbRequestParameter> _parameters;
         private string _commandText;
         private List<Result> _results;

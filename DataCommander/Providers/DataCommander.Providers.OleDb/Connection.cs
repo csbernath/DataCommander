@@ -3,6 +3,7 @@ using System.Data.OleDb;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Providers.Connection;
+using DataCommander.Providers2.Connection;
 using Foundation.Core;
 
 namespace DataCommander.Providers.OleDb

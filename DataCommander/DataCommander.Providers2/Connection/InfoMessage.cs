@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataCommander.Providers.Connection
+namespace DataCommander.Providers2.Connection
 {
     public sealed class InfoMessage
     {

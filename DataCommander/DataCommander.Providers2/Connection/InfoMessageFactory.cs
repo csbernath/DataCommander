@@ -1,6 +1,6 @@
 ﻿using Foundation.Core.ClockAggregate;
 
-namespace DataCommander.Providers.Connection
+namespace DataCommander.Providers2.Connection
 {
     public static class InfoMessageFactory
     {

@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Text;
 
-namespace DataCommander.Providers.Query
+namespace DataCommander.Providers2.Query
 {
-    internal sealed class TokenIterator
+    public sealed class TokenIterator
     {
         #region Private Fields
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataCommander.Providers
+namespace DataCommander.Providers2
 {
     [Flags]
     public enum SqlObjectTypes

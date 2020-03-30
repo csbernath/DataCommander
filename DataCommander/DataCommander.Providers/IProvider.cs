@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Common;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers2;
+using DataCommander.Providers2.Connection;
 using Foundation.Data;
 
 namespace DataCommander.Providers

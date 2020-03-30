@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using DataCommander.Providers2;
 
-namespace DataCommander.Providers
+namespace DataCommander.Providers2
 {
     public sealed class GetCompletionResponse
     {

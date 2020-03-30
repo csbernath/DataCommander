@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DataCommander.Providers.Query
+namespace DataCommander.Providers2.Query
 {
     public class UndoRedoState<T>
     {

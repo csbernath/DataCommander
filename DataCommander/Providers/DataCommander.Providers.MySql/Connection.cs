@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Providers.Connection;
+using DataCommander.Providers2.Connection;
 using MySql.Data.MySqlClient;
 
 namespace DataCommander.Providers.MySql

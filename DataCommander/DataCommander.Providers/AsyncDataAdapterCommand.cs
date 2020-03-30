@@ -10,11 +10,11 @@ namespace DataCommander.Providers
         public readonly int LineIndex;
         public readonly string Text;
         public readonly IDbCommand Command;
-        public readonly QueryConfiguration.Query Query;
+        public readonly Providers2.QueryConfiguration.Query Query;
         public readonly ReadOnlyList<DbRequestParameter> Parameters;
         public readonly string CommandText;
 
-        public AsyncDataAdapterCommand(string fileName, int lineIndex, string text, IDbCommand command, QueryConfiguration.Query query,
+        public AsyncDataAdapterCommand(string fileName, int lineIndex, string text, IDbCommand command, Providers2.QueryConfiguration.Query query,
             ReadOnlyList<DbRequestParameter> parameters, string commandText)
         {
             LineIndex = lineIndex;

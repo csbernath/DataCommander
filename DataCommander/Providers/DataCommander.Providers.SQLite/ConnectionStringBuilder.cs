@@ -2,6 +2,7 @@
 using System.Data.SQLite;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers2;
+using DataCommander.Providers2.Connection;
 
 namespace DataCommander.Providers.SQLite
 {

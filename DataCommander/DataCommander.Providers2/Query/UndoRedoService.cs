@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Foundation.Assertions;
 
-namespace DataCommander.Providers.Query
+namespace DataCommander.Providers2.Query
 {
     public static class UndoRedoService
     {

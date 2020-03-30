@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Providers.QueryConfiguration
+﻿namespace DataCommander.Providers2.QueryConfiguration
 {
     public static class Parser
     {

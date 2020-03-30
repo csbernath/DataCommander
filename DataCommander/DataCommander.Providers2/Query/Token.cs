@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace DataCommander.Providers.Query
+namespace DataCommander.Providers2.Query
 {
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public sealed class Token

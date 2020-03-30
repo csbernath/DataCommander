@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Providers.Connection;
+using DataCommander.Providers2.Connection;
 using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Data;

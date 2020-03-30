@@ -4,6 +4,7 @@ using System.Data.SqlServerCe;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Providers.Connection;
+using DataCommander.Providers2.Connection;
 
 namespace DataCommander.Providers.SqlServerCe40
 {

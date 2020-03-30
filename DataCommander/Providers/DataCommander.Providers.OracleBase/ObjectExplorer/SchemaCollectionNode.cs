@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.Common;
 using System.Windows.Forms;
-using DataCommander.Providers.Connection;
+using DataCommander.Providers2.Connection;
 using Foundation.Data;
 
 namespace DataCommander.Providers.OracleBase.ObjectExplorer

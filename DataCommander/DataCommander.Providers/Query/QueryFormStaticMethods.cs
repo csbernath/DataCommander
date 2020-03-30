@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using DataCommander.Providers.ResultWriter;
 using DataCommander.Providers2;
 using DataCommander.Providers2.FieldNamespace;
+using DataCommander.Providers2.Query;
 
 namespace DataCommander.Providers.Query
 {

@@ -8,6 +8,7 @@ using System.Text;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.Query;
 using DataCommander.Providers2;
+using DataCommander.Providers2.Connection;
 using Foundation.Configuration;
 using Foundation.Data;
 using Foundation.Log;

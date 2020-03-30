@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
 
-namespace DataCommander.Providers.Connection
+namespace DataCommander.Providers2.Connection
 {
     internal static class DbConnectionStringBuilderExtensions
     {

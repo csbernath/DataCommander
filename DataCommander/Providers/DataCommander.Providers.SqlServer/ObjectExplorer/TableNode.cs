@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using DataCommander.Providers.Query;
+using DataCommander.Providers2;
 using Foundation.Assertions;
 using Foundation.Collections;
 using Foundation.Collections.ReadOnly;

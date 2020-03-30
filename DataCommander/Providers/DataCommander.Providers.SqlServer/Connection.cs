@@ -11,6 +11,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
+using DataCommander.Providers2.Connection;
 
 namespace DataCommander.Providers.SqlServer
 {

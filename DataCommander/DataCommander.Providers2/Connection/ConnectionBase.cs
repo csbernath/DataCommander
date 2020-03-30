@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Foundation.Assertions;
 
-namespace DataCommander.Providers.Connection
+namespace DataCommander.Providers2.Connection
 {
     public abstract class ConnectionBase
     {

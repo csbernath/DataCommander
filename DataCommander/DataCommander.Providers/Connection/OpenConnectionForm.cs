@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DataCommander.Providers2.Connection;
 using Foundation.Core;
 using Foundation.Log;
 using Foundation.Windows.Forms;

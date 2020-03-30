@@ -226,20 +226,12 @@
     </Compile>
     <Compile Include="AsyncDataAdapterCommand.cs" />
     <Compile Include="Connection\ColorThemeApplier.cs" />
+    <Compile Include="Connection\ConnectionProperties.cs" />
     <Compile Include="Connection\ConnectionPropertiesRepository.cs" />
-    <Compile Include="Connection\ConnectionStringKeyword.cs" />
-    <Compile Include="Connection\DbConnectionStringBuilderExtensions.cs" />
-    <Compile Include="Connection\InfoMessageFactory.cs" />
     <Compile Include="DataCommanderApplication.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Connection\DatabaseChangedEventArgs.cs" />
     <Compile Include="Connection\DataRowSelector.cs" />
-    <Compile Include="Connection\InfoMessage.cs" />
-    <Compile Include="Connection\InfoMessageEventHandler.cs" />
-    <Compile Include="Connection\InfoMessageSeverity.cs" />
-    <Compile Include="GetCompletionResponse.cs" />
-    <Compile Include="GetTableSchemaResult.cs" />
     <Compile Include="IAsyncDataAdapter.cs" />
     <Compile Include="IQueryForm.cs" />
     <Compile Include="IResultWriter.cs" />
@@ -264,20 +256,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="QueryConfiguration\Parser.cs" />
-    <Compile Include="Query\CommandState.cs" />
     <Compile Include="ColorTheme.cs" />
     <Compile Include="Query\CompletionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Connection\ConnectionBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Connection\ConnectionForm.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Connection\ConnectionProperties.cs">
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Connection\ConnectionStringBuilderForm.cs">
       <SubType>Form</SubType>
@@ -286,12 +270,7 @@
       <DependentUpon>ConnectionStringBuilderForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Query\ItemSelectedEventArgs.cs" />
-    <Compile Include="Query\ListBoxItem.cs" />
     <Compile Include="Query\QueryFormStaticMethods.cs" />
-    <Compile Include="Query\TokenIterator.cs" />
-    <Compile Include="Query\TokenType.cs" />
-    <Compile Include="Query\UndoRedoService.cs" />
-    <Compile Include="Query\UndoRedoState.cs" />
     <Compile Include="Query\WordDocumentCreator.cs" />
     <Compile Include="ResultWriter\BooleanDataWriter.cs" />
     <Compile Include="ResultWriter\DataViewProperties.cs" />
@@ -309,7 +288,6 @@
     <Compile Include="ResultWriter\HtmlResultWriter.cs" />
     <Compile Include="ResultWriter\JsonResultWriter.cs" />
     <Compile Include="ResultWriter\MyDataObject.cs" />
-    <Compile Include="QueryConfiguration\Query.cs" />
     <Compile Include="ResultWriter\SqlBulkCopyResultWriter.cs" />
     <Compile Include="ResultWriter\CopyResultWriter.cs" />
     <Compile Include="ResultWriter\DataGridViewResultWriter.cs" />
@@ -377,11 +355,7 @@
     <Compile Include="StandardOutput.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Query\TableStyle.cs" />
     <Compile Include="ResultWriter\TextResultWriter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Query\Token.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TextBoxWriter.cs">
@@ -521,8 +495,6 @@
       <Name>DataCommander.Providers2</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="FieldNamespace\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

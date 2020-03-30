@@ -1,6 +1,6 @@
 ﻿using Foundation.Collections.ReadOnly;
 
-namespace DataCommander.Providers.QueryConfiguration
+namespace DataCommander.Providers2.QueryConfiguration
 {
     public class Query
     {

@@ -6,7 +6,9 @@ using System.Linq;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.Query;
 using DataCommander.Providers2;
+using DataCommander.Providers2.Connection;
 using DataCommander.Providers2.FieldNamespace;
+using DataCommander.Providers2.Query;
 using Foundation.Linq;
 using Foundation.Log;
 

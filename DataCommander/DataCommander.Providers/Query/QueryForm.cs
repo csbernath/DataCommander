@@ -36,6 +36,8 @@ using Foundation.Windows.Forms;
 using Newtonsoft.Json;
 using Timer = System.Windows.Forms.Timer;
 using DataCommander.Providers2;
+using DataCommander.Providers2.Connection;
+using DataCommander.Providers2.Query;
 
 namespace DataCommander.Providers.Query
 {
@@ -1711,11 +1713,11 @@ namespace DataCommander.Providers.Query
         private sealed class GetQueryConfigurationResult
         {
             public readonly bool Succeeded;
-            public readonly QueryConfiguration.Query Query;
+            public readonly Providers2.QueryConfiguration.Query Query;
             public readonly ReadOnlyList<DbRequestParameter> Parameters;
             public readonly string CommandText;
 
-            public GetQueryConfigurationResult(bool succeeded, QueryConfiguration.Query query, ReadOnlyList<DbRequestParameter> parameters, string commandText)
+            public GetQueryConfigurationResult(bool succeeded, Providers2.QueryConfiguration.Query query, ReadOnlyList<DbRequestParameter> parameters, string commandText)
             {
                 Succeeded = succeeded;
                 Query = query;
@@ -1729,7 +1731,7 @@ namespace DataCommander.Providers.Query
             Assert.IsNotNull(commandText);
 
             var succeeded = false;
-            QueryConfiguration.Query query = null;
+            Providers2.QueryConfiguration.Query query = null;
             ReadOnlyList<DbRequestParameter> parameters = null;
             string resultCommandText = null;
 
@@ -1742,7 +1744,7 @@ namespace DataCommander.Providers.Query
                     configurationStart = commandText.IndexOf("{", configurationStart);
                     configurationEnd = commandText.LastIndexOf("}", configurationEnd);
                     var configuration = commandText.Substring(configurationStart, configurationEnd - configurationStart + 1);
-                    query = JsonConvert.DeserializeObject<QueryConfiguration.Query>(configuration);
+                    query = JsonConvert.DeserializeObject<Providers2.QueryConfiguration.Query>(configuration);
                     var commentEnd = commandText.IndexOf("*/", configurationEnd);
                     if (commentEnd >= 0)
                     {

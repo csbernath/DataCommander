@@ -2,6 +2,7 @@
 using System.Data.Common;
 using System.Security.Cryptography;
 using System.Text;
+using DataCommander.Providers2.Connection;
 using Foundation.Configuration;
 using Foundation.Core;
 using Foundation.Log;

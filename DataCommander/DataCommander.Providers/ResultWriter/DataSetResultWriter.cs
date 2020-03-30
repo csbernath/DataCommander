@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using DataCommander.Providers.Connection;
+using DataCommander.Providers2.Connection;
 using Foundation.Data;
 using Foundation.Data.MethodProfiler;
 using Foundation.Diagnostics;

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DataCommander.Providers.Query
+namespace DataCommander.Providers2.Query
 {
-    internal sealed class ListBoxItem<T>
+    public sealed class ListBoxItem<T>
     {
         private readonly Func<T, string> _toString;
 
