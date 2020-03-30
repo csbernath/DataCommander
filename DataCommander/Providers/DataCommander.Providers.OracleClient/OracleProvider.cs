@@ -6,9 +6,9 @@ using System.Data.OracleClient;
 using System.Text;
 using System.Xml;
 using DataCommander.Providers.Connection;
-using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.OracleBase.ObjectExplorer;
 using DataCommander.Providers2;
+using DataCommander.Providers2.FieldNamespace;
 using Foundation.Data;
 
 namespace DataCommander.Providers.OracleClient

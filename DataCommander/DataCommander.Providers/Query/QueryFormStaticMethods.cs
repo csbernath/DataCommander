@@ -5,9 +5,9 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.ResultWriter;
 using DataCommander.Providers2;
+using DataCommander.Providers2.FieldNamespace;
 
 namespace DataCommander.Providers.Query
 {

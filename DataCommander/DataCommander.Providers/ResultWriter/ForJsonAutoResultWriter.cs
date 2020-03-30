@@ -3,7 +3,7 @@ using System.Data;
 using System.IO;
 using System.Text;
 using DataCommander.Providers.Connection;
-using DataCommander.Providers.FieldNamespace;
+using DataCommander.Providers2.FieldNamespace;
 using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Data;

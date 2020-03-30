@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataCommander.Providers.Connection;
-using DataCommander.Providers.FieldNamespace;
+using DataCommander.Providers2.FieldNamespace;
 using Foundation.Data;
 using Newtonsoft.Json;
 

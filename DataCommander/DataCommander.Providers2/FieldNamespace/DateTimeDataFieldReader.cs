@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Data;
-using DataCommander.Providers2.FieldNamespace;
 
-namespace DataCommander.Providers.FieldNamespace
+namespace DataCommander.Providers2.FieldNamespace
 {
-    public sealed class DateTimeOffsetDataFieldReader : IDataFieldReader
+    public sealed class DateTimeDataFieldReader : IDataFieldReader
     {
         private readonly IDataRecord _dataRecord;
         private readonly int _columnOrdinal;
 
-        public DateTimeOffsetDataFieldReader(
+        public DateTimeDataFieldReader(
             IDataRecord dataRecord,
             int columnOrdinal)
         {
@@ -29,9 +28,8 @@ namespace DataCommander.Providers.FieldNamespace
                 }
                 else
                 {
-                    value = _dataRecord[_columnOrdinal];
-                    var dateTimeOffset = (DateTimeOffset)value;
-                    value = new DateTimeOffsetField(dateTimeOffset);
+                    var dateTime = _dataRecord.GetDateTime(_columnOrdinal);
+                    value = new DateTimeField(dateTime);
                 }
 
                 return value;

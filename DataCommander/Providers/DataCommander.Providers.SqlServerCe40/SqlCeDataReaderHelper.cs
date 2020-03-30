@@ -3,7 +3,6 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlServerCe;
 using System.Globalization;
-using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers2;
 using DataCommander.Providers2.FieldNamespace;
 using Foundation.Data;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace DataCommander.Providers.FieldNamespace
+namespace DataCommander.Providers2.FieldNamespace
 {
     /// <summary>
     /// Summary description for DecimalField.

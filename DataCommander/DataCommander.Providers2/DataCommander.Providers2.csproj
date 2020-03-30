@@ -6,10 +6,26 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Collections\Foundation.Collections.csproj" />
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Text\Foundation.Text.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="FieldNamespace\BinaryField.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="FieldNamespace\DecimalField.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="FieldNamespace\DecimalString.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="FieldNamespace\DefaultDataFieldReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="FieldNamespace\IDataFieldReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="FieldNamespace\StringField.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="IStandardOutput.cs">

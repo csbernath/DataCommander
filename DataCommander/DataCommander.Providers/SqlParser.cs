@@ -4,9 +4,9 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using DataCommander.Providers.Connection;
-using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.Query;
 using DataCommander.Providers2;
+using DataCommander.Providers2.FieldNamespace;
 using Foundation.Linq;
 using Foundation.Log;
 

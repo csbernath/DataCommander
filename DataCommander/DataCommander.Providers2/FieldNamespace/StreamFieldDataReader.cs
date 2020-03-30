@@ -1,40 +1,42 @@
 ﻿using System;
 using System.Data;
-using DataCommander.Providers2.FieldNamespace;
+using System.IO;
 
-namespace DataCommander.Providers.FieldNamespace
+namespace DataCommander.Providers2.FieldNamespace
 {
-    public sealed class DateTimeDataFieldReader : IDataFieldReader
+    public sealed class StreamFieldDataReader : IDataFieldReader
     {
         private readonly IDataRecord _dataRecord;
         private readonly int _columnOrdinal;
 
-        public DateTimeDataFieldReader(
-            IDataRecord dataRecord,
-            int columnOrdinal)
+        public StreamFieldDataReader(IDataRecord dataRecord, int columnOrdinal)
         {
             _dataRecord = dataRecord;
             _columnOrdinal = columnOrdinal;
         }
 
+        #region IDataFieldReader Members
+
         object IDataFieldReader.Value
         {
             get
             {
+                var stream = (Stream) _dataRecord[_columnOrdinal];
                 object value;
 
-                if (_dataRecord.IsDBNull(_columnOrdinal))
+                if (stream != null)
                 {
-                    value = DBNull.Value;
+                    value = new StreamField(stream);
                 }
                 else
                 {
-                    var dateTime = _dataRecord.GetDateTime(_columnOrdinal);
-                    value = new DateTimeField(dateTime);
+                    value = DBNull.Value;
                 }
 
                 return value;
             }
         }
+
+        #endregion
     }
 }

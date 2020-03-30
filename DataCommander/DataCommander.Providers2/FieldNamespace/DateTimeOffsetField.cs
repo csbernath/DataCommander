@@ -1,40 +1,38 @@
 ﻿using System;
 using System.Globalization;
 
-namespace DataCommander.Providers.FieldNamespace
+namespace DataCommander.Providers2.FieldNamespace
 {
-    public sealed class DateTimeField : IComparable, IConvertible
+    public sealed class DateTimeOffsetField : IComparable, IConvertible
     {
-        public DateTimeField(DateTime value) => Value = value;
-
-        public DateTime Value { get; }
-
-        public static bool TryParse(string s, out DateTime dateTime)
+        public DateTimeOffsetField(DateTimeOffset value)
         {
-            var formats = new[]
-            {
-                "yyyyMMdd",
-                "yyyy-MM-dd",
-                "yyyy-MM-dd HH:mm:ss",
-                "yyyy-MM-dd HH:mm:ss.fff"
-            };
-
-            var succeeded = DateTime.TryParseExact(s, formats, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out dateTime);
-            return succeeded;
+            Value = value;
         }
 
-        public static string ToString(DateTime dateTime)
+        public DateTimeOffset Value { get; }
+
+        private static string ToString(DateTimeOffset value)
         {
-            string format;
+            //string format;
 
-            if (dateTime.TimeOfDay.Ticks == 0)
-                format = "yyyy-MM-dd";
-            else if (dateTime.Date.Ticks == 0)
-                format = "HH:mm:ss.fff";
-            else
-                format = "yyyy-MM-dd HH:mm:ss.fff";
+            //if (value.TimeOfDay.Ticks == 0)
+            //{
+            //    format = "yyyy-MM-ddZ";
+            //}
+            //else if (value.Date.Ticks == 0)
+            //{
+            //    format = "HH:mm:ss.fffZ";
+            //}
+            //else
+            //{
+            //    format = "yyyy-MM-dd HH:mm:ss.fffZ";
+            //}
 
-            return dateTime.ToString(format);
+            //return value.ToString(format);
+
+            // TODO
+            return value.ToString(CultureInfo.InvariantCulture);
         }
 
         public override string ToString()
@@ -46,37 +44,40 @@ namespace DataCommander.Providers.FieldNamespace
 
         public int CompareTo(object obj)
         {
-            int result;
-            var type = obj.GetType();
-            var typeCode = Type.GetTypeCode(type);
+            // TODO
+            return 0;
+            //int result;
+            //Type type = obj.GetType();
+            //TypeCode typeCode = Type.GetTypeCode(type);
 
-            switch (typeCode)
-            {
-                case TypeCode.String:
-                    var s = (string) obj;
-                    var succeeded = TryParse(s, out var dateTime);
+            //switch (typeCode)
+            //{
+            //    case TypeCode.String:
+            //        string s = (string)obj;
+            //        DateTime dateTime;
+            //        bool succeeded = TryParse(s, out dateTime);
 
-                    if (succeeded)
-                    {
-                        result = Value.CompareTo(dateTime);
-                    }
-                    else
-                    {
-                        result = -1;
-                    }
+            //        if (succeeded)
+            //        {
+            //            result = this.value.CompareTo(dateTime);
+            //        }
+            //        else
+            //        {
+            //            result = -1;
+            //        }
 
-                    break;
+            //        break;
 
-                case TypeCode.Object:
-                    var dateTimeField = (DateTimeField) obj;
-                    result = Value.CompareTo(dateTimeField.Value);
-                    break;
+            //    case TypeCode.Object:
+            //        DateTimeOffsetField dateTimeField = (DateTimeOffsetField)obj;
+            //        result = this.value.CompareTo(dateTimeField.value);
+            //        break;
 
-                default:
-                    throw new NotImplementedException();
-            }
+            //    default:
+            //        throw new NotImplementedException();
+            //}
 
-            return result;
+            //return result;
         }
 
         #endregion
@@ -105,7 +106,7 @@ namespace DataCommander.Providers.FieldNamespace
 
         DateTime IConvertible.ToDateTime(IFormatProvider provider)
         {
-            return Value;
+            return Value.LocalDateTime;
         }
 
         decimal IConvertible.ToDecimal(IFormatProvider provider)

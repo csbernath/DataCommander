@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Data;
-using System.IO;
-using DataCommander.Providers2.FieldNamespace;
 
-namespace DataCommander.Providers.FieldNamespace
+namespace DataCommander.Providers2.FieldNamespace
 {
-    public sealed class StreamFieldDataReader : IDataFieldReader
+    public sealed class SingleFieldDataReader : IDataFieldReader
     {
         private readonly IDataRecord _dataRecord;
         private readonly int _columnOrdinal;
 
-        public StreamFieldDataReader(IDataRecord dataRecord, int columnOrdinal)
+        public SingleFieldDataReader(IDataRecord dataRecord, int columnOrdinal)
         {
             _dataRecord = dataRecord;
             _columnOrdinal = columnOrdinal;
@@ -22,16 +20,16 @@ namespace DataCommander.Providers.FieldNamespace
         {
             get
             {
-                var stream = (Stream) _dataRecord[_columnOrdinal];
                 object value;
 
-                if (stream != null)
+                if (_dataRecord.IsDBNull(_columnOrdinal))
                 {
-                    value = new StreamField(stream);
+                    value = DBNull.Value;
                 }
                 else
                 {
-                    value = DBNull.Value;
+                    var singleValue = (float)_dataRecord[_columnOrdinal];
+                    value = new SingleField(singleValue);
                 }
 
                 return value;

@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
-using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers2;
 using DataCommander.Providers2.FieldNamespace;
 

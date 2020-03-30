@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace DataCommander.Providers.FieldNamespace
+namespace DataCommander.Providers2.FieldNamespace
 {
     public sealed class StreamField
     {

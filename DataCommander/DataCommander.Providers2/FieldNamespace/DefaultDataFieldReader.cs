@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Data;
-using DataCommander.Providers2.FieldNamespace;
 
-namespace DataCommander.Providers.FieldNamespace
+namespace DataCommander.Providers2.FieldNamespace
 {
     public sealed class DefaultDataFieldReader : IDataFieldReader
     {

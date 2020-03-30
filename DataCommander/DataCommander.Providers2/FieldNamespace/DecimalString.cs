@@ -1,7 +1,6 @@
-﻿namespace DataCommander.Providers.FieldNamespace
+﻿namespace DataCommander.Providers2.FieldNamespace
 {
-
-    internal sealed class DecimalString
+    public sealed class DecimalString
     {
         public DecimalString(string str)
         {
