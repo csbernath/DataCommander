@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
-using DataCommander.Providers.Connection;
 using DataCommander.Providers.ResultWriter;
 using DataCommander.Providers2.Connection;
-using Foundation.Core;
 
 namespace DataCommander.Providers
 {

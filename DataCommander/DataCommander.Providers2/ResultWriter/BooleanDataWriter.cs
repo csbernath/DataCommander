@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DataCommander.Providers.ResultWriter
+namespace DataCommander.Providers2.ResultWriter
 {
-    internal sealed class BooleanDataWriter : DataWriterBase
+    public sealed class BooleanDataWriter : DataWriterBase
     {
         public override string ToString(object value)
         {

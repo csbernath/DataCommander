@@ -272,19 +272,14 @@
     <Compile Include="Query\ItemSelectedEventArgs.cs" />
     <Compile Include="Query\QueryFormStaticMethods.cs" />
     <Compile Include="Query\WordDocumentCreator.cs" />
-    <Compile Include="ResultWriter\BooleanDataWriter.cs" />
-    <Compile Include="ResultWriter\DataViewProperties.cs" />
-    <Compile Include="ResultWriter\DataWriterBase.cs" />
     <Compile Include="ResultWriter\DateTimeDataWriter.cs" />
     <Compile Include="ResultWriter\DecimalDataWriter.cs" />
     <Compile Include="ResultWriter\DoubleBufferedDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ResultWriter\ExcelResultWriter.cs" />
-    <Compile Include="ResultWriter\FieldType.cs" />
     <Compile Include="ResultWriter\FieldTypeDictionary.cs" />
     <Compile Include="ResultWriter\ForJsonAutoResultWriter.cs" />
-    <Compile Include="ResultWriter\HtmlEntity.cs" />
     <Compile Include="ResultWriter\HtmlResultWriter.cs" />
     <Compile Include="ResultWriter\JsonResultWriter.cs" />
     <Compile Include="ResultWriter\MyDataObject.cs" />
@@ -347,7 +342,6 @@
     <Compile Include="ResultWriter\LogResultWriter.cs" />
     <Compile Include="ResultWriter\SqlCeResultWriter.cs" />
     <Compile Include="ResultWriter\SQLiteResultWriter.cs" />
-    <Compile Include="ResultWriter\StringDataWriter.cs" />
     <Compile Include="SqlBulkCopyAsyncDataAdapter.cs" />
     <Compile Include="SqlParser.cs">
       <SubType>Code</SubType>

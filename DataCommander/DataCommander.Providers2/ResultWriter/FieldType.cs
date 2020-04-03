@@ -1,6 +1,6 @@
-﻿namespace DataCommander.Providers.ResultWriter
+﻿namespace DataCommander.Providers2.ResultWriter
 {
-    internal enum FieldType
+    public enum FieldType
     {
         None,
         Guid,

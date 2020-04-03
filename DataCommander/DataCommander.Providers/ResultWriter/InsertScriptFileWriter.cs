@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using DataCommander.Providers.Query;
 using DataCommander.Providers2.FieldNamespace;
+using DataCommander.Providers2.ResultWriter;
 using Foundation.Assertions;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
@@ -143,7 +144,7 @@ namespace DataCommander.Providers.ResultWriter
                 switch (fieldType)
                 {
                     case FieldType.Guid:
-                        s = "'" + value.ToString() + "'";
+                        s = "'" + value + "'";
                         break;
 
                     case FieldType.BinaryField:

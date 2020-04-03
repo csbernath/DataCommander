@@ -1,6 +1,6 @@
-﻿namespace DataCommander.Providers.ResultWriter
+﻿namespace DataCommander.Providers2.ResultWriter
 {
-    internal abstract class DataWriterBase
+    public abstract class DataWriterBase
     {
         public void Init(int width) => Width = width;
 

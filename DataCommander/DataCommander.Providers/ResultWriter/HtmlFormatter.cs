@@ -5,6 +5,7 @@ using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
+using DataCommander.Providers2.ResultWriter;
 
 namespace DataCommander.Providers.ResultWriter
 {
@@ -40,14 +41,9 @@ namespace DataCommander.Providers.ResultWriter
                     columnName = columnName.Trim();
                 }
 
-                if (!string.IsNullOrEmpty(columnName))
-                {
-                    html = HttpUtility.HtmlEncode(column.ColumnName);
-                }
-                else
-                {
-                    html = HtmlEntity.NonBreakingSpace;
-                }
+                html = !string.IsNullOrEmpty(columnName)
+                    ? HttpUtility.HtmlEncode(column.ColumnName)
+                    : HtmlEntity.NonBreakingSpace;
 
                 html = "<nobr><handled>" + html + "</handled></nobr>";
                 cell.InnerHtml = html;

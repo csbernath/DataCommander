@@ -2,7 +2,6 @@
 using System.Data;
 using System.Diagnostics;
 using System.IO;
-using DataCommander.Providers.Connection;
 using DataCommander.Providers2.Connection;
 using Foundation.Assertions;
 using Foundation.Data;

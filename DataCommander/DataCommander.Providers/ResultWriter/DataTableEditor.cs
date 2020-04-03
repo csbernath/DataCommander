@@ -16,6 +16,7 @@ using DataCommander.Providers.Query;
 using DataCommander.Providers2;
 using DataCommander.Providers2.Connection;
 using DataCommander.Providers2.FieldNamespace;
+using DataCommander.Providers2.ResultWriter;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
