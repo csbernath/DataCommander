@@ -269,16 +269,13 @@
     <Compile Include="Connection\ConnectionStringBuilderForm.Designer.cs">
       <DependentUpon>ConnectionStringBuilderForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Query\ItemSelectedEventArgs.cs" />
     <Compile Include="Query\QueryFormStaticMethods.cs" />
     <Compile Include="Query\WordDocumentCreator.cs" />
     <Compile Include="ResultWriter\DateTimeDataWriter.cs" />
-    <Compile Include="ResultWriter\DecimalDataWriter.cs" />
     <Compile Include="ResultWriter\DoubleBufferedDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ResultWriter\ExcelResultWriter.cs" />
-    <Compile Include="ResultWriter\FieldTypeDictionary.cs" />
     <Compile Include="ResultWriter\ForJsonAutoResultWriter.cs" />
     <Compile Include="ResultWriter\HtmlResultWriter.cs" />
     <Compile Include="ResultWriter\JsonResultWriter.cs" />

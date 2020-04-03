@@ -2,17 +2,15 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 using DataCommander.Providers2;
+using DataCommander.Providers2.Query;
 
 namespace DataCommander.Providers.Query
 {
-    /// <summary>
-    /// Summary description for CompletionForm.
-    /// </summary>
     internal sealed class CompletionForm : Form
     {
         /// <summary>
         /// Required designer variable.
-        /// </summary>kkjj
+        /// </summary>
         private readonly Container _components = null;
 
         private readonly QueryForm _queryForm;

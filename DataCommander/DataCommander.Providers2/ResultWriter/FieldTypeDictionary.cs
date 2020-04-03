@@ -5,7 +5,7 @@ using Foundation.Assertions;
 
 namespace DataCommander.Providers.ResultWriter
 {
-    internal static class FieldTypeDictionary
+    public static class FieldTypeDictionary
     {
         static FieldTypeDictionary()
         {
