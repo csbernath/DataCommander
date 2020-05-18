@@ -22,6 +22,14 @@ namespace Foundation.Data
                 : dataRecord.GetBoolean(fieldIndex);
         }
 
+        public static byte? GetNullableByte(this IDataRecord dataRecord, int fieldIndex)
+        {
+            Assert.IsNotNull(dataRecord, nameof(dataRecord));
+            return dataRecord.IsDBNull(fieldIndex)
+                ? (byte?) null
+                : dataRecord.GetByte(fieldIndex);
+        }
+
         public static DateTime? GetNullableDateTime(this IDataRecord dataRecord, int fieldIndex)
         {
             Assert.IsNotNull(dataRecord, nameof(dataRecord));
