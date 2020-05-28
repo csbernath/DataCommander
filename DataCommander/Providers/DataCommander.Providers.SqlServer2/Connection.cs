@@ -230,6 +230,14 @@ namespace DataCommander.Providers.SqlServer2
 
                     #endregion
 
+                    #region SQL Server 2019
+
+                    case "15.00.2070":
+                        description = "4517790 Servicing Update (GDR1) for SQL Server 2019 RTM";
+                        break;
+
+                    #endregion
+
                     default:
                         description = null;
                         break;
