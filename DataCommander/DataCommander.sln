@@ -28,7 +28,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.MyS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.PostgreSql", "Providers\DataCommander.Providers.PostgreSql\DataCommander.Providers.PostgreSql.csproj", "{F4553DD9-F793-4DD1-9D34-98449264018B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Tfs-15.0.0.0", "Providers\DataCommander.Providers.Tfs-15.0.0.0\DataCommander.Providers.Tfs-15.0.0.0.csproj", "{3C2A1C8C-66FC-48E0-9B2E-40C697425336}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Tfs-16.0.0.0", "Providers\DataCommander.Providers.Tfs-16.0.0.0\DataCommander.Providers.Tfs-16.0.0.0.csproj", "{3C2A1C8C-66FC-48E0-9B2E-40C697425336}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.NetStandard-2.0", "..\Foundation\.NetStandard-2.0\.NetStandard-2.0\Foundation.NetStandard-2.0.csproj", "{04996258-F3F5-4EEC-9D3E-ACAE9726F93F}"
 EndProject
@@ -85,7 +85,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Sql
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Data.SqlClient2", "..\Foundation\.NetStandard-2.0\Foundation.Data.SqlClient2\Foundation.Data.SqlClient2.csproj", "{8897B0EC-1DF2-4699-96E2-1978FCA632A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers2", "DataCommander.Providers2\DataCommander.Providers2.csproj", "{CAAD5102-F178-4BB9-971B-78213991882D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers2", "DataCommander.Providers2\DataCommander.Providers2.csproj", "{CAAD5102-F178-4BB9-971B-78213991882D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
