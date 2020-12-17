@@ -424,7 +424,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EPPlus">
-      <Version>5.4.1</Version>
+      <Version>5.4.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.SqlServer.Compact">
       <Version>4.0.8876.1</Version>
