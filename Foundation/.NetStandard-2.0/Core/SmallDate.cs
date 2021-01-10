@@ -79,6 +79,9 @@ namespace Foundation.Core
             return new SmallDate(valueUInt16);
         }
 
+        public SmallDate Next => AddDays(1);
+        public SmallDate Previous => AddDays(-1);
+
         [Pure]
         public SmallDate AddMonths(int months)
         {

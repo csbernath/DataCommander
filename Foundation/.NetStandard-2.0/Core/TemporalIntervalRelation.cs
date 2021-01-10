@@ -5,18 +5,18 @@
     /// </summary>
     public enum TemporalIntervalRelation
     {
-        Before,
+        Precedes,
         Meets,
-        Overlaps,
+        OverlapsWith,
         Starts,
         During,
         Finishes,
-        Equal,
-        After,
-        MetBy,
-        OverlappedBy,
-        StartedBy,
+        IsPrecededBy,
+        IsMetBy,
+        IsOverlappedBy,
+        IsStartedBy,
         Contains,
-        FinishedBy
+        IsFinishedBy,
+        IsEqualTo
     }
 }

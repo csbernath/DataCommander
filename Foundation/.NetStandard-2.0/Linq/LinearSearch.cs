@@ -1,7 +1,7 @@
 ﻿using System;
 using Foundation.Assertions;
 
-namespace Foundation.Collections
+namespace Foundation.Linq
 {
     public static class LinearSearch
     {
