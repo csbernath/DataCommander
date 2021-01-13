@@ -4,8 +4,8 @@ namespace Foundation.Core
 {
     public static class SmallDateIntervalRelations
     {
-        public static bool Precedes(this SmallDateInterval x, SmallDateInterval y) => x.End < y.Start;
-        public static bool Meets(this SmallDateInterval x, SmallDateInterval y) => x.End.AddDays(1) == y.Start;
+        public static bool Precedes(this SmallDateInterval x, SmallDateInterval y) => x.End.Next < y.Start;
+        public static bool Meets(this SmallDateInterval x, SmallDateInterval y) => x.End.Next == y.Start;
         public static bool OverlapsWith(this SmallDateInterval x, SmallDateInterval y) => x.Start < y.Start && y.Start <= x.End && x.End < y.End;
         public static bool Starts(this SmallDateInterval x, SmallDateInterval y) => x.Start == y.Start && x.End < y.End;
         public static bool During(this SmallDateInterval x, SmallDateInterval y) => y.Start < x.Start && x.End < y.End;
@@ -42,7 +42,7 @@ namespace Foundation.Core
                 relation = TemporalIntervalRelation.IsOverlappedBy;
             else if (x.IsStartedBy(y))
                 relation = TemporalIntervalRelation.IsStartedBy;
-            else if (x.Contains(y))
+            else if (Contains(x, y))
                 relation = TemporalIntervalRelation.Contains;
             else if (x.IsFinishedBy(y))
                 relation = TemporalIntervalRelation.IsFinishedBy;
