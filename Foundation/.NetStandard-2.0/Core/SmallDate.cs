@@ -79,7 +79,10 @@ namespace Foundation.Core
             return new SmallDate(valueUInt16);
         }
 
+        [Pure]
         public SmallDate Next => AddDays(1);
+        
+        [Pure]
         public SmallDate Previous => AddDays(-1);
 
         [Pure]
