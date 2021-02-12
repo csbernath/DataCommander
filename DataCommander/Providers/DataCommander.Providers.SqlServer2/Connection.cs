@@ -236,6 +236,10 @@ namespace DataCommander.Providers.SqlServer2
                         description = "4517790 Servicing Update (GDR1) for SQL Server 2019 RTM";
                         break;
 
+                    case "15.00.2080":
+                        description = "Microsoft SQL Server 2019 (RTM-GDR) (KB4583458)";
+                        break;
+
                     #endregion
 
                     default:

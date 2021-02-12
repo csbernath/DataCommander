@@ -433,12 +433,11 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             foreach (var column in columns)
             {
                 if (first)
-                {
                     first = false;
-                    stringBuilder.Append("declare\r\n");
-                }
                 else
-                    stringBuilder.Append(",\r\n");
+                    stringBuilder.Append("\r\n");
+
+                stringBuilder.Append("declare");
 
                 var variableName = column.ColumnName;
                 variableName = char.ToLower(variableName[0]) + variableName.Substring(1);
@@ -474,7 +473,10 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                         break;
                 }
 
-                stringBuilder.Append($"    @{variableName} {typeName}");
+                stringBuilder.Append($" @{variableName} {typeName}");
+
+                if (column.IsNullable == false)
+                    stringBuilder.Append(" /*not null*/");
             }
 
             stringBuilder.AppendFormat("\r\n\r\ninsert into {0}.{1}\r\n(\r\n    ", _owner, _name);

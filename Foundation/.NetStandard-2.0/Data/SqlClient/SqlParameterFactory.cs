@@ -74,6 +74,14 @@ namespace Foundation.Data.SqlClient
             return parameter;
         }
 
+        public static SqlParameter CreateVarChar(string parameterName, int size, string value)
+        {
+            var parameterValue = value != null ? (object) value : DBNull.Value;
+            var parameter = new SqlParameter(parameterName, SqlDbType.VarChar, size);
+            parameter.Value = parameterValue;
+            return parameter;
+        }
+
         public static SqlParameter CreateXml(string parameterName, string value) => Create(parameterName, SqlDbType.Xml, value);
 
         private static object ToParameterValue<T>(T? value) where T : struct => value != null ? (object) value.Value : DBNull.Value;
