@@ -583,6 +583,10 @@ namespace {_request.Namespace}
                             method = !parameter.IsNullable ? "Add" : "AddNullableInt";
                             break;
 
+                        case SqlDbType.UniqueIdentifier:
+                            method = !parameter.IsNullable ? "Add" : "AddNullableGuid";
+                            break;
+
                         case SqlDbType.VarChar:
                             method = "AddString";
                             break;

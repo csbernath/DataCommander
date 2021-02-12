@@ -39,6 +39,12 @@ namespace Foundation.Data.SqlClient
             Add(parameter);
         }
 
+        public void AddNullableGuid(string parameterName, Guid? value)
+        {
+            var parameter = SqlParameterFactory.CreateNullableGuid(parameterName, value);
+            Add(parameter);
+        }
+
         public void AddNullableInt(string parameterName, int? value)
         {
             var parameter = SqlParameterFactory.CreateNullableInt(parameterName, value);

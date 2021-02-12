@@ -34,6 +34,12 @@ namespace Foundation.Data.SqlClient
             return Create(parameterName, SqlDbType.DateTime, parameterValue);
         }
 
+        public static SqlParameter CreateNullableGuid(string parameterName, Guid? value)
+        {
+            var parameterValue = ToParameterValue(value);
+            return Create(parameterName, SqlDbType.UniqueIdentifier, parameterValue);
+        }
+
         public static SqlParameter CreateNullableInt(string parameterName, int? value)
         {
             var parameterValue = ToParameterValue(value);
