@@ -27,7 +27,8 @@ namespace Foundation.Diagnostics
                 KeyValuePair.Create(461808, "4.7.2 (Windows 10 April 2018 Update)"),
                 KeyValuePair.Create(461814, "4.7.2"),
                 KeyValuePair.Create(528040, "4.8 (On Windows 10 May 2019 Update)"),
-                KeyValuePair.Create(528049, "4.8 (On all others Windows operating systems (including other Windows 10 operating systems))")
+                KeyValuePair.Create(528049, "4.8 (On all others Windows operating systems (including other Windows 10 operating systems))"),
+                KeyValuePair.Create(528372, "4.8 (On Windows 10 May 2020 Update and Windows 10 October 2020 Update)")
             };
             Items = new ReadOnlySortedList<int, string>(items, Comparer<int>.Default.Compare);
         }
