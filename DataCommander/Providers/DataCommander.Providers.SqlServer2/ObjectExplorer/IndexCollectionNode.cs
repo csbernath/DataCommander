@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Microsoft.Data.SqlClient;
-using System.Windows.Forms;
-using Foundation.Data;
+﻿using Foundation.Data;
 using Foundation.Data.SqlClient;
+using Microsoft.Data.SqlClient;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace DataCommander.Providers.SqlServer2.ObjectExplorer
 {
@@ -34,7 +34,9 @@ join {0}.sys.objects o (nolock)
     on s.schema_id = o.schema_id
 join {0}.sys.indexes i (nolock)
     on o.object_id = i.object_id
-where o.object_id = @object_id
+where
+    o.object_id = @object_id and
+    i.type > 0
 order by i.name",
                 cb.QuoteIdentifier(_databaseNode.Name));
 

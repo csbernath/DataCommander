@@ -36,7 +36,7 @@ namespace DataCommander.Providers
             var typeName = attributes["TypeName"].GetValue<string>();
             var type = Type.GetType(typeName, true);
             var instance = Activator.CreateInstance(type);
-            Assert.IsTrue(instance != null);
+            Assert.IsNotNull(instance);
             Assert.IsTrue(instance is IProvider);
             var provider = (IProvider) instance;
             Assert.IsNotNull(provider);

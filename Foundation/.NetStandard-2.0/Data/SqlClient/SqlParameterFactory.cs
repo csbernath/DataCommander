@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Foundation.Assertions;
+using Microsoft.SqlServer.Server;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using Foundation.Assertions;
-using Microsoft.SqlServer.Server;
 
 namespace Foundation.Data.SqlClient
 {
