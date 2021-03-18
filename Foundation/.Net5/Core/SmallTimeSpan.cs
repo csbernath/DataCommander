@@ -1,0 +1,20 @@
+﻿using System;
+
+namespace Foundation.Core
+{
+    public struct SmallTimeSpan
+    {
+        public static readonly SmallTimeSpan MinValue = new SmallTimeSpan(short.MinValue);
+        public static readonly SmallTimeSpan MaxValue = new SmallTimeSpan(short.MaxValue);
+
+        private SmallTimeSpan(short value) => TotalMinutes = value;
+
+        public SmallTimeSpan(TimeSpan timeSpan) => TotalMinutes = ToSmallTimeSpanValue(timeSpan);
+
+        public short TotalMinutes { get; }
+        public override string ToString() => ToTimeSpan(TotalMinutes).ToString();
+
+        private static TimeSpan ToTimeSpan(short value) => TimeSpan.FromSeconds(value);
+        private static short ToSmallTimeSpanValue(TimeSpan timeSpan) => (short) timeSpan.TotalSeconds;
+    }
+}
