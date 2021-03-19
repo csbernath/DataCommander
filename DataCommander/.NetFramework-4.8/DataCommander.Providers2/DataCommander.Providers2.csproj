@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Collections\Foundation.Collections.csproj" />
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Log\Foundation.Log.csproj" />
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Text\Foundation.Text.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\.NetStandard-2.0\Collections\Foundation.Collections.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\.NetStandard-2.0\Log\Foundation.Log.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\.NetStandard-2.0\Text\Foundation.Text.csproj" />
   </ItemGroup>
 
   <ItemGroup>

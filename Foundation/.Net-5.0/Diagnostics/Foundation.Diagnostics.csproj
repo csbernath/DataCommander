@@ -13,7 +13,7 @@
     <ProjectReference Include="..\Collections\Foundation.Collections.csproj" />
     <ProjectReference Include="..\Core\Foundation.Core.csproj" />
     <ProjectReference Include="..\Log\Foundation.Log.csproj" />
-    <ProjectReference Include="..\Text\Foundatrion.Text.csproj" />
+    <ProjectReference Include="..\Text\Foundation.Text.csproj" />
   </ItemGroup>
 
 </Project>

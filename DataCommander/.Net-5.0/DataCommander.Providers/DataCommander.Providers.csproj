@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Company>Csaba Bernáth</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Foundation\.Net-5.0\Assertions\Foundation.Assertions.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\.Net-5.0\Data\Foundation.Data.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\.Net-5.0\Diagnostics\Foundation.Diagnostics.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\.Net-5.0\Log\Foundation.Log.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\.Net-5.0\Threading\Foundation.Threading.csproj" />
+    <ProjectReference Include="..\DataCommander.Providers2\DataCommander.Providers2.csproj" />
+  </ItemGroup>
+
+</Project>

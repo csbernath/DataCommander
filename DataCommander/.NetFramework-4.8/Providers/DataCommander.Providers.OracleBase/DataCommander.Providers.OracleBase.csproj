@@ -104,7 +104,7 @@
     <Compile Include="ObjectExplorer\ViewNode.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Foundation\.NetStandard-2.0\Collections\Foundation.Collections.csproj">
+    <ProjectReference Include="..\..\..\..\Foundation\.NetStandard-2.0\Collections\Foundation.Collections.csproj">
       <Project>{61B48D70-B14F-462C-8A07-E9DB585D3869}</Project>
       <Name>Foundation.Collections</Name>
     </ProjectReference>
@@ -116,11 +116,11 @@
       <Project>{31A30A80-D1B6-4867-A65E-188DE9E912C8}</Project>
       <Name>DataCommander.Providers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Foundation\.NetStandard-2.0\Configuration\Foundation.Configuration.csproj">
+    <ProjectReference Include="..\..\..\..\Foundation\.NetStandard-2.0\Configuration\Foundation.Configuration.csproj">
       <Project>{513D0094-7D6B-4453-9D43-23223C51EC4C}</Project>
       <Name>Foundation.Configuration</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Foundation\.NetStandard-2.0\Data\Foundation.Data.csproj">
+    <ProjectReference Include="..\..\..\..\Foundation\.NetStandard-2.0\Data\Foundation.Data.csproj">
       <Project>{34f913bc-edee-4385-bae6-c650a0e21878}</Project>
       <Name>Foundation.Data</Name>
     </ProjectReference>
