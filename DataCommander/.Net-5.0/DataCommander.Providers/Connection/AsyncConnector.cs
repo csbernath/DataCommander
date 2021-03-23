@@ -2,7 +2,10 @@
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Threading;
+using DataCommander.Providers.Connection;
+using DataCommander.Providers2.Connection;
 using Foundation.Diagnostics;
+using Foundation.Log;
 using Foundation.Threading;
 
 namespace DataCommander.Providers
