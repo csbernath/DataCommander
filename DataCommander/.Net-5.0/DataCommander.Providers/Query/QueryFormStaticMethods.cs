@@ -14,23 +14,23 @@ namespace DataCommander.Providers.Query
 {
     internal static class QueryFormStaticMethods
     {
-        private static HtmlTextBox CreateHtmlTextBoxFromDataTable(DataTable dataTable)
-        {
-            var fileName = Path.GetTempFileName();
-            var fileStream = new FileStream(fileName, FileMode.OpenOrCreate);
-            using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
-            {
-                var columnIndexes = new int[dataTable.Columns.Count];
-                for (var i = 0; i < columnIndexes.Length; i++)
-                    columnIndexes[i] = i;
-                HtmlFormatter.Write(dataTable.DefaultView, columnIndexes, streamWriter);
-            }
+        //private static HtmlTextBox CreateHtmlTextBoxFromDataTable(DataTable dataTable)
+        //{
+        //    var fileName = Path.GetTempFileName();
+        //    var fileStream = new FileStream(fileName, FileMode.OpenOrCreate);
+        //    using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
+        //    {
+        //        var columnIndexes = new int[dataTable.Columns.Count];
+        //        for (var i = 0; i < columnIndexes.Length; i++)
+        //            columnIndexes[i] = i;
+        //        HtmlFormatter.Write(dataTable.DefaultView, columnIndexes, streamWriter);
+        //    }
 
-            var htmlTextBox = new HtmlTextBox();
-            htmlTextBox.Navigate(fileName);
+        //    var htmlTextBox = new HtmlTextBox();
+        //    htmlTextBox.Navigate(fileName);
 
-            return htmlTextBox;
-        }
+        //    return htmlTextBox;
+        //}
 
         public static Control CreateControlFromDataTable(DbCommandBuilder commandBuilder, DataTable dataTable, GetTableSchemaResult getTableSchemaResult,
             ResultWriterType tableStyle, bool readOnly, ToolStripStatusLabel toolStripStatusLabel, ColorTheme colorTheme)
@@ -43,9 +43,9 @@ namespace DataCommander.Providers.Query
                     control = CreateDataTableEditorFromDataTable(commandBuilder, dataTable, getTableSchemaResult, readOnly, toolStripStatusLabel, colorTheme);
                     break;
 
-                case ResultWriterType.Html:
-                    control = CreateHtmlTextBoxFromDataTable(dataTable);
-                    break;
+                //case ResultWriterType.Html:
+                //    control = CreateHtmlTextBoxFromDataTable(dataTable);
+                //    break;
 
                 case ResultWriterType.ListView:
                     control = CreateListViewFromDataTable(dataTable);

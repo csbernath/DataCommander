@@ -43,17 +43,17 @@ namespace DataCommander.Providers.ResultWriter
                 var s = stringWriter.ToString();
                 data = new MemoryStream(Encoding.Default.GetBytes(s));
             }
-            else if (format == DataFormats.Html)
-            {
-                var stringWriter = new StringWriter();
-                HtmlFormatter.Write(_dataView, _columnIndexes, stringWriter);
-                var htmlFragment = stringWriter.ToString();
-                stringWriter = new StringWriter();
-                WriteHtmlFragment(htmlFragment, stringWriter);
-                var s = stringWriter.ToString();
-                var bytes = Encoding.UTF8.GetBytes(s);
-                data = new MemoryStream(bytes);
-            }
+            //else if (format == DataFormats.Html)
+            //{
+            //    var stringWriter = new StringWriter();
+            //    HtmlFormatter.Write(_dataView, _columnIndexes, stringWriter);
+            //    var htmlFragment = stringWriter.ToString();
+            //    stringWriter = new StringWriter();
+            //    WriteHtmlFragment(htmlFragment, stringWriter);
+            //    var s = stringWriter.ToString();
+            //    var bytes = Encoding.UTF8.GetBytes(s);
+            //    data = new MemoryStream(bytes);
+            //}
             else if (format == DataFormats.Text || format == DataFormats.UnicodeText)
             {
                 data = _dataView.ToStringTableString();

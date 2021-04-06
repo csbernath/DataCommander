@@ -89,8 +89,8 @@ namespace DataCommander.Providers.ResultWriter
                         _dataGrid.DataError += dataGrid_DataError;
                     }
 
-                    var ts = new DataGridTableStyle();
-                    ts.MappingName = _dataTable.TableName;
+                    //var ts = new DataGridTableStyle();
+                    //ts.MappingName = _dataTable.TableName;
                     // TODO
                     // dataGrid.TableStyles.Add(ts);                    
 
@@ -658,11 +658,11 @@ namespace DataCommander.Providers.ResultWriter
                     {
                         switch (saveFileDialog.FilterIndex)
                         {
-                            case 1:
-                                var columnIndexes = GetColumnIndexes();
-                                using (var streamWriter = new StreamWriter(path, false, Encoding.UTF8))
-                                    HtmlFormatter.Write(_dataTable.DefaultView, columnIndexes, streamWriter);
-                                break;
+                            //case 1:
+                            //    var columnIndexes = GetColumnIndexes();
+                            //    using (var streamWriter = new StreamWriter(path, false, Encoding.UTF8))
+                            //        HtmlFormatter.Write(_dataTable.DefaultView, columnIndexes, streamWriter);
+                            //    break;
 
                             case 2:
                                 using (var streamWriter = new StreamWriter(path, false, Encoding.UTF8))

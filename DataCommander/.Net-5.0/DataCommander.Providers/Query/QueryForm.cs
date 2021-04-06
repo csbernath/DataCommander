@@ -449,9 +449,9 @@ namespace DataCommander.Providers.Query
                     ShowDataTableDataGrid(dataTable);
                     break;
 
-                case ResultWriterType.Html:
-                    ShowDataViewHtml(dataTable.DefaultView);
-                    break;
+                //case ResultWriterType.Html:
+                //    ShowDataViewHtml(dataTable.DefaultView);
+                //    break;
 
                 case ResultWriterType.Rtf:
                     ShowDataTableRtf(dataTable);
@@ -1951,38 +1951,38 @@ namespace DataCommander.Providers.Query
             ShowTabPage(dataTable.TableName, GetToolTipText(dataTable), dataTableEditor);
         }
 
-        private void ShowDataViewHtml(DataView dataView)
-        {
-            var fileName = Path.GetTempFileName();
-            using (var fileStream = new FileStream(fileName, FileMode.OpenOrCreate))
-            {
-                using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
-                {
-                    var columnIndexes = new int[dataView.Table.Columns.Count];
-                    for (var i = 0; i < columnIndexes.Length; i++)
-                    {
-                        columnIndexes[i] = i;
-                    }
+        //private void ShowDataViewHtml(DataView dataView)
+        //{
+        //    var fileName = Path.GetTempFileName();
+        //    using (var fileStream = new FileStream(fileName, FileMode.OpenOrCreate))
+        //    {
+        //        using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
+        //        {
+        //            var columnIndexes = new int[dataView.Table.Columns.Count];
+        //            for (var i = 0; i < columnIndexes.Length; i++)
+        //            {
+        //                columnIndexes[i] = i;
+        //            }
 
-                    HtmlFormatter.Write(dataView, columnIndexes, streamWriter);
-                }
-            }
+        //            HtmlFormatter.Write(dataView, columnIndexes, streamWriter);
+        //        }
+        //    }
 
-            var dataTable = dataView.Table;
-            var tabPage = new TabPage(dataTable.TableName);
-            tabPage.ToolTipText = GetToolTipText(dataTable);
-            _tabControl.TabPages.Add(tabPage);
+        //    var dataTable = dataView.Table;
+        //    var tabPage = new TabPage(dataTable.TableName);
+        //    tabPage.ToolTipText = GetToolTipText(dataTable);
+        //    _tabControl.TabPages.Add(tabPage);
 
-            var htmlTextBox = new HtmlTextBox();
-            htmlTextBox.Dock = DockStyle.Fill;
-            tabPage.Controls.Add(htmlTextBox);
+        //    var htmlTextBox = new HtmlTextBox();
+        //    htmlTextBox.Dock = DockStyle.Fill;
+        //    tabPage.Controls.Add(htmlTextBox);
 
-            _tabControl.SelectedTab = tabPage;
+        //    _tabControl.SelectedTab = tabPage;
 
-            htmlTextBox.Navigate(fileName);
+        //    htmlTextBox.Navigate(fileName);
 
-            _sbPanelRows.Text = dataTable.Rows.Count + " row(s).";
-        }
+        //    _sbPanelRows.Text = dataTable.Rows.Count + " row(s).";
+        //}
 
         private void ShowDataTableRtf(DataTable dataTable)
         {
