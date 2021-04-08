@@ -494,8 +494,9 @@ Oracle|Oracle using [Oracle provider](https://msdn.microsoft.com/en-us/library/s
 PostgreSQL|[PostgreSQL](https://github.com/npgsql/Npgsql)|
 SQLite|[SQLite .NET Data Provider](http://system.data.sqlite.org)|
 SqlServer|[Microsoft SQL Server](http://www.microsoft.com/en-us/server-cloud/products/sql-server/) 2005 or greater|
+SqlServer2|[Microsoft SQL Server](http://www.microsoft.com/en-us/server-cloud/products/sql-server/) 2005 or greater|
 SqlServerCe40|[Microsoft SQL Server Compact Edition 4.0](http://www.microsoft.com/en-us/download/details.aspx?id=17876)|
-Tfs-15.0.0.0|[Microsoft Team Foundation Server](https://msdn.microsoft.com/en-us/vstudio/ff637362.aspx) using nuget TFS client|
+Tfs-16.0.0.0|[Microsoft Team Foundation Server](https://msdn.microsoft.com/en-us/vstudio/ff637362.aspx) using nuget TFS client|
 Wmi|[Windows Management Instrumentation](https://msdn.microsoft.com/en-us/library/aa394582(v=vs.85).aspx)
 
 General functions
@@ -934,17 +935,17 @@ This program is freeware and released under the [GNU General Public License](htt
 
 ## Development environment
 
-- Microsoft Visual Studio Community 2019 Version 16.1.4
-- Resharper 2019.1.2
+- Microsoft Visual Studio Community 2019 Version 16.9.3
+- Resharper 2020.3.4
 - Microsoft .NET Framework 4.8 (Windows Forms UI)
 - .NET Standard 2.0 (Foundation class libraries)
 - .NET Core 2.2 (unit tests)
 - C# 7.2
+- .NET 5
 ## Screenshots
 <img src="MainMenu.png" alt="Main menu">
 <img src="ObjectExplorer.png" alt="Object Explorer">
 <img src="DataGridView.png" alt="Data Grid View">
-
 
 ## Credits
 
@@ -952,7 +953,7 @@ This program is freeware and released under the [GNU General Public License](htt
 
 ## References
 
-- [Microsoft SQL Server Management Studio v18.1](https://msdn.microsoft.com/en-us/library/hh213248.aspx)
+- [Microsoft SQL Server Management Studio v18.8](https://msdn.microsoft.com/en-us/library/hh213248.aspx)
 - [pgAdmin: PostgreSQL Tools](http://www.pgadmin.org/)
 - [TOAD for SQL Server](http://www.quest.com/toad-for-sql-server/)
 - [PL/SQL Developer](http://www.allroundautomations.com/plsqldev.html)
