@@ -443,7 +443,7 @@ order by i.CustomerID,i.InvoiceID";
 ```
 ## How to use ORM in DDD
 ### Write model
- - Create the event sourced aggregate. The events will be replayed when saving agregate to the SQL database.
+ - Create the event sourced aggregate. The events will be replayed when saving aggregate to the SQL database.
  - Create the aggregate repository:
 	 - Save aggregate: replay events in SQL
 		 - Create insert/update/delete SQL statements with Data Commander
@@ -936,7 +936,7 @@ This program is freeware and released under the [GNU General Public License](htt
 ## Development environment
 
 - Microsoft Visual Studio Community 2019 Version 16.9.3
-- Resharper 2020.3.4
+- Resharper 2021.1.1
 - Microsoft .NET Framework 4.8 (Windows Forms UI)
 - .NET Standard 2.0 (Foundation class libraries)
 - .NET Core 2.2 (unit tests)
