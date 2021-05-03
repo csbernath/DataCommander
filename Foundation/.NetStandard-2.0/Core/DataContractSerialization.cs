@@ -20,6 +20,19 @@ namespace Foundation.Core
             return xml;
         }
 
+        public static string Serialize<T>(T objectGraph, XmlWriterSettings xmlWriterSettings)
+        {
+            var stringBuilder = new StringBuilder();
+            using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
+            {
+                var serializer = new DataContractSerializer(typeof(T));
+                serializer.WriteObject(xmlWriter, objectGraph);
+            }
+
+            var xml = stringBuilder.ToString();
+            return xml;
+        }
+
         public static T Deserialize<T>(string xml)
         {
             var serializer = new DataContractSerializer(typeof(T));
