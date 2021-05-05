@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Runtime.Loader;
 using ADODB;
 using Foundation.Assertions;
 using Foundation.Configuration;
@@ -34,7 +37,16 @@ namespace DataCommander.Providers
             folder = folder.ChildNodes[name];
             var attributes = folder.Attributes;
             var typeName = attributes["TypeName"].GetValue<string>();
-            var type = Type.GetType(typeName, true);
+            var type = Type.GetType(typeName);
+            if (type == null)
+                type = Type.GetType(typeName, assemblyName =>
+                    {
+                        var path = Path.Combine(Environment.CurrentDirectory, $"{assemblyName.Name}.dll");
+                        var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
+                        return assembly;
+                    },
+                    ((assembly, typeName, arg3) => assembly.GetType(typeName)));
+
             var instance = Activator.CreateInstance(type);
             Assert.IsNotNull(instance);
             Assert.IsTrue(instance is IProvider);
