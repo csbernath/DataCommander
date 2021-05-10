@@ -161,15 +161,21 @@ namespace DataCommander.Providers
             _timer.Start();
         }
 
+        private static string BytesToText(long bytes)
+        {
+            var megaBytes = bytes / 1024.0 / 1024.0;
+            var text = $"{Math.Round(megaBytes, 0)}";
+            return text;
+        }
+
         public void UpdateTotalMemory()
         {
             var totalMemory = GC.GetTotalMemory(false);
-            var totalMemoryMb = (double)totalMemory / 1024.0 / 1024.0;
-            var text = $"{Math.Round(totalMemoryMb, 0)} MB";
+            var workingSet = Environment.WorkingSet;
 
-            _managedMemoryToolStripStatusLabel.Text = text;
+            _managedMemoryToolStripStatusLabel.Text = $"{BytesToText(totalMemory)} / {BytesToText(workingSet)} MB";
 
-            _managedMemoryToolStripStatusLabel.ForeColor = totalMemoryMb <= 256
+            _managedMemoryToolStripStatusLabel.ForeColor = totalMemory <= 256 * 1024 * 1024
                 ? _colorTheme != null
                     ? _colorTheme.ForeColor
                     : SystemColors.ControlText
