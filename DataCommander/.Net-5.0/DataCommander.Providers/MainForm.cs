@@ -522,7 +522,7 @@ namespace DataCommander.Providers
             this.MainMenuStrip = this._mainMenu;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "Data Commander";
+            this.Text = "Data Commander (.NET 5 version)";
             this._mainMenu.ResumeLayout(false);
             this._mainMenu.PerformLayout();
             this._toolStrip.ResumeLayout(false);

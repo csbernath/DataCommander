@@ -18,8 +18,6 @@ namespace DataCommander.Providers
             var assembly = Assembly.GetEntryAssembly();
             var path = assembly.Location;
             var lastWriteTime = File.GetLastWriteTime(path);
-            var dotNetFrameworkRelease = AppDomainMonitor.GetDotNetFrameworkRelease();
-            DotNetFrameworkVersionStore.TryGet(dotNetFrameworkRelease, out var dotNetFrameworkVersion);
             var targetFrameworkAttribute = assembly.GetCustomAttribute<TargetFrameworkAttribute>();
             var windowsVersionInfo = WindowsVersionInfo.Get();
 
@@ -56,11 +54,10 @@ Target Framework: {targetFrameworkAttribute.FrameworkDisplayName}
 <br/>
 <table style=""font-family:verdana;font-size:9pt"">
 <tr><td>Windows ProductName:</td><td>{windowsVersionInfo.ProductName}</td></tr>
+<tr><td>Windows DisplayVersion:</td><td>{windowsVersionInfo.DisplayVersion}</td></tr>
 <tr><td>Windows ReleaseId:</td><td>{windowsVersionInfo.ReleaseId}</td></tr>
 <tr><td>Windows CurrentBuild:</td><td>{windowsVersionInfo.CurrentBuild}</td></tr>
 <tr><td>.NET CLR version:</td><td>{Environment.Version}</td></tr>
-<tr><td>.NET Framework release:</td><td>{dotNetFrameworkRelease}</td></tr>
-<tr><td>.NET Framework version:</td><td>{dotNetFrameworkVersion}</td></tr>
 <tr><td>.NET Processor architecture:</td><td>{assembly.GetName().ProcessorArchitecture}</td></tr>
 </table>
 </br>

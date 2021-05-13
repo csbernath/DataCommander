@@ -40,15 +40,6 @@ namespace Foundation.Diagnostics
 
         #region Public Methods
 
-        public static int GetDotNetFrameworkRelease()
-        {
-            using (var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full"))
-            {
-                var release = (int)key.GetValue("Release");
-                return release;
-            }
-        }
-
         public static string GetEnvironmentInfo()
         {
             var tickCount = Environment.TickCount;
@@ -56,8 +47,6 @@ namespace Foundation.Diagnostics
             var zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
             var tickCountString = $"{tickCount} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";
             var workingSet = Environment.WorkingSet;
-            var dotNetFrameworkRelease = GetDotNetFrameworkRelease();
-            DotNetFrameworkVersionStore.TryGet(dotNetFrameworkRelease, out var dotNetFrameworkVersion);
             var windowsVersionInfo = WindowsVersionInfo.Get();
 
             var message = $@"Environment information
@@ -65,14 +54,13 @@ MachineName:            {Environment.MachineName}
 ProcessorCount:         {Environment.ProcessorCount}
 OSVersion:              {Environment.OSVersion}
 Windows ProductName:    {windowsVersionInfo.ProductName}
+Windows DisplayVersion: {windowsVersionInfo.DisplayVersion}
 Windows ReleaseId:      {windowsVersionInfo.ReleaseId}
 Windows CurrentBuild:   {windowsVersionInfo.CurrentBuild}
 Is64BitOperatingSystem: {Environment.Is64BitOperatingSystem}
 Is64BitProcess:         {Environment.Is64BitProcess}
 IntPtr.Size:            {IntPtr.Size} ({IntPtr.Size * 8} bit)
 CLR version:            {Environment.Version}
-.NET Framework release: {dotNetFrameworkRelease}
-.NET Framework version: {dotNetFrameworkVersion}
 UserDomainName:         {Environment.UserDomainName}
 UserName:               {Environment.UserName}
 UserInteractive:        {Environment.UserInteractive}
