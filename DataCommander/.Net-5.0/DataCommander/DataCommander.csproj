@@ -6,6 +6,10 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Product>Data Commander</Product>
     <Company>Data Commander</Company>
+    <ApplicationIcon>App.ico</ApplicationIcon>
+    <Authors>Data Commander</Authors>
+    <PackageId>Data Commander</PackageId>
+    <Description>Data Commander</Description>
   </PropertyGroup>
 
   <ItemGroup>

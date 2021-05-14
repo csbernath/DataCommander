@@ -496,7 +496,7 @@ namespace DataCommander.Providers
             this._managedMemoryToolStripStatusLabel.Name = "_managedMemoryToolStripStatusLabel";
             this._managedMemoryToolStripStatusLabel.Size = new System.Drawing.Size(100, 17);
             this._managedMemoryToolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this._managedMemoryToolStripStatusLabel.ToolTipText = "Managed memory";
+            this._managedMemoryToolStripStatusLabel.ToolTipText = "Managed memory / Working set";
             this._managedMemoryToolStripStatusLabel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.managedMemoryToolStripStatusLabel_MouseUp);
             // 
             // _toolStripPanel

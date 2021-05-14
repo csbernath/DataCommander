@@ -3299,7 +3299,7 @@ namespace DataCommander.Providers.Query
             ticks = Stopwatch.GetTimestamp() - ticks;
             var length = response.Items != null ? response.Items.Count : 0;
             SetStatusbarPanelText($"GetCompletion returned {length} items from {@from} in {StopwatchTimeSpan.ToString(ticks, 3)} seconds.",
-                SystemColors.ControlText);
+                _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
             return response;
         }
 
