@@ -49,6 +49,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander", "DataComman
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers.SqlServer2", "Providers\DataCommander.Providers.SqlServer2\DataCommander.Providers.SqlServer2.csproj", "{E72CD2A3-4343-4FED-9DE1-5BBD8B19354E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers.Tfs", "Providers\DataCommander.Providers.Tfs\DataCommander.Providers.Tfs.csproj", "{7E353C6B-78B1-4CC9-AA86-90EF48AE7239}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +141,10 @@ Global
 		{E72CD2A3-4343-4FED-9DE1-5BBD8B19354E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E72CD2A3-4343-4FED-9DE1-5BBD8B19354E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E72CD2A3-4343-4FED-9DE1-5BBD8B19354E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E353C6B-78B1-4CC9-AA86-90EF48AE7239}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E353C6B-78B1-4CC9-AA86-90EF48AE7239}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E353C6B-78B1-4CC9-AA86-90EF48AE7239}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E353C6B-78B1-4CC9-AA86-90EF48AE7239}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -162,6 +168,7 @@ Global
 		{05FCB4BA-781D-4B25-BB86-9E2F5E2FE3D0} = {2E4B255C-096E-45D0-A27B-2725C7CBE13A}
 		{D036893C-779C-43F8-AD54-9EECA847A17F} = {2E4B255C-096E-45D0-A27B-2725C7CBE13A}
 		{E72CD2A3-4343-4FED-9DE1-5BBD8B19354E} = {71C8735D-181F-43FF-8CFF-5DB64B9CC5AE}
+		{7E353C6B-78B1-4CC9-AA86-90EF48AE7239} = {71C8735D-181F-43FF-8CFF-5DB64B9CC5AE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0C5BD4E9-0123-4824-9688-9D29D59A3FDE}
