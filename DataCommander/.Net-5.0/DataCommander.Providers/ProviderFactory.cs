@@ -36,20 +36,11 @@ namespace DataCommander.Providers
             folder = folder.ChildNodes[name];
             var attributes = folder.Attributes;
             var typeName = attributes["TypeName"].GetValue<string>();
-            var type = Type.GetType(typeName);
-            if (type == null)
-                type = Type.GetType(typeName, assemblyName =>
-                    {
-                        var path = Path.Combine(Environment.CurrentDirectory, $"{assemblyName.Name}.dll");
-                        var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
-                        return assembly;
-                    },
-                    ((assembly, typeName, arg3) => assembly.GetType(typeName)));
-
+            var type = Type.GetType(typeName, true);
             var instance = Activator.CreateInstance(type);
             Assert.IsNotNull(instance);
             Assert.IsTrue(instance is IProvider);
-            var provider = (IProvider)instance;
+            var provider = (IProvider) instance;
             Assert.IsNotNull(provider);
             return provider;
         }

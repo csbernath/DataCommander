@@ -6,7 +6,7 @@ namespace Foundation.Data.SqlClient
         /// <summary>
         /// Database '%.*ls' is being recovered. Waiting until recovery is finished.
         /// </summary>
-        public const int DatabaseisBeingRecovered = 922;
+        public const int DatabaseIsBeingRecovered = 922;
 
         /// <summary>
         /// Transaction (Process ID %d) was deadlocked on %.*ls resources with another process and has been chosen as the deadlock victim. Rerun the transaction.

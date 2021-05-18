@@ -156,7 +156,7 @@ namespace Foundation.Data.SqlClient
                         handled = true;
                         break;
 
-                    case SqlErrorNumber.DatabaseisBeingRecovered:
+                    case SqlErrorNumber.DatabaseIsBeingRecovered:
                         handled = true;
                         break;
 

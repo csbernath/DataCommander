@@ -1,5 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Runtime.Loader;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Foundation.Configuration;
@@ -21,6 +24,8 @@ namespace DataCommander.Providers
 
         private DataCommanderApplication()
         {
+            AssemblyLoadContext.Default.Resolving += Default_Resolving;
+
             var entryAssembly = Assembly.GetEntryAssembly();
             var fileName = entryAssembly.Location;
             var versionInfo = FileVersionInfo.GetVersionInfo(fileName);
@@ -29,6 +34,13 @@ namespace DataCommander.Providers
             Settings.Section.SelectNode(null, true);
 
             SystemEvents.SessionEnding += SystemEvents_SessionEnding;
+        }
+
+        private static Assembly Default_Resolving(AssemblyLoadContext assemblyLoadContext, AssemblyName assemblyName)
+        {
+            var assemblyPath = Path.Combine(Environment.CurrentDirectory, $"{assemblyName.Name}.dll");
+            var assembly = assemblyLoadContext.LoadFromAssemblyPath(assemblyPath);
+            return assembly;
         }
 
         private static void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
