@@ -122,7 +122,12 @@ Credits:
 
                 if (exists)
                 {
-                    Process.Start(url);
+                    var processStartInfo = new ProcessStartInfo
+                    {
+                        FileName = url,
+                        UseShellExecute = true
+                    };
+                    Process.Start(processStartInfo);
                 }
 
                 e.Cancel = true;

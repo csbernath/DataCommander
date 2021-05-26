@@ -26,6 +26,7 @@ using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Threading;
 using Foundation.Windows.Forms;
+using OfficeOpenXml.ConditionalFormatting;
 
 namespace DataCommander.Providers
 {
@@ -900,10 +901,15 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             }
         }
 
-        private void ShowContents()
+        private static void ShowContents()
         {
             const string url = "https://github.com/csbernath/DataCommander/blob/master/README.md";
-            Process.Start(url);
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            };
+            Process.Start(processStartInfo);
         }
 
         private void contentsToolStripMenuItem_Click(object sender, EventArgs e) => ShowContents();
@@ -991,8 +997,13 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
         private void checkForToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var url = "https://github.com/csbernath/DataCommander/releases";
-            Process.Start(url);
+            const string url = "https://github.com/csbernath/DataCommander/releases";
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            };
+            Process.Start(processStartInfo);
         }
 
         private void managedMemoryToolStripStatusLabel_MouseUp(object sender, MouseEventArgs e)

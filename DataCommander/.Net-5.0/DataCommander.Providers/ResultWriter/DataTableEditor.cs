@@ -799,10 +799,15 @@ namespace DataCommander.Providers.ResultWriter
 
         private void OpenAsExcelFile_Click(object sender, EventArgs e)
         {
-            var binaryField = (BinaryField)_cellValue;
+            var binaryField = (BinaryField) _cellValue;
             var path = Path.Combine(Path.GetTempPath(), Path.GetTempFileName() + ".zip");
             File.WriteAllBytes(path, binaryField.Value);
-            Process.Start(path);
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = path,
+                UseShellExecute = true
+            };
+            Process.Start(processStartInfo);
         }
 
         private void SaveStreamField_Click(object sender, EventArgs e)
