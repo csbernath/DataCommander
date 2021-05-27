@@ -575,9 +575,10 @@ namespace DataCommander.Providers
                 switch (WindowState)
                 {
                     case FormWindowState.Normal:
-                        var width = Math.Max(ClientSize.Width + 70, 100);
-                        var height = Math.Max(ClientSize.Height - 120, 50);
-                        queryForm.ClientSize = new Size(width, height);
+                        //var width = Math.Max(ClientSize.Width + 70, 100);
+                        //var height = Math.Max(ClientSize.Height - 120, 50);
+                        //queryForm.ClientSize = new Size(width, height);
+                        queryForm.WindowState = FormWindowState.Maximized;
                         break;
 
                     case FormWindowState.Maximized:
