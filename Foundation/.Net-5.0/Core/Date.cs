@@ -10,10 +10,10 @@ namespace Foundation.Core
     {
         private readonly ulong _value;
 
-        public static readonly DateTime MinDateTime = new DateTime(1900, 1, 1);
-        public static readonly DateTime MaxDateTime = new DateTime(9999, 12, 31);
-        public static readonly Date MinValue = new Date(MinDateTime);
-        public static readonly Date MaxValue = new Date(MaxDateTime);
+        public static readonly DateTime MinDateTime = new(1900, 1, 1);
+        public static readonly DateTime MaxDateTime = new(9999, 12, 31);
+        public static readonly Date MinValue = new(MinDateTime);
+        public static readonly Date MaxValue = new(MaxDateTime);
 
         public Date(ulong value) => _value = value;
 
@@ -45,7 +45,7 @@ namespace Foundation.Core
 
             if (valueInt64 < 0)
                 valueUInt64 = 0;
-            else if (MaxValue._value < (ulong)valueInt64)
+            else if (MaxValue._value < (ulong) valueInt64)
                 valueUInt64 = MaxValue._value;
             else
                 valueUInt64 = (ulong) valueInt64;
@@ -91,5 +91,14 @@ namespace Foundation.Core
             }
         }
 
+        public override bool Equals(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -4,7 +4,7 @@ namespace Foundation.Collections
 {
     public struct BitVector64
     {
-        //[CLSCompliant(false)]
+        [CLSCompliant(false)]
         public BitVector64(ulong data) => Value = data;
 
         [CLSCompliant(false)]
