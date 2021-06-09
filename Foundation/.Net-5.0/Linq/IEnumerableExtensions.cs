@@ -297,6 +297,9 @@ namespace Foundation.Linq
         }
 
         [Pure]
+        public static SortedSet<T> ToSortedSet<T>(this IEnumerable<T> source) => new SortedSet<T>(source);
+
+        [Pure]
         public static SortedSet<T> ToSortedSet<T>(this IEnumerable<T> source, IComparer<T> comparer) => new SortedSet<T>(source, comparer);
 
         [Pure]
