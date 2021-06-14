@@ -8,7 +8,6 @@ using System.Text;
 using Foundation.Core;
 using Foundation.Log;
 using Foundation.Text;
-using Microsoft.Win32;
 
 namespace Foundation.Diagnostics
 {

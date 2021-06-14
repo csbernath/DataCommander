@@ -2,8 +2,6 @@
 using System.Data;
 using System.Data.Common;
 using System.Drawing;
-using System.IO;
-using System.Text;
 using System.Windows.Forms;
 using DataCommander.Providers.ResultWriter;
 using DataCommander.Providers2;

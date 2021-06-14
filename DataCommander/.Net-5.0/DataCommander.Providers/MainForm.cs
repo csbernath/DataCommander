@@ -26,7 +26,6 @@ using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Threading;
 using Foundation.Windows.Forms;
-using OfficeOpenXml.ConditionalFormatting;
 
 namespace DataCommander.Providers
 {

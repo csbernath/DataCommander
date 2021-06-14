@@ -6,7 +6,6 @@ using System.Text;
 using System.Windows.Forms;
 using DataCommander.Providers2;
 using DataCommander.Providers2.Query;
-using Foundation.Collections;
 using Foundation.Linq;
 
 namespace DataCommander.Providers.Query

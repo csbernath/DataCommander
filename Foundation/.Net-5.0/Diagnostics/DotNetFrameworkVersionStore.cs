@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Foundation.Collections;
 using Foundation.Collections.ReadOnly;
 
 namespace Foundation.Diagnostics

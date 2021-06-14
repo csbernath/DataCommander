@@ -1,5 +1,4 @@
-﻿using DataCommander.Providers.Connection;
-using DataCommander.Providers2.Connection;
+﻿using DataCommander.Providers2.Connection;
 using Foundation.Core;
 using Foundation.Core.ClockAggregate;
 using Foundation.Data;

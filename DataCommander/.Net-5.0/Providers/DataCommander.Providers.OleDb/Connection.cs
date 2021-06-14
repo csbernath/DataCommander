@@ -1,6 +1,4 @@
-﻿using DataCommander.Providers.Connection;
-using DataCommander.Providers2.Connection;
-using Foundation.Core;
+﻿using DataCommander.Providers2.Connection;
 using System.Data;
 using System.Data.OleDb;
 using System.Threading;

@@ -7,7 +7,6 @@ using Foundation.Core;
 using Foundation.Data;
 using Foundation.Data.DbQueryBuilding;
 using Foundation.Data.SqlClient;
-using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
 using Foundation.Windows.Forms;

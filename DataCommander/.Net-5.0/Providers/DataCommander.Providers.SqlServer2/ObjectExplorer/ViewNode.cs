@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using System.Windows.Forms;
-using DataCommander.Providers.Query;
 using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer2.ObjectExplorer

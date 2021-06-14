@@ -7,8 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Xml;
-using DataCommander.Providers.Connection;
-using DataCommander.Providers.Query;
 using DataCommander.Providers.SqlServer2.FieldReader;
 using DataCommander.Providers2;
 using DataCommander.Providers2.Connection;

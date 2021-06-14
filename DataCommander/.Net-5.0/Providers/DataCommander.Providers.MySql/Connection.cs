@@ -1,5 +1,4 @@
-﻿using DataCommander.Providers.Connection;
-using DataCommander.Providers2.Connection;
+﻿using DataCommander.Providers2.Connection;
 using MySql.Data.MySqlClient;
 using System;
 using System.Threading;

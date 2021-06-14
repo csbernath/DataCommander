@@ -6,8 +6,6 @@ using System.Data.SqlServerCe;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Xml;
-using DataCommander.Providers.Connection;
 using DataCommander.Providers.SqlServerCe40.ObjectExplorer;
 using DataCommander.Providers2;
 using DataCommander.Providers2.Connection;

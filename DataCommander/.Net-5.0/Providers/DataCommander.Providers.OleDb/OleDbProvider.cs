@@ -1,5 +1,4 @@
-﻿using DataCommander.Providers.Connection;
-using DataCommander.Providers2;
+﻿using DataCommander.Providers2;
 using DataCommander.Providers2.Connection;
 using Foundation.Data;
 using System;

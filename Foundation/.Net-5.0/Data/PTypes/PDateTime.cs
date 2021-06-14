@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data.SqlTypes;
 using System.Diagnostics;
-using Foundation.Data.SqlClient;
 
 namespace Foundation.Data.PTypes
 {
