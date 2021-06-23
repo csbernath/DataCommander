@@ -1561,7 +1561,7 @@ namespace DataCommander.Providers.Query
                 SetStatusbarPanelText("Executing query...", _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
                 var statements = Provider.GetStatements(query);
                 Log.Write(LogLevel.Trace, "Query:\r\n{0}", query);
-                IEnumerable<AsyncDataAdapterCommand> commands;
+                IReadOnlyCollection<AsyncDataAdapterCommand> commands;
 
                 if (statements.Count == 1)
                 {
@@ -1588,10 +1588,13 @@ namespace DataCommander.Providers.Query
                 }
                 else
                     commands =
-                        from statement in statements
-                        select new AsyncDataAdapterCommand(null, statement.LineIndex, null,
-                            Connection.Connection.CreateCommand(new CreateCommandRequest(statement.CommandText, null, CommandType.Text, _commandTimeout,
-                                _transaction)), null, null, null);
+                        (
+                            from statement in statements
+                            select new AsyncDataAdapterCommand(null, statement.LineIndex, null,
+                                Connection.Connection.CreateCommand(new CreateCommandRequest(statement.CommandText, null, CommandType.Text, _commandTimeout,
+                                    _transaction)), null, null, null)
+                        )
+                        .ToReadOnlyCollection();
 
                 int maxRecords;
                 IResultWriter resultWriter = null;

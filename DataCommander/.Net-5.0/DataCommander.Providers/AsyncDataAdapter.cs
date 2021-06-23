@@ -20,7 +20,7 @@ namespace DataCommander.Providers
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
 
         private readonly IProvider _provider;
-        private readonly IEnumerable<AsyncDataAdapterCommand> _commands;
+        private readonly IReadOnlyCollection<AsyncDataAdapterCommand> _commands;
         private readonly int _maxRecords;
         private readonly int _rowBlockSize;
         private readonly IResultWriter _resultWriter;
@@ -35,7 +35,7 @@ namespace DataCommander.Providers
 
         #endregion
 
-        public AsyncDataAdapter(IProvider provider, IEnumerable<AsyncDataAdapterCommand> commands, int maxRecords, int rowBlockSize, IResultWriter resultWriter,
+        public AsyncDataAdapter(IProvider provider, IReadOnlyCollection<AsyncDataAdapterCommand> commands, int maxRecords, int rowBlockSize, IResultWriter resultWriter,
             Action<IAsyncDataAdapter, Exception> endFill, Action<IAsyncDataAdapter> writeEnd)
         {
             _provider = provider;
