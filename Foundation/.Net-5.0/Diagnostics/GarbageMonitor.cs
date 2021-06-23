@@ -71,12 +71,10 @@ namespace Foundation.Diagnostics
         public void Add(string name, object target)
         {
             Assert.IsNotNull(target);
-
-            string typeName = null;
             var size = 0;
 
             var type = target.GetType();
-            typeName = TypeNameCollection.GetTypeName(type);
+            var typeName = TypeNameCollection.GetTypeName(type);
 
             if (target is string targetString)
             {
