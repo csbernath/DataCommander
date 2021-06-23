@@ -285,17 +285,17 @@ namespace DataCommander.Providers.SqlServer2
 
             if (!cancellationToken.IsCancellationRequested)
             {
-                const string commandText = @"select @@servername,@@spid
+                _spid = (short) _sqlConnection.ServerProcessId;
+
+                const string commandText = @"select @@servername
 set arithabort on";
 
                 var executor = DbCommandExecutorFactory.Create(_sqlConnection);
                 var item = executor.ExecuteReader(new ExecuteReaderRequest(commandText), 1, dataRecord => new
                 {
-                    ServerName = dataRecord.GetString(0),
-                    Spid = dataRecord.GetInt16(1)
+                    ServerName = dataRecord.GetString(0)
                 }).First();
                 _serverName = item.ServerName;
-                _spid = item.Spid;
             }
         }
 
