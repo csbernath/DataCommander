@@ -21,14 +21,14 @@ namespace Foundation.Core
         [Pure]
         public bool Contains(SmallDate date)
         {
-            var contains = Start.Value <= date.Value && date.Value <= End.Value;
+            var contains = Start <= date && date <= End;
             return contains;
         }
 
         [Pure]
         public bool Contains(SmallDateInterval other)
         {
-            var contains = Start.Value <= other.Start.Value && other.End.Value <= End.Value;
+            var contains = Start <= other.Start && other.End <= End;
             return contains;
         }
 

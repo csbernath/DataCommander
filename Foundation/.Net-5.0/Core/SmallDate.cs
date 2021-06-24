@@ -32,7 +32,7 @@ namespace Foundation.Core
             _value = ToSmallDateValue(dateTime);
         }
 
-        public ushort Value => _value;
+        //public ushort Value => _value;
         public int Year => ToDateTime(_value).Year;
         public int Month => ToDateTime(_value).Month;
         public int Day => ToDateTime(_value).Day;
