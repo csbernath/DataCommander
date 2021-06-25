@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Core
 {
@@ -19,9 +20,12 @@ namespace Foundation.Core
 
         private DateOnly(int dayNumber)
         {
-            Debug.Assert((uint) dayNumber <= MaxDayNumber);
+            Assert.IsInRange((uint) dayNumber <= MaxDayNumber);
             _dayNumber = dayNumber;
         }
+
+        public static DateOnly MinValue => new DateOnly(MinDayNumber);
+        public static DateOnly MaxValue => new DateOnly(MaxDayNumber);
 
         public DateOnly(int year, int month, int day) => _dayNumber = DayNumberFromDateTime(new DateTime(year, month, day));
 
