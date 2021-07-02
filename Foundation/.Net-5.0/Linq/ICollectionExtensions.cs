@@ -18,6 +18,18 @@ namespace Foundation.Linq
                     collection.Add(item);
         }
 
+        public static ReadOnlyCollection<T> AsReadOnly<T>(this ICollection<T> collection)
+        {
+            Assert.IsNotNull(collection, nameof(collection));
+            return new ReadOnlyCollection<T>(collection.ToList());
+        }
+
+        public static ICollection<TResult> Cast<TResult>(this ICollection source)
+        {
+            ICollection<TResult> collection = source != null ? new CastedCollection<TResult>(source) : null;
+            return collection;
+        }
+
         public static bool IsNullOrEmpty(this ICollection collection)
         {
             var isNullOrEmpty = collection == null || collection.Count == 0;
@@ -29,6 +41,8 @@ namespace Foundation.Linq
             var isNullOrEmpty = collection == null || collection.Count == 0;
             return isNullOrEmpty;
         }
+
+        public static bool IsNullOrAny<T>(this ICollection<T> source) => source != null && source.Count > 0;
 
         public static int Remove<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
@@ -46,20 +60,6 @@ namespace Foundation.Linq
 
             return count;
         }
-
-        public static ReadOnlyCollection<T> AsReadOnly<T>(this ICollection<T> collection)
-        {
-            Assert.IsNotNull(collection, nameof(collection));
-            return new ReadOnlyCollection<T>(collection.ToList());
-        }
-
-        public static ICollection<TResult> Cast<TResult>(this ICollection source)
-        {
-            ICollection<TResult> collection = source != null ? new CastedCollection<TResult>(source) : null;
-            return collection;
-        }
-
-        public static bool IsNullOrAny<T>(this ICollection<T> source) => source != null && source.Count > 0;
 
         public static T[] ToArray<T>(ICollection<T> source)
         {
