@@ -55,13 +55,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers.Ole
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers.SQLite", "Providers\DataCommander.Providers.SQLite\DataCommander.Providers.SQLite.csproj", "{0381F665-EE66-4E83-A4FE-903BC9DAB8FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.SqlServer", "Providers\DataCommander.Providers.SqlServer\DataCommander.Providers.SqlServer.csproj", "{4E1DF75A-56A0-46CE-BBEE-955011AA349A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers.SqlServer", "Providers\DataCommander.Providers.SqlServer\DataCommander.Providers.SqlServer.csproj", "{4E1DF75A-56A0-46CE-BBEE-955011AA349A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers.SqlServerCe40", "Providers\DataCommander.Providers.SqlServerCe40\DataCommander.Providers.SqlServerCe40.csproj", "{80BB6D36-97B2-4393-929D-0AF5F7A05FFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.MySql", "Providers\DataCommander.Providers.MySql\DataCommander.Providers.MySql.csproj", "{C088FDA9-7991-41DF-A72D-6B7074AC555B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers.MySql", "Providers\DataCommander.Providers.MySql\DataCommander.Providers.MySql.csproj", "{C088FDA9-7991-41DF-A72D-6B7074AC555B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Msi", "Providers\DataCommander.Providers.Msi\DataCommander.Providers.Msi.csproj", "{8321DB29-34C0-4A27-AE1D-C3CE807A9353}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Odp", "Providers\DataCommander.Providers.Odp\DataCommander.Providers.Odp.csproj", "{E6E924FD-41D2-4A5E-909B-AD4BE7AB4084}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -181,6 +183,10 @@ Global
 		{8321DB29-34C0-4A27-AE1D-C3CE807A9353}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8321DB29-34C0-4A27-AE1D-C3CE807A9353}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8321DB29-34C0-4A27-AE1D-C3CE807A9353}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6E924FD-41D2-4A5E-909B-AD4BE7AB4084}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6E924FD-41D2-4A5E-909B-AD4BE7AB4084}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6E924FD-41D2-4A5E-909B-AD4BE7AB4084}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6E924FD-41D2-4A5E-909B-AD4BE7AB4084}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -211,6 +217,7 @@ Global
 		{80BB6D36-97B2-4393-929D-0AF5F7A05FFA} = {71C8735D-181F-43FF-8CFF-5DB64B9CC5AE}
 		{C088FDA9-7991-41DF-A72D-6B7074AC555B} = {71C8735D-181F-43FF-8CFF-5DB64B9CC5AE}
 		{8321DB29-34C0-4A27-AE1D-C3CE807A9353} = {71C8735D-181F-43FF-8CFF-5DB64B9CC5AE}
+		{E6E924FD-41D2-4A5E-909B-AD4BE7AB4084} = {71C8735D-181F-43FF-8CFF-5DB64B9CC5AE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0C5BD4E9-0123-4824-9688-9D29D59A3FDE}

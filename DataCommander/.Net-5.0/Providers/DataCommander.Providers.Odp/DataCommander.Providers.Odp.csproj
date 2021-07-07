@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\DataCommander\bin\Debug</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Foundation\.Net-5.0\Data\Foundation.Data.csproj" />
+    <ProjectReference Include="..\..\DataCommander.Providers2\DataCommander.Providers2.csproj" />
+    <ProjectReference Include="..\..\DataCommander.Providers\DataCommander.Providers.csproj" />
+  </ItemGroup>
+
+</Project>
