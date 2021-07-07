@@ -1536,6 +1536,9 @@ namespace DataCommander.Providers.Query
 
         private void ExecuteQuery()
         {
+            var message = new string('-', 80);
+            AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, message));
+
             var query = Query;
             if (string.IsNullOrWhiteSpace(query))
                 return;
