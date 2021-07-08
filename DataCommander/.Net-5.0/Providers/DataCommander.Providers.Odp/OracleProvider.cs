@@ -585,7 +585,7 @@ order by OBJECT_NAME";
                 folder.RemoveChildNode(folder2);
         }
 
-        public string GetExceptionMessage(Exception e)
+        private string GetExceptionMessage(Exception e)
         {
             string message;
 
@@ -726,11 +726,21 @@ order by OBJECT_NAME";
 
         string IProvider.GetExceptionMessage(Exception e)
         {
-            // TODO
-            return e.ToString();
+            var message = GetExceptionMessage(e);
+            return message;
         }
 
-        List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
+        List<InfoMessage> IProvider.ToInfoMessages(Exception e)
+        {
+            var message = GetExceptionMessage(e);
+            var infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Error, null, message);
+            var infoMessages = new List<InfoMessage>
+            {
+                infoMessage
+            };
+            return infoMessages;
+        }
+
         string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
 
         List<Statement> IProvider.GetStatements(string commandText)
