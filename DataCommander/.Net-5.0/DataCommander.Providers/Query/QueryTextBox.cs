@@ -665,8 +665,17 @@ namespace DataCommander.Providers.Query
             {
                 var text = (string)GetData(dataObject, DataFormats.UnicodeText);
                 var path = text;
+
                 if (File.Exists(path))
                     DataCommanderApplication.Instance.MainForm.LoadFiles(path.ItemToArray());
+                else if (Uri.TryCreate(path, UriKind.Absolute, out var uri))
+                {
+                    if (uri.Scheme == "file")
+                    {
+                        path = uri.LocalPath;
+                        DataCommanderApplication.Instance.MainForm.LoadFiles(path.ItemToArray());    
+                    }
+                }                    
                 else
                 {
                     var startIndex = RichTextBox.SelectionStart;
