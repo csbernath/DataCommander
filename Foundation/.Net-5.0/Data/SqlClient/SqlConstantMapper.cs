@@ -58,6 +58,11 @@ namespace Foundation.Data.SqlClient
         public static string ToSqlConstant(this decimal source) => source.ToString(NumberFormatInfo.InvariantInfo);
 
         [Pure]
+        public static string ToSqlConstant(this decimal? source) => source != null
+            ? source.Value.ToSqlConstant()
+            : SqlNull.NullString;
+
+        [Pure]
         public static string ToSqlConstant(this int source) => source.ToString();
 
         [Pure]
