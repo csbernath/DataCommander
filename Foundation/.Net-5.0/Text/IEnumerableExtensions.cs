@@ -8,6 +8,9 @@ namespace Foundation.Text
     public static class IEnumerableExtensions
     {
         [Pure]
+        public static string Join(this IEnumerable<string> source, string separator) => string.Join(separator, source);
+        
+        [Pure]
         public static string ToString<TSource>(this IEnumerable<TSource> source, IReadOnlyCollection<StringTableColumnInfo<TSource>> columns)
         {
             Assert.IsNotNull(source);
@@ -53,21 +56,18 @@ namespace Foundation.Text
             #region Fill second row
 
             var columnWidths = new int[columns.Count];
-            columnIndex = 0;
-            foreach (var column in columns)
+            for (columnIndex = 0;columnIndex < columns.Count;++columnIndex)
             {
-                var max = table.Rows.Select(r => r[columnIndex] == null ? 0 : r[columnIndex].Length).Max();
+                var max = table.Rows
+                    .Select(r => r[columnIndex] == null ? 0 : r[columnIndex].Length)
+                    .Max();
                 secondRow[columnIndex] = new string('-', max);
                 columnWidths[columnIndex] = max;
-                ++columnIndex;
             }
 
             #endregion
 
             return table.ToString(columnWidths, " ");
         }
-
-        [Pure]
-        public static string Join(this IEnumerable<string> source, string separator) => string.Join(separator, source);
     }
 }
