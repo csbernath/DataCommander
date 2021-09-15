@@ -152,7 +152,7 @@ namespace {_request.Namespace}
             var stringBuilder = new StringBuilder();
             stringBuilder.Append($"\r\n\r\npublic sealed class {_request.Name}Db{GetRequestType()}Handler\r\n{{\r\n");
             stringBuilder.Append("    private const string CommandText = @\"\";\r\n");
-            stringBuilder.Append($"    private static int? CommandTimeout = {commandTimeoutString};\r\n");
+            stringBuilder.Append($"    private const int? CommandTimeout = {commandTimeoutString};\r\n");
             stringBuilder.Append("    private readonly IDbConnection _connection;\r\n");
             stringBuilder.Append("    private readonly IDbTransaction _transaction;\r\n\r\n");
             stringBuilder.Append($"    public {_request.Name}Db{GetRequestType()}Handler(IDbConnection connection, IDbTransaction transaction)\r\n");
