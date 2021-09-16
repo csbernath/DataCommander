@@ -935,13 +935,19 @@ This program is freeware and released under the [GNU General Public License](htt
 
 ## Development environment
 
+.NET 5 version:
+- JetBrains Rider 2021.1
+- .NET 5
+- C# 7.2
+
+.NET 4.8 version:
 - Microsoft Visual Studio Community 2019 Version 16.9.3
 - Resharper 2021.1.1
 - Microsoft .NET Framework 4.8 (Windows Forms UI)
 - .NET Standard 2.0 (Foundation class libraries)
 - .NET Core 2.2 (unit tests)
 - C# 7.2
-- .NET 5
+
 ## Screenshots
 <img src="MainMenu.png" alt="Main menu">
 <img src="ObjectExplorer.png" alt="Object Explorer">
