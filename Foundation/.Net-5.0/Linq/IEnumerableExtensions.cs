@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using Foundation.Assertions;
 
 namespace Foundation.Linq
 {
-    public static class IEnumerableExtensions
+    public static partial class IEnumerableExtensions
     {
         [Pure]
         public static bool CountIsGreaterThan<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate, int count)
@@ -158,6 +159,28 @@ namespace Foundation.Linq
 
         [Pure]
         public static bool IsNullOrEmpty<TSource>(this IEnumerable<TSource> source) => source == null || !source.Any();
+
+        public static TSource MinOrDefault<TSource>(this IEnumerable<TSource> source) where TSource : IComparable<TSource>
+        {
+            var minItem = default(TSource);
+            var first = true;
+            
+            foreach (var item in source)
+            {
+                if (first)
+                {
+                    minItem = item;
+                    first = false;
+                }
+                else
+                {
+                    if (item.CompareTo(minItem) < 0)
+                        minItem = item;
+                }
+            }
+
+            return minItem;
+        }
 
         [Pure]
         public static IOrderedEnumerable<TSource> OrderBy<TSource>(this IEnumerable<TSource> source) => source.OrderBy(IdentityFunction<TSource>.Instance);

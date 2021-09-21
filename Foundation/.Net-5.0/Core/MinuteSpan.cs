@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace Foundation.Core
 {
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
-    public struct MinuteSpan : IComparable<MinuteSpan>
+    public readonly struct MinuteSpan : IComparable<MinuteSpan>
     {
         private readonly int _value;
 
@@ -45,6 +45,8 @@ namespace Foundation.Core
                 return debuggerDisplay;
             }
         }
+
+        public override bool Equals(object value) => value is MinuteSpan minuteSpan && minuteSpan._value == _value; 
 
         public bool Equals(MinuteSpan other) => _value == other._value;
         public override int GetHashCode() => _value;

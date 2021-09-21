@@ -32,6 +32,9 @@ namespace Foundation.Core
         [Pure]
         public DateOnly Next => AddDays(1);
 
+        public override bool Equals(object value) => value is DateOnly dateOnly && _dayNumber == dateOnly._dayNumber;
+        public override int GetHashCode() => _dayNumber;        
+
         public DateOnly AddDays(int value)
         {
             int newDayNumber = _dayNumber + value;
@@ -45,18 +48,20 @@ namespace Foundation.Core
             static void ThrowOutOfRange() => throw new ArgumentOutOfRangeException(nameof(value));
         }
 
-        [Pure]
-        public DateTime ToDateTime() => ToDateTime(_dayNumber);
-
-        [Pure]
-        private static DateTime ToDateTime(int dayNumber) => new DateTime(dayNumber * TimeSpan.TicksPerDay);
-        
         public static bool operator ==(DateOnly left, DateOnly right) => left._dayNumber == right._dayNumber;
         public static bool operator !=(DateOnly left, DateOnly right) => left._dayNumber != right._dayNumber;
         public static bool operator >(DateOnly left, DateOnly right) => left._dayNumber > right._dayNumber;
         public static bool operator >=(DateOnly left, DateOnly right) => left._dayNumber >= right._dayNumber;
         public static bool operator <(DateOnly left, DateOnly right) => left._dayNumber < right._dayNumber;
         public static bool operator <=(DateOnly left, DateOnly right) => left._dayNumber <= right._dayNumber;
+        
+        [Pure]
+        public DateTime ToDateTime() => ToDateTime(_dayNumber);
+
+        [Pure]
+        private static DateTime ToDateTime(int dayNumber) => new DateTime(dayNumber * TimeSpan.TicksPerDay);
+
+        public static DateOnly FromDateTime(DateTime dateTime) => new DateOnly(DayNumberFromDateTime(dateTime));        
 
         public int CompareTo(DateOnly other) => _dayNumber.CompareTo(other._dayNumber);
 

@@ -94,6 +94,8 @@ namespace Foundation.Core
             return new SmallDate(result);
         }
 
+        public override bool Equals(object value) => value is SmallDate smallDate && smallDate._value == _value; 
+
         public override int GetHashCode() => _value;
 
         public override string ToString()
