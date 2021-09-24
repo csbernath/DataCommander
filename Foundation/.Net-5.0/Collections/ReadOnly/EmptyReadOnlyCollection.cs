@@ -1,9 +1,10 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 
 namespace Foundation.Collections.ReadOnly
 {
     public static class EmptyReadOnlyCollection<T>
     {
-        public static readonly ReadOnlyCollection<T> Value = new ReadOnlyCollection<T>(EmptyArray<T>.Value);
+        public static readonly ReadOnlyCollection<T> Value = new(Array.Empty<T>());
     }
 }

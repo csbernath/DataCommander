@@ -391,9 +391,9 @@ namespace DataCommander.Providers.ResultWriter
             var columns = _tableSchema.Columns;
             var stringBuilder = new StringBuilder();
             var first = true;
-            var uniqueIndexColumns = UniqueIndexColumns.ToReadOnlyList();
+            var uniqueIndexColumns = UniqueIndexColumns.ToReadOnlyCollection();
             if (uniqueIndexColumns.Count == 0)
-                uniqueIndexColumns = columns.ToReadOnlyList();
+                uniqueIndexColumns = columns.ToReadOnlyCollection();
 
             foreach (var uniqueIndexColumn in uniqueIndexColumns)
             {

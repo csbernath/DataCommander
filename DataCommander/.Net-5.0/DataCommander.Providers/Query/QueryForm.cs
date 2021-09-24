@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
@@ -1720,10 +1721,11 @@ namespace DataCommander.Providers.Query
         {
             public readonly bool Succeeded;
             public readonly Providers2.QueryConfiguration.Query Query;
-            public readonly ReadOnlyList<DbRequestParameter> Parameters;
+            public readonly ReadOnlyCollection<DbRequestParameter> Parameters;
             public readonly string CommandText;
 
-            public GetQueryConfigurationResult(bool succeeded, Providers2.QueryConfiguration.Query query, ReadOnlyList<DbRequestParameter> parameters, string commandText)
+            public GetQueryConfigurationResult(bool succeeded, Providers2.QueryConfiguration.Query query, ReadOnlyCollection<DbRequestParameter> parameters,
+                string commandText)
             {
                 Succeeded = succeeded;
                 Query = query;
@@ -1738,7 +1740,7 @@ namespace DataCommander.Providers.Query
 
             var succeeded = false;
             Providers2.QueryConfiguration.Query query = null;
-            ReadOnlyList<DbRequestParameter> parameters = null;
+            ReadOnlyCollection<DbRequestParameter> parameters = null;
             string resultCommandText = null;
 
             var configurationStart = commandText.IndexOf("/* Query Configuration");
@@ -1763,7 +1765,7 @@ namespace DataCommander.Providers.Query
                             parameters = ToDbQueryParameters(tokens);
                         }
                         else
-                            parameters = ReadOnlyList<DbRequestParameter>.Empty;
+                            parameters = EmptyReadOnlyCollection<DbRequestParameter>.Value;
 
                         resultCommandText = commandText.Substring(parametersEnd + 16);
                         succeeded = true;
@@ -1815,16 +1817,16 @@ namespace DataCommander.Providers.Query
             {
                 sqlDbType = SqlDbType.Structured;
                 isNullable = false;
-                csharpValue = $"query.{name}.Select(i => i.ToSqlDataRecord()).ToReadOnlyList()";
+                csharpValue = $"query.{name}.Select(i => i.ToSqlDataRecord()).ToReadOnlyCollection()";
             }
 
             return new DbRequestParameter(name, dataType, sqlDbType, size, isNullable, csharpValue);
         }
 
-        private static ReadOnlyList<DbRequestParameter> ToDbQueryParameters(List<Token> tokens)
+        private static ReadOnlyCollection<DbRequestParameter> ToDbQueryParameters(List<Token> tokens)
         {
             var declarations = GetDeclarations(tokens);
-            return declarations.Select(ToDbRequestParameter).ToReadOnlyList();
+            return declarations.Select(ToDbRequestParameter).ToReadOnlyCollection();
         }
 
         private static List<List<Token>> GetDeclarations(List<Token> tokens)

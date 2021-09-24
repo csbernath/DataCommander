@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Text;
 using Foundation.Assertions;
 using Foundation.Collections;
-using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data.SqlClient;
 
@@ -343,7 +343,7 @@ namespace {_request.Namespace}
             return stringBuilder.ToString();
         }
 
-        private string GetQueryResultClassConstructor(ReadOnlyList<DbQueryResult> results)
+        private string GetQueryResultClassConstructor(ReadOnlyCollection<DbQueryResult> results)
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append($"public {_request.Name}DbQueryResult(");

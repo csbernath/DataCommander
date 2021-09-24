@@ -1,13 +1,13 @@
-﻿using Foundation.Collections.ReadOnly;
+﻿using System.Collections.ObjectModel;
 
 namespace DataCommander.Providers2
 {
     public class GetTableSchemaResult
     {
-        public readonly ReadOnlyList<Column> Columns;
-        public readonly ReadOnlyList<UniqueIndexColumn> UniqueIndexColumns;
+        public readonly ReadOnlyCollection<Column> Columns;
+        public readonly ReadOnlyCollection<UniqueIndexColumn> UniqueIndexColumns;
 
-        public GetTableSchemaResult(ReadOnlyList<Column> columns, ReadOnlyList<UniqueIndexColumn> uniqueIndexColumns)
+        public GetTableSchemaResult(ReadOnlyCollection<Column> columns, ReadOnlyCollection<UniqueIndexColumn> uniqueIndexColumns)
         {
             Columns = columns;
             UniqueIndexColumns = uniqueIndexColumns;

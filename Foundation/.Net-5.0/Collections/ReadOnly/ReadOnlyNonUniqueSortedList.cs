@@ -61,7 +61,7 @@ namespace Foundation.Collections.ReadOnly
                     readOnlyList = new ReadOnlyListSegment<TValue>(_values, currentGroupIndex, count);
                 }
                 else
-                    readOnlyList = ReadOnlyList<TValue>.Empty;
+                    readOnlyList = EmptyReadOnlyCollection<TValue>.Value;
 
                 Assert.IsNotNull(readOnlyList);
                 return readOnlyList;
@@ -110,7 +110,7 @@ namespace Foundation.Collections.ReadOnly
                     if (_comparison(key.Previous, key.Current) != 0) segmentedArrayBuilder.Add(index);
                 }
 
-                _groups = segmentedArrayBuilder.ToReadOnlyList();
+                _groups = segmentedArrayBuilder.ToReadOnlyCollection();
 
                 #endregion
             }

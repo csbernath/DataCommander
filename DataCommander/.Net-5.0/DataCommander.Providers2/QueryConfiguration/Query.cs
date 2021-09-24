@@ -1,4 +1,4 @@
-﻿using Foundation.Collections.ReadOnly;
+﻿using System.Collections.ObjectModel;
 
 namespace DataCommander.Providers2.QueryConfiguration
 {
@@ -7,10 +7,10 @@ namespace DataCommander.Providers2.QueryConfiguration
         public readonly string Name;
         public readonly string Using;
         public readonly string Namespace;
-        public readonly ReadOnlyList<string> Results;
+        public readonly ReadOnlyCollection<string> Results;
         public readonly int? CommandTimeout;
 
-        public Query(string name, string @using, string @namespace, ReadOnlyList<string> results, int? commandTimeout)
+        public Query(string name, string @using, string @namespace, ReadOnlyCollection<string> results, int? commandTimeout)
         {
             Name = name;
             Using = @using;

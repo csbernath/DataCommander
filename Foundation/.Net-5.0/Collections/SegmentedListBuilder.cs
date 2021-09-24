@@ -45,7 +45,7 @@ namespace Foundation.Collections
             _nextSegmentItemIndex++;
         }
 
-        public IReadOnlyList<T> ToReadOnlyList()
+        public IReadOnlyList<T> ToReadOnlyCollection()
         {
             var count = Count;
             return new ReadOnlySegmentedList(_segments, count);

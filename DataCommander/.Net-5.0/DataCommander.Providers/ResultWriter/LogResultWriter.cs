@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -32,7 +33,7 @@ namespace DataCommander.Providers.ResultWriter
 
         private string _fileName;
         private Providers2.QueryConfiguration.Query _query;
-        private ReadOnlyList<DbRequestParameter> _parameters;
+        private ReadOnlyCollection<DbRequestParameter> _parameters;
         private string _commandText;
         private List<Result> _results;
 
@@ -99,7 +100,7 @@ namespace DataCommander.Providers.ResultWriter
             if (_query != null)
             {
                 var directory = _fileName != null ? Path.GetDirectoryName(_fileName) : Path.GetTempPath();
-                var results = _query.Results.EmptyIfNull().Zip(_results, ToResult).ToReadOnlyList();
+                var results = _query.Results.EmptyIfNull().Zip(_results, ToResult).ToReadOnlyCollection();
                 var query = new DbRequest(directory, _query.Name, _query.Using, _query.Namespace, _commandText, 0, _parameters, results);
 
                 var queryBuilder = new DbRequestBuilder(query);
@@ -127,7 +128,7 @@ namespace DataCommander.Providers.ResultWriter
                     .Cast<DataRow>()
                     .Select(FoundationDbColumnFactory.Create)
                     .Select(ToField)
-                    .ToReadOnlyList();
+                    .ToReadOnlyCollection();
                 var result = new Result(fields);
                 _results.Add(result);
             }
@@ -189,8 +190,8 @@ namespace DataCommander.Providers.ResultWriter
 
         private class Result
         {
-            public readonly ReadOnlyList<DbQueryResultField> Fields;
-            public Result(ReadOnlyList<DbQueryResultField> fields) => Fields = fields;
+            public readonly ReadOnlyCollection<DbQueryResultField> Fields;
+            public Result(ReadOnlyCollection<DbQueryResultField> fields) => Fields = fields;
         }
     }
 }

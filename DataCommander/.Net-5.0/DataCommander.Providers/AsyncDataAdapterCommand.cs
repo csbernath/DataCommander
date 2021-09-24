@@ -1,5 +1,5 @@
-﻿using System.Data;
-using Foundation.Collections.ReadOnly;
+﻿using System.Collections.ObjectModel;
+using System.Data;
 using Foundation.Data.DbQueryBuilding;
 
 namespace DataCommander.Providers
@@ -11,11 +11,11 @@ namespace DataCommander.Providers
         public readonly string Text;
         public readonly IDbCommand Command;
         public readonly Providers2.QueryConfiguration.Query Query;
-        public readonly ReadOnlyList<DbRequestParameter> Parameters;
+        public readonly ReadOnlyCollection<DbRequestParameter> Parameters;
         public readonly string CommandText;
 
         public AsyncDataAdapterCommand(string fileName, int lineIndex, string text, IDbCommand command, Providers2.QueryConfiguration.Query query,
-            ReadOnlyList<DbRequestParameter> parameters, string commandText)
+            ReadOnlyCollection<DbRequestParameter> parameters, string commandText)
         {
             LineIndex = lineIndex;
             Text = text;

@@ -1,9 +1,9 @@
 ﻿using DataCommander.Providers2;
-using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 using System.Data;
 using System.Data.SqlClient;
+using Foundation.Collections.ReadOnly;
 
 namespace DataCommander.Providers.SqlServer
 {
@@ -85,8 +85,8 @@ order by ic.index_column_id",
             GetTableSchemaResult getTableSchemaResult = null;
             executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
             {
-                var columns = dataReader.ReadResult(128, ReadColumn).ToReadOnlyList();
-                var uniqueIndexColumns = dataReader.ReadNextResult(128, ReadUniqueIndexColumn).ToReadOnlyList();
+                var columns = dataReader.ReadResult(128, ReadColumn).ToReadOnlyCollection();
+                var uniqueIndexColumns = dataReader.ReadNextResult(128, ReadUniqueIndexColumn).ToReadOnlyCollection();
                 getTableSchemaResult = new GetTableSchemaResult(columns, uniqueIndexColumns);
             });
             return getTableSchemaResult;

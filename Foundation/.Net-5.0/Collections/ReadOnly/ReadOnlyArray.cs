@@ -7,7 +7,7 @@ namespace Foundation.Collections.ReadOnly
     public class ReadOnlyArray<T> : IReadOnlyList<T>
     {
         private readonly T[] _items;
-        public static ReadOnlyArray<T> Empty = new ReadOnlyArray<T>();
+        public static ReadOnlyArray<T> Empty = new();
 
         public ReadOnlyArray(T[] items)
         {

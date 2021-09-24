@@ -21,14 +21,6 @@ namespace Foundation.Collections.ReadOnly
         }
 
         [Pure]
-        public static ReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source)
-        {
-            Assert.IsNotNull(source);
-            var list = source.ToList();
-            return list.ToReadOnlyList();
-        }
-
-        [Pure]
         public static ReadOnlySegmentLinkedList<T> ToReadOnlySegmentLinkedList<T>(this IEnumerable<T> source, int segmentLength)
         {
             Assert.IsNotNull(source);

@@ -55,7 +55,7 @@ namespace Foundation.Collections
         /// <summary>
         /// </summary>
         /// <returns></returns>
-        public IReadOnlyList<T> ToReadOnlyList()
+        public IReadOnlyList<T> ToReadOnlyCollection()
         {
             return new ReadOnlySegmentedList(_segments);
         }
