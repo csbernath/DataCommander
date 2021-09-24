@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Diagnostics;
@@ -617,11 +618,27 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             var identifierColumn = getTableSchemaResult.UniqueIndexColumns
                 .Select(i => getTableSchemaResult.Columns.First(j => j.ColumnId == i.ColumnId))
                 .Select(i => new Foundation.Data.DbQueryBuilding.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
-                .First();
+                .FirstOrDefault();
             var versionColumn = columns.FirstOrDefault(i => i.ColumnName == "Version");
-            columns = columns.Where(i => i.ColumnName != identifierColumn.ColumnName).ToReadOnlyCollection();
-            var createUpdateSqlStatementMethod = CreateUpdateSqlStatementMethodFactory.Create(_owner, _name, identifierColumn, versionColumn, columns);
-            var createDeleteSqlStatementMethod = CreateDeleteSqlStatementMethodFactory.Create(_owner, _name, identifierColumn, versionColumn);
+
+            ReadOnlyCollection<Line> createUpdateSqlStatementMethod;            
+            ReadOnlyCollection<Line> createDeleteSqlStatementMethod;
+
+            if (identifierColumn != null)
+            {
+                columns = columns
+                    .Where(i => i.ColumnName != identifierColumn.ColumnName)
+                    .ToReadOnlyCollection();
+
+                createUpdateSqlStatementMethod = CreateUpdateSqlStatementMethodFactory.Create(_owner, _name, identifierColumn, versionColumn, columns);
+
+                createDeleteSqlStatementMethod = CreateDeleteSqlStatementMethodFactory.Create(_owner, _name, identifierColumn, versionColumn);
+            }
+            else
+            {
+                createUpdateSqlStatementMethod = null;
+                createDeleteSqlStatementMethod = null;
+            }
 
             var textBuilder = new TextBuilder();
             textBuilder.Add(dataTransferObject);
@@ -630,10 +647,18 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             using (textBuilder.AddCSharpBlock())
             {
                 textBuilder.Add(createInsertSqlSqlStatementMethod);
-                textBuilder.Add(Line.Empty);
-                textBuilder.Add(createUpdateSqlStatementMethod);
-                textBuilder.Add(Line.Empty);
-                textBuilder.Add(createDeleteSqlStatementMethod);
+
+                if (createUpdateSqlStatementMethod != null)
+                {
+                    textBuilder.Add(Line.Empty);
+                    textBuilder.Add(createUpdateSqlStatementMethod);
+                }
+
+                if (createDeleteSqlStatementMethod != null)
+                {
+                    textBuilder.Add(Line.Empty);
+                    textBuilder.Add(createDeleteSqlStatementMethod);
+                }
             }
 
             Clipboard.SetText(textBuilder.ToLines().ToIndentedString("    "));

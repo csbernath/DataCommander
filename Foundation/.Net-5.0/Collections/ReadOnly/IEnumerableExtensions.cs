@@ -10,13 +10,13 @@ namespace Foundation.Collections.ReadOnly
     public static class IEnumerableExtensions
     {
         [Pure]
-        public static ReadOnlyCollection<TSource> ToReadOnlyCollection<TSource>(this IEnumerable<TSource> source)
+        public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> source)
         {
             Assert.IsNotNull(source);
+
             var list = source.ToList();
-            var readOnlyCollection = list.Count == 0
-                ? EmptyReadOnlyCollection<TSource>.Value
-                : new ReadOnlyCollection<TSource>(list);
+            var readOnlyCollection = list.ToReadOnlyCollection();
+
             return readOnlyCollection;
         }
 
