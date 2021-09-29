@@ -43,10 +43,11 @@ namespace Foundation.Diagnostics
         {
             var tickCount = Environment.TickCount;
             var totalDays = (double)tickCount / DateTimeConstants.MillisecondsPerDay;
-            var zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
-            var tickCountString = $"{tickCount} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";
             var workingSet = Environment.WorkingSet;
             var windowsVersionInfo = WindowsVersionInfo.Get();
+            var stopwatchFrequency = GetStopwatchFrequency();
+            var zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);            
+            var tickCountString = $"{tickCount} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";            
 
             var message = $@"Environment information
 MachineName:            {Environment.MachineName}
@@ -70,10 +71,14 @@ GC LargeObjectHeapCompactionMode: {GCSettings.LargeObjectHeapCompactionMode}
 GC LatencyMode:         {GCSettings.LatencyMode}
 WorkingSet:             {(double)workingSet / (1024 * 1024):N} MB ({workingSet} bytes)
 TickCount:              {tickCountString}
-Stopwatch.Frequency:    {Stopwatch.Frequency} ({Math.Round((double)Stopwatch.Frequency / TenPowerConstants.TenPower6, 2)} MHz, 1 tick = {Math.Round(StopwatchConstants.NanosecondsPerTick)} nanoseconds), 1 millisecond = {Math.Round(StopwatchConstants.TicksPerMillisecond)} ticks
-TimeZoneInfo.Local.Id:  {TimeZoneInfo.Local.Id}";
+Stopwatch.Frequency:    {stopwatchFrequency}
+TimeZoneInfo.Local.Id:  {TimeZoneInfo.Local.Id}
+TempPath:               {Path.GetTempPath()}";
             return message;
         }
+
+        private static string GetStopwatchFrequency() =>
+            $"{Stopwatch.Frequency} ({Math.Round((double)Stopwatch.Frequency / TenPowerConstants.TenPower6, 2)} MHz, 1 tick = {Math.Round(StopwatchConstants.NanosecondsPerTick)} nanoseconds), 1 millisecond = {Math.Round(StopwatchConstants.TicksPerMillisecond)} ticks";
 
         public static string GetCurrentDomainState()
         {
