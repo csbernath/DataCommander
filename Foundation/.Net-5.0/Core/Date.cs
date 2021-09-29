@@ -15,6 +15,7 @@ namespace Foundation.Core
         public static readonly Date MinValue = new(MinDateTime);
         public static readonly Date MaxValue = new(MaxDateTime);
 
+        [CLSCompliant(false)]
         public Date(ulong value) => _value = value;
 
         public Date(DateTime dateTime)

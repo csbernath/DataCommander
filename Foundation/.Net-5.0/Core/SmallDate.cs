@@ -18,6 +18,7 @@ namespace Foundation.Core
         public static readonly SmallDate MinValue = new SmallDate(ushort.MinValue);
         public static readonly SmallDate MaxValue = new SmallDate(ushort.MaxValue);
 
+        [CLSCompliant(false)]
         public SmallDate(ushort value) => _value = value;
 
         public SmallDate(DateTime dateTime)
