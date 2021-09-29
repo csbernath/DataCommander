@@ -321,6 +321,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                 options.ScriptBatchTerminator = true;
                 options.SchemaQualify = true;
                 options.SchemaQualifyForeignKeysReferences = true;
+                options.TargetServerVersion = SqlServerVersion.Version100;
 
                 var stringCollection = table.Script(options);
                 var sb = new StringBuilder();
