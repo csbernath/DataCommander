@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Foundation.Assertions;
 
@@ -15,7 +16,7 @@ namespace Foundation.Collections.ReadOnly
             _items = items;
         }
 
-        internal ReadOnlyArray() => _items = EmptyArray<T>.Value;
+        internal ReadOnlyArray() => _items = Array.Empty<T>();
 
         public int Count => _items.Length;
         public T this[int index] => _items[index];
