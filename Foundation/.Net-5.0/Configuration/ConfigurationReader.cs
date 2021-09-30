@@ -28,7 +28,7 @@ namespace Foundation.Configuration
         private string _sectionName;
         private XmlReader _xmlReader;
         private IFormatProvider _formatProvider;
-        private readonly ErrorCollection _errors = new ErrorCollection();
+        private readonly ErrorCollection _errors = new();
         private bool _enableFileSystemWatcher;
 
         private static Stream OpenStream(string configFileName)

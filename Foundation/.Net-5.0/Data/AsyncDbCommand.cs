@@ -131,7 +131,7 @@ namespace Foundation.Data
         /// </summary>
         public UpdateRowSource UpdatedRowSource
         {
-            get => new UpdateRowSource();
+            get => new();
 
             set
             {

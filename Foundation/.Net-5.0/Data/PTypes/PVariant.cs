@@ -7,9 +7,9 @@ namespace Foundation.Data.PTypes
     {
         private object _sql;
 
-        public static readonly PVariant Null = new PVariant(PValueType.Null);
-        public static readonly PVariant Default = new PVariant(PValueType.Default);
-        public static readonly PVariant Empty = new PVariant(PValueType.Empty);
+        public static readonly PVariant Null = new(PValueType.Null);
+        public static readonly PVariant Default = new(PValueType.Default);
+        public static readonly PVariant Empty = new(PValueType.Empty);
 
         private PVariant(PValueType type)
         {
@@ -74,7 +74,7 @@ namespace Foundation.Data.PTypes
             }
         }
 
-        public static implicit operator PVariant(string s) => new PVariant(s);
+        public static implicit operator PVariant(string s) => new(s);
         public override string ToString() => _sql.ToString();
     }
 }

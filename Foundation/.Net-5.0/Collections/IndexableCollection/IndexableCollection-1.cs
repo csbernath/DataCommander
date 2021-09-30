@@ -62,6 +62,6 @@ namespace Foundation.Collections.IndexableCollection
             Indexes.Add(defaultIndex);
         }
 
-        public IndexCollection<T> Indexes { get; } = new IndexCollection<T>();
+        public IndexCollection<T> Indexes { get; } = new();
     }
 }

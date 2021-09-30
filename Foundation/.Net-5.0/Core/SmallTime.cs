@@ -7,8 +7,8 @@ namespace Foundation.Core
     public struct SmallTime : IEquatable<SmallTime>, IComparable<SmallTime>
     {
         private readonly short _value;
-        public static readonly SmallTime MinValue = new SmallTime(short.MinValue);
-        public static readonly SmallTime MaxValue = new SmallTime(short.MaxValue);
+        public static readonly SmallTime MinValue = new(short.MinValue);
+        public static readonly SmallTime MaxValue = new(short.MaxValue);
 
         public SmallTime(short value)
         {

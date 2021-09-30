@@ -16,10 +16,10 @@ namespace Foundation.Threading
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
         private readonly Thread _thread;
         private ThreadStart _start;
-        private readonly WorkerEvent _stopRequest = new WorkerEvent(WorkerEventState.NonSignaled);
+        private readonly WorkerEvent _stopRequest = new(WorkerEventState.NonSignaled);
         private bool _isStopAccepted;
-        private readonly WorkerEvent _pauseRequest = new WorkerEvent(WorkerEventState.NonSignaled);
-        private readonly WorkerEvent _continueRequest = new WorkerEvent(WorkerEventState.NonSignaled);
+        private readonly WorkerEvent _pauseRequest = new(WorkerEventState.NonSignaled);
+        private readonly WorkerEvent _continueRequest = new(WorkerEventState.NonSignaled);
         private EventHandler _started;
         private EventHandler _stopped;
 

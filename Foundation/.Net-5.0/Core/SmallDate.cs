@@ -13,10 +13,10 @@ namespace Foundation.Core
     {
         private readonly ushort _value;
 
-        public static readonly DateTime MinDateTime = new DateTime(1900, 1, 1);
-        public static readonly DateTime MaxDateTime = new DateTime(2079, 06, 06);
-        public static readonly SmallDate MinValue = new SmallDate(ushort.MinValue);
-        public static readonly SmallDate MaxValue = new SmallDate(ushort.MaxValue);
+        public static readonly DateTime MinDateTime = new(1900, 1, 1);
+        public static readonly DateTime MaxDateTime = new(2079, 06, 06);
+        public static readonly SmallDate MinValue = new(ushort.MinValue);
+        public static readonly SmallDate MaxValue = new(ushort.MaxValue);
 
         [CLSCompliant(false)]
         public SmallDate(ushort value) => _value = value;

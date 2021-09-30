@@ -52,11 +52,11 @@ namespace DataCommander.Providers
 
         #region Public Properties
 
-        public static DataCommanderApplication Instance { get; } = new DataCommanderApplication();
+        public static DataCommanderApplication Instance { get; } = new();
 
         public string Name { get; }
 
-        public ApplicationData ApplicationData { get; } = new ApplicationData();
+        public ApplicationData ApplicationData { get; } = new();
 
         public string FileName { get; private set; }
 

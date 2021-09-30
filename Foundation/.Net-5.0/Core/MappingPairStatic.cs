@@ -3,6 +3,6 @@
     public static class MappingPair
     {
         public static MappingPair<TSource, TTarget> Create<TSource, TTarget>(TSource source, TTarget target) =>
-            new MappingPair<TSource, TTarget>(source, target);
+            new(source, target);
     }
 }

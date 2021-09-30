@@ -6,7 +6,7 @@ namespace Foundation.Data.SqlClient
 {
     public static class SqlDataTypeArray
     {
-        public static readonly ReadOnlyArray<SqlDataType> SqlDataTypes = new ReadOnlyArray<SqlDataType>(new[]
+        public static readonly ReadOnlyArray<SqlDataType> SqlDataTypes = new(new[]
         {
             new SqlDataType(SqlDbType.BigInt, SqlDataTypeName.BigInt, CSharpTypeName.Int64),
             new SqlDataType(SqlDbType.Bit, SqlDataTypeName.Bit, CSharpTypeName.Boolean),

@@ -6,9 +6,9 @@ namespace Foundation.Data.PTypes
     {
         private SqlDouble _sql;
 
-        public static readonly PDouble Null = new PDouble(PValueType.Null);
-        public static readonly PDouble Default = new PDouble(PValueType.Default);
-        public static readonly PDouble Empty = new PDouble(PValueType.Empty);
+        public static readonly PDouble Null = new(PValueType.Null);
+        public static readonly PDouble Default = new(PValueType.Default);
+        public static readonly PDouble Empty = new(PValueType.Empty);
 
         public PDouble(double value)
         {
@@ -28,8 +28,8 @@ namespace Foundation.Data.PTypes
             _sql = SqlDouble.Null;
         }
 
-        public static implicit operator PDouble(double value) => new PDouble(value);
-        public static implicit operator PDouble(SqlDouble value) => new PDouble(value);
+        public static implicit operator PDouble(double value) => new(value);
+        public static implicit operator PDouble(SqlDouble value) => new(value);
         public static implicit operator double(PDouble value) => (double)value._sql;
 
         public static bool operator ==(PDouble x, PDouble y)

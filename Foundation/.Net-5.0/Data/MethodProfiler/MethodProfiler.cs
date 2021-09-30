@@ -15,12 +15,12 @@ namespace Foundation.Data.MethodProfiler
     {
         public const string ConditionString = "FOUNDATION_METHODPROFILER";
 
-        private static readonly MethodCollection Methods = new MethodCollection();
-        private static readonly Dictionary<string, MethodFraction> MethodFractions = new Dictionary<string, MethodFraction>();
-        private static readonly MethodInvocationStackCollection Stacks = new MethodInvocationStackCollection();
+        private static readonly MethodCollection Methods = new();
+        private static readonly Dictionary<string, MethodFraction> MethodFractions = new();
+        private static readonly MethodInvocationStackCollection Stacks = new();
         private static readonly AsyncTextWriter TextWriter;
-        private static readonly MethodFormatter MethodFormatter = new MethodFormatter();
-        private static readonly MethodProfilerMethodInvocationFormatter MethodProfilerMethodInvocationFormatter = new MethodProfilerMethodInvocationFormatter();
+        private static readonly MethodFormatter MethodFormatter = new();
+        private static readonly MethodProfilerMethodInvocationFormatter MethodProfilerMethodInvocationFormatter = new();
 
         static MethodProfiler()
         {

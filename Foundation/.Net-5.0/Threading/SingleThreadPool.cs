@@ -12,8 +12,8 @@ namespace Foundation.Threading
     public sealed class SingleThreadPool
     {
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-        private readonly Queue<Tuple<WaitCallback, object>> _workItems = new Queue<Tuple<WaitCallback, object>>();
-        private readonly EventWaitHandle _enqueueEvent = new EventWaitHandle(false, EventResetMode.AutoReset);
+        private readonly Queue<Tuple<WaitCallback, object>> _workItems = new();
+        private readonly EventWaitHandle _enqueueEvent = new(false, EventResetMode.AutoReset);
         private int _queuedItemCount;
 
         /// <summary>

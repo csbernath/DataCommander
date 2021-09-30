@@ -32,7 +32,7 @@ namespace DataCommander.Providers
     public class MainForm : Form
     {
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-        private readonly StringCollection _recentFileList = new StringCollection();
+        private readonly StringCollection _recentFileList = new();
 
         private MenuStrip _mainMenu;
         private ToolStripMenuItem _menuItem1;

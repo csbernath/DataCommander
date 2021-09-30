@@ -10,7 +10,7 @@ namespace Foundation.Threading
     /// </summary>
     public sealed class WorkerThreadPoolDequeuerCollection : IList<WorkerThreadPoolDequeuer>
     {
-        private readonly List<WorkerThreadPoolDequeuer> _list = new List<WorkerThreadPoolDequeuer>();
+        private readonly List<WorkerThreadPoolDequeuer> _list = new();
         private readonly WorkerThreadPool _pool;
 
         internal WorkerThreadPoolDequeuerCollection(WorkerThreadPool pool)
@@ -21,7 +21,7 @@ namespace Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public WorkerThreadCollection Threads { get; } = new WorkerThreadCollection();
+        public WorkerThreadCollection Threads { get; } = new();
 
         /// <summary>
         /// 

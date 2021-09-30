@@ -13,17 +13,17 @@ namespace Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public static readonly PInt64 Null = new PInt64(PValueType.Null);
+        public static readonly PInt64 Null = new(PValueType.Null);
 
         /// <summary>
         /// 
         /// </summary>
-        public static readonly PInt64 Default = new PInt64(PValueType.Default);
+        public static readonly PInt64 Default = new(PValueType.Default);
 
         /// <summary>
         /// 
         /// </summary>
-        public static readonly PInt64 Empty = new PInt64(PValueType.Empty);
+        public static readonly PInt64 Empty = new(PValueType.Empty);
 
         /// <summary>
         /// 
@@ -51,9 +51,9 @@ namespace Foundation.Data.PTypes
             _sql = SqlInt64.Null;
         }
 
-        public static implicit operator PInt64(long value) => new PInt64(value);
+        public static implicit operator PInt64(long value) => new(value);
         public static implicit operator PInt64(long? value) => value != null ? new PInt64(value.Value) : Null;
-        public static implicit operator PInt64(SqlInt64 value) => new PInt64(value);
+        public static implicit operator PInt64(SqlInt64 value) => new(value);
         public static implicit operator long(PInt64 value) => (long)value._sql;
 
         public static bool operator ==(PInt64 x, PInt64 y)

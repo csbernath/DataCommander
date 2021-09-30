@@ -9,7 +9,7 @@ namespace Foundation.Collections.ReadOnly
         private readonly bool _hasElement;
         private readonly T _element;
 
-        public static readonly ReadOnlyZeroOrOneElementArray<T> Zero = new ReadOnlyZeroOrOneElementArray<T>(false, default(T));
+        public static readonly ReadOnlyZeroOrOneElementArray<T> Zero = new(false, default(T));
 
         internal ReadOnlyZeroOrOneElementArray(bool hasElement, T element)
         {

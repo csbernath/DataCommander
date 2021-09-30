@@ -8,9 +8,9 @@ namespace Foundation.Data.PTypes
     {
         private SqlInt32 _sql;
 
-        public static readonly PInt32 Null = new PInt32(PValueType.Null);
-        public static readonly PInt32 Default = new PInt32(PValueType.Default);
-        public static readonly PInt32 Empty = new PInt32(PValueType.Empty);
+        public static readonly PInt32 Null = new(PValueType.Null);
+        public static readonly PInt32 Default = new(PValueType.Default);
+        public static readonly PInt32 Empty = new(PValueType.Empty);
 
         [DebuggerStepThrough]
         public PInt32(int value)
@@ -40,13 +40,13 @@ namespace Foundation.Data.PTypes
         }
 
         [DebuggerStepThrough]
-        public static implicit operator PInt32(int value) => new PInt32(value);
+        public static implicit operator PInt32(int value) => new(value);
 
         [DebuggerStepThrough]
-        public static implicit operator PInt32(int? value) => new PInt32(value);
+        public static implicit operator PInt32(int? value) => new(value);
 
         [DebuggerStepThrough]
-        public static implicit operator PInt32(SqlInt32 value) => new PInt32(value);
+        public static implicit operator PInt32(SqlInt32 value) => new(value);
 
         public static implicit operator int(PInt32 value) => (int)value._sql;
 

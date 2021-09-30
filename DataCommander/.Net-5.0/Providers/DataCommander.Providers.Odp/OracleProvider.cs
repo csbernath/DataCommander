@@ -16,7 +16,7 @@ namespace DataCommander.Providers.Odp
     internal sealed class OracleProvider : IProvider
     {
         private string _connectionString;
-        private readonly ObjectExplorer.ObjectExplorer _objectExplorer = new ObjectExplorer.ObjectExplorer();
+        private readonly ObjectExplorer.ObjectExplorer _objectExplorer = new();
 
         string IProvider.Name => "Odp";
         DbProviderFactory IProvider.DbProviderFactory => OracleClientFactory.Instance;
@@ -747,7 +747,7 @@ order by OBJECT_NAME";
         {
             return new List<Statement>
             {
-                new Statement
+                new()
                 {
                     LineIndex = 0,
                     CommandText = commandText

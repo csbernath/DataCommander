@@ -10,7 +10,7 @@ namespace Foundation.Data.SqlClient
     /// </summary>
     public static class SqlDatabase
     {
-        public static readonly SqlDateTime SqlDateTimeZero = new SqlDateTime(1900, 1, 1);
+        public static readonly SqlDateTime SqlDateTimeZero = new(1900, 1, 1);
 
 #if FOUNDATION_4_7
         /// <summary>

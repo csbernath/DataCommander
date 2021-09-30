@@ -108,7 +108,7 @@ namespace Foundation.Collections
         #region Private Fields
 
         private readonly int _segmentItemCapacity;
-        private readonly List<T[]> _segments = new List<T[]>();
+        private readonly List<T[]> _segments = new();
         private int _nextSegmentItemIndex;
 
         #endregion

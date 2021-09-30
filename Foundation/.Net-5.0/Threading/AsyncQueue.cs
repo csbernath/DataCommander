@@ -11,8 +11,8 @@ namespace Foundation.Threading
     {
         private string _name;
         private IAsyncQueue _asyncQueue;
-        private readonly Queue _queue = new Queue();
-        private readonly AutoResetEvent _queueEvent = new AutoResetEvent(false);
+        private readonly Queue _queue = new();
+        private readonly AutoResetEvent _queueEvent = new(false);
 
         private sealed class ConsumerThread
         {
@@ -184,6 +184,6 @@ namespace Foundation.Threading
         /// <summary>
         /// Gets the consumer thread list.
         /// </summary>
-        public WorkerThreadCollection Consumers { get; } = new WorkerThreadCollection();
+        public WorkerThreadCollection Consumers { get; } = new();
     }
 }

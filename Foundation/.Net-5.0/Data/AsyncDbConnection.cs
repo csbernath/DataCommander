@@ -17,8 +17,8 @@ namespace Foundation.Data
         private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(AsyncDbConnection));
         private readonly IDbConnection _cloneableConnection;
         private readonly ICloneable _cloneable;
-        private readonly List<string> _commands = new List<string>();
-        private readonly AutoResetEvent _queueEvent = new AutoResetEvent(false);
+        private readonly List<string> _commands = new();
+        private readonly AutoResetEvent _queueEvent = new(false);
         private readonly WorkerThread _thread;
 
         #endregion

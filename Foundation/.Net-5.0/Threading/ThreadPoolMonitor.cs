@@ -7,11 +7,11 @@ namespace Foundation.Threading
     {
         private static readonly StringTableColumnInfo<ThreadPoolRow>[] ThreadPoolColumns =
         {
-            new StringTableColumnInfo<ThreadPoolRow>("Name", StringTableColumnAlign.Left, t => t.Name),
-            new StringTableColumnInfo<ThreadPoolRow>("Min", StringTableColumnAlign.Right, t => t.Min.ToString()),
-            new StringTableColumnInfo<ThreadPoolRow>("Active", StringTableColumnAlign.Right, t => t.Active.ToString()),
-            new StringTableColumnInfo<ThreadPoolRow>("Available", StringTableColumnAlign.Right, t => t.Available.ToString()),
-            new StringTableColumnInfo<ThreadPoolRow>("Max", StringTableColumnAlign.Right, t => t.Max.ToString())
+            new("Name", StringTableColumnAlign.Left, t => t.Name),
+            new("Min", StringTableColumnAlign.Right, t => t.Min.ToString()),
+            new("Active", StringTableColumnAlign.Right, t => t.Active.ToString()),
+            new("Available", StringTableColumnAlign.Right, t => t.Available.ToString()),
+            new("Max", StringTableColumnAlign.Right, t => t.Max.ToString())
         };
 
         public static string ThreadPoolToStringTableString()

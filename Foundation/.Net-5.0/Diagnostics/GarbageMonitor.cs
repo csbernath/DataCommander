@@ -13,11 +13,11 @@ namespace Foundation.Diagnostics
     public sealed class GarbageMonitor
     {
         private static readonly StringTableColumnInfo<MonitoredObjectState>[] Columns;
-        public static readonly GarbageMonitor Default = new GarbageMonitor("Default");
+        public static readonly GarbageMonitor Default = new("Default");
 
         private readonly string _garbageMonitorName;
-        private readonly LinkedList<MonitoredObject> _monitoredObjects = new LinkedList<MonitoredObject>();
-        private readonly InterlockedSequence _interlockedSequence = new InterlockedSequence(0);
+        private readonly LinkedList<MonitoredObject> _monitoredObjects = new();
+        private readonly InterlockedSequence _interlockedSequence = new(0);
 
         static GarbageMonitor()
         {

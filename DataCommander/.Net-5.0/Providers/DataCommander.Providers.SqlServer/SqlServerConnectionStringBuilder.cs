@@ -6,7 +6,7 @@ namespace DataCommander.Providers.SqlServer
 {
     internal sealed class SqlServerConnectionStringBuilder : IDbConnectionStringBuilder
     {
-        private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder = new SqlConnectionStringBuilder();
+        private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder = new();
 
         #region IDbConnectionStringBuilder Members
 

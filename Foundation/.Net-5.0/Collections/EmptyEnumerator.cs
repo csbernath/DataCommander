@@ -6,7 +6,7 @@ namespace Foundation.Collections
 {
     internal sealed class EmptyEnumerator<T> : IEnumerator<T>
     {
-        public static readonly EmptyEnumerator<T> Value = new EmptyEnumerator<T>();
+        public static readonly EmptyEnumerator<T> Value = new();
 
         private EmptyEnumerator()
         {

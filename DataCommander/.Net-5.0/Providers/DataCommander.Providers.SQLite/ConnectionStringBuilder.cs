@@ -7,7 +7,7 @@ namespace DataCommander.Providers.SQLite
 {
     internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
     {
-        private readonly SQLiteConnectionStringBuilder _sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder();
+        private readonly SQLiteConnectionStringBuilder _sqLiteConnectionStringBuilder = new();
 
         string IDbConnectionStringBuilder.ConnectionString
         {

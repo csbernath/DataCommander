@@ -29,7 +29,7 @@ namespace Foundation.Collections
             _arguments.Add(arguments);
         }
 
-        public ListIndex<CommandLineArgument> ListIndex { get; } = new ListIndex<CommandLineArgument>("listIndex");
+        public ListIndex<CommandLineArgument> ListIndex { get; } = new("listIndex");
         public NonUniqueIndex<string, CommandLineArgument> NameIndex { get; }
 
         #region Private Methods

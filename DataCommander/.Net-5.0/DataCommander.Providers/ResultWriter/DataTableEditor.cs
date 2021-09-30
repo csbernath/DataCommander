@@ -46,7 +46,7 @@ namespace DataCommander.Providers.ResultWriter
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private readonly Container _components = new Container();
+        private readonly Container _components = new();
 
         #endregion
 

@@ -5,7 +5,7 @@ namespace Foundation.Collections
 {
     internal sealed class EmptyNonGenericEnumerator : IEnumerator
     {
-        public static readonly EmptyNonGenericEnumerator Value = new EmptyNonGenericEnumerator();
+        public static readonly EmptyNonGenericEnumerator Value = new();
 
         private EmptyNonGenericEnumerator()
         {

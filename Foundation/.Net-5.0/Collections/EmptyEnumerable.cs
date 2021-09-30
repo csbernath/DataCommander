@@ -5,7 +5,7 @@ namespace Foundation.Collections
 {
     public sealed class EmptyEnumerable<T> : IEnumerable<T>
     {
-        public static readonly EmptyEnumerable<T> Value = new EmptyEnumerable<T>();
+        public static readonly EmptyEnumerable<T> Value = new();
 
         private EmptyEnumerable()
         {

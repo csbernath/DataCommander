@@ -4,7 +4,7 @@ namespace Foundation.IO
 {
     internal sealed class DefaultFormatter : IFormatter
     {
-        public static DefaultFormatter Instance { get; } = new DefaultFormatter();
+        public static DefaultFormatter Instance { get; } = new();
 
         void IFormatter.AppendTo(StringBuilder sb, object[] args)
         {

@@ -7,7 +7,7 @@ namespace Foundation.Text
 {
     public class StringTableColumnCollection : IList<StringTableColumn>
     {
-        private readonly List<StringTableColumn> _columns = new List<StringTableColumn>();
+        private readonly List<StringTableColumn> _columns = new();
 
         #region IList<StringTableColumn> Members
 

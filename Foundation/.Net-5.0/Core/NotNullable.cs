@@ -29,7 +29,7 @@ namespace Foundation.Core
             }
         }
 
-        public static implicit operator NotNullable<T>(T value) => new NotNullable<T>(value);
+        public static implicit operator NotNullable<T>(T value) => new(value);
         public static implicit operator T(NotNullable<T> notNullable) => notNullable.Value;
     }
 }

@@ -4,7 +4,7 @@ namespace Foundation.Log
 {
     public sealed class NullLogFactory : ILogFactory
     {
-        public static readonly NullLogFactory Instance = new NullLogFactory();
+        public static readonly NullLogFactory Instance = new();
 
         private NullLogFactory()
         {

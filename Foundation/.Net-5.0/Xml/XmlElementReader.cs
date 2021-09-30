@@ -12,7 +12,7 @@ namespace Foundation.Xml
     public class XmlElementReader
     {
         private readonly XmlReader _xmlReader;
-        private readonly XmlDocument _xmlDocument = new XmlDocument();
+        private readonly XmlDocument _xmlDocument = new();
 
         /// <summary>
         /// 

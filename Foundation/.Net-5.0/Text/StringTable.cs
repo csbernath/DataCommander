@@ -18,9 +18,9 @@ namespace Foundation.Text
                 Columns.Add(new StringTableColumn());
         }
 
-        public StringTableColumnCollection Columns { get; } = new StringTableColumnCollection();
-        public StringTableRowCollection Rows { get; } = new StringTableRowCollection();
-        public StringTableRow NewRow() => new StringTableRow(this);
+        public StringTableColumnCollection Columns { get; } = new();
+        public StringTableRowCollection Rows { get; } = new();
+        public StringTableRow NewRow() => new(this);
 
         private int GetMaxColumnWidth(int columnIndex)
         {

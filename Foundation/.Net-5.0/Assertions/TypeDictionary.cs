@@ -5,7 +5,7 @@ namespace Foundation.Assertions
 {
     public sealed class TypeDictionary<TValue>
     {
-        private readonly Dictionary<Type, TValue> _selections = new Dictionary<Type, TValue>();
+        private readonly Dictionary<Type, TValue> _selections = new();
 
         public void Add<T>(TValue value)
         {

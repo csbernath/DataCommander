@@ -5,7 +5,7 @@ namespace Foundation.Core
 {
     public sealed class UniversalTime : IDateTimeProvider
     {
-        public static readonly UniversalTime Default = new UniversalTime();
+        public static readonly UniversalTime Default = new();
 
         private UniversalTime()
         {

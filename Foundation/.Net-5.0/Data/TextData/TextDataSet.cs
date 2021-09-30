@@ -25,6 +25,6 @@ namespace Foundation.Data.TextData
         /// <summary>
         /// 
         /// </summary>
-        public TextDataSetTableCollection Tables { get; } = new TextDataSetTableCollection();
+        public TextDataSetTableCollection Tables { get; } = new();
     }
 }

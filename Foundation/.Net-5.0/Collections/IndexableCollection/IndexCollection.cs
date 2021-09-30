@@ -6,7 +6,7 @@ namespace Foundation.Collections.IndexableCollection
 {
     public class IndexCollection<T> : ICollection<ICollectionIndex<T>>
     {
-        private readonly Dictionary<string, ICollectionIndex<T>> _dictionary = new Dictionary<string, ICollectionIndex<T>>();
+        private readonly Dictionary<string, ICollectionIndex<T>> _dictionary = new();
 
         public ICollectionIndex<T> this[string name] => _dictionary[name];
 

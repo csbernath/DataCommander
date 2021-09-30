@@ -8,9 +8,9 @@ namespace Foundation.Data.PTypes
     {
         private readonly SqlDateTime _sql;
 
-        public static readonly PDateTime Null = new PDateTime(PValueType.Null);
-        public static readonly PDateTime Default = new PDateTime(PValueType.Default);
-        public static readonly PDateTime Empty = new PDateTime(PValueType.Empty);
+        public static readonly PDateTime Null = new(PValueType.Null);
+        public static readonly PDateTime Default = new(PValueType.Default);
+        public static readonly PDateTime Empty = new(PValueType.Empty);
 
         public PDateTime(DateTime value)
         {
@@ -37,11 +37,11 @@ namespace Foundation.Data.PTypes
             ValueType = value.IsNull ? PValueType.Null : PValueType.Value;
         }
 
-        public static implicit operator PDateTime(DateTime value) => new PDateTime(value);
-        public static implicit operator PDateTime(DateTime? value) => new PDateTime(value);
+        public static implicit operator PDateTime(DateTime value) => new(value);
+        public static implicit operator PDateTime(DateTime? value) => new(value);
 
         [DebuggerStepThrough]
-        public static implicit operator PDateTime(SqlDateTime value) => new PDateTime(value);
+        public static implicit operator PDateTime(SqlDateTime value) => new(value);
 
         public static implicit operator DateTime(PDateTime value) => (DateTime)value._sql;
 

@@ -7,7 +7,7 @@ namespace DataCommander.Providers.ResultWriter
 {
     internal partial class DataViewPropertiesForm : Form
     {
-        private readonly DataViewProperties _properties = new DataViewProperties();
+        private readonly DataViewProperties _properties = new();
 
         public DataViewPropertiesForm(DataViewProperties properties)
         {

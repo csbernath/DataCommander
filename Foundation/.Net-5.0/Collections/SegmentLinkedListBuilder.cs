@@ -6,7 +6,7 @@ namespace Foundation.Collections
 {
     public class SegmentLinkedListBuilder<T>
     {
-        private readonly LinkedList<T[]> _linkedList = new LinkedList<T[]>();
+        private readonly LinkedList<T[]> _linkedList = new();
         private readonly int _segmentLength;
         private int _count;
 
@@ -32,6 +32,6 @@ namespace Foundation.Collections
             ++_count;
         }
 
-        public ReadOnlySegmentLinkedList<T> ToReadOnlySegmentLinkedList() => new ReadOnlySegmentLinkedList<T>(_linkedList, _count);
+        public ReadOnlySegmentLinkedList<T> ToReadOnlySegmentLinkedList() => new(_linkedList, _count);
     }
 }

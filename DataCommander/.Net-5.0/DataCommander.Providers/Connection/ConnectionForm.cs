@@ -24,9 +24,9 @@ namespace DataCommander.Providers.Connection
         private Button _btnCancel;
         private Button _newButton;
         private StatusStrip _statusBar;
-        private readonly DataTable _dataTable = new DataTable();
+        private readonly DataTable _dataTable = new();
         private bool _isDirty;
-        private readonly Container _components = new Container();
+        private readonly Container _components = new();
 
         public ConnectionForm(StatusStrip statusBar, ColorTheme colorTheme)
         {

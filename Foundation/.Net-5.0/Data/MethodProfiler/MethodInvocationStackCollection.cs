@@ -5,7 +5,7 @@ namespace Foundation.Data.MethodProfiler
 {
     internal sealed class MethodInvocationStackCollection
     {
-        private readonly ConcurrentDictionary<int, Stack<MethodInvocation>> _stacks = new ConcurrentDictionary<int, Stack<MethodInvocation>>();
+        private readonly ConcurrentDictionary<int, Stack<MethodInvocation>> _stacks = new();
 
         public void Push(int threadId, int methodId, long beginTime)
         {

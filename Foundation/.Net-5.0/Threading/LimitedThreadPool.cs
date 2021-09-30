@@ -14,7 +14,7 @@ namespace Foundation.Threading
     {
         private int _maxThreadCount;
         private int _availableThreadCount;
-        private readonly Queue<Tuple<Action<T>, T>> _queue = new Queue<Tuple<Action<T>, T>>();
+        private readonly Queue<Tuple<Action<T>, T>> _queue = new();
 
         /// <summary>
         /// 

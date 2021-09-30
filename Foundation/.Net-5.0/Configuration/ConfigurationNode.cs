@@ -179,12 +179,12 @@ namespace Foundation.Configuration
         /// <summary>
         /// Gets the attributes stored in this node.
         /// </summary>
-        public ConfigurationAttributeCollection Attributes { get; } = new ConfigurationAttributeCollection();
+        public ConfigurationAttributeCollection Attributes { get; } = new();
 
         /// <summary>
         /// Gets the child nodes of this node.
         /// </summary>
-        public ConfigurationNodeCollection ChildNodes { get; } = new ConfigurationNodeCollection();
+        public ConfigurationNodeCollection ChildNodes { get; } = new();
 
         /// <summary>
         /// Writes the content of this node (attributes and child nodes)

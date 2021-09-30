@@ -7,12 +7,12 @@ namespace Foundation.Core
     public static class Selection
     {
         public static ArgumentEqualsSelection<TArgument> CreateArgumentEqualsSelection<TArgument>(TArgument argument) where TArgument : IEquatable<TArgument> =>
-            new ArgumentEqualsSelection<TArgument>(argument);
+            new(argument);
 
         public static ArgumentIsSelection<TArgument> CreateArgumentIsSelection<TArgument>(TArgument argument) where TArgument : class =>
-            new ArgumentIsSelection<TArgument>(argument);
+            new(argument);
 
-        public static TypeIsSelection CreateTypeIsSelection(Type type) => new TypeIsSelection(type);
+        public static TypeIsSelection CreateTypeIsSelection(Type type) => new(type);
 
         public static int Select(Func<bool>[] selections)
         {

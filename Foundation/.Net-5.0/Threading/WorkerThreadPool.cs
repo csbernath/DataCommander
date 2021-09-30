@@ -8,7 +8,7 @@ namespace Foundation.Threading
     /// </summary>
     public class WorkerThreadPool
     {
-        private readonly Queue<object> _queue = new Queue<object>();
+        private readonly Queue<object> _queue = new();
         private int _activeThreadCount;
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Foundation.Threading
         /// </summary>
         public int ActiveThreadCount => _activeThreadCount;
 
-        internal AutoResetEvent EnqueueEvent { get; } = new AutoResetEvent(false);
+        internal AutoResetEvent EnqueueEvent { get; } = new(false);
 
         /// <summary>
         /// 

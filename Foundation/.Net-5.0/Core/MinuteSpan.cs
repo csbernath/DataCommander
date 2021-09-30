@@ -8,7 +8,7 @@ namespace Foundation.Core
     {
         private readonly int _value;
 
-        public static readonly MinuteSpan Zero = new MinuteSpan(0);
+        public static readonly MinuteSpan Zero = new(0);
 
         public MinuteSpan(int value) => _value = value;
 
@@ -20,10 +20,10 @@ namespace Foundation.Core
         public static bool operator <=(MinuteSpan x, MinuteSpan y) => x._value <= y._value;
         public static bool operator >(MinuteSpan x, MinuteSpan y) => x._value > y._value;
         public static bool operator >=(MinuteSpan x, MinuteSpan y) => x._value >= y._value;
-        public static MinuteSpan operator +(MinuteSpan x, MinuteSpan y) => new MinuteSpan(x._value + y._value);
-        public static MinuteSpan operator -(MinuteSpan x, MinuteSpan y) => new MinuteSpan(x._value - y._value);
+        public static MinuteSpan operator +(MinuteSpan x, MinuteSpan y) => new(x._value + y._value);
+        public static MinuteSpan operator -(MinuteSpan x, MinuteSpan y) => new(x._value - y._value);
 
-        public static MinuteSpan FromMinutes(int minutes) => new MinuteSpan(minutes);
+        public static MinuteSpan FromMinutes(int minutes) => new(minutes);
 
         public static MinuteSpan FromHours(double hours)
         {

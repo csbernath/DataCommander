@@ -22,8 +22,8 @@ namespace DataCommander.Providers.Connection
         private Timer _timer;
         private IContainer components;
         private readonly ConnectionProperties _connectionProperties;
-        private readonly Stopwatch _stopwatch = new Stopwatch();
-        private readonly EventWaitHandle _handleCreatedEvent = new EventWaitHandle(false, EventResetMode.ManualReset);
+        private readonly Stopwatch _stopwatch = new();
+        private readonly EventWaitHandle _handleCreatedEvent = new(false, EventResetMode.ManualReset);
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly Task _task;
 

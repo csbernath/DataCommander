@@ -11,7 +11,7 @@ namespace Foundation.Threading
     /// </summary>
     public sealed class WorkerThreadCollection : IList<WorkerThread>
     {
-        private readonly List<WorkerThread> _threads = new List<WorkerThread>();
+        private readonly List<WorkerThread> _threads = new();
 
         #region IList<WorkerThread> Members
 

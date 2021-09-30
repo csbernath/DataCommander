@@ -125,7 +125,7 @@ namespace Foundation.Collections
             {
             }
 
-            public static TypeEqualityComparer Instance { get; } = new TypeEqualityComparer();
+            public static TypeEqualityComparer Instance { get; } = new();
 
             #region IEqualityComparer<Type> Members
 

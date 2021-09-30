@@ -11,7 +11,7 @@ namespace Foundation.Data.SqlClient
 {
     public class SqlParameterCollectionBuilder
     {
-        private readonly List<SqlParameter> _parameters = new List<SqlParameter>();
+        private readonly List<SqlParameter> _parameters = new();
 
         public void Add(SqlParameter sqlParameter) => _parameters.Add(sqlParameter);
 

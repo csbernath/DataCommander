@@ -24,8 +24,8 @@ namespace Foundation.Core
             _dayNumber = dayNumber;
         }
 
-        public static DateOnly MinValue => new DateOnly(MinDayNumber);
-        public static DateOnly MaxValue => new DateOnly(MaxDayNumber);
+        public static DateOnly MinValue => new(MinDayNumber);
+        public static DateOnly MaxValue => new(MaxDayNumber);
 
         public DateOnly(int year, int month, int day) => _dayNumber = DayNumberFromDateTime(new DateTime(year, month, day));
 
@@ -59,9 +59,9 @@ namespace Foundation.Core
         public DateTime ToDateTime() => ToDateTime(_dayNumber);
 
         [Pure]
-        private static DateTime ToDateTime(int dayNumber) => new DateTime(dayNumber * TimeSpan.TicksPerDay);
+        private static DateTime ToDateTime(int dayNumber) => new(dayNumber * TimeSpan.TicksPerDay);
 
-        public static DateOnly FromDateTime(DateTime dateTime) => new DateOnly(DayNumberFromDateTime(dateTime));        
+        public static DateOnly FromDateTime(DateTime dateTime) => new(DayNumberFromDateTime(dateTime));        
 
         public int CompareTo(DateOnly other) => _dayNumber.CompareTo(other._dayNumber);
 

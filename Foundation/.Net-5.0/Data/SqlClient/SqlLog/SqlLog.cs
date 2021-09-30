@@ -67,10 +67,10 @@ namespace Foundation.Data.SqlClient.SqlLog
         private static readonly IInternalConnectionHelper InternalConnectionHelper;
         private int _connectionCounter;
         private readonly SafeSqlConnection _connection;
-        private readonly Dictionary<int, Dictionary<string, SqLoglCommandExecution>> _applications = new Dictionary<int, Dictionary<string, SqLoglCommandExecution>>();
-        private readonly Dictionary<object, SqlLogConnection> _connections = new Dictionary<object, SqlLogConnection>();
-        private readonly Queue<ISqlLogItem> _queue = new Queue<ISqlLogItem>();
-        private readonly AutoResetEvent _queueEvent = new AutoResetEvent(false);
+        private readonly Dictionary<int, Dictionary<string, SqLoglCommandExecution>> _applications = new();
+        private readonly Dictionary<object, SqlLogConnection> _connections = new();
+        private readonly Queue<ISqlLogItem> _queue = new();
+        private readonly AutoResetEvent _queueEvent = new(false);
 
         #endregion
 

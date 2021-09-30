@@ -12,7 +12,7 @@ namespace DataCommander.Providers.ResultWriter
         {
         }
 
-        public List<DoubleBufferedDataGridView> DataGridViews { get; } = new List<DoubleBufferedDataGridView>();
+        public List<DoubleBufferedDataGridView> DataGridViews { get; } = new();
 
         #region IResultWriter Members
 

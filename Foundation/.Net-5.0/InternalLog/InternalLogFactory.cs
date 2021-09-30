@@ -7,7 +7,7 @@ namespace Foundation.InternalLog
 {
     public sealed class InternalLogFactory : ILogFactory
     {
-        public static readonly InternalLogFactory Instance = new InternalLogFactory();
+        public static readonly InternalLogFactory Instance = new();
 
         private static TextLogWriter _textLogWriter;
 

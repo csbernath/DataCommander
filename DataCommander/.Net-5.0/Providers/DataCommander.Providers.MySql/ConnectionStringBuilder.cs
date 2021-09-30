@@ -6,7 +6,7 @@ namespace DataCommander.Providers.MySql
 {
     internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
     {
-        private readonly MySqlConnectionStringBuilder _mySqlConnectionStringBuilder = new MySqlConnectionStringBuilder();
+        private readonly MySqlConnectionStringBuilder _mySqlConnectionStringBuilder = new();
 
         string IDbConnectionStringBuilder.ConnectionString
         {

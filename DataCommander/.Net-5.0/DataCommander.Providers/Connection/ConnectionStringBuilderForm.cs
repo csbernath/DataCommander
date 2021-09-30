@@ -14,7 +14,7 @@ namespace DataCommander.Providers.Connection
 {
     internal partial class ConnectionStringBuilderForm : Form
     {
-        private readonly ConnectionProperties _tempConnectionProperties = new ConnectionProperties();
+        private readonly ConnectionProperties _tempConnectionProperties = new();
         private ConnectionProperties _connectionProperties;
         private readonly IList<string> _providers;
         private DbProviderFactory _dbProviderFactory;

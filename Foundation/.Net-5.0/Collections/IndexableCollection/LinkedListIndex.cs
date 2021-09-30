@@ -5,7 +5,7 @@ namespace Foundation.Collections.IndexableCollection
 {
     public class LinkedListIndex<T> : ICollectionIndex<T>
     {
-        private readonly LinkedList<T> _linkedList = new LinkedList<T>();
+        private readonly LinkedList<T> _linkedList = new();
 
         public LinkedListIndex(string name) => Name = name;
 

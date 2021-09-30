@@ -7,9 +7,9 @@ namespace Foundation.Data.PTypes
     {
         private SqlString _sql;
 
-        public static readonly PString Null = new PString(PValueType.Null);
-        public static readonly PString Default = new PString(PValueType.Default);
-        public static readonly PString Empty = new PString(PValueType.Empty);
+        public static readonly PString Null = new(PValueType.Null);
+        public static readonly PString Default = new(PValueType.Default);
+        public static readonly PString Empty = new(PValueType.Empty);
 
         private PString(PValueType type)
         {
@@ -36,12 +36,12 @@ namespace Foundation.Data.PTypes
             ValueType = value.IsNull ? PValueType.Null : PValueType.Value;
         }
 
-        public static implicit operator PString(char value) => new PString(value);
+        public static implicit operator PString(char value) => new(value);
 
         [DebuggerStepThrough]
-        public static implicit operator PString(string value) => new PString(value);
+        public static implicit operator PString(string value) => new(value);
 
-        public static implicit operator PString(SqlString value) => new PString(value);
+        public static implicit operator PString(SqlString value) => new(value);
 
         public static implicit operator string(PString value) => (string)value._sql;
 

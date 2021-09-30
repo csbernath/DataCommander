@@ -10,6 +10,6 @@ namespace Foundation.Xml.XmlSpreadsheet
         public string NumberFormat;
         public string Width;
         public Converter<object, string> Convert;
-        public Dictionary<string, object> ExtendedProperties = new Dictionary<string, object>();
+        public Dictionary<string, object> ExtendedProperties = new();
     }
 }

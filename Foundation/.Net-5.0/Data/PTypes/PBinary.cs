@@ -6,9 +6,9 @@ namespace Foundation.Data.PTypes
     {
         private readonly SqlBinary _sql;
 
-        public static readonly PBinary Null = new PBinary(PValueType.Null);
-        public static readonly PBinary Default = new PBinary(PValueType.Default);
-        public static readonly PBinary Empty = new PBinary(PValueType.Empty);
+        public static readonly PBinary Null = new(PValueType.Null);
+        public static readonly PBinary Default = new(PValueType.Default);
+        public static readonly PBinary Empty = new(PValueType.Empty);
 
         #region Constructors
 
@@ -26,7 +26,7 @@ namespace Foundation.Data.PTypes
 
         #endregion
 
-        public static implicit operator PBinary(byte[] value) => new PBinary(value);
+        public static implicit operator PBinary(byte[] value) => new(value);
         public static implicit operator byte[](PBinary value) => (byte[])value._sql;
 
         public static bool operator ==(PBinary x, PBinary y)

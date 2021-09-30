@@ -6,7 +6,7 @@ namespace Foundation.Threading
 {
     internal sealed class Lock
     {
-        private readonly object _lockObject = new object();
+        private readonly object _lockObject = new();
         private int _counter;
 
         public IDisposable Enter()

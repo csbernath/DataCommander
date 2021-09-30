@@ -13,17 +13,17 @@ namespace Foundation.Threading.Tasks
         #region Private Fields
 
         private static ILog _log = LogFactory.Instance.GetCurrentTypeLog();
-        private static readonly HashSet<TaskInfo> Tasks = new HashSet<TaskInfo>();
+        private static readonly HashSet<TaskInfo> Tasks = new();
 
         private static readonly StringTableColumnInfo<TaskInfo>[] Columns =
         {
             StringTableColumnInfo.Create<TaskInfo, int>("Id", StringTableColumnAlign.Right, s => s.Id),
-            new StringTableColumnInfo<TaskInfo>("Name", StringTableColumnAlign.Left, s => s.Name),
+            new("Name", StringTableColumnAlign.Left, s => s.Name),
             StringTableColumnInfo.Create<TaskInfo, int?>("ManagedThreadId", StringTableColumnAlign.Right, s => s.ManagedThreadId),
             StringTableColumnInfo.Create<TaskInfo, bool?>("IsThreadPoolThread", StringTableColumnAlign.Left, s => s.IsThreadPoolThread),
-            new StringTableColumnInfo<TaskInfo>("CreationTime", StringTableColumnAlign.Left, s => ToString(s.CreationTime)),
-            new StringTableColumnInfo<TaskInfo>("StartTime", StringTableColumnAlign.Left, s => ToString(s.StartTime)),
-            new StringTableColumnInfo<TaskInfo>("CompletedTime", StringTableColumnAlign.Left, s => ToString(s.CompletedTime)),
+            new("CreationTime", StringTableColumnAlign.Left, s => ToString(s.CreationTime)),
+            new("StartTime", StringTableColumnAlign.Left, s => ToString(s.StartTime)),
+            new("CompletedTime", StringTableColumnAlign.Left, s => ToString(s.CompletedTime)),
             StringTableColumnInfo.Create<TaskInfo, TimeSpan?>("CompletedTimeSpan", StringTableColumnAlign.Left, s => s.CompletedTimeSpan),
             StringTableColumnInfo.Create<TaskInfo, bool>("IsAlive", StringTableColumnAlign.Left, s => s.IsAlive),
             StringTableColumnInfo.Create<TaskInfo, bool>("IsCompleted", StringTableColumnAlign.Left, s => s.IsCompleted)

@@ -19,7 +19,7 @@ namespace Foundation.Data.TextData
         /// <summary>
         /// 
         /// </summary>
-        public new TextDataParameterCollection Parameters { get; } = new TextDataParameterCollection();
+        public new TextDataParameterCollection Parameters { get; } = new();
 
         /// <summary>
         /// 

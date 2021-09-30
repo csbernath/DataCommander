@@ -9,7 +9,7 @@ namespace Foundation.Data.MethodProfiler
     internal sealed class MethodCollection : IEnumerable<MethodBase>
     {
         private int _idSequence;
-        private readonly ConcurrentDictionary<MethodBase, int> _methods = new ConcurrentDictionary<MethodBase, int>();
+        private readonly ConcurrentDictionary<MethodBase, int> _methods = new();
 
         public bool TryGetValue(MethodBase method, out int methodId)
         {

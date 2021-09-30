@@ -5,7 +5,7 @@ namespace DataCommander.Providers.Odp
 {
     internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
     {
-        private readonly OracleConnectionStringBuilder _oracleConnectionStringBuilder = new OracleConnectionStringBuilder();
+        private readonly OracleConnectionStringBuilder _oracleConnectionStringBuilder = new();
 
         string IDbConnectionStringBuilder.ConnectionString
         {

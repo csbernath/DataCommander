@@ -5,7 +5,7 @@ namespace Foundation.DefaultLog
 {
     public sealed class ConsoleLogWriter : ILogWriter
     {
-        private static readonly object LockObject = new object();
+        private static readonly object LockObject = new();
 
         private ConsoleLogWriter()
         {

@@ -25,9 +25,9 @@ namespace Foundation.Data.PTypes
             _sql = SqlByte.Null;
         }
 
-        public static implicit operator PByte(byte value) => new PByte(value);
+        public static implicit operator PByte(byte value) => new(value);
         public static implicit operator PByte(byte? value) => value != null ? new PByte(value.Value) : Null;
-        public static implicit operator PByte(SqlByte value) => new PByte(value);
+        public static implicit operator PByte(SqlByte value) => new(value);
         public static implicit operator byte(PByte value) => (byte)value._sql;
 
         public static bool operator ==(PByte x, PByte y)
@@ -120,8 +120,8 @@ namespace Foundation.Data.PTypes
         }
 
         public override string ToString() => _sql.ToString();
-        public static readonly PByte Null = new PByte(PValueType.Null);
-        public static readonly PByte Default = new PByte(PValueType.Default);
-        public static readonly PByte Empty = new PByte(PValueType.Empty);
+        public static readonly PByte Null = new(PValueType.Null);
+        public static readonly PByte Default = new(PValueType.Default);
+        public static readonly PByte Empty = new(PValueType.Empty);
     }
 }

@@ -5,7 +5,7 @@ namespace Foundation.Collections.IndexableCollection
 {
     public sealed class ReversedComparer<T> : IComparer<T>
     {
-        private static readonly Lazy<ReversedComparer<T>> Instance = new Lazy<ReversedComparer<T>>(CreateReversedComparer);
+        private static readonly Lazy<ReversedComparer<T>> Instance = new(CreateReversedComparer);
 
         private readonly IComparer<T> _comparer;
 

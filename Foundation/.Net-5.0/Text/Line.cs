@@ -21,6 +21,6 @@ namespace Foundation.Text
                 ? this
                 : new Line(Indentation + indentation, Text);
 
-        public static Line Empty = new Line(0, string.Empty);
+        public static Line Empty = new(0, string.Empty);
     }
 }

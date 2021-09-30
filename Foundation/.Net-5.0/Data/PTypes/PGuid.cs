@@ -7,9 +7,9 @@ namespace Foundation.Data.PTypes
     {
         private readonly SqlGuid _sql;
 
-        public static readonly PGuid Null = new PGuid(PValueType.Null);
-        public static readonly PGuid Default = new PGuid(PValueType.Default);
-        public static readonly PGuid Empty = new PGuid(PValueType.Empty);
+        public static readonly PGuid Null = new(PValueType.Null);
+        public static readonly PGuid Default = new(PValueType.Default);
+        public static readonly PGuid Empty = new(PValueType.Empty);
 
         public PGuid(Guid value)
         {
@@ -29,8 +29,8 @@ namespace Foundation.Data.PTypes
             _sql = SqlGuid.Null;
         }
 
-        public static implicit operator PGuid(Guid value) => new PGuid(value);
-        public static implicit operator PGuid(SqlGuid value) => new PGuid(value);
+        public static implicit operator PGuid(Guid value) => new(value);
+        public static implicit operator PGuid(SqlGuid value) => new(value);
         public static implicit operator Guid(PGuid value) => (Guid)value._sql;
 
         public static bool operator ==(PGuid x, PGuid y)

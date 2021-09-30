@@ -7,9 +7,9 @@ namespace Foundation.Data.PTypes
     {
         private SqlMoney _sql;
 
-        public static readonly PMoney Null = new PMoney(PValueType.Null);
-        public static readonly PMoney Default = new PMoney(PValueType.Default);
-        public static readonly PMoney Empty = new PMoney(PValueType.Empty);
+        public static readonly PMoney Null = new(PValueType.Null);
+        public static readonly PMoney Default = new(PValueType.Default);
+        public static readonly PMoney Empty = new(PValueType.Empty);
 
         public PMoney(decimal value)
         {
@@ -29,8 +29,8 @@ namespace Foundation.Data.PTypes
             _sql = SqlMoney.Null;
         }
 
-        public static implicit operator PMoney(decimal value) => new PMoney(value);
-        public static implicit operator PMoney(SqlMoney value) => new PMoney(value);
+        public static implicit operator PMoney(decimal value) => new(value);
+        public static implicit operator PMoney(SqlMoney value) => new(value);
         public static implicit operator decimal(PMoney value) => (decimal)value._sql;
 
         public static bool operator ==(PMoney x, PMoney y)

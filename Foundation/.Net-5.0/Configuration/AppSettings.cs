@@ -8,7 +8,7 @@ namespace Foundation.Configuration
 {
     public static class AppSettings
     {
-        public static readonly Lazy<NameValueCollectionReader> Instance = new Lazy<NameValueCollectionReader>(CreateInstance);
+        public static readonly Lazy<NameValueCollectionReader> Instance = new(CreateInstance);
 
         private static NameValueCollectionReader CreateInstance()
         {

@@ -28,9 +28,9 @@ namespace Foundation.Data.PTypes
         }
 
         [DebuggerStepThrough]
-        public static implicit operator PInt16(short value) => new PInt16(value);
+        public static implicit operator PInt16(short value) => new(value);
 
-        public static implicit operator PInt16(SqlInt16 value) => new PInt16(value);
+        public static implicit operator PInt16(SqlInt16 value) => new(value);
 
         public static implicit operator short(PInt16 value) => (short)value._sql;
 
@@ -116,8 +116,8 @@ namespace Foundation.Data.PTypes
         }
 
         public override string ToString() => _sql.ToString();
-        public static readonly PInt16 Null = new PInt16(PValueType.Null);
-        public static readonly PInt16 Default = new PInt16(PValueType.Default);
-        public static readonly PInt16 Empty = new PInt16(PValueType.Empty);
+        public static readonly PInt16 Null = new(PValueType.Null);
+        public static readonly PInt16 Default = new(PValueType.Default);
+        public static readonly PInt16 Empty = new(PValueType.Empty);
     }
 }

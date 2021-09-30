@@ -108,8 +108,8 @@ namespace DataCommander.Providers.Query
         private CommandType _commandType = CommandType.Text;
         private IAsyncDataAdapter _dataAdapter;
         private bool _cancel;
-        private readonly Timer _timer = new Timer();
-        private readonly Stopwatch _stopwatch = new Stopwatch();
+        private readonly Timer _timer = new();
+        private readonly Stopwatch _stopwatch = new();
         private readonly int _htmlMaxRecords;
         private readonly int _wordMaxRecords;
         private DataSetResultWriter _dataSetResultWriter;
@@ -153,11 +153,11 @@ namespace DataCommander.Providers.Query
         private ToolStripMenuItem _parseToolStripMenuItem;
         private QueryTextBox _queryTextBox;
 
-        private readonly ConcurrentQueue<InfoMessage> _infoMessages = new ConcurrentQueue<InfoMessage>();
+        private readonly ConcurrentQueue<InfoMessage> _infoMessages = new();
         private int _errorCount;
-        private readonly LimitedConcurrencyLevelTaskScheduler _scheduler = new LimitedConcurrencyLevelTaskScheduler(1);
-        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-        private readonly EventWaitHandle _enqueueEvent = new EventWaitHandle(false, EventResetMode.AutoReset);
+        private readonly LimitedConcurrencyLevelTaskScheduler _scheduler = new(1);
+        private readonly CancellationTokenSource _cancellationTokenSource = new();
+        private readonly EventWaitHandle _enqueueEvent = new(false, EventResetMode.AutoReset);
         private ToolStripMenuItem createCCommandQueryToolStripMenuItem;
         private ToolStripMenuItem undoToolStripMenuItem;
         private ToolStripMenuItem redoToolStripMenuItem;

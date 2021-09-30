@@ -6,11 +6,11 @@ namespace Foundation.Data.PTypes
     {
         private readonly SqlBoolean _sql;
 
-        public static readonly PBoolean Null = new PBoolean(PValueType.Null);
-        public static readonly PBoolean Default = new PBoolean(PValueType.Default);
-        public static readonly PBoolean Empty = new PBoolean(PValueType.Empty);
-        public static readonly PBoolean True = new PBoolean(true);
-        public static readonly PBoolean False = new PBoolean(false);
+        public static readonly PBoolean Null = new(PValueType.Null);
+        public static readonly PBoolean Default = new(PValueType.Default);
+        public static readonly PBoolean Empty = new(PValueType.Empty);
+        public static readonly PBoolean True = new(true);
+        public static readonly PBoolean False = new(false);
 
         #region Constructors
 
@@ -34,7 +34,7 @@ namespace Foundation.Data.PTypes
 
         #endregion
 
-        public static implicit operator PBoolean(bool value) => new PBoolean(value);
+        public static implicit operator PBoolean(bool value) => new(value);
 
         public static implicit operator PBoolean(bool? value)
         {
@@ -49,7 +49,7 @@ namespace Foundation.Data.PTypes
             return target;
         }
 
-        public static implicit operator PBoolean(SqlBoolean value) => new PBoolean(value);
+        public static implicit operator PBoolean(SqlBoolean value) => new(value);
         public static implicit operator bool(PBoolean value) => (bool)value._sql;
 
         public static bool operator ==(PBoolean x, PBoolean y)

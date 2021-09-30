@@ -10,7 +10,7 @@ namespace Foundation.Xml
     public sealed class SimpleXmlTextWriter : XmlWriter
     {
         private readonly IndentedTextWriter _textWriter;
-        private readonly Stack<StackItem> _stack = new Stack<StackItem>();
+        private readonly Stack<StackItem> _stack = new();
 
         public SimpleXmlTextWriter(TextWriter textWriter)
         {
@@ -374,7 +374,7 @@ namespace Foundation.Xml
         /// When overridden in a derived class, gets the state of the writer.
         /// </summary>
         /// <value></value>
-        public override WriteState WriteState => new WriteState();
+        public override WriteState WriteState => new();
 
         private static string Encode(char c)
         {

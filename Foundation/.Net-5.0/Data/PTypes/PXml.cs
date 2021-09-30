@@ -8,9 +8,9 @@ namespace Foundation.Data.PTypes
         private readonly SqlXml _sqlXml;
         private PValueType _type;
 
-        public static readonly PXml Null = new PXml(PValueType.Null);
-        public static readonly PXml Default = new PXml(PValueType.Default);
-        public static readonly PXml Empty = new PXml(PValueType.Empty);
+        public static readonly PXml Null = new(PValueType.Null);
+        public static readonly PXml Default = new(PValueType.Default);
+        public static readonly PXml Empty = new(PValueType.Empty);
 
         private PXml(PValueType type)
         {
@@ -28,6 +28,6 @@ namespace Foundation.Data.PTypes
         public object Value => _sqlXml;
 
         [DebuggerStepThrough]
-        public static implicit operator PXml(SqlXml value) => new PXml(value);
+        public static implicit operator PXml(SqlXml value) => new(value);
     }
 }

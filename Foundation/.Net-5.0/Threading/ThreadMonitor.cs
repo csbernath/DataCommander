@@ -14,20 +14,20 @@ namespace Foundation.Threading
     /// </summary>
     public static class ThreadMonitor
     {
-        private static readonly SortedDictionary<int, WorkerThread> Threads = new SortedDictionary<int, WorkerThread>();
+        private static readonly SortedDictionary<int, WorkerThread> Threads = new();
 
         private static readonly StringTableColumnInfo<WorkerThread>[] ThreadColumns =
         {
-            new StringTableColumnInfo<WorkerThread>("ManagedThreadId", StringTableColumnAlign.Right, t => t.ManagedThreadId.ToString()),
-            new StringTableColumnInfo<WorkerThread>("Name", StringTableColumnAlign.Left, t => t.Name),
-            new StringTableColumnInfo<WorkerThread>("State", StringTableColumnAlign.Left, t => t.ThreadState.ToString()),
-            new StringTableColumnInfo<WorkerThread>("StartTime", StringTableColumnAlign.Left, t => ToString(t.StartTime)),
-            new StringTableColumnInfo<WorkerThread>("StopTime", StringTableColumnAlign.Left, t => ToString(t.StopTime)),
-            new StringTableColumnInfo<WorkerThread>("Elapsed", StringTableColumnAlign.Left,
+            new("ManagedThreadId", StringTableColumnAlign.Right, t => t.ManagedThreadId.ToString()),
+            new("Name", StringTableColumnAlign.Left, t => t.Name),
+            new("State", StringTableColumnAlign.Left, t => t.ThreadState.ToString()),
+            new("StartTime", StringTableColumnAlign.Left, t => ToString(t.StartTime)),
+            new("StopTime", StringTableColumnAlign.Left, t => ToString(t.StopTime)),
+            new("Elapsed", StringTableColumnAlign.Left,
                 t => t.ThreadState == ThreadState.Stopped ? (t.StopTime - t.StartTime).ToString() : null),
-            new StringTableColumnInfo<WorkerThread>("Priority", StringTableColumnAlign.Left, t => GetPriority(t.Thread)),
-            new StringTableColumnInfo<WorkerThread>("IsBackground", StringTableColumnAlign.Left, t => IsBackground(t.Thread)),
-            new StringTableColumnInfo<WorkerThread>("IsThreadPoolThread", StringTableColumnAlign.Left, t => t.Thread.IsThreadPoolThread.ToString())
+            new("Priority", StringTableColumnAlign.Left, t => GetPriority(t.Thread)),
+            new("IsBackground", StringTableColumnAlign.Left, t => IsBackground(t.Thread)),
+            new("IsThreadPoolThread", StringTableColumnAlign.Left, t => t.Thread.IsThreadPoolThread.ToString())
         };
 
         /// <summary>

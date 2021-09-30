@@ -5,7 +5,7 @@ namespace Foundation.Core
 {
     public sealed class LocalTime : IDateTimeProvider
     {
-        public static readonly LocalTime Default = new LocalTime();
+        public static readonly LocalTime Default = new();
 
         private LocalTime()
         {

@@ -7,7 +7,7 @@ namespace Foundation.Configuration
 {
     public sealed class ConfigurationNodeTree
     {
-        private ConfigurationNode _rootNode = new ConfigurationNode(null);
+        private ConfigurationNode _rootNode = new(null);
 
         public void LoadXml(string xml, string sectionName)
         {

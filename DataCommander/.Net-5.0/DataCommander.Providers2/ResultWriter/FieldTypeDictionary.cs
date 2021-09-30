@@ -18,6 +18,6 @@ namespace DataCommander.Providers.ResultWriter
             Instance.Add<StringField>(FieldType.StringField);
         }
 
-        public static TypeDictionary<FieldType> Instance { get; } = new TypeDictionary<FieldType>();
+        public static TypeDictionary<FieldType> Instance { get; } = new();
     }
 }

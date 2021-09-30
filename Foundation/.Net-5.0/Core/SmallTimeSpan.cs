@@ -4,8 +4,8 @@ namespace Foundation.Core
 {
     public struct SmallTimeSpan
     {
-        public static readonly SmallTimeSpan MinValue = new SmallTimeSpan(short.MinValue);
-        public static readonly SmallTimeSpan MaxValue = new SmallTimeSpan(short.MaxValue);
+        public static readonly SmallTimeSpan MinValue = new(short.MinValue);
+        public static readonly SmallTimeSpan MaxValue = new(short.MaxValue);
 
         private SmallTimeSpan(short value) => TotalMinutes = value;
 

@@ -317,7 +317,7 @@ namespace DataCommander.Providers.OleDb
         {
             return new List<Statement>
             {
-                new Statement
+                new()
                 {
                     LineIndex = 0,
                     CommandText = commandText

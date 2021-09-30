@@ -18,7 +18,7 @@ namespace DataCommander.Providers.Query
 {
     public sealed class QueryTextBox : UserControl
     {
-        private readonly List<KeyWordList> _keyWordLists = new List<KeyWordList>();
+        private readonly List<KeyWordList> _keyWordLists = new();
         private int _selectionStart = 0;
         private int _selectionLength = 0;
         private int _prevSelectionStart;
@@ -27,7 +27,7 @@ namespace DataCommander.Providers.Query
         private ToolStripStatusLabel _sbPanel;
         private int _columnIndex;
         private ColorTheme _colorTheme;
-        private UndoRedoState<string> _undoRedoState = new UndoRedoState<string>(new List<string>(), 0);
+        private UndoRedoState<string> _undoRedoState = new(new List<string>(), 0);
 
         public RichTextBox RichTextBox { get; private set; }
 
@@ -36,7 +36,7 @@ namespace DataCommander.Providers.Query
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private readonly Container _components = new Container();
+        private readonly Container _components = new();
 
         public QueryTextBox()
         {

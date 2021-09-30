@@ -15,13 +15,13 @@ namespace Foundation.Text
         }
 
         public static StringTableColumnInfo<TSource> CreateLeft<TSource>(string columnName, Func<TSource, string> toString) =>
-            new StringTableColumnInfo<TSource>(columnName, StringTableColumnAlign.Left, toString);
+            new(columnName, StringTableColumnAlign.Left, toString);
 
         public static StringTableColumnInfo<TSource> CreateLeft<TSource, TResult>(string columnName, Func<TSource, TResult> getValue) =>
             Create(columnName, StringTableColumnAlign.Left, getValue);
 
         public static StringTableColumnInfo<TSource> CreateRight<TSource>(string columnName, Func<TSource, string> toString) =>
-            new StringTableColumnInfo<TSource>(columnName, StringTableColumnAlign.Right, toString);
+            new(columnName, StringTableColumnAlign.Right, toString);
 
         public static StringTableColumnInfo<TSource> CreateRight<TSource, TResult>(string columnName, Func<TSource, TResult> getValue) =>
             Create(columnName, StringTableColumnAlign.Right, getValue);

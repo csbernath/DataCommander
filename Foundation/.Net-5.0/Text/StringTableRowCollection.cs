@@ -6,7 +6,7 @@ namespace Foundation.Text
 {
     public class StringTableRowCollection : IEnumerable<StringTableRow>
     {
-        private readonly SegmentedCollection<StringTableRow> _rows = new SegmentedCollection<StringTableRow>(64);
+        private readonly SegmentedCollection<StringTableRow> _rows = new(64);
 
         internal StringTableRowCollection()
         {

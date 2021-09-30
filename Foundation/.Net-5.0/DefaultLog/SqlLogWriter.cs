@@ -23,8 +23,8 @@ namespace Foundation.DefaultLog
         private readonly Func<LogEntry, string> _logEntryToCommandText;
         private readonly int _commandTimeout;
         private readonly SingleThreadPool _singleThreadPool;
-        private readonly List<LogEntry> _entryQueue = new List<LogEntry>();
-        private readonly object _lockObject = new object();
+        private readonly List<LogEntry> _entryQueue = new();
+        private readonly object _lockObject = new();
         private Timer _timer;
 
         #endregion

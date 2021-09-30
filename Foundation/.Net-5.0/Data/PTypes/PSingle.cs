@@ -7,9 +7,9 @@ namespace Foundation.Data.PTypes
     {
         private SqlSingle _sql;
 
-        public static readonly PSingle Null = new PSingle(PValueType.Null);
-        public static readonly PSingle Default = new PSingle(PValueType.Default);
-        public static readonly PSingle Empty = new PSingle(PValueType.Empty);
+        public static readonly PSingle Null = new(PValueType.Null);
+        public static readonly PSingle Default = new(PValueType.Default);
+        public static readonly PSingle Empty = new(PValueType.Empty);
 
         private PSingle(PValueType type)
         {
@@ -29,8 +29,8 @@ namespace Foundation.Data.PTypes
             ValueType = value.IsNull ? PValueType.Null : PValueType.Value;
         }
 
-        public static implicit operator PSingle(float value) => new PSingle(value);
-        public static implicit operator PSingle(SqlSingle value) => new PSingle(value);
+        public static implicit operator PSingle(float value) => new(value);
+        public static implicit operator PSingle(SqlSingle value) => new(value);
         public static implicit operator float(PSingle value) => (float)value._sql;
 
         public static bool operator ==(PSingle x, PSingle y)

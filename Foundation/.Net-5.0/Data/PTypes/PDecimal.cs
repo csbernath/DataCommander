@@ -7,9 +7,9 @@ namespace Foundation.Data.PTypes
     {
         private readonly SqlDecimal _sql;
 
-        public static readonly PDecimal Null = new PDecimal(PValueType.Null);
-        public static readonly PDecimal Default = new PDecimal(PValueType.Default);
-        public static readonly PDecimal Empty = new PDecimal(PValueType.Empty);
+        public static readonly PDecimal Null = new(PValueType.Null);
+        public static readonly PDecimal Default = new(PValueType.Default);
+        public static readonly PDecimal Empty = new(PValueType.Empty);
 
         public PDecimal(decimal value)
         {
@@ -29,8 +29,8 @@ namespace Foundation.Data.PTypes
             _sql = SqlDecimal.Null;
         }
 
-        public static implicit operator PDecimal(decimal value) => new PDecimal(value);
-        public static implicit operator PDecimal(SqlDecimal value) => new PDecimal(value);
+        public static implicit operator PDecimal(decimal value) => new(value);
+        public static implicit operator PDecimal(SqlDecimal value) => new(value);
 
         /// <summary>
         /// 

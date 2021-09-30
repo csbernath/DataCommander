@@ -6,7 +6,7 @@ namespace DataCommander.Providers.SqlServerCe40
 {
     internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
     {
-        private readonly SqlCeConnectionStringBuilder _sqlCeConnectionStringBuilder = new SqlCeConnectionStringBuilder();
+        private readonly SqlCeConnectionStringBuilder _sqlCeConnectionStringBuilder = new();
 
         string IDbConnectionStringBuilder.ConnectionString
         {

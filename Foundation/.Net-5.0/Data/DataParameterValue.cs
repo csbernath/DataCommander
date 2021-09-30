@@ -18,10 +18,10 @@ namespace Foundation.Data
             _value = default(T);
         }
 
-        public static DataParameterValue<T> Default { get; } = new DataParameterValue<T>(DataParameterValueType.Default);
-        public static DataParameterValue<T> Null { get; } = new DataParameterValue<T>(DataParameterValueType.Null);
-        public static DataParameterValue<T> Void { get; } = new DataParameterValue<T>(DataParameterValueType.Void);
-        public static implicit operator DataParameterValue<T>(T value) => new DataParameterValue<T>(value);
+        public static DataParameterValue<T> Default { get; } = new(DataParameterValueType.Default);
+        public static DataParameterValue<T> Null { get; } = new(DataParameterValueType.Null);
+        public static DataParameterValue<T> Void { get; } = new(DataParameterValueType.Void);
+        public static implicit operator DataParameterValue<T>(T value) => new(value);
         public static explicit operator T(DataParameterValue<T> value) => value.Value;
         public DataParameterValueType Type { get; }
 

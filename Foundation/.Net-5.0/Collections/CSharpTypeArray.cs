@@ -5,7 +5,7 @@ namespace Foundation.Collections
 {
     public static class CSharpTypeArray
     {
-        public static readonly ReadOnlyArray<CSharpType> CSharpTypes = new ReadOnlyArray<CSharpType>(new[]
+        public static readonly ReadOnlyArray<CSharpType> CSharpTypes = new(new[]
         {
             new CSharpType(CSharpTypeName.Boolean, typeof(bool)),
             new CSharpType(CSharpTypeName.Byte, typeof(byte)),
