@@ -4,9 +4,6 @@ using Oracle.ManagedDataAccess.Client;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
 {
-    /// <summary>
-    /// Summary description for ObjectBrowser.
-    /// </summary>
     internal sealed class ObjectExplorer : IObjectExplorer
     {
         private OracleConnection _connection;

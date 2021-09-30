@@ -40,12 +40,6 @@ namespace Foundation.Collections
             return result;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="minIndex"></param>
-        /// <param name="maxIndex"></param>
-        /// <param name="lessThan"></param>
-        /// <param name="equals"></param>
         public static void Search(int minIndex, int maxIndex,
             Func<int, bool> lessThan,
             Func<int, bool> equals)

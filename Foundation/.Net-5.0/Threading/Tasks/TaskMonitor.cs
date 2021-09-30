@@ -33,9 +33,6 @@ namespace Foundation.Threading.Tasks
 
         #region Public Properties
 
-        /// <summary>
-        /// 
-        /// </summary>
         public static int Count => Tasks.Count;
 
         #endregion

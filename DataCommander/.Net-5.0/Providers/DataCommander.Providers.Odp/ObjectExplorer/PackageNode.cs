@@ -7,9 +7,6 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
 {
-    /// <summary>
-    /// Summary description for TablesNode.
-    /// </summary>
     internal sealed class PackageNode : ITreeNode
     {
         private readonly SchemaNode _schemaNode;

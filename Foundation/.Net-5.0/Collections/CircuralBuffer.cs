@@ -11,16 +11,11 @@ namespace Foundation.Collections
     /// <typeparam name="T"></typeparam>
     public sealed class CircularBuffer<T> : IList<T>
     {
-        /// <summary>
-        /// </summary>
-        /// <param name="capacity"></param>
         public CircularBuffer(int capacity)
         {
             SetCapacity(capacity);
         }
 
-        /// <summary>
-        /// </summary>
         public int Capacity => _array.Length;
 
         #region IEnumerable<T> Members
@@ -53,10 +48,6 @@ namespace Foundation.Collections
 
         #endregion
 
-        /// <summary>
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
         public void AddHead(T item)
         {
             Assert.IsValidOperation(Count < Capacity);
@@ -75,10 +66,6 @@ namespace Foundation.Collections
             Count++;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
         public void AddTail(T item)
         {
             //Assert.IsTrue(this.Count < this.array.Length);
@@ -97,9 +84,6 @@ namespace Foundation.Collections
             Count++;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="items"></param>
         public void AddTail(IEnumerable<T> items)
         {
             Assert.IsNotNull(items);
@@ -107,18 +91,12 @@ namespace Foundation.Collections
             foreach (var item in items) AddTail(item);
         }
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
         public T PeekHead()
         {
             Assert.IsValidOperation(Count > 0);
             return _array[_head];
         }
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
         public T RemoveHead()
         {
             Assert.IsValidOperation(Count > 0);
@@ -131,9 +109,6 @@ namespace Foundation.Collections
             return item;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
         public T PeekTail()
         {
             Assert.IsValidOperation(Count > 0);
@@ -141,9 +116,6 @@ namespace Foundation.Collections
             return _array[_tail];
         }
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
         public T RemoveTail()
         {
             Assert.IsValidOperation(Count > 0);
@@ -155,9 +127,6 @@ namespace Foundation.Collections
             return item;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="capacity"></param>
         public void SetCapacity(int capacity)
         {
             Assert.IsValidOperation(capacity >= Count);

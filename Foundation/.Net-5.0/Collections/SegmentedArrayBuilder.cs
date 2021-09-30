@@ -4,15 +4,8 @@ using Foundation.Assertions;
 
 namespace Foundation.Collections
 {
-    /// <summary>
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
     public sealed class SegmentedArrayBuilder<T>
     {
-        /// <summary>
-        /// </summary>
-        /// <param name="length"></param>
-        /// <param name="segmentLength"></param>
         public SegmentedArrayBuilder(
             int length,
             int segmentLength)
@@ -33,9 +26,6 @@ namespace Foundation.Collections
             }
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="item"></param>
         public void Add(T item)
         {
             var currentSegment = _segments[_currentSegmentArrayIndex];
@@ -52,9 +42,6 @@ namespace Foundation.Collections
             }
         }
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
         public IReadOnlyList<T> ToReadOnlyCollection()
         {
             return new ReadOnlySegmentedList(_segments);
