@@ -1,9 +1,9 @@
-﻿using DataCommander.Providers.Query;
-using Foundation.Data.SqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Windows.Forms;
+using DataCommander.Providers.Query;
+using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {

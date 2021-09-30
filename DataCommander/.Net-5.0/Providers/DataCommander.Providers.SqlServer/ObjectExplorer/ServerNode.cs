@@ -1,9 +1,9 @@
-﻿using Foundation.Assertions;
-using Foundation.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Windows.Forms;
+using Foundation.Assertions;
+using Foundation.Core;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -50,7 +50,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             var securityNode = new SecurityNode(this);
             var serverObjectCollectionNode = new ServerObjectCollectionNode(this);
             var jobCollectionNode = new JobCollectionNode(this);
-            return new ITreeNode[] { node, securityNode, serverObjectCollectionNode, jobCollectionNode };
+            return new ITreeNode[] {node, securityNode, serverObjectCollectionNode, jobCollectionNode};
         }
 
         bool ITreeNode.Sortable => false;

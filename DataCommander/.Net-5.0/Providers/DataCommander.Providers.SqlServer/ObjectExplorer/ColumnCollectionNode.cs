@@ -1,10 +1,10 @@
-﻿using Foundation.Data;
+﻿using System.Collections.Generic;
+using System.Data;
+using Microsoft.Data.SqlClient;
+using System.Windows.Forms;
+using Foundation.Data;
 using Foundation.Linq;
 using Foundation.Log;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Windows.Forms;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {

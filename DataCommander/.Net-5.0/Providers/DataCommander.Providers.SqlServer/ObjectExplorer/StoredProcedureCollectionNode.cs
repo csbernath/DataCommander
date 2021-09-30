@@ -1,8 +1,8 @@
-﻿using Foundation.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Windows.Forms;
+using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -60,8 +60,8 @@ order by s.name,o.name", _database.Name, _isMsShipped
             for (var i = 0; i < count; i++)
             {
                 var row = dataRows[i];
-                var owner = (string)row["Owner"];
-                var name = (string)row["Name"];
+                var owner = (string) row["Owner"];
+                var name = (string) row["Name"];
 
                 treeNodes.Add(new StoredProcedureNode(_database, owner, name));
             }

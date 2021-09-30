@@ -47,7 +47,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Windows.Forms", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander", "DataCommander\DataCommander.csproj", "{D2A37383-F42E-4FA1-ABC5-3EC9C091B496}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers.SqlServer2", "Providers\DataCommander.Providers.SqlServer2\DataCommander.Providers.SqlServer2.csproj", "{E72CD2A3-4343-4FED-9DE1-5BBD8B19354E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers.SqlServer", "Providers\DataCommander.Providers.SqlServer\DataCommander.Providers.SqlServer.csproj", "{E72CD2A3-4343-4FED-9DE1-5BBD8B19354E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers.Tfs", "Providers\DataCommander.Providers.Tfs\DataCommander.Providers.Tfs.csproj", "{7E353C6B-78B1-4CC9-AA86-90EF48AE7239}"
 EndProject

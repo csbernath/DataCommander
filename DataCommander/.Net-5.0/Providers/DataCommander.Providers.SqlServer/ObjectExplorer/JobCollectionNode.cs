@@ -1,8 +1,8 @@
-﻿using Foundation.Assertions;
-using Foundation.Data;
-using System.Collections.Generic;
-using System.Data.SqlClient;
+﻿using System.Collections.Generic;
+using Microsoft.Data.SqlClient;
 using System.Windows.Forms;
+using Foundation.Assertions;
+using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -27,7 +27,7 @@ order by j.name";
             return SqlClientFactory.Instance.ExecuteReader(Server.ConnectionString, new ExecuteReaderRequest(commandText), 128, dataRecord =>
             {
                 var name = dataRecord.GetString(0);
-                return (ITreeNode)new JobNode(this, name);
+                return (ITreeNode) new JobNode(this, name);
             });
         }
 

@@ -1,9 +1,9 @@
-﻿using DataCommander.Providers2;
+﻿using System;
+using System.Data;
+using Microsoft.Data.SqlClient;
+using DataCommander.Providers2;
 using DataCommander.Providers2.FieldNamespace;
 using Foundation.Data;
-using System;
-using System.Data;
-using System.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.FieldReader
 {
@@ -14,7 +14,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
 
         public SqlDataReaderHelper(IDataReader dataReader)
         {
-            _sqlDataReader = (SqlDataReader)dataReader;
+            _sqlDataReader = (SqlDataReader) dataReader;
             var schemaTable = dataReader.GetSchemaTable();
 
             if (schemaTable != null)
@@ -38,7 +38,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
         private static IDataFieldReader CreateDataFieldReader(IDataRecord dataRecord, FoundationDbColumn dataColumnSchema)
         {
             var columnOrdinal = dataColumnSchema.ColumnOrdinal;
-            var providerType = (SqlDbType)dataColumnSchema.ProviderType;
+            var providerType = (SqlDbType) dataColumnSchema.ProviderType;
             IDataFieldReader dataFieldReader;
 
             switch (providerType)

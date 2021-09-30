@@ -1,9 +1,9 @@
-﻿using DataCommander.Providers2;
+﻿using System.Data;
+using DataCommander.Providers2;
+using Foundation.Collections.ReadOnly;
+using Microsoft.Data.SqlClient;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
-using System.Data;
-using System.Data.SqlClient;
-using Foundation.Collections.ReadOnly;
 
 namespace DataCommander.Providers.SqlServer
 {
@@ -62,7 +62,7 @@ where
     i.object_id = @id
     and i.is_unique = 1
     and i.has_filter = 0
-order by c.[Count]
+order by c.[Count],i.index_id
 
 if @index_id is null
     select @index_id = i.index_id

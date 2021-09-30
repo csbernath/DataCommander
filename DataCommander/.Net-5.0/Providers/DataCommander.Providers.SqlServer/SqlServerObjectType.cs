@@ -1,5 +1,4 @@
-﻿
-namespace DataCommander.Providers.SqlServer
+﻿namespace DataCommander.Providers.SqlServer
 {
     internal static class SqlServerObjectType
     {

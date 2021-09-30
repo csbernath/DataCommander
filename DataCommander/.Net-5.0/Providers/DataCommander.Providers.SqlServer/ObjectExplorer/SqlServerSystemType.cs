@@ -1,5 +1,4 @@
-﻿
-namespace DataCommander.Providers.SqlServer.ObjectExplorer
+﻿namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     internal enum SqlServerSystemType
     {

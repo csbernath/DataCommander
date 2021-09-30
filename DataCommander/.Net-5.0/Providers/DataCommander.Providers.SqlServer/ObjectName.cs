@@ -1,6 +1,6 @@
-﻿using DataCommander.Providers2;
-using System.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using System.Text;
+using DataCommander.Providers2;
 
 namespace DataCommander.Providers.SqlServer
 {
@@ -50,7 +50,7 @@ namespace DataCommander.Providers.SqlServer
 
         private static string QuoteIdentifier(string unquotedIdentifier)
         {
-            var quotedIdentifier = unquotedIdentifier.IndexOfAny(new[] { '.', '-' }) >= 0
+            var quotedIdentifier = unquotedIdentifier.IndexOfAny(new[] {'.', '-'}) >= 0
                 ? new SqlCommandBuilder().QuoteIdentifier(unquotedIdentifier)
                 : unquotedIdentifier;
 

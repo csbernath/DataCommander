@@ -1,8 +1,8 @@
-﻿using Foundation.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Windows.Forms;
+using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -32,7 +32,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
             for (var i = 0; i < count; ++i)
             {
-                var name = (string)dataRows[i][0];
+                var name = (string) dataRows[i][0];
                 treeNodes[i] = new UserNode(_database, name);
             }
 

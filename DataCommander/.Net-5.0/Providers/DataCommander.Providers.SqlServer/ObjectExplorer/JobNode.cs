@@ -1,12 +1,12 @@
-﻿using DataCommander.Providers.Query;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using Microsoft.Data.SqlClient;
+using System.Windows.Forms;
+using DataCommander.Providers.Query;
 using Foundation.Assertions;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Windows.Forms;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -48,7 +48,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
                     dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText));
                 }
 
-                var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+                var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
                 queryForm.ShowDataSet(dataSet);
 
                 return null;

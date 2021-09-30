@@ -1,9 +1,9 @@
-﻿using DataCommander.Providers.Query;
-using Foundation.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Windows.Forms;
+using DataCommander.Providers.Query;
+using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -52,7 +52,7 @@ where m.object_id = {_id}";
             {
                 connection.Open();
                 var executor = connection.CreateCommandExecutor();
-                definition = (string)executor.ExecuteScalar(new CreateCommandRequest(commandText));
+                definition = (string) executor.ExecuteScalar(new CreateCommandRequest(commandText));
             }
 
             QueryForm.ShowText(definition);

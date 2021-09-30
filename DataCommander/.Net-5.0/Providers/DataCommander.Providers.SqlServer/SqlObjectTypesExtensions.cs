@@ -1,5 +1,5 @@
-﻿using DataCommander.Providers2;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using DataCommander.Providers2;
 
 namespace DataCommander.Providers.SqlServer
 {

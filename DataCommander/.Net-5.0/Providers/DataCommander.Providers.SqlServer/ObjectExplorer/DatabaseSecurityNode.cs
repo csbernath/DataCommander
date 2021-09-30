@@ -1,6 +1,6 @@
-﻿using Foundation.Assertions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
+using Foundation.Assertions;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {

@@ -1,12 +1,12 @@
-﻿using DataCommander.Providers.Query;
-using Foundation.Core;
-using Foundation.Data.SqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using DataCommander.Providers.Query;
+using Foundation.Core;
+using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -61,7 +61,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
             Clipboard.SetText(text);
 
-            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
 
             queryForm.SetStatusbarPanelText(
                 $"Copying stored prcoedure script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.",

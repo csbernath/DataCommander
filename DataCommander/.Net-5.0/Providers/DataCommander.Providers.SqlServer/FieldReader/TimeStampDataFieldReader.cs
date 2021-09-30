@@ -1,6 +1,6 @@
-﻿using DataCommander.Providers2.FieldNamespace;
-using System.Data;
-using System.Data.SqlClient;
+﻿using System.Data;
+using Microsoft.Data.SqlClient;
+using DataCommander.Providers2.FieldNamespace;
 
 namespace DataCommander.Providers.SqlServer.FieldReader
 {
@@ -14,7 +14,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
             IDataRecord dataRecord,
             int columnOrdinal)
         {
-            _sqlDataReader = (SqlDataReader)dataRecord;
+            _sqlDataReader = (SqlDataReader) dataRecord;
             _columnOrdinal = columnOrdinal;
         }
 

@@ -1,4 +1,14 @@
-﻿using DataCommander.Providers.Query;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
+using Microsoft.Data.SqlClient;
+using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using DataCommander.Providers.Query;
 using DataCommander.Providers2;
 using Foundation.Assertions;
 using Foundation.Collections;
@@ -7,20 +17,12 @@ using Foundation.Core;
 using Foundation.Data;
 using Foundation.Data.DbQueryBuilding;
 using Foundation.Data.SqlClient;
+using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
 using Foundation.Windows.Forms;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using Sequence = Foundation.Core.Sequence;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
@@ -85,6 +87,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
                 scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("CREATE to clipboard", null, ScriptTable_Click));
                 scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("SELECT to clipboard", null, SelectScript_Click));
                 scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("INSERT to clipboard", null, InsertScript_Click));
+                scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("UPDATE to clipboard", null, UpdateScript_Click));
                 scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("C# ORM to clipboard", null, CsharpOrm_Click));
                 menu.Items.Add(scriptTableAs);
 
@@ -147,7 +150,7 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
         private void EditRows(object sender, EventArgs e)
         {
             var mainForm = DataCommanderApplication.Instance.MainForm;
-            var queryForm = (QueryForm)mainForm.ActiveMdiChild;
+            var queryForm = (QueryForm) mainForm.ActiveMdiChild;
             var name = DatabaseNode.Name + "." + _owner + "." + _name;
             var query = "select * from " + name;
             queryForm.EditRows(query);
@@ -215,7 +218,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                         case "varchar":
                         case "nvarchar":
                         case "varbinary":
-                            var columnLength = (int)column["col_len"];
+                            var columnLength = (int) column["col_len"];
                             string columnlengthString;
 
                             if (columnLength == -1)
@@ -240,8 +243,8 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                 if (keys.Rows.Count > 0)
                 {
                     var pk = (from row in keys.AsEnumerable()
-                              where row.Field<byte>("cType") == 1
-                              select row).FirstOrDefault();
+                        where row.Field<byte>("cType") == 1
+                        select row).FirstOrDefault();
 
                     if (pk != null)
                         for (var i = 1; i <= 16; i++)
@@ -266,7 +269,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                 dataSet.Tables.Add(schema);
 
                 var mainForm = DataCommanderApplication.Instance.MainForm;
-                var queryForm = (QueryForm)mainForm.ActiveMdiChild;
+                var queryForm = (QueryForm) mainForm.ActiveMdiChild;
                 queryForm.ShowDataSet(dataSet);
             }
         }
@@ -275,7 +278,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
         {
             using (new CursorManager(Cursors.WaitCursor))
             {
-                var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+                var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
                 queryForm.SetStatusbarPanelText("Copying table script to clipboard...",
                     queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
                 var stopwatch = Stopwatch.StartNew();
@@ -318,6 +321,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                 options.ScriptBatchTerminator = true;
                 options.SchemaQualify = true;
                 options.SchemaQualifyForeignKeysReferences = true;
+                options.TargetServerVersion = SqlServerVersion.Version100;
 
                 var stringCollection = table.Script(options);
                 var sb = new StringBuilder();
@@ -348,7 +352,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
 
             dataTable.TableName = $"{_name} indexes";
             var mainForm = DataCommanderApplication.Instance.MainForm;
-            var queryForm = (QueryForm)mainForm.ActiveMdiChild;
+            var queryForm = (QueryForm) mainForm.ActiveMdiChild;
             var dataSet = new DataSet();
             dataSet.Tables.Add(dataTable);
             queryForm.ShowDataSet(dataSet);
@@ -365,7 +369,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
             }
 
             Clipboard.SetText(selectStatement);
-            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
             queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
                 queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
         }
@@ -431,12 +435,11 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             foreach (var column in columns)
             {
                 if (first)
-                {
                     first = false;
-                    stringBuilder.Append("declare\r\n");
-                }
                 else
-                    stringBuilder.Append(",\r\n");
+                    stringBuilder.Append("\r\n");
+
+                stringBuilder.Append("declare");
 
                 var variableName = column.ColumnName;
                 variableName = char.ToLower(variableName[0]) + variableName.Substring(1);
@@ -445,12 +448,21 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                 switch (typeName)
                 {
                     case SqlDataTypeName.Char:
+                    case SqlDataTypeName.VarChar:
+                    {
+                        var maxLength = column.MaxLength;
+                        var maxLengthString = maxLength >= 0 ? maxLength.ToString() : "max";
+                        typeName += "(" + maxLengthString + ")";
+                    }
+                        break;
+
                     case SqlDataTypeName.NChar:
                     case SqlDataTypeName.NVarChar:
-                    case SqlDataTypeName.VarChar:
+                    {
                         var maxLength = column.MaxLength;
-                        var precisionString = maxLength >= 0 ? maxLength.ToString() : "max";
-                        typeName += "(" + precisionString + ")";
+                        var maxLengthString = maxLength >= 0 ? (maxLength / 2).ToString() : "max";
+                        typeName += "(" + maxLengthString + ")";
+                    }
                         break;
 
                     case SqlDataTypeName.Decimal:
@@ -463,7 +475,10 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                         break;
                 }
 
-                stringBuilder.Append($"    @{variableName} {typeName}");
+                stringBuilder.Append($" @{variableName} {typeName}");
+
+                if (column.IsNullable == false)
+                    stringBuilder.Append(" /*not null*/");
             }
 
             stringBuilder.AppendFormat("\r\n\r\ninsert into {0}.{1}\r\n(\r\n    ", _owner, _name);
@@ -502,8 +517,69 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             stringBuilder.Append(stringTable.ToString(4));
 
             Clipboard.SetText(stringBuilder.ToString());
-            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
 
+            queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
+                queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
+        }
+
+        private string CreateUpdateScript()
+        {
+            var connectionString = DatabaseNode.Databases.Server.ConnectionString;
+            GetTableSchemaResult getTableSchemaResult;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var tableName = $"{DatabaseNode.Name}.{_owner}.{_name}";
+                getTableSchemaResult = TableSchema.GetTableSchema(connection, tableName);
+            }
+
+            var textBuilder = new TextBuilder();
+
+            textBuilder.Add($"update {Name}");
+            textBuilder.Add("set");
+            using (textBuilder.Indent(1))
+            {
+                var last = getTableSchemaResult.Columns.Count - 1;
+                foreach (var item in getTableSchemaResult.Columns.SelectIndexed())
+                {
+                    var column = item.Value;
+                    var line = new StringBuilder();
+                    line.Append($"{column.ColumnName} = @{column.ColumnName}");
+                    if (item.Index < last)
+                        line.Append(',');
+                    textBuilder.Add(line.ToString());
+                }
+            }
+
+            if (getTableSchemaResult.UniqueIndexColumns.Count > 0)
+            {
+                textBuilder.Add("where");
+                using (textBuilder.Indent(1))
+                {
+                    var last = getTableSchemaResult.UniqueIndexColumns.Count - 1;
+                    foreach (var item in getTableSchemaResult.UniqueIndexColumns.SelectIndexed())
+                    {
+                        var columnId = item.Value.ColumnId;
+                        var column = getTableSchemaResult.Columns.First(i => i.ColumnId == columnId);
+                        var line = new StringBuilder();
+                        line.Append($"{column.ColumnName} = @{column.ColumnName}");
+                        if (item.Index < last)
+                            line.Append(',');
+                        textBuilder.Add(line.ToString());
+                    }
+                }
+            }
+
+            var script = textBuilder.ToLines().ToIndentedString("    ");
+            return script;
+        }
+
+        private void UpdateScript_Click(object sender, EventArgs e)
+        {
+            var script = CreateUpdateScript();
+            Clipboard.SetText(script);
+            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
             queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
                 queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
         }
@@ -543,11 +619,27 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             var identifierColumn = getTableSchemaResult.UniqueIndexColumns
                 .Select(i => getTableSchemaResult.Columns.First(j => j.ColumnId == i.ColumnId))
                 .Select(i => new Foundation.Data.DbQueryBuilding.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
-                .First();
+                .FirstOrDefault();
             var versionColumn = columns.FirstOrDefault(i => i.ColumnName == "Version");
-            columns = columns.Where(i => i.ColumnName != identifierColumn.ColumnName).ToReadOnlyCollection();
-            var createUpdateSqlStatementMethod = CreateUpdateSqlStatementMethodFactory.Create(_owner, _name, identifierColumn, versionColumn, columns);
-            var createDeleteSqlStatementMethod = CreateDeleteSqlStatementMethodFactory.Create(_owner, _name, identifierColumn, versionColumn);
+
+            ReadOnlyCollection<Line> createUpdateSqlStatementMethod;            
+            ReadOnlyCollection<Line> createDeleteSqlStatementMethod;
+
+            if (identifierColumn != null)
+            {
+                columns = columns
+                    .Where(i => i.ColumnName != identifierColumn.ColumnName)
+                    .ToReadOnlyCollection();
+
+                createUpdateSqlStatementMethod = CreateUpdateSqlStatementMethodFactory.Create(_owner, _name, identifierColumn, versionColumn, columns);
+
+                createDeleteSqlStatementMethod = CreateDeleteSqlStatementMethodFactory.Create(_owner, _name, identifierColumn, versionColumn);
+            }
+            else
+            {
+                createUpdateSqlStatementMethod = null;
+                createDeleteSqlStatementMethod = null;
+            }
 
             var textBuilder = new TextBuilder();
             textBuilder.Add(dataTransferObject);
@@ -556,10 +648,18 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             using (textBuilder.AddCSharpBlock())
             {
                 textBuilder.Add(createInsertSqlSqlStatementMethod);
-                textBuilder.Add(Line.Empty);
-                textBuilder.Add(createUpdateSqlStatementMethod);
-                textBuilder.Add(Line.Empty);
-                textBuilder.Add(createDeleteSqlStatementMethod);
+
+                if (createUpdateSqlStatementMethod != null)
+                {
+                    textBuilder.Add(Line.Empty);
+                    textBuilder.Add(createUpdateSqlStatementMethod);
+                }
+
+                if (createDeleteSqlStatementMethod != null)
+                {
+                    textBuilder.Add(Line.Empty);
+                    textBuilder.Add(createDeleteSqlStatementMethod);
+                }
             }
 
             Clipboard.SetText(textBuilder.ToLines().ToIndentedString("    "));

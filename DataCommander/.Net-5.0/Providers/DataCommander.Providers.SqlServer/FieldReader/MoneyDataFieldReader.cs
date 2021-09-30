@@ -1,7 +1,7 @@
-﻿using DataCommander.Providers2.FieldNamespace;
-using System;
+﻿using System;
 using System.Data;
 using System.Globalization;
+using DataCommander.Providers2.FieldNamespace;
 
 namespace DataCommander.Providers.SqlServer.FieldReader
 {
@@ -13,7 +13,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
 
         static MoneyDataFieldReader()
         {
-            NumberFormatInfo = (NumberFormatInfo)NumberFormatInfo.CurrentInfo.Clone();
+            NumberFormatInfo = (NumberFormatInfo) NumberFormatInfo.CurrentInfo.Clone();
             //numberFormatInfo.CurrencySymbol = string.Empty;
             //numberFormatInfo.CurrencyDecimalSeparator = ".";
             //numberFormatInfo.CurrencyGroupSeparator = ",";
@@ -22,7 +22,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
 
             NumberFormatInfo.NumberDecimalSeparator = ".";
             NumberFormatInfo.NumberGroupSeparator = ",";
-            NumberFormatInfo.NumberGroupSizes = new[] { 3 };
+            NumberFormatInfo.NumberGroupSizes = new[] {3};
             NumberFormatInfo.NumberDecimalDigits = 4;
         }
 

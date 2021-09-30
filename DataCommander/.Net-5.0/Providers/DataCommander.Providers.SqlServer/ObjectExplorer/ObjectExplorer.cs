@@ -1,6 +1,6 @@
-﻿using Foundation.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
+using Foundation.Linq;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {

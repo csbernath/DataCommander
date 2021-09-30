@@ -1,7 +1,7 @@
-﻿using DataCommander.Providers2.FieldNamespace;
-using System;
+﻿using System;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
+using DataCommander.Providers2.FieldNamespace;
 
 namespace DataCommander.Providers.SqlServer.FieldReader
 {
@@ -15,7 +15,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
             IDataRecord dataRecord,
             int columnOrdinal)
         {
-            _sqlDataReader = (SqlDataReader)dataRecord;
+            _sqlDataReader = (SqlDataReader) dataRecord;
             _columnOrdinal = columnOrdinal;
         }
 
@@ -42,7 +42,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
                         switch (elementTypeCode)
                         {
                             case TypeCode.Byte:
-                                var bytes = (byte[])value;
+                                var bytes = (byte[]) value;
                                 value = new BinaryField(bytes);
                                 break;
                         }
@@ -54,7 +54,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
                         switch (typeCode)
                         {
                             case TypeCode.DateTime:
-                                var dateTime = (DateTime)value;
+                                var dateTime = (DateTime) value;
                                 value = DateTimeField.ToString(dateTime);
                                 break;
                         }

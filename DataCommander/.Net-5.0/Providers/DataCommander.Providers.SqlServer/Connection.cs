@@ -1,16 +1,16 @@
-﻿using DataCommander.Providers2.Connection;
-using Foundation.Core;
-using Foundation.Core.ClockAggregate;
-using Foundation.Data;
-using Foundation.Data.SqlClient;
-using System;
+﻿using System;
 using System.Data;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
+using DataCommander.Providers2.Connection;
+using Foundation.Core;
+using Foundation.Core.ClockAggregate;
+using Foundation.Data;
+using Foundation.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer
 {
@@ -58,7 +58,7 @@ namespace DataCommander.Providers.SqlServer
             {
                 var executor = _sqlConnection.CreateCommandExecutor();
                 var commandText = "select @@version";
-                var version = (string)executor.ExecuteScalar(new CreateCommandRequest(commandText));
+                var version = (string) executor.ExecuteScalar(new CreateCommandRequest(commandText));
 
                 /* select
           serverproperty('Collation') as Collation,
@@ -229,6 +229,18 @@ namespace DataCommander.Providers.SqlServer
 
                     #endregion
 
+                    #region SQL Server 2019
+
+                    case "15.00.2070":
+                        description = "4517790 Servicing Update (GDR1) for SQL Server 2019 RTM";
+                        break;
+
+                    case "15.00.2080":
+                        description = "Microsoft SQL Server 2019 (RTM-GDR) (KB4583458)";
+                        break;
+
+                    #endregion
+
                     default:
                         description = null;
                         break;
@@ -244,7 +256,7 @@ namespace DataCommander.Providers.SqlServer
             {
                 var executor = DbCommandExecutorFactory.Create(_sqlConnection);
                 var scalar = executor.ExecuteScalar(new CreateCommandRequest("select @@trancount"));
-                var transactionCount = (int)scalar;
+                var transactionCount = (int) scalar;
                 return transactionCount;
             }
         }
@@ -273,17 +285,17 @@ namespace DataCommander.Providers.SqlServer
 
             if (!cancellationToken.IsCancellationRequested)
             {
-                const string commandText = @"select @@servername,@@spid
+                _spid = (short) _sqlConnection.ServerProcessId;
+
+                const string commandText = @"select @@servername
 set arithabort on";
 
                 var executor = DbCommandExecutorFactory.Create(_sqlConnection);
                 var item = executor.ExecuteReader(new ExecuteReaderRequest(commandText), 1, dataRecord => new
                 {
-                    ServerName = dataRecord.GetString(0),
-                    Spid = dataRecord.GetInt16(1)
+                    ServerName = dataRecord.GetString(0)
                 }).First();
                 _serverName = item.ServerName;
-                _spid = item.Spid;
             }
         }
 
@@ -305,7 +317,7 @@ set arithabort on";
                     var percentString = error.Message.Substring(0, index);
                     var percent = int.Parse(percentString);
                     var remainingPercent = 100 - percent;
-                    var estimated = (long)Math.Round(100.0 / percent * elapsed);
+                    var estimated = (long) Math.Round(100.0 / percent * elapsed);
                     var estimatedRemaining = remainingPercent * elapsed / percent;
                     var infoMessage = new InfoMessage(localTime, InfoMessageSeverity.Verbose, null,
                         $"Estimated time: {StopwatchTimeSpan.ToString(estimated, 0)} remaining time: {StopwatchTimeSpan.ToString(estimatedRemaining, 0)}");

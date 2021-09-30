@@ -1,8 +1,8 @@
-﻿using Foundation.Assertions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Data.SqlClient;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace DataCommander.Providers.SqlServer
 {

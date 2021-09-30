@@ -1,4 +1,13 @@
-﻿using DataCommander.Providers.SqlServer.FieldReader;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Xml;
+using DataCommander.Providers.SqlServer.FieldReader;
 using DataCommander.Providers2;
 using DataCommander.Providers2.Connection;
 using DataCommander.Providers2.FieldNamespace;
@@ -8,18 +17,10 @@ using Foundation.Configuration;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
+using Foundation.Data.SqlClient2;
 using Foundation.Linq;
 using Foundation.Log;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using System.Data.SqlClient;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Xml;
+using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer
 {
@@ -69,7 +70,7 @@ namespace DataCommander.Providers.SqlServer
         #region Properties
 
         string IProvider.Name => "SqlServer";
-        DbProviderFactory IProvider.DbProviderFactory => SqlClientFactory.Instance;
+        DbProviderFactory IProvider.DbProviderFactory => Microsoft.Data.SqlClient.SqlClientFactory.Instance;
 
         ConnectionBase IProvider.CreateConnection(string connectionString) => new Connection(connectionString);
 
@@ -103,7 +104,7 @@ namespace DataCommander.Providers.SqlServer
 
         string IProvider.CommandToString(IDbCommand command)
         {
-            var sqlCommand = (SqlCommand)command;
+            var sqlCommand = (SqlCommand) command;
             return sqlCommand.ToLogString();
         }
 
@@ -171,7 +172,7 @@ namespace DataCommander.Providers.SqlServer
 
                 var columnSize = columnSchema.ColumnSize;
                 var providerType = columnSchema.ProviderType;
-                var dbType = (DbType)providerType;
+                var dbType = (DbType) providerType;
                 var parameter = new SqlParameter();
                 parameter.ParameterName = $"@p{i}";
                 //parameter.DbType = dbType;
@@ -226,8 +227,8 @@ namespace DataCommander.Providers.SqlServer
 
                     case SqlDataTypeName.Decimal:
                         parameter.SqlDbType = SqlDbType.Decimal;
-                        parameter.Precision = (byte)columnSchema.NumericPrecision.Value;
-                        parameter.Scale = (byte)columnSchema.NumericScale.Value;
+                        parameter.Precision = (byte) columnSchema.NumericPrecision.Value;
+                        parameter.Scale = (byte) columnSchema.NumericScale.Value;
                         converters[i] = ConvertToDecimal;
                         break;
 
@@ -251,7 +252,7 @@ namespace DataCommander.Providers.SqlServer
 
         void IProvider.DeriveParameters(IDbCommand command)
         {
-            var sqlConnection = (SqlConnection)command.Connection;
+            var sqlConnection = (SqlConnection) command.Connection;
             var sqlCommand = new SqlCommand(command.CommandText, sqlConnection)
             {
                 CommandType = command.CommandType,
@@ -270,7 +271,7 @@ namespace DataCommander.Providers.SqlServer
 
         public XmlReader ExecuteXmlReader(IDbCommand command)
         {
-            var sqlCommand = (SqlCommand)command;
+            var sqlCommand = (SqlCommand) command;
             return sqlCommand.ExecuteXmlReader();
         }
 
@@ -312,7 +313,7 @@ namespace DataCommander.Providers.SqlServer
 
         Type IProvider.GetColumnType(FoundationDbColumn column)
         {
-            var dbType = (SqlDbType)column.ProviderType;
+            var dbType = (SqlDbType) column.ProviderType;
             var columnSize = column.ColumnSize;
             Type type;
 
@@ -387,7 +388,7 @@ namespace DataCommander.Providers.SqlServer
                 {
                     if (value.IndexOf("@@") == 0)
                     {
-                        array = _keyWords.Where(k => k.StartsWith(value)).Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
+                        array = _keyWords.Where(k => k.StartsWith(value)).Select(keyWord => (IObjectName) new NonSqlObjectName(keyWord)).ToList();
                     }
                     else
                     {
@@ -403,7 +404,7 @@ namespace DataCommander.Providers.SqlServer
                                     list.Add(token.Value, null);
                         }
 
-                        array = list.Keys.Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
+                        array = list.Keys.Select(keyWord => (IObjectName) new NonSqlObjectName(keyWord)).ToList();
                     }
                 }
             }
@@ -434,55 +435,55 @@ namespace DataCommander.Providers.SqlServer
                         case SqlObjectTypes.Function:
                         case SqlObjectTypes.Table | SqlObjectTypes.View:
                         case SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function:
+                        {
+                            name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
+                            var nameParts = sqlObject.Name != null
+                                ? new IdentifierParser(new StringReader(sqlObject.Name)).Parse().ToList()
+                                : null;
+                            var namePartsCount = nameParts != null
+                                ? nameParts.Count
+                                : 0;
+                            var statements = new List<string>();
+
+                            switch (namePartsCount)
                             {
-                                name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
-                                var nameParts = sqlObject.Name != null
-                                    ? new IdentifierParser(new StringReader(sqlObject.Name)).Parse().ToList()
-                                    : null;
-                                var namePartsCount = nameParts != null
-                                    ? nameParts.Count
-                                    : 0;
-                                var statements = new List<string>();
-
-                                switch (namePartsCount)
+                                case 0:
+                                case 1:
                                 {
-                                    case 0:
-                                    case 1:
-                                        {
-                                            statements.Add(SqlServerObject.GetDatabases());
-                                            statements.Add(SqlServerObject.GetSchemas());
+                                    statements.Add(SqlServerObject.GetDatabases());
+                                    statements.Add(SqlServerObject.GetSchemas());
 
-                                            var objectTypes = sqlObject.Type.ToObjectTypes();
-                                            statements.Add(SqlServerObject.GetObjects("dbo", objectTypes));
-                                        }
-                                        break;
-
-                                    case 2:
-                                        if (nameParts[0] != null)
-                                        {
-                                            statements.Add(SqlServerObject.GetSchemas(nameParts[0]));
-
-                                            var objectTypes = sqlObject.Type.ToObjectTypes();
-                                            statements.Add(SqlServerObject.GetObjects(nameParts[0], objectTypes));
-                                        }
-
-                                        break;
-
-                                    case 3:
-                                        {
-                                            if (nameParts[0] != null && nameParts[1] != null)
-                                            {
-                                                var objectTypes = sqlObject.Type.ToObjectTypes();
-                                                statements.Add(SqlServerObject.GetObjects(nameParts[0], nameParts[1], objectTypes));
-                                            }
-                                        }
-                                        break;
+                                    var objectTypes = sqlObject.Type.ToObjectTypes();
+                                    statements.Add(SqlServerObject.GetObjects("dbo", objectTypes));
                                 }
+                                    break;
 
-                                commandText = statements.Count > 0
-                                    ? string.Join("\r\n", statements)
-                                    : null;
+                                case 2:
+                                    if (nameParts[0] != null)
+                                    {
+                                        statements.Add(SqlServerObject.GetSchemas(nameParts[0]));
+
+                                        var objectTypes = sqlObject.Type.ToObjectTypes();
+                                        statements.Add(SqlServerObject.GetObjects(nameParts[0], objectTypes));
+                                    }
+
+                                    break;
+
+                                case 3:
+                                {
+                                    if (nameParts[0] != null && nameParts[1] != null)
+                                    {
+                                        var objectTypes = sqlObject.Type.ToObjectTypes();
+                                        statements.Add(SqlServerObject.GetObjects(nameParts[0], nameParts[1], objectTypes));
+                                    }
+                                }
+                                    break;
                             }
+
+                            commandText = statements.Count > 0
+                                ? string.Join("\r\n", statements)
+                                : null;
+                        }
                             break;
 
                         case SqlObjectTypes.Column:
@@ -490,9 +491,9 @@ namespace DataCommander.Providers.SqlServer
                             string[] owners;
 
                             if (name.Schema != null)
-                                owners = new[] { name.Schema };
+                                owners = new[] {name.Schema};
                             else
-                                owners = new[] { "dbo", "sys" };
+                                owners = new[] {"dbo", "sys"};
 
                             var sb = new StringBuilder();
                             for (i = 0; i < owners.Length; i++)
@@ -568,7 +569,7 @@ order by 1", name.Database);
                                     {
                                         var token = tokens[tokenIndex];
                                         var tokenValue = token.Value;
-                                        var indexofAny = tokenValue.IndexOfAny(new[] { '\r', '\n' });
+                                        var indexofAny = tokenValue.IndexOfAny(new[] {'\r', '\n'});
                                         if (indexofAny >= 0) tokenValue = tokenValue.Substring(0, indexofAny);
 
                                         string like;
@@ -656,7 +657,7 @@ from
 
         DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
         {
-            var sqlParameter = (SqlParameter)parameter;
+            var sqlParameter = (SqlParameter) parameter;
             return new SqlDataParameter(sqlParameter);
         }
 
@@ -779,7 +780,7 @@ from
                     }
 
                     var columnSize = dataColumnSchema.ColumnSize;
-                    var dbType = (SqlDbType)dataColumnSchema.ProviderType;
+                    var dbType = (SqlDbType) dataColumnSchema.ProviderType;
                     var dataTypeName = dataReader.GetDataTypeName(columnIndex);
                     var sb = new StringBuilder();
                     sb.Append(dataTypeName);
@@ -893,7 +894,7 @@ from
             }
             else
             {
-                var convertible = (IConvertible)source;
+                var convertible = (IConvertible) source;
                 target = convertible.ToString(null);
             }
 
@@ -909,7 +910,7 @@ from
             }
             else
             {
-                var decimalField = (DecimalField)source;
+                var decimalField = (DecimalField) source;
                 target = decimalField.DecimalValue;
             }
 

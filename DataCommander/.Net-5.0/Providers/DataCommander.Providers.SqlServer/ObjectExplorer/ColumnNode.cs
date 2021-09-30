@@ -46,7 +46,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             get
             {
                 string typeName;
-                var systemType = (SqlServerSystemType)_systemTypeId;
+                var systemType = (SqlServerSystemType) _systemTypeId;
                 switch (systemType)
                 {
                     case SqlServerSystemType.Char:

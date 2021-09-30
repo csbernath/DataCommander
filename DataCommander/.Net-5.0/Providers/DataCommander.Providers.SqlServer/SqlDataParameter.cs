@@ -1,6 +1,6 @@
 ﻿using DataCommander.Providers2;
+using Microsoft.Data.SqlClient;
 using Foundation.Assertions;
-using System.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer
 {

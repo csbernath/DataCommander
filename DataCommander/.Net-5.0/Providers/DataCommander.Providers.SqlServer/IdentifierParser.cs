@@ -21,7 +21,7 @@ namespace DataCommander.Providers.SqlServer
                 if (peek == -1)
                     break;
 
-                peekChar = (char)peek;
+                peekChar = (char) peek;
 
                 if (peekChar == '.')
                     _textReader.Read();
@@ -48,7 +48,7 @@ namespace DataCommander.Providers.SqlServer
                 if (peek == -1)
                     break;
 
-                var peekChar = (char)peek;
+                var peekChar = (char) peek;
 
                 if (peekChar == ']')
                 {
@@ -74,7 +74,7 @@ namespace DataCommander.Providers.SqlServer
                 if (peek == -1)
                     break;
 
-                var peekChar = (char)peek;
+                var peekChar = (char) peek;
 
                 if (peekChar == '.')
                 {
