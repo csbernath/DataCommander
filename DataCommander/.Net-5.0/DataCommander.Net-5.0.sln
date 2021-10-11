@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Foundation", "Foundation", "{2E4B255C-096E-45D0-A27B-2725C7CBE13A}"
+ProjectSection(SolutionItems) = preProject
+	..\..\Foundation\.Net-5.0\README.md = ..\..\Foundation\.Net-5.0\README.md
+EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{71C8735D-181F-43FF-8CFF-5DB64B9CC5AE}"
 EndProject

@@ -7,10 +7,8 @@
 |-|-|-|-|-|-|-|-|
 |[```ReadOnlyCollection<T>```](https://docs.microsoft.com/en-us/dotnet/api/system.collections.objectmodel.readonlycollection-1?view=netframework-4.7.2)|.NET|[```IReadOnlyList<T>```](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1?view=netframework-4.7.2),```IList<T>```|No|No|Yes|No|Yes
 |[```ReadOnlyDictionary<TKey,TValue>```](https://docs.microsoft.com/en-us/dotnet/api/system.collections.objectmodel.readonlydictionary-2?view=netframework-4.7.2)|.NET|```IReadOnlyDictionary<TKey,TValue>```,```IDictionary<TKey,TValue>```|Yes|No|No|Yes|Yes
-|[```ReadOnlyDictionary<TKey,TValue>```](../Foundation.Collections/ReadOnlySortedDictionary.cs)|Foundation||Yes|No|No|Yes|No
 |[```ILookup<TKey,TElement>```](https://docs.microsoft.com/en-us/dotnet/api/system.linq.ilookup-2?view=netframework-4.7.2)|.NET|[```ILookup<TKey,TElement>```](https://docs.microsoft.com/en-us/dotnet/api/system.linq.ilookup-2?view=netframework-4.7.2)|No|No|No|Yes|No
 |[```ReadOnlyArray<T>```]()|Foundation|[```IReadOnlyList<T>```](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1?view=netframework-4.7.2)|No|No|Yes|No|No
-|[```ReadOnlyList<T>```]()|Foundation|[```IReadOnlyList<T>```](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1?view=netframework-4.7.2)|No|No|Yes|No|No
 |[```ReadOnlySortedArray<TKey,TValue>```](../Foundation.Collections/ReadOnlySortedArray.cs)|Foundation||Yes|Yes|Yes|Yes|No
 |[```ReadOnlySortedList<TKey,TValue>```](../Foundation.Collections/ReadOnlySortedList.cs)|Foundation|IReadOnlyDictionary<TKey, TValue>|Yes|Yes|Yes|Yes|No
 |[```ReadOnlySortedSet<T>```](../Foundation.Collections/ReadOnlySortedSet.cs)|Foundation|```IReadOnlySortedSet<T>```|Yes|Yes|Yes|No|No

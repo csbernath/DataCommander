@@ -30,7 +30,7 @@ namespace DataCommander.Providers
 <a href=""https://github.com/csbernath/DataCommander"">Data Commander</a>
 <br/>
 <br/>
-Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.NetStandard-2.0/README.md"">Foundation (.NET Standard 2.0) Class Library</a>
+Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.Net-5.0/README.md"">Foundation (.NET 5.0) Class Library</a>
 <br/>
 <br/>
 Version: {assembly.GetName().Version}
