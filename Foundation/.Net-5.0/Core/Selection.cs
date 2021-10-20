@@ -6,9 +6,6 @@ namespace Foundation.Core
     [Obsolete]
     public static class Selection
     {
-        public static ArgumentEqualsSelection<TArgument> CreateArgumentEqualsSelection<TArgument>(TArgument argument) where TArgument : IEquatable<TArgument> =>
-            new(argument);
-
         public static ArgumentIsSelection<TArgument> CreateArgumentIsSelection<TArgument>(TArgument argument) where TArgument : class =>
             new(argument);
 
