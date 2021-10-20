@@ -1,5 +1,4 @@
-﻿
-namespace Foundation.Data.DbQueryBuilding
+﻿namespace Foundation.Data.DbQueryBuilding
 {
     public sealed class DataTransferObjectField
     {
