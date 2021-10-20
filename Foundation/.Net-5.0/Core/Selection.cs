@@ -12,8 +12,6 @@ namespace Foundation.Core
         public static ArgumentIsSelection<TArgument> CreateArgumentIsSelection<TArgument>(TArgument argument) where TArgument : class =>
             new(argument);
 
-        public static TypeIsSelection CreateTypeIsSelection(Type type) => new(type);
-
         public static int Select(Func<bool>[] selections)
         {
             Assert.IsNotNull(selections);
