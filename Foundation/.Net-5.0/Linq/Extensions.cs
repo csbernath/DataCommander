@@ -9,15 +9,6 @@ namespace Foundation.Linq
 {
     public static class Extensions
     {
-        public static void IfArgumentIs<TSource, TTarget>(this TSource source, Action<TTarget> action) where TTarget : class
-        {
-            if (source is TTarget)
-            {
-                var target = source as TTarget;
-                action(target);
-            }
-        }
-
         public static bool IfAsNotNull<TSource, TTarget>(this TSource source, Action<TTarget> action) where TTarget : class
         {
             var target = source as TTarget;
