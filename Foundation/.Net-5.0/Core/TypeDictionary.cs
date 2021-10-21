@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Foundation.Assertions
+namespace Foundation.Core
 {
     public sealed class TypeDictionary<TValue>
     {
@@ -19,10 +19,7 @@ namespace Foundation.Assertions
             return _selections.TryGetValue(type, out value);
         }
 
-        public TValue GetValueOrDefault(Type type)
-        {
-            return _selections.GetValueOrDefault(type);
-        }
+        public TValue GetValueOrDefault(Type type) => _selections.GetValueOrDefault(type);
 
         public TValue GetValueOrDefault<T>()
         {

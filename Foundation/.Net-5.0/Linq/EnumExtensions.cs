@@ -8,24 +8,6 @@ namespace Foundation.Linq
 {
     public static class EnumExtensions
     {
-#if FOUNDATION_3_5
-/// <summary>
-/// 
-/// </summary>
-/// <param name="container"></param>
-/// <param name="flag"></param>
-/// <returns></returns>
-        public static bool HasFlag( this Enum container, Enum flag )
-        {
-            Assert.IsTrue( container.GetType() == flag.GetType() );
-
-            UInt64 containerUInt64 = Convert.ToUInt64( container );
-            UInt64 flagUInt64 = Convert.ToUInt64( flag );
-            bool hasFlag = ( containerUInt64 & flagUInt64 ) == flagUInt64;
-            return hasFlag;
-        }
-#endif
-
         public static T SetFlag<T>(this T container, T flag)
         {
             Assert.IsTrue(typeof(T).IsEnum);
