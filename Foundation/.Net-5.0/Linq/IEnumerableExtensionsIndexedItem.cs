@@ -5,7 +5,7 @@ using Foundation.Assertions;
 
 namespace Foundation.Linq
 {
-    public static class EnumerableIndexedItemExtensions
+    public static class IEnumerableExtensionsIndexedItem
     {
         [Pure]
         public static IndexedItem<TSource> FirstIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)

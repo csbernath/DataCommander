@@ -11,8 +11,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     internal sealed class DatabaseNode : ITreeNode
     {
-        private string _name;
-        private byte _state;
+        private readonly string _name;
+        private readonly byte _state;
 
         public DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string name, byte state)
         {

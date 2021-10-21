@@ -18,7 +18,7 @@ namespace DataCommander.Providers
 
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
         private string _sectionName;
-        private bool _updaterStarted = false;
+        private readonly bool _updaterStarted = false;
 
         #endregion
 
