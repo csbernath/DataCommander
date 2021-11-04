@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Text;
 using Microsoft.Data.SqlClient;
 using System.Windows.Forms;
 using DataCommander.Providers.Query;
 using Foundation.Data;
+using Foundation.Data.SqlClient;
+using Foundation.Text;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -61,15 +64,18 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         {
             get
             {
-                var menuItemGetInformation = new ToolStripMenuItem("Get information", null,
-                    menuItemGetInformation_Click);
+                var getInformationMenuItem = new ToolStripMenuItem("Get information", null, GetInformationMenuItem_Click);
+                var createDatabaseSnapshotMenuItem = new ToolStripMenuItem("Create database snapshot script to clipboard", null, CreateDatabaseSnapshotScriptToClipboardMenuItem_Click);
+
                 var contextMenu = new ContextMenuStrip();
-                contextMenu.Items.Add(menuItemGetInformation);
+                contextMenu.Items.Add(getInformationMenuItem);
+                contextMenu.Items.Add(createDatabaseSnapshotMenuItem);
+                
                 return contextMenu;
             }
         }
 
-        private void menuItemGetInformation_Click(object sender, EventArgs e)
+        private void GetInformationMenuItem_Click(object sender, EventArgs e)
         {
             var commandText = string.Format(@"select
     d.dbid,
@@ -109,6 +115,60 @@ from	[{0}].sys.database_files f", _name);
             }
 
             if (dataSet != null) queryForm.ShowDataSet(dataSet);
+        }
+        
+        private void CreateDatabaseSnapshotScriptToClipboardMenuItem_Click(object? sender, EventArgs e)
+        {
+            var databaseName = _name;
+
+            var databaseSnapshotName = $"{databaseName}_Snapshot_{DateTime.Now.ToString("yyyyMMdd_HHmm")}";
+            var logical_file_name = GetLogicalFileName(databaseName);
+            var osFileName = $"D:\\Backup\\{databaseSnapshotName}.ss";
+
+            var textBuilder = new TextBuilder();
+            
+            textBuilder.Add($"CREATE DATABASE [{databaseSnapshotName}]");
+            textBuilder.Add("ON");
+            
+            using (textBuilder.AddBlock("(", ")"))
+            {
+                textBuilder.Add($"NAME = {logical_file_name},");
+                textBuilder.Add($"FILENAME = {osFileName.ToVarChar()}");
+            }
+
+            textBuilder.Add($"AS SNAPSHOT OF [{databaseName}]");
+            textBuilder.Add(Line.Empty);
+            textBuilder.Add("USE master");
+            textBuilder.Add($"ALTER DATABASE [{databaseName}] SET SINGLE_USER");
+            textBuilder.Add($"RESTORE DATABASE [{databaseName}] FROM");
+            textBuilder.Add($"DATABASE_SNAPSHOT = [{databaseSnapshotName.ToVarChar()}]");
+            textBuilder.Add($"ALTER DATABASE [{databaseName}] SET MULTI_USER WITH NO_WAIT");
+
+            var text = textBuilder.ToLines().ToIndentedString("  ");
+            Clipboard.SetText(text);
+        }
+
+        private object GetLogicalFileName(string database)
+        {
+            string logicalFileName;
+            
+            var commandText = @$"select
+    f.name
+from [{database}].sys.database_files f
+where
+    f.type = 0";
+
+            var connectionString = Databases.Server.ConnectionString;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var executor = connection.CreateCommandExecutor();
+                var createCommandRequest = new CreateCommandRequest(commandText);
+                var scalar = executor.ExecuteScalar(createCommandRequest);
+                logicalFileName = (string)scalar;
+            }
+
+            return logicalFileName;
         }
     }
 }
