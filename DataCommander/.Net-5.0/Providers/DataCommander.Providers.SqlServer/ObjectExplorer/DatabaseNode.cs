@@ -141,7 +141,7 @@ from	[{0}].sys.database_files f", _name);
             textBuilder.Add("USE master");
             textBuilder.Add($"ALTER DATABASE [{databaseName}] SET SINGLE_USER");
             textBuilder.Add($"RESTORE DATABASE [{databaseName}] FROM");
-            textBuilder.Add($"DATABASE_SNAPSHOT = [{databaseSnapshotName.ToVarChar()}]");
+            textBuilder.Add($"DATABASE_SNAPSHOT = {databaseSnapshotName.ToVarChar()}");
             textBuilder.Add($"ALTER DATABASE [{databaseName}] SET MULTI_USER WITH NO_WAIT");
 
             var text = textBuilder.ToLines().ToIndentedString("  ");
