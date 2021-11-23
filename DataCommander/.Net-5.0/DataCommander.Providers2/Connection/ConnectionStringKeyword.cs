@@ -7,5 +7,6 @@
         public const string IntegratedSecurity = "Integrated Security";
         public const string UserId = "User ID";
         public const string Password = "Password";
+        public const string TrustServerCertificate = "TrustServerCertificate";
     }
 }

@@ -19,7 +19,11 @@ namespace DataCommander.Providers.SqlServer
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
         {
-            var supportedKeywords = new[] {ConnectionStringKeyword.IntegratedSecurity};
+            var supportedKeywords = new[]
+            {
+                "Integrated Security",
+                "TrustServerCertificate"
+            };
             return supportedKeywords.Contains(keyword);
         }
 

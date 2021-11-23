@@ -4016,8 +4016,8 @@ namespace DataCommander.Providers.Query
                     tableName = sqlStatement.FindTableName();
 
                 //IResultWriter resultWriter = new SqlBulkCopyResultWriter( this.AddInfoMessage, destinationProvider, destinationConnection, tableName, nextQueryForm.InvokeSetTransaction );
-                var maxRecords = int.MaxValue;
-                var rowBlockSize = 10000;
+                //var maxRecords = int.MaxValue;
+                //var rowBlockSize = 10000;
                 AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, "Copying table..."));
                 SetStatusbarPanelText("Copying table...", SystemColors.ControlText);
                 SetGui(CommandState.Cancel);

@@ -31,13 +31,18 @@ namespace DataCommander.Providers.Connection
 
             if (attributes.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out attribute))
                 connectionProperties.IntegratedSecurity = attribute.Value != null
-                    ? (bool?)attribute.GetValue<bool>()
+                    ? attribute.GetValue<bool>()
                     : null;
 
             if (attributes.TryGetValue(ConnectionStringKeyword.UserId, out attribute))
                 connectionProperties.UserId = attribute.GetValue<string>();
 
             LoadProtectedPassword(configurationNode, connectionProperties);
+
+            if (attributes.TryGetValue(ConnectionStringKeyword.TrustServerCertificate, out attribute))
+                connectionProperties.TrustServerCertificate = attribute.Value != null
+                    ? attribute.GetValue<bool>()
+                    : null;
 
             return connectionProperties;
         }
@@ -56,6 +61,8 @@ namespace DataCommander.Providers.Connection
                 attributes.SetAttributeValue(ConnectionStringKeyword.Password, ProtectPassword(connectionProperties.Password.Value));
             else
                 attributes.Remove(ConnectionStringKeyword.Password);
+
+            attributes.SetAttributeValue(ConnectionStringKeyword.TrustServerCertificate, connectionProperties.TrustServerCertificate);
 
             var connectionStringBuilder = new DbConnectionStringBuilder();
             connectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;

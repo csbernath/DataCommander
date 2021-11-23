@@ -15,6 +15,7 @@ namespace DataCommander.Providers.Connection
         public bool? IntegratedSecurity;
         public string UserId;
         public Option<string> Password;
+        public bool? TrustServerCertificate;
 
         public IProvider Provider;
         public string ConnectionString;

@@ -68,6 +68,10 @@ namespace DataCommander.Providers.Connection
 
                 userIdTextBox.Text = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.UserId);
                 passwordTextBox.Text = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.Password);
+
+                if (_dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.TrustServerCertificate) &&
+                    _dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.TrustServerCertificate, out valueObject))
+                    trustServerCertificateCheckBox.Checked = (bool)valueObject;
             }
         }
 
@@ -108,6 +112,7 @@ namespace DataCommander.Providers.Connection
 
                 _dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
                 integratedSecurityCheckBox.Enabled = _dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity);
+                trustServerCertificateCheckBox.Enabled = _dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.TrustServerCertificate);
             }
             catch (Exception ex)
             {
@@ -289,9 +294,7 @@ namespace DataCommander.Providers.Connection
             //}
 
             if (dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity))
-            {
                 dbConnectionStringBuilder.SetValue(ConnectionStringKeyword.IntegratedSecurity, integratedSecurityCheckBox.Checked);
-            }
 
             SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.UserId, userIdTextBox.Text);
 
@@ -299,6 +302,9 @@ namespace DataCommander.Providers.Connection
                 SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.Password, passwordTextBox.Text);
             else
                 dbConnectionStringBuilder.Remove(ConnectionStringKeyword.Password);
+
+            if (dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.TrustServerCertificate))
+                dbConnectionStringBuilder.SetValue(ConnectionStringKeyword.TrustServerCertificate, trustServerCertificateCheckBox.Checked);
         }
 
         private void SaveTo(ConnectionProperties connectionProperties)
@@ -318,6 +324,7 @@ namespace DataCommander.Providers.Connection
                 integratedSecurity = (bool)value;
 
             connectionProperties.IntegratedSecurity = integratedSecurity;
+
             connectionProperties.UserId = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.UserId);
 
             if (_dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.Password, out value))
@@ -329,6 +336,12 @@ namespace DataCommander.Providers.Connection
             }
             else
                 connectionProperties.Password = null;
+
+            bool? trustServerCertificate = null;
+            if (_dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.TrustServerCertificate, out value))
+                trustServerCertificate = (bool)value;
+
+            connectionProperties.TrustServerCertificate = trustServerCertificate;
 
             connectionProperties.ConnectionString = _dbConnectionStringBuilder.ConnectionString;
         }
