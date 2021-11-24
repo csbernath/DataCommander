@@ -1,6 +1,5 @@
 ﻿using DataCommander.Providers2.Connection;
 using Foundation.Core;
-using Foundation.Log;
 
 namespace DataCommander.Providers.Connection
 {

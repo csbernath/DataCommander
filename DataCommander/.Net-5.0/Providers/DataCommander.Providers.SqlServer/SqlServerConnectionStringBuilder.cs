@@ -1,5 +1,4 @@
 ﻿using DataCommander.Providers2;
-using DataCommander.Providers2.Connection;
 using Microsoft.Data.SqlClient;
 using Foundation.Linq;
 
