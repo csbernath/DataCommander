@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -208,10 +210,19 @@ namespace DataCommander.Providers.Connection
             var connectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(configurationNode);
             row["ConnectionName"] = connectionProperties.ConnectionName;
             row["ProviderName"] = connectionProperties.ProviderName;
-            row[ConnectionStringKeyword.DataSource] = connectionProperties.DataSource;
-            row[ConnectionStringKeyword.InitialCatalog] = connectionProperties.InitialCatalog;
-            row[ConnectionStringKeyword.IntegratedSecurity] = connectionProperties.IntegratedSecurity;
-            row[ConnectionStringKeyword.UserId] = connectionProperties.UserId;
+
+            var dbConnectionStringBuilder = new DbConnectionStringBuilder();
+            dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
+
+            row[ConnectionStringKeyword.DataSource] = (string)dbConnectionStringBuilder[ConnectionStringKeyword.DataSource];
+
+            if (dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.InitialCatalog, out var value))
+                row[ConnectionStringKeyword.InitialCatalog] = (string)value;
+
+            row[ConnectionStringKeyword.IntegratedSecurity] = bool.Parse((string)dbConnectionStringBuilder[ConnectionStringKeyword.IntegratedSecurity]);
+
+            if (dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out value))
+                row[ConnectionStringKeyword.UserId] = (string)value;
         }
 
         private void btnOK_Click(object sender, EventArgs e)

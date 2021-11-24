@@ -23,26 +23,7 @@ namespace DataCommander.Providers.Connection
             connectionProperties.ProviderName = attributes["ProviderName"].GetValue<string>();
             connectionProperties.ConnectionString = attributes["ConnectionString"].GetValue<string>();
 
-            if (attributes.TryGetValue(ConnectionStringKeyword.DataSource, out var attribute))
-                connectionProperties.DataSource = attribute.GetValue<string>();
-
-            if (attributes.TryGetValue(ConnectionStringKeyword.InitialCatalog, out attribute))
-                connectionProperties.InitialCatalog = attribute.GetValue<string>();
-
-            if (attributes.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out attribute))
-                connectionProperties.IntegratedSecurity = attribute.Value != null
-                    ? attribute.GetValue<bool>()
-                    : null;
-
-            if (attributes.TryGetValue(ConnectionStringKeyword.UserId, out attribute))
-                connectionProperties.UserId = attribute.GetValue<string>();
-
             LoadProtectedPassword(configurationNode, connectionProperties);
-
-            if (attributes.TryGetValue(ConnectionStringKeyword.TrustServerCertificate, out attribute))
-                connectionProperties.TrustServerCertificate = attribute.Value != null
-                    ? attribute.GetValue<bool>()
-                    : null;
 
             return connectionProperties;
         }
@@ -52,17 +33,11 @@ namespace DataCommander.Providers.Connection
             var attributes = configurationNode.Attributes;
             attributes.SetAttributeValue("ConnectionName", connectionProperties.ConnectionName);
             attributes.SetAttributeValue("ProviderName", connectionProperties.ProviderName);
-            attributes.SetAttributeValue(ConnectionStringKeyword.DataSource, connectionProperties.DataSource);
-            attributes.SetAttributeValue(ConnectionStringKeyword.InitialCatalog, connectionProperties.InitialCatalog);
-            attributes.SetAttributeValue(ConnectionStringKeyword.IntegratedSecurity, connectionProperties.IntegratedSecurity);
-            attributes.SetAttributeValue(ConnectionStringKeyword.UserId, connectionProperties.UserId);
 
             if (connectionProperties.Password != null)
                 attributes.SetAttributeValue(ConnectionStringKeyword.Password, ProtectPassword(connectionProperties.Password.Value));
             else
                 attributes.Remove(ConnectionStringKeyword.Password);
-
-            attributes.SetAttributeValue(ConnectionStringKeyword.TrustServerCertificate, connectionProperties.TrustServerCertificate);
 
             var connectionStringBuilder = new DbConnectionStringBuilder();
             connectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;

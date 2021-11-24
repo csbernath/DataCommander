@@ -316,18 +316,8 @@ namespace DataCommander.Providers.Connection
 
             connectionProperties.ConnectionName = connectionNameTextBox.Text;
             connectionProperties.ProviderName = providersComboBox.Text;
-            connectionProperties.DataSource = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.DataSource);
-            connectionProperties.InitialCatalog = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.InitialCatalog);
 
-            bool? integratedSecurity = null;
-            if (_dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var value))
-                integratedSecurity = (bool)value;
-
-            connectionProperties.IntegratedSecurity = integratedSecurity;
-
-            connectionProperties.UserId = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.UserId);
-
-            if (_dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.Password, out value))
+            if (_dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.Password, out var value))
             {
                 var password = (string)value;
                 connectionProperties.Password = password.Length > 0
@@ -336,12 +326,6 @@ namespace DataCommander.Providers.Connection
             }
             else
                 connectionProperties.Password = null;
-
-            bool? trustServerCertificate = null;
-            if (_dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.TrustServerCertificate, out value))
-                trustServerCertificate = (bool)value;
-
-            connectionProperties.TrustServerCertificate = trustServerCertificate;
 
             connectionProperties.ConnectionString = _dbConnectionStringBuilder.ConnectionString;
         }
