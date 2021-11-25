@@ -14,7 +14,7 @@ namespace DataCommander.Providers.Connection
 {
     internal partial class ConnectionStringBuilderForm : Form
     {
-        private readonly ConnectionProperties _tempConnectionProperties = new();
+        private ConnectionProperties _tempConnectionProperties;
         private ConnectionProperties _connectionProperties;
         private readonly IList<string> _providers;
         private DbProviderFactory _dbProviderFactory;
@@ -104,6 +104,7 @@ namespace DataCommander.Providers.Connection
                 var index = providersComboBox.SelectedIndex;
                 var providerName = _providers[index];
                 var provider = ProviderFactory.CreateProvider(providerName);
+                _tempConnectionProperties = new ConnectionProperties(null,providerName);
                 _tempConnectionProperties.Provider = provider;
                 _dbProviderFactory = provider.DbProviderFactory;
 
@@ -267,8 +268,7 @@ namespace DataCommander.Providers.Connection
 
         private void OK_Click(object sender, EventArgs e)
         {
-            _connectionProperties = new ConnectionProperties();
-            SaveTo(_connectionProperties);
+            _connectionProperties = CreateConnectionProperties();
             DialogResult = DialogResult.OK;
         }
 
@@ -307,15 +307,15 @@ namespace DataCommander.Providers.Connection
                 dbConnectionStringBuilder.SetValue(ConnectionStringKeyword.TrustServerCertificate, trustServerCertificateCheckBox.Checked);
         }
 
-        private void SaveTo(ConnectionProperties connectionProperties)
+        private ConnectionProperties CreateConnectionProperties()
         {
+            var connectionName = connectionNameTextBox.Text;
             var providerName = providersComboBox.Text;
+            var connectionProperties = new ConnectionProperties(connectionName, providerName);
+
             var provider = ProviderFactory.CreateProvider(providerName);
             _dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
             SaveTo(_dbConnectionStringBuilder);
-
-            connectionProperties.ConnectionName = connectionNameTextBox.Text;
-            connectionProperties.ProviderName = providersComboBox.Text;
 
             if (_dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.Password, out var value))
             {
@@ -328,14 +328,15 @@ namespace DataCommander.Providers.Connection
                 connectionProperties.Password = null;
 
             connectionProperties.ConnectionString = _dbConnectionStringBuilder.ConnectionString;
+
+            return connectionProperties;
         }
 
         private void testButton_Click(object sender, EventArgs e)
         {
             try
             {
-                var connectionProperties = new ConnectionProperties();
-                SaveTo(connectionProperties);
+                var connectionProperties = CreateConnectionProperties();
                 var form = new OpenConnectionForm(connectionProperties);
 
                 if (form.ShowDialog() == DialogResult.OK)

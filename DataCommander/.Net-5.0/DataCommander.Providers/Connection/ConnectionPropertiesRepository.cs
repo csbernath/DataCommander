@@ -16,12 +16,13 @@ namespace DataCommander.Providers.Connection
 
         public static ConnectionProperties GetFromConfiguration(ConfigurationNode configurationNode)
         {
-            var connectionProperties = new ConnectionProperties();
-
             var attributes = configurationNode.Attributes;
-            connectionProperties.ConnectionName = attributes["ConnectionName"].GetValue<string>();
-            connectionProperties.ProviderName = attributes["ProviderName"].GetValue<string>();
-            connectionProperties.ConnectionString = attributes["ConnectionString"].GetValue<string>();
+            var connectionName = attributes["ConnectionName"].GetValue<string>();
+            var providerName = attributes["ProviderName"].GetValue<string>();
+            var connectionString = attributes["ConnectionString"].GetValue<string>();
+
+            var connectionProperties = new ConnectionProperties(connectionName, providerName);
+            connectionProperties.ConnectionString = connectionString;
 
             LoadProtectedPassword(configurationNode, connectionProperties);
 

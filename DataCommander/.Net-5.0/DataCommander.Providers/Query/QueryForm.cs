@@ -2206,11 +2206,10 @@ namespace DataCommander.Providers.Query
                         var csb = new SqlConnectionStringBuilder(_connectionString);
                         csb.InitialCatalog = _database;
 
-                        var connectionProperties = new ConnectionProperties
-                        {
-                            Provider = Provider,
-                            ConnectionString = csb.ConnectionString
-                        };
+                        var connectionProperties = new ConnectionProperties(null, null);
+                        connectionProperties.Provider = Provider;
+                        connectionProperties.ConnectionString = csb.ConnectionString;
+                    
                         var openConnectionForm = new OpenConnectionForm(connectionProperties);
                         if (openConnectionForm.ShowDialog() == DialogResult.OK)
                         {
