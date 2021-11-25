@@ -48,7 +48,7 @@ namespace DataCommander.Providers.Connection
 
         private static string ProtectPassword(string password)
         {
-            var bytes = !string.IsNullOrEmpty(password) ? Encoding.UTF8.GetBytes(password) : new byte[0];
+            var bytes = !string.IsNullOrEmpty(password) ? Encoding.UTF8.GetBytes(password) : Array.Empty<byte>();
             var protectedBytes = ProtectedData.Protect(bytes, Entropy, DataProtectionScope.CurrentUser);
             var protectedPassword = Convert.ToBase64String(protectedBytes);
             return protectedPassword;

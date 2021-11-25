@@ -936,9 +936,10 @@ This program is freeware and released under the [GNU General Public License](htt
 ## Development environment
 
 .NET 5 version:
-- JetBrains Rider 2021.1
+- [JetBrains Rider 2021.1](https://www.jetbrains.com/rider/)
+- Microsoft Visual Studio Community 2019 Version 16.11.6 (editing Forms)
 - .NET 5
-- C# 7.2
+- C# 9.0
 
 .NET 4.8 version:
 - Microsoft Visual Studio Community 2019 Version 16.9.3
