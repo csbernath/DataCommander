@@ -1,8 +1,9 @@
 ﻿using Foundation.Data;
-using Foundation.Data.SqlClient;
 using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Foundation.Data.SqlClient;
+using SqlCommandExecutor = Foundation.Data.SqlClient2.SqlCommandExecutor;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {

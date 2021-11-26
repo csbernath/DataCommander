@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using Foundation.Assertions;
 using Foundation.Data;
-using Foundation.Data.SqlClient;
+using Foundation.Data.SqlClient2;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {

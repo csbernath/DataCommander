@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using Foundation.Data;
-using Foundation.Data.SqlClient;
+using Foundation.Data.SqlClient2;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {

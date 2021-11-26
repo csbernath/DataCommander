@@ -298,6 +298,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                 connectionInfo.ServerName = csb.DataSource;
                 connectionInfo.UseIntegratedSecurity = csb.IntegratedSecurity;
                 connectionInfo.WorkstationId = csb.WorkstationID;
+                connectionInfo.TrustServerCertificate = csb.TrustServerCertificate;
                 if (!csb.IntegratedSecurity)
                 {
                     connectionInfo.UserName = csb.UserID;

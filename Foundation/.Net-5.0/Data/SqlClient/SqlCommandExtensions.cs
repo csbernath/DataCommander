@@ -6,16 +6,8 @@ using Foundation.Assertions;
 
 namespace Foundation.Data.SqlClient
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class SqlCommandExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
         public static string ToLogString(this SqlCommand command)
         {
             Assert.IsNotNull(command);
