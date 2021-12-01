@@ -46,8 +46,6 @@ namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
 
         string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu => null;
-
         public ContextMenu GetContextMenu()
         {
             var menuItem = new MenuItem("Shrink database", ShrinkDatabase, EmptyReadOnlyCollection<MenuItem>.Value);

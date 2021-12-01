@@ -75,8 +75,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             }
         }
 
-        public ContextMenuStrip ContextMenu => throw new NotSupportedException();
-
         public ContextMenu GetContextMenu()
         {
             var editRows = new MenuItem("Edit Rows", EditRows, EmptyReadOnlyCollection<MenuItem>.Value);

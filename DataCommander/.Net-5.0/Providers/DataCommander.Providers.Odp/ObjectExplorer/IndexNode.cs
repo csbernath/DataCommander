@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
 {
@@ -29,7 +28,6 @@ where table_owner = '{_table.Schema.Name}' and table_name = '{_table.Name
             }' and index_name = '{_name}'
 order by column_position";
 
-        public ContextMenuStrip ContextMenu => null;
         public ContextMenu GetContextMenu()
         {
             throw new System.NotImplementedException();

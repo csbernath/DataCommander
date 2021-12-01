@@ -40,7 +40,6 @@ order by r.ROUTINE_NAME";
 
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu => null;
         public ContextMenu GetContextMenu() => null;
     }
 }

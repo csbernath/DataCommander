@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -39,7 +38,6 @@ group by u.name";
             }
         }
 
-        public ContextMenuStrip ContextMenu => null;
         public ContextMenu GetContextMenu()
         {
             throw new System.NotImplementedException();

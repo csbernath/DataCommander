@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
 {
@@ -30,7 +29,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
         public bool Sortable => false;
         public string Query => "select * from " + _tableNode.Schema.Name + "." + _name;
-        public ContextMenuStrip ContextMenu => null;
+
         public ContextMenu GetContextMenu()
         {
             throw new System.NotImplementedException();

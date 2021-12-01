@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
-using System.Windows.Forms;
 using Foundation.Data;
 using Oracle.ManagedDataAccess.Client;
 
@@ -47,7 +46,6 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
 		public bool Sortable => false;
         public string Query => null;
-        public ContextMenuStrip ContextMenu => null;
         public ContextMenu GetContextMenu() => null;
 	}
 }

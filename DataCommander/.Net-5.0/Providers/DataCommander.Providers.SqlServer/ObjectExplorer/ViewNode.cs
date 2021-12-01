@@ -50,8 +50,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             }
         }
 
-        public ContextMenuStrip ContextMenu => throw new NotSupportedException();
-
         public ContextMenu GetContextMenu()
         {
             var menuItemScriptObject = new MenuItem("Script View as CREATE to clipboard", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);

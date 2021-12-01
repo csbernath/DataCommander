@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using DataCommander.Providers.Query;
 using Foundation.Collections.ReadOnly;
 using Oracle.ManagedDataAccess.Client;
@@ -69,8 +68,6 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 				}
 			}
 		}
-
-		public ContextMenuStrip ContextMenu => throw new NotSupportedException();
 
 		public ContextMenu GetContextMenu()
 		{

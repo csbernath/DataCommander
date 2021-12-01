@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace DataCommander.Providers.OleDb
 {
@@ -49,7 +48,6 @@ namespace DataCommander.Providers.OleDb
             }
         }
 
-        public ContextMenuStrip ContextMenu => null;
         public ContextMenu GetContextMenu()
         {
             throw new System.NotImplementedException();

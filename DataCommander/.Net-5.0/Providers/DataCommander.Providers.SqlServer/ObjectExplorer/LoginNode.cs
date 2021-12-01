@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -15,7 +14,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => throw new NotImplementedException();
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
-        ContextMenuStrip ITreeNode.ContextMenu => null;
+
         public ContextMenu GetContextMenu()
         {
             throw new NotImplementedException();

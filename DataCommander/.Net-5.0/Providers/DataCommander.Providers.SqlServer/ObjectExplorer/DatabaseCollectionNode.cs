@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
-using System.Windows.Forms;
 using Foundation.Assertions;
 using Foundation.Data;
 
@@ -50,7 +49,7 @@ order by d.name";
 
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
-        ContextMenuStrip ITreeNode.ContextMenu => null;
+
         public ContextMenu GetContextMenu()
         {
             throw new System.NotImplementedException();

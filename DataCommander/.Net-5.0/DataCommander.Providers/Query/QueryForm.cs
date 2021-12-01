@@ -2936,19 +2936,10 @@ namespace DataCommander.Providers.Query
             }
         }
 
-        private ContextMenuStrip GetContextMenu(ITreeNode treeNode)
+        private static ContextMenuStrip GetContextMenu(ITreeNode treeNode)
         {
-            ContextMenuStrip contextMenuStrip;
-            try
-            {
-                var contextMenu = treeNode.GetContextMenu();
-                contextMenuStrip = ToContextMenuStrip(contextMenu);
-            }
-            catch (NotImplementedException)
-            {
-                contextMenuStrip = treeNode.ContextMenu;
-            }
-
+            var contextMenu = treeNode.GetContextMenu();
+            var contextMenuStrip = ToContextMenuStrip(contextMenu);
             return contextMenuStrip;
         }
 

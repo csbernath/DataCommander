@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -31,7 +30,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
-        ContextMenuStrip ITreeNode.ContextMenu => null;
+
         public ContextMenu GetContextMenu()
         {
             throw new System.NotImplementedException();

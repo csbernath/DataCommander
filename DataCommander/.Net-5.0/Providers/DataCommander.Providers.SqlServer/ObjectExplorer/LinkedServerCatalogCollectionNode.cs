@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
-using System.Windows.Forms;
 using Foundation.Assertions;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
@@ -73,7 +72,7 @@ drop table #catalog";
 
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
-        ContextMenuStrip ITreeNode.ContextMenu => null;
+
         public ContextMenu GetContextMenu()
         {
             throw new System.NotImplementedException();

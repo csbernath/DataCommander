@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
-using System.Windows.Forms;
 using Foundation.Collections.ReadOnly;
 
 namespace DataCommander.Providers.OleDb
@@ -79,8 +78,6 @@ namespace DataCommander.Providers.OleDb
             var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
             queryForm.ShowDataSet(dataSet);
         }
-
-        public ContextMenuStrip ContextMenu => null;
 
         public ContextMenu GetContextMenu()
         {

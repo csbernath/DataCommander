@@ -29,8 +29,6 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu => throw new NotSupportedException();
-
         public ContextMenu GetContextMenu()
         {
             var item = new MenuItem("Show create function", ShowCreateFunction_Click, EmptyReadOnlyCollection<MenuItem>.Value);

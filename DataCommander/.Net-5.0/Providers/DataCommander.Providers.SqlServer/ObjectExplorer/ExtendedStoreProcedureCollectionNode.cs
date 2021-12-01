@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
 using Foundation.Data;
 using Foundation.Data.SqlClient2;
 
@@ -15,7 +14,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         bool ITreeNode.IsLeaf => false;
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
-        ContextMenuStrip ITreeNode.ContextMenu => null;
         public ContextMenu GetContextMenu() => null;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)

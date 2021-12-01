@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using Foundation.Data;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
@@ -31,8 +30,8 @@ order by s.SEQUENCE_NAME";
         }
 
         bool ITreeNode.Sortable => false;
-        string ITreeNode.Query => throw new NotImplementedException();
-        ContextMenuStrip ITreeNode.ContextMenu => throw new NotImplementedException();
+        string ITreeNode.Query => null;
+
         public ContextMenu GetContextMenu()
         {
             throw new NotImplementedException();

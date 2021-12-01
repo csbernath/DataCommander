@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using Microsoft.Data.SqlClient;
-using System.Windows.Forms;
 using DataCommander.Providers.Query;
 using Foundation.Assertions;
 using Foundation.Data;
@@ -55,7 +54,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             }
         }
 
-        ContextMenuStrip ITreeNode.ContextMenu => null;
         public ContextMenu GetContextMenu()
         {
             throw new NotImplementedException();

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
 using Foundation.Data;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
@@ -40,7 +39,7 @@ where	s.OWNER			= '{_schema.Name}'
 
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
-        ContextMenuStrip ITreeNode.ContextMenu => null;
+
         public ContextMenu GetContextMenu()
         {
             throw new System.NotImplementedException();

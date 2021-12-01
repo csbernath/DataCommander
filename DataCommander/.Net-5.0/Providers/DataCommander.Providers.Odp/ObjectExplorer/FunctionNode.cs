@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Windows.Forms;
 using DataCommander.Providers.Query;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
@@ -73,8 +72,6 @@ order by line";
             text = sb.ToString();
             QueryForm.ShowText(text);
         }
-
-        public ContextMenuStrip ContextMenu => throw new NotSupportedException();
 
         public ContextMenu GetContextMenu()
         {

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Data.OleDb;
-using System.Windows.Forms;
 
 namespace DataCommander.Providers.OleDb
 {
@@ -62,7 +61,7 @@ namespace DataCommander.Providers.OleDb
         public string Query => null;
         public OleDbConnection Connection { get; }
         public string Name { get; }
-        public ContextMenuStrip ContextMenu => null;
+
         public ContextMenu GetContextMenu()
         {
             throw new System.NotImplementedException();

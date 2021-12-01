@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Windows.Forms;
 using DataCommander.Providers.Query;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
@@ -97,8 +96,6 @@ order by procedure_name";
 
             tbQuery.Focus();
         }
-
-        public ContextMenuStrip ContextMenu => throw new NotSupportedException();
 
         public ContextMenu GetContextMenu()
         {

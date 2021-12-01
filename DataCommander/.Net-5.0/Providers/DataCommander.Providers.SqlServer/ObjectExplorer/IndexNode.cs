@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using System.Windows.Forms;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -89,7 +88,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         //    QueryForm.ShowText(text);
         //}
 
-        public ContextMenuStrip ContextMenu => null;
         public ContextMenu GetContextMenu()
         {
             throw new System.NotImplementedException();

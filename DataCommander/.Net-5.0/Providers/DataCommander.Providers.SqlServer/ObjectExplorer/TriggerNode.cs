@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
-using System.Windows.Forms;
 using DataCommander.Providers.Query;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
@@ -25,8 +24,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => null;
         public bool Sortable => false;
         public string Query => null;
-
-        public ContextMenuStrip ContextMenu => throw new NotSupportedException();
 
         public ContextMenu GetContextMenu()
         {

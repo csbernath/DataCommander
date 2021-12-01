@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
-using System.Windows.Forms;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 using SqlCommandExecutor = Foundation.Data.SqlClient2.SqlCommandExecutor;
@@ -45,7 +44,7 @@ order by name";
 
         public bool Sortable => false;
         public string Query => null;
-        public ContextMenuStrip ContextMenu => null;
+
         public ContextMenu GetContextMenu()
         {
             throw new System.NotImplementedException();

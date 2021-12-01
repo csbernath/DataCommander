@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
 using Foundation.Data;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
@@ -45,7 +44,6 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         public bool Sortable => false;
         public string Query => null;
         public SchemaNode Schema => _schema;
-        public ContextMenuStrip ContextMenu => null;
         public ContextMenu GetContextMenu() => null;
     }
 }

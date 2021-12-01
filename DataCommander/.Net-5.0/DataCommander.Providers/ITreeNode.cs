@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace DataCommander.Providers
 {
@@ -10,7 +9,6 @@ namespace DataCommander.Providers
         IEnumerable<ITreeNode> GetChildren(bool refresh);
         bool Sortable { get; }
         string Query { get; }
-        ContextMenuStrip ContextMenu { get; }
         ContextMenu GetContextMenu();
     }
 }

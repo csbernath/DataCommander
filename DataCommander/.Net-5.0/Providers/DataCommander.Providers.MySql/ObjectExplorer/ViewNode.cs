@@ -35,8 +35,6 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
         string ITreeNode.Query => $@"select *
 from {_databaseNode.Name}.{_name}";
 
-        ContextMenuStrip ITreeNode.ContextMenu => throw new NotSupportedException();
-
         public ContextMenu GetContextMenu()
         {
             var item = new MenuItem("Show create table", ShowCreateTable_Click, EmptyReadOnlyCollection<MenuItem>.Value);

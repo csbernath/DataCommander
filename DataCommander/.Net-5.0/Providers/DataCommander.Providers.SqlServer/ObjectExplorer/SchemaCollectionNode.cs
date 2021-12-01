@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
-using System.Windows.Forms;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
@@ -39,7 +38,7 @@ order by s.name";
 
         public bool Sortable => false;
         public string Query => null;
-        public ContextMenuStrip ContextMenu => null;
+
         public ContextMenu GetContextMenu()
         {
             throw new System.NotImplementedException();

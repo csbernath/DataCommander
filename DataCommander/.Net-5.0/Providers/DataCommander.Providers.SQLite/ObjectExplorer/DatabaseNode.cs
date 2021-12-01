@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Windows.Forms;
 
 namespace DataCommander.Providers.SQLite.ObjectExplorer
 {
@@ -31,7 +30,6 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
 
         string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu => null;
         public ContextMenu GetContextMenu()
         {
             throw new System.NotImplementedException();

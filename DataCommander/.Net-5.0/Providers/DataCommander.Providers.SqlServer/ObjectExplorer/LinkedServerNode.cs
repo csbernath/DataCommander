@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
 using Foundation.Assertions;
 using Foundation.Linq;
 
@@ -21,7 +20,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => new LinkedServerCatalogCollectionNode(this).ItemAsEnumerable();
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
-        ContextMenuStrip ITreeNode.ContextMenu => null;
+
         public ContextMenu GetContextMenu()
         {
             throw new System.NotImplementedException();

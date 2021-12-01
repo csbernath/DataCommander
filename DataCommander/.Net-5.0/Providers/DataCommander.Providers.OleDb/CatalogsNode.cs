@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Data.OleDb;
-using System.Windows.Forms;
 
 namespace DataCommander.Providers.OleDb
 {
@@ -46,7 +45,7 @@ namespace DataCommander.Providers.OleDb
 
         public bool Sortable => false;
         public string Query => null;
-        public ContextMenuStrip ContextMenu => null;
+
         public ContextMenu GetContextMenu()
         {
             throw new System.NotImplementedException();

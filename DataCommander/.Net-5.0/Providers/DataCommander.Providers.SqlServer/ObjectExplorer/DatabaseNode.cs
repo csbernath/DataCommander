@@ -60,8 +60,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         public bool Sortable => false;
         string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu => throw new NotSupportedException();
-
         public ContextMenu GetContextMenu()
         {
             var getInformationMenuItem = new MenuItem("Get information", GetInformationMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);

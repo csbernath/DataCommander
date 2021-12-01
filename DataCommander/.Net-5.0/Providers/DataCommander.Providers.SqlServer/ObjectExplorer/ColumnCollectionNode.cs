@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using Microsoft.Data.SqlClient;
-using System.Windows.Forms;
 using Foundation.Data;
 using Foundation.Linq;
 using Foundation.Log;
@@ -117,7 +115,6 @@ order by fkc.parent_column_id";
 
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
-        ContextMenuStrip ITreeNode.ContextMenu => throw new NotSupportedException();
         public ContextMenu GetContextMenu() => null;
 
         #endregion

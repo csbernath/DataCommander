@@ -39,7 +39,6 @@ order by TABLE_NAME";
 
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu => null;
         public ContextMenu GetContextMenu() => null;
     }
 }

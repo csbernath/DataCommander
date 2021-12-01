@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
 using Foundation.Data;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
@@ -46,7 +45,6 @@ order by s.SYNONYM_NAME";
 
         public SchemaNode Schema => _schema;
 
-        public ContextMenuStrip ContextMenu => null;
         public ContextMenu GetContextMenu()
         {
             throw new System.NotImplementedException();

@@ -38,8 +38,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             }
         }
 
-        public ContextMenuStrip ContextMenu => throw new NotSupportedException();
-
         public ContextMenu GetContextMenu()
         {
             var scriptObjectMenuItem = new MenuItem("Script Object", ScriptObjectMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
