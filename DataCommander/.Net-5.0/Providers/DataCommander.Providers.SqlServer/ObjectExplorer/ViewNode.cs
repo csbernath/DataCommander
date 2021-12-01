@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using System.Windows.Forms;
+using Foundation.Collections.ReadOnly;
 using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
@@ -49,15 +50,14 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             }
         }
 
-        public ContextMenuStrip ContextMenu
+        public ContextMenuStrip ContextMenu => throw new NotSupportedException();
+
+        public ContextMenu GetContextMenu()
         {
-            get
-            {
-                var menuItemScriptObject = new ToolStripMenuItem("Script View as CREATE to clipboard", null, menuItemScriptObject_Click);
-                var contextMenu = new ContextMenuStrip();
-                contextMenu.Items.Add(menuItemScriptObject);
-                return contextMenu;
-            }
+            var menuItemScriptObject = new MenuItem("Script View as CREATE to clipboard", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+            var items = new[] { menuItemScriptObject }.ToReadOnlyCollection();
+            var contextMenu = new ContextMenu(items);
+            return contextMenu;
         }
 
         private void menuItemScriptObject_Click(object sender, EventArgs e)

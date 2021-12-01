@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Foundation.Collections.ReadOnly;
 
 namespace DataCommander.Providers.MySql.ObjectExplorer
 {
@@ -34,17 +35,14 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
         string ITreeNode.Query => $@"select *
 from {_databaseNode.Name}.{_name}";
 
-        ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu => throw new NotSupportedException();
+
+        public ContextMenu GetContextMenu()
         {
-            get
-            {
-                var menu = new ContextMenuStrip();
-
-                var item = new ToolStripMenuItem("Show create table", null, ShowCreateTable_Click);
-                menu.Items.Add(item);
-
-                return menu;
-            }
+            var item = new MenuItem("Show create table", ShowCreateTable_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+            var items = new[] { item }.ToReadOnlyCollection();
+            var menu = new ContextMenu(items);
+            return menu;
         }
 
         private void ShowCreateTable_Click(object sender, EventArgs e)

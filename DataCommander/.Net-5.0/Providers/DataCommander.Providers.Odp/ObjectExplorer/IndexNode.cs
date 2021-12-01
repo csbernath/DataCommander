@@ -30,6 +30,10 @@ where table_owner = '{_table.Schema.Name}' and table_name = '{_table.Name
 order by column_position";
 
         public ContextMenuStrip ContextMenu => null;
+        public ContextMenu GetContextMenu()
+        {
+            throw new System.NotImplementedException();
+        }
 
         private readonly TableNode _table;
         private readonly string _name;

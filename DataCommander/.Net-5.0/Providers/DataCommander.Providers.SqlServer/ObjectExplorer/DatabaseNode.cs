@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Data.SqlClient;
 using System.Windows.Forms;
 using DataCommander.Providers.Query;
+using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 using Foundation.Text;
@@ -59,19 +60,16 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         public bool Sortable => false;
         string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                var getInformationMenuItem = new ToolStripMenuItem("Get information", null, GetInformationMenuItem_Click);
-                var createDatabaseSnapshotMenuItem = new ToolStripMenuItem("Create database snapshot script to clipboard", null, CreateDatabaseSnapshotScriptToClipboardMenuItem_Click);
+        ContextMenuStrip ITreeNode.ContextMenu => throw new NotSupportedException();
 
-                var contextMenu = new ContextMenuStrip();
-                contextMenu.Items.Add(getInformationMenuItem);
-                contextMenu.Items.Add(createDatabaseSnapshotMenuItem);
-                
-                return contextMenu;
-            }
+        public ContextMenu GetContextMenu()
+        {
+            var getInformationMenuItem = new MenuItem("Get information", GetInformationMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+            var createDatabaseSnapshotMenuItem =
+                new MenuItem("Create database snapshot script to clipboard", CreateDatabaseSnapshotScriptToClipboardMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+            var menuItems = new[] { getInformationMenuItem, createDatabaseSnapshotMenuItem }.ToReadOnlyCollection();
+            var contextMenu = new ContextMenu(menuItems);
+            return contextMenu;
         }
 
         private void GetInformationMenuItem_Click(object sender, EventArgs e)

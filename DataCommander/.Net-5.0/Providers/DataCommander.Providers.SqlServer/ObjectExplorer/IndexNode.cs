@@ -90,5 +90,9 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         //}
 
         public ContextMenuStrip ContextMenu => null;
+        public ContextMenu GetContextMenu()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

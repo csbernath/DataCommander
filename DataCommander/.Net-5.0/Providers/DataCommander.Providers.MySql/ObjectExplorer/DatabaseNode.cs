@@ -32,5 +32,6 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
         string ITreeNode.Query => null;
 
         System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu => null;
+        public ContextMenu GetContextMenu() => null;
     }
 }

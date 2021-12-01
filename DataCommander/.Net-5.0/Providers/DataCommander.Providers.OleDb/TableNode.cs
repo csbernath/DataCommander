@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Windows.Forms;
+using Foundation.Collections.ReadOnly;
 
 namespace DataCommander.Providers.OleDb
 {
@@ -79,15 +80,14 @@ namespace DataCommander.Providers.OleDb
             queryForm.ShowDataSet(dataSet);
         }
 
-        public ContextMenuStrip ContextMenu
+        public ContextMenuStrip ContextMenu => null;
+
+        public ContextMenu GetContextMenu()
         {
-            get
-            {
-                var contextMenu = new ContextMenuStrip();
-                var menuItem = new ToolStripMenuItem("Columns", null, Columns_Click);
-                contextMenu.Items.Add(menuItem);
-                return contextMenu;
-            }
+            var menuItem = new MenuItem("Columns", Columns_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+            var items = new[] { menuItem }.ToReadOnlyCollection();
+            var contextMenu = new ContextMenu(items);
+            return contextMenu;
         }
     }
 }

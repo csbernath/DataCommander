@@ -39,6 +39,11 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         public bool Sortable => false;
         public string Query => null;
         public ContextMenuStrip ContextMenu => null;
+        public ContextMenu GetContextMenu()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public SchemaCollectionNode SchemasNode => _schemasNode;
     }
 }

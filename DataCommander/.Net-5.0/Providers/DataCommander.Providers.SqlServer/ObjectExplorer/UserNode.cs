@@ -40,5 +40,9 @@ group by u.name";
         }
 
         public ContextMenuStrip ContextMenu => null;
+        public ContextMenu GetContextMenu()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlServerCe;
 using System.Windows.Forms;
+using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
@@ -45,17 +46,15 @@ namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
 
         string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu => null;
+
+        public ContextMenu GetContextMenu()
         {
-            get
-            {
-                var contextMenu = new ContextMenuStrip();
-                var menuItem = new ToolStripMenuItem("Shrink database", null, ShrinkDatabase);
-                contextMenu.Items.Add(menuItem);
-                menuItem = new ToolStripMenuItem("Compact database", null, CompactDatabase);
-                contextMenu.Items.Add(menuItem);
-                return contextMenu;
-            }
+            var menuItem = new MenuItem("Shrink database", ShrinkDatabase, EmptyReadOnlyCollection<MenuItem>.Value);
+            var compactDatabase = new MenuItem("Compact database", CompactDatabase, EmptyReadOnlyCollection<MenuItem>.Value);
+            var items = new[] { menuItem, compactDatabase }.ToReadOnlyCollection();
+            var contextMenu = new ContextMenu(items);
+            return contextMenu;
         }
 
         #endregion

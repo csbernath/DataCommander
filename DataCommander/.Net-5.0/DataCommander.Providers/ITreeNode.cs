@@ -11,5 +11,6 @@ namespace DataCommander.Providers
         bool Sortable { get; }
         string Query { get; }
         ContextMenuStrip ContextMenu { get; }
+        ContextMenu GetContextMenu();
     }
 }

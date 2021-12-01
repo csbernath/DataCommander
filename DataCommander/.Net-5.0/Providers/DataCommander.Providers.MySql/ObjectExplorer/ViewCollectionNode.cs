@@ -43,5 +43,6 @@ order by TABLE_NAME";
         string ITreeNode.Query => null;
 
         System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu => null;
+        public ContextMenu GetContextMenu() => null;
     }
 }

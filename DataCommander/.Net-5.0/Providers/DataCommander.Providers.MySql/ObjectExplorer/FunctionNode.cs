@@ -2,9 +2,11 @@
 using Foundation.Data;
 using MySql.Data.MySqlClient;
 using System;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Foundation.Collections.ReadOnly;
 
 namespace DataCommander.Providers.MySql.ObjectExplorer
 {
@@ -27,17 +29,14 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu => throw new NotSupportedException();
+
+        public ContextMenu GetContextMenu()
         {
-            get
-            {
-                var menu = new ContextMenuStrip();
-
-                var item = new ToolStripMenuItem("Show create function", null, ShowCreateFunction_Click);
-                menu.Items.Add(item);
-
-                return menu;
-            }
+            var item = new MenuItem("Show create function", ShowCreateFunction_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+            var items = new[] { item }.ToReadOnlyCollection();
+            var menu = new ContextMenu(items);
+            return menu;
         }
 
         private void ShowCreateFunction_Click(object sender, EventArgs e)

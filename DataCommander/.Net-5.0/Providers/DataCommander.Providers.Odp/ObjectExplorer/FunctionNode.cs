@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using DataCommander.Providers.Query;
+using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
@@ -73,25 +74,22 @@ order by line";
             QueryForm.ShowText(text);
         }
 
-        public ContextMenuStrip ContextMenu
+        public ContextMenuStrip ContextMenu => throw new NotSupportedException();
+
+        public ContextMenu GetContextMenu()
         {
-            get
+            ContextMenu contextMenu;
+
+            if (_packageNode != null)
+                contextMenu = null;
+            else
             {
-                ContextMenuStrip contextMenu;
-
-                if (_packageNode != null)
-                {
-                    contextMenu = null;
-                }
-                else
-                {
-                    var menuItem = new ToolStripMenuItem("Script Object", null, ScriptObject_Click);
-                    contextMenu = new ContextMenuStrip();
-                    contextMenu.Items.Add(menuItem);
-                }
-
-                return contextMenu;
+                var menuItem = new MenuItem("Script Object", ScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+                var items = new[] { menuItem }.ToReadOnlyCollection();
+                contextMenu = new ContextMenu(items);
             }
+
+            return contextMenu;
         }
     }
 }

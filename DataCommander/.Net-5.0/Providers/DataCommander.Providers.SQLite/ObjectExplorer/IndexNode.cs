@@ -44,6 +44,10 @@ where
         }
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
+        public ContextMenu GetContextMenu()
+        {
+            throw new System.NotImplementedException();
+        }
 
         #endregion
     }

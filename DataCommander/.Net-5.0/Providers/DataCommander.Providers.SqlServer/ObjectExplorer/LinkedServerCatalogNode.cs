@@ -31,6 +31,10 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         string ITreeNode.Query => null;
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
+        public ContextMenu GetContextMenu()
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion
     }

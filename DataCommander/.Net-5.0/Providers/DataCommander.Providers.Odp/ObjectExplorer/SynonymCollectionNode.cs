@@ -47,6 +47,10 @@ order by s.SYNONYM_NAME";
         public SchemaNode Schema => _schema;
 
         public ContextMenuStrip ContextMenu => null;
+        public ContextMenu GetContextMenu()
+        {
+            throw new System.NotImplementedException();
+        }
 
         private readonly SchemaNode _schema;
     }

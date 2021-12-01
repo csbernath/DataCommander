@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using System.Windows.Forms;
 using DataCommander.Providers.Query;
+using Foundation.Collections.ReadOnly;
 using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
@@ -65,15 +66,14 @@ from	{_database.Name}.{_owner}.[{_name}]()";
             }
         }
 
-        public ContextMenuStrip ContextMenu
+        public ContextMenuStrip ContextMenu => throw new NotSupportedException();
+
+        public ContextMenu GetContextMenu()
         {
-            get
-            {
-                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, menuItemScriptObject_Click);
-                var contextMenu = new ContextMenuStrip();
-                contextMenu.Items.Add(menuItemScriptObject);
-                return contextMenu;
-            }
+            var scriptObjectMenuItem = new MenuItem("Script Object", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+            var menuItems = new[] { scriptObjectMenuItem }.ToReadOnlyCollection();
+            var contextMenu = new ContextMenu(menuItems);
+            return contextMenu;
         }
 
         private void menuItemScriptObject_Click(object sender, EventArgs e)

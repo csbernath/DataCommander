@@ -41,6 +41,10 @@ where	s.OWNER			= '{_schema.Name}'
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
         ContextMenuStrip ITreeNode.ContextMenu => null;
+        public ContextMenu GetContextMenu()
+        {
+            throw new System.NotImplementedException();
+        }
 
         #endregion
     }

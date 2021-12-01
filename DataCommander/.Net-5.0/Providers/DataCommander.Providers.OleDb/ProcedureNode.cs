@@ -50,5 +50,9 @@ namespace DataCommander.Providers.OleDb
         }
 
         public ContextMenuStrip ContextMenu => null;
+        public ContextMenu GetContextMenu()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -50,6 +50,10 @@ order by name collate nocase";
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
         ContextMenuStrip ITreeNode.ContextMenu => null;
+        public ContextMenu GetContextMenu()
+        {
+            throw new System.NotImplementedException();
+        }
 
         #endregion
     }

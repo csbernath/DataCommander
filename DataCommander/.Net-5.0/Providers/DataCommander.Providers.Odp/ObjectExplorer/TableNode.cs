@@ -40,8 +40,12 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 		public bool Sortable => false;
 	    public string Query => "select * from " + _schema.Name + "." + _name;
 	    public ContextMenuStrip ContextMenu => null;
+	    public ContextMenu GetContextMenu()
+	    {
+		    throw new System.NotImplementedException();
+	    }
 
 
-		public SchemaNode Schema => _schema;
+	    public SchemaNode Schema => _schema;
 	}
 }

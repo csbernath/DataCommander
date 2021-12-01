@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using DataCommander.Providers.Query;
+using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
@@ -97,20 +98,15 @@ order by procedure_name";
             tbQuery.Focus();
         }
 
-        public ContextMenuStrip ContextMenu
+        public ContextMenuStrip ContextMenu => throw new NotSupportedException();
+
+        public ContextMenu GetContextMenu()
         {
-            get
-            {
-                var contextMenu = new ContextMenuStrip();
-
-                var menuItemPackage = new ToolStripMenuItem("Script Package", null, ScriptPackage);
-                contextMenu.Items.Add(menuItemPackage);
-
-                var menuItemPackageBody = new ToolStripMenuItem("Script Package Body", null, ScriptPackageBody);
-                contextMenu.Items.Add(menuItemPackageBody);
-
-                return contextMenu;
-            }
+            var menuItemPackage = new MenuItem("Script Package", ScriptPackage, EmptyReadOnlyCollection<MenuItem>.Value);
+            var menuItemPackageBody = new MenuItem("Script Package Body", ScriptPackageBody, EmptyReadOnlyCollection<MenuItem>.Value);
+            var items = new[] { menuItemPackage, menuItemPackageBody }.ToReadOnlyCollection();
+            var contextMenu = new ContextMenu(items);
+            return contextMenu;
         }
 
         public SchemaNode SchemaNode => _schemaNode;

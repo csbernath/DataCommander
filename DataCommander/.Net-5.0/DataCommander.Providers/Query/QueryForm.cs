@@ -2899,7 +2899,7 @@ namespace DataCommander.Providers.Query
                     if (treeNodeV != null)
                     {
                         var treeNode = (ITreeNode)treeNodeV.Tag;
-                        var contextMenu = treeNode.ContextMenu;
+                        var contextMenu = GetContextMenu(treeNode);
 
                         if (!treeNode.IsLeaf)
                         {
@@ -2934,6 +2934,45 @@ namespace DataCommander.Providers.Query
             {
                 MessageBox.Show(ex.ToString());
             }
+        }
+
+        private ContextMenuStrip GetContextMenu(ITreeNode treeNode)
+        {
+            ContextMenuStrip contextMenuStrip;
+            try
+            {
+                var contextMenu = treeNode.GetContextMenu();
+                contextMenuStrip = ToContextMenuStrip(contextMenu);
+            }
+            catch (NotImplementedException)
+            {
+                contextMenuStrip = treeNode.ContextMenu;
+            }
+
+            return contextMenuStrip;
+        }
+
+        private static ContextMenuStrip ToContextMenuStrip(ContextMenu contextMenu)
+        {
+            var menuItems = contextMenu.MenuItems
+                .Select(selector: ToToolStripMenuItem)
+                .ToArray();
+
+            var contextMenuStrip = new ContextMenuStrip();
+            contextMenuStrip.Items.AddRange(menuItems);
+
+            return contextMenuStrip;
+        }
+
+        private static ToolStripMenuItem ToToolStripMenuItem(MenuItem source)
+        {
+            var item = new ToolStripMenuItem(source.Text, null, source.OnClick);
+            var dropdownItems = source.DropDownItems
+                .Select(ToToolStripMenuItem)
+                .Cast<ToolStripItem>()
+                .ToArray();
+            item.DropDownItems.AddRange(dropdownItems);
+            return item;
         }
 
         private void tvObjectBrowser_DoubleClick(object sender, EventArgs e)

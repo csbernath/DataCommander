@@ -31,6 +31,10 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 	    string ITreeNode.Query => throw new NotImplementedException();
 
 	    ContextMenuStrip ITreeNode.ContextMenu => throw new NotImplementedException();
+	    public ContextMenu GetContextMenu()
+	    {
+		    throw new NotImplementedException();
+	    }
 
 	    #endregion
 	}

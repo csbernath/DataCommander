@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using System.Windows.Forms;
 using DataCommander.Providers.Query;
+using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
@@ -25,15 +26,14 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         public bool Sortable => false;
         public string Query => null;
 
-        public ContextMenuStrip ContextMenu
+        public ContextMenuStrip ContextMenu => throw new NotSupportedException();
+
+        public ContextMenu GetContextMenu()
         {
-            get
-            {
-                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, menuItemScriptObject_Click);
-                var contextMenu = new ContextMenuStrip();
-                contextMenu.Items.Add(menuItemScriptObject);
-                return contextMenu;
-            }
+            var menuItemScriptObject = new MenuItem("Script Object", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+            var items = new[] { menuItemScriptObject }.ToReadOnlyCollection();
+            var contextMenu = new ContextMenu(items);
+            return contextMenu;
         }
 
         private void menuItemScriptObject_Click(object sender, EventArgs e)

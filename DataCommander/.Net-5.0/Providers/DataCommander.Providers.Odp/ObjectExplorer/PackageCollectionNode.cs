@@ -46,6 +46,6 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         public string Query => null;
         public SchemaNode Schema => _schema;
         public ContextMenuStrip ContextMenu => null;
-
+        public ContextMenu GetContextMenu() => null;
     }
 }

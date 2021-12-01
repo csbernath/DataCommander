@@ -75,30 +75,29 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             }
         }
 
-        public ContextMenuStrip ContextMenu
+        public ContextMenuStrip ContextMenu => throw new NotSupportedException();
+
+        public ContextMenu GetContextMenu()
         {
-            get
+            var editRows = new MenuItem("Edit Rows", EditRows, EmptyReadOnlyCollection<MenuItem>.Value);
+
+            var dropdownItems = new[]
             {
-                var menu = new ContextMenuStrip();
-                var item = new ToolStripMenuItem("Edit Rows", null, EditRows);
-                menu.Items.Add(item);
+                new MenuItem("CREATE to clipboard", ScriptTable_Click, EmptyReadOnlyCollection<MenuItem>.Value),
+                new MenuItem("SELECT to clipboard", SelectScript_Click, EmptyReadOnlyCollection<MenuItem>.Value),
+                new MenuItem("INSERT to clipboard", InsertScript_Click, EmptyReadOnlyCollection<MenuItem>.Value),
+                new MenuItem("UPDATE to clipboard", UpdateScript_Click, EmptyReadOnlyCollection<MenuItem>.Value),
+                new MenuItem("C# ORM to clipboard", CsharpOrm_Click, EmptyReadOnlyCollection<MenuItem>.Value)
+            }.ToReadOnlyCollection();
+            var scriptTableAs = new MenuItem("Script Table as", null, dropdownItems);
 
-                var scriptTableAs = new ToolStripMenuItem("Script Table as");
-                scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("CREATE to clipboard", null, ScriptTable_Click));
-                scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("SELECT to clipboard", null, SelectScript_Click));
-                scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("INSERT to clipboard", null, InsertScript_Click));
-                scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("UPDATE to clipboard", null, UpdateScript_Click));
-                scriptTableAs.DropDownItems.Add(new ToolStripMenuItem("C# ORM to clipboard", null, CsharpOrm_Click));
-                menu.Items.Add(scriptTableAs);
+            var schema = new MenuItem("Schema", Schema_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+            var indexes = new MenuItem("Indexes", Indexes_Click, EmptyReadOnlyCollection<MenuItem>.Value);
 
-                item = new ToolStripMenuItem("Schema", null, Schema_Click);
-                menu.Items.Add(item);
+            var items = new[] { editRows, scriptTableAs, schema, indexes }.ToReadOnlyCollection();
+            var menu = new ContextMenu(items);
 
-                item = new ToolStripMenuItem("Indexes", null, Indexes_Click);
-                menu.Items.Add(item);
-
-                return menu;
-            }
+            return menu;
         }
 
         internal static string GetSelectStatement(IDbConnection connection, DatabaseObjectMultipartName databaseObjectMultipartName)

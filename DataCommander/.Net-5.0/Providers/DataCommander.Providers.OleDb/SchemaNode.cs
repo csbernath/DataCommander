@@ -43,5 +43,9 @@ namespace DataCommander.Providers.OleDb
         public CatalogNode Catalog { get; }
         public string Name { get; }
         public ContextMenuStrip ContextMenu => null;
+        public ContextMenu GetContextMenu()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

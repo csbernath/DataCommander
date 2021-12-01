@@ -72,5 +72,9 @@ order by s.name,o.name", _database.Name, _isMsShipped
         public bool Sortable => false;
         public string Query => null;
         public ContextMenuStrip ContextMenu => null;
+        public ContextMenu GetContextMenu()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

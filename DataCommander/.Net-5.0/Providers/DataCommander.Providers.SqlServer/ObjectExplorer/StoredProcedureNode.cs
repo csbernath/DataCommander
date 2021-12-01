@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using DataCommander.Providers.Query;
+using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data.SqlClient;
 
@@ -37,18 +38,17 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             }
         }
 
-        public ContextMenuStrip ContextMenu
+        public ContextMenuStrip ContextMenu => throw new NotSupportedException();
+
+        public ContextMenu GetContextMenu()
         {
-            get
-            {
-                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, menuItemScriptObject_Click);
-                var contextMenu = new ContextMenuStrip();
-                contextMenu.Items.Add(menuItemScriptObject);
-                return contextMenu;
-            }
+            var scriptObjectMenuItem = new MenuItem("Script Object", ScriptObjectMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+            var menuItems = new[] { scriptObjectMenuItem }.ToReadOnlyCollection();
+            var contextMenu = new ContextMenu(menuItems);
+            return contextMenu;
         }
 
-        private void menuItemScriptObject_Click(object sender, EventArgs e)
+        private void ScriptObjectMenuItem_Click(object sender, EventArgs e)
         {
             var stopwatch = Stopwatch.StartNew();
             var connectionString = _database.Databases.Server.ConnectionString;

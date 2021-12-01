@@ -20,5 +20,9 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         public bool Sortable => false;
         public string Query => null;
         public ContextMenuStrip ContextMenu => null;
+        public ContextMenu GetContextMenu()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

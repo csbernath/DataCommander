@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Windows.Forms;
 using DataCommander.Providers.Query;
+using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SQLite.ObjectExplorer
@@ -55,20 +56,20 @@ where	name	= '{name}'";
             QueryForm.ShowText(script);
         }
 
-        ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu => throw new NotSupportedException();
+
+        public ContextMenu GetContextMenu()
         {
-            get
+            ContextMenu contextMenu = null;
+
+            if (Name != "sqlite_master")
             {
-                ContextMenuStrip contextMenu = null;
-
-                if (Name != "sqlite_master")
-                {
-                    contextMenu = new ContextMenuStrip();
-                    contextMenu.Items.Add("Script", null, Script_Click);
-                }
-
-                return contextMenu;
+                var item = new MenuItem("Script", Script_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+                var items = new[] { item }.ToReadOnlyCollection();
+                contextMenu = new ContextMenu(items);
             }
+
+            return contextMenu;
         }
 
         #endregion

@@ -47,6 +47,10 @@ namespace DataCommander.Providers.OleDb
         public bool Sortable => false;
         public string Query => null;
         public ContextMenuStrip ContextMenu => null;
+        public ContextMenu GetContextMenu()
+        {
+            throw new System.NotImplementedException();
+        }
 
         private readonly OleDbConnection connection;
     }

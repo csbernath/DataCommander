@@ -5,6 +5,7 @@ using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Foundation.Collections.ReadOnly;
 
 namespace DataCommander.Providers.MySql.ObjectExplorer
 {
@@ -25,17 +26,14 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu => throw new NotSupportedException();
+
+        public ContextMenu GetContextMenu()
         {
-            get
-            {
-                var menu = new ContextMenuStrip();
-
-                var item = new ToolStripMenuItem("Show create procedure", null, ShowCreateProcedure_Click);
-                menu.Items.Add(item);
-
-                return menu;
-            }
+            var item = new MenuItem("Show create procedure", ShowCreateProcedure_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+            var items = new[] { item }.ToReadOnlyCollection();
+            var menu = new ContextMenu(items);
+            return menu;
         }
 
         private void ShowCreateProcedure_Click(object sender, EventArgs e)
