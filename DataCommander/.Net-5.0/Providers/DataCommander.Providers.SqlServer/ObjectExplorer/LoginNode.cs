@@ -15,9 +15,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
 
-        public ContextMenu GetContextMenu()
-        {
-            throw new NotImplementedException();
-        }
+        public ContextMenu GetContextMenu() => null;
     }
 }

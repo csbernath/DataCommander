@@ -2132,10 +2132,7 @@ namespace DataCommander.Providers.Query
             base.Dispose(disposing);
         }
 
-        private void FocusControl(Control control)
-        {
-            control.Focus();
-        }
+        private void FocusControl(Control control) => control.Focus();
 
         private void ShowResultWriterDataSet()
         {
@@ -2161,10 +2158,6 @@ namespace DataCommander.Providers.Query
 
                 switch (TableStyle)
                 {
-                    case ResultWriterType.Text:
-                    default:
-                        break;
-
                     case ResultWriterType.DataGrid:
                     case ResultWriterType.Html:
                     case ResultWriterType.Rtf:
@@ -2279,15 +2272,9 @@ namespace DataCommander.Providers.Query
             this.Invoke(() => _mainForm.UpdateTotalMemory());
         }
 
-        private void EndFillInvoker(IAsyncDataAdapter dataAdapter, Exception e)
-        {
-            this.Invoke(() => EndFill(dataAdapter, e));
-        }
+        private void EndFillInvoker(IAsyncDataAdapter dataAdapter, Exception e) => this.Invoke(() => EndFill(dataAdapter, e));
 
-        private void WriteEndInvoker(IAsyncDataAdapter dataAdapter)
-        {
-            this.Invoke(() => WriteEnd(dataAdapter));
-        }
+        private void WriteEndInvoker(IAsyncDataAdapter dataAdapter) => this.Invoke(() => WriteEnd(dataAdapter));
 
         private void EndFillHandleException(Exception ex)
         {
@@ -2359,7 +2346,6 @@ namespace DataCommander.Providers.Query
                     hasElements = true;
                     var infoMessages = new InfoMessage[_infoMessages.Count];
                     var count = _infoMessages.Take(infoMessages);
-                    var stringBuilder = new StringBuilder();
                     for (var i = 0; i < count; i++)
                     {
                         this.Invoke(() =>
@@ -2392,21 +2378,17 @@ namespace DataCommander.Providers.Query
                 }
 
                 if (hasElements)
-                {
                     this.Invoke(() =>
                     {
                         _messagesTextBox.ScrollToCaret();
                         _messagesTextBox.Update();
                     });
-                }
 
                 if (_infoMessages.Count == 0)
                 {
                     var w = WaitHandle.WaitAny(waitHandles, 1000);
                     if (w == 1)
-                    {
                         break;
-                    }
                 }
             }
         }
@@ -2421,11 +2403,7 @@ namespace DataCommander.Providers.Query
             _sbPanelCaretPosition.Text = "Ln " + line + " Col " + col;
         }
 
-        private void AddTable(
-            OleDbConnection oleDbConnection,
-            DataSet dataSet,
-            Guid guid,
-            string name)
+        private void AddTable(OleDbConnection oleDbConnection, DataSet dataSet, Guid guid, string name)
         {
             try
             {
@@ -2486,27 +2464,14 @@ namespace DataCommander.Providers.Query
                                 switch (typeCode)
                                 {
                                     case TypeCode.DateTime:
-                                        const long ticksPerMillisecond = 10000;
-                                        const long ticksPerSecond = ticksPerMillisecond * 1000;
-                                        const long ticksPerMinute = ticksPerSecond * 60;
-                                        const long ticksPerHour = ticksPerMinute * 60;
-                                        const long ticksPerDay = ticksPerHour * 24;
-
                                         var dateTime = (DateTime)value;
                                         var ticks = dateTime.Ticks;
 
-                                        if (ticks % ticksPerDay == 0)
-                                        {
+                                        if (ticks % StopwatchConstants.TicksPerDay == 0)
                                             row["Value"] = dateTime.ToString("yyyy-MM-dd");
-                                        }
                                         else
-                                        {
                                             row["Value"] = dateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                                        }
 
-                                        break;
-
-                                    default:
                                         break;
                                 }
                             }
@@ -2530,19 +2495,17 @@ namespace DataCommander.Providers.Query
         private void mnuCloseTabPage_Click(object sender, EventArgs e)
         {
             var tabPage = _tabControl.SelectedTab;
+            
             if (tabPage != null && tabPage != _messagesTabPage && tabPage != _resultSetsTabPage)
-            {
                 CloseResultSetTabPage(tabPage);
-            }
         }
 
         private void CloseResultSetTabPages()
         {
             var tabPages = _resultSetsTabControl.TabPages.Cast<TabPage>().ToArray();
+            
             foreach (var tabPage in tabPages)
-            {
                 CloseResultSetTabPage(tabPage);
-            }
 
             ResultSetCount = 0;
         }
@@ -2575,10 +2538,7 @@ namespace DataCommander.Providers.Query
             _dataAdapter.Cancel();
         }
 
-        private void mnuCancel_Click(object sender, EventArgs e)
-        {
-            CancelCommandQuery();
-        }
+        private void mnuCancel_Click(object sender, EventArgs e) => CancelCommandQuery();
 
         private void WriteRows(long rowCount, int scale)
         {
@@ -2671,13 +2631,9 @@ namespace DataCommander.Providers.Query
                         {
                             case DialogResult.Yes:
                                 if (_fileName != null)
-                                {
                                     Save(_fileName);
-                                }
                                 else
-                                {
                                     ShowSaveFileDialog();
-                                }
 
                                 break;
 
@@ -2736,40 +2692,13 @@ namespace DataCommander.Providers.Query
             _sbPanelTableStyle.Text = tableStyle.ToString();
         }
 
-        private void mnuText_Click(object sender, EventArgs e)
-        {
-            SetResultWriterType(ResultWriterType.Text);
-        }
-
-        private void mnuDataGrid_Click(object sender, EventArgs e)
-        {
-            SetResultWriterType(ResultWriterType.DataGrid);
-        }
-
-        private void mnuHtml_Click(object sender, EventArgs e)
-        {
-            SetResultWriterType(ResultWriterType.Html);
-        }
-
-        private void mnuRtf_Click(object sender, EventArgs e)
-        {
-            SetResultWriterType(ResultWriterType.Rtf);
-        }
-
-        private void mnuListView_Click(object sender, EventArgs e)
-        {
-            SetResultWriterType(ResultWriterType.ListView);
-        }
-
-        private void mnuExcel_Click(object sender, EventArgs e)
-        {
-            SetResultWriterType(ResultWriterType.Excel);
-        }
-
-        private void menuResultModeFile_Click(object sender, EventArgs e)
-        {
-            SetResultWriterType(ResultWriterType.File);
-        }
+        private void mnuText_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.Text);
+        private void mnuDataGrid_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.DataGrid);
+        private void mnuHtml_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.Html);
+        private void mnuRtf_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.Rtf);
+        private void mnuListView_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.ListView);
+        private void mnuExcel_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.Excel);
+        private void menuResultModeFile_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.File);
 
         private void mnuCommandTypeText_Click(object sender, EventArgs e)
         {
@@ -2820,9 +2749,7 @@ namespace DataCommander.Providers.Query
                         }
 
                         if (children != null)
-                        {
                             AddNodes(treeNode.Nodes, children, treeNode2.Sortable);
-                        }
                     }
                     finally
                     {
@@ -2849,9 +2776,7 @@ namespace DataCommander.Providers.Query
                         var treeNode2 = (ITreeNode)treeNode.Tag;
 
                         if (e.Button != MouseButtons.Left)
-                        {
                             _tvObjectExplorer.SelectedNode = treeNode;
-                        }
 
                         var text = treeNode.Text;
                     }
@@ -3005,19 +2930,14 @@ namespace DataCommander.Providers.Query
             }
         }
 
-        private void mnuPaste_Click(object sender, EventArgs e)
-        {
-            QueryTextBox.Paste();
-        }
+        private void mnuPaste_Click(object sender, EventArgs e) => QueryTextBox.Paste();
 
         private void mnuGoTo_Click(object sender, EventArgs e)
         {
             var control = ActiveControl;
             var richTextBox = control as RichTextBox;
             if (richTextBox == null)
-            {
                 richTextBox = QueryTextBox.RichTextBox;
-            }
 
             var charIndex = richTextBox.SelectionStart;
             var currentLineNumber = richTextBox.GetLineFromCharIndex(charIndex) + 1;
@@ -3038,9 +2958,7 @@ namespace DataCommander.Providers.Query
             TreeNode found = null;
 
             if (matcher.IsMatch(parent.Text))
-            {
                 found = parent;
-            }
             else
             {
                 foreach (TreeNode child in parent.Nodes)
@@ -3048,9 +2966,7 @@ namespace DataCommander.Providers.Query
                     found = FindTreeNode(child, matcher);
 
                     if (found != null)
-                    {
                         break;
-                    }
                 }
             }
 
@@ -3094,9 +3010,7 @@ namespace DataCommander.Providers.Query
                     var treeNode2 = treeView.SelectedNode.FirstNode;
 
                     if (treeNode2 == null || treeNode2.Tag == null)
-                    {
                         treeNode2 = treeView.SelectedNode.NextNode;
-                    }
 
                     var treeNode = treeNode2;
 
@@ -3111,23 +3025,19 @@ namespace DataCommander.Providers.Query
                             break;
                         }
                         else
-                        {
                             treeNode = treeNode.NextNode;
-                        }
                     }
                 }
                 else
                 {
-                    var dataTableViewer = control as DataTableEditor;
+                    var dataTableEditor = control as DataTableEditor;
 
-                    if (dataTableViewer == null)
-                    {
-                        dataTableViewer = control.Parent as DataTableEditor;
-                    }
+                    if (dataTableEditor == null)
+                        dataTableEditor = control.Parent as DataTableEditor;
 
-                    if (dataTableViewer != null)
+                    if (dataTableEditor != null)
                     {
-                        var dataTable = dataTableViewer.DataTable;
+                        var dataTable = dataTableEditor.DataTable;
 
                         if (dataTable != null)
                         {
@@ -3149,7 +3059,7 @@ namespace DataCommander.Providers.Query
                             }
                             else
                             {
-                                var dataGrid = dataTableViewer.DataGrid;
+                                var dataGrid = dataTableEditor.DataGrid;
                                 var cell = dataGrid.CurrentCell;
                                 var rowIndex = cell.RowIndex;
                                 var columnIndex = cell.ColumnIndex;
@@ -3162,9 +3072,7 @@ namespace DataCommander.Providers.Query
                             }
                         }
                         else
-                        {
                             found = false;
-                        }
                     }
                     else
                     {
@@ -3199,9 +3107,7 @@ namespace DataCommander.Providers.Query
             try
             {
                 if (_findTextForm == null)
-                {
                     _findTextForm = new FindTextForm();
-                }
 
                 var control = ActiveControl;
                 var dataTableViewer = control as DataTableEditor;
@@ -3219,14 +3125,10 @@ namespace DataCommander.Providers.Query
                     _findTextForm.Text = $"Find (DataTable: {name})";
                 }
                 else
-                {
                     _findTextForm.Text = "Find";
-                }
 
                 if (_findTextForm.ShowDialog() == DialogResult.OK)
-                {
                     FindText(_findTextForm.FindText);
-                }
             }
             catch (Exception ex)
             {
@@ -3239,11 +3141,8 @@ namespace DataCommander.Providers.Query
             if (_findTextForm != null)
             {
                 var text = _findTextForm.FindText;
-
                 if (text != null)
-                {
                     FindText(text);
-                }
             }
         }
 
@@ -3295,13 +3194,9 @@ namespace DataCommander.Providers.Query
         public void Save()
         {
             if (_fileName != null)
-            {
                 Save(_fileName);
-            }
             else
-            {
                 ShowSaveFileDialog();
-            }
         }
 
         private void mnuSave_Click(object sender, EventArgs e)
@@ -3426,9 +3321,7 @@ namespace DataCommander.Providers.Query
                             if (dataTable != null)
                             {
                                 if (dataSet == null)
-                                {
                                     dataSet = new DataSet();
-                                }
 
                                 dataTable.TableName = "SchemaTable" + i;
                                 dataSet.Tables.Add(dataTable);
@@ -3442,9 +3335,7 @@ namespace DataCommander.Providers.Query
                     finally
                     {
                         if (dataReader != null)
-                        {
                             dataReader.Close();
-                        }
                     }
                 }
 

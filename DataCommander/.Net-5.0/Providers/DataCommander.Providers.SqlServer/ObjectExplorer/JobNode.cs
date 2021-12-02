@@ -54,10 +54,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             }
         }
 
-        public ContextMenu GetContextMenu()
-        {
-            throw new NotImplementedException();
-        }
+        public ContextMenu GetContextMenu() => null;
 
         #endregion
     }
