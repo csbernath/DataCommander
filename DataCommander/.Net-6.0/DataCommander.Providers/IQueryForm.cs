@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Drawing;
 
 namespace DataCommander.Providers
 {
@@ -7,5 +8,7 @@ namespace DataCommander.Providers
     {
         void ShowMessage(Exception exception);
         void ShowDataSet(DataSet dataSet);
+        void SetStatusbarPanelText(string text, Color color);
+        ColorTheme ColorTheme { get; }
     }
 }

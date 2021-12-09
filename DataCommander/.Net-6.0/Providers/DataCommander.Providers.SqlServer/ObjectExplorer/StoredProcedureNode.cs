@@ -59,7 +59,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
             Clipboard.SetText(text);
 
-            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (IQueryForm)sender;
 
             queryForm.SetStatusbarPanelText(
                 $"Copying stored prcoedure script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.",

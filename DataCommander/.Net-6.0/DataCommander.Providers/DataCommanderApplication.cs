@@ -12,8 +12,6 @@ using Microsoft.Win32;
 
 namespace DataCommander.Providers
 {
-    
-    aaaaa
     public sealed class DataCommanderApplication
     {
         #region Private Fields
