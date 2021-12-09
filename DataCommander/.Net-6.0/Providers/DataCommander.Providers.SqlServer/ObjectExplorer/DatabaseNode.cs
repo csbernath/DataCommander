@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using System.Windows.Forms;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
@@ -110,7 +109,7 @@ from	[{0}].sys.database_files f", _name);
 
             if (dataSet != null) queryForm.ShowDataSet(dataSet);
         }
-        
+
         private void CreateDatabaseSnapshotScriptToClipboardMenuItem_Click(object? sender, EventArgs e)
         {
             var databaseName = _name;
@@ -120,10 +119,10 @@ from	[{0}].sys.database_files f", _name);
             var osFileName = $"D:\\Backup\\{databaseSnapshotName}.ss";
 
             var textBuilder = new TextBuilder();
-            
+
             textBuilder.Add($"CREATE DATABASE [{databaseSnapshotName}]");
             textBuilder.Add("ON");
-            
+
             using (textBuilder.AddBlock("(", ")"))
             {
                 textBuilder.Add($"NAME = {logical_file_name},");
@@ -139,7 +138,8 @@ from	[{0}].sys.database_files f", _name);
             textBuilder.Add($"ALTER DATABASE [{databaseName}] SET MULTI_USER WITH NO_WAIT");
 
             var text = textBuilder.ToLines().ToIndentedString("  ");
-            Clipboard.SetText(text);
+            var queryForm = (IQueryForm)sender;
+            queryForm.ClipboardSetText(text);
         }
 
         private object GetLogicalFileName(string database)

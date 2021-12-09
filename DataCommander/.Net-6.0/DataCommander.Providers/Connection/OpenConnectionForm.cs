@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using DataCommander.Providers2.Connection;
 using Foundation.Core;
 using Foundation.Log;
-using Foundation.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
 namespace DataCommander.Providers.Connection

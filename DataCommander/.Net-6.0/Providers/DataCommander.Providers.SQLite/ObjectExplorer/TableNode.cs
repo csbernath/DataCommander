@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
-using DataCommander.Providers.Query;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 
@@ -52,7 +51,8 @@ where	name	= '{name}'";
         private void Script_Click(object sender, EventArgs e)
         {
             var script = GetScript(Database.Connection, Database.Name, Name);
-            QueryForm.ShowText(script);
+            var queryForm = (IQueryForm)sender;
+            queryForm.ShowText(script);
         }
 
         public ContextMenu GetContextMenu()

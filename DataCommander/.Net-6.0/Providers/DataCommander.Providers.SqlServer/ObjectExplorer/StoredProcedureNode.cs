@@ -4,7 +4,6 @@ using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
-using DataCommander.Providers.Query;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data.SqlClient;
@@ -57,9 +56,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
                 text = SqlDatabase.GetSysComments(connection, _database.Name, _owner, _name);
             }
 
-            Clipboard.SetText(text);
-
             var queryForm = (IQueryForm)sender;
+            queryForm.ClipboardSetText(text);
 
             queryForm.SetStatusbarPanelText(
                 $"Copying stored prcoedure script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.",

@@ -5,7 +5,6 @@ using System.Text;
 using ADODB;
 using DataCommander.Providers.Query;
 using DataCommander.Providers2;
-using Foundation.Windows.Forms;
 
 namespace DataCommander.Providers
 {

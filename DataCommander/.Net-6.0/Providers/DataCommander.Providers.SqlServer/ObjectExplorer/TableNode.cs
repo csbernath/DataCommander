@@ -146,10 +146,9 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
 
         private void EditRows(object sender, EventArgs e)
         {
-            var mainForm = DataCommanderApplication.Instance.MainForm;
-            var queryForm = (QueryForm) mainForm.ActiveMdiChild;
             var name = DatabaseNode.Name + "." + _owner + "." + _name;
             var query = "select * from " + name;
+            var queryForm = (IQueryForm)sender;            
             queryForm.EditRows(query);
         }
 
@@ -215,7 +214,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                         case "varchar":
                         case "nvarchar":
                         case "varbinary":
-                            var columnLength = (int) column["col_len"];
+                            var columnLength = (int)column["col_len"];
                             string columnlengthString;
 
                             if (columnLength == -1)
@@ -265,8 +264,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
 
                 dataSet.Tables.Add(schema);
 
-                var mainForm = DataCommanderApplication.Instance.MainForm;
-                var queryForm = (QueryForm) mainForm.ActiveMdiChild;
+                var queryForm = (IQueryForm)sender;
                 queryForm.ShowDataSet(dataSet);
             }
         }
@@ -275,7 +273,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
         {
             using (new CursorManager(Cursors.WaitCursor))
             {
-                var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+                var queryForm = (IQueryForm)sender;
                 queryForm.SetStatusbarPanelText("Copying table script to clipboard...",
                     queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
                 var stopwatch = Stopwatch.StartNew();
@@ -329,7 +327,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                     sb.AppendLine("GO");
                 }
 
-                Clipboard.SetText(sb.ToString());
+                queryForm.ClipboardSetText(sb.ToString());
                 stopwatch.Stop();
                 queryForm.SetStatusbarPanelText(
                     $"Copying table script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.",
@@ -349,10 +347,11 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
             }
 
             dataTable.TableName = $"{_name} indexes";
-            var mainForm = DataCommanderApplication.Instance.MainForm;
-            var queryForm = (QueryForm) mainForm.ActiveMdiChild;
+            
             var dataSet = new DataSet();
             dataSet.Tables.Add(dataTable);
+            
+            var queryForm = (IQueryForm)sender;            
             queryForm.ShowDataSet(dataSet);
         }
 
@@ -366,8 +365,8 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                 selectStatement = GetSelectStatement(connection, name);
             }
 
-            Clipboard.SetText(selectStatement);
             var queryForm = (IQueryForm)sender;
+            queryForm.ClipboardSetText(selectStatement);
             queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
                 queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
         }
@@ -514,9 +513,8 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
 
             stringBuilder.Append(stringTable.ToString(4));
 
-            Clipboard.SetText(stringBuilder.ToString());
-            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-
+            var queryForm = (IQueryForm)sender;
+            queryForm.ClipboardSetText(stringBuilder.ToString());            
             queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
                 queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
         }
@@ -576,8 +574,10 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
         private void UpdateScript_Click(object sender, EventArgs e)
         {
             var script = CreateUpdateScript();
-            Clipboard.SetText(script);
+
             var queryForm = (IQueryForm)sender;
+            queryForm.ClipboardSetText(script);
+
             queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
                 queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
         }
@@ -660,9 +660,8 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                 }
             }
 
-            Clipboard.SetText(textBuilder.ToLines().ToIndentedString("    "));
             var queryForm = (IQueryForm)sender;
-
+            queryForm.ClipboardSetText(textBuilder.ToLines().ToIndentedString("    "));
             queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
                 queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
         }

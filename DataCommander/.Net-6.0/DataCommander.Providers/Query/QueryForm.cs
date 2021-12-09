@@ -3973,32 +3973,32 @@ namespace DataCommander.Providers.Query
             SetResultWriterType(tableStyle);
         }
 
-        public static void ShowText(string text)
+        public void ShowText(string text)
         {
             var mainForm = DataCommanderApplication.Instance.MainForm;
             mainForm.Cursor = Cursors.WaitCursor;
-            var queryForm = (QueryForm)mainForm.ActiveMdiChild;
-
+            
             try
             {
-                var queryTextBox = queryForm.QueryTextBox;
-                var selectionStart = queryTextBox.RichTextBox.TextLength;
+                var selectionStart = _queryTextBox.RichTextBox.TextLength;
                 var append = text;
-                queryTextBox.RichTextBox.AppendText(append);
-                queryTextBox.RichTextBox.SelectionStart = selectionStart;
-                queryTextBox.RichTextBox.SelectionLength = append.Length;
+                _queryTextBox.RichTextBox.AppendText(append);
+                _queryTextBox.RichTextBox.SelectionStart = selectionStart;
+                _queryTextBox.RichTextBox.SelectionLength = append.Length;
 
-                queryTextBox.Focus();
+                _queryTextBox.Focus();
             }
             catch (Exception e)
             {
-                queryForm.ShowMessage(e);
+                ShowMessage(e);
             }
             finally
             {
                 mainForm.Cursor = Cursors.Default;
             }
         }
+
+        public void ClipboardSetText(string text) => Clipboard.SetText(text);
 
         [Flags]
         private enum Tchittestflags

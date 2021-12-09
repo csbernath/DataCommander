@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using DataCommander.Providers.Query;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
@@ -63,7 +62,9 @@ order by line";
             });
 
             var text = stringBuilder.ToString();
-            QueryForm.ShowText(text);
+
+            var queryForm = (IQueryForm)sender;
+            queryForm.ShowText(text);
         }
 
         public ContextMenu GetContextMenu()

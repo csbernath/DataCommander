@@ -68,7 +68,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
                 text = SqlDatabase.GetSysComments(connection, _database.Name, _schema, _name);
             }
 
-            Clipboard.SetText(text);
+            var queryForm = (IQueryForm)sender;
+            queryForm.ClipboardSetText(text);
         }
     }
 }
