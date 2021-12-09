@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using Microsoft.Data.SqlClient;
-using DataCommander.Providers.Query;
 using Foundation.Assertions;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
