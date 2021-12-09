@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
+using DataCommander.Providers2;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data.SqlClient;

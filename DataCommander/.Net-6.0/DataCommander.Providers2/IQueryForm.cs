@@ -2,7 +2,7 @@
 using System.Data;
 using System.Drawing;
 
-namespace DataCommander.Providers;
+namespace DataCommander.Providers2;
 
 public interface IQueryForm
 {

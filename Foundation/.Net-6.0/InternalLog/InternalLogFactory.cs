@@ -1,6 +1,5 @@
 ﻿using System;
 using Foundation.Core;
-using Foundation.DefaultLog;
 using Foundation.Log;
 
 namespace Foundation.InternalLog;

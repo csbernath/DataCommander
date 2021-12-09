@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace DataCommander.Providers.ResultWriter;
+namespace DataCommander.Providers;
 
 internal interface IResultWriter
 {

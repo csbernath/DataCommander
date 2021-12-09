@@ -1,6 +1,4 @@
-﻿using DataCommander.Providers2.ResultWriter;
-
-namespace DataCommander.Providers.ResultWriter;
+﻿namespace DataCommander.Providers2.ResultWriter;
 
 public sealed class DecimalDataWriter : DataWriterBase
 {

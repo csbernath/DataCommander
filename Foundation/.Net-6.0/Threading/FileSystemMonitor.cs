@@ -2,9 +2,8 @@
 using System.Globalization;
 using System.IO;
 using Foundation.Log;
-using Foundation.Threading;
 
-namespace Foundation.IO;
+namespace Foundation.Threading;
 
 /// <summary>
 /// Periodically checks a directory for file creations/deletions

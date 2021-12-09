@@ -1,9 +1,8 @@
 ﻿using System;
 using DataCommander.Providers2.FieldNamespace;
-using DataCommander.Providers2.ResultWriter;
 using Foundation.Core;
 
-namespace DataCommander.Providers.ResultWriter;
+namespace DataCommander.Providers2.ResultWriter;
 
 public static class FieldTypeDictionary
 {

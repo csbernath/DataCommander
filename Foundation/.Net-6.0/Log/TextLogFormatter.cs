@@ -1,6 +1,4 @@
-﻿using Foundation.Log;
-
-namespace Foundation.DefaultLog;
+﻿namespace Foundation.Log;
 
 public sealed class TextLogFormatter : ILogFormatter
 {

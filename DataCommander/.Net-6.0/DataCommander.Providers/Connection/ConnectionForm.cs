@@ -8,6 +8,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using DataCommander.Providers.ResultWriter;
+using DataCommander.Providers2;
 using DataCommander.Providers2.Connection;
 using Foundation.Configuration;
 using Foundation.Core;

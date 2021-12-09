@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace DataCommander.Providers;
+namespace DataCommander.Providers2;
 
 public sealed class ColorTheme
 {
