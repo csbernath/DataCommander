@@ -10,10 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Foundation\.Net-5.0\Assertions\Foundation.Assertions.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\.Net-5.0\Collections\Foundation.Collections.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\.Net-5.0\Core\Foundation.Core.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\.Net-5.0\Text\Foundation.Text.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\.Net-6.0\Assertions\Foundation.Assertions.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\.Net-6.0\Collections\Foundation.Collections.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\.Net-6.0\Core\Foundation.Core.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\.Net-6.0\Text\Foundation.Text.csproj" />
   </ItemGroup>
 
 </Project>
