@@ -4,17 +4,16 @@ using Foundation.Assertions;
 using Foundation.Linq;
 using Foundation.Text;
 
-namespace Foundation.Data
-{
-    public static class DataViewExtensions
-    {
-        public static string ToStringTableString(this DataView dataView)
-        {
-            Assert.IsNotNull(dataView, nameof(dataView));
+namespace Foundation.Data;
 
-            var rows = dataView.Cast<DataRowView>().Select((dataRowView, rowIndex) => dataRowView.Row);
-            var columns = dataView.Table.Columns.Cast<DataColumn>().Select(DataTableExtensions.ToStringTableColumnInfo).ToArray();
-            return rows.ToString(columns);
-        }
+public static class DataViewExtensions
+{
+    public static string ToStringTableString(this DataView dataView)
+    {
+        Assert.IsNotNull(dataView, nameof(dataView));
+
+        var rows = dataView.Cast<DataRowView>().Select((dataRowView, rowIndex) => dataRowView.Row);
+        var columns = dataView.Table.Columns.Cast<DataColumn>().Select(DataTableExtensions.ToStringTableColumnInfo).ToArray();
+        return rows.ToString(columns);
     }
 }

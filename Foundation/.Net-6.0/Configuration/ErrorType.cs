@@ -1,9 +1,8 @@
-﻿namespace Foundation.Configuration
+﻿namespace Foundation.Configuration;
+
+internal enum ErrorType
 {
-    internal enum ErrorType
-    {
-        Error,
-        Warning,
-        Information
-    }
+    Error,
+    Warning,
+    Information
 }

@@ -1,9 +1,8 @@
-﻿namespace DataCommander.Providers2
-{
-    public class UniqueIndexColumn
-    {
-        public readonly int ColumnId;
+﻿namespace DataCommander.Providers2;
 
-        public UniqueIndexColumn(int columnId) => ColumnId = columnId;
-    }
+public class UniqueIndexColumn
+{
+    public readonly int ColumnId;
+
+    public UniqueIndexColumn(int columnId) => ColumnId = columnId;
 }

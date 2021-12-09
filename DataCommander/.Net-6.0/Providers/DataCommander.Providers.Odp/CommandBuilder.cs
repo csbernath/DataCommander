@@ -3,32 +3,32 @@ using System.Data;
 using Foundation.Data;
 using Oracle.ManagedDataAccess.Client;
 
-namespace DataCommander.Providers.Odp
-{
-    /// <exclude/>
-	/// <summary>
-	/// Summary description for CommandBuilder.
-	/// </summary>
-	public static class CommandBuilder
-	{
-		public static void DeriveParameters(
-			OracleConnection connection,
-			string owner,
-			string packageName,
-			string objectName,
-			string overload,
-			OracleParameterCollection parameters )
-		{
-			if (overload == null)
-			{
-				overload = "is null";
-			}
-			else
-			{
-				overload = "= '" + overload + "'";
-			}
+namespace DataCommander.Providers.Odp;
 
-			const string format = @"select	argument_name,
+/// <exclude/>
+/// <summary>
+/// Summary description for CommandBuilder.
+/// </summary>
+public static class CommandBuilder
+{
+	public static void DeriveParameters(
+		OracleConnection connection,
+		string owner,
+		string packageName,
+		string objectName,
+		string overload,
+		OracleParameterCollection parameters )
+	{
+		if (overload == null)
+		{
+			overload = "is null";
+		}
+		else
+		{
+			overload = "= '" + overload + "'";
+		}
+
+		const string format = @"select	argument_name,
 	data_type,
 	default_value,
 	in_out,
@@ -42,109 +42,108 @@ where	owner			= '{0}'
     and overload		{3}
 	--and data_level = 0
 order by overload,position";
-		    var commandText = string.Format(format, owner, packageName, objectName, overload);
-		    var command = new OracleCommand(commandText, connection);
+		var commandText = string.Format(format, owner, packageName, objectName, overload);
+		var command = new OracleCommand(commandText, connection);
 
-			using (var dataReader = command.ExecuteReader())
+		using (var dataReader = command.ExecuteReader())
+		{
+			var first = true;
+
+			while (dataReader.Read())
 			{
-				var first = true;
+				var argumentName = dataReader.GetStringOrDefault(0);
+				var dataType = dataReader.GetString(1);
+				var inOut = dataReader.GetString(2);
+				var dataLength = dataReader.GetNullableDecimal(3);
+				var precision = dataReader.GetNullableDecimal(4);
+				var scale = dataReader.GetNullableDecimal(5);
+				ParameterDirection direction;
 
-				while (dataReader.Read())
+				switch (inOut)
 				{
-					var argumentName = dataReader.GetStringOrDefault(0);
-					var dataType = dataReader.GetString(1);
-				    var inOut = dataReader.GetString(2);
-					var dataLength = dataReader.GetNullableDecimal(3);
-				    var precision = dataReader.GetNullableDecimal(4);
-				    var scale = dataReader.GetNullableDecimal(5);
-				    ParameterDirection direction;
+					case "IN":
+						direction = ParameterDirection.Input;
+						break;
 
-					switch (inOut)
-					{
-						case "IN":
-							direction = ParameterDirection.Input;
-							break;
+					case "OUT":
+						direction = first ? ParameterDirection.ReturnValue : ParameterDirection.Output;
+						break;
 
-						case "OUT":
-							direction = first ? ParameterDirection.ReturnValue : ParameterDirection.Output;
-							break;
+					case "IN/OUT":
+						direction = ParameterDirection.InputOutput;
+						break;
 
-						case "IN/OUT":
-							direction = ParameterDirection.InputOutput;
-							break;
+					default:
+						throw new NotImplementedException();
+				}
 
-						default:
-							throw new NotImplementedException();
-					}
+				OracleDbType dbType;
 
-					OracleDbType dbType;
+				switch (dataType)
+				{
+					case "CHAR":
+						dbType = OracleDbType.Char;
+						break;
 
-					switch (dataType)
-					{
-						case "CHAR":
-							dbType = OracleDbType.Char;
-							break;
+					case "NUMBER":
+						dbType = OracleDbType.Decimal;
 
-						case "NUMBER":
-							dbType = OracleDbType.Decimal;
+						if (precision == null && scale == null)
+						{
+							precision = 38;
+							scale = 127;
+						}
 
-							if (precision == null && scale == null)
-							{
-								precision = 38;
-								scale = 127;
-							}
+						break;
 
-							break;
+					case "VARCHAR2":
+						dbType = OracleDbType.Varchar2;
+						break;
 
-						case "VARCHAR2":
-							dbType = OracleDbType.Varchar2;
-							break;
+					case "PL/SQL TABLE":
+						dbType = OracleDbType.RefCursor;
+						break;
 
-						case "PL/SQL TABLE":
-							dbType = OracleDbType.RefCursor;
-							break;
+					case "BINARY_INTEGER":
+						//            dbType = OracleDbType.Decimal;
+						//
+						//            if (precision == 0 && scale == 0)
+						//            {
+						//              precision = 38;
+						//              scale = 0;
+						//            }
+						//
+						//            length = dataReader.IsDBNull(3) ? 22 : Convert.ToInt32(dataReader[3]);
+						dbType = OracleDbType.Int64;
+						break;
 
-						case "BINARY_INTEGER":
-							//            dbType = OracleDbType.Decimal;
-							//
-							//            if (precision == 0 && scale == 0)
-							//            {
-							//              precision = 38;
-							//              scale = 0;
-							//            }
-							//
-							//            length = dataReader.IsDBNull(3) ? 22 : Convert.ToInt32(dataReader[3]);
-							dbType = OracleDbType.Int64;
-							break;
+					case "RAW":
+						dbType = OracleDbType.Raw;
+						break;
 
-						case "RAW":
-							dbType = OracleDbType.Raw;
-							break;
+					//case "OBJECT":
+					//    dbType = OracleDbType.
+					//    break;
 
-						//case "OBJECT":
-						//    dbType = OracleDbType.
-						//    break;
+					default:
+						throw new NotImplementedException();
+				}
 
-						default:
-							throw new NotImplementedException();
-					}
+				var parameter = new OracleParameter
+				{
+					ParameterName = argumentName,
+					Direction = direction,
+					OracleDbType = dbType,
+					Size = (int)dataLength.GetValueOrDefault(),
+					Precision = (byte)precision.GetValueOrDefault(),
+					Scale = (byte)scale.GetValueOrDefault()
+				};
 
-				    var parameter = new OracleParameter
-				    {
-				        ParameterName = argumentName,
-				        Direction = direction,
-				        OracleDbType = dbType,
-				        Size = (int)dataLength.GetValueOrDefault(),
-				        Precision = (byte)precision.GetValueOrDefault(),
-				        Scale = (byte)scale.GetValueOrDefault()
-				    };
+				parameters.Add( parameter );
 
-				    parameters.Add( parameter );
-
-					if (first)
-					{
-						first = false;
-					}
+				if (first)
+				{
+					first = false;
 				}
 			}
 		}

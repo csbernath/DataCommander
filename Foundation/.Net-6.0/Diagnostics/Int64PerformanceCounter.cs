@@ -2,78 +2,77 @@
 using System.Threading;
 using Foundation.Assertions;
 
-namespace Foundation.Diagnostics
+namespace Foundation.Diagnostics;
+
+public sealed class Int64PerformanceCounter
 {
-    public sealed class Int64PerformanceCounter
+    #region Private Fields
+
+    private readonly string _name;
+    private readonly Func<long, string> _toString;
+    private long _count;
+    private long _sum;
+    private long _min = long.MaxValue;
+    private long _max = long.MinValue;
+
+    #endregion
+
+    public Int64PerformanceCounter(string name, Func<long, string> toString)
     {
-        #region Private Fields
+        Assert.IsNotNull(toString);
 
-        private readonly string _name;
-        private readonly Func<long, string> _toString;
-        private long _count;
-        private long _sum;
-        private long _min = long.MaxValue;
-        private long _max = long.MinValue;
+        _name = name;
+        _toString = toString;
+    }
 
-        #endregion
+    public void Increment(long item)
+    {
+        Interlocked.Increment(ref _count);
+        Interlocked.Add(ref _sum, item);
 
-        public Int64PerformanceCounter(string name, Func<long, string> toString)
+        while (true)
         {
-            Assert.IsNotNull(toString);
-
-            _name = name;
-            _toString = toString;
+            var min = _min;
+            if (item < min)
+            {
+                var originalMin = Interlocked.CompareExchange(ref _min, item, min);
+                if (originalMin == min)
+                    break;
+                else
+                    Thread.SpinWait(1);
+            }
+            else
+                break;
         }
 
-        public void Increment(long item)
+        while (true)
         {
-            Interlocked.Increment(ref _count);
-            Interlocked.Add(ref _sum, item);
-
-            while (true)
+            var max = _max;
+            if (item > max)
             {
-                var min = _min;
-                if (item < min)
-                {
-                    var originalMin = Interlocked.CompareExchange(ref _min, item, min);
-                    if (originalMin == min)
-                        break;
-                    else
-                        Thread.SpinWait(1);
-                }
-                else
+                var originalMax = Interlocked.CompareExchange(ref _max, item, max);
+                if (originalMax == max)
                     break;
-            }
-
-            while (true)
-            {
-                var max = _max;
-                if (item > max)
-                {
-                    var originalMax = Interlocked.CompareExchange(ref _max, item, max);
-                    if (originalMax == max)
-                        break;
-                    else
-                        Thread.SpinWait(1);
-                }
                 else
-                    break;
+                    Thread.SpinWait(1);
             }
+            else
+                break;
         }
+    }
 
-        public long Count => _count;
-        public long Sum => _sum;
-        public long Min => _min;
-        public long Max => _max;
+    public long Count => _count;
+    public long Sum => _sum;
+    public long Min => _min;
+    public long Max => _max;
 
-        public string ToLogString()
-        {
-            return $@"Int64PerformanceCounter '{_name}'
+    public string ToLogString()
+    {
+        return $@"Int64PerformanceCounter '{_name}'
 count: {_count}
 min: {_toString(_min)}
 avg: {_toString((long)((double)Sum / Count))}
 max: {_toString(_max)}
 sum: {_toString(_sum)}";
-        }
     }
 }

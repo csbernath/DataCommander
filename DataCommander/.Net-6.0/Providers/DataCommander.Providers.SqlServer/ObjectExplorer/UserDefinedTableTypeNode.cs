@@ -1,39 +1,38 @@
 ﻿using System.Collections.Generic;
 
-namespace DataCommander.Providers.SqlServer.ObjectExplorer
+namespace DataCommander.Providers.SqlServer.ObjectExplorer;
+
+internal sealed class UserDefinedTableTypeNode : ITreeNode
 {
-    internal sealed class UserDefinedTableTypeNode : ITreeNode
+    private readonly DatabaseNode _database;
+    private readonly int _id;
+    private readonly string _name;
+    private readonly string _schema;
+
+    public UserDefinedTableTypeNode(DatabaseNode database, int id, string schema, string name)
     {
-        private readonly DatabaseNode _database;
-        private readonly int _id;
-        private readonly string _name;
-        private readonly string _schema;
+        _database = database;
+        _id = id;
+        _schema = schema;
+        _name = name;
+    }
 
-        public UserDefinedTableTypeNode(DatabaseNode database, int id, string schema, string name)
+    string ITreeNode.Name => $"{_schema}.{_name}";
+    bool ITreeNode.IsLeaf => false;
+
+    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    {
+        return new ITreeNode[]
         {
-            _database = database;
-            _id = id;
-            _schema = schema;
-            _name = name;
-        }
+            new ColumnCollectionNode(_database, _id)
+        };
+    }
 
-        string ITreeNode.Name => $"{_schema}.{_name}";
-        bool ITreeNode.IsLeaf => false;
+    bool ITreeNode.Sortable => false;
+    string ITreeNode.Query => null;
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
-        {
-            return new ITreeNode[]
-            {
-                new ColumnCollectionNode(_database, _id)
-            };
-        }
-
-        bool ITreeNode.Sortable => false;
-        string ITreeNode.Query => null;
-
-        public ContextMenu GetContextMenu()
-        {
-            throw new System.NotImplementedException();
-        }
+    public ContextMenu GetContextMenu()
+    {
+        throw new System.NotImplementedException();
     }
 }

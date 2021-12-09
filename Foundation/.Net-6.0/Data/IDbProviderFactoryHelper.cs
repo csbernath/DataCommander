@@ -1,19 +1,18 @@
 ﻿
-namespace Foundation.Data
+namespace Foundation.Data;
+
+/// <summary>
+/// 
+/// </summary>
+public interface IDbProviderFactoryHelper
 {
     /// <summary>
     /// 
     /// </summary>
-    public interface IDbProviderFactoryHelper
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        IDbCommandHelper DbCommandHelper { get; }
+    IDbCommandHelper DbCommandHelper { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        IDbCommandBuilderHelper DbCommandBuilderHelper { get; }
-    }
+    /// <summary>
+    /// 
+    /// </summary>
+    IDbCommandBuilderHelper DbCommandBuilderHelper { get; }
 }

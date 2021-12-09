@@ -1,5 +1,4 @@
-﻿namespace Foundation.Configuration
-{
+﻿namespace Foundation.Configuration;
 #if DOC
     /// <summary>
     /// The <c>Foundation.Configuration</c> namespace
@@ -10,4 +9,3 @@
     {
     }
 #endif
-}

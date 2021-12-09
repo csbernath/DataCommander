@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Foundation.Core
+namespace Foundation.Core;
+
+public interface IDateTimeProvider
 {
-    public interface IDateTimeProvider
-    {
-        DateTime Now { get; }
-    }
+    DateTime Now { get; }
 }

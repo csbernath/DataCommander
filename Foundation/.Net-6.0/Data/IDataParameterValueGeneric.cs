@@ -1,8 +1,7 @@
 ﻿
-namespace Foundation.Data
+namespace Foundation.Data;
+
+public interface IDataParameterValue<out T> : IDataParameterValue
 {
-    public interface IDataParameterValue<out T> : IDataParameterValue
-    {
-        T Value { get; }
-    }
+    T Value { get; }
 }

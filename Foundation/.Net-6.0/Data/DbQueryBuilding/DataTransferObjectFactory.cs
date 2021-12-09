@@ -2,41 +2,40 @@
 using System.Linq;
 using Foundation.Text;
 
-namespace Foundation.Data.DbQueryBuilding
+namespace Foundation.Data.DbQueryBuilding;
+
+public static class DataTransferObjectFactory
 {
-    public static class DataTransferObjectFactory
+    public static ReadOnlyCollection<Line> CreateDataTransferObject(string name, ReadOnlyCollection<DataTransferObjectField> fields)
     {
-        public static ReadOnlyCollection<Line> CreateDataTransferObject(string name, ReadOnlyCollection<DataTransferObjectField> fields)
+        var textBuilder = new TextBuilder();
+
+        textBuilder.Add($"public sealed class {name}");
+        using (textBuilder.AddCSharpBlock())
         {
-            var textBuilder = new TextBuilder();
+            foreach (var field in fields)
+                textBuilder.Add($"public readonly {field.Type} {field.Name};");
 
-            textBuilder.Add($"public sealed class {name}");
-            using (textBuilder.AddCSharpBlock())
-            {
-                foreach (var field in fields)
-                    textBuilder.Add($"public readonly {field.Type} {field.Name};");
-
-                textBuilder.Add(Line.Empty);
-                var constructor = GetConstructor(name, fields);
-                textBuilder.Add(constructor);
-            }
-
-            return textBuilder.ToLines();
+            textBuilder.Add(Line.Empty);
+            var constructor = GetConstructor(name, fields);
+            textBuilder.Add(constructor);
         }
 
-        private static ReadOnlyCollection<Line> GetConstructor(string name, ReadOnlyCollection<DataTransferObjectField> fields)
+        return textBuilder.ToLines();
+    }
+
+    private static ReadOnlyCollection<Line> GetConstructor(string name, ReadOnlyCollection<DataTransferObjectField> fields)
+    {
+        var textBuilder = new TextBuilder();
+
+        var parameters = fields.Select(field => $"{field.Type} {field.Name.ToCamelCase()}").Join(", ");
+        textBuilder.Add($"public {name}({parameters})");
+        using (textBuilder.AddCSharpBlock())
         {
-            var textBuilder = new TextBuilder();
-
-            var parameters = fields.Select(field => $"{field.Type} {field.Name.ToCamelCase()}").Join(", ");
-            textBuilder.Add($"public {name}({parameters})");
-            using (textBuilder.AddCSharpBlock())
-            {
-                foreach (var field in fields)
-                    textBuilder.Add($"{field.Name} = {field.Name.ToCamelCase()};");
-            }
-
-            return textBuilder.ToLines();
+            foreach (var field in fields)
+                textBuilder.Add($"{field.Name} = {field.Name.ToCamelCase()};");
         }
+
+        return textBuilder.ToLines();
     }
 }

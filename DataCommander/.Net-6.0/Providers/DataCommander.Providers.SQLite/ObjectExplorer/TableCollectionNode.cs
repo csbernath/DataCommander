@@ -1,26 +1,26 @@
 ﻿using System.Collections.Generic;
 using Foundation.Data;
 
-namespace DataCommander.Providers.SQLite.ObjectExplorer
+namespace DataCommander.Providers.SQLite.ObjectExplorer;
+
+internal sealed class TableCollectionNode : ITreeNode
 {
-    internal sealed class TableCollectionNode : ITreeNode
+    private readonly DatabaseNode _databaseNode;
+
+    public TableCollectionNode(DatabaseNode databaseNode)
     {
-        private readonly DatabaseNode _databaseNode;
+        _databaseNode = databaseNode;
+    }
 
-        public TableCollectionNode(DatabaseNode databaseNode)
-        {
-            _databaseNode = databaseNode;
-        }
+    #region ITreeNode Members
 
-        #region ITreeNode Members
+    string ITreeNode.Name => "Tables";
 
-        string ITreeNode.Name => "Tables";
+    bool ITreeNode.IsLeaf => false;
 
-        bool ITreeNode.IsLeaf => false;
-
-        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
-        {
-            var commandText = $@"select	name
+    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    {
+        var commandText = $@"select	name
 from
 (
 	select	name
@@ -30,30 +30,29 @@ from
 	select	'sqlite_master'
 ) t
 order by name collate nocase";
-            var executor = _databaseNode.Connection.CreateCommandExecutor();
-            var table = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
-            var rows = table.Rows;
-            var count = rows.Count;
-            var nodes = new ITreeNode[count];
+        var executor = _databaseNode.Connection.CreateCommandExecutor();
+        var table = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
+        var rows = table.Rows;
+        var count = rows.Count;
+        var nodes = new ITreeNode[count];
 
-            for (var i = 0; i < count; i++)
-            {
-                var row = rows[i];
-                var name = (string) row["name"];
-                nodes[i] = new TableNode(_databaseNode, name);
-            }
-
-            return nodes;
-        }
-
-        bool ITreeNode.Sortable => false;
-        string ITreeNode.Query => null;
-
-        public ContextMenu GetContextMenu()
+        for (var i = 0; i < count; i++)
         {
-            throw new System.NotImplementedException();
+            var row = rows[i];
+            var name = (string) row["name"];
+            nodes[i] = new TableNode(_databaseNode, name);
         }
 
-        #endregion
+        return nodes;
     }
+
+    bool ITreeNode.Sortable => false;
+    string ITreeNode.Query => null;
+
+    public ContextMenu GetContextMenu()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    #endregion
 }

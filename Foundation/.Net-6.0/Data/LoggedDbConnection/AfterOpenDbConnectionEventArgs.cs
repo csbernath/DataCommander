@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace Foundation.Data.LoggedDbConnection
-{
-    public sealed class AfterOpenDbConnectionEventArgs : LoggedEventArgs
-    {
-        public AfterOpenDbConnectionEventArgs(Exception exception) => Exception = exception;
+namespace Foundation.Data.LoggedDbConnection;
 
-        public Exception Exception { get; }
-    }
+public sealed class AfterOpenDbConnectionEventArgs : LoggedEventArgs
+{
+    public AfterOpenDbConnectionEventArgs(Exception exception) => Exception = exception;
+
+    public Exception Exception { get; }
 }

@@ -1,9 +1,8 @@
 ﻿using System.Text;
 
-namespace Foundation.IO
+namespace Foundation.IO;
+
+public interface IFormatter
 {
-    public interface IFormatter
-    {
-        void AppendTo(StringBuilder sb, object[] args);
-    }
+    void AppendTo(StringBuilder sb, object[] args);
 }

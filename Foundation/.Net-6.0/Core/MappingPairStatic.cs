@@ -1,8 +1,7 @@
-﻿namespace Foundation.Core
+﻿namespace Foundation.Core;
+
+public static class MappingPair
 {
-    public static class MappingPair
-    {
-        public static MappingPair<TSource, TTarget> Create<TSource, TTarget>(TSource source, TTarget target) =>
-            new(source, target);
-    }
+    public static MappingPair<TSource, TTarget> Create<TSource, TTarget>(TSource source, TTarget target) =>
+        new(source, target);
 }

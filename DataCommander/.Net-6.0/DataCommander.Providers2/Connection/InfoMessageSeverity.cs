@@ -1,9 +1,8 @@
-﻿namespace DataCommander.Providers2.Connection
+﻿namespace DataCommander.Providers2.Connection;
+
+public enum InfoMessageSeverity
 {
-    public enum InfoMessageSeverity
-    {
-        Error,
-        Information,
-        Verbose
-    }
+    Error,
+    Information,
+    Verbose
 }

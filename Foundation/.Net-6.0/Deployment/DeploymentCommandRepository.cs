@@ -5,52 +5,51 @@ using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Deployment.Commands;
 
-namespace Foundation.Deployment
+namespace Foundation.Deployment;
+
+public sealed class DeploymentCommandRepository
 {
-    public sealed class DeploymentCommandRepository
+    private readonly ISerializer _serializer;
+
+    public DeploymentCommandRepository(ISerializer serializer)
     {
-        private readonly ISerializer _serializer;
+        Assert.IsNotNull(serializer);
+        _serializer = serializer;
+    }
 
-        public DeploymentCommandRepository(ISerializer serializer)
+    public DeploymentCommand Get(string applicationName)
+    {
+        var fileName = GetFileName(applicationName);
+        DeploymentCommand deploymentCommand;
+
+        if (File.Exists(fileName))
         {
-            Assert.IsNotNull(serializer);
-            _serializer = serializer;
+            var text = File.ReadAllText(fileName, Encoding.UTF8);
+            deploymentCommand = _serializer.Deserialize<DeploymentCommand>(text);
+        }
+        else
+        {
+            var now = UniversalTime.Default.Now;
+            deploymentCommand = new CheckForUpdates(now);
         }
 
-        public DeploymentCommand Get(string applicationName)
-        {
-            var fileName = GetFileName(applicationName);
-            DeploymentCommand deploymentCommand;
+        return deploymentCommand;
+    }
 
-            if (File.Exists(fileName))
-            {
-                var text = File.ReadAllText(fileName, Encoding.UTF8);
-                deploymentCommand = _serializer.Deserialize<DeploymentCommand>(text);
-            }
-            else
-            {
-                var now = UniversalTime.Default.Now;
-                deploymentCommand = new CheckForUpdates(now);
-            }
+    public void Save(string applicationName, DeploymentCommand command)
+    {
+        var text = _serializer.Serialize(command);
+        var fileName = GetFileName(applicationName);
+        File.WriteAllText(fileName, text, Encoding.UTF8);
+    }
 
-            return deploymentCommand;
-        }
+    private static string GetFileName(string applicationName)
+    {
+        var localApplicationDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        var directory = Path.Combine(localApplicationDataDirectory, applicationName);
+        if (!Directory.Exists(directory))
+            Directory.CreateDirectory(directory);
 
-        public void Save(string applicationName, DeploymentCommand command)
-        {
-            var text = _serializer.Serialize(command);
-            var fileName = GetFileName(applicationName);
-            File.WriteAllText(fileName, text, Encoding.UTF8);
-        }
-
-        private static string GetFileName(string applicationName)
-        {
-            var localApplicationDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            var directory = Path.Combine(localApplicationDataDirectory, applicationName);
-            if (!Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
-
-            return Path.Combine(directory, "DeploymentCommand.json");
-        }
+        return Path.Combine(directory, "DeploymentCommand.json");
     }
 }

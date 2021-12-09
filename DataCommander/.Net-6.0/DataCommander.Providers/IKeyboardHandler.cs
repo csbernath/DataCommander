@@ -1,10 +1,9 @@
 ﻿using System.Windows.Forms;
 
-namespace DataCommander.Providers
+namespace DataCommander.Providers;
+
+internal interface IKeyboardHandler
 {
-    internal interface IKeyboardHandler
-    {
-        bool HandleKeyDown(KeyEventArgs e);
-        bool HandleKeyPress(KeyPressEventArgs e);
-    }
+    bool HandleKeyDown(KeyEventArgs e);
+    bool HandleKeyPress(KeyPressEventArgs e);
 }

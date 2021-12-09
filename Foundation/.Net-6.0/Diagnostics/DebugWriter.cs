@@ -2,29 +2,28 @@
 using System.IO;
 using System.Text;
 
-namespace Foundation.Diagnostics
+namespace Foundation.Diagnostics;
+
+public class DebugWriter : TextWriter
 {
-    public class DebugWriter : TextWriter
+    private static DebugWriter _instance;
+
+    public static DebugWriter Instance
     {
-        private static DebugWriter _instance;
-
-        public static DebugWriter Instance
+        get
         {
-            get
-            {
-                if (_instance == null)
-                    _instance = new DebugWriter();
+            if (_instance == null)
+                _instance = new DebugWriter();
 
-                return _instance;
-            }
+            return _instance;
         }
+    }
 
-        public override Encoding Encoding => null;
+    public override Encoding Encoding => null;
 
-        public override void Write(char[] buffer, int index, int count)
-        {
-            var message = new string(buffer, index, count);
-            Debug.Write(message);
-        }
+    public override void Write(char[] buffer, int index, int count)
+    {
+        var message = new string(buffer, index, count);
+        Debug.Write(message);
     }
 }

@@ -1,9 +1,8 @@
 ﻿
-namespace Foundation.Threading
+namespace Foundation.Threading;
+
+internal enum WorkerEventState
 {
-    internal enum WorkerEventState
-    {
-        NonSignaled,
-        Signaled
-    }
+    NonSignaled,
+    Signaled
 }

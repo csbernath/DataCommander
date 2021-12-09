@@ -6,47 +6,46 @@ using DataCommander.Providers2;
 using DataCommander.Providers2.Connection;
 using Foundation.Data;
 
-namespace DataCommander.Providers
+namespace DataCommander.Providers;
+
+public interface IProvider
 {
-    public interface IProvider
-    {
-        #region Properties
+    #region Properties
 
-        string Name { get; }
-        DbProviderFactory DbProviderFactory { get; }
-        string[] KeyWords { get; }
-        bool CanConvertCommandToString { get; }
-        bool IsCommandCancelable { get; }
+    string Name { get; }
+    DbProviderFactory DbProviderFactory { get; }
+    string[] KeyWords { get; }
+    bool CanConvertCommandToString { get; }
+    bool IsCommandCancelable { get; }
 
-        #endregion
+    #endregion
 
-        #region Methods
+    #region Methods
 
-        IObjectExplorer CreateObjectExplorer();
-        void ClearCompletionCache();
-        string CommandToString(IDbCommand command);
-        ConnectionBase CreateConnection(string connectionString);
-        IDbConnectionStringBuilder CreateConnectionStringBuilder();
-        DbDataAdapter CreateDataAdapter(string selectCommandText, IDbConnection connection);
-        IDataReaderHelper CreateDataReaderHelper(IDataReader dataReader);
+    IObjectExplorer CreateObjectExplorer();
+    void ClearCompletionCache();
+    string CommandToString(IDbCommand command);
+    ConnectionBase CreateConnection(string connectionString);
+    IDbConnectionStringBuilder CreateConnectionStringBuilder();
+    DbDataAdapter CreateDataAdapter(string selectCommandText, IDbConnection connection);
+    IDataReaderHelper CreateDataReaderHelper(IDataReader dataReader);
 
-        void CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationConnection, string destinationTableName,
-            out IDbCommand insertCommand, out Converter<object, object>[] converters);
+    void CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationConnection, string destinationTableName,
+        out IDbCommand insertCommand, out Converter<object, object>[] converters);
 
-        void DeriveParameters(IDbCommand command);
+    void DeriveParameters(IDbCommand command);
 
-        Type GetColumnType(FoundationDbColumn column);
-        string GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName);
-        GetCompletionResponse GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position);
-        DataParameterBase GetDataParameter(IDataParameter parameter);
+    Type GetColumnType(FoundationDbColumn column);
+    string GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName);
+    GetCompletionResponse GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position);
+    DataParameterBase GetDataParameter(IDataParameter parameter);
 
-        string GetExceptionMessage(Exception exception);
-        DataTable GetParameterTable(IDataParameterCollection parameters);
-        DataTable GetSchemaTable(IDataReader dataReader);
-        List<Statement> GetStatements(string commandText);
-        GetTableSchemaResult GetTableSchema(IDbConnection connection, string tableName);
-        List<InfoMessage> ToInfoMessages(Exception e);
+    string GetExceptionMessage(Exception exception);
+    DataTable GetParameterTable(IDataParameterCollection parameters);
+    DataTable GetSchemaTable(IDataReader dataReader);
+    List<Statement> GetStatements(string commandText);
+    GetTableSchemaResult GetTableSchema(IDbConnection connection, string tableName);
+    List<InfoMessage> ToInfoMessages(Exception e);
 
-        #endregion
-    }
+    #endregion
 }

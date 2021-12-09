@@ -1,11 +1,10 @@
-﻿namespace Foundation.Xml.XmlSpreadsheet
+﻿namespace Foundation.Xml.XmlSpreadsheet;
+
+public enum XmlSpreadsheetDataType
 {
-    public enum XmlSpreadsheetDataType
-    {
-        Number,
-        DateTime,
-        Boolean,
-        String,
-        Error
-    }
+    Number,
+    DateTime,
+    Boolean,
+    String,
+    Error
 }

@@ -1,9 +1,8 @@
 ﻿using System.Data;
 
-namespace Foundation.Data
+namespace Foundation.Data;
+
+public interface IDbCommandBuilderHelper
 {
-    public interface IDbCommandBuilderHelper
-    {
-        void DeriveParameters(IDbCommand command);
-    }
+    void DeriveParameters(IDbCommand command);
 }

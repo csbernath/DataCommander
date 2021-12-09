@@ -4,26 +4,26 @@ using Foundation.Assertions;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 
-namespace DataCommander.Providers.SqlServer.ObjectExplorer
+namespace DataCommander.Providers.SqlServer.ObjectExplorer;
+
+internal sealed class LinkedServerCatalogCollectionNode : ITreeNode
 {
-    internal sealed class LinkedServerCatalogCollectionNode : ITreeNode
+    private readonly LinkedServerNode _linkedServer;
+
+    public LinkedServerCatalogCollectionNode(LinkedServerNode linkedServer)
     {
-        private readonly LinkedServerNode _linkedServer;
+        Assert.IsNotNull(linkedServer);
+        _linkedServer = linkedServer;
+    }
 
-        public LinkedServerCatalogCollectionNode(LinkedServerNode linkedServer)
-        {
-            Assert.IsNotNull(linkedServer);
-            _linkedServer = linkedServer;
-        }
+    #region ITreeNode Members
 
-        #region ITreeNode Members
+    string ITreeNode.Name => "Catalogs";
+    bool ITreeNode.IsLeaf => false;
 
-        string ITreeNode.Name => "Catalogs";
-        bool ITreeNode.IsLeaf => false;
-
-        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
-        {
-            const string commandText = @"declare @provider nvarchar(128)
+    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    {
+        const string commandText = @"declare @provider nvarchar(128)
 select  @provider = s.provider
 from    sys.servers s (nolock)
 where   s.name = @name
@@ -55,29 +55,28 @@ end
 
 drop table #catalog";
 
-            using (var connection = new SqlConnection(_linkedServer.LinkedServers.Server.ConnectionString))
-            {
-                connection.Open();
-
-                var parameters = new SqlParameterCollectionBuilder();
-                parameters.Add("@name", _linkedServer.Name);
-                parameters.Add("@getSystemCatalogs", false);
-
-                var executor = connection.CreateCommandExecutor();
-                var executeReaderRequest = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
-                return executor.ExecuteReader(executeReaderRequest, 128,
-                    dataRecord => new LinkedServerCatalogNode(_linkedServer, dataRecord.GetString(0)));
-            }
-        }
-
-        bool ITreeNode.Sortable => false;
-        string ITreeNode.Query => null;
-
-        public ContextMenu GetContextMenu()
+        using (var connection = new SqlConnection(_linkedServer.LinkedServers.Server.ConnectionString))
         {
-            throw new System.NotImplementedException();
-        }
+            connection.Open();
 
-        #endregion
+            var parameters = new SqlParameterCollectionBuilder();
+            parameters.Add("@name", _linkedServer.Name);
+            parameters.Add("@getSystemCatalogs", false);
+
+            var executor = connection.CreateCommandExecutor();
+            var executeReaderRequest = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
+            return executor.ExecuteReader(executeReaderRequest, 128,
+                dataRecord => new LinkedServerCatalogNode(_linkedServer, dataRecord.GetString(0)));
+        }
     }
+
+    bool ITreeNode.Sortable => false;
+    string ITreeNode.Query => null;
+
+    public ContextMenu GetContextMenu()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    #endregion
 }

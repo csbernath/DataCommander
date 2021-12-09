@@ -1,16 +1,15 @@
-﻿namespace Foundation.Core
+﻿namespace Foundation.Core;
+
+public sealed class Sequence
 {
-    public sealed class Sequence
+    private int _index;
+
+    public int Next()
     {
-        private int _index;
-
-        public int Next()
-        {
-            var next = _index;
-            ++_index;
-            return next;
-        }
-
-        public void Reset() => _index = 0;
+        var next = _index;
+        ++_index;
+        return next;
     }
+
+    public void Reset() => _index = 0;
 }

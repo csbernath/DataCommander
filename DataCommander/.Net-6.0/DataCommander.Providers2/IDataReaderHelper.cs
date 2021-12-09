@@ -1,7 +1,6 @@
-﻿namespace DataCommander.Providers2
+﻿namespace DataCommander.Providers2;
+
+public interface IDataReaderHelper
 {
-    public interface IDataReaderHelper
-    {
-        int GetValues(object[] values);
-    }
+    int GetValues(object[] values);
 }

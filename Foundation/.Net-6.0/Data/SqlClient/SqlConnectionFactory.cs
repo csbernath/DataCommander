@@ -2,20 +2,19 @@
 using System.Data;
 using System.Data.SqlClient;
 
-namespace Foundation.Data.SqlClient
+namespace Foundation.Data.SqlClient;
+
+internal sealed class SqlConnectionFactory : IDbConnectionHelper
 {
-    internal sealed class SqlConnectionFactory : IDbConnectionHelper
+    private readonly IDbConnection _connection;
+
+    public event EventHandler InfoMessage;
+
+    public SqlConnectionFactory(SqlConnection sqlConnection, IDbConnection connection)
     {
-        private readonly IDbConnection _connection;
-
-        public event EventHandler InfoMessage;
-
-        public SqlConnectionFactory(SqlConnection sqlConnection, IDbConnection connection)
-        {
-            sqlConnection.InfoMessage += InfoMessageEvent;
-            _connection = connection;
-        }
-
-        private void InfoMessageEvent(object sender, SqlInfoMessageEventArgs e) => InfoMessage?.Invoke(_connection, e);
+        sqlConnection.InfoMessage += InfoMessageEvent;
+        _connection = connection;
     }
+
+    private void InfoMessageEvent(object sender, SqlInfoMessageEventArgs e) => InfoMessage?.Invoke(_connection, e);
 }

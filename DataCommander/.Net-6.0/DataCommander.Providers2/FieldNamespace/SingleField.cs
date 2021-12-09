@@ -1,17 +1,16 @@
-﻿namespace DataCommander.Providers2.FieldNamespace
+﻿namespace DataCommander.Providers2.FieldNamespace;
+
+public sealed class SingleField
 {
-    public sealed class SingleField
+    public SingleField(float value)
     {
-        public SingleField(float value)
-        {
-            Value = value;
-        }
+        Value = value;
+    }
 
-        public float Value { get; }
+    public float Value { get; }
 
-        public override string ToString()
-        {
-            return Value.ToString("N16");
-        }
+    public override string ToString()
+    {
+        return Value.ToString("N16");
     }
 }

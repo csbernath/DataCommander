@@ -3,78 +3,77 @@ using System.IO;
 using System.Xml;
 using Foundation.Assertions;
 
-namespace Foundation.Configuration
+namespace Foundation.Configuration;
+
+public sealed class ConfigurationNodeTree
 {
-    public sealed class ConfigurationNodeTree
+    private ConfigurationNode _rootNode = new(null);
+
+    public void LoadXml(string xml, string sectionName)
     {
-        private ConfigurationNode _rootNode = new(null);
+        var reader = new ConfigurationReader();
+        var textReader = new StringReader(xml);
+        var xmlReader = new XmlTextReader(textReader);
+        _rootNode = reader.Read(xmlReader, null, sectionName, null);
+    }
 
-        public void LoadXml(string xml, string sectionName)
+    public void Save(XmlWriter xmlWriter, string sectionName)
+    {
+        Assert.IsNotNull(xmlWriter);
+        Assert.IsNotNull(sectionName);
+
+        xmlWriter.WriteStartElement(sectionName);
+        ConfigurationWriter.Write(xmlWriter, _rootNode.Attributes);
+
+        foreach (var childNode in _rootNode.ChildNodes)
         {
-            var reader = new ConfigurationReader();
-            var textReader = new StringReader(xml);
-            var xmlReader = new XmlTextReader(textReader);
-            _rootNode = reader.Read(xmlReader, null, sectionName, null);
+            ConfigurationWriter.WriteNode(xmlWriter, childNode);
         }
 
-        public void Save(XmlWriter xmlWriter, string sectionName)
+        xmlWriter.WriteEndElement();
+    }
+
+    public string GetXml(string sectionName)
+    {
+        string s;
+
+        using (var textWriter = new StringWriter(CultureInfo.InvariantCulture))
         {
-            Assert.IsNotNull(xmlWriter);
-            Assert.IsNotNull(sectionName);
-
-            xmlWriter.WriteStartElement(sectionName);
-            ConfigurationWriter.Write(xmlWriter, _rootNode.Attributes);
-
-            foreach (var childNode in _rootNode.ChildNodes)
-            {
-                ConfigurationWriter.WriteNode(xmlWriter, childNode);
-            }
-
-            xmlWriter.WriteEndElement();
+            var xmlWriter = new XmlTextWriter(textWriter) {Formatting = Formatting.Indented, Indentation = 2, IndentChar = ' '};
+            Save(xmlWriter, sectionName);
+            xmlWriter.Close();
+            s = textWriter.ToString();
         }
 
-        public string GetXml(string sectionName)
+        return s;
+    }
+
+    public ConfigurationNode SelectNode(string path)
+    {
+        if (_rootNode == null)
+            _rootNode = new ConfigurationNode(null);
+
+        var node = _rootNode;
+
+        if (path != null)
         {
-            string s;
+            var nodeNames = path.Split(ConfigurationNode.Delimiter);
 
-            using (var textWriter = new StringWriter(CultureInfo.InvariantCulture))
+            for (var i = 0; i < nodeNames.Length; i++)
             {
-                var xmlWriter = new XmlTextWriter(textWriter) {Formatting = Formatting.Indented, Indentation = 2, IndentChar = ' '};
-                Save(xmlWriter, sectionName);
-                xmlWriter.Close();
-                s = textWriter.ToString();
-            }
+                var childNodeName = nodeNames[i];
+                var contains = node.ChildNodes.TryGetValue(childNodeName, out var childNode);
 
-            return s;
-        }
-
-        public ConfigurationNode SelectNode(string path)
-        {
-            if (_rootNode == null)
-                _rootNode = new ConfigurationNode(null);
-
-            var node = _rootNode;
-
-            if (path != null)
-            {
-                var nodeNames = path.Split(ConfigurationNode.Delimiter);
-
-                for (var i = 0; i < nodeNames.Length; i++)
+                if (!contains)
                 {
-                    var childNodeName = nodeNames[i];
-                    var contains = node.ChildNodes.TryGetValue(childNodeName, out var childNode);
-
-                    if (!contains)
-                    {
-                        childNode = new ConfigurationNode(childNodeName);
-                        node.AddChildNode(childNode);
-                    }
-
-                    node = childNode;
+                    childNode = new ConfigurationNode(childNodeName);
+                    node.AddChildNode(childNode);
                 }
-            }
 
-            return node;
+                node = childNode;
+            }
         }
+
+        return node;
     }
 }

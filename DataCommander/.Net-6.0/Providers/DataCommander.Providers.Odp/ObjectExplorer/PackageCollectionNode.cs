@@ -1,49 +1,48 @@
 ﻿using System.Collections.Generic;
 using Foundation.Data;
 
-namespace DataCommander.Providers.Odp.ObjectExplorer
+namespace DataCommander.Providers.Odp.ObjectExplorer;
+
+internal sealed class PackageCollectionNode : ITreeNode
 {
-    internal sealed class PackageCollectionNode : ITreeNode
+    private readonly SchemaNode _schema;
+
+    public PackageCollectionNode(SchemaNode schema) => _schema = schema;
+
+    public string Name => "Packages";
+    public bool IsLeaf => false;
+
+    public IEnumerable<ITreeNode> GetChildren(bool refresh)
     {
-        private readonly SchemaNode _schema;
+        var folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
+        var key = _schema.SchemasNode.Connection.DataSource + "." + _schema.Name;
+        var contains = folder.Attributes.TryGetAttributeValue(key, out string[] packages);
 
-        public PackageCollectionNode(SchemaNode schema) => _schema = schema;
-
-        public string Name => "Packages";
-        public bool IsLeaf => false;
-
-        public IEnumerable<ITreeNode> GetChildren(bool refresh)
+        if (!contains || refresh)
         {
-            var folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
-            var key = _schema.SchemasNode.Connection.DataSource + "." + _schema.Name;
-            var contains = folder.Attributes.TryGetAttributeValue(key, out string[] packages);
+            var commandText = "select object_name from all_objects where owner = '{0}' and object_type = 'PACKAGE' order by object_name";
+            commandText = string.Format(commandText, _schema.Name);
+            var executor = _schema.SchemasNode.Connection.CreateCommandExecutor();
+            var dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
+            var count = dataTable.Rows.Count;
+            packages = new string[count];
 
-            if (!contains || refresh)
-            {
-                var commandText = "select object_name from all_objects where owner = '{0}' and object_type = 'PACKAGE' order by object_name";
-                commandText = string.Format(commandText, _schema.Name);
-                var executor = _schema.SchemasNode.Connection.CreateCommandExecutor();
-                var dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
-                var count = dataTable.Rows.Count;
-                packages = new string[count];
+            for (var i = 0; i < count; i++)
+                packages[i] = (string) dataTable.Rows[i][0];
 
-                for (var i = 0; i < count; i++)
-                    packages[i] = (string) dataTable.Rows[i][0];
-
-                folder.Attributes.SetAttributeValue(key, packages);
-            }
-
-            var treeNodes = new ITreeNode[packages.Length];
-
-            for (var i = 0; i < packages.Length; i++)
-                treeNodes[i] = new PackageNode(_schema, packages[i]);
-
-            return treeNodes;
+            folder.Attributes.SetAttributeValue(key, packages);
         }
 
-        public bool Sortable => false;
-        public string Query => null;
-        public SchemaNode Schema => _schema;
-        public ContextMenu GetContextMenu() => null;
+        var treeNodes = new ITreeNode[packages.Length];
+
+        for (var i = 0; i < packages.Length; i++)
+            treeNodes[i] = new PackageNode(_schema, packages[i]);
+
+        return treeNodes;
     }
+
+    public bool Sortable => false;
+    public string Query => null;
+    public SchemaNode Schema => _schema;
+    public ContextMenu GetContextMenu() => null;
 }

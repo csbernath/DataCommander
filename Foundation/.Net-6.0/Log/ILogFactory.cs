@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace Foundation.Log
+namespace Foundation.Log;
+
+public interface ILogFactory : IDisposable
 {
-    public interface ILogFactory : IDisposable
-    {
-        string FileName { get; }
-        ILog GetLog(string name);
-    }
+    string FileName { get; }
+    ILog GetLog(string name);
 }

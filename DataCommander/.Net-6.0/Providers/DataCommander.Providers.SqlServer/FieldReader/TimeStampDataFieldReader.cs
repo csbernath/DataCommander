@@ -2,29 +2,28 @@
 using Microsoft.Data.SqlClient;
 using DataCommander.Providers2.FieldNamespace;
 
-namespace DataCommander.Providers.SqlServer.FieldReader
+namespace DataCommander.Providers.SqlServer.FieldReader;
+
+internal sealed class TimeStampDataFieldReader : IDataFieldReader
 {
-    internal sealed class TimeStampDataFieldReader : IDataFieldReader
+    private readonly int _columnOrdinal;
+
+    private readonly SqlDataReader _sqlDataReader;
+
+    public TimeStampDataFieldReader(
+        IDataRecord dataRecord,
+        int columnOrdinal)
     {
-        private readonly int _columnOrdinal;
+        _sqlDataReader = (SqlDataReader) dataRecord;
+        _columnOrdinal = columnOrdinal;
+    }
 
-        private readonly SqlDataReader _sqlDataReader;
-
-        public TimeStampDataFieldReader(
-            IDataRecord dataRecord,
-            int columnOrdinal)
+    public object Value
+    {
+        get
         {
-            _sqlDataReader = (SqlDataReader) dataRecord;
-            _columnOrdinal = columnOrdinal;
-        }
-
-        public object Value
-        {
-            get
-            {
-                var o = _sqlDataReader.GetValue(_columnOrdinal);
-                return o;
-            }
+            var o = _sqlDataReader.GetValue(_columnOrdinal);
+            return o;
         }
     }
 }

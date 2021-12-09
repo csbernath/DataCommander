@@ -1,8 +1,7 @@
-﻿namespace DataCommander.Providers2
+﻿namespace DataCommander.Providers2;
+
+public interface IObjectName
 {
-    public interface IObjectName
-    {
-        string UnquotedName { get; }
-        string QuotedName { get; }
-    }
+    string UnquotedName { get; }
+    string QuotedName { get; }
 }

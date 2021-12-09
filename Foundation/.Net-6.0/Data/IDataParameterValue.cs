@@ -1,8 +1,7 @@
 ﻿
-namespace Foundation.Data
+namespace Foundation.Data;
+
+public interface IDataParameterValue
 {
-    public interface IDataParameterValue
-    {
-        object ValueObject { get; }
-    }
+    object ValueObject { get; }
 }

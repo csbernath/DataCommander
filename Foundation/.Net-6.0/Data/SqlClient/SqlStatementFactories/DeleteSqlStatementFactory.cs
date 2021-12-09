@@ -4,21 +4,20 @@ using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Text;
 
-namespace Foundation.Data.SqlClient.SqlStatementFactories
+namespace Foundation.Data.SqlClient.SqlStatementFactories;
+
+public static class DeleteSqlStatementFactory
 {
-    public static class DeleteSqlStatementFactory
+    public static ReadOnlyCollection<Line> Create(string table, IReadOnlyCollection<ColumnNameValue> whereColumns)
     {
-        public static ReadOnlyCollection<Line> Create(string table, IReadOnlyCollection<ColumnNameValue> whereColumns)
-        {
-            Assert.IsTrue(!table.IsNullOrEmpty());
-            Assert.IsNotNull(whereColumns);
-            Assert.IsTrue(whereColumns.Count > 0);
-            var textBuilder = new TextBuilder();
-            textBuilder.Add($"delete {table}");
-            textBuilder.Add("where");
-            using (textBuilder.Indent(1))
-                textBuilder.Add(whereColumns.Join(" and"));
-            return textBuilder.ToLines();
-        }
+        Assert.IsTrue(!table.IsNullOrEmpty());
+        Assert.IsNotNull(whereColumns);
+        Assert.IsTrue(whereColumns.Count > 0);
+        var textBuilder = new TextBuilder();
+        textBuilder.Add($"delete {table}");
+        textBuilder.Add("where");
+        using (textBuilder.Indent(1))
+            textBuilder.Add(whereColumns.Join(" and"));
+        return textBuilder.ToLines();
     }
 }

@@ -1,10 +1,9 @@
-﻿namespace DataCommander.Providers2.Query
+﻿namespace DataCommander.Providers2.Query;
+
+public enum TokenType
 {
-    public enum TokenType
-    {
-        KeyWord,
-        String,
-        Digit,
-        OperatorOrPunctuator
-    }
+    KeyWord,
+    String,
+    Digit,
+    OperatorOrPunctuator
 }

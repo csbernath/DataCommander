@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Foundation.Threading.Tasks
+namespace Foundation.Threading.Tasks;
+
+public static class TaskSyncRunner
 {
-    public static class TaskSyncRunner
+    public static TResult Run<TResult>(Func<Task<TResult>> task)
     {
-        public static TResult Run<TResult>(Func<Task<TResult>> task)
-        {
-            return Task.Run(async () => await task()).GetAwaiter().GetResult();
-        }
+        return Task.Run(async () => await task()).GetAwaiter().GetResult();
     }
 }

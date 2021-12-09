@@ -1,8 +1,7 @@
-﻿namespace Foundation.Log
+﻿namespace Foundation.Log;
+
+public enum LogState
 {
-    public enum LogState
-    {
-        Closed,
-        Open
-    }
+    Closed,
+    Open
 }

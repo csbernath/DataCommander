@@ -2,28 +2,27 @@
 using System.Data;
 using Foundation.Data.DbQueryBuilding;
 
-namespace DataCommander.Providers
-{
-    internal sealed class AsyncDataAdapterCommand
-    {
-        public readonly string FileName;
-        public readonly int LineIndex;
-        public readonly string Text;
-        public readonly IDbCommand Command;
-        public readonly Providers2.QueryConfiguration.Query Query;
-        public readonly ReadOnlyCollection<DbRequestParameter> Parameters;
-        public readonly string CommandText;
+namespace DataCommander.Providers;
 
-        public AsyncDataAdapterCommand(string fileName, int lineIndex, string text, IDbCommand command, Providers2.QueryConfiguration.Query query,
-            ReadOnlyCollection<DbRequestParameter> parameters, string commandText)
-        {
-            LineIndex = lineIndex;
-            Text = text;
-            Command = command;
-            Query = query;
-            Parameters = parameters;
-            CommandText = commandText;
-            FileName = fileName;
-        }
+internal sealed class AsyncDataAdapterCommand
+{
+    public readonly string FileName;
+    public readonly int LineIndex;
+    public readonly string Text;
+    public readonly IDbCommand Command;
+    public readonly Providers2.QueryConfiguration.Query Query;
+    public readonly ReadOnlyCollection<DbRequestParameter> Parameters;
+    public readonly string CommandText;
+
+    public AsyncDataAdapterCommand(string fileName, int lineIndex, string text, IDbCommand command, Providers2.QueryConfiguration.Query query,
+        ReadOnlyCollection<DbRequestParameter> parameters, string commandText)
+    {
+        LineIndex = lineIndex;
+        Text = text;
+        Command = command;
+        Query = query;
+        Parameters = parameters;
+        CommandText = commandText;
+        FileName = fileName;
     }
 }

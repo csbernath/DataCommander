@@ -1,14 +1,13 @@
-﻿namespace Foundation.Log
+﻿namespace Foundation.Log;
+
+/// <summary>
+/// The verbosity of logging.
+/// </summary>
+public enum LogLevel
 {
-    /// <summary>
-    /// The verbosity of logging.
-    /// </summary>
-    public enum LogLevel
-    {
-        Error,
-        Warning,
-        Information,
-        Trace,
-        Debug
-    }
+    Error,
+    Warning,
+    Information,
+    Trace,
+    Debug
 }

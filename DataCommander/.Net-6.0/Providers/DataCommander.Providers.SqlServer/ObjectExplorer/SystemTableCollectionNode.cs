@@ -2,24 +2,24 @@
 using Microsoft.Data.SqlClient;
 using Foundation.Data;
 
-namespace DataCommander.Providers.SqlServer.ObjectExplorer
+namespace DataCommander.Providers.SqlServer.ObjectExplorer;
+
+internal sealed class SystemTableCollectionNode : ITreeNode
 {
-    internal sealed class SystemTableCollectionNode : ITreeNode
+    public SystemTableCollectionNode(DatabaseNode databaseNode)
     {
-        public SystemTableCollectionNode(DatabaseNode databaseNode)
-        {
-            DatabaseNode = databaseNode;
-        }
+        DatabaseNode = databaseNode;
+    }
 
-        public DatabaseNode DatabaseNode { get; }
+    public DatabaseNode DatabaseNode { get; }
 
-        string ITreeNode.Name => "System Tables";
+    string ITreeNode.Name => "System Tables";
 
-        bool ITreeNode.IsLeaf => false;
+    bool ITreeNode.IsLeaf => false;
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
-        {
-            var commandText = $@"select
+    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    {
+        var commandText = $@"select
     s.name,
     tbl.name,
     tbl.object_id
@@ -45,27 +45,26 @@ where
 end          
              AS bit)=1)
 order by 1,2";
-            var connectionString = DatabaseNode.Databases.Server.ConnectionString;
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                var executor = connection.CreateCommandExecutor();
-                return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataReader =>
-                {
-                    var schema = dataReader.GetString(0);
-                    var name = dataReader.GetString(1);
-                    var id = dataReader.GetInt32(2);
-                    return new TableNode(DatabaseNode, schema, name, id);
-                });
-            }
-        }
-
-        bool ITreeNode.Sortable => false;
-        string ITreeNode.Query => null;
-
-        public ContextMenu GetContextMenu()
+        var connectionString = DatabaseNode.Databases.Server.ConnectionString;
+        using (var connection = new SqlConnection(connectionString))
         {
-            throw new System.NotImplementedException();
+            connection.Open();
+            var executor = connection.CreateCommandExecutor();
+            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataReader =>
+            {
+                var schema = dataReader.GetString(0);
+                var name = dataReader.GetString(1);
+                var id = dataReader.GetInt32(2);
+                return new TableNode(DatabaseNode, schema, name, id);
+            });
         }
+    }
+
+    bool ITreeNode.Sortable => false;
+    string ITreeNode.Query => null;
+
+    public ContextMenu GetContextMenu()
+    {
+        throw new System.NotImplementedException();
     }
 }

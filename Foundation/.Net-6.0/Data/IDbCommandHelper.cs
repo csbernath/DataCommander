@@ -1,10 +1,9 @@
 ﻿using System.Data;
 using System.Xml;
 
-namespace Foundation.Data
+namespace Foundation.Data;
+
+public interface IDbCommandHelper
 {
-    public interface IDbCommandHelper
-    {
-        XmlDocument ExecuteXmlDocument(IDbCommand command);
-    }
+    XmlDocument ExecuteXmlDocument(IDbCommand command);
 }

@@ -1,10 +1,9 @@
-﻿namespace DataCommander.Providers2.ResultWriter
-{
-    public abstract class DataWriterBase
-    {
-        public void Init(int width) => Width = width;
+﻿namespace DataCommander.Providers2.ResultWriter;
 
-        public int Width { get; private set; }
-        public abstract string ToString(object value);
-    }
+public abstract class DataWriterBase
+{
+    public void Init(int width) => Width = width;
+
+    public int Width { get; private set; }
+    public abstract string ToString(object value);
 }

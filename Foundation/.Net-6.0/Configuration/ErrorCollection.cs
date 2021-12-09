@@ -1,18 +1,17 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text;
 
-namespace Foundation.Configuration
+namespace Foundation.Configuration;
+
+internal sealed class ErrorCollection : Collection<Error>
 {
-    internal sealed class ErrorCollection : Collection<Error>
+    public override string ToString()
     {
-        public override string ToString()
-        {
-            var stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
-            foreach (var error in this)
-                stringBuilder.AppendLine(error.ToString());
+        foreach (var error in this)
+            stringBuilder.AppendLine(error.ToString());
 
-            return stringBuilder.ToString();
-        }
+        return stringBuilder.ToString();
     }
 }

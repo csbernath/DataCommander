@@ -3,66 +3,65 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using DataCommander.Providers2.FieldNamespace;
 
-namespace DataCommander.Providers.SqlServer.FieldReader
+namespace DataCommander.Providers.SqlServer.FieldReader;
+
+internal sealed class VariantDataFieldReader : IDataFieldReader
 {
-    internal sealed class VariantDataFieldReader : IDataFieldReader
+    private readonly int _columnOrdinal;
+
+    private readonly SqlDataReader _sqlDataReader;
+
+    public VariantDataFieldReader(
+        IDataRecord dataRecord,
+        int columnOrdinal)
     {
-        private readonly int _columnOrdinal;
+        _sqlDataReader = (SqlDataReader) dataRecord;
+        _columnOrdinal = columnOrdinal;
+    }
 
-        private readonly SqlDataReader _sqlDataReader;
-
-        public VariantDataFieldReader(
-            IDataRecord dataRecord,
-            int columnOrdinal)
+    object IDataFieldReader.Value
+    {
+        get
         {
-            _sqlDataReader = (SqlDataReader) dataRecord;
-            _columnOrdinal = columnOrdinal;
-        }
+            object value;
 
-        object IDataFieldReader.Value
-        {
-            get
+            if (_sqlDataReader.IsDBNull(_columnOrdinal))
             {
-                object value;
+                value = DBNull.Value;
+            }
+            else
+            {
+                value = _sqlDataReader.GetValue(_columnOrdinal);
+                var type = value.GetType();
 
-                if (_sqlDataReader.IsDBNull(_columnOrdinal))
+                if (type.IsArray)
                 {
-                    value = DBNull.Value;
+                    var elementType = type.GetElementType();
+                    var elementTypeCode = Type.GetTypeCode(elementType);
+
+                    switch (elementTypeCode)
+                    {
+                        case TypeCode.Byte:
+                            var bytes = (byte[]) value;
+                            value = new BinaryField(bytes);
+                            break;
+                    }
                 }
                 else
                 {
-                    value = _sqlDataReader.GetValue(_columnOrdinal);
-                    var type = value.GetType();
+                    var typeCode = Type.GetTypeCode(type);
 
-                    if (type.IsArray)
+                    switch (typeCode)
                     {
-                        var elementType = type.GetElementType();
-                        var elementTypeCode = Type.GetTypeCode(elementType);
-
-                        switch (elementTypeCode)
-                        {
-                            case TypeCode.Byte:
-                                var bytes = (byte[]) value;
-                                value = new BinaryField(bytes);
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        var typeCode = Type.GetTypeCode(type);
-
-                        switch (typeCode)
-                        {
-                            case TypeCode.DateTime:
-                                var dateTime = (DateTime) value;
-                                value = DateTimeField.ToString(dateTime);
-                                break;
-                        }
+                        case TypeCode.DateTime:
+                            var dateTime = (DateTime) value;
+                            value = DateTimeField.ToString(dateTime);
+                            break;
                     }
                 }
-
-                return value;
             }
+
+            return value;
         }
     }
 }

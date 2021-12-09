@@ -1,74 +1,73 @@
 ﻿using System;
 using Foundation.Log;
 
-namespace Foundation.DefaultLog
+namespace Foundation.DefaultLog;
+
+public sealed class ConsoleLogWriter : ILogWriter
 {
-    public sealed class ConsoleLogWriter : ILogWriter
+    private static readonly object LockObject = new();
+
+    private ConsoleLogWriter()
     {
-        private static readonly object LockObject = new();
+    }
 
-        private ConsoleLogWriter()
+    static ConsoleLogWriter()
+    {
+        Instance = new ConsoleLogWriter();
+    }
+
+    public static ConsoleLogWriter Instance { get; }
+
+    #region ILogWriter Members
+
+    void ILogWriter.Open()
+    {
+    }
+
+    void ILogWriter.Write(LogEntry logEntry)
+    {
+        lock (LockObject)
         {
-        }
+            var color = Console.ForegroundColor;
 
-        static ConsoleLogWriter()
-        {
-            Instance = new ConsoleLogWriter();
-        }
-
-        public static ConsoleLogWriter Instance { get; }
-
-        #region ILogWriter Members
-
-        void ILogWriter.Open()
-        {
-        }
-
-        void ILogWriter.Write(LogEntry logEntry)
-        {
-            lock (LockObject)
+            switch (logEntry.LogLevel)
             {
-                var color = Console.ForegroundColor;
+                case LogLevel.Error:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    break;
 
-                switch (logEntry.LogLevel)
-                {
-                    case LogLevel.Error:
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        break;
+                case LogLevel.Warning:
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    break;
+            }
 
-                    case LogLevel.Warning:
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        break;
-                }
+            Console.WriteLine(logEntry.Message);
 
-                Console.WriteLine(logEntry.Message);
-
-                switch (logEntry.LogLevel)
-                {
-                    case LogLevel.Error:
-                    case LogLevel.Warning:
-                        Console.ForegroundColor = color;
-                        break;
-                }
+            switch (logEntry.LogLevel)
+            {
+                case LogLevel.Error:
+                case LogLevel.Warning:
+                    Console.ForegroundColor = color;
+                    break;
             }
         }
-
-        void ILogWriter.Flush()
-        {
-        }
-
-        void ILogWriter.Close()
-        {
-        }
-
-        #endregion
-
-        #region IDisposable Members
-
-        void IDisposable.Dispose()
-        {
-        }
-
-        #endregion
     }
+
+    void ILogWriter.Flush()
+    {
+    }
+
+    void ILogWriter.Close()
+    {
+    }
+
+    #endregion
+
+    #region IDisposable Members
+
+    void IDisposable.Dispose()
+    {
+    }
+
+    #endregion
 }

@@ -7,22 +7,22 @@ using System.Windows.Forms;
 using Foundation.Diagnostics;
 using Foundation.Log;
 
-namespace DataCommander.Providers
+namespace DataCommander.Providers;
+
+public partial class AboutForm : Form
 {
-    public partial class AboutForm : Form
+    private bool _first = true;
+
+    public AboutForm()
     {
-        private bool _first = true;
+        var assembly = Assembly.GetEntryAssembly();
+        var path = assembly.Location;
+        var lastWriteTime = File.GetLastWriteTime(path);
+        var targetFrameworkAttribute = assembly.GetCustomAttribute<TargetFrameworkAttribute>();
+        var windowsVersionInfo = WindowsVersionInfo.Get();
 
-        public AboutForm()
-        {
-            var assembly = Assembly.GetEntryAssembly();
-            var path = assembly.Location;
-            var lastWriteTime = File.GetLastWriteTime(path);
-            var targetFrameworkAttribute = assembly.GetCustomAttribute<TargetFrameworkAttribute>();
-            var windowsVersionInfo = WindowsVersionInfo.Get();
-
-            var text =
-                $@"
+        var text =
+            $@"
 <style>
     a {{text-decoration:none}}
 </style>
@@ -74,65 +74,64 @@ Credits:
 </ul>
 </div>";
 
-            InitializeComponent();
+        InitializeComponent();
 
-            webBrowser1.DocumentText = text;
-        }
+        webBrowser1.DocumentText = text;
+    }
 
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+    protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+    {
+        if (keyData == Keys.Escape)
         {
-            if (keyData == Keys.Escape)
+            Close();
+            return true;
+        }
+        return base.ProcessCmdKey(ref msg, keyData);
+    }
+
+    private void webBrowser1_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+    {
+        if (_first)
+        {
+            _first = false;
+        }
+        else
+        {
+            string url = null;
+            var exists = false;
+
+            if (e.Url.Scheme == "applicationdatafile")
             {
-                Close();
-                return true;
+                var applicationDataFileName = DataCommanderApplication.Instance.FileName;
+                exists = true;
+                url = applicationDataFileName;
             }
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
-
-        private void webBrowser1_Navigating(object sender, WebBrowserNavigatingEventArgs e)
-        {
-            if (_first)
+            else if (e.Url.Scheme == "logfile")
             {
-                _first = false;
+                var logFileName = LogFactory.Instance.FileName;
+                if (logFileName != null)
+                {
+                    exists = true;
+                    url = logFileName;
+                }
             }
             else
             {
-                string url = null;
-                var exists = false;
-
-                if (e.Url.Scheme == "applicationdatafile")
-                {
-                    var applicationDataFileName = DataCommanderApplication.Instance.FileName;
-                    exists = true;
-                    url = applicationDataFileName;
-                }
-                else if (e.Url.Scheme == "logfile")
-                {
-                    var logFileName = LogFactory.Instance.FileName;
-                    if (logFileName != null)
-                    {
-                        exists = true;
-                        url = logFileName;
-                    }
-                }
-                else
-                {
-                    exists = true;
-                    url = e.Url.ToString();
-                }
-
-                if (exists)
-                {
-                    var processStartInfo = new ProcessStartInfo
-                    {
-                        FileName = url,
-                        UseShellExecute = true
-                    };
-                    Process.Start(processStartInfo);
-                }
-
-                e.Cancel = true;
+                exists = true;
+                url = e.Url.ToString();
             }
+
+            if (exists)
+            {
+                var processStartInfo = new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                };
+                Process.Start(processStartInfo);
+            }
+
+            e.Cancel = true;
         }
     }
 }

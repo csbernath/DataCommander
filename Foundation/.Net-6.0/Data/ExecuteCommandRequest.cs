@@ -2,20 +2,19 @@
 using System.Data;
 using Foundation.Assertions;
 
-namespace Foundation.Data
+namespace Foundation.Data;
+
+public sealed class ExecuteCommandRequest
 {
-    public sealed class ExecuteCommandRequest
+    public readonly CreateCommandRequest CreateCommandRequest;
+    public readonly Action<IDbCommand> Execute;
+
+    public ExecuteCommandRequest(CreateCommandRequest createCommandRequest, Action<IDbCommand> execute)
     {
-        public readonly CreateCommandRequest CreateCommandRequest;
-        public readonly Action<IDbCommand> Execute;
+        Assert.IsNotNull(createCommandRequest);
+        Assert.IsNotNull(execute);
 
-        public ExecuteCommandRequest(CreateCommandRequest createCommandRequest, Action<IDbCommand> execute)
-        {
-            Assert.IsNotNull(createCommandRequest);
-            Assert.IsNotNull(execute);
-
-            CreateCommandRequest = createCommandRequest;
-            Execute = execute;
-        }
+        CreateCommandRequest = createCommandRequest;
+        Execute = execute;
     }
 }

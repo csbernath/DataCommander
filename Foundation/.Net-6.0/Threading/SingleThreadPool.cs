@@ -4,115 +4,114 @@ using System.Threading;
 using Foundation.Assertions;
 using Foundation.Log;
 
-namespace Foundation.Threading
+namespace Foundation.Threading;
+
+/// <summary>
+/// 
+/// </summary>
+public sealed class SingleThreadPool
 {
+    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private readonly Queue<Tuple<WaitCallback, object>> _workItems = new();
+    private readonly EventWaitHandle _enqueueEvent = new(false, EventResetMode.AutoReset);
+    private int _queuedItemCount;
+
     /// <summary>
     /// 
     /// </summary>
-    public sealed class SingleThreadPool
+    public SingleThreadPool()
     {
-        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-        private readonly Queue<Tuple<WaitCallback, object>> _workItems = new();
-        private readonly EventWaitHandle _enqueueEvent = new(false, EventResetMode.AutoReset);
-        private int _queuedItemCount;
+        Thread = new WorkerThread(Start);
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public SingleThreadPool()
+    /// <summary>
+    /// 
+    /// </summary>
+    public WorkerThread Thread { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public int QueuedItemCount => _queuedItemCount;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="callback"></param>
+    /// <param name="state"></param>
+    public void QueueUserWorkItem(WaitCallback callback, object state)
+    {
+        Assert.IsNotNull(callback);
+
+        var tuple = Tuple.Create(callback, state);
+
+        lock (_workItems)
         {
-            Thread = new WorkerThread(Start);
+            _workItems.Enqueue(tuple);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public WorkerThread Thread { get; }
+        Interlocked.Increment(ref _queuedItemCount);
+        _enqueueEvent.Set();
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public int QueuedItemCount => _queuedItemCount;
+    private void Dequeue()
+    {
+        Tuple<WaitCallback, object>[] array;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="callback"></param>
-        /// <param name="state"></param>
-        public void QueueUserWorkItem(WaitCallback callback, object state)
+        lock (_workItems)
         {
-            Assert.IsNotNull(callback);
-
-            var tuple = Tuple.Create(callback, state);
-
-            lock (_workItems)
-            {
-                _workItems.Enqueue(tuple);
-            }
-
-            Interlocked.Increment(ref _queuedItemCount);
-            _enqueueEvent.Set();
+            array = new Tuple<WaitCallback, object>[_workItems.Count];
+            _workItems.CopyTo(array, 0);
+            _workItems.Clear();
         }
 
-        private void Dequeue()
+        for (var i = 0; i < array.Length; i++)
         {
-            Tuple<WaitCallback, object>[] array;
+            var workItem = array[i];
+            var callback = workItem.Item1;
+            var state = workItem.Item2;
 
-            lock (_workItems)
+            try
             {
-                array = new Tuple<WaitCallback, object>[_workItems.Count];
-                _workItems.CopyTo(array, 0);
-                _workItems.Clear();
+                callback(state);
+            }
+            catch (Exception e)
+            {
+                Log.Write(LogLevel.Error, "Executing task failed. callback: {0}, state: {1}\r\n{2}", callback, state, e);
             }
 
-            for (var i = 0; i < array.Length; i++)
-            {
-                var workItem = array[i];
-                var callback = workItem.Item1;
-                var state = workItem.Item2;
-
-                try
-                {
-                    callback(state);
-                }
-                catch (Exception e)
-                {
-                    Log.Write(LogLevel.Error, "Executing task failed. callback: {0}, state: {1}\r\n{2}", callback, state, e);
-                }
-
-                Interlocked.Decrement(ref _queuedItemCount);
-            }
+            Interlocked.Decrement(ref _queuedItemCount);
         }
+    }
 
-        private void Start()
+    private void Start()
+    {
+        var waitHandles = new[]
         {
-            var waitHandles = new[]
+            Thread.StopRequest,
+            _enqueueEvent
+        };
+
+        while (true)
+        {
+            WaitHandle.WaitAny(waitHandles);
+
+            if (Thread.IsStopRequested)
             {
-                Thread.StopRequest,
-                _enqueueEvent
-            };
-
-            while (true)
-            {
-                WaitHandle.WaitAny(waitHandles);
-
-                if (Thread.IsStopRequested)
-                {
-                    break;
-                }
-
-                Dequeue();
+                break;
             }
-        }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Stop()
-        {
-            Thread.Stop();
-            Thread.Join();
             Dequeue();
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void Stop()
+    {
+        Thread.Stop();
+        Thread.Join();
+        Dequeue();
     }
 }

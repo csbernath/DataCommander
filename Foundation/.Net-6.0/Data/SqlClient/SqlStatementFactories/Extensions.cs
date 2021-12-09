@@ -7,26 +7,25 @@ using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Text;
 
-namespace Foundation.Data.SqlClient.SqlStatementFactories
+namespace Foundation.Data.SqlClient.SqlStatementFactories;
+
+public static class ColumnNameValueExtensions
 {
-    public static class ColumnNameValueExtensions
+    public static ReadOnlyCollection<Line> Join(this IReadOnlyCollection<ColumnNameValue> columns, string separator)
     {
-        public static ReadOnlyCollection<Line> Join(this IReadOnlyCollection<ColumnNameValue> columns, string separator)
-        {
-            Assert.IsTrue(columns.All(column => !column.Value.IsNullOrEmpty()));
+        Assert.IsTrue(columns.All(column => !column.Value.IsNullOrEmpty()));
 
-            var last = columns.Count - 1;
-            var items = columns.Select((column, index) =>
-                {
-                    var stringBuilder = new StringBuilder();
-                    stringBuilder.Append($"{column.Name} = {column.Value}");
+        var last = columns.Count - 1;
+        var items = columns.Select((column, index) =>
+            {
+                var stringBuilder = new StringBuilder();
+                stringBuilder.Append($"{column.Name} = {column.Value}");
 
-                    if (index < last)
-                        stringBuilder.Append(separator);
-                    return new Line(0, stringBuilder.ToString());
-                })
-                .ToReadOnlyCollection();
-            return items;
-        }
+                if (index < last)
+                    stringBuilder.Append(separator);
+                return new Line(0, stringBuilder.ToString());
+            })
+            .ToReadOnlyCollection();
+        return items;
     }
 }

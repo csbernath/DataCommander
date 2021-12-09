@@ -1,34 +1,33 @@
 ﻿using System;
 using Foundation.Assertions;
 
-namespace Foundation.Core
+namespace Foundation.Core;
+
+public sealed class MultipleDispatchSelection<TArgument>
 {
-    public sealed class MultipleDispatchSelection<TArgument>
+    private readonly Func<TArgument, bool>[] _selections;
+
+    public MultipleDispatchSelection(params Func<TArgument, bool>[] selections)
     {
-        private readonly Func<TArgument, bool>[] _selections;
+        Assert.IsNotNull(selections);
+        _selections = selections;
+    }
 
-        public MultipleDispatchSelection(params Func<TArgument, bool>[] selections)
+    public int Select(TArgument argument)
+    {
+        var selectedIndex = -1;
+
+        for (var i = 0; i < _selections.Length; ++i)
         {
-            Assert.IsNotNull(selections);
-            _selections = selections;
-        }
-
-        public int Select(TArgument argument)
-        {
-            var selectedIndex = -1;
-
-            for (var i = 0; i < _selections.Length; ++i)
+            var selection = _selections[i];
+            var selected = selection(argument);
+            if (selected)
             {
-                var selection = _selections[i];
-                var selected = selection(argument);
-                if (selected)
-                {
-                    selectedIndex = i;
-                    break;
-                }
+                selectedIndex = i;
+                break;
             }
-
-            return selectedIndex;
         }
+
+        return selectedIndex;
     }
 }

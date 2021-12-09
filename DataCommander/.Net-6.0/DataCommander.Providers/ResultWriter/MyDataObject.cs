@@ -5,166 +5,165 @@ using System.Text;
 using System.Windows.Forms;
 using Foundation.Data;
 
-namespace DataCommander.Providers.ResultWriter
+namespace DataCommander.Providers.ResultWriter;
+
+internal sealed class MyDataObject : IDataObject
 {
-    internal sealed class MyDataObject : IDataObject
+    private readonly DataView _dataView;
+    private readonly int[] _columnIndexes;
+
+    public MyDataObject(DataView dataView, int[] columnIndexes)
     {
-        private readonly DataView _dataView;
-        private readonly int[] _columnIndexes;
+        _dataView = dataView;
+        _columnIndexes = columnIndexes;
+    }
 
-        public MyDataObject(DataView dataView, int[] columnIndexes)
+    #region IDataObject Members
+
+    object IDataObject.GetData(Type format)
+    {
+        throw new NotImplementedException();
+    }
+
+    object IDataObject.GetData(string format)
+    {
+        throw new NotImplementedException();
+    }
+
+    object IDataObject.GetData(string format, bool autoConvert)
+    {
+        object data;
+
+        if (format == DataFormats.CommaSeparatedValue)
         {
-            _dataView = dataView;
-            _columnIndexes = columnIndexes;
+            var stringWriter = new StringWriter();
+            Writer.Write(_dataView, ',', "\r\n", stringWriter);
+            var c = (char)0;
+            stringWriter.Write(c);
+            var s = stringWriter.ToString();
+            data = new MemoryStream(Encoding.Default.GetBytes(s));
+        }
+        //else if (format == DataFormats.Html)
+        //{
+        //    var stringWriter = new StringWriter();
+        //    HtmlFormatter.Write(_dataView, _columnIndexes, stringWriter);
+        //    var htmlFragment = stringWriter.ToString();
+        //    stringWriter = new StringWriter();
+        //    WriteHtmlFragment(htmlFragment, stringWriter);
+        //    var s = stringWriter.ToString();
+        //    var bytes = Encoding.UTF8.GetBytes(s);
+        //    data = new MemoryStream(bytes);
+        //}
+        else if (format == DataFormats.Text || format == DataFormats.UnicodeText)
+        {
+            data = _dataView.ToStringTableString();
+        }
+        else if (format == "TabSeparatedValues")
+        {
+            // TODO
+            data = "TabSep";
+        }
+        else
+        {
+            data = null;
         }
 
-        #region IDataObject Members
+        return data;
+    }
 
-        object IDataObject.GetData(Type format)
+    bool IDataObject.GetDataPresent(Type format)
+    {
+        throw new NotImplementedException();
+    }
+
+    bool IDataObject.GetDataPresent(string format)
+    {
+        throw new NotImplementedException();
+    }
+
+    bool IDataObject.GetDataPresent(string format, bool autoConvert)
+    {
+        bool isDataPresent;
+
+        if (format == DataFormats.CommaSeparatedValue ||
+            format == DataFormats.Html ||
+            format == DataFormats.Text ||
+            format == DataFormats.UnicodeText)
         {
-            throw new NotImplementedException();
+            isDataPresent = true;
+        }
+        else
+        {
+            isDataPresent = false;
         }
 
-        object IDataObject.GetData(string format)
+        return isDataPresent;
+    }
+
+    string[] IDataObject.GetFormats()
+    {
+        throw new NotImplementedException();
+    }
+
+    string[] IDataObject.GetFormats(bool autoConvert)
+    {
+        return new[]
         {
-            throw new NotImplementedException();
-        }
+            DataFormats.CommaSeparatedValue,
+            DataFormats.Html,
+            //DataFormats.StringFormat,
+            DataFormats.Text,
+            DataFormats.UnicodeText,
+            "TabSeparatedValues" // TODO
+        };
+    }
 
-        object IDataObject.GetData(string format, bool autoConvert)
-        {
-            object data;
+    void IDataObject.SetData(object data)
+    {
+        throw new NotImplementedException();
+    }
 
-            if (format == DataFormats.CommaSeparatedValue)
-            {
-                var stringWriter = new StringWriter();
-                Writer.Write(_dataView, ',', "\r\n", stringWriter);
-                var c = (char)0;
-                stringWriter.Write(c);
-                var s = stringWriter.ToString();
-                data = new MemoryStream(Encoding.Default.GetBytes(s));
-            }
-            //else if (format == DataFormats.Html)
-            //{
-            //    var stringWriter = new StringWriter();
-            //    HtmlFormatter.Write(_dataView, _columnIndexes, stringWriter);
-            //    var htmlFragment = stringWriter.ToString();
-            //    stringWriter = new StringWriter();
-            //    WriteHtmlFragment(htmlFragment, stringWriter);
-            //    var s = stringWriter.ToString();
-            //    var bytes = Encoding.UTF8.GetBytes(s);
-            //    data = new MemoryStream(bytes);
-            //}
-            else if (format == DataFormats.Text || format == DataFormats.UnicodeText)
-            {
-                data = _dataView.ToStringTableString();
-            }
-            else if (format == "TabSeparatedValues")
-            {
-                // TODO
-                data = "TabSep";
-            }
-            else
-            {
-                data = null;
-            }
+    void IDataObject.SetData(Type format, object data)
+    {
+        throw new NotImplementedException();
+    }
 
-            return data;
-        }
+    void IDataObject.SetData(string format, object data)
+    {
+        throw new NotImplementedException();
+    }
 
-        bool IDataObject.GetDataPresent(Type format)
-        {
-            throw new NotImplementedException();
-        }
+    void IDataObject.SetData(string format, bool autoConvert, object data)
+    {
+        throw new NotImplementedException();
+    }
 
-        bool IDataObject.GetDataPresent(string format)
-        {
-            throw new NotImplementedException();
-        }
+    #endregion
 
-        bool IDataObject.GetDataPresent(string format, bool autoConvert)
-        {
-            bool isDataPresent;
-
-            if (format == DataFormats.CommaSeparatedValue ||
-                format == DataFormats.Html ||
-                format == DataFormats.Text ||
-                format == DataFormats.UnicodeText)
-            {
-                isDataPresent = true;
-            }
-            else
-            {
-                isDataPresent = false;
-            }
-
-            return isDataPresent;
-        }
-
-        string[] IDataObject.GetFormats()
-        {
-            throw new NotImplementedException();
-        }
-
-        string[] IDataObject.GetFormats(bool autoConvert)
-        {
-            return new[]
-            {
-                DataFormats.CommaSeparatedValue,
-                DataFormats.Html,
-                //DataFormats.StringFormat,
-                DataFormats.Text,
-                DataFormats.UnicodeText,
-                "TabSeparatedValues" // TODO
-            };
-        }
-
-        void IDataObject.SetData(object data)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IDataObject.SetData(Type format, object data)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IDataObject.SetData(string format, object data)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IDataObject.SetData(string format, bool autoConvert, object data)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
-        private static void WriteHtmlFragment(string htmlFragment, TextWriter textWriter)
-        {
-            var header = @"Version:0.9
+    private static void WriteHtmlFragment(string htmlFragment, TextWriter textWriter)
+    {
+        var header = @"Version:0.9
 StartHTML:{000000}
 EndHTML:{111111}
 StartFragment:{222222}
 EndFragment:{333333}
 ";
-            var startHtmlString = "<html><body><!--StartFragment-->";
-            var endHtmlString = "<!--EndFragment--></body></html>";
-            var startHtml = header.Length;
-            var startFragment = startHtml + startHtmlString.Length;
-            var htmlFragmentLength = Encoding.UTF8.GetByteCount(htmlFragment);
-            var endFragment = startFragment + htmlFragmentLength;
-            var endHtml = endFragment + endHtmlString.Length;
+        var startHtmlString = "<html><body><!--StartFragment-->";
+        var endHtmlString = "<!--EndFragment--></body></html>";
+        var startHtml = header.Length;
+        var startFragment = startHtml + startHtmlString.Length;
+        var htmlFragmentLength = Encoding.UTF8.GetByteCount(htmlFragment);
+        var endFragment = startFragment + htmlFragmentLength;
+        var endHtml = endFragment + endHtmlString.Length;
 
-            header = header.Replace("{000000}", startHtml.ToString().PadLeft(8));
-            header = header.Replace("{111111}", endHtml.ToString().PadLeft(8));
-            header = header.Replace("{222222}", startFragment.ToString().PadLeft(8));
-            header = header.Replace("{333333}", endFragment.ToString().PadLeft(8));
+        header = header.Replace("{000000}", startHtml.ToString().PadLeft(8));
+        header = header.Replace("{111111}", endHtml.ToString().PadLeft(8));
+        header = header.Replace("{222222}", startFragment.ToString().PadLeft(8));
+        header = header.Replace("{333333}", endFragment.ToString().PadLeft(8));
 
-            textWriter.Write(header);
-            textWriter.Write(startHtmlString);
-            textWriter.Write(htmlFragment);
-            textWriter.Write(endHtmlString);
-        }
+        textWriter.Write(header);
+        textWriter.Write(startHtmlString);
+        textWriter.Write(htmlFragment);
+        textWriter.Write(endHtmlString);
     }
 }

@@ -1,25 +1,24 @@
 ﻿using System.Diagnostics;
 
-namespace Foundation.Configuration
+namespace Foundation.Configuration;
+
+internal sealed class ConfigurationAttributeCollectionDebugger
 {
-    internal sealed class ConfigurationAttributeCollectionDebugger
+    private readonly ConfigurationAttributeCollection _collection;
+
+    public ConfigurationAttributeCollectionDebugger(ConfigurationAttributeCollection collection)
     {
-        private readonly ConfigurationAttributeCollection _collection;
+        _collection = collection;
+    }
 
-        public ConfigurationAttributeCollectionDebugger(ConfigurationAttributeCollection collection)
+    [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+    public ConfigurationAttribute[] Items
+    {
+        get
         {
-            _collection = collection;
-        }
-
-        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public ConfigurationAttribute[] Items
-        {
-            get
-            {
-                var array = new ConfigurationAttribute[_collection.Count];
-                _collection.CopyTo(array, 0);
-                return array;
-            }
+            var array = new ConfigurationAttribute[_collection.Count];
+            _collection.CopyTo(array, 0);
+            return array;
         }
     }
 }

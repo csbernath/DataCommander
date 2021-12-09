@@ -1,9 +1,8 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Foundation.Deployment.Commands
+namespace Foundation.Deployment.Commands;
+
+[DataContract]
+public class StartUpdater : DeploymentCommand
 {
-    [DataContract]
-    public class StartUpdater : DeploymentCommand
-    {
-    }
 }

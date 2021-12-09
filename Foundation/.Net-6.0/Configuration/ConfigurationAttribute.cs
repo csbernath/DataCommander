@@ -7,87 +7,82 @@ using System.Xml.Serialization;
 using Foundation.Assertions;
 using Foundation.Collections;
 
-namespace Foundation.Configuration
+namespace Foundation.Configuration;
+
+[DebuggerDisplay("Name = {Name}, Value = {Value}, Description = {Description}")]
+public sealed class ConfigurationAttribute
 {
-    [DebuggerDisplay("Name = {Name}, Value = {Value}, Description = {Description}")]
-    public sealed class ConfigurationAttribute
+    public ConfigurationAttribute(string name, object value, string description)
     {
-        public ConfigurationAttribute(string name, object value, string description)
+        Name = name;
+        Value = value;
+        Description = description;
+    }
+
+    public string Name { get; }
+    public object Value { get; set; }
+    public string Description { get; }
+
+    public T GetValue<T>()
+    {
+        Assert.IsInRange((Value == null && typeof(T).IsClass) || Value is T);
+
+        var value = (T) Value;
+        return value;
+    }
+
+    public ConfigurationAttribute Clone()
+    {
+        var clone = new ConfigurationAttribute(Name, Value, Description);
+        return clone;
+    }
+
+    public void Write(TextWriter textWriter)
+    {
+        string typeName;
+        Type type = null;
+
+        if (Value != null)
         {
-            Name = name;
-            Value = value;
-            Description = description;
+            type = Value.GetType();
+            typeName = TypeNameCollection.GetTypeName(type);
+        }
+        else
+        {
+            typeName = "object";
         }
 
-        public string Name { get; }
-        public object Value { get; set; }
-        public string Description { get; }
+        textWriter.Write("  " + typeName + " " + Name + " = ");
 
-        public T GetValue<T>()
+        if (type != null)
         {
-            Assert.IsInRange((Value == null && typeof(T).IsClass) || Value is T);
-
-            var value = (T) Value;
-            return value;
-        }
-
-        public ConfigurationAttribute Clone()
-        {
-            var clone = new ConfigurationAttribute(Name, Value, Description);
-            return clone;
-        }
-
-        public void Write(TextWriter textWriter)
-        {
-            string typeName;
-            Type type = null;
-
-            if (Value != null)
+            if (type.IsArray)
             {
-                type = Value.GetType();
-                typeName = TypeNameCollection.GetTypeName(type);
-            }
-            else
-            {
-                typeName = "object";
-            }
+                var elementType = type.GetElementType();
 
-            textWriter.Write("  " + typeName + " " + Name + " = ");
-
-            if (type != null)
-            {
-                if (type.IsArray)
+                if (elementType == typeof(byte))
                 {
-                    var elementType = type.GetElementType();
-
-                    if (elementType == typeof(byte))
-                    {
-                        var inArray = (byte[]) Value;
-                        var base64 = System.Convert.ToBase64String(inArray);
-                        textWriter.WriteLine(base64);
-                    }
-                    else
-                    {
-                        var array = (Array) Value;
-
-                        if (array.Length > 0)
-                        {
-                            textWriter.WriteLine();
-
-                            var index = 0;
-
-                            foreach (var arrayItem in array)
-                            {
-                                textWriter.Write("    [" + index + "] = ");
-                                Write(arrayItem, textWriter);
-                                index++;
-                            }
-                        }
-                    }
+                    var inArray = (byte[]) Value;
+                    var base64 = System.Convert.ToBase64String(inArray);
+                    textWriter.WriteLine(base64);
                 }
                 else
                 {
-                    Write(Value, textWriter);
+                    var array = (Array) Value;
+
+                    if (array.Length > 0)
+                    {
+                        textWriter.WriteLine();
+
+                        var index = 0;
+
+                        foreach (var arrayItem in array)
+                        {
+                            textWriter.Write("    [" + index + "] = ");
+                            Write(arrayItem, textWriter);
+                            index++;
+                        }
+                    }
                 }
             }
             else
@@ -95,74 +90,78 @@ namespace Foundation.Configuration
                 Write(Value, textWriter);
             }
         }
-
-        //[ContractVerification(false)]
-        private static void Write(object attributeValue, TextWriter textWriter)
+        else
         {
-            string attibuteValueString;
+            Write(Value, textWriter);
+        }
+    }
 
-            if (attributeValue != null)
+    //[ContractVerification(false)]
+    private static void Write(object attributeValue, TextWriter textWriter)
+    {
+        string attibuteValueString;
+
+        if (attributeValue != null)
+        {
+            var type = attributeValue.GetType();
+            var typeCode = Type.GetTypeCode(type);
+
+            switch (typeCode)
             {
-                var type = attributeValue.GetType();
-                var typeCode = Type.GetTypeCode(type);
+                case TypeCode.String:
+                    attibuteValueString = "\"" + attributeValue + "\"";
+                    break;
 
-                switch (typeCode)
+                case TypeCode.Object:
                 {
-                    case TypeCode.String:
-                        attibuteValueString = "\"" + attributeValue + "\"";
-                        break;
-
-                    case TypeCode.Object:
+                    if (type == typeof(TimeSpan))
+                        attibuteValueString = attributeValue.ToString();
+                    else
                     {
-                        if (type == typeof(TimeSpan))
-                            attibuteValueString = attributeValue.ToString();
+                        if (attributeValue is XmlNode xmlNode)
+                            attibuteValueString = xmlNode.OuterXml;
                         else
                         {
-                            if (attributeValue is XmlNode xmlNode)
-                                attibuteValueString = xmlNode.OuterXml;
-                            else
-                            {
-                                xmlNode = XmlHelper.Serialize(attributeValue);
-                                attibuteValueString = xmlNode.OuterXml;
-                            }
+                            xmlNode = XmlHelper.Serialize(attributeValue);
+                            attibuteValueString = xmlNode.OuterXml;
                         }
                     }
-                        break;
-
-                    default:
-                        attibuteValueString = attributeValue.ToString();
-                        break;
                 }
-            }
-            else
-                attibuteValueString = "null";
+                    break;
 
-            textWriter.WriteLine(attibuteValueString);
+                default:
+                    attibuteValueString = attributeValue.ToString();
+                    break;
+            }
         }
+        else
+            attibuteValueString = "null";
 
-        private static class XmlHelper
+        textWriter.WriteLine(attibuteValueString);
+    }
+
+    private static class XmlHelper
+    {
+        public static XmlElement Serialize(object obj)
         {
-            public static XmlElement Serialize(object obj)
-            {
-                Assert.IsNotNull(obj);
+            Assert.IsNotNull(obj);
 
-                var type = obj.GetType();
-                var xmlSerializer = new XmlSerializer(type);
-                var stringWriter = new StringWriter(CultureInfo.InvariantCulture);
-                xmlSerializer.Serialize(stringWriter, obj);
+            var type = obj.GetType();
+            var xmlSerializer = new XmlSerializer(type);
+            var stringWriter = new StringWriter(CultureInfo.InvariantCulture);
+            xmlSerializer.Serialize(stringWriter, obj);
 
-                var sb = stringWriter.GetStringBuilder();
-                var s = sb.ToString();
+            var sb = stringWriter.GetStringBuilder();
+            var s = sb.ToString();
 
-                var xmlDocument = new XmlDocument();
-                xmlDocument.InnerXml = s;
-                var xmlElement = xmlDocument.DocumentElement;
+            var xmlDocument = new XmlDocument();
+            xmlDocument.InnerXml = s;
+            var xmlElement = xmlDocument.DocumentElement;
 
-                // removes unnecessary attributes generated by XmlSerializer
-                xmlElement.Attributes.RemoveAll();
+            // removes unnecessary attributes generated by XmlSerializer
+            xmlElement.Attributes.RemoveAll();
 
-                return xmlElement;
-            }
+            return xmlElement;
         }
     }
 }

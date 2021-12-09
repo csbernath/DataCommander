@@ -3,20 +3,19 @@ using System.Data.Common;
 using System.Threading.Tasks;
 using Foundation.Assertions;
 
-namespace Foundation.Data
+namespace Foundation.Data;
+
+public sealed class ExecuteCommandAsyncRequest
 {
-    public sealed class ExecuteCommandAsyncRequest
+    public readonly CreateCommandRequest CreateCommandRequest;
+    public readonly Func<DbCommand, Task> Execute;
+
+    public ExecuteCommandAsyncRequest(CreateCommandRequest createCommandRequest, Func<DbCommand, Task> execute)
     {
-        public readonly CreateCommandRequest CreateCommandRequest;
-        public readonly Func<DbCommand, Task> Execute;
+        Assert.IsNotNull(createCommandRequest);
+        Assert.IsNotNull(execute);
 
-        public ExecuteCommandAsyncRequest(CreateCommandRequest createCommandRequest, Func<DbCommand, Task> execute)
-        {
-            Assert.IsNotNull(createCommandRequest);
-            Assert.IsNotNull(execute);
-
-            CreateCommandRequest = createCommandRequest;
-            Execute = execute;
-        }
+        CreateCommandRequest = createCommandRequest;
+        Execute = execute;
     }
 }

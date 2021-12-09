@@ -1,4 +1,2 @@
 ﻿
-namespace Foundation.Threading
-{
-}
+namespace Foundation.Threading;

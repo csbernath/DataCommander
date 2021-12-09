@@ -5,30 +5,29 @@ using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Foundation.Data.SqlClient
+namespace Foundation.Data.SqlClient;
+
+public sealed class SqlCommandExecutor : IDbCommandAsyncExecutor
 {
-    public sealed class SqlCommandExecutor : IDbCommandAsyncExecutor
+    private readonly string _connectionString;
+
+    public SqlCommandExecutor(string connectionString) => _connectionString = connectionString;
+
+    public void Execute(Action<IDbConnection> execute)
     {
-        private readonly string _connectionString;
-
-        public SqlCommandExecutor(string connectionString) => _connectionString = connectionString;
-
-        public void Execute(Action<IDbConnection> execute)
+        using (var connection = new SqlConnection(_connectionString))
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                execute(connection);
-            }
+            connection.Open();
+            execute(connection);
         }
+    }
 
-        public async Task ExecuteAsync(Func<DbConnection, Task> execute, CancellationToken cancellationToken)
+    public async Task ExecuteAsync(Func<DbConnection, Task> execute, CancellationToken cancellationToken)
+    {
+        using (var connection = new SqlConnection(_connectionString))
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync(cancellationToken);
-                await execute(connection);
-            }
+            await connection.OpenAsync(cancellationToken);
+            await execute(connection);
         }
     }
 }

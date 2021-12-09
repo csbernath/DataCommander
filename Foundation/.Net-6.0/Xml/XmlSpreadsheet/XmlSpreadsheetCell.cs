@@ -1,54 +1,53 @@
 ﻿using System.Xml;
 using Foundation.Assertions;
 
-namespace Foundation.Xml.XmlSpreadsheet
+namespace Foundation.Xml.XmlSpreadsheet;
+
+public sealed class XmlSpreadsheetCell
 {
-    public sealed class XmlSpreadsheetCell
+    private readonly XmlSpreadsheetAttributeCollection _attributes = new();
+    private readonly XmlSpreadsheetDataType _dataType;
+    private readonly string _value;
+
+    public XmlSpreadsheetCell(XmlSpreadsheetDataType dataType, string value)
     {
-        private readonly XmlSpreadsheetAttributeCollection _attributes = new();
-        private readonly XmlSpreadsheetDataType _dataType;
-        private readonly string _value;
+        _dataType = dataType;
+        _value = value;
+    }
 
-        public XmlSpreadsheetCell(XmlSpreadsheetDataType dataType, string value)
+    public string StyleId
+    {
+        set
         {
-            _dataType = dataType;
-            _value = value;
+            var attribute = new XmlSpreadsheetAttribute("ss:StyleID", value);
+            _attributes.Add(attribute);
         }
+    }
 
-        public string StyleId
+    public int MergeAcross
+    {
+        set
         {
-            set
+            var attribute = new XmlSpreadsheetAttribute("ss:MergeAcross", value.ToString());
+            _attributes.Add(attribute);
+        }
+    }
+
+    public void Write(XmlWriter xmlWriter)
+    {
+        Assert.IsNotNull(xmlWriter);
+
+        using (xmlWriter.WriteElement("Cell"))
+        {
+            foreach (var attribute in _attributes)
             {
-                var attribute = new XmlSpreadsheetAttribute("ss:StyleID", value);
-                _attributes.Add(attribute);
+                attribute.Write(xmlWriter);
             }
-        }
 
-        public int MergeAcross
-        {
-            set
+            using (xmlWriter.WriteElement("Data"))
             {
-                var attribute = new XmlSpreadsheetAttribute("ss:MergeAcross", value.ToString());
-                _attributes.Add(attribute);
-            }
-        }
-
-        public void Write(XmlWriter xmlWriter)
-        {
-            Assert.IsNotNull(xmlWriter);
-
-            using (xmlWriter.WriteElement("Cell"))
-            {
-                foreach (var attribute in _attributes)
-                {
-                    attribute.Write(xmlWriter);
-                }
-
-                using (xmlWriter.WriteElement("Data"))
-                {
-                    xmlWriter.WriteAttributeString("ss:Type", _dataType.ToString());
-                    xmlWriter.WriteString(_value);
-                }
+                xmlWriter.WriteAttributeString("ss:Type", _dataType.ToString());
+                xmlWriter.WriteString(_value);
             }
         }
     }

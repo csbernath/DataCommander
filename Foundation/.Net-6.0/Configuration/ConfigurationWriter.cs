@@ -4,111 +4,110 @@ using System.Xml.Serialization;
 using Foundation.Collections;
 using Foundation.Xml;
 
-namespace Foundation.Configuration
+namespace Foundation.Configuration;
+
+public static class ConfigurationWriter
 {
-    public static class ConfigurationWriter
+    public static void WriteNode(XmlWriter xmlWriter, ConfigurationNode node)
     {
-        public static void WriteNode(XmlWriter xmlWriter, ConfigurationNode node)
+        string xmlElementName;
+        string xmlAttributeValue;
+
+        if (node.HasName)
         {
-            string xmlElementName;
-            string xmlAttributeValue;
+            var nodeName = node.Name;
+            var encodedName = XmlConvert.EncodeName(nodeName);
 
-            if (node.HasName)
+            if (nodeName == encodedName)
             {
-                var nodeName = node.Name;
-                var encodedName = XmlConvert.EncodeName(nodeName);
-
-                if (nodeName == encodedName)
-                {
-                    xmlElementName = nodeName;
-                    xmlAttributeValue = null;
-                }
-                else
-                {
-                    xmlElementName = ConfigurationElementName.Node;
-                    xmlAttributeValue = nodeName;
-                }
+                xmlElementName = nodeName;
+                xmlAttributeValue = null;
             }
             else
             {
                 xmlElementName = ConfigurationElementName.Node;
-                xmlAttributeValue = null;
-            }
-
-            using (xmlWriter.WriteElement(xmlElementName))
-            {
-                if (xmlAttributeValue != null)
-                    xmlWriter.WriteAttributeString("name", xmlAttributeValue);
-
-                Write(xmlWriter, node.Attributes);
-
-                foreach (var childNode in node.ChildNodes)
-                    WriteNode(xmlWriter, childNode);
+                xmlAttributeValue = nodeName;
             }
         }
-
-        public static void Write(XmlWriter xmlWriter, ConfigurationAttributeCollection attributes)
+        else
         {
-            foreach (var attribute in attributes)
+            xmlElementName = ConfigurationElementName.Node;
+            xmlAttributeValue = null;
+        }
+
+        using (xmlWriter.WriteElement(xmlElementName))
+        {
+            if (xmlAttributeValue != null)
+                xmlWriter.WriteAttributeString("name", xmlAttributeValue);
+
+            Write(xmlWriter, node.Attributes);
+
+            foreach (var childNode in node.ChildNodes)
+                WriteNode(xmlWriter, childNode);
+        }
+    }
+
+    public static void Write(XmlWriter xmlWriter, ConfigurationAttributeCollection attributes)
+    {
+        foreach (var attribute in attributes)
+        {
+            using (xmlWriter.WriteElement(ConfigurationElementName.Attribute))
             {
-                using (xmlWriter.WriteElement(ConfigurationElementName.Attribute))
+                xmlWriter.WriteAttributeString("name", attribute.Name);
+                var value = attribute.Value;
+
+                if (value != null)
                 {
-                    xmlWriter.WriteAttributeString("name", attribute.Name);
-                    var value = attribute.Value;
+                    var type = value.GetType();
 
-                    if (value != null)
+                    if (type != typeof(string))
                     {
-                        var type = value.GetType();
+                        var typeName = TypeNameCollection.GetTypeName(type);
+                        xmlWriter.WriteAttributeString("type", typeName);
+                    }
 
-                        if (type != typeof(string))
-                        {
-                            var typeName = TypeNameCollection.GetTypeName(type);
-                            xmlWriter.WriteAttributeString("type", typeName);
-                        }
+                    var typeCode = Type.GetTypeCode(type);
+                    string strValue;
 
-                        var typeCode = Type.GetTypeCode(type);
-                        string strValue;
+                    switch (typeCode)
+                    {
+                        case TypeCode.Object:
+                            if (type == typeof(TimeSpan))
+                            {
+                                var timeSpan = (TimeSpan) value;
+                                strValue = timeSpan.ToString();
+                                xmlWriter.WriteAttributeString("value", strValue);
+                            }
+                            else if (type.IsArray)
+                            {
+                                var array = (Array) value;
 
-                        switch (typeCode)
-                        {
-                            case TypeCode.Object:
-                                if (type == typeof(TimeSpan))
+                                for (var j = 0; j < array.Length; j++)
                                 {
-                                    var timeSpan = (TimeSpan) value;
-                                    strValue = timeSpan.ToString();
-                                    xmlWriter.WriteAttributeString("value", strValue);
-                                }
-                                else if (type.IsArray)
-                                {
-                                    var array = (Array) value;
-
-                                    for (var j = 0; j < array.Length; j++)
+                                    using (xmlWriter.WriteElement("a"))
                                     {
-                                        using (xmlWriter.WriteElement("a"))
-                                        {
-                                            value = array.GetValue(j);
-                                            strValue = value.ToString();
-                                            xmlWriter.WriteAttributeString("value", strValue);
-                                        }
+                                        value = array.GetValue(j);
+                                        strValue = value.ToString();
+                                        xmlWriter.WriteAttributeString("value", strValue);
                                     }
                                 }
-                                else
-                                {
-                                    var xmlSerializer = new XmlSerializer(type);
-                                    xmlSerializer.Serialize(xmlWriter, value);
-                                }
+                            }
+                            else
+                            {
+                                var xmlSerializer = new XmlSerializer(type);
+                                xmlSerializer.Serialize(xmlWriter, value);
+                            }
 
-                                break;
+                            break;
 
-                            default:
-                                strValue = value.ToString();
-                                xmlWriter.WriteAttributeString("value", strValue);
-                                break;
-                        }
+                        default:
+                            strValue = value.ToString();
+                            xmlWriter.WriteAttributeString("value", strValue);
+                            break;
                     }
-                    else
-                        xmlWriter.WriteAttributeString("isNull", bool.TrueString);
                 }
+                else
+                    xmlWriter.WriteAttributeString("isNull", bool.TrueString);
             }
         }
     }

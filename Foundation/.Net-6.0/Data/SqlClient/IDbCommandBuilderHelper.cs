@@ -1,9 +1,8 @@
 ﻿using System.Data;
 
-namespace Foundation.Data.SqlClient
+namespace Foundation.Data.SqlClient;
+
+public interface IDbCommandBuilderHelper
 {
-    public interface IDbCommandBuilderHelper
-    {
-        void DeriveParameters(IDbCommand command);
-    }
+    void DeriveParameters(IDbCommand command);
 }

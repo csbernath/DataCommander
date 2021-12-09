@@ -1,254 +1,253 @@
 ﻿using System;
 using System.Data.SqlTypes;
 
-namespace Foundation.Data.PTypes
+namespace Foundation.Data.PTypes;
+
+public static class PConvert
 {
-    public static class PConvert
+    public static PBoolean FromSqlBoolean(object sqlBoolean)
     {
-        public static PBoolean FromSqlBoolean(object sqlBoolean)
+        PBoolean sp;
+
+        if (sqlBoolean == null)
+            sp = PBoolean.Empty;
+        else
         {
-            PBoolean sp;
-
-            if (sqlBoolean == null)
-                sp = PBoolean.Empty;
-            else
-            {
-                var sql = (SqlBoolean)sqlBoolean;
-                sp = sql;
-            }
-
-            return sp;
+            var sql = (SqlBoolean)sqlBoolean;
+            sp = sql;
         }
 
-        public static PDateTime FromSqlDateTime(object sqlDateTime)
+        return sp;
+    }
+
+    public static PDateTime FromSqlDateTime(object sqlDateTime)
+    {
+        PDateTime sp;
+
+        if (sqlDateTime == null)
+            sp = PDateTime.Empty;
+        else
         {
-            PDateTime sp;
-
-            if (sqlDateTime == null)
-                sp = PDateTime.Empty;
-            else
-            {
-                var sql = (SqlDateTime)sqlDateTime;
-                sp = sql;
-            }
-
-            return sp;
+            var sql = (SqlDateTime)sqlDateTime;
+            sp = sql;
         }
 
-        public static PDecimal FromSqlDecimal(object sqlDecimal)
+        return sp;
+    }
+
+    public static PDecimal FromSqlDecimal(object sqlDecimal)
+    {
+        PDecimal sp;
+
+        if (sqlDecimal == null)
+            sp = PDecimal.Empty;
+        else
         {
-            PDecimal sp;
-
-            if (sqlDecimal == null)
-                sp = PDecimal.Empty;
-            else
-            {
-                var sql = (SqlDecimal)sqlDecimal;
-                sp = sql;
-            }
-
-            return sp;
+            var sql = (SqlDecimal)sqlDecimal;
+            sp = sql;
         }
 
-        public static PDouble FromSqlDouble(object sqlDouble)
+        return sp;
+    }
+
+    public static PDouble FromSqlDouble(object sqlDouble)
+    {
+        PDouble sp;
+
+        if (sqlDouble == null)
+            sp = PDouble.Empty;
+        else
         {
-            PDouble sp;
-
-            if (sqlDouble == null)
-                sp = PDouble.Empty;
-            else
-            {
-                var sql = (SqlDouble)sqlDouble;
-                sp = sql;
-            }
-
-            return sp;
+            var sql = (SqlDouble)sqlDouble;
+            sp = sql;
         }
 
-        public static PInt16 FromSqlInt16(object value)
+        return sp;
+    }
+
+    public static PInt16 FromSqlInt16(object value)
+    {
+        PInt16 sp;
+
+        if (value == null)
+            sp = PInt16.Empty;
+        else
         {
-            PInt16 sp;
-
-            if (value == null)
-                sp = PInt16.Empty;
-            else
-            {
-                var sql = (SqlInt16)value;
-                sp = sql;
-            }
-
-            return sp;
+            var sql = (SqlInt16)value;
+            sp = sql;
         }
 
-        public static PInt32 FromSqlInt32(object value)
+        return sp;
+    }
+
+    public static PInt32 FromSqlInt32(object value)
+    {
+        PInt32 sp;
+
+        if (value == null)
+            sp = PInt32.Empty;
+        else
         {
-            PInt32 sp;
-
-            if (value == null)
-                sp = PInt32.Empty;
-            else
-            {
-                var sql = (SqlInt32)value;
-                sp = sql;
-            }
-
-            return sp;
+            var sql = (SqlInt32)value;
+            sp = sql;
         }
 
-        public static PMoney FromSqlMoney(object sqlMoney)
+        return sp;
+    }
+
+    public static PMoney FromSqlMoney(object sqlMoney)
+    {
+        PMoney sp;
+
+        if (sqlMoney == null)
+            sp = PMoney.Empty;
+        else
         {
-            PMoney sp;
-
-            if (sqlMoney == null)
-                sp = PMoney.Empty;
-            else
-            {
-                var sql = (SqlMoney)sqlMoney;
-                sp = sql;
-            }
-
-            return sp;
+            var sql = (SqlMoney)sqlMoney;
+            sp = sql;
         }
 
-        public static PString FromSqlString(object sqlString)
+        return sp;
+    }
+
+    public static PString FromSqlString(object sqlString)
+    {
+        PString sp;
+
+        if (sqlString == null)
+            sp = PString.Empty;
+        else
         {
-            PString sp;
-
-            if (sqlString == null)
-                sp = PString.Empty;
-            else
-            {
-                var sql = (SqlString)sqlString;
-                sp = sql;
-            }
-
-            return sp;
+            var sql = (SqlString)sqlString;
+            sp = sql;
         }
 
-        public static PBoolean ScalarToPBoolean(object scalar)
-        {
-            PBoolean sp;
+        return sp;
+    }
 
-            if (scalar == null)
-                sp = PBoolean.Empty;
-            else if (scalar == DBNull.Value)
-                sp = PBoolean.Null;
-            else
-                sp = (bool)scalar;
+    public static PBoolean ScalarToPBoolean(object scalar)
+    {
+        PBoolean sp;
 
-            return sp;
-        }
+        if (scalar == null)
+            sp = PBoolean.Empty;
+        else if (scalar == DBNull.Value)
+            sp = PBoolean.Null;
+        else
+            sp = (bool)scalar;
 
-        public static PDateTime ScalarToPDateTime(object scalar)
-        {
-            PDateTime sp;
+        return sp;
+    }
 
-            if (scalar == null)
-                sp = PDateTime.Empty;
-            else if (scalar == DBNull.Value)
-                sp = PDateTime.Null;
-            else
-                sp = (DateTime)scalar;
+    public static PDateTime ScalarToPDateTime(object scalar)
+    {
+        PDateTime sp;
 
-            return sp;
-        }
+        if (scalar == null)
+            sp = PDateTime.Empty;
+        else if (scalar == DBNull.Value)
+            sp = PDateTime.Null;
+        else
+            sp = (DateTime)scalar;
 
-        public static PDecimal ScalarToPDecimal(object scalar)
-        {
-            PDecimal sp;
+        return sp;
+    }
 
-            if (scalar == null)
-                sp = PDecimal.Empty;
-            else if (scalar == DBNull.Value)
-                sp = PDecimal.Null;
-            else
-                sp = (decimal)scalar;
+    public static PDecimal ScalarToPDecimal(object scalar)
+    {
+        PDecimal sp;
 
-            return sp;
-        }
+        if (scalar == null)
+            sp = PDecimal.Empty;
+        else if (scalar == DBNull.Value)
+            sp = PDecimal.Null;
+        else
+            sp = (decimal)scalar;
 
-        public static PDouble ScalarToPDouble(object scalar)
-        {
-            PDouble sp;
+        return sp;
+    }
 
-            if (scalar == null)
-                sp = PDouble.Empty;
-            else if (scalar == DBNull.Value)
-                sp = PDouble.Null;
-            else
-                sp = (double)scalar;
+    public static PDouble ScalarToPDouble(object scalar)
+    {
+        PDouble sp;
 
-            return sp;
-        }
+        if (scalar == null)
+            sp = PDouble.Empty;
+        else if (scalar == DBNull.Value)
+            sp = PDouble.Null;
+        else
+            sp = (double)scalar;
 
-        public static PInt16 ScalarToPInt16(object scalar)
-        {
-            PInt16 sp;
+        return sp;
+    }
 
-            if (scalar == null)
-                sp = PInt16.Empty;
-            else if (scalar == DBNull.Value)
-                sp = PInt16.Null;
-            else
-                sp = (short)scalar;
+    public static PInt16 ScalarToPInt16(object scalar)
+    {
+        PInt16 sp;
 
-            return sp;
-        }
+        if (scalar == null)
+            sp = PInt16.Empty;
+        else if (scalar == DBNull.Value)
+            sp = PInt16.Null;
+        else
+            sp = (short)scalar;
 
-        public static PInt32 ScalarToPInt32(object scalar)
-        {
-            PInt32 sp;
+        return sp;
+    }
 
-            if (scalar == null)
-                sp = PInt32.Empty;
-            else if (scalar == DBNull.Value)
-                sp = PInt32.Null;
-            else
-                sp = (int)scalar;
+    public static PInt32 ScalarToPInt32(object scalar)
+    {
+        PInt32 sp;
 
-            return sp;
-        }
+        if (scalar == null)
+            sp = PInt32.Empty;
+        else if (scalar == DBNull.Value)
+            sp = PInt32.Null;
+        else
+            sp = (int)scalar;
 
-        public static PMoney ScalarToPMoney(object scalar)
-        {
-            PMoney sp;
+        return sp;
+    }
 
-            if (scalar == null)
-                sp = PMoney.Empty;
-            else if (scalar == DBNull.Value)
-                sp = PMoney.Null;
-            else
-                sp = (decimal)scalar;
+    public static PMoney ScalarToPMoney(object scalar)
+    {
+        PMoney sp;
 
-            return sp;
-        }
+        if (scalar == null)
+            sp = PMoney.Empty;
+        else if (scalar == DBNull.Value)
+            sp = PMoney.Null;
+        else
+            sp = (decimal)scalar;
 
-        public static PString ScalarToPString(object scalar)
-        {
-            PString sp;
+        return sp;
+    }
 
-            if (scalar == null)
-                sp = PString.Empty;
-            else if (scalar == DBNull.Value)
-                sp = PString.Null;
-            else
-                sp = (string)scalar;
+    public static PString ScalarToPString(object scalar)
+    {
+        PString sp;
 
-            return sp;
-        }
+        if (scalar == null)
+            sp = PString.Empty;
+        else if (scalar == DBNull.Value)
+            sp = PString.Null;
+        else
+            sp = (string)scalar;
 
-        public static PXml ScalarToPXml(object scalar)
-        {
-            PXml xml;
+        return sp;
+    }
 
-            if (scalar == null)
-                xml = PXml.Empty;
-            else if (scalar == DBNull.Value)
-                xml = PXml.Null;
-            else
-                xml = (SqlXml)scalar;
+    public static PXml ScalarToPXml(object scalar)
+    {
+        PXml xml;
 
-            return xml;
-        }
+        if (scalar == null)
+            xml = PXml.Empty;
+        else if (scalar == DBNull.Value)
+            xml = PXml.Null;
+        else
+            xml = (SqlXml)scalar;
+
+        return xml;
     }
 }

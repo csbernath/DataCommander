@@ -1,41 +1,40 @@
 ﻿using System;
 
-namespace Foundation.Diagnostics
+namespace Foundation.Diagnostics;
+
+internal sealed class MonitoredObjectState
 {
-    internal sealed class MonitoredObjectState
+    public readonly MonitoredObject MonitoredObject;
+    private readonly long _timestamp;
+
+    public MonitoredObjectState(MonitoredObject monitoredObject, long timestamp)
     {
-        public readonly MonitoredObject MonitoredObject;
-        private readonly long _timestamp;
+        MonitoredObject = monitoredObject;
+        _timestamp = timestamp;
+    }
 
-        public MonitoredObjectState(MonitoredObject monitoredObject, long timestamp)
+    public int? GetGeneration()
+    {
+        var generation = GetGeneration(MonitoredObject.WeakReference);
+        return generation;
+    }
+
+    public long GetAge() => _timestamp - MonitoredObject.Timestamp;
+
+    private static int? GetGeneration(WeakReference weakReference)
+    {
+        int? generation = null;
+        if (weakReference.IsAlive)
         {
-            MonitoredObject = monitoredObject;
-            _timestamp = timestamp;
-        }
-
-        public int? GetGeneration()
-        {
-            var generation = GetGeneration(MonitoredObject.WeakReference);
-            return generation;
-        }
-
-        public long GetAge() => _timestamp - MonitoredObject.Timestamp;
-
-        private static int? GetGeneration(WeakReference weakReference)
-        {
-            int? generation = null;
-            if (weakReference.IsAlive)
+            try
             {
-                try
-                {
-                    generation = GC.GetGeneration(weakReference);
-                }
-                catch
-                {
-                }
+                generation = GC.GetGeneration(weakReference);
             }
-
-            return generation;
+            catch
+            {
+            }
         }
+
+        return generation;
     }
 }

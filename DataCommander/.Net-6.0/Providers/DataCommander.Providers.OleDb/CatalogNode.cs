@@ -1,70 +1,69 @@
 ﻿using System.Collections.Generic;
 using System.Data.OleDb;
 
-namespace DataCommander.Providers.OleDb
+namespace DataCommander.Providers.OleDb;
+
+class CatalogNode : ITreeNode
 {
-    class CatalogNode : ITreeNode
+    public CatalogNode(
+        OleDbConnection connection,
+        string name)
     {
-        public CatalogNode(
-            OleDbConnection connection,
-            string name)
+        Connection = connection;
+        Name = name;
+    }
+
+    string ITreeNode.Name
+    {
+        get
         {
-            Connection = connection;
-            Name = name;
+            var name = Name;
+
+            if (name == null)
+                name = "[No catalogs found]";
+            else if (name.Length == 0)
+                name = "[Catalog name is empty]";
+
+            return name;
         }
+    }
 
-        string ITreeNode.Name
+    public bool IsLeaf => false;
+
+    public IEnumerable<ITreeNode> GetChildren(bool refresh)
+    {
+        ITreeNode[] treeNodes;
+
+        try
         {
-            get
+            var restrictions = new object[] { Name };
+            var dataTable = Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Schemata, restrictions);
+            var count = dataTable.Rows.Count;
+            var nameColumn = dataTable.Columns["SCHEMA_NAME"];
+            treeNodes = new ITreeNode[count];
+
+            for (var i = 0; i < count; i++)
             {
-                var name = Name;
-
-                if (name == null)
-                    name = "[No catalogs found]";
-                else if (name.Length == 0)
-                    name = "[Catalog name is empty]";
-
-                return name;
+                var schemaName = (string)dataTable.Rows[i][nameColumn];
+                treeNodes[i] = new SchemaNode(this, schemaName);
             }
         }
-
-        public bool IsLeaf => false;
-
-        public IEnumerable<ITreeNode> GetChildren(bool refresh)
+        catch
         {
-            ITreeNode[] treeNodes;
-
-            try
-            {
-                var restrictions = new object[] { Name };
-                var dataTable = Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Schemata, restrictions);
-                var count = dataTable.Rows.Count;
-                var nameColumn = dataTable.Columns["SCHEMA_NAME"];
-                treeNodes = new ITreeNode[count];
-
-                for (var i = 0; i < count; i++)
-                {
-                    var schemaName = (string)dataTable.Rows[i][nameColumn];
-                    treeNodes[i] = new SchemaNode(this, schemaName);
-                }
-            }
-            catch
-            {
-                treeNodes = new ITreeNode[1];
-                treeNodes[0] = new SchemaNode(this, null);
-            }
-
-            return treeNodes;
+            treeNodes = new ITreeNode[1];
+            treeNodes[0] = new SchemaNode(this, null);
         }
 
-        public bool Sortable => false;
-        public string Query => null;
-        public OleDbConnection Connection { get; }
-        public string Name { get; }
+        return treeNodes;
+    }
 
-        public ContextMenu GetContextMenu()
-        {
-            throw new System.NotImplementedException();
-        }
+    public bool Sortable => false;
+    public string Query => null;
+    public OleDbConnection Connection { get; }
+    public string Name { get; }
+
+    public ContextMenu GetContextMenu()
+    {
+        throw new System.NotImplementedException();
     }
 }

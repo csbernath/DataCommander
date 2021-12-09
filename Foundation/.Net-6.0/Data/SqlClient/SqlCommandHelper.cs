@@ -2,28 +2,27 @@
 using System.Data.SqlClient;
 using System.Xml;
 
-namespace Foundation.Data.SqlClient
+namespace Foundation.Data.SqlClient;
+
+public class SqlCommandHelper : IDbCommandHelper
 {
-    public class SqlCommandHelper : IDbCommandHelper
+    public XmlDocument ExecuteXmlDocument(IDbCommand command)
     {
-        public XmlDocument ExecuteXmlDocument(IDbCommand command)
+        var sqlCommand = (SqlCommand)command;
+        var xmlDocument = new XmlDocument();
+        XmlReader xmlReader = null;
+
+        try
         {
-            var sqlCommand = (SqlCommand)command;
-            var xmlDocument = new XmlDocument();
-            XmlReader xmlReader = null;
-
-            try
-            {
-                xmlReader = sqlCommand.ExecuteXmlReader();
-                xmlDocument.Load(xmlReader);
-            }
-            finally
-            {
-                if (xmlReader != null)
-                    xmlReader.Close();
-            }
-
-            return xmlDocument;
+            xmlReader = sqlCommand.ExecuteXmlReader();
+            xmlDocument.Load(xmlReader);
         }
+        finally
+        {
+            if (xmlReader != null)
+                xmlReader.Close();
+        }
+
+        return xmlDocument;
     }
 }

@@ -5,68 +5,67 @@ using System.Globalization;
 using Foundation.Assertions;
 using Foundation.Collections.ReadOnly;
 
-namespace Foundation.Data
+namespace Foundation.Data;
+
+public static class DbProviderFactoryExtensions
 {
-    public static class DbProviderFactoryExtensions
+    public static DataTable ExecuteDataTable(this DbProviderFactory factory, DbConnection connection, string commandText)
     {
-        public static DataTable ExecuteDataTable(this DbProviderFactory factory, DbConnection connection, string commandText)
-        {
-            Assert.IsNotNull(factory);
-            Assert.IsNotNull(connection);
+        Assert.IsNotNull(factory);
+        Assert.IsNotNull(connection);
 
-            var command = connection.CreateCommand();
-            command.CommandText = commandText;
-            var adapter = factory.CreateDataAdapter();
-            adapter.SelectCommand = command;
-            var table = new DataTable
-            {
-                Locale = CultureInfo.InvariantCulture
-            };
-            adapter.Fill(table);
-            return table;
+        var command = connection.CreateCommand();
+        command.CommandText = commandText;
+        var adapter = factory.CreateDataAdapter();
+        adapter.SelectCommand = command;
+        var table = new DataTable
+        {
+            Locale = CultureInfo.InvariantCulture
+        };
+        adapter.Fill(table);
+        return table;
+    }
+
+    public static DataTable ExecuteDataTable(this DbProviderFactory dbProviderFactory, string connectionString, string commandText)
+    {
+        using (var connection = dbProviderFactory.CreateConnection())
+        {
+            connection.ConnectionString = connectionString;
+            connection.Open();
+            return ExecuteDataTable(dbProviderFactory, connection, commandText);
         }
+    }
 
-        public static DataTable ExecuteDataTable(this DbProviderFactory dbProviderFactory, string connectionString, string commandText)
+    public static void ExecuteReader(this DbProviderFactory dbProviderFactory, string connectionString, ExecuteReaderRequest request,
+        Action<IDataReader> read)
+    {
+        using (var connection = dbProviderFactory.CreateConnection())
         {
-            using (var connection = dbProviderFactory.CreateConnection())
-            {
-                connection.ConnectionString = connectionString;
-                connection.Open();
-                return ExecuteDataTable(dbProviderFactory, connection, commandText);
-            }
+            connection.ConnectionString = connectionString;
+            connection.Open();
+            var executor = connection.CreateCommandExecutor();
+            executor.ExecuteReader(request, read);
         }
+    }
 
-        public static void ExecuteReader(this DbProviderFactory dbProviderFactory, string connectionString, ExecuteReaderRequest request,
-            Action<IDataReader> read)
+    public static ReadOnlySegmentLinkedList<T> ExecuteReader<T>(this DbProviderFactory dbProviderFactory, string connectionString,
+        ExecuteReaderRequest request, int segmentLength, Func<IDataRecord, T> readRecord)
+    {
+        ReadOnlySegmentLinkedList<T> rows = null;
+        dbProviderFactory.ExecuteReader(connectionString, request, dataReader => rows = dataReader.ReadResult(segmentLength, readRecord));
+        return rows;
+    }
+
+    public static void ExecuteTransaction(this DbProviderFactory dbProviderFactory, string connectionString, Action<IDbTransaction> action)
+    {
+        using (var connection = dbProviderFactory.CreateConnection())
         {
-            using (var connection = dbProviderFactory.CreateConnection())
+            connection.ConnectionString = connectionString;
+            connection.Open();
+            using (var transaction = connection.BeginTransaction())
             {
-                connection.ConnectionString = connectionString;
-                connection.Open();
-                var executor = connection.CreateCommandExecutor();
-                executor.ExecuteReader(request, read);
-            }
-        }
-
-        public static ReadOnlySegmentLinkedList<T> ExecuteReader<T>(this DbProviderFactory dbProviderFactory, string connectionString,
-            ExecuteReaderRequest request, int segmentLength, Func<IDataRecord, T> readRecord)
-        {
-            ReadOnlySegmentLinkedList<T> rows = null;
-            dbProviderFactory.ExecuteReader(connectionString, request, dataReader => rows = dataReader.ReadResult(segmentLength, readRecord));
-            return rows;
-        }
-
-        public static void ExecuteTransaction(this DbProviderFactory dbProviderFactory, string connectionString, Action<IDbTransaction> action)
-        {
-            using (var connection = dbProviderFactory.CreateConnection())
-            {
-                connection.ConnectionString = connectionString;
-                connection.Open();
-                using (var transaction = connection.BeginTransaction())
-                {
-                    action(transaction);
-                    transaction.Commit();
-                }
+                action(transaction);
+                transaction.Commit();
             }
         }
     }

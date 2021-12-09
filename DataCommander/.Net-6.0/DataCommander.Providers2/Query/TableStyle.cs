@@ -1,20 +1,19 @@
-﻿namespace DataCommander.Providers2.Query
+﻿namespace DataCommander.Providers2.Query;
+
+public enum ResultWriterType
 {
-    public enum ResultWriterType
-    {
-        DataGrid,
-        DataGridView,
-        Excel,
-        File,
-        ForJsonAuto,
-        Html,
-        HtmlFile,
-        InsertScriptFile,
-        JsonFile,
-        ListView,
-        Log,
-        Rtf,
-        SqLite,
-        Text
-    }
+    DataGrid,
+    DataGridView,
+    Excel,
+    File,
+    ForJsonAuto,
+    Html,
+    HtmlFile,
+    InsertScriptFile,
+    JsonFile,
+    ListView,
+    Log,
+    Rtf,
+    SqLite,
+    Text
 }

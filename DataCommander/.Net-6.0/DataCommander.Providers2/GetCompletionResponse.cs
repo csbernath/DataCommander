@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace DataCommander.Providers2
+namespace DataCommander.Providers2;
+
+public sealed class GetCompletionResponse
 {
-    public sealed class GetCompletionResponse
-    {
-        public int StartPosition;
-        public int Length;
-        public List<IObjectName> Items;
-        public bool FromCache;
-    }
+    public int StartPosition;
+    public int Length;
+    public List<IObjectName> Items;
+    public bool FromCache;
 }

@@ -4,75 +4,74 @@ using System.Configuration;
 using System.Diagnostics;
 using Foundation.Assertions;
 
-namespace Foundation.Configuration
-{
-    public static class AppSettings
-    {
-        public static readonly Lazy<NameValueCollectionReader> Instance = new(CreateInstance);
+namespace Foundation.Configuration;
 
-        private static NameValueCollectionReader CreateInstance()
+public static class AppSettings
+{
+    public static readonly Lazy<NameValueCollectionReader> Instance = new(CreateInstance);
+
+    private static NameValueCollectionReader CreateInstance()
+    {
+        var reader = new Reader(ConfigurationManager.AppSettings);
+        return new NameValueCollectionReader(reader.TryGetValue);
+    }
+
+    public static NameValueCollectionReader CurrentType
+    {
+        get
         {
-            var reader = new Reader(ConfigurationManager.AppSettings);
+            var nameValueCollection = ConfigurationManager.AppSettings;
+
+            var stackTrace = new StackTrace(1);
+            var stackFrame = stackTrace.GetFrame(0);
+            var methodBase = stackFrame.GetMethod();
+            var typeName = methodBase.DeclaringType.FullName;
+            var prefix = typeName + Type.Delimiter;
+
+            var reader = new PrefixedReader(nameValueCollection, prefix);
             return new NameValueCollectionReader(reader.TryGetValue);
         }
+    }
 
-        public static NameValueCollectionReader CurrentType
+    private sealed class Reader
+    {
+        private readonly NameValueCollection _nameValueCollection;
+
+        public Reader(NameValueCollection nameValueCollection)
         {
-            get
-            {
-                var nameValueCollection = ConfigurationManager.AppSettings;
+            Assert.IsNotNull(nameValueCollection);
 
-                var stackTrace = new StackTrace(1);
-                var stackFrame = stackTrace.GetFrame(0);
-                var methodBase = stackFrame.GetMethod();
-                var typeName = methodBase.DeclaringType.FullName;
-                var prefix = typeName + Type.Delimiter;
-
-                var reader = new PrefixedReader(nameValueCollection, prefix);
-                return new NameValueCollectionReader(reader.TryGetValue);
-            }
+            _nameValueCollection = nameValueCollection;
         }
 
-        private sealed class Reader
+        public bool TryGetValue(string name, out string value)
         {
-            private readonly NameValueCollection _nameValueCollection;
+            value = _nameValueCollection[name];
+            var contains = value != null;
+            return contains;
+        }
+    }
 
-            public Reader(NameValueCollection nameValueCollection)
-            {
-                Assert.IsNotNull(nameValueCollection);
+    private sealed class PrefixedReader
+    {
+        private readonly NameValueCollection _nameValueCollection;
+        private readonly string _prefix;
 
-                _nameValueCollection = nameValueCollection;
-            }
+        public PrefixedReader(NameValueCollection nameValueCollection, string prefix)
+        {
+            Assert.IsNotNull(nameValueCollection);
+            Assert.IsNotNull(prefix);
 
-            public bool TryGetValue(string name, out string value)
-            {
-                value = _nameValueCollection[name];
-                var contains = value != null;
-                return contains;
-            }
+            _nameValueCollection = nameValueCollection;
+            _prefix = prefix;
         }
 
-        private sealed class PrefixedReader
+        public bool TryGetValue(string name, out string value)
         {
-            private readonly NameValueCollection _nameValueCollection;
-            private readonly string _prefix;
-
-            public PrefixedReader(NameValueCollection nameValueCollection, string prefix)
-            {
-                Assert.IsNotNull(nameValueCollection);
-                Assert.IsNotNull(prefix);
-
-                _nameValueCollection = nameValueCollection;
-                _prefix = prefix;
-            }
-
-            public bool TryGetValue(string name, out string value)
-            {
-                var prefixedName = _prefix != null ? _prefix + name : name;
-                value = _nameValueCollection[prefixedName];
-                var contains = value != null;
-                return contains;
-            }
+            var prefixedName = _prefix != null ? _prefix + name : name;
+            value = _nameValueCollection[prefixedName];
+            var contains = value != null;
+            return contains;
         }
     }
 }

@@ -2,44 +2,43 @@
 using System.IO;
 using Foundation.Assertions;
 
-namespace Foundation.Data.TextData
+namespace Foundation.Data.TextData;
+
+internal sealed class TextDataStreamWriter
 {
-    internal sealed class TextDataStreamWriter
+    private readonly TextWriter _textWriter;
+
+    private readonly IList<ITextDataConverter> _converters;
+
+    public TextDataStreamWriter(TextWriter textWriter, IList<TextDataColumn> columns, IList<ITextDataConverter> converters)
     {
-        private readonly TextWriter _textWriter;
+        Assert.IsNotNull(textWriter);
+        Assert.IsNotNull(columns);
+        Assert.IsNotNull(converters);
 
-        private readonly IList<ITextDataConverter> _converters;
+        _textWriter = textWriter;
+        Columns = columns;
+        _converters = converters;
+    }
 
-        public TextDataStreamWriter(TextWriter textWriter, IList<TextDataColumn> columns, IList<ITextDataConverter> converters)
+    public IList<TextDataColumn> Columns { get; }
+
+    public void WriteRow(object[] values)
+    {
+        Assert.IsNotNull(values);
+        Assert.IsTrue(Columns.Count == values.Length);
+
+        for (var i = 0; i < values.Length; i++)
         {
-            Assert.IsNotNull(textWriter);
-            Assert.IsNotNull(columns);
-            Assert.IsNotNull(converters);
+            var value = values[i];
+            var converter = _converters[i];
+            var column = Columns[i];
+            var valueString = converter.ToString(value, column);
 
-            _textWriter = textWriter;
-            Columns = columns;
-            _converters = converters;
-        }
+            Assert.IsTrue(!string.IsNullOrEmpty(valueString));
+            Assert.IsTrue(column.MaxLength == valueString.Length);
 
-        public IList<TextDataColumn> Columns { get; }
-
-        public void WriteRow(object[] values)
-        {
-            Assert.IsNotNull(values);
-            Assert.IsTrue(Columns.Count == values.Length);
-
-            for (var i = 0; i < values.Length; i++)
-            {
-                var value = values[i];
-                var converter = _converters[i];
-                var column = Columns[i];
-                var valueString = converter.ToString(value, column);
-
-                Assert.IsTrue(!string.IsNullOrEmpty(valueString));
-                Assert.IsTrue(column.MaxLength == valueString.Length);
-
-                _textWriter.Write(valueString);
-            }
+            _textWriter.Write(valueString);
         }
     }
 }

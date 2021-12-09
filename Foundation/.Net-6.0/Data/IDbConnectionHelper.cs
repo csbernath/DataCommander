@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Foundation.Data
+namespace Foundation.Data;
+
+public interface IDbConnectionHelper
 {
-    public interface IDbConnectionHelper
-    {
-        event EventHandler InfoMessage;
-    }
+    event EventHandler InfoMessage;
 }

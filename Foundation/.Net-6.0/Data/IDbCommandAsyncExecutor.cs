@@ -3,10 +3,9 @@ using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Foundation.Data
+namespace Foundation.Data;
+
+public interface IDbCommandAsyncExecutor : IDbCommandExecutor
 {
-    public interface IDbCommandAsyncExecutor : IDbCommandExecutor
-    {
-        Task ExecuteAsync(Func<DbConnection, Task> execute, CancellationToken cancellationToken);
-    }
+    Task ExecuteAsync(Func<DbConnection, Task> execute, CancellationToken cancellationToken);
 }

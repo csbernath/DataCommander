@@ -1,7 +1,6 @@
-﻿namespace DataCommander.Providers2.ResultWriter
+﻿namespace DataCommander.Providers2.ResultWriter;
+
+public static class HtmlEntity
 {
-    public static class HtmlEntity
-    {
-        public const string NonBreakingSpace = "&nbsp;";
-    }
+    public const string NonBreakingSpace = "&nbsp;";
 }

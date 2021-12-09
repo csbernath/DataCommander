@@ -1,24 +1,23 @@
 ﻿using System;
 using Foundation.Core.ClockAggregate;
 
-namespace Foundation.Core
+namespace Foundation.Core;
+
+public sealed class LocalTime : IDateTimeProvider
 {
-    public sealed class LocalTime : IDateTimeProvider
+    public static readonly LocalTime Default = new();
+
+    private LocalTime()
     {
-        public static readonly LocalTime Default = new();
+    }
 
-        private LocalTime()
+    public DateTime Now
+    {
+        get
         {
-        }
-
-        public DateTime Now
-        {
-            get
-            {
-                var clock = ClockAggregateRepository.Singleton.Get();
-                var localTime = clock.GetLocalTimeFromCurrentEnvironmentTickCount();
-                return localTime;
-            }
+            var clock = ClockAggregateRepository.Singleton.Get();
+            var localTime = clock.GetLocalTimeFromCurrentEnvironmentTickCount();
+            return localTime;
         }
     }
 }

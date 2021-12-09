@@ -1,39 +1,38 @@
 ﻿using System;
 using System.Data;
 
-namespace DataCommander.Providers2.FieldNamespace
+namespace DataCommander.Providers2.FieldNamespace;
+
+public sealed class DateTimeDataFieldReader : IDataFieldReader
 {
-    public sealed class DateTimeDataFieldReader : IDataFieldReader
+    private readonly IDataRecord _dataRecord;
+    private readonly int _columnOrdinal;
+
+    public DateTimeDataFieldReader(
+        IDataRecord dataRecord,
+        int columnOrdinal)
     {
-        private readonly IDataRecord _dataRecord;
-        private readonly int _columnOrdinal;
+        _dataRecord = dataRecord;
+        _columnOrdinal = columnOrdinal;
+    }
 
-        public DateTimeDataFieldReader(
-            IDataRecord dataRecord,
-            int columnOrdinal)
+    object IDataFieldReader.Value
+    {
+        get
         {
-            _dataRecord = dataRecord;
-            _columnOrdinal = columnOrdinal;
-        }
+            object value;
 
-        object IDataFieldReader.Value
-        {
-            get
+            if (_dataRecord.IsDBNull(_columnOrdinal))
             {
-                object value;
-
-                if (_dataRecord.IsDBNull(_columnOrdinal))
-                {
-                    value = DBNull.Value;
-                }
-                else
-                {
-                    var dateTime = _dataRecord.GetDateTime(_columnOrdinal);
-                    value = new DateTimeField(dateTime);
-                }
-
-                return value;
+                value = DBNull.Value;
             }
+            else
+            {
+                var dateTime = _dataRecord.GetDateTime(_columnOrdinal);
+                value = new DateTimeField(dateTime);
+            }
+
+            return value;
         }
     }
 }

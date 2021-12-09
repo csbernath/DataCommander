@@ -3,32 +3,32 @@ using Microsoft.Data.SqlClient;
 using Foundation.Assertions;
 using Foundation.Data;
 
-namespace DataCommander.Providers.SqlServer.ObjectExplorer
+namespace DataCommander.Providers.SqlServer.ObjectExplorer;
+
+internal sealed class DatabaseCollectionNode : ITreeNode
 {
-    internal sealed class DatabaseCollectionNode : ITreeNode
+    public DatabaseCollectionNode(ServerNode server)
     {
-        public DatabaseCollectionNode(ServerNode server)
-        {
-            Assert.IsTrue(server != null);
+        Assert.IsTrue(server != null);
 
-            Server = server;
-        }
+        Server = server;
+    }
 
-        public ServerNode Server { get; }
+    public ServerNode Server { get; }
 
-        #region ITreeNode Members
+    #region ITreeNode Members
 
-        string ITreeNode.Name => "Databases";
+    string ITreeNode.Name => "Databases";
 
-        bool ITreeNode.IsLeaf => false;
+    bool ITreeNode.IsLeaf => false;
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
-        {
-            var list = new List<ITreeNode>();
-            list.Add(new SystemDatabaseCollectionNode(this));
-            list.Add(new DatabaseSnapshotCollectionNode(this));
+    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    {
+        var list = new List<ITreeNode>();
+        list.Add(new SystemDatabaseCollectionNode(this));
+        list.Add(new DatabaseSnapshotCollectionNode(this));
 
-            const string commandText = @"select
+        const string commandText = @"select
     d.name,
     d.state
 from sys.databases d (nolock)
@@ -37,24 +37,23 @@ where
     and name not in('master','model','msdb','tempdb')
 order by d.name";
 
-            var rows = SqlClientFactory.Instance.ExecuteReader(Server.ConnectionString, new ExecuteReaderRequest(commandText), 128, dataRecord =>
-            {
-                var name = dataRecord.GetString(0);
-                var state = dataRecord.GetByte(1);
-                return new DatabaseNode(this, name, state);
-            });
-            list.AddRange(rows);
-            return list;
-        }
-
-        bool ITreeNode.Sortable => false;
-        string ITreeNode.Query => null;
-
-        public ContextMenu GetContextMenu()
+        var rows = SqlClientFactory.Instance.ExecuteReader(Server.ConnectionString, new ExecuteReaderRequest(commandText), 128, dataRecord =>
         {
-            throw new System.NotImplementedException();
-        }
-
-        #endregion
+            var name = dataRecord.GetString(0);
+            var state = dataRecord.GetByte(1);
+            return new DatabaseNode(this, name, state);
+        });
+        list.AddRange(rows);
+        return list;
     }
+
+    bool ITreeNode.Sortable => false;
+    string ITreeNode.Query => null;
+
+    public ContextMenu GetContextMenu()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    #endregion
 }
