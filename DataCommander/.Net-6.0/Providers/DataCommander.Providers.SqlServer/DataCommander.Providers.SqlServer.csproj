@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
+    <TargetFramework>net6.0</TargetFramework>    
     <AssemblyName>DataCommander.Providers.SqlServer</AssemblyName>
     <RootNamespace>DataCommander.Providers.SqlServer</RootNamespace>
     <LangVersion>10</LangVersion>
