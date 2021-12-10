@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
+    <TargetFramework>net6.0</TargetFramework>
     <LangVersion>10</LangVersion>
   </PropertyGroup>
 
@@ -15,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DataCommander.Providers\DataCommander.Providers.csproj" />
+    <ProjectReference Include="..\..\DataCommander.Providers2\DataCommander.Providers2.csproj" />
   </ItemGroup>
 
 </Project>

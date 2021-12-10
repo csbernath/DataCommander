@@ -1,12 +1,11 @@
-﻿using DataCommander.Providers.Query;
-using Foundation.Data;
-using MySql.Data.MySqlClient;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
 using DataCommander.Providers2;
 using Foundation.Collections.ReadOnly;
+using Foundation.Data;
+using MySql.Data.MySqlClient;
 
 namespace DataCommander.Providers.MySql.ObjectExplorer;
 
@@ -24,7 +23,7 @@ internal sealed class FunctionNode : ITreeNode
     string ITreeNode.Name => _name;
     bool ITreeNode.IsLeaf => true;
 
-    System.Collections.Generic.IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => null;
+    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => null;
 
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;
@@ -47,8 +46,8 @@ internal sealed class FunctionNode : ITreeNode
                 dataRecord => dataRecord.GetString(2))
             .First();
 
-        Clipboard.SetText(statement);
-        var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+        var queryForm = (IQueryForm)sender;
+        queryForm.ClipboardSetText(statement);        
         queryForm.SetStatusbarPanelText("Copying create function statement to clipboard finished.", SystemColors.ControlText);
     }
 }
