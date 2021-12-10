@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Data.SqlServerCe;
 using System.IO;
 using System.Text;
+using DataCommander.Providers2;
 using Foundation.Data;
 using Foundation.Text;
 

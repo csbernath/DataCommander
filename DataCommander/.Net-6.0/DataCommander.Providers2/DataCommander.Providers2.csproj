@@ -13,6 +13,7 @@
     <ProjectReference Include="..\..\..\Foundation\.Net-6.0\Assertions\Foundation.Assertions.csproj" />
     <ProjectReference Include="..\..\..\Foundation\.Net-6.0\Collections\Foundation.Collections.csproj" />
     <ProjectReference Include="..\..\..\Foundation\.Net-6.0\Core\Foundation.Core.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\.Net-6.0\Data\Foundation.Data.csproj" />
     <ProjectReference Include="..\..\..\Foundation\.Net-6.0\Text\Foundation.Text.csproj" />
   </ItemGroup>
 

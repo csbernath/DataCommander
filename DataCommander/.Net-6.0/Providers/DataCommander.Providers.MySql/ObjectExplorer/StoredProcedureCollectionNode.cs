@@ -2,6 +2,7 @@
 using Foundation.Data.SqlClient;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
+using DataCommander.Providers2;
 
 namespace DataCommander.Providers.MySql.ObjectExplorer;
 

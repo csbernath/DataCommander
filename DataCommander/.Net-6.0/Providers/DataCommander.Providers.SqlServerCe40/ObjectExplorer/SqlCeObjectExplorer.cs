@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlServerCe;
+using DataCommander.Providers2;
 
 namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer;
 

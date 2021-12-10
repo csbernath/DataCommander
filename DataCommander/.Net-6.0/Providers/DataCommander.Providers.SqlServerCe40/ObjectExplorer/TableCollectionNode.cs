@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlServerCe;
 using System.Windows.Forms;
+using DataCommander.Providers2;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 

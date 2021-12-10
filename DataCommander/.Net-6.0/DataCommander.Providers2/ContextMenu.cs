@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 
-namespace DataCommander.Providers;
+namespace DataCommander.Providers2;
 
 public class ContextMenu
 {

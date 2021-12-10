@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DataCommander.Providers.Query;
+using DataCommander.Providers2;
 using Foundation.Collections.ReadOnly;
 using Oracle.ManagedDataAccess.Client;
 

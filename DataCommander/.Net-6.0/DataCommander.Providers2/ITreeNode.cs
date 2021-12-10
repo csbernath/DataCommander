@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DataCommander.Providers;
+namespace DataCommander.Providers2;
 
 public interface ITreeNode
 {

@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
-using DataCommander.Providers2;
 using DataCommander.Providers2.Connection;
 using DataCommander.Providers2.FieldNamespace;
 using DataCommander.Providers2.Query;
 using Foundation.Linq;
 using Foundation.Log;
 
-namespace DataCommander.Providers;
+namespace DataCommander.Providers2;
 
 public sealed class SqlParser
 {

@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.IO;
 using System.Text;
 using DataCommander.Providers.Query;
+using DataCommander.Providers2;
 using DataCommander.Providers2.Connection;
 using Foundation.Data.MethodProfiler;
 using Foundation.Data.SqlClient;

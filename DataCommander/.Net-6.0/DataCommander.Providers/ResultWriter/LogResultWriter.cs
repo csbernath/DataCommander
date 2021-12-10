@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using DataCommander.Providers2;
 using DataCommander.Providers2.Connection;
 using DataCommander.Providers2.QueryConfiguration;
 using Foundation.Assertions;

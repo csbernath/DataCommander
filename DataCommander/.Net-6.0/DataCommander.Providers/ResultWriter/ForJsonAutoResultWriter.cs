@@ -2,6 +2,7 @@
 using System.Data;
 using System.IO;
 using System.Text;
+using DataCommander.Providers2;
 using DataCommander.Providers2.Connection;
 using DataCommander.Providers2.FieldNamespace;
 using Foundation.Assertions;

@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Threading;
 using DataCommander.Providers.ResultWriter;
+using DataCommander.Providers2;
 using DataCommander.Providers2.QueryConfiguration;
 using Foundation.Assertions;
 using Foundation.Data;

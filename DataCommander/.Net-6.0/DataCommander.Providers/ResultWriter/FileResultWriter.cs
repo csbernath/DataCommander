@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.IO;
 using System.Text;
+using DataCommander.Providers2;
 using DataCommander.Providers2.ResultWriter;
 using Foundation.Assertions;
 using Foundation.Text;

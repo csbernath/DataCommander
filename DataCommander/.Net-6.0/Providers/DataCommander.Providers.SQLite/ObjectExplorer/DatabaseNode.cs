@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.SQLite;
+using DataCommander.Providers2;
 
 namespace DataCommander.Providers.SQLite.ObjectExplorer;
 

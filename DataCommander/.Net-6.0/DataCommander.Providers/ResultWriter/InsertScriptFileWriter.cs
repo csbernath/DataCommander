@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.IO;
 using System.Text;
 using DataCommander.Providers.Query;
+using DataCommander.Providers2;
 using DataCommander.Providers2.FieldNamespace;
 using DataCommander.Providers2.ResultWriter;
 using Foundation.Assertions;

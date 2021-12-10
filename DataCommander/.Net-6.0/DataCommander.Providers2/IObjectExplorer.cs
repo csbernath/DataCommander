@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 
-namespace DataCommander.Providers;
+namespace DataCommander.Providers2;
 
 public interface IObjectExplorer
 {

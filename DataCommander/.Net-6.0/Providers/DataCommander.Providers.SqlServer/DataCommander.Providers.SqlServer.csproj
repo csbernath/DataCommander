@@ -21,7 +21,7 @@
     <ProjectReference Include="..\..\..\..\Foundation\.Net-6.0\Data.SqlClient2\Foundation.Data.SqlClient2.csproj">
       <Private>true</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\DataCommander.Providers\DataCommander.Providers.csproj" />
+    <ProjectReference Include="..\..\DataCommander.Providers2\DataCommander.Providers2.csproj" />
   </ItemGroup>
 
 </Project>

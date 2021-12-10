@@ -5,6 +5,7 @@ using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using DataCommander.Providers2;
 using Foundation.Collections.ReadOnly;
 
 namespace DataCommander.Providers.MySql.ObjectExplorer;
