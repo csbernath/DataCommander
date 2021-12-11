@@ -1,9 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
     <LangVersion>10</LangVersion>
+    <TargetFrameworks>net6.0;net6.0-windows</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -17,7 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Foundation\.Net-6.0\Data\Foundation.Data.csproj" />
     <ProjectReference Include="..\..\DataCommander.Providers2\DataCommander.Providers2.csproj" />
-    <ProjectReference Include="..\..\DataCommander.Providers\DataCommander.Providers.csproj" />
   </ItemGroup>
 
 </Project>

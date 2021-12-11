@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using DataCommander.Providers.Query;
 using DataCommander.Providers2;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
@@ -80,22 +79,13 @@ order by procedure_name";
         for (var i = 0; i < count; i++)
         {
             var dataRow = dataRows[i];
-            var line = (string) dataRow[0];
+            var line = (string)dataRow[0];
             sb.Append(line);
         }
 
-        var mainForm = DataCommanderApplication.Instance.MainForm;
-        var queryForm = (QueryForm) mainForm.ActiveMdiChild;
-        var tbQuery = queryForm.QueryTextBox;
-        var selectionStart = tbQuery.RichTextBox.TextLength;
-
+        var queryForm = (IQueryForm)sender;
         var append = sb.ToString();
-
-        tbQuery.RichTextBox.AppendText(append);
-        tbQuery.RichTextBox.SelectionStart = selectionStart;
-        tbQuery.RichTextBox.SelectionLength = append.Length;
-
-        tbQuery.Focus();
+        queryForm.ShowText(append);
     }
 
     public ContextMenu GetContextMenu()

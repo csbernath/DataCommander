@@ -20,38 +20,38 @@ internal sealed class TableCollectionNode : ITreeNode
 
 	public bool IsLeaf => false;
 
-	public IEnumerable<ITreeNode> GetChildren( bool refresh )
+	public IEnumerable<ITreeNode> GetChildren(bool refresh)
 	{
-		var folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
-		var key = _schema.SchemasNode.Connection.DataSource + "." + _schema.Name;
-		var contains = folder.Attributes.TryGetAttributeValue( key, out string[] tables );
+		// var folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
+		// var key = _schema.SchemasNode.Connection.DataSource + "." + _schema.Name;
+		// var contains = folder.Attributes.TryGetAttributeValue( key, out string[] tables );
+		string[] tables;
 
-		if (!contains || refresh)
+		//if (!contains || refresh)
+		if (true)
 		{
 			var commandText = "select table_name from all_tables where owner = '{0}' order by table_name";
-			commandText = string.Format( commandText, _schema.Name );
+			commandText = string.Format(commandText, _schema.Name);
 
-			var command = new OracleCommand( commandText, _schema.SchemasNode.Connection );
+			var command = new OracleCommand(commandText, _schema.SchemasNode.Connection);
 			command.FetchSize = 256 * 1024;
 			var dataTable = command.ExecuteDataTable(CancellationToken.None);
 			var count = dataTable.Rows.Count;
-			tables = new string[ count ];
+			tables = new string[count];
 
 			for (var i = 0; i < count; i++)
 			{
-				var name = (string) dataTable.Rows[ i ][ 0 ];
-				tables[ i ] = name;
+				var name = (string)dataTable.Rows[i][0];
+				tables[i] = name;
 			}
 
-			folder.Attributes.SetAttributeValue( key, tables );
+			//folder.Attributes.SetAttributeValue( key, tables );
 		}
 
-		var treeNodes = new ITreeNode[ tables.Length ];
+		var treeNodes = new ITreeNode[tables.Length];
 
 		for (var i = 0; i < tables.Length; i++)
-		{
-			treeNodes[ i ] = new TableNode( _schema, tables[ i ], false );
-		}
+			treeNodes[i] = new TableNode(_schema, tables[i], false);
 
 		return treeNodes;
 	}

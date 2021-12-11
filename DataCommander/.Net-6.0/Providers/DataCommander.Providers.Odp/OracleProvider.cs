@@ -473,13 +473,14 @@ order by OBJECT_NAME";
             }
 
             var key = sb.ToString();
-            var applicationData = DataCommanderApplication.Instance.ApplicationData;
-            var folderName = ConfigurationNodeName.FromType(typeof (OracleProvider)) + ConfigurationNode.Delimiter + "CompletionCache";
-            var folder = applicationData.CreateNode(folderName);
-            var contains = folder.Attributes.TryGetAttributeValue(key, out items);
-            response.FromCache = contains;
+            // var applicationData = DataCommanderApplication.Instance.ApplicationData;
+            // var folderName = ConfigurationNodeName.FromType(typeof (OracleProvider)) + ConfigurationNode.Delimiter + "CompletionCache";
+            // var folder = applicationData.CreateNode(folderName);
+            // var contains = folder.Attributes.TryGetAttributeValue(key, out items);
+            // response.FromCache = contains;
 
-            if (!contains)
+            //if (!contains)
+            if (true)
             {
                 var executor = connection.Connection.CreateCommandExecutor();
                 var table = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
@@ -491,7 +492,7 @@ order by OBJECT_NAME";
                     items[i] = (string) table.Rows[i][0];
                 }
 
-                folder.Attributes.Add(key, items, null);
+                //folder.Attributes.Add(key, items, null);
             }
         }
 
@@ -578,11 +579,11 @@ order by OBJECT_NAME";
 
     public void ClearCompletionCache()
     {
-        var folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
-        var folder2 = folder.ChildNodes["CompletionCache"];
-
-        if (folder2 != null)
-            folder.RemoveChildNode(folder2);
+        // var folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
+        // var folder2 = folder.ChildNodes["CompletionCache"];
+        //
+        // if (folder2 != null)
+        //     folder.RemoveChildNode(folder2);
     }
 
     private string GetExceptionMessage(Exception e)

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using DataCommander.Providers.Query;
 using DataCommander.Providers2;
 using Foundation.Collections.ReadOnly;
 using Oracle.ManagedDataAccess.Client;
@@ -53,16 +52,8 @@ internal sealed class ViewNode : ITreeNode
 				{
 					var append = dataReader.GetString( 0 );
 
-					var mainForm = DataCommanderApplication.Instance.MainForm;
-					var queryForm = (QueryForm) mainForm.ActiveMdiChild;
-					var querytextBox = queryForm.QueryTextBox;
-					var selectionStart = querytextBox.RichTextBox.TextLength;
-
-					querytextBox.RichTextBox.AppendText( append );
-					querytextBox.RichTextBox.SelectionStart = selectionStart;
-					querytextBox.RichTextBox.SelectionLength = append.Length;
-
-					querytextBox.Focus();
+					var queryForm = (IQueryForm)sender;
+					queryForm.ShowText(append);
 				}
 
 				dataReader.Close();

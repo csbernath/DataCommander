@@ -15,11 +15,14 @@ internal sealed class PackageCollectionNode : ITreeNode
 
     public IEnumerable<ITreeNode> GetChildren(bool refresh)
     {
-        var folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
-        var key = _schema.SchemasNode.Connection.DataSource + "." + _schema.Name;
-        var contains = folder.Attributes.TryGetAttributeValue(key, out string[] packages);
+        // var folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
+        // var key = _schema.SchemasNode.Connection.DataSource + "." + _schema.Name;
+        // var contains = folder.Attributes.TryGetAttributeValue(key, out string[] packages);
 
-        if (!contains || refresh)
+        string[] packages;
+
+        //if (!contains || refresh)
+        if (true || refresh)
         {
             var commandText = "select object_name from all_objects where owner = '{0}' and object_type = 'PACKAGE' order by object_name";
             commandText = string.Format(commandText, _schema.Name);
@@ -31,7 +34,7 @@ internal sealed class PackageCollectionNode : ITreeNode
             for (var i = 0; i < count; i++)
                 packages[i] = (string) dataTable.Rows[i][0];
 
-            folder.Attributes.SetAttributeValue(key, packages);
+            //folder.Attributes.SetAttributeValue(key, packages);
         }
 
         var treeNodes = new ITreeNode[packages.Length];
