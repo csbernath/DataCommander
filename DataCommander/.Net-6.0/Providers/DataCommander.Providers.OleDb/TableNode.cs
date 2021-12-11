@@ -1,5 +1,4 @@
-﻿using DataCommander.Providers.Query;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
@@ -76,7 +75,7 @@ sealed class TableNode : ITreeNode
         var dataSet = new DataSet();
         dataSet.Tables.Add(dataTable);
 
-        var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+        var queryForm = (IQueryForm)sender;
         queryForm.ShowDataSet(dataSet);
     }
 
