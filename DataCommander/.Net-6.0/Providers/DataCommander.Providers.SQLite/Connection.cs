@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.Threading;
 using System.Threading.Tasks;
-using DataCommander.Providers2.Connection;
+using DataCommander.Api.Connection;
 using Foundation.Log;
 
 namespace DataCommander.Providers.SQLite;

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
-using DataCommander.Providers2;
+using DataCommander.Api;
 using Foundation.Data;
 using Oracle.ManagedDataAccess.Client;
 

@@ -2,7 +2,7 @@
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using DataCommander.Providers2.Connection;
+using DataCommander.Api.Connection;
 using Oracle.ManagedDataAccess.Client;
 
 namespace DataCommander.Providers.Odp;

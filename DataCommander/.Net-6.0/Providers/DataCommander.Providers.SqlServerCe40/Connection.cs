@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SqlServerCe;
 using System.Threading;
 using System.Threading.Tasks;
-using DataCommander.Providers2.Connection;
+using DataCommander.Api.Connection;
 
 namespace DataCommander.Providers.SqlServerCe40;
 

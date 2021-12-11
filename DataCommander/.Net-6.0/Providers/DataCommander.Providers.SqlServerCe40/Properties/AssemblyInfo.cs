@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-//[assembly: AssemblyTitle("DataCommander.Providers.SqlServerCe40")]
+//[assembly: AssemblyTitle("DataCommander.Application.SqlServerCe40")]
 //[assembly: AssemblyVersion("1.0.2.0")]
 [assembly: AssemblyCopyright("Copyright © 2002-2021 Csaba Bernáth")]
 //[assembly: AssemblyCompany("Csaba Bernáth")]

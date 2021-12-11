@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Data;
 using Microsoft.Data.SqlClient;
-using DataCommander.Providers2;
-using DataCommander.Providers2.FieldNamespace;
+using DataCommander.Api;
+using DataCommander.Api.FieldNamespace;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.FieldReader;

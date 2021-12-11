@@ -1,5 +1,5 @@
-﻿using DataCommander.Providers2;
-using DataCommander.Providers2.Connection;
+﻿using DataCommander.Api;
+using DataCommander.Api.Connection;
 using Foundation.Data;
 using System;
 using System.Collections.Generic;
@@ -8,6 +8,7 @@ using System.Data.Common;
 using System.Data.OleDb;
 using System.Text;
 using System.Xml;
+using DataCommander.Application;
 
 namespace DataCommander.Providers.OleDb;
 

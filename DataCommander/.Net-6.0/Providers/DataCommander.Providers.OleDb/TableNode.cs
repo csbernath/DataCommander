@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
-using DataCommander.Providers2;
+using DataCommander.Api;
 using Foundation.Collections.ReadOnly;
 
 namespace DataCommander.Providers.OleDb;

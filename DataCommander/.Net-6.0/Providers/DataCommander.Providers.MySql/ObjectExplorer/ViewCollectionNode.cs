@@ -1,7 +1,7 @@
 ﻿using Foundation.Data;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
-using DataCommander.Providers2;
+using DataCommander.Api;
 
 namespace DataCommander.Providers.MySql.ObjectExplorer;
 

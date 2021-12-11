@@ -7,9 +7,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using DataCommander.Providers.SqlServerCe40.ObjectExplorer;
-using DataCommander.Providers2;
-using DataCommander.Providers2.Connection;
-using DataCommander.Providers2.FieldNamespace;
+using DataCommander.Api;
+using DataCommander.Api.Connection;
+using DataCommander.Api.FieldNamespace;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 

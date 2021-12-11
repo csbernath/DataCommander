@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using DataCommander.Providers2;
+using DataCommander.Api;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 

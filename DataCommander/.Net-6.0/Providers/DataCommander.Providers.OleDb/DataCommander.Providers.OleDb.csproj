@@ -14,8 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DataCommander.Providers2\DataCommander.Providers2.csproj" />
-    <ProjectReference Include="..\..\DataCommander.Providers\DataCommander.Providers.csproj" />
+    <ProjectReference Include="..\..\DataCommander.Api\DataCommander.Api.csproj" />
+    <ProjectReference Include="..\..\DataCommander.Application\DataCommander.Application.csproj" />
   </ItemGroup>
 
 </Project>

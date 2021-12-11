@@ -1,5 +1,5 @@
-﻿using DataCommander.Providers2;
-using DataCommander.Providers2.Connection;
+﻿using DataCommander.Api;
+using DataCommander.Api.Connection;
 using Foundation.Configuration;
 using Foundation.Data;
 using Foundation.Log;

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using DataCommander.Application;
 using DataCommander.Providers;
 //using DataCommander.Updater;
 using Foundation.Configuration;

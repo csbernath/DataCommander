@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Globalization;
-using DataCommander.Providers2.FieldNamespace;
+using DataCommander.Api.FieldNamespace;
 
 namespace DataCommander.Providers.SqlServer.FieldReader;
 

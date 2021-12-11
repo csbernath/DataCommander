@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.SQLite;
-using DataCommander.Providers2;
-using DataCommander.Providers2.Connection;
+using DataCommander.Api;
+using DataCommander.Api.Connection;
 
 namespace DataCommander.Providers.SQLite;
 

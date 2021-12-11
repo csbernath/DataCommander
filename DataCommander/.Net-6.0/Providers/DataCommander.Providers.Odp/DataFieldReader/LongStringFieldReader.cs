@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using DataCommander.Providers2.FieldNamespace;
+using DataCommander.Api.FieldNamespace;
 
 namespace DataCommander.Providers.Odp.DataFieldReader;
 

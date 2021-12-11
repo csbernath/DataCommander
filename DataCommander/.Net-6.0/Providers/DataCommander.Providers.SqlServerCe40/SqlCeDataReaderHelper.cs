@@ -3,8 +3,8 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlServerCe;
 using System.Globalization;
-using DataCommander.Providers2;
-using DataCommander.Providers2.FieldNamespace;
+using DataCommander.Api;
+using DataCommander.Api.FieldNamespace;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServerCe40;
