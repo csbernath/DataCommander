@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlServerCe;
-using System.Windows.Forms;
 using DataCommander.Providers2;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
@@ -67,20 +66,10 @@ internal sealed class TableCollectionNode : ITreeNode
 
     private void CompactDatabase(object sender, EventArgs e)
     {
-        var form = DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-        var cursor = form.Cursor;
-        try
-        {
-            form.Cursor = Cursors.WaitCursor;
-            _connection.Close();
-            var connectionString = _objectExplorer.ConnectionString;
-            var engine = new SqlCeEngine(connectionString);
-            engine.Compact(null);
-            _connection.Open();
-        }
-        finally
-        {
-            form.Cursor = cursor;
-        }
+        _connection.Close();
+        var connectionString = _objectExplorer.ConnectionString;
+        var engine = new SqlCeEngine(connectionString);
+        engine.Compact(null);
+        _connection.Open();
     }
 }
