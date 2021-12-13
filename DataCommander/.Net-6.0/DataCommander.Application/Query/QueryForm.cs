@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -2196,8 +2195,9 @@ public sealed class QueryForm : Form, IQueryForm
                 {
                     AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Connection is closed. Opening connection..."));
 
-                    var csb = new SqlConnectionStringBuilder(_connectionString);
-                    csb.InitialCatalog = _database;
+                    var csb = Provider.CreateConnectionStringBuilder();
+                    csb.ConnectionString = _connectionString;
+                    csb.SetValue(ConnectionStringKeyword.InitialCatalog, _database);
 
                     var connectionProperties = new ConnectionProperties(null, null);
                     connectionProperties.Provider = Provider;
@@ -3919,46 +3919,46 @@ public sealed class QueryForm : Form, IQueryForm
 
     internal void CopyTableWithSqlBulkCopy()
     {
-        var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
-        var index = Array.IndexOf(forms, this);
-        if (index < forms.Length - 1)
-        {
-            var nextQueryForm = (QueryForm)forms[index + 1];
-            var destinationProvider = nextQueryForm.Provider;
-            var destinationConnection = (SqlConnection)nextQueryForm.Connection.Connection;
-            var destionationTransaction = (SqlTransaction)nextQueryForm._transaction;
-            var sqlStatement = new SqlParser(Query);
-            _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
-            string tableName;
-            if (_command.CommandType == CommandType.StoredProcedure)
-                tableName = _command.CommandText;
-            else
-                tableName = sqlStatement.FindTableName();
-
-            //IResultWriter resultWriter = new SqlBulkCopyResultWriter( this.AddInfoMessage, destinationProvider, destinationConnection, tableName, nextQueryForm.InvokeSetTransaction );
-            //var maxRecords = int.MaxValue;
-            //var rowBlockSize = 10000;
-            AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, "Copying table..."));
-            SetStatusbarPanelText("Copying table...", SystemColors.ControlText);
-            SetGui(CommandState.Cancel);
-            _errorCount = 0;
-            _stopwatch.Start();
-            _timer.Start();
-            _dataAdapter = new SqlBulkCopyAsyncDataAdapter(destinationConnection, destionationTransaction, tableName, AddInfoMessage);
-            //Provider,
-            //new[]
-            //{
-            //    new AsyncDataAdapterCommand
-            //    {
-            //        LineIndex = 0,
-            //        Command = _command
-            //    }
-            //},
-            //maxRecords, rowBlockSize, null, EndFillInvoker, WriteEndInvoker);
-            _dataAdapter.Start();
-        }
-        else
-            AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Please open a destination connection."));
+        // var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
+        // var index = Array.IndexOf(forms, this);
+        // if (index < forms.Length - 1)
+        // {
+        //     var nextQueryForm = (QueryForm)forms[index + 1];
+        //     var destinationProvider = nextQueryForm.Provider;
+        //     var destinationConnection = (SqlConnection)nextQueryForm.Connection.Connection;
+        //     var destionationTransaction = (SqlTransaction)nextQueryForm._transaction;
+        //     var sqlStatement = new SqlParser(Query);
+        //     _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
+        //     string tableName;
+        //     if (_command.CommandType == CommandType.StoredProcedure)
+        //         tableName = _command.CommandText;
+        //     else
+        //         tableName = sqlStatement.FindTableName();
+        //
+        //     //IResultWriter resultWriter = new SqlBulkCopyResultWriter( this.AddInfoMessage, destinationProvider, destinationConnection, tableName, nextQueryForm.InvokeSetTransaction );
+        //     //var maxRecords = int.MaxValue;
+        //     //var rowBlockSize = 10000;
+        //     AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, "Copying table..."));
+        //     SetStatusbarPanelText("Copying table...", SystemColors.ControlText);
+        //     SetGui(CommandState.Cancel);
+        //     _errorCount = 0;
+        //     _stopwatch.Start();
+        //     _timer.Start();
+        //     _dataAdapter = new SqlBulkCopyAsyncDataAdapter(destinationConnection, destionationTransaction, tableName, AddInfoMessage);
+        //     //Provider,
+        //     //new[]
+        //     //{
+        //     //    new AsyncDataAdapterCommand
+        //     //    {
+        //     //        LineIndex = 0,
+        //     //        Command = _command
+        //     //    }
+        //     //},
+        //     //maxRecords, rowBlockSize, null, EndFillInvoker, WriteEndInvoker);
+        //     _dataAdapter.Start();
+        // }
+        // else
+        //     AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Please open a destination connection."));
     }
 
     private void insertScriptFileToolStripMenuItem_Click(object sender, EventArgs e)
