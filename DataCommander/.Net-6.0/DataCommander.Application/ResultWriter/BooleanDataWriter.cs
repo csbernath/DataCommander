@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataCommander.Api.ResultWriter;
+namespace DataCommander.Application.ResultWriter;
 
 public sealed class BooleanDataWriter : DataWriterBase
 {

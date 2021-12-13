@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Api.ResultWriter;
+﻿namespace DataCommander.Application.ResultWriter;
 
 public abstract class DataWriterBase
 {
