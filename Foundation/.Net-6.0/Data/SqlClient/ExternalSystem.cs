@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using Foundation.Assertions;
 using Foundation.Configuration;
+using Microsoft.Data.SqlClient;
 
 namespace Foundation.Data.SqlClient;
 

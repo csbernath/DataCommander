@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Globalization;
 using System.Text;
 using Foundation.Core;
+using Microsoft.Data.SqlClient;
 
 namespace Foundation.Data.SqlClient.SqlLog;
 

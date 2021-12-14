@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Data.SqlClient;
 using System.Net.Sockets;
 using System.Text;
 using Foundation.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace Foundation.Data;
 

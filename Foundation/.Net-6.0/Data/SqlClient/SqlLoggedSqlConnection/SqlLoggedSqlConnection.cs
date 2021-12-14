@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using Foundation.Assertions;
 using Foundation.Core;
+using Microsoft.Data.SqlClient;
 
 namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection;
 

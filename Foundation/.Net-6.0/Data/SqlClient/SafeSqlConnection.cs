@@ -2,11 +2,11 @@
 using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Text;
 using System.Threading;
 using Foundation.Assertions;
 using Foundation.Log;
+using Microsoft.Data.SqlClient;
 
 namespace Foundation.Data.SqlClient;
 

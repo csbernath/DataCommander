@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
 using System.Globalization;
 using System.Security.Principal;
 using Foundation.Assertions;
 using Foundation.Configuration;
 using Foundation.Data.SqlClient.SqlLoggedSqlConnection;
+using Microsoft.Data.SqlClient;
 
 namespace Foundation.Data.SqlClient;
 #if FOUNDATION_3_5

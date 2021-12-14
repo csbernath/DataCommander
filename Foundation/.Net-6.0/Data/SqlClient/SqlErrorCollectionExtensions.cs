@@ -1,5 +1,5 @@
-﻿using System.Data.SqlClient;
-using System.Text;
+﻿using System.Text;
+using Microsoft.Data.SqlClient;
 
 namespace Foundation.Data.SqlClient;
 

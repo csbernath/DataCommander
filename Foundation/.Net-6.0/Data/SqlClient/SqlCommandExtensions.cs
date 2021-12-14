@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
 using System.Text;
 using Foundation.Assertions;
+using Microsoft.Data.SqlClient;
 
 namespace Foundation.Data.SqlClient;
 
