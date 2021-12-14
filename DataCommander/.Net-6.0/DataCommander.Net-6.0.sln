@@ -20,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Core", "..\..\Fo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Data", "..\..\Foundation\.Net-6.0\Data\Foundation.Data.csproj", "{3A9F3290-3A4A-460E-88FE-E4D1EDB9D155}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Data.SqlClient2", "..\..\Foundation\.Net-6.0\Data.SqlClient2\Foundation.Data.SqlClient2.csproj", "{8C6E4459-FF09-4EA6-8F0F-6FB8848272C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Data.SqlClient", "..\..\Foundation\.Net-6.0\Data.SqlClient\Foundation.Data.SqlClient.csproj", "{8C6E4459-FF09-4EA6-8F0F-6FB8848272C8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.DefaultLog", "..\..\Foundation\.Net-6.0\DefaultLog\Foundation.DefaultLog.csproj", "{A23D8394-BE4C-47DF-9A74-66069CF247A7}"
 EndProject

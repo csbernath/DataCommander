@@ -3,7 +3,6 @@ using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
-using SqlCommandExecutor = Foundation.Data.SqlClient2.SqlCommandExecutor;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 

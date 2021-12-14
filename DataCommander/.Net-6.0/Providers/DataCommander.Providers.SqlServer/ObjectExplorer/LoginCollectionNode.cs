@@ -2,7 +2,7 @@
 using DataCommander.Api;
 using Foundation.Assertions;
 using Foundation.Data;
-using Foundation.Data.SqlClient2;
+using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
