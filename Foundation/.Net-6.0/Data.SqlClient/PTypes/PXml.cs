@@ -1,7 +1,7 @@
 ﻿using System.Data.SqlTypes;
 using System.Diagnostics;
 
-namespace Foundation.Data.PTypes;
+namespace Foundation.Data.SqlClient.PTypes;
 
 public struct PXml
 {

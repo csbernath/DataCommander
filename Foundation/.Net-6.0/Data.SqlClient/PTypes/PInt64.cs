@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.SqlTypes;
 
-namespace Foundation.Data.PTypes;
+namespace Foundation.Data.SqlClient.PTypes;
 
 /// <summary>
 /// 

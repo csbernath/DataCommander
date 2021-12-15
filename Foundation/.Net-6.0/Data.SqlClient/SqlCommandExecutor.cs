@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 
-namespace Foundation.Data.SqlClient2;
+namespace Foundation.Data.SqlClient;
 
 public sealed class SqlCommandExecutor : IDbCommandAsyncExecutor
 {

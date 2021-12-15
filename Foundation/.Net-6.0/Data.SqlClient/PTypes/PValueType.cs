@@ -1,5 +1,5 @@
 ﻿
-namespace Foundation.Data.PTypes;
+namespace Foundation.Data.SqlClient.PTypes;
 
 /// <summary>
 /// A Microsoft SQL Server stored procedure parameter can be NULL, DEFAULT, too.
