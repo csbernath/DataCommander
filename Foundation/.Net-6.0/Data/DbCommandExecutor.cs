@@ -4,7 +4,7 @@ using Foundation.Assertions;
 
 namespace Foundation.Data;
 
-internal sealed class DbCommandExecutor : IDbCommandExecutor
+public sealed class DbCommandExecutor : IDbCommandExecutor
 {
     private readonly IDbConnection _connection;
 
