@@ -2,8 +2,6 @@
 using System.ComponentModel;
 using System.Net.Sockets;
 using System.Text;
-using Foundation.Data.SqlClient;
-using Microsoft.Data.SqlClient;
 
 namespace Foundation.Data;
 
@@ -29,12 +27,12 @@ public static class ExceptionExtensions
         sb.AppendFormat("\r\nSocketException.SocketErrorCode: {0}", socketException.SocketErrorCode);
     }
 
-    private static void Append(StringBuilder sb, SqlException sqlException)
-    {
-        sb.AppendLine(sqlException.ToString());
-        var errors = sqlException.Errors.ToLogString();
-        sb.Append(errors);
-    }
+    // private static void Append(StringBuilder sb, SqlException sqlException)
+    // {
+    //     sb.AppendLine(sqlException.ToString());
+    //     var errors = sqlException.Errors.ToLogString();
+    //     sb.Append(errors);
+    // }
 
     private static void Append(StringBuilder sb, Exception exception)
     {
@@ -59,9 +57,9 @@ public static class ExceptionExtensions
                 case Win32Exception win32Exception:
                     Append(sb, win32Exception);
                     break;
-                case SqlException sqlException:
-                    Append(sb, sqlException);
-                    break;
+                // case SqlException sqlException:
+                //     Append(sb, sqlException);
+                //     break;
                 default:
                     sb.Append(current);
                     break;
