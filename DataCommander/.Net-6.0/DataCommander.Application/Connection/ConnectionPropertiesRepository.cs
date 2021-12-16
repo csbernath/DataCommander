@@ -21,7 +21,7 @@ public static class ConnectionPropertiesRepository
         var providerName = attributes["ProviderName"].GetValue<string>();
         var connectionString = attributes["ConnectionString"].GetValue<string>();
 
-        var connectionProperties = new ConnectionProperties(connectionName, providerName);
+        var connectionProperties = new ConnectionProperties(connectionName, providerName, null);
         connectionProperties.ConnectionString = connectionString;
 
         LoadProtectedPassword(configurationNode, connectionProperties);

@@ -104,8 +104,7 @@ internal partial class ConnectionStringBuilderForm : Form
             var index = providersComboBox.SelectedIndex;
             var providerName = _providers[index];
             var provider = ProviderFactory.CreateProvider(providerName);
-            _tempConnectionProperties = new ConnectionProperties(null,providerName);
-            _tempConnectionProperties.Provider = provider;
+            _tempConnectionProperties = new ConnectionProperties(null,providerName, provider);
             _dbProviderFactory = provider.DbProviderFactory;
 
             if (_dbProviderFactory is OleDbFactory oleDbFactory)
@@ -311,9 +310,8 @@ internal partial class ConnectionStringBuilderForm : Form
     {
         var connectionName = connectionNameTextBox.Text;
         var providerName = providersComboBox.Text;
-        var connectionProperties = new ConnectionProperties(connectionName, providerName);
-
-        var provider = ProviderFactory.CreateProvider(providerName);
+        var provider = ProviderFactory.CreateProvider(providerName);        
+        var connectionProperties = new ConnectionProperties(connectionName, providerName, provider);
         _dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
         SaveTo(_dbConnectionStringBuilder);
 

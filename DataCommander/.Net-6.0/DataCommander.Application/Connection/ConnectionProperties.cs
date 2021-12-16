@@ -14,9 +14,10 @@ public sealed class ConnectionProperties
     public string ConnectionString;
     public ConnectionBase Connection;
 
-    public ConnectionProperties(string connectionName, string providerName)
+    public ConnectionProperties(string connectionName, string providerName, IProvider provider)
     {
         ConnectionName = connectionName;
         ProviderName = providerName;
+        Provider = provider;
     }
 }

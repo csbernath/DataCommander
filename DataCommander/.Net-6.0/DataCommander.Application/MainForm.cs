@@ -768,7 +768,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                     var connection = provider.CreateConnection(connectionString);
                     await connection.OpenAsync(CancellationToken.None);
 
-                    var connectionProperties = new ConnectionProperties(null, provider.Name);
+                    var connectionProperties = new ConnectionProperties(null, provider.Name, provider);
                     connectionProperties.ConnectionString = connectionString;
 
                     var node = DataCommanderApplication.Instance.ConnectionsConfigurationNode;

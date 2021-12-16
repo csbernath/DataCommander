@@ -88,7 +88,7 @@ internal sealed class OpenConnectionForm : Form
 
         var dbConnectionStringBuilder = new DbConnectionStringBuilder();
         dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
-        var contains = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
+        dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
         dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out var userId);
         var dataSource = (string)dataSourceObject;
         _textBox.Text = $@"Connection name: {connectionProperties.ConnectionName}

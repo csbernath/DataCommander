@@ -2066,10 +2066,7 @@ public sealed class QueryForm : Form, IQueryForm
         ShowTabPage(dataTable.TableName, null, listView);
     }
 
-    private void ShowTabPage(
-        string tabPageName,
-        string toolTipText,
-        Control control)
+    private void ShowTabPage(string tabPageName, string toolTipText, Control control)
     {
         control.Dock = DockStyle.Fill;
         var tabPage = new TabPage(tabPageName);
@@ -2195,13 +2192,12 @@ public sealed class QueryForm : Form, IQueryForm
                 {
                     AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Connection is closed. Opening connection..."));
 
-                    var csb = Provider.CreateConnectionStringBuilder();
-                    csb.ConnectionString = _connectionString;
-                    csb.SetValue(ConnectionStringKeyword.InitialCatalog, _database);
+                    var connectionStringBuilder = Provider.CreateConnectionStringBuilder();
+                    connectionStringBuilder.ConnectionString = _connectionString;
+                    connectionStringBuilder.SetValue(ConnectionStringKeyword.InitialCatalog, _database);
 
-                    var connectionProperties = new ConnectionProperties(null, null);
-                    connectionProperties.Provider = Provider;
-                    connectionProperties.ConnectionString = csb.ConnectionString;
+                    var connectionProperties = new ConnectionProperties(null, Provider.Name, Provider);
+                    connectionProperties.ConnectionString = connectionStringBuilder.ConnectionString;
                     
                     var openConnectionForm = new OpenConnectionForm(connectionProperties);
                     if (openConnectionForm.ShowDialog() == DialogResult.OK)
