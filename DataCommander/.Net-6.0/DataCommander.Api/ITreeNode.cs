@@ -9,5 +9,5 @@ public interface ITreeNode
     IEnumerable<ITreeNode> GetChildren(bool refresh);
     bool Sortable { get; }
     string Query { get; }
-    ContextMenu GetContextMenu();
+    ContextMenu? GetContextMenu();
 }

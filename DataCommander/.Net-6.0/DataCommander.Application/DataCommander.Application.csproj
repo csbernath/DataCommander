@@ -5,6 +5,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Company>Csaba Bernáth</Company>
     <LangVersion>10</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
