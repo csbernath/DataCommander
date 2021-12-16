@@ -45,8 +45,5 @@ order by name";
     public bool Sortable => false;
     public string Query => null;
 
-    public ContextMenu GetContextMenu()
-    {
-        throw new System.NotImplementedException();
-    }
+    public ContextMenu GetContextMenu() => null;
 }
