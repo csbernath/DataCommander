@@ -1,5 +1,4 @@
-﻿
-namespace Foundation.Data.SqlClient;
+﻿namespace Foundation.Data.SqlClient;
 
 public static class SqlErrorNumber
 {
