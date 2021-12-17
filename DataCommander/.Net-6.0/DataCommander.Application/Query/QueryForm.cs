@@ -1584,7 +1584,7 @@ public sealed class QueryForm : Form, IQueryForm
                 }
 
                 command.Transaction = _transaction;
-                commands = new AsyncDataAdapterCommand(_fileName, 0, statements[0].CommandText, command,
+                commands = new AsyncDataAdapterCommand(_fileName, 0, command,
                     getQueryConfigurationResult.Succeeded ? getQueryConfigurationResult.Query : null,
                     getQueryConfigurationResult.Succeeded ? getQueryConfigurationResult.Parameters : null,
                     getQueryConfigurationResult.Succeeded ? getQueryConfigurationResult.CommandText : null).ItemToArray();
@@ -1593,7 +1593,7 @@ public sealed class QueryForm : Form, IQueryForm
                 commands =
                     (
                         from statement in statements
-                        select new AsyncDataAdapterCommand(null, statement.LineIndex, null,
+                        select new AsyncDataAdapterCommand(null, statement.LineIndex,
                             Connection.Connection.CreateCommand(new CreateCommandRequest(statement.CommandText, null, CommandType.Text, _commandTimeout,
                                 _transaction)), null, null, null)
                     )
@@ -3721,7 +3721,7 @@ public sealed class QueryForm : Form, IQueryForm
             const int maxRecords = int.MaxValue;
             _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
             IResultWriter resultWriter = _dataSetResultWriter;
-            _dataAdapter = new AsyncDataAdapter(Provider, new AsyncDataAdapterCommand(null, 0, null, _command, null, null, null).ItemToArray(), maxRecords,
+            _dataAdapter = new AsyncDataAdapter(Provider, new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray(), maxRecords,
                 _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
             _dataAdapter.Start();
         }
@@ -3745,7 +3745,7 @@ public sealed class QueryForm : Form, IQueryForm
         var sqlCeResultWriter = new SqlCeResultWriter(_textBoxWriter, tableName);
         IAsyncDataAdapter asyncDataAdatper = new AsyncDataAdapter(
             Provider,
-            new AsyncDataAdapterCommand(null, 0, null, _command, null, null, null).ItemToArray(),
+            new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray(),
             maxRecords, _rowBlockSize, sqlCeResultWriter, EndFillInvoker, WriteEndInvoker);
         asyncDataAdatper.Start();
     }
@@ -3905,7 +3905,7 @@ public sealed class QueryForm : Form, IQueryForm
             _errorCount = 0;
             _stopwatch.Start();
             _timer.Start();
-            _dataAdapter = new AsyncDataAdapter(Provider, new AsyncDataAdapterCommand(null, 0, null, _command, null, null, null).ItemToArray(), maxRecords,
+            _dataAdapter = new AsyncDataAdapter(Provider, new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray(), maxRecords,
                 rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
             _dataAdapter.Start();
         }
