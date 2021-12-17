@@ -42,82 +42,82 @@ public sealed class BinaryField : IConvertible
         throw new NotImplementedException();
     }
 
-    bool IConvertible.ToBoolean(IFormatProvider provider)
+    bool IConvertible.ToBoolean(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    byte IConvertible.ToByte(IFormatProvider provider)
+    byte IConvertible.ToByte(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    char IConvertible.ToChar(IFormatProvider provider)
+    char IConvertible.ToChar(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    DateTime IConvertible.ToDateTime(IFormatProvider provider)
+    DateTime IConvertible.ToDateTime(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    decimal IConvertible.ToDecimal(IFormatProvider provider)
+    decimal IConvertible.ToDecimal(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    double IConvertible.ToDouble(IFormatProvider provider)
+    double IConvertible.ToDouble(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    short IConvertible.ToInt16(IFormatProvider provider)
+    short IConvertible.ToInt16(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    int IConvertible.ToInt32(IFormatProvider provider)
+    int IConvertible.ToInt32(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    long IConvertible.ToInt64(IFormatProvider provider)
+    long IConvertible.ToInt64(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    sbyte IConvertible.ToSByte(IFormatProvider provider)
+    sbyte IConvertible.ToSByte(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    float IConvertible.ToSingle(IFormatProvider provider)
+    float IConvertible.ToSingle(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    string IConvertible.ToString(IFormatProvider provider)
+    string IConvertible.ToString(IFormatProvider? provider)
     {
         return Hex.GetString(Value, true);
     }
 
-    object IConvertible.ToType(Type conversionType, IFormatProvider provider)
+    object IConvertible.ToType(Type conversionType, IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    ushort IConvertible.ToUInt16(IFormatProvider provider)
+    ushort IConvertible.ToUInt16(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    uint IConvertible.ToUInt32(IFormatProvider provider)
+    uint IConvertible.ToUInt32(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    ulong IConvertible.ToUInt64(IFormatProvider provider)
+    ulong IConvertible.ToUInt64(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }

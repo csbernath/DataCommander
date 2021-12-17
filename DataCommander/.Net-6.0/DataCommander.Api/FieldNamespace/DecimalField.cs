@@ -31,7 +31,7 @@ public sealed class DecimalField : IComparable
 
     #region IComparable Members
 
-    int IComparable.CompareTo(object obj)
+    int IComparable.CompareTo(object? obj)
     {
         var other = (DecimalField) obj;
         return DecimalValue.CompareTo(other.DecimalValue);

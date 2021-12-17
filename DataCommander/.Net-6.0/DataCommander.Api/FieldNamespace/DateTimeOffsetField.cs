@@ -104,70 +104,35 @@ public sealed class DateTimeOffsetField : IComparable, IConvertible
         throw new NotImplementedException();
     }
 
-    DateTime IConvertible.ToDateTime(IFormatProvider provider)
+    DateTime IConvertible.ToDateTime(IFormatProvider? provider)
     {
         return Value.LocalDateTime;
     }
 
-    decimal IConvertible.ToDecimal(IFormatProvider provider)
+    decimal IConvertible.ToDecimal(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    double IConvertible.ToDouble(IFormatProvider provider)
+    double IConvertible.ToDouble(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    short IConvertible.ToInt16(IFormatProvider provider)
+    short IConvertible.ToInt16(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    int IConvertible.ToInt32(IFormatProvider provider)
-    {
-        throw new NotImplementedException();
-    }
-
-    long IConvertible.ToInt64(IFormatProvider provider)
-    {
-        throw new NotImplementedException();
-    }
-
-    sbyte IConvertible.ToSByte(IFormatProvider provider)
-    {
-        throw new NotImplementedException();
-    }
-
-    float IConvertible.ToSingle(IFormatProvider provider)
-    {
-        throw new NotImplementedException();
-    }
-
-    string IConvertible.ToString(IFormatProvider provider)
-    {
-        return ToString();
-    }
-
-    object IConvertible.ToType(Type conversionType, IFormatProvider provider)
-    {
-        throw new NotImplementedException();
-    }
-
-    ushort IConvertible.ToUInt16(IFormatProvider provider)
-    {
-        throw new NotImplementedException();
-    }
-
-    uint IConvertible.ToUInt32(IFormatProvider provider)
-    {
-        throw new NotImplementedException();
-    }
-
-    ulong IConvertible.ToUInt64(IFormatProvider provider)
-    {
-        throw new NotImplementedException();
-    }
+    int IConvertible.ToInt32(IFormatProvider? provider) => throw new NotImplementedException();
+    long IConvertible.ToInt64(IFormatProvider? provider) => throw new NotImplementedException();
+    sbyte IConvertible.ToSByte(IFormatProvider? provider) => throw new NotImplementedException();
+    float IConvertible.ToSingle(IFormatProvider? provider) => throw new NotImplementedException();
+    string IConvertible.ToString(IFormatProvider? provider) => ToString();
+    object IConvertible.ToType(Type conversionType, IFormatProvider? provider) => throw new NotImplementedException();
+    ushort IConvertible.ToUInt16(IFormatProvider? provider) => throw new NotImplementedException();
+    uint IConvertible.ToUInt32(IFormatProvider? provider) => throw new NotImplementedException();
+    ulong IConvertible.ToUInt64(IFormatProvider? provider) => throw new NotImplementedException();
 
     #endregion
 }
