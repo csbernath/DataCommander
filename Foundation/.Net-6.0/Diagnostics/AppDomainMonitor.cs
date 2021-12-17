@@ -29,15 +29,11 @@ public static class AppDomainMonitor
                 assemblyInfo => assemblyInfo.Date?.ToString("yyyy-MM-dd HH:mm:ss")),
             new StringTableColumnInfo<AssemblyInfo>("PublicKeyToken", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.PublicKeyToken),
             new StringTableColumnInfo<AssemblyInfo>("ImageRuntimeVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.ImageRuntimeVersion),
-            StringTableColumnInfo.Create<AssemblyInfo, bool>("GlobalAssemblyCache", StringTableColumnAlign.Left,
-                assemblyInfo => assemblyInfo.GlobalAssemblyCache),
             new StringTableColumnInfo<AssemblyInfo>("CodeBase", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.CodeBase),
             new StringTableColumnInfo<AssemblyInfo>("Location", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Location),
             StringTableColumnInfo.CreateLeft<AssemblyInfo, bool>("IsDynamic", i => i.IsDynamic)
         };
     }
-
-    #region Public Methods
 
     public static string GetEnvironmentInfo()
     {
@@ -46,8 +42,8 @@ public static class AppDomainMonitor
         var workingSet = Environment.WorkingSet;
         var windowsVersionInfo = WindowsVersionInfo.Get();
         var stopwatchFrequency = GetStopwatchFrequency();
-        var zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);            
-        var tickCountString = $"{tickCount} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";            
+        var zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
+        var tickCountString = $"{tickCount} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";
 
         var message = $@"Environment information
 MachineName:            {Environment.MachineName}
@@ -88,10 +84,6 @@ TempPath:               {Path.GetTempPath()}";
         AppendAppDomainState(appDomain, stringBuilder);
         return stringBuilder.ToString();
     }
-
-    #endregion
-
-    #region Private Methods
 
     private static void AppendAppDomainState(AppDomain appDomain, StringBuilder sb)
     {
@@ -147,7 +139,7 @@ TempPath:               {Path.GetTempPath()}";
         var publicKeyTokenString = publicKeyToken != null ? Hex.GetString(publicKeyToken, false) : null;
 
         return new AssemblyInfo(name.Name, fileVersion, name.Version, name.ProcessorArchitecture, date, publicKeyTokenString, assembly.ImageRuntimeVersion,
-            assembly.GlobalAssemblyCache, name.CodeBase, location, isDynamic);
+            name.CodeBase, location, isDynamic);
     }
 
     private static Version GetFileVersion(string fileName)
@@ -181,13 +173,12 @@ TempPath:               {Path.GetTempPath()}";
         public readonly DateTime? Date;
         public readonly string PublicKeyToken;
         public readonly string ImageRuntimeVersion;
-        public readonly bool GlobalAssemblyCache;
         public readonly string CodeBase;
         public readonly string Location;
         public readonly bool IsDynamic;
 
         public AssemblyInfo(string name, Version fileVersion, Version version, ProcessorArchitecture processorArchitecture, DateTime? date,
-            string publicKeyToken, string imageRuntimeVersion, bool globalAssemblyCache, string codeBase, string location, bool isDynamic)
+            string publicKeyToken, string imageRuntimeVersion, string codeBase, string location, bool isDynamic)
         {
             Name = name;
             FileVersion = fileVersion;
@@ -196,12 +187,9 @@ TempPath:               {Path.GetTempPath()}";
             Date = date;
             PublicKeyToken = publicKeyToken;
             ImageRuntimeVersion = imageRuntimeVersion;
-            GlobalAssemblyCache = globalAssemblyCache;
             CodeBase = codeBase;
             Location = location;
             IsDynamic = isDynamic;
         }
     }
-
-    #endregion
 }

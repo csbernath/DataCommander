@@ -153,8 +153,8 @@ public static class Settings
     {
         Assert.IsNotNull(assembly);
 
-        var codeBase = assembly.CodeBase;
-        var uri = new Uri(codeBase);
+        var location = assembly.Location;
+        var uri = new Uri(location);
         var fileName = uri.LocalPath;
         var fileInfo = new FileInfo(fileName);
         fileName = fileInfo.FullName;
