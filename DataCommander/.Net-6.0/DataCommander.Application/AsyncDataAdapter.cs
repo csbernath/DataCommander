@@ -81,7 +81,9 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
                 {
                     var joined = _thread.Join(5000);
                     if (!joined)
-                        _thread.Abort();
+                    {
+                        //TODO _thread.Abort();
+                    }
                 }
             }
         }
