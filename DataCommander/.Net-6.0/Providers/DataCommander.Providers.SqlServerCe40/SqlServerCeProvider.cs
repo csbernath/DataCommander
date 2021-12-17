@@ -28,7 +28,7 @@ public sealed class SqlServerCeProvider : IProvider
     DataParameterBase IProvider.GetDataParameter(IDataParameter parameter) => throw new NotImplementedException();
     DataTable IProvider.GetParameterTable(IDataParameterCollection parameters) => throw new NotImplementedException();
     DataTable IProvider.GetSchemaTable(IDataReader dataReader) => dataReader.GetSchemaTable();
-    GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
+    GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string? tableName) => throw new NotImplementedException();
 
     Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
     {
@@ -86,7 +86,7 @@ public sealed class SqlServerCeProvider : IProvider
 
             if (sqlObject != null)
             {
-                string name;
+                string? name;
                 switch (sqlObject.Type)
                 {
                     case SqlObjectTypes.Table | SqlObjectTypes.View:
@@ -354,7 +354,7 @@ ORDER BY ORDINAL_POSITION";
         DataTable sourceSchemaTable,
         string[] sourceDataTypeNames,
         IDbConnection destinationconnection,
-        string destinationTableName,
+        string? destinationTableName,
         out IDbCommand insertCommand,
         out Converter<object, object>[] converters)
     {

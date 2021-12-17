@@ -2,14 +2,14 @@
 
 internal sealed class OracleName
 {
-    private readonly string _owner;
-    private readonly string _name;
+    private readonly string? _owner;
+    private readonly string? _name;
 
-    public OracleName( string userId, string name )
+    public OracleName( string? userId, string? name )
     {
         if (name != null)
         {
-            var items = name.Split( '.' );
+            string?[] items = name.Split( '.' );
 
             if (items.Length > 1)
             {
@@ -29,6 +29,6 @@ internal sealed class OracleName
         }
     }
 
-    public string Owner => _owner;
-    public string Name => _name;
+    public string? Owner => _owner;
+    public string? Name => _name;
 }

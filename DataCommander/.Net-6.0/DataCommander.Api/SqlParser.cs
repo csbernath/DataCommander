@@ -34,7 +34,7 @@ public sealed class SqlParser
 
     #region Public Properties
 
-    public IDictionary<string, string> Tables { get; }
+    public IDictionary<string, string?> Tables { get; }
     public List<Token> Tokens { get; }
 
     #endregion
@@ -149,9 +149,9 @@ public sealed class SqlParser
         return command;
     }
 
-    public SqlObject FindSqlObject(int index)
+    public SqlObject? FindSqlObject(int index)
     {
-        SqlObject sqlObject = null;
+        SqlObject? sqlObject = null;
         if (index >= 1)
         {
             var prev = Tokens[index - 1];
@@ -159,7 +159,7 @@ public sealed class SqlParser
             if (prev.Type == TokenType.KeyWord)
             {
                 var value = prev.Value.ToLower();
-                string name = null;
+                string? name = null;
 
                 if (index < Tokens.Count)
                 {
@@ -249,9 +249,9 @@ public sealed class SqlParser
         return sqlObject;
     }
 
-    public SqlObject FindSqlObject(Token previousToken, Token currentToken)
+    public SqlObject? FindSqlObject(Token previousToken, Token currentToken)
     {
-        SqlObject sqlObject = null;
+        SqlObject? sqlObject = null;
         if (previousToken != null)
         {
             if (previousToken.Type == TokenType.KeyWord)
@@ -359,15 +359,15 @@ public sealed class SqlParser
         return sqlObject;
     }
 
-    private SqlObject GetValue(Token previousToken)
+    private SqlObject? GetValue(Token previousToken)
     {
         var tokenBeforeOperator = Tokens[previousToken.Index - 1];
         return new SqlObject(tokenBeforeOperator.Value, null, SqlObjectTypes.Value, null);
     }
 
-    public string FindTableName()
+    public string? FindTableName()
     {
-        string tableName = null;
+        string? tableName = null;
         int i;
 
         for (i = 0; i < Tokens.Count; i++)
@@ -462,11 +462,11 @@ public sealed class SqlParser
         return tokens;
     }
 
-    private object GetParameterValue(
+    private object? GetParameterValue(
         DataParameterBase dataParameter,
-        object value)
+        object? value)
     {
-        object value2;
+        object? value2;
 
         if (value != null)
         {
@@ -558,10 +558,10 @@ public sealed class SqlParser
         return value2;
     }
 
-    private static object ToParameterValue(Token token)
+    private static object? ToParameterValue(Token token)
     {
         var tokenValue = token.Value;
-        object value;
+        object? value;
         if (token.Type == TokenType.KeyWord &&
             string.Compare(tokenValue, "null", StringComparison.InvariantCultureIgnoreCase) == 0)
             value = DBNull.Value;
@@ -576,8 +576,8 @@ public sealed class SqlParser
 
     private static Parameter ToParameter(List<Token> tokens)
     {
-        string name;
-        object value;
+        string? name;
+        object? value;
         var count = tokens.Count;
         if (count == 0)
         {
@@ -600,9 +600,9 @@ public sealed class SqlParser
         return new Parameter(name, value);
     }
 
-    private static IDictionary<string, string> FindTables(List<Token> tokens, out Table[] allTables)
+    private static IDictionary<string, string?> FindTables(List<Token> tokens, out Table[] allTables)
     {
-        var tables = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+        var tables = new Dictionary<string, string?>(StringComparer.InvariantCultureIgnoreCase);
         var tableList = new List<Table>();
 
         for (var i = 0; i < tokens.Count; i++)
@@ -645,10 +645,10 @@ public sealed class SqlParser
         return tables;
     }
 
-    private SqlObject GetSqlObject(string value)
+    private SqlObject? GetSqlObject(string? value)
     {
-        SqlObject sqlObject = null;
-        var items = value.Split('.');
+        SqlObject? sqlObject = null;
+        string?[] items = value.Split('.');
         if (items.Length > 1)
         {
             var alias = items[0];
@@ -672,12 +672,12 @@ public sealed class SqlParser
 
     private sealed class Table
     {
-        private string _alias;
+        private string? _alias;
 
         public readonly int Index;
-        public readonly string Name;
+        public readonly string? Name;
 
-        public Table(int index, string name, string alias)
+        public Table(int index, string? name, string? alias)
         {
             Index = index;
             Name = name;
@@ -687,10 +687,10 @@ public sealed class SqlParser
 
     private sealed class Parameter
     {
-        public readonly string Name;
-        public readonly object Value;
+        public readonly string? Name;
+        public readonly object? Value;
 
-        public Parameter(string name, object value)
+        public Parameter(string? name, object? value)
         {
             Name = name;
             Value = value;

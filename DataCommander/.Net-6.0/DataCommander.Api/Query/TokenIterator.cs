@@ -39,7 +39,7 @@ public sealed class TokenIterator
         {
             int startPosition;
             int endPosition;
-            string value;
+            string? value;
             var c = _text[_index];
 
             if (c == 'N')
@@ -115,7 +115,7 @@ public sealed class TokenIterator
 
     #region Private Methods
 
-    private string ReadKeyWord()
+    private string? ReadKeyWord()
     {
         var sb = new StringBuilder();
 
@@ -134,7 +134,7 @@ public sealed class TokenIterator
         return keyWord;
     }
 
-    private string ReadString()
+    private string? ReadString()
     {
         var sb = new StringBuilder();
         _index++;
@@ -169,7 +169,7 @@ public sealed class TokenIterator
         return sb.ToString();
     }
 
-    private string ReadDigit()
+    private string? ReadDigit()
     {
         var sb = new StringBuilder();
 

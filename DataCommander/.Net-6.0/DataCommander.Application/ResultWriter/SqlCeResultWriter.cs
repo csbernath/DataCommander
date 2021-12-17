@@ -13,12 +13,12 @@ namespace DataCommander.Application.ResultWriter;
 internal sealed class SqlCeResultWriter : IResultWriter
 {
     private readonly TextWriter _messageWriter;
-    private readonly string _tableName;
+    private readonly string? _tableName;
     private IProvider _provider;
     private SqlCeConnection _connection;
     private SqlCeCommand _insertCommand;
 
-    public SqlCeResultWriter(TextWriter messageWriter, string tableName)
+    public SqlCeResultWriter(TextWriter messageWriter, string? tableName)
     {
         _messageWriter = messageWriter;
         _tableName = tableName;

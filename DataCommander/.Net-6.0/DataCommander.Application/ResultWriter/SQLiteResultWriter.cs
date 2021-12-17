@@ -15,10 +15,10 @@ internal sealed class SqLiteResultWriter : IResultWriter
     private readonly TextWriter _messageWriter;
     private SQLiteConnection _connection;
     private SQLiteTransaction _transaction;
-    private string _tableName;
+    private string? _tableName;
     private SQLiteCommand _insertCommand;
 
-    public SqLiteResultWriter(TextWriter messageWriter, string tableName)
+    public SqLiteResultWriter(TextWriter messageWriter, string? tableName)
     {
         _messageWriter = messageWriter;
         _tableName = tableName;

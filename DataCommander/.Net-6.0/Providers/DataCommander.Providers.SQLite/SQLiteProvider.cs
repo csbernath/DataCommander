@@ -223,7 +223,7 @@ order by name collate nocase";
         return message;
     }
 
-    GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
+    GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string? tableName) => throw new NotImplementedException();
     List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
     DbProviderFactory IProvider.DbProviderFactory => SQLiteFactory.Instance;
 
@@ -309,7 +309,7 @@ order by name collate nocase";
         DataTable sourceSchemaTable,
         string[] sourceDataTypeNames,
         IDbConnection destinationconnection,
-        string destinationTableName,
+        string? destinationTableName,
         out IDbCommand insertCommand,
         out Converter<object, object>[] converters)
     {

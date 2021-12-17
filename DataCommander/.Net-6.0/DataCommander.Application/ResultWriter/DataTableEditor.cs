@@ -34,7 +34,7 @@ internal class DataTableEditor : UserControl
 
     private readonly DbCommandBuilder _commandBuilder;
     private DoubleBufferedDataGridView _dataGrid;
-    private string _tableName;
+    private string? _tableName;
     private GetTableSchemaResult _tableSchema;
     private DataTable _dataTable;
     private ToolStripStatusLabel _statusBarPanel;
@@ -211,7 +211,7 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    public string TableName
+    public string? TableName
     {
         set => _tableName = value;
     }

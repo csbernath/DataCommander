@@ -29,7 +29,7 @@ public interface IProvider
     DbDataAdapter CreateDataAdapter(string selectCommandText, IDbConnection connection);
     IDataReaderHelper CreateDataReaderHelper(IDataReader dataReader);
 
-    void CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationConnection, string destinationTableName,
+    void CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationConnection, string? destinationTableName,
         out IDbCommand insertCommand, out Converter<object, object>[] converters);
 
     void DeriveParameters(IDbCommand command);
@@ -43,7 +43,7 @@ public interface IProvider
     DataTable GetParameterTable(IDataParameterCollection parameters);
     DataTable GetSchemaTable(IDataReader dataReader);
     List<Statement> GetStatements(string commandText);
-    GetTableSchemaResult GetTableSchema(IDbConnection connection, string tableName);
+    GetTableSchemaResult GetTableSchema(IDbConnection connection, string? tableName);
     List<InfoMessage> ToInfoMessages(Exception e);
 
     #endregion

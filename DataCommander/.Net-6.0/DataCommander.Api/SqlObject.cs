@@ -2,7 +2,7 @@
 
 public sealed class SqlObject
 {
-    public SqlObject(string parentName, string parentAlias, SqlObjectTypes type, string name)
+    public SqlObject(string? parentName, string? parentAlias, SqlObjectTypes type, string? name)
     {
         ParentName = parentName;
         ParentAlias = parentAlias;
@@ -10,8 +10,8 @@ public sealed class SqlObject
         Name = name;
     }
 
-    public string ParentName { get; set; }
-    public string ParentAlias { get; }
+    public string? ParentName { get; set; }
+    public string? ParentAlias { get; }
     public SqlObjectTypes Type { get; }
-    public string Name { get; set; }
+    public string? Name { get; set; }
 }

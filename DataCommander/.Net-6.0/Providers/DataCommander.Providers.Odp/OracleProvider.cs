@@ -246,7 +246,7 @@ internal sealed class OracleProvider : IProvider
         return table;
     }
 
-    GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
+    GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string? tableName) => throw new NotImplementedException();
 
     Type IProvider.GetColumnType(FoundationDbColumn column)
     {
@@ -353,7 +353,7 @@ internal sealed class OracleProvider : IProvider
         if (sqlObject != null)
         {
             string[] parts;
-            string owner;
+            string? owner;
 
             switch (sqlObject.Type)
             {
@@ -686,7 +686,7 @@ order by OBJECT_NAME";
         DataTable sourceSchemaTable,
         string[] sourceDataTypeNames,
         IDbConnection destinationconnection,
-        string destinationTableName,
+        string? destinationTableName,
         out IDbCommand insertCommand,
         out Converter<object, object>[] converters)
     {

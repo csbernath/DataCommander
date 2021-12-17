@@ -42,7 +42,7 @@ public sealed class DateTimeOffsetField : IComparable, IConvertible
 
     #region IComparable Members
 
-    public int CompareTo(object obj)
+    public int CompareTo(object? obj)
     {
         // TODO
         return 0;
@@ -89,17 +89,17 @@ public sealed class DateTimeOffsetField : IComparable, IConvertible
         return TypeCode.Object;
     }
 
-    bool IConvertible.ToBoolean(IFormatProvider provider)
+    bool IConvertible.ToBoolean(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    byte IConvertible.ToByte(IFormatProvider provider)
+    byte IConvertible.ToByte(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
-    char IConvertible.ToChar(IFormatProvider provider)
+    char IConvertible.ToChar(IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }

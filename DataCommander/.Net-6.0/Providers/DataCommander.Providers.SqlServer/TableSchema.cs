@@ -9,7 +9,7 @@ namespace DataCommander.Providers.SqlServer;
 
 internal sealed class TableSchema
 {
-    public static GetTableSchemaResult GetTableSchema(IDbConnection connection, string tableName)
+    public static GetTableSchemaResult GetTableSchema(IDbConnection connection, string? tableName)
     {
         var sqlCommandBuilder = new SqlCommandBuilder();
 

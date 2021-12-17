@@ -76,7 +76,7 @@ internal sealed class MySqlProvider : IProvider
     }
 
     void IProvider.CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationconnection,
-        string destinationTableName, out IDbCommand insertCommand, out Converter<object, object>[] converters)
+        string? destinationTableName, out IDbCommand insertCommand, out Converter<object, object>[] converters)
     {
         throw new NotImplementedException();
     }
@@ -357,7 +357,7 @@ internal sealed class MySqlProvider : IProvider
         };
     }
 
-    GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
+    GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string? tableName) => throw new NotImplementedException();
     List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
     IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder() => new ConnectionStringBuilder();
 

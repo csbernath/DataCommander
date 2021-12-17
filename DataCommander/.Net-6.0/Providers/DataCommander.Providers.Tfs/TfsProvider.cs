@@ -61,7 +61,7 @@ public sealed class TfsProvider : IProvider
         throw new NotImplementedException();
     }
 
-    void IProvider.CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationConnection, string destinationTableName,
+    void IProvider.CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationConnection, string? destinationTableName,
         out IDbCommand insertCommand, out Converter<object, object>[] converters)
     {
         throw new NotImplementedException();
@@ -112,7 +112,7 @@ public sealed class TfsProvider : IProvider
         throw new NotImplementedException();
     }
 
-    GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName)
+    GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string? tableName)
     {
         throw new NotImplementedException();
     }

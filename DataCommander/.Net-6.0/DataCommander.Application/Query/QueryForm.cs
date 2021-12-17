@@ -479,7 +479,7 @@ public sealed class QueryForm : Form, IQueryForm
             if (dataSet != null && dataSet.Tables.Count > 0)
             {
                 GetTableSchemaResult getTableSchemaResult = null;
-                string text;
+                string? text;
                 if (_openTableMode)
                 {
                     var tableName = _sqlStatement.FindTableName();

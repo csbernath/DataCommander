@@ -10,9 +10,9 @@ public sealed class Token
     public readonly int EndPosition;
     public readonly int LineIndex;
     public readonly TokenType Type;
-    public readonly string Value;
+    public readonly string? Value;
 
-    public Token(int index, int startPosition, int endPosition, int lineIndex, TokenType type, string value)
+    public Token(int index, int startPosition, int endPosition, int lineIndex, TokenType type, string? value)
     {
         Index = index;
         StartPosition = startPosition;

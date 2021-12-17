@@ -249,7 +249,7 @@ internal sealed class OleDbProvider : IProvider
     {
     }
 
-    GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
+    GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string? tableName) => throw new NotImplementedException();
     List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
     public string GetExceptionMessage(Exception e) => e.ToString();
 
@@ -304,7 +304,7 @@ internal sealed class OleDbProvider : IProvider
         DataTable sourceSchemaTable,
         string[] sourceDataTypeNames,
         IDbConnection destinationconnection,
-        string destinationTableName,
+        string? destinationTableName,
         out IDbCommand insertCommand,
         out Converter<object, object>[] converters)
     {

@@ -16,14 +16,14 @@ namespace DataCommander.Application.ResultWriter;
 
 internal sealed class InsertScriptFileWriter : IResultWriter
 {
-    private readonly string _tableName;
+    private readonly string? _tableName;
     private readonly TextWriter _messageWriter;
     private StreamWriter _streamWriter;
     private DataTable _schemaTable;
     private string _sqlStatementPrefix;
     private bool _firstRow = true;
 
-    public InsertScriptFileWriter(string tableName, TextWriter messageWriter)
+    public InsertScriptFileWriter(string? tableName, TextWriter messageWriter)
     {
         Assert.IsNotNull(messageWriter);
 
@@ -263,7 +263,7 @@ internal sealed class InsertScriptFileWriter : IResultWriter
     {
     }
 
-    private static string GetSqlStatementPrefix(string tableName, DataTable schemaTable)
+    private static string GetSqlStatementPrefix(string? tableName, DataTable schemaTable)
     {
         var schemaRows = schemaTable.Rows;
         var columnCount = schemaRows.Count;

@@ -22,7 +22,7 @@ internal sealed class CopyResultWriter : IResultWriter
     private readonly Action<InfoMessage> _addInfoMessage;
     private readonly IProvider _destinationProvider;
     private readonly ConnectionBase _destinationConnection;
-    private readonly string _tableName;
+    private readonly string? _tableName;
     private readonly Action<IDbTransaction> _setTransaction;
     private readonly CancellationToken _cancellationToken;
     private IDbTransaction _transaction;
@@ -38,7 +38,7 @@ internal sealed class CopyResultWriter : IResultWriter
     private long _insertedRowCount;
     private long _waitMilliseconds;
 
-    public CopyResultWriter(Action<InfoMessage> addInfoMessage, IProvider destinationProvider, ConnectionBase destinationConnection, string tableName,
+    public CopyResultWriter(Action<InfoMessage> addInfoMessage, IProvider destinationProvider, ConnectionBase destinationConnection, string? tableName,
         Action<IDbTransaction> setTransaction, CancellationToken cancellationToken)
     {
         _logResultWriter = new LogResultWriter(addInfoMessage);

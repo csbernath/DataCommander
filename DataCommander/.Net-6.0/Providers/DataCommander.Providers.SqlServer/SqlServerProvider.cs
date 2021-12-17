@@ -121,7 +121,7 @@ internal sealed class SqlServerProvider : IProvider
         DataTable sourceSchemaTable,
         string[] sourceDataTypeNames,
         IDbConnection destinationConnection,
-        string destinationTableName,
+        string? destinationTableName,
         out IDbCommand insertCommand,
         out Converter<object, object>[] converters)
     {
@@ -391,7 +391,7 @@ internal sealed class SqlServerProvider : IProvider
                 }
                 else
                 {
-                    var list = new SortedList<string, object>();
+                    var list = new SortedList<string?, object>();
 
                     for (var i = 0; i < tokens.Count; i++)
                     {
@@ -571,7 +571,7 @@ order by 1", name.Database);
                                     var indexofAny = tokenValue.IndexOfAny(new[] {'\r', '\n'});
                                     if (indexofAny >= 0) tokenValue = tokenValue.Substring(0, indexofAny);
 
-                                    string like;
+                                    string? like;
                                     if (tokenValue.Length > 0)
                                     {
                                         if (tokenValue.Contains('%'))
@@ -857,7 +857,7 @@ from
         return statements;
     }
 
-    GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => TableSchema.GetTableSchema(connection, tableName);
+    GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string? tableName) => TableSchema.GetTableSchema(connection, tableName);
 
     List<InfoMessage> IProvider.ToInfoMessages(Exception exception)
     {
