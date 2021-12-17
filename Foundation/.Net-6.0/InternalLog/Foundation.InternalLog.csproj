@@ -5,6 +5,14 @@
     <LangVersion>10</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Core\Foundation.Core.csproj" />
     <ProjectReference Include="..\Log\Foundation.Log.csproj" />
