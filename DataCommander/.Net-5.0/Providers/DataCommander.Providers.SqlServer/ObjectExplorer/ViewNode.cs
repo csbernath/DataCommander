@@ -5,70 +5,69 @@ using System.Windows.Forms;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data.SqlClient;
 
-namespace DataCommander.Providers.SqlServer.ObjectExplorer
+namespace DataCommander.Providers.SqlServer.ObjectExplorer;
+
+internal sealed class ViewNode : ITreeNode
 {
-    internal sealed class ViewNode : ITreeNode
+    private readonly DatabaseNode _database;
+    private readonly int _id;
+    private readonly string _name;
+    private readonly string _schema;
+
+    public ViewNode(DatabaseNode database, int id, string schema, string name)
     {
-        private readonly DatabaseNode _database;
-        private readonly int _id;
-        private readonly string _name;
-        private readonly string _schema;
+        _database = database;
+        _id = id;
+        _schema = schema;
+        _name = name;
+    }
 
-        public ViewNode(DatabaseNode database, int id, string schema, string name)
+    public string Name => $"{_schema}.{_name}";
+    public bool IsLeaf => false;
+
+    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    {
+        return new ITreeNode[]
         {
-            _database = database;
-            _id = id;
-            _schema = schema;
-            _name = name;
-        }
+            new ColumnCollectionNode(_database, _id),
+            new TriggerCollectionNode(_database, _id),
+            new IndexCollectionNode(_database, _id)
+        };
+    }
 
-        public string Name => $"{_schema}.{_name}";
-        public bool IsLeaf => false;
+    public bool Sortable => false;
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    public string Query
+    {
+        get
         {
-            return new ITreeNode[]
-            {
-                new ColumnCollectionNode(_database, _id),
-                new TriggerCollectionNode(_database, _id),
-                new IndexCollectionNode(_database, _id)
-            };
-        }
-
-        public bool Sortable => false;
-
-        public string Query
-        {
-            get
-            {
-                var name = new DatabaseObjectMultipartName(null, _database.Name, _schema, _name);
-                var connectionString = _database.Databases.Server.ConnectionString;
-                string text;
-                using (var connection = new SqlConnection(connectionString))
-                    text = TableNode.GetSelectStatement(connection, name);
-                return text;
-            }
-        }
-
-        public ContextMenu GetContextMenu()
-        {
-            var menuItemScriptObject = new MenuItem("Script View as CREATE to clipboard", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-            var items = new[] { menuItemScriptObject }.ToReadOnlyCollection();
-            var contextMenu = new ContextMenu(items);
-            return contextMenu;
-        }
-
-        private void menuItemScriptObject_Click(object sender, EventArgs e)
-        {
+            var name = new DatabaseObjectMultipartName(null, _database.Name, _schema, _name);
             var connectionString = _database.Databases.Server.ConnectionString;
             string text;
             using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                text = SqlDatabase.GetSysComments(connection, _database.Name, _schema, _name);
-            }
-
-            Clipboard.SetText(text);
+                text = TableNode.GetSelectStatement(connection, name);
+            return text;
         }
+    }
+
+    public ContextMenu GetContextMenu()
+    {
+        var menuItemScriptObject = new MenuItem("Script View as CREATE to clipboard", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+        var items = new[] { menuItemScriptObject }.ToReadOnlyCollection();
+        var contextMenu = new ContextMenu(items);
+        return contextMenu;
+    }
+
+    private void menuItemScriptObject_Click(object sender, EventArgs e)
+    {
+        var connectionString = _database.Databases.Server.ConnectionString;
+        string text;
+        using (var connection = new SqlConnection(connectionString))
+        {
+            connection.Open();
+            text = SqlDatabase.GetSysComments(connection, _database.Name, _schema, _name);
+        }
+
+        Clipboard.SetText(text);
     }
 }

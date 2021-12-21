@@ -1,14 +1,13 @@
 ﻿using DataCommander.Providers2;
 
-namespace DataCommander.Providers.SqlServer
+namespace DataCommander.Providers.SqlServer;
+
+internal sealed class NonSqlObjectName : IObjectName
 {
-    internal sealed class NonSqlObjectName : IObjectName
-    {
-        private readonly string _objectName;
+    private readonly string _objectName;
 
-        public NonSqlObjectName(string objectName) => _objectName = objectName;
+    public NonSqlObjectName(string objectName) => _objectName = objectName;
 
-        string IObjectName.UnquotedName => _objectName;
-        string IObjectName.QuotedName => _objectName;
-    }
+    string IObjectName.UnquotedName => _objectName;
+    string IObjectName.QuotedName => _objectName;
 }

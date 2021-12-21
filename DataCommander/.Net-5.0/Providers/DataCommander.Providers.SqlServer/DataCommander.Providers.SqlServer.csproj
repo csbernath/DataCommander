@@ -5,6 +5,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <AssemblyName>DataCommander.Providers.SqlServer</AssemblyName>
     <RootNamespace>DataCommander.Providers.SqlServer</RootNamespace>
+    <LangVersion>10</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DataCommander.Providers.SqlServer.ObjectExplorer
+namespace DataCommander.Providers.SqlServer.ObjectExplorer;
+
+internal sealed class LoginNode : ITreeNode
 {
-    internal sealed class LoginNode : ITreeNode
-    {
-        private readonly string _name;
+    private readonly string _name;
 
-        public LoginNode(string name) => _name = name;
+    public LoginNode(string name) => _name = name;
 
-        string ITreeNode.Name => _name;
-        bool ITreeNode.IsLeaf => true;
-        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => throw new NotImplementedException();
-        bool ITreeNode.Sortable => false;
-        string ITreeNode.Query => null;
+    string ITreeNode.Name => _name;
+    bool ITreeNode.IsLeaf => true;
+    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => throw new NotImplementedException();
+    bool ITreeNode.Sortable => false;
+    string ITreeNode.Query => null;
 
-        public ContextMenu GetContextMenu() => null;
-    }
+    public ContextMenu GetContextMenu() => null;
 }

@@ -3,40 +3,39 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using Foundation.Data;
 
-namespace DataCommander.Providers.SqlServer.ObjectExplorer
+namespace DataCommander.Providers.SqlServer.ObjectExplorer;
+
+internal sealed class DatabaseSnapshotCollectionNode : ITreeNode
 {
-    internal sealed class DatabaseSnapshotCollectionNode : ITreeNode
+    private readonly DatabaseCollectionNode _databaseCollectionNode;
+
+    public DatabaseSnapshotCollectionNode(DatabaseCollectionNode databaseCollectionNode)
     {
-        private readonly DatabaseCollectionNode _databaseCollectionNode;
+        _databaseCollectionNode = databaseCollectionNode;
+    }
 
-        public DatabaseSnapshotCollectionNode(DatabaseCollectionNode databaseCollectionNode)
-        {
-            _databaseCollectionNode = databaseCollectionNode;
-        }
+    string ITreeNode.Name => "Database Snapshots";
+    bool ITreeNode.IsLeaf => false;
 
-        string ITreeNode.Name => "Database Snapshots";
-        bool ITreeNode.IsLeaf => false;
-
-        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
-        {
-            var connectionString = _databaseCollectionNode.Server.ConnectionString;
-            const string commandText = @"select name
+    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    {
+        var connectionString = _databaseCollectionNode.Server.ConnectionString;
+        const string commandText = @"select name
 from sys.databases d
 where
 	d.source_database_id is not null
 order by 1";
-            var executeReaderRequest = new ExecuteReaderRequest(commandText);
-            return SqlClientFactory.Instance.ExecuteReader(connectionString, executeReaderRequest, 128, ReadDatabaseNode);
-        }
-
-        private DatabaseNode ReadDatabaseNode(IDataRecord dataRecord)
-        {
-            var name = dataRecord.GetString(0);
-            return new DatabaseNode(_databaseCollectionNode, name, 0);
-        }
-
-        bool ITreeNode.Sortable => false;
-        string ITreeNode.Query => null;
-        public ContextMenu GetContextMenu() => null;
+        var executeReaderRequest = new ExecuteReaderRequest(commandText);
+        return SqlClientFactory.Instance.ExecuteReader(connectionString, executeReaderRequest, 128, ReadDatabaseNode);
     }
+
+    private DatabaseNode ReadDatabaseNode(IDataRecord dataRecord)
+    {
+        var name = dataRecord.GetString(0);
+        return new DatabaseNode(_databaseCollectionNode, name, 0);
+    }
+
+    bool ITreeNode.Sortable => false;
+    string ITreeNode.Query => null;
+    public ContextMenu GetContextMenu() => null;
 }
