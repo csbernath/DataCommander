@@ -74,7 +74,7 @@ TempPath:               {Path.GetTempPath()}";
     }
 
     private static string GetStopwatchFrequency() =>
-        $"{Stopwatch.Frequency} ({Math.Round((double)Stopwatch.Frequency / TenPowerConstants.TenPower6, 2)} MHz, 1 tick = {Math.Round(StopwatchConstants.NanosecondsPerTick)} nanoseconds), 1 millisecond = {Math.Round(StopwatchConstants.TicksPerMillisecond)} ticks";
+        $"{Stopwatch.Frequency} ({Math.Round((double)Stopwatch.Frequency / TenPowerConstants.TenPower6, 2)} MHz, 1 tick = {Math.Round(StopwatchConstants.NanosecondsPerTick)} nanoseconds, 1 millisecond = {Math.Round(StopwatchConstants.TicksPerMillisecond)} ticks)";
 
     public static string GetCurrentDomainState()
     {
