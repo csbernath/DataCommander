@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>      
+    <UseWindowsForms>true</UseWindowsForms>
+    <LangVersion>10</LangVersion>      
   </PropertyGroup>
 
   <ItemGroup>
