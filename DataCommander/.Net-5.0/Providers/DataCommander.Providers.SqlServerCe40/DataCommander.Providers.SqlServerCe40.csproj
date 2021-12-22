@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
+    <LangVersion>10</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -14,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DataCommander.Providers2\DataCommander.Providers2.csproj" />
-    <ProjectReference Include="..\..\DataCommander.Providers\DataCommander.Providers.csproj" />
+    <ProjectReference Include="..\..\DataCommander.Api\DataCommander.Api.csproj" />
+    <ProjectReference Include="..\..\DataCommander.Application\DataCommander.Application.csproj" />
   </ItemGroup>
 
 </Project>

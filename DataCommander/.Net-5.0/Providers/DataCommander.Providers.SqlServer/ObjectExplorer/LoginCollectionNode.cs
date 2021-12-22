@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using DataCommander.Api;
 using Foundation.Assertions;
 using Foundation.Data;
-using Foundation.Data.SqlClient2;
+using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
@@ -32,8 +33,5 @@ order by name";
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;
 
-    public ContextMenu GetContextMenu()
-    {
-        throw new System.NotImplementedException();
-    }
+    public ContextMenu GetContextMenu() => null;
 }

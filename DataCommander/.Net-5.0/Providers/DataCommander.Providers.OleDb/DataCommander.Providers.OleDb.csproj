@@ -6,6 +6,8 @@
     <Company>Csaba Bernáth</Company>
     <Authors>Csaba Bernáth</Authors>
     <Product>Data Commander</Product>
+    <LangVersion>10</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -13,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DataCommander.Providers\DataCommander.Providers.csproj" />
+    <ProjectReference Include="..\..\DataCommander.Application\DataCommander.Application.csproj" />
   </ItemGroup>
 
 </Project>

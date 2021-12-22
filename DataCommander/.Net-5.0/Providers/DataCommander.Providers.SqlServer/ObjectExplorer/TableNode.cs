@@ -7,9 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
-using DataCommander.Providers.Query;
-using DataCommander.Providers2;
+using DataCommander.Api;
 using Foundation.Assertions;
 using Foundation.Collections;
 using Foundation.Collections.ReadOnly;
@@ -20,7 +18,6 @@ using Foundation.Data.SqlClient;
 using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
-using Foundation.Windows.Forms;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
 using Sequence = Foundation.Core.Sequence;
@@ -146,195 +143,188 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
 
     private void EditRows(object sender, EventArgs e)
     {
-        var mainForm = DataCommanderApplication.Instance.MainForm;
-        var queryForm = (QueryForm) mainForm.ActiveMdiChild;
         var name = DatabaseNode.Name + "." + _owner + "." + _name;
         var query = "select * from " + name;
+        var queryForm = (IQueryForm)sender;            
         queryForm.EditRows(query);
     }
 
     private void Schema_Click(object sender, EventArgs e)
     {
-        using (new CursorManager(Cursors.WaitCursor))
-        {
-            var commandText = string.Format(
-                @"use [{0}]
+        var commandText = string.Format(
+            @"use [{0}]
 exec sp_MShelpcolumns N'{1}.[{2}]', @orderby = 'id'
 exec sp_MStablekeys N'{1}.[{2}]', null, 14
 exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
 
-            Log.Write(LogLevel.Trace, commandText);
-            var connectionString = DatabaseNode.Databases.Server.ConnectionString;
-            DataSet dataSet;
-            using (var connection = new SqlConnection(connectionString))
-            {
-                var executor = connection.CreateCommandExecutor();
-                dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText));
-            }
-
-            var columns = dataSet.Tables[0];
-            var keys = dataSet.Tables[1];
-
-            var schema = new DataTable();
-            schema.Columns.Add(" ", typeof(int));
-            schema.Columns.Add("  ", typeof(string));
-            schema.Columns.Add("Name", typeof(string));
-            schema.Columns.Add("Type", typeof(string));
-            schema.Columns.Add("Collation", typeof(string));
-            schema.Columns.Add("Formula", typeof(string));
-
-            foreach (DataRow column in columns.Rows)
-            {
-                string identity;
-
-                if (Convert.ToBoolean(column["col_identity"]))
-                    identity = "IDENTITY";
-                else
-                    identity = string.Empty;
-
-                var sb = new StringBuilder();
-                var dbType = column["col_typename"].ToString();
-                sb.Append(dbType);
-
-                switch (dbType)
-                {
-                    case "decimal":
-                    case "numeric":
-                        var precision = Convert.ToInt32(column["col_prec"]);
-                        var scale = Convert.ToInt32(column["col_scale"]);
-
-                        if (scale == 0)
-                            sb.AppendFormat("({0})", precision);
-                        else
-                            sb.AppendFormat("({0},{1})", precision, scale);
-
-                        break;
-
-                    case "char":
-                    case "nchar":
-                    case "varchar":
-                    case "nvarchar":
-                    case "varbinary":
-                        var columnLength = (int) column["col_len"];
-                        string columnlengthString;
-
-                        if (columnLength == -1)
-                            columnlengthString = "max";
-                        else
-                            columnlengthString = columnLength.ToString();
-
-                        sb.AppendFormat("({0})", columnlengthString);
-                        break;
-                }
-
-                if (!Convert.ToBoolean(column["col_null"])) sb.Append(" not null");
-
-                var collation = ValueReader.GetValue(column["collation"], string.Empty);
-                var formula = string.Empty;
-
-                if (column["text"] != DBNull.Value) formula = column["text"].ToString();
-
-                schema.Rows.Add(column["col_id"], identity, column["col_name"], sb.ToString(), collation, formula);
-            }
-
-            if (keys.Rows.Count > 0)
-            {
-                var pk = (from row in keys.AsEnumerable()
-                    where row.Field<byte>("cType") == 1
-                    select row).FirstOrDefault();
-
-                if (pk != null)
-                    for (var i = 1; i <= 16; i++)
-                    {
-                        var keyColObj = pk["cKeyCol" + i];
-
-                        if (keyColObj == DBNull.Value) break;
-
-                        var keyCol = keyColObj.ToString();
-
-                        var filter = $"Name = '{keyCol}'";
-                        var dataRow = schema.Select(filter)[0];
-                        var identity = dataRow[1].ToString();
-
-                        if (identity.Length > 0)
-                            dataRow[1] = "PKEY," + dataRow[1];
-                        else
-                            dataRow[1] = "PKEY";
-                    }
-            }
-
-            dataSet.Tables.Add(schema);
-
-            var mainForm = DataCommanderApplication.Instance.MainForm;
-            var queryForm = (QueryForm) mainForm.ActiveMdiChild;
-            queryForm.ShowDataSet(dataSet);
+        Log.Write(LogLevel.Trace, commandText);
+        var connectionString = DatabaseNode.Databases.Server.ConnectionString;
+        DataSet dataSet;
+        using (var connection = new SqlConnection(connectionString))
+        {
+            var executor = connection.CreateCommandExecutor();
+            dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText));
         }
+
+        var columns = dataSet.Tables[0];
+        var keys = dataSet.Tables[1];
+
+        var schema = new DataTable();
+        schema.Columns.Add(" ", typeof(int));
+        schema.Columns.Add("  ", typeof(string));
+        schema.Columns.Add("Name", typeof(string));
+        schema.Columns.Add("Type", typeof(string));
+        schema.Columns.Add("Collation", typeof(string));
+        schema.Columns.Add("Formula", typeof(string));
+
+        foreach (DataRow column in columns.Rows)
+        {
+            string identity;
+
+            if (Convert.ToBoolean(column["col_identity"]))
+                identity = "IDENTITY";
+            else
+                identity = string.Empty;
+
+            var sb = new StringBuilder();
+            var dbType = column["col_typename"].ToString();
+            sb.Append(dbType);
+
+            switch (dbType)
+            {
+                case "decimal":
+                case "numeric":
+                    var precision = Convert.ToInt32(column["col_prec"]);
+                    var scale = Convert.ToInt32(column["col_scale"]);
+
+                    if (scale == 0)
+                        sb.AppendFormat("({0})", precision);
+                    else
+                        sb.AppendFormat("({0},{1})", precision, scale);
+
+                    break;
+
+                case "char":
+                case "nchar":
+                case "varchar":
+                case "nvarchar":
+                case "varbinary":
+                    var columnLength = (int)column["col_len"];
+                    string columnlengthString;
+
+                    if (columnLength == -1)
+                        columnlengthString = "max";
+                    else
+                        columnlengthString = columnLength.ToString();
+
+                    sb.AppendFormat("({0})", columnlengthString);
+                    break;
+            }
+
+            if (!Convert.ToBoolean(column["col_null"])) sb.Append(" not null");
+
+            var collation = ValueReader.GetValue(column["collation"], string.Empty);
+            var formula = string.Empty;
+
+            if (column["text"] != DBNull.Value) formula = column["text"].ToString();
+
+            schema.Rows.Add(column["col_id"], identity, column["col_name"], sb.ToString(), collation, formula);
+        }
+
+        if (keys.Rows.Count > 0)
+        {
+            var pk = (from row in keys.AsEnumerable()
+                where row.Field<byte>("cType") == 1
+                select row).FirstOrDefault();
+
+            if (pk != null)
+                for (var i = 1; i <= 16; i++)
+                {
+                    var keyColObj = pk["cKeyCol" + i];
+
+                    if (keyColObj == DBNull.Value) break;
+
+                    var keyCol = keyColObj.ToString();
+
+                    var filter = $"Name = '{keyCol}'";
+                    var dataRow = schema.Select(filter)[0];
+                    var identity = dataRow[1].ToString();
+
+                    if (identity.Length > 0)
+                        dataRow[1] = "PKEY," + dataRow[1];
+                    else
+                        dataRow[1] = "PKEY";
+                }
+        }
+
+        dataSet.Tables.Add(schema);
+
+        var queryForm = (IQueryForm)sender;
+        queryForm.ShowDataSet(dataSet);
     }
 
     private void ScriptTable_Click(object sender, EventArgs e)
     {
-        using (new CursorManager(Cursors.WaitCursor))
+
+        var queryForm = (IQueryForm)sender;
+        queryForm.SetStatusbarPanelText("Copying table script to clipboard...",
+            queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
+        var stopwatch = Stopwatch.StartNew();
+
+        var connectionString = DatabaseNode.Databases.Server.ConnectionString;
+        var csb = new SqlConnectionStringBuilder(connectionString);
+
+        var connectionInfo = new SqlConnectionInfo();
+        connectionInfo.ApplicationName = csb.ApplicationName;
+        connectionInfo.ConnectionTimeout = csb.ConnectTimeout;
+        connectionInfo.DatabaseName = csb.InitialCatalog;
+        connectionInfo.EncryptConnection = csb.Encrypt;
+        connectionInfo.MaxPoolSize = csb.MaxPoolSize;
+        connectionInfo.MinPoolSize = csb.MinPoolSize;
+        connectionInfo.PacketSize = csb.PacketSize;
+        connectionInfo.Pooled = csb.Pooling;
+        connectionInfo.ServerName = csb.DataSource;
+        connectionInfo.UseIntegratedSecurity = csb.IntegratedSecurity;
+        connectionInfo.WorkstationId = csb.WorkstationID;
+        connectionInfo.TrustServerCertificate = csb.TrustServerCertificate;
+        if (!csb.IntegratedSecurity)
         {
-            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-            queryForm.SetStatusbarPanelText("Copying table script to clipboard...",
-                queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
-            var stopwatch = Stopwatch.StartNew();
-
-            var connectionString = DatabaseNode.Databases.Server.ConnectionString;
-            var csb = new SqlConnectionStringBuilder(connectionString);
-
-            var connectionInfo = new SqlConnectionInfo();
-            connectionInfo.ApplicationName = csb.ApplicationName;
-            connectionInfo.ConnectionTimeout = csb.ConnectTimeout;
-            connectionInfo.DatabaseName = csb.InitialCatalog;
-            connectionInfo.EncryptConnection = csb.Encrypt;
-            connectionInfo.MaxPoolSize = csb.MaxPoolSize;
-            connectionInfo.MinPoolSize = csb.MinPoolSize;
-            connectionInfo.PacketSize = csb.PacketSize;
-            connectionInfo.Pooled = csb.Pooling;
-            connectionInfo.ServerName = csb.DataSource;
-            connectionInfo.UseIntegratedSecurity = csb.IntegratedSecurity;
-            connectionInfo.WorkstationId = csb.WorkstationID;
-            connectionInfo.TrustServerCertificate = csb.TrustServerCertificate;
-            if (!csb.IntegratedSecurity)
-            {
-                connectionInfo.UserName = csb.UserID;
-                connectionInfo.Password = csb.Password;
-            }
-
-            var connection = new ServerConnection(connectionInfo);
-            connection.Connect();
-            var server = new Server(connection);
-            var database = server.Databases[DatabaseNode.Name];
-            var table = database.Tables[_name, _owner];
-
-            var options = new ScriptingOptions();
-            options.Indexes = true;
-            options.Permissions = true;
-            options.IncludeDatabaseContext = false;
-            options.Default = true;
-            options.AnsiPadding = true;
-            options.DriAll = true;
-            options.ExtendedProperties = true;
-            options.ScriptBatchTerminator = true;
-            options.SchemaQualify = true;
-            options.SchemaQualifyForeignKeysReferences = true;
-            options.TargetServerVersion = SqlServerVersion.Version100;
-
-            var stringCollection = table.Script(options);
-            var sb = new StringBuilder();
-            foreach (var s in stringCollection)
-            {
-                sb.AppendLine(s);
-                sb.AppendLine("GO");
-            }
-
-            Clipboard.SetText(sb.ToString());
-            stopwatch.Stop();
-            queryForm.SetStatusbarPanelText(
-                $"Copying table script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.",
-                queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
+            connectionInfo.UserName = csb.UserID;
+            connectionInfo.Password = csb.Password;
         }
+
+        var connection = new ServerConnection(connectionInfo);
+        connection.Connect();
+        var server = new Server(connection);
+        var database = server.Databases[DatabaseNode.Name];
+        var table = database.Tables[_name, _owner];
+
+        var options = new ScriptingOptions();
+        options.Indexes = true;
+        options.Permissions = true;
+        options.IncludeDatabaseContext = false;
+        options.Default = true;
+        options.AnsiPadding = true;
+        options.DriAll = true;
+        options.ExtendedProperties = true;
+        options.ScriptBatchTerminator = true;
+        options.SchemaQualify = true;
+        options.SchemaQualifyForeignKeysReferences = true;
+        options.TargetServerVersion = SqlServerVersion.Version100;
+
+        var stringCollection = table.Script(options);
+        var sb = new StringBuilder();
+        foreach (var s in stringCollection)
+        {
+            sb.AppendLine(s);
+            sb.AppendLine("GO");
+        }
+
+        queryForm.ClipboardSetText(sb.ToString());
+        stopwatch.Stop();
+        queryForm.SetStatusbarPanelText(
+            $"Copying table script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.",
+            queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
     }
 
     private void Indexes_Click(object sender, EventArgs e)
@@ -349,10 +339,11 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
         }
 
         dataTable.TableName = $"{_name} indexes";
-        var mainForm = DataCommanderApplication.Instance.MainForm;
-        var queryForm = (QueryForm) mainForm.ActiveMdiChild;
+            
         var dataSet = new DataSet();
         dataSet.Tables.Add(dataTable);
+            
+        var queryForm = (IQueryForm)sender;            
         queryForm.ShowDataSet(dataSet);
     }
 
@@ -366,8 +357,8 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
             selectStatement = GetSelectStatement(connection, name);
         }
 
-        Clipboard.SetText(selectStatement);
-        var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+        var queryForm = (IQueryForm)sender;
+        queryForm.ClipboardSetText(selectStatement);
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
             queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
     }
@@ -514,9 +505,8 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
 
         stringBuilder.Append(stringTable.ToString(4));
 
-        Clipboard.SetText(stringBuilder.ToString());
-        var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-
+        var queryForm = (IQueryForm)sender;
+        queryForm.ClipboardSetText(stringBuilder.ToString());            
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
             queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
     }
@@ -576,8 +566,10 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
     private void UpdateScript_Click(object sender, EventArgs e)
     {
         var script = CreateUpdateScript();
-        Clipboard.SetText(script);
-        var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+
+        var queryForm = (IQueryForm)sender;
+        queryForm.ClipboardSetText(script);
+
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
             queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
     }
@@ -660,9 +652,8 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             }
         }
 
-        Clipboard.SetText(textBuilder.ToLines().ToIndentedString("    "));
-        var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-
+        var queryForm = (IQueryForm)sender;
+        queryForm.ClipboardSetText(textBuilder.ToLines().ToIndentedString("    "));
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
             queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
     }

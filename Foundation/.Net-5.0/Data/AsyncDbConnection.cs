@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Text;
 using System.Threading;
-using Foundation.Data.SqlClient;
 using Foundation.Log;
 using Foundation.Threading;
+using Microsoft.Data.SqlClient;
 
 namespace Foundation.Data;
 
@@ -207,10 +206,7 @@ public sealed class AsyncDbConnection : IDbConnection
 
                 if (exception != null)
                 {
-                    var message = exception is SqlException sqlException
-                        ? sqlException.Errors.ToLogString()
-                        : exception.ToLogString();
-
+                    var message = exception.ToLogString();
                     Log.Write(LogLevel.Error, message);
                 }
             }

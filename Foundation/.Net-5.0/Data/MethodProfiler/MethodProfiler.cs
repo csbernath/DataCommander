@@ -13,7 +13,7 @@ namespace Foundation.Data.MethodProfiler;
 
 public static class MethodProfiler
 {
-    public const string ConditionString = "FOUNDATION_METHODPROFILER";
+    private const string ConditionString = "FOUNDATION_METHODPROFILER";
 
     private static readonly MethodCollection Methods = new();
     private static readonly Dictionary<string, MethodFraction> MethodFractions = new();
@@ -31,8 +31,8 @@ public static class MethodProfiler
 
         if (assembly != null)
         {
-            var codeBase = assembly.CodeBase;
-            var uri = new Uri(codeBase);
+            var location = assembly.Location;
+            var uri = new Uri(location);
             var fileName = uri.LocalPath;
             applicationName = fileName;
         }
@@ -147,8 +147,5 @@ exec MethodProfilerApplication_Add {0},{1}",
     }
 
     [Conditional(ConditionString)]
-    public static void Close()
-    {
-        TextWriter.Close();
-    }
+    public static void Close() => TextWriter.Close();
 }

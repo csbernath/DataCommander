@@ -8,16 +8,15 @@ using System.Text;
 using System.Threading;
 using System.Xml;
 using DataCommander.Providers.SqlServer.FieldReader;
-using DataCommander.Providers2;
-using DataCommander.Providers2.Connection;
-using DataCommander.Providers2.FieldNamespace;
-using DataCommander.Providers2.Query;
+using DataCommander.Api;
+using DataCommander.Api.Connection;
+using DataCommander.Api.FieldNamespace;
+using DataCommander.Api.Query;
 using Foundation.Assertions;
 using Foundation.Configuration;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
-using Foundation.Data.SqlClient2;
 using Foundation.Linq;
 using Foundation.Log;
 using Microsoft.Data.SqlClient;
@@ -122,7 +121,7 @@ internal sealed class SqlServerProvider : IProvider
         DataTable sourceSchemaTable,
         string[] sourceDataTypeNames,
         IDbConnection destinationConnection,
-        string destinationTableName,
+        string? destinationTableName,
         out IDbCommand insertCommand,
         out Converter<object, object>[] converters)
     {
@@ -392,7 +391,7 @@ internal sealed class SqlServerProvider : IProvider
                 }
                 else
                 {
-                    var list = new SortedList<string, object>();
+                    var list = new SortedList<string?, object>();
 
                     for (var i = 0; i < tokens.Count; i++)
                     {
@@ -572,7 +571,7 @@ order by 1", name.Database);
                                     var indexofAny = tokenValue.IndexOfAny(new[] {'\r', '\n'});
                                     if (indexofAny >= 0) tokenValue = tokenValue.Substring(0, indexofAny);
 
-                                    string like;
+                                    string? like;
                                     if (tokenValue.Length > 0)
                                     {
                                         if (tokenValue.Contains('%'))
@@ -858,7 +857,7 @@ from
         return statements;
     }
 
-    GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => TableSchema.GetTableSchema(connection, tableName);
+    GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string? tableName) => TableSchema.GetTableSchema(connection, tableName);
 
     List<InfoMessage> IProvider.ToInfoMessages(Exception exception)
     {

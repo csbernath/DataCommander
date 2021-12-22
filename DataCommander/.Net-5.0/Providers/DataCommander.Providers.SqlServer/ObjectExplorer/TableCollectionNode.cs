@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Data;
 
@@ -62,8 +63,5 @@ order by 1,2";
     public bool Sortable => false;
     public string Query => null;
 
-    public ContextMenu GetContextMenu()
-    {
-        throw new System.NotImplementedException();
-    }
+    public ContextMenu GetContextMenu() => null;
 }

@@ -1,56 +1,56 @@
 ﻿using System.Collections.Generic;
+using DataCommander.Api;
 
-namespace DataCommander.Providers.OleDb
+namespace DataCommander.Providers.OleDb;
+
+internal sealed class ProcedureNode : ITreeNode
 {
-    internal sealed class ProcedureNode : ITreeNode
+    private readonly string name;
+
+    public ProcedureNode(string name)
     {
-        private readonly string name;
+        this.name = name;
+    }
 
-        public ProcedureNode(string name)
+    public string Name
+    {
+        get
         {
-            this.name = name;
-        }
+            var name = this.name;
 
-        public string Name
+            if (name == null)
+                name = "[No procedures found]";
+
+            return name;
+        }
+    }
+
+    public bool IsLeaf => true;
+
+    public IEnumerable<ITreeNode> GetChildren(bool refresh)
+    {
+        return null;
+    }
+
+    public bool Sortable => false;
+
+    public string Query
+    {
+        get
         {
-            get
-            {
-                var name = this.name;
+            string query;
 
-                if (name == null)
-                    name = "[No procedures found]";
+            if (name != null)
+                query = "exec " + name;
+            else
+                query = null;
 
-                return name;
-            }
+            return query;
         }
+    }
 
-        public bool IsLeaf => true;
-
-        public IEnumerable<ITreeNode> GetChildren(bool refresh)
-        {
-            return null;
-        }
-
-        public bool Sortable => false;
-
-        public string Query
-        {
-            get
-            {
-                string query;
-
-                if (name != null)
-                    query = "exec " + name;
-                else
-                    query = null;
-
-                return query;
-            }
-        }
-
-        public ContextMenu GetContextMenu()
-        {
-            throw new System.NotImplementedException();
-        }
+    public ContextMenu GetContextMenu()
+    {
+        throw new System.NotImplementedException();
     }
 }

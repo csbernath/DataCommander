@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using DataCommander.Api;
 using Microsoft.Data.SqlClient;
-using DataCommander.Providers.Query;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 
@@ -49,9 +49,10 @@ where m.object_id = {_id}";
         {
             connection.Open();
             var executor = connection.CreateCommandExecutor();
-            definition = (string) executor.ExecuteScalar(new CreateCommandRequest(commandText));
+            definition = (string)executor.ExecuteScalar(new CreateCommandRequest(commandText));
         }
 
-        QueryForm.ShowText(definition);
+        var queryForm = (IQueryForm)sender;
+        queryForm.ShowText(definition);
     }
 }

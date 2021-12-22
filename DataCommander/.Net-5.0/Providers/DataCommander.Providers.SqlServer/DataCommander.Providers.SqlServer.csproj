@@ -18,10 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Foundation\.Net-5.0\Data.SqlClient2\Foundation.Data.SqlClient2.csproj">
-      <Private>true</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\DataCommander.Providers\DataCommander.Providers.csproj" />
+    <ProjectReference Include="..\..\..\..\Foundation\.Net-5.0\Data.SqlClient\Foundation.Data.SqlClient.csproj" />
+    <ProjectReference Include="..\..\DataCommander.Api\DataCommander.Api.csproj" />
   </ItemGroup>
 
 </Project>

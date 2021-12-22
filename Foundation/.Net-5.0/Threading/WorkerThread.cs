@@ -187,8 +187,6 @@ public class WorkerThread
         return signaled;
     }
 
-    public void Abort() => Thread.Abort();
-
     #endregion
 
     #region Private Methods

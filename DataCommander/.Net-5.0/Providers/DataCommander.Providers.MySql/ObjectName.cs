@@ -1,53 +1,52 @@
-﻿using DataCommander.Providers2;
+﻿using DataCommander.Api;
 using System.Text;
 
-namespace DataCommander.Providers.MySql
+namespace DataCommander.Providers.MySql;
+
+internal sealed class ObjectName : IObjectName
 {
-    internal sealed class ObjectName : IObjectName
+    private readonly string _databaseName;
+    private readonly string _objectName;
+
+    public ObjectName(string databaseName, string objectName)
     {
-        private readonly string _databaseName;
-        private readonly string _objectName;
+        _databaseName = databaseName;
+        _objectName = objectName;
+    }
 
-        public ObjectName(string databaseName, string objectName)
+    string IObjectName.UnquotedName
+    {
+        get
         {
-            _databaseName = databaseName;
-            _objectName = objectName;
-        }
-
-        string IObjectName.UnquotedName
-        {
-            get
+            var sb = new StringBuilder();
+            if (_databaseName != null)
             {
-                var sb = new StringBuilder();
-                if (_databaseName != null)
-                {
-                    sb.Append(_databaseName);
-                    sb.Append('.');
-                }
-
-                sb.Append(_objectName);
-
-                return sb.ToString();
+                sb.Append(_databaseName);
+                sb.Append('.');
             }
+
+            sb.Append(_objectName);
+
+            return sb.ToString();
         }
+    }
 
-        string IObjectName.QuotedName
+    string IObjectName.QuotedName
+    {
+        get
         {
-            get
+            // TODO
+
+            var sb = new StringBuilder();
+            if (_databaseName != null)
             {
-                // TODO
-
-                var sb = new StringBuilder();
-                if (_databaseName != null)
-                {
-                    sb.Append(_databaseName);
-                    sb.Append('.');
-                }
-
-                sb.Append(_objectName);
-
-                return sb.ToString();
+                sb.Append(_databaseName);
+                sb.Append('.');
             }
+
+            sb.Append(_objectName);
+
+            return sb.ToString();
         }
     }
 }

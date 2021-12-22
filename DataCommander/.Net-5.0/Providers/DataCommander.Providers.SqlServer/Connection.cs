@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
-using DataCommander.Providers2.Connection;
+using DataCommander.Api.Connection;
 using Foundation.Core;
 using Foundation.Core.ClockAggregate;
 using Foundation.Data;

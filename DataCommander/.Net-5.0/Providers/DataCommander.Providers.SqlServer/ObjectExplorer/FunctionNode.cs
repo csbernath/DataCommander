@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using DataCommander.Api;
 using Microsoft.Data.SqlClient;
-using DataCommander.Providers.Query;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data.SqlClient;
 
@@ -83,6 +83,7 @@ from	{_database.Name}.{_owner}.[{_name}]()";
             text = SqlDatabase.GetSysComments(connection, _database.Name, _owner, _name);
         }
 
-        QueryForm.ShowText(text);
+        var queryForm = (IQueryForm)sender;
+        queryForm.ShowText(text);
     }
 }

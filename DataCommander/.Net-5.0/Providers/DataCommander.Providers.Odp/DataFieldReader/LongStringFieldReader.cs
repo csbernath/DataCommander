@@ -1,40 +1,39 @@
 ﻿using System;
 using System.Data;
-using DataCommander.Providers2.FieldNamespace;
+using DataCommander.Api.FieldNamespace;
 
-namespace DataCommander.Providers.Odp.DataFieldReader
+namespace DataCommander.Providers.Odp.DataFieldReader;
+
+internal sealed class LongStringFieldReader : IDataFieldReader
 {
-    internal sealed class LongStringFieldReader : IDataFieldReader
+    private readonly IDataRecord _dataRecord;
+    private readonly int _columnOrdinal;
+
+    public LongStringFieldReader(
+        IDataRecord dataRecord,
+        int columnOrdinal )
     {
-        private readonly IDataRecord _dataRecord;
-        private readonly int _columnOrdinal;
+        _dataRecord = dataRecord;
+        _columnOrdinal = columnOrdinal;
+    }
 
-        public LongStringFieldReader(
-            IDataRecord dataRecord,
-            int columnOrdinal )
+    object IDataFieldReader.Value
+    {
+        get
         {
-            _dataRecord = dataRecord;
-            _columnOrdinal = columnOrdinal;
-        }
+            object value;
 
-        object IDataFieldReader.Value
-        {
-            get
+            if (_dataRecord.IsDBNull( _columnOrdinal ))
             {
-                object value;
-
-                if (_dataRecord.IsDBNull( _columnOrdinal ))
-                {
-                    value = DBNull.Value;
-                }
-                else
-                {
-                    var s = _dataRecord.GetString( _columnOrdinal );
-                    value = new StringField( s, 1024 );
-                }
-
-                return value;
+                value = DBNull.Value;
             }
+            else
+            {
+                var s = _dataRecord.GetString( _columnOrdinal );
+                value = new StringField( s, 1024 );
+            }
+
+            return value;
         }
     }
 }

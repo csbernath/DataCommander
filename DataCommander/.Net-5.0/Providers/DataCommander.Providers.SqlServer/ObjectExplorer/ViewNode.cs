@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using DataCommander.Api;
 using Microsoft.Data.SqlClient;
-using System.Windows.Forms;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data.SqlClient;
 
@@ -68,6 +68,7 @@ internal sealed class ViewNode : ITreeNode
             text = SqlDatabase.GetSysComments(connection, _database.Name, _schema, _name);
         }
 
-        Clipboard.SetText(text);
+        var queryForm = (IQueryForm)sender;
+        queryForm.ClipboardSetText(text);
     }
 }

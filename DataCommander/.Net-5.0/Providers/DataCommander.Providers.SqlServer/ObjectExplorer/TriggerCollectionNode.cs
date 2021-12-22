@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
-using SqlCommandExecutor = Foundation.Data.SqlClient2.SqlCommandExecutor;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
@@ -45,8 +45,5 @@ order by name";
     public bool Sortable => false;
     public string Query => null;
 
-    public ContextMenu GetContextMenu()
-    {
-        throw new System.NotImplementedException();
-    }
+    public ContextMenu GetContextMenu() => null;
 }

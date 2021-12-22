@@ -19,13 +19,16 @@ public sealed class WindowsVersionInfo
 
     public static WindowsVersionInfo Get()
     {
+#pragma warning disable CA1416
         using (var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion"))
         {
             var productName = (string)key.GetValue("ProductName");
-            var displayVersion = (string) key.GetValue("DisplayVersion");
+            var displayVersion = (string)key.GetValue("DisplayVersion");
             var releaseId = (string)key.GetValue("ReleaseId");
             var currentBuild = (string)key.GetValue("CurrentBuild");
+
             return new WindowsVersionInfo(productName, displayVersion, releaseId, currentBuild);
         }
+#pragma warning restore CA1416
     }
 }

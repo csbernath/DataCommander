@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using Microsoft.Data.SqlClient;
-using System.Windows.Forms;
-using DataCommander.Providers.Query;
+using DataCommander.Api;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 using Foundation.Text;
+using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
@@ -93,8 +92,8 @@ select
 	convert(decimal(15,4),(f.size-fileproperty(name, 'SpaceUsed')) * 8096.0 / 1000000)	as [Free (MB)]
 from	[{0}].sys.database_files f", _name);
         var connectionString = Databases.Server.ConnectionString;
-        var mainForm = DataCommanderApplication.Instance.MainForm;
-        var queryForm = (QueryForm) mainForm.ActiveMdiChild;
+
+        var queryForm = (IQueryForm)sender;
         DataSet dataSet = null;
         using (var connection = new SqlConnection(connectionString))
         {
@@ -111,7 +110,7 @@ from	[{0}].sys.database_files f", _name);
 
         if (dataSet != null) queryForm.ShowDataSet(dataSet);
     }
-        
+
     private void CreateDatabaseSnapshotScriptToClipboardMenuItem_Click(object? sender, EventArgs e)
     {
         var databaseName = _name;
@@ -121,10 +120,10 @@ from	[{0}].sys.database_files f", _name);
         var osFileName = $"D:\\Backup\\{databaseSnapshotName}.ss";
 
         var textBuilder = new TextBuilder();
-            
+
         textBuilder.Add($"CREATE DATABASE [{databaseSnapshotName}]");
         textBuilder.Add("ON");
-            
+
         using (textBuilder.AddBlock("(", ")"))
         {
             textBuilder.Add($"NAME = {logical_file_name},");
@@ -140,7 +139,8 @@ from	[{0}].sys.database_files f", _name);
         textBuilder.Add($"ALTER DATABASE [{databaseName}] SET MULTI_USER WITH NO_WAIT");
 
         var text = textBuilder.ToLines().ToIndentedString("  ");
-        Clipboard.SetText(text);
+        var queryForm = (IQueryForm)sender;
+        queryForm.ClipboardSetText(text);
     }
 
     private object GetLogicalFileName(string database)

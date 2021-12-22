@@ -20,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Core", "..\..\Fo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Data", "..\..\Foundation\.Net-5.0\Data\Foundation.Data.csproj", "{3A9F3290-3A4A-460E-88FE-E4D1EDB9D155}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Data.SqlClient2", "..\..\Foundation\.Net-5.0\Data.SqlClient2\Foundation.Data.SqlClient2.csproj", "{8C6E4459-FF09-4EA6-8F0F-6FB8848272C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Data.SqlClient", "..\..\Foundation\.Net-5.0\Data.SqlClient\Foundation.Data.SqlClient.csproj", "{8C6E4459-FF09-4EA6-8F0F-6FB8848272C8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.DefaultLog", "..\..\Foundation\.Net-5.0\DefaultLog\Foundation.DefaultLog.csproj", "{A23D8394-BE4C-47DF-9A74-66069CF247A7}"
 EndProject
@@ -42,9 +42,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Threading", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Xml", "..\..\Foundation\.Net-5.0\Xml\Foundation.Xml.csproj", "{05FCB4BA-781D-4B25-BB86-9E2F5E2FE3D0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers2", "DataCommander.Providers2\DataCommander.Providers2.csproj", "{85C955DA-4060-4558-9866-FF660244E33E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Api", "DataCommander.Api\DataCommander.Api.csproj", "{85C955DA-4060-4558-9866-FF660244E33E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers", "DataCommander.Providers\DataCommander.Providers.csproj", "{13E1283E-F978-4ED3-AF66-5842A29009EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Application", "DataCommander.Application\DataCommander.Application.csproj", "{13E1283E-F978-4ED3-AF66-5842A29009EA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Windows.Forms", "..\..\Foundation\.Net-5.0\Windows.Forms\Foundation.Windows.Forms.csproj", "{D036893C-779C-43F8-AD54-9EECA847A17F}"
 EndProject

@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
-using System.Windows.Forms;
-using DataCommander.Providers.Query;
+using DataCommander.Api;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data.SqlClient;
@@ -57,9 +56,8 @@ internal sealed class StoredProcedureNode : ITreeNode
             text = SqlDatabase.GetSysComments(connection, _database.Name, _owner, _name);
         }
 
-        Clipboard.SetText(text);
-
-        var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+        var queryForm = (IQueryForm)sender;
+        queryForm.ClipboardSetText(text);
 
         queryForm.SetStatusbarPanelText(
             $"Copying stored prcoedure script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.",

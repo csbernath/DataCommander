@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using DataCommander.Api;
 using Foundation.Data;
-using Foundation.Data.SqlClient2;
+using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 

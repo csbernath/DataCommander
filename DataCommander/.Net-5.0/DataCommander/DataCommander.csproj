@@ -11,6 +11,7 @@
     <PackageId>Data Commander</PackageId>
     <Description>Data Commander</Description>
     <LangVersion>10</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +25,7 @@
     <ProjectReference Include="..\..\..\Foundation\.Net-5.0\Data\Foundation.Data.csproj" />
     <ProjectReference Include="..\..\..\Foundation\.Net-5.0\DefaultLog\Foundation.DefaultLog.csproj" />
     <ProjectReference Include="..\..\..\Foundation\.Net-5.0\Log\Foundation.Log.csproj" />
-    <ProjectReference Include="..\DataCommander.Providers\DataCommander.Providers.csproj" />
+    <ProjectReference Include="..\DataCommander.Application\DataCommander.Application.csproj" />
   </ItemGroup>
 
 </Project>

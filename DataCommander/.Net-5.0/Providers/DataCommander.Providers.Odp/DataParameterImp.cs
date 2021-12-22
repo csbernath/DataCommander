@@ -1,15 +1,14 @@
-﻿using DataCommander.Providers2;
+﻿using DataCommander.Api;
 using Oracle.ManagedDataAccess.Client;
 
-namespace DataCommander.Providers.Odp
+namespace DataCommander.Providers.Odp;
+
+internal sealed class DataParameterImp : DataParameterBase
 {
-    internal sealed class DataParameterImp : DataParameterBase
-    {
-        public DataParameterImp(OracleParameter parameter)
-            : base(parameter, parameter.Size, parameter.Precision, parameter.Scale) => this._parameter = parameter;
+    public DataParameterImp(OracleParameter parameter)
+        : base(parameter, parameter.Size, parameter.Precision, parameter.Scale) => this._parameter = parameter;
 
-        protected override void SetSize(int size) => _parameter.Size = size;
+    protected override void SetSize(int size) => _parameter.Size = size;
 
-        private readonly OracleParameter _parameter;
-    }
+    private readonly OracleParameter _parameter;
 }

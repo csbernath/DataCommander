@@ -20,7 +20,7 @@ internal sealed class DatabaseObjectMultipartName
         Name = name;
     }
 
-    public DatabaseObjectMultipartName(string currentDatabase, string name)
+    public DatabaseObjectMultipartName(string currentDatabase, string? name)
     {
         if (name != null)
         {

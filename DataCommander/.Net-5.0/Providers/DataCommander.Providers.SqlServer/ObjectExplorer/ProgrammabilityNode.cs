@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DataCommander.Api;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
@@ -28,8 +29,5 @@ internal sealed class ProgrammabilityNode : ITreeNode
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;
 
-    public ContextMenu GetContextMenu()
-    {
-        throw new System.NotImplementedException();
-    }
+    public ContextMenu GetContextMenu() => null;
 }

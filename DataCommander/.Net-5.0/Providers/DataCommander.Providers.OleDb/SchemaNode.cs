@@ -1,50 +1,50 @@
 ﻿using System.Collections.Generic;
+using DataCommander.Api;
 
-namespace DataCommander.Providers.OleDb
+namespace DataCommander.Providers.OleDb;
+
+/// <summary>
+/// Summary description for CatalogsNode.
+/// </summary>
+sealed class SchemaNode : ITreeNode
 {
-    /// <summary>
-    /// Summary description for CatalogsNode.
-    /// </summary>
-    sealed class SchemaNode : ITreeNode
+    public SchemaNode(CatalogNode catalog, string name)
     {
-        public SchemaNode(CatalogNode catalog, string name)
+        Catalog = catalog;
+        Name = name;
+    }
+
+    string ITreeNode.Name
+    {
+        get
         {
-            Catalog = catalog;
-            Name = name;
+            var name = Name;
+
+            if (name == null)
+                name = "[No schemas found]";
+
+            return name;
         }
+    }
 
-        string ITreeNode.Name
-        {
-            get
-            {
-                var name = Name;
+    public bool IsLeaf => false;
 
-                if (name == null)
-                    name = "[No schemas found]";
+    public IEnumerable<ITreeNode> GetChildren(bool refresh)
+    {
+        var treeNodes = new ITreeNode[2];
+        treeNodes[0] = new TableCollectionNode(this);
+        treeNodes[1] = new ProcedureCollectionNode(this);
 
-                return name;
-            }
-        }
+        return treeNodes;
+    }
 
-        public bool IsLeaf => false;
+    public bool Sortable => false;
+    public string Query => null;
+    public CatalogNode Catalog { get; }
+    public string Name { get; }
 
-        public IEnumerable<ITreeNode> GetChildren(bool refresh)
-        {
-            var treeNodes = new ITreeNode[2];
-            treeNodes[0] = new TableCollectionNode(this);
-            treeNodes[1] = new ProcedureCollectionNode(this);
-
-            return treeNodes;
-        }
-
-        public bool Sortable => false;
-        public string Query => null;
-        public CatalogNode Catalog { get; }
-        public string Name { get; }
-
-        public ContextMenu GetContextMenu()
-        {
-            throw new System.NotImplementedException();
-        }
+    public ContextMenu GetContextMenu()
+    {
+        throw new System.NotImplementedException();
     }
 }

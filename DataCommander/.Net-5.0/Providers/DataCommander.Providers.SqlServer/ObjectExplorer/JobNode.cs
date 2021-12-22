@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using DataCommander.Api;
 using Microsoft.Data.SqlClient;
-using DataCommander.Providers.Query;
 using Foundation.Assertions;
+using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 
@@ -27,34 +28,37 @@ internal sealed class JobNode : ITreeNode
     string ITreeNode.Name => _name;
     bool ITreeNode.IsLeaf => true;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
-    {
-        throw new NotImplementedException();
-    }
+    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => throw new NotSupportedException();
 
     bool ITreeNode.Sortable => false;
 
-    string ITreeNode.Query
+    string ITreeNode.Query => null;
+
+    public ContextMenu GetContextMenu()
     {
-        get
+        var menuItems = new[]
         {
-            var commandText = $@"msdb..sp_help_job @job_name = {_name.ToNullableNVarChar()}";
-            DataSet dataSet;
+            new MenuItem("HelpJob", OnHelpJobClick, EmptyReadOnlyCollection<MenuItem>.Value)
+        }.ToReadOnlyCollection();
+        var contextMenu = new ContextMenu(menuItems);
 
-            using (var connection = new SqlConnection(_jobs.Server.ConnectionString))
-            {
-                var executor = connection.CreateCommandExecutor();
-                dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText));
-            }
-
-            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-            queryForm.ShowDataSet(dataSet);
-
-            return null;
-        }
+        return contextMenu;
     }
 
-    public ContextMenu GetContextMenu() => null;
+    private void OnHelpJobClick(object? sender, EventArgs e)
+    {
+        var commandText = $@"msdb..sp_help_job @job_name = {_name.ToNullableNVarChar()}";
+        DataSet dataSet;
+
+        using (var connection = new SqlConnection(_jobs.Server.ConnectionString))
+        {
+            var executor = connection.CreateCommandExecutor();
+            dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText));
+        }
+
+        var queryForm = (IQueryForm)sender;
+        queryForm.ShowDataSet(dataSet);
+    }
 
     #endregion
 }

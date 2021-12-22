@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DataCommander.Api;
 using Foundation.Assertions;
 using Foundation.Linq;
 
@@ -29,10 +30,7 @@ internal sealed class SecurityNode : ITreeNode
 
     string ITreeNode.Query => null;
 
-    public ContextMenu GetContextMenu()
-    {
-        throw new System.NotImplementedException();
-    }
+    public ContextMenu GetContextMenu() => null;
 
     #endregion
 }
