@@ -15,6 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\DataCommander.Api\DataCommander.Api.csproj" />
     <ProjectReference Include="..\..\DataCommander.Application\DataCommander.Application.csproj" />
   </ItemGroup>
 
