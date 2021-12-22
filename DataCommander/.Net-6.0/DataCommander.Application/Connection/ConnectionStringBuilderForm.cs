@@ -338,7 +338,7 @@ internal partial class ConnectionStringBuilderForm : Form
             var form = new OpenConnectionForm(connectionProperties);
 
             if (form.ShowDialog() == DialogResult.OK)
-                MessageBox.Show("The connection was tested successfully.");
+                MessageBox.Show("The connection was tested successfully.", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (Exception ex)
         {

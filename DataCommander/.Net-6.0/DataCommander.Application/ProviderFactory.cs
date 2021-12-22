@@ -14,7 +14,7 @@ public static class ProviderFactory
         get
         {
             var providers = new List<string>();
-            var node = Settings.CurrentNamespace;
+            var node = Settings.SelectNode("DataCommander/Providers", true);
 
             foreach (var childNode in node.ChildNodes)
             {
