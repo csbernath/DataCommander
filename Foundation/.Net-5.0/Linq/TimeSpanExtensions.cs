@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Foundation.Linq
+namespace Foundation.Linq;
+
+public static class TimeSpanExtensions
 {
-    public static class TimeSpanExtensions
-    {
-        public static double GetTotalMicroseconds(this TimeSpan timeSpan) => timeSpan.Ticks * 0.1;
-    }
+    public static double GetTotalMicroseconds(this TimeSpan timeSpan) => timeSpan.Ticks * 0.1;
 }

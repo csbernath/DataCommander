@@ -1,22 +1,21 @@
 ﻿using System;
 using Foundation.Core;
 
-namespace Foundation.Text
+namespace Foundation.Text;
+
+public static class TextBuilderExtensions
 {
-    public static class TextBuilderExtensions
+    public static IDisposable AddCSharpBlock(this TextBuilder indentedTextBuilder) => indentedTextBuilder.AddBlock("{", "}");
+
+    public static IDisposable AddBlock(this TextBuilder indentedTextBuilder, string begin, string end)
     {
-        public static IDisposable AddCSharpBlock(this TextBuilder indentedTextBuilder) => indentedTextBuilder.AddBlock("{", "}");
+        indentedTextBuilder.Add(begin);
+        var indentation = indentedTextBuilder.Indent(1);
 
-        public static IDisposable AddBlock(this TextBuilder indentedTextBuilder, string begin, string end)
+        return new Disposer(() =>
         {
-            indentedTextBuilder.Add(begin);
-            var indentation = indentedTextBuilder.Indent(1);
-
-            return new Disposer(() =>
-            {
-                indentation.Dispose();
-                indentedTextBuilder.Add(end);
-            });
-        }
+            indentation.Dispose();
+            indentedTextBuilder.Add(end);
+        });
     }
 }

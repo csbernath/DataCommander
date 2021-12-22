@@ -2,20 +2,19 @@
 using System.Windows.Forms;
 using Foundation.Assertions;
 
-namespace Foundation.Windows.Forms
+namespace Foundation.Windows.Forms;
+
+public sealed class CursorManager : IDisposable
 {
-    public sealed class CursorManager : IDisposable
+    private readonly Cursor originalCursor;
+
+    public CursorManager(Cursor cursor)
     {
-        private readonly Cursor originalCursor;
+        Assert.IsNotNull(cursor);
 
-        public CursorManager(Cursor cursor)
-        {
-            Assert.IsNotNull(cursor);
-
-            originalCursor = Cursor.Current;
-            Cursor.Current = cursor;
-        }
-
-        void IDisposable.Dispose() => Cursor.Current = originalCursor;
+        originalCursor = Cursor.Current;
+        Cursor.Current = cursor;
     }
+
+    void IDisposable.Dispose() => Cursor.Current = originalCursor;
 }

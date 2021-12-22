@@ -1,21 +1,20 @@
 ﻿using System.Text;
 
-namespace Foundation.IO
+namespace Foundation.IO;
+
+internal sealed class AsyncTextWriterListItem
 {
-    internal sealed class AsyncTextWriterListItem
+    private readonly IFormatter _formatter;
+    private readonly object[] _args;
+
+    public AsyncTextWriterListItem(IFormatter formatter, params object[] args)
     {
-        private readonly IFormatter _formatter;
-        private readonly object[] _args;
+        _formatter = formatter;
+        _args = args;
+    }
 
-        public AsyncTextWriterListItem(IFormatter formatter, params object[] args)
-        {
-            _formatter = formatter;
-            _args = args;
-        }
-
-        public void AppendTo(StringBuilder sb)
-        {
-            _formatter.AppendTo(sb, _args);
-        }
+    public void AppendTo(StringBuilder sb)
+    {
+        _formatter.AppendTo(sb, _args);
     }
 }

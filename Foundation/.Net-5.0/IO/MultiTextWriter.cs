@@ -3,34 +3,33 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Foundation.IO
+namespace Foundation.IO;
+
+public class MultiTextWriter : TextWriter
 {
-    public class MultiTextWriter : TextWriter
+    private readonly List<TextWriter> _textWriters = new();
+
+    public IList<TextWriter> TextWriters => _textWriters;
+
+    public override Encoding Encoding => throw new NotImplementedException();
+
+    public override void Write(char value)
     {
-        private readonly List<TextWriter> _textWriters = new();
+        foreach (var textWriter in _textWriters)
+            textWriter.Write(value);
+    }
 
-        public IList<TextWriter> TextWriters => _textWriters;
+    public override void Write(char[] buffer, int index, int count)
+    {
+        var value = new string(buffer, index, count);
+        Write(value);
+    }
 
-        public override Encoding Encoding => throw new NotImplementedException();
-
-        public override void Write(char value)
+    public override void Write(string value)
+    {
+        foreach (var textWriter in _textWriters)
         {
-            foreach (var textWriter in _textWriters)
-                textWriter.Write(value);
-        }
-
-        public override void Write(char[] buffer, int index, int count)
-        {
-            var value = new string(buffer, index, count);
-            Write(value);
-        }
-
-        public override void Write(string value)
-        {
-            foreach (var textWriter in _textWriters)
-            {
-                textWriter.Write(value);
-            }
+            textWriter.Write(value);
         }
     }
 }

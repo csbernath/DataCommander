@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace Foundation.Log
+namespace Foundation.Log;
+
+public interface ILog : IDisposable
 {
-    public interface ILog : IDisposable
-    {
-        void Write(LogLevel logLevel, string message);
-        bool IsEnabled(LogLevel logLevel);
-    }
+    void Write(LogLevel logLevel, string message);
+    bool IsEnabled(LogLevel logLevel);
 }

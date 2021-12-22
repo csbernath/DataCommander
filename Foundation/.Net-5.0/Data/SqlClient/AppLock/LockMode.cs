@@ -1,12 +1,11 @@
 ﻿
-namespace Foundation.Data.SqlClient.AppLock
+namespace Foundation.Data.SqlClient.AppLock;
+
+public enum LockMode
 {
-    public enum LockMode
-    {
-        Shared,
-        Update,
-        IntentShared,
-        IntentExclusive,
-        Exclusive
-    }
+    Shared,
+    Update,
+    IntentShared,
+    IntentExclusive,
+    Exclusive
 }

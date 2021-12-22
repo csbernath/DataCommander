@@ -2,13 +2,12 @@
 using System.Data;
 using System.Threading;
 
-namespace Foundation.Data
+namespace Foundation.Data;
+
+public interface ISafeDbConnection
 {
-    public interface ISafeDbConnection
-    {
-        CancellationToken CancellationToken { get; }
-        object Id { get; }
-        void HandleException(Exception exception, TimeSpan elapsed);
-        void HandleException(Exception exception, IDbCommand command);
-    }
+    CancellationToken CancellationToken { get; }
+    object Id { get; }
+    void HandleException(Exception exception, TimeSpan elapsed);
+    void HandleException(Exception exception, IDbCommand command);
 }

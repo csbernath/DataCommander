@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Foundation.Threading.Tasks
+namespace Foundation.Threading.Tasks;
+
+internal sealed class MonitoredTaskActionState : MonitoredTaskState
 {
-    internal sealed class MonitoredTaskActionState : MonitoredTaskState
-    {
-        public Action<object> Action = null;
-    }
+    public Action<object> Action = null;
 }

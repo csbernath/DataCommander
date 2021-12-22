@@ -1,32 +1,31 @@
 ﻿using System;
 
-namespace Foundation.Log
+namespace Foundation.Log;
+
+public sealed class NullLogFactory : ILogFactory
 {
-    public sealed class NullLogFactory : ILogFactory
+    public static readonly NullLogFactory Instance = new();
+
+    private NullLogFactory()
     {
-        public static readonly NullLogFactory Instance = new();
-
-        private NullLogFactory()
-        {
-        }
-
-        #region ILogFactory Members
-
-        string ILogFactory.FileName => null;
-
-        ILog ILogFactory.GetLog(string name)
-        {
-            return NullLog.Instance;
-        }
-
-        #endregion
-
-        #region IDisposable Members
-
-        void IDisposable.Dispose()
-        {
-        }
-
-        #endregion
     }
+
+    #region ILogFactory Members
+
+    string ILogFactory.FileName => null;
+
+    ILog ILogFactory.GetLog(string name)
+    {
+        return NullLog.Instance;
+    }
+
+    #endregion
+
+    #region IDisposable Members
+
+    void IDisposable.Dispose()
+    {
+    }
+
+    #endregion
 }

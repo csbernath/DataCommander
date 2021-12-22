@@ -1,52 +1,51 @@
 ﻿using System.IO;
 
-namespace Foundation.Configuration
+namespace Foundation.Configuration;
+
+/// <summary>
+/// 
+/// </summary>
+public static class IniReader
 {
     /// <summary>
     /// 
     /// </summary>
-    public static class IniReader
+    /// <param name="reader"></param>
+    /// <returns></returns>
+    public static ConfigurationNode Read(TextReader reader)
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="reader"></param>
-        /// <returns></returns>
-        public static ConfigurationNode Read(TextReader reader)
+        var node = new ConfigurationNode(null);
+        var currentNode = node;
+
+        while (reader.Peek() != -1)
         {
-            var node = new ConfigurationNode(null);
-            var currentNode = node;
+            var line = reader.ReadLine();
 
-            while (reader.Peek() != -1)
+            if (!string.IsNullOrEmpty(line))
             {
-                var line = reader.ReadLine();
-
-                if (!string.IsNullOrEmpty(line))
+                if (line[0] == '[')
                 {
-                    if (line[0] == '[')
-                    {
-                        var index = line.IndexOf(']');
-                        var name = line.Substring(1, index - 1);
-                        var childNode = new ConfigurationNode(name);
-                        node.AddChildNode(childNode);
-                        currentNode = childNode;
-                    }
-                    else
-                    {
-                        var index = line.IndexOf('=');
+                    var index = line.IndexOf(']');
+                    var name = line.Substring(1, index - 1);
+                    var childNode = new ConfigurationNode(name);
+                    node.AddChildNode(childNode);
+                    currentNode = childNode;
+                }
+                else
+                {
+                    var index = line.IndexOf('=');
 
-                        if (index >= 0)
-                        {
-                            var name = line.Substring(0, index);
-                            var length = line.Length - index - 1;
-                            var value = line.Substring(index + 1, length);
-                            currentNode.Attributes.Add(new ConfigurationAttribute(name, value, null));
-                        }
+                    if (index >= 0)
+                    {
+                        var name = line.Substring(0, index);
+                        var length = line.Length - index - 1;
+                        var value = line.Substring(index + 1, length);
+                        currentNode.Attributes.Add(new ConfigurationAttribute(name, value, null));
                     }
                 }
             }
-
-            return node;
         }
+
+        return node;
     }
 }

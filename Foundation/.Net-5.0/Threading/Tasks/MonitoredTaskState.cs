@@ -1,9 +1,8 @@
 ﻿
-namespace Foundation.Threading.Tasks
+namespace Foundation.Threading.Tasks;
+
+internal class MonitoredTaskState
 {
-    internal class MonitoredTaskState
-    {
-        public object State = null;
-        public TaskInfo TaskInfo = null;
-    }
+    public object State = null;
+    public TaskInfo TaskInfo = null;
 }

@@ -1,27 +1,26 @@
 ﻿using System.Text;
 using Microsoft.Data.SqlClient;
 
-namespace Foundation.Data.SqlClient2
+namespace Foundation.Data.SqlClient2;
+
+public static class SqlErrorCollectionExtensions
 {
-    public static class SqlErrorCollectionExtensions
+    public static string ToLogString(this SqlErrorCollection errors)
     {
-        public static string ToLogString(this SqlErrorCollection errors)
+        string message = null;
+
+        if (errors != null)
         {
-            string message = null;
-
-            if (errors != null)
+            var stringBuilder = new StringBuilder();
+            foreach (SqlError error in errors)
             {
-                var stringBuilder = new StringBuilder();
-                foreach (SqlError error in errors)
-                {
-                    var s = error.ToLogString();
-                    stringBuilder.AppendLine(s);
-                }
-
-                message = stringBuilder.ToString();
+                var s = error.ToLogString();
+                stringBuilder.AppendLine(s);
             }
 
-            return message;
+            message = stringBuilder.ToString();
         }
+
+        return message;
     }
 }

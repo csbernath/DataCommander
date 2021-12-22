@@ -1,23 +1,22 @@
-﻿namespace Foundation.Collections.IndexableCollection
+﻿namespace Foundation.Collections.IndexableCollection;
+
+public struct GetKeyResponse<T>
 {
-    public struct GetKeyResponse<T>
+    public GetKeyResponse(bool hasKey, T key)
     {
-        public GetKeyResponse(bool hasKey, T key)
-        {
-            HasKey = hasKey;
-            Key = key;
-        }
-
-        public bool HasKey { get; }
-
-        public T Key { get; }
+        HasKey = hasKey;
+        Key = key;
     }
 
-    public static class GetKeyResponse
+    public bool HasKey { get; }
+
+    public T Key { get; }
+}
+
+public static class GetKeyResponse
+{
+    public static GetKeyResponse<T> Create<T>(bool hasKey, T key)
     {
-        public static GetKeyResponse<T> Create<T>(bool hasKey, T key)
-        {
-            return new GetKeyResponse<T>(hasKey, key);
-        }
+        return new GetKeyResponse<T>(hasKey, key);
     }
 }

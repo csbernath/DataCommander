@@ -1,9 +1,8 @@
 ﻿using System.Drawing;
 
-namespace DataCommander.Providers
+namespace DataCommander.Providers;
+
+public interface IQueryForm
 {
-    public interface IQueryForm
-    {
-        void SetStatusbarPanelText(string text, Color color);
-    }
+    void SetStatusbarPanelText(string text, Color color);
 }

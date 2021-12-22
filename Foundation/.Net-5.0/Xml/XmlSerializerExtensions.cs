@@ -3,20 +3,19 @@ using System.Xml;
 using System.Xml.Serialization;
 using Foundation.Assertions;
 
-namespace Foundation.Xml
+namespace Foundation.Xml;
+
+public static class XmlSerializerExtensions
 {
-    public static class XmlSerializerExtensions
+    public static string SerializeToXmlString(this XmlSerializer xmlSerializer, XmlWriterSettings xmlWriterSettings, object o)
     {
-        public static string SerializeToXmlString(this XmlSerializer xmlSerializer, XmlWriterSettings xmlWriterSettings, object o)
-        {
-            Assert.IsNotNull(xmlSerializer);
+        Assert.IsNotNull(xmlSerializer);
 
-            var stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
-            using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
-                xmlSerializer.Serialize(xmlWriter, o);
+        using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
+            xmlSerializer.Serialize(xmlWriter, o);
 
-            return stringBuilder.ToString();
-        }
+        return stringBuilder.ToString();
     }
 }

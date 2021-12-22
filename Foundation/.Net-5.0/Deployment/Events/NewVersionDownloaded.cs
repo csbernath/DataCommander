@@ -1,7 +1,6 @@
 ﻿
-namespace Foundation.Deployment.Events
+namespace Foundation.Deployment.Events;
+
+public sealed class NewVersionDownloaded : Event
 {
-    public sealed class NewVersionDownloaded : Event
-    {
-    }
 }

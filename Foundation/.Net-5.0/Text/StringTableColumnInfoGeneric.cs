@@ -1,21 +1,20 @@
 ﻿using System;
 using Foundation.Assertions;
 
-namespace Foundation.Text
+namespace Foundation.Text;
+
+public sealed class StringTableColumnInfo<T>
 {
-    public sealed class StringTableColumnInfo<T>
+    public readonly string ColumnName;
+    public readonly StringTableColumnAlign Align;
+    public readonly Func<T, string> ToStringFunction;
+
+    public StringTableColumnInfo(string columnName, StringTableColumnAlign align, Func<T, string> toStringFunction)
     {
-        public readonly string ColumnName;
-        public readonly StringTableColumnAlign Align;
-        public readonly Func<T, string> ToStringFunction;
+        Assert.IsNotNull(toStringFunction);
 
-        public StringTableColumnInfo(string columnName, StringTableColumnAlign align, Func<T, string> toStringFunction)
-        {
-            Assert.IsNotNull(toStringFunction);
-
-            ColumnName = columnName;
-            Align = align;
-            ToStringFunction = toStringFunction;
-        }
+        ColumnName = columnName;
+        Align = align;
+        ToStringFunction = toStringFunction;
     }
 }

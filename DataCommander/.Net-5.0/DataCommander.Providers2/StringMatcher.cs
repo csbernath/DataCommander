@@ -1,22 +1,21 @@
 ﻿using System;
 
-namespace DataCommander.Providers2
+namespace DataCommander.Providers2;
+
+public sealed class StringMatcher : IStringMatcher
 {
-    public sealed class StringMatcher : IStringMatcher
+    private readonly string _subString;
+    private readonly StringComparison _comparison;
+
+    public StringMatcher(string subString, StringComparison comparison)
     {
-        private readonly string _subString;
-        private readonly StringComparison _comparison;
+        _subString = subString;
+        _comparison = comparison;
+    }
 
-        public StringMatcher(string subString, StringComparison comparison)
-        {
-            _subString = subString;
-            _comparison = comparison;
-        }
-
-        public bool IsMatch(string text)
-        {
-            var index = text.IndexOf(_subString, _comparison);
-            return index >= 0;
-        }
+    public bool IsMatch(string text)
+    {
+        var index = text.IndexOf(_subString, _comparison);
+        return index >= 0;
     }
 }

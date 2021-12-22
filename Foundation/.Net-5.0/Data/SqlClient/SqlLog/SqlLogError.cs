@@ -2,77 +2,76 @@
 using System.Data.SqlClient;
 using System.Text;
 
-namespace Foundation.Data.SqlClient.SqlLog
+namespace Foundation.Data.SqlClient.SqlLog;
+
+internal sealed class SqlLogError : ISqlLogItem
 {
-    internal sealed class SqlLogError : ISqlLogItem
+    private readonly int _applicationId;
+    private readonly int _connectionNo;
+    private readonly int _commandNo;
+    private readonly int _executionNo;
+    private readonly Exception _exception;
+
+    public SqlLogError(
+        int applicationId,
+        int connectionNo,
+        int commandNo,
+        int executionNo,
+        Exception exception)
     {
-        private readonly int _applicationId;
-        private readonly int _connectionNo;
-        private readonly int _commandNo;
-        private readonly int _executionNo;
-        private readonly Exception _exception;
+        _applicationId = applicationId;
+        _connectionNo = connectionNo;
+        _commandNo = commandNo;
+        _executionNo = executionNo;
+        _exception = exception;
+    }
 
-        public SqlLogError(
-            int applicationId,
-            int connectionNo,
-            int commandNo,
-            int executionNo,
-            Exception exception)
+    public string CommandText
+    {
+        get
         {
-            _applicationId = applicationId;
-            _connectionNo = connectionNo;
-            _commandNo = commandNo;
-            _executionNo = executionNo;
-            _exception = exception;
-        }
+            var sb = new StringBuilder();
+            var sqlEx = _exception as SqlException;
 
-        public string CommandText
-        {
-            get
+            if (sqlEx != null)
             {
-                var sb = new StringBuilder();
-                var sqlEx = _exception as SqlException;
+                var errors = sqlEx.Errors;
+                var count = errors.Count;
 
-                if (sqlEx != null)
+                for (var i = 0; i < count; i++)
                 {
-                    var errors = sqlEx.Errors;
-                    var count = errors.Count;
+                    var error = errors[i];
+                    var procedure = error.Procedure;
 
-                    for (var i = 0; i < count; i++)
-                    {
-                        var error = errors[i];
-                        var procedure = error.Procedure;
+                    if (procedure.Length == 0)
+                        procedure = null;
 
-                        if (procedure.Length == 0)
-                            procedure = null;
-
-                        AppendError(sb, i + 1, error.Number, error.Class, error.State, procedure, error.LineNumber, error.Message);
-                    }
+                    AppendError(sb, i + 1, error.Number, error.Class, error.State, procedure, error.LineNumber, error.Message);
                 }
-                else
-                {
-                    var text = _exception.ToString();
-                    sb.AppendFormat("exec LogException {0},{1},{2},{3},{4}", _applicationId, _connectionNo, _commandNo, _executionNo, text.ToNullableVarChar());
-                }
-
-                return sb.ToString();
             }
-        }
+            else
+            {
+                var text = _exception.ToString();
+                sb.AppendFormat("exec LogException {0},{1},{2},{3},{4}", _applicationId, _connectionNo, _commandNo, _executionNo, text.ToNullableVarChar());
+            }
 
-        private void AppendError(StringBuilder sb, int errorNo, int error, byte severity, byte state, string procedure, int line, string message)
-        {
-            sb.AppendFormat(
-                "exec LogError {0},{1},{2},{3},{4},{5},{6},{7},{8},{9}\r\n",
-                _applicationId,
-                _connectionNo,
-                _commandNo,
-                _executionNo,
-                errorNo,
-                error,
-                severity,
-                state,
-                procedure.ToNullableVarChar(),
-                message.ToNullableVarChar());
+            return sb.ToString();
         }
+    }
+
+    private void AppendError(StringBuilder sb, int errorNo, int error, byte severity, byte state, string procedure, int line, string message)
+    {
+        sb.AppendFormat(
+            "exec LogError {0},{1},{2},{3},{4},{5},{6},{7},{8},{9}\r\n",
+            _applicationId,
+            _connectionNo,
+            _commandNo,
+            _executionNo,
+            errorNo,
+            error,
+            severity,
+            state,
+            procedure.ToNullableVarChar(),
+            message.ToNullableVarChar());
     }
 }

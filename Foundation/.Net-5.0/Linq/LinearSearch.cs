@@ -1,48 +1,47 @@
 ﻿using System;
 using Foundation.Assertions;
 
-namespace Foundation.Linq
+namespace Foundation.Linq;
+
+public static class LinearSearch
 {
-    public static class LinearSearch
+    public static int IndexOf(int minIndex, int maxIndex, Func<int, bool> predicate)
     {
-        public static int IndexOf(int minIndex, int maxIndex, Func<int, bool> predicate)
+        Assert.IsNotNull(predicate);
+
+        var index = -1;
+
+        while (minIndex <= maxIndex)
         {
-            Assert.IsNotNull(predicate);
-
-            var index = -1;
-
-            while (minIndex <= maxIndex)
+            if (predicate(minIndex))
             {
-                if (predicate(minIndex))
-                {
-                    index = minIndex;
-                    break;
-                }
-
-                minIndex++;
+                index = minIndex;
+                break;
             }
 
-            return index;
+            minIndex++;
         }
 
-        public static int LastIndexOf(int minIndex, int maxIndex, Func<int, bool> predicate)
+        return index;
+    }
+
+    public static int LastIndexOf(int minIndex, int maxIndex, Func<int, bool> predicate)
+    {
+        Assert.IsNotNull(predicate);
+
+        var index = -1;
+
+        while (minIndex <= maxIndex)
         {
-            Assert.IsNotNull(predicate);
-
-            var index = -1;
-
-            while (minIndex <= maxIndex)
+            if (predicate(maxIndex))
             {
-                if (predicate(maxIndex))
-                {
-                    index = maxIndex;
-                    break;
-                }
-
-                maxIndex--;
+                index = maxIndex;
+                break;
             }
 
-            return index;
+            maxIndex--;
         }
+
+        return index;
     }
 }

@@ -1,31 +1,30 @@
 ﻿using System;
 
-namespace Foundation.Log
+namespace Foundation.Log;
+
+internal sealed class NullLog : ILog
 {
-    internal sealed class NullLog : ILog
+    public static readonly NullLog Instance = new();
+
+    private NullLog()
     {
-        public static readonly NullLog Instance = new();
-
-        private NullLog()
-        {
-        }
-
-        #region ILog Members
-
-        bool ILog.IsEnabled(LogLevel logLevel) => false;
-
-        void ILog.Write(LogLevel logLevel, string message)
-        {
-        }
-
-        #endregion
-
-        #region IDisposable Members
-
-        void IDisposable.Dispose()
-        {
-        }
-
-        #endregion
     }
+
+    #region ILog Members
+
+    bool ILog.IsEnabled(LogLevel logLevel) => false;
+
+    void ILog.Write(LogLevel logLevel, string message)
+    {
+    }
+
+    #endregion
+
+    #region IDisposable Members
+
+    void IDisposable.Dispose()
+    {
+    }
+
+    #endregion
 }

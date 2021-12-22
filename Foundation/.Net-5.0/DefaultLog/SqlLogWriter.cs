@@ -8,154 +8,153 @@ using Foundation.InternalLog;
 using Foundation.Log;
 using Foundation.Threading;
 
-namespace Foundation.DefaultLog
+namespace Foundation.DefaultLog;
+
+/// <summary>
+/// 
+/// </summary>
+internal sealed class SqlLogWriter : ILogWriter
 {
+    #region Private Fields
+
+    private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(SqlLogWriter));
+    private const int Period = 10000;
+    private readonly Func<IDbConnection> _createConnection;
+    private readonly Func<LogEntry, string> _logEntryToCommandText;
+    private readonly int _commandTimeout;
+    private readonly SingleThreadPool _singleThreadPool;
+    private readonly List<LogEntry> _entryQueue = new();
+    private readonly object _lockObject = new();
+    private Timer _timer;
+
+    #endregion
+
     /// <summary>
     /// 
     /// </summary>
-    internal sealed class SqlLogWriter : ILogWriter
+    /// <param name="createConnection"></param>
+    /// <param name="logEntryToCommandText"></param>
+    /// <param name="commandTimeout"></param>
+    /// <param name="singleThreadPool"></param>
+    public SqlLogWriter(
+        Func<IDbConnection> createConnection,
+        Func<LogEntry, string> logEntryToCommandText,
+        int commandTimeout,
+        SingleThreadPool singleThreadPool)
     {
-        #region Private Fields
+        Assert.IsNotNull(createConnection);
+        Assert.IsNotNull(logEntryToCommandText);
+        Assert.IsNotNull(singleThreadPool);
 
-        private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(SqlLogWriter));
-        private const int Period = 10000;
-        private readonly Func<IDbConnection> _createConnection;
-        private readonly Func<LogEntry, string> _logEntryToCommandText;
-        private readonly int _commandTimeout;
-        private readonly SingleThreadPool _singleThreadPool;
-        private readonly List<LogEntry> _entryQueue = new();
-        private readonly object _lockObject = new();
-        private Timer _timer;
+        _createConnection = createConnection;
+        _logEntryToCommandText = logEntryToCommandText;
+        _singleThreadPool = singleThreadPool;
+        _commandTimeout = commandTimeout;
+    }
 
-        #endregion
+    #region ILogWriter Members
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="createConnection"></param>
-        /// <param name="logEntryToCommandText"></param>
-        /// <param name="commandTimeout"></param>
-        /// <param name="singleThreadPool"></param>
-        public SqlLogWriter(
-            Func<IDbConnection> createConnection,
-            Func<LogEntry, string> logEntryToCommandText,
-            int commandTimeout,
-            SingleThreadPool singleThreadPool)
+    void ILogWriter.Open()
+    {
+        _timer = new Timer(TimerCallback, null, 0, Period);
+    }
+
+    void ILogWriter.Write(LogEntry logEntry)
+    {
+        lock (_entryQueue)
         {
-            Assert.IsNotNull(createConnection);
-            Assert.IsNotNull(logEntryToCommandText);
-            Assert.IsNotNull(singleThreadPool);
+            _entryQueue.Add(logEntry);
+        }
+    }
 
-            _createConnection = createConnection;
-            _logEntryToCommandText = logEntryToCommandText;
-            _singleThreadPool = singleThreadPool;
-            _commandTimeout = commandTimeout;
+    private void Flush()
+    {
+        TimerCallback(null);
+    }
+
+    void ILogWriter.Flush()
+    {
+        Flush();
+    }
+
+    void ILogWriter.Close()
+    {
+        if (_timer != null)
+        {
+            _timer.Dispose();
+            _timer = null;
         }
 
-        #region ILogWriter Members
+        Flush();
+    }
 
-        void ILogWriter.Open()
-        {
-            _timer = new Timer(TimerCallback, null, 0, Period);
-        }
+    #endregion
 
-        void ILogWriter.Write(LogEntry logEntry)
+    #region IDisposable Members
+
+    void IDisposable.Dispose()
+    {
+        // TODO
+    }
+
+    #endregion
+
+    private void TimerCallback(object state)
+    {
+        lock (_lockObject)
         {
-            lock (_entryQueue)
+            if (_entryQueue.Count > 0)
             {
-                _entryQueue.Add(logEntry);
-            }
-        }
+                if (_timer != null)
+                    _timer.Change(Timeout.Infinite, Timeout.Infinite);
 
-        private void Flush()
-        {
-            TimerCallback(null);
-        }
+                LogEntry[] array;
 
-        void ILogWriter.Flush()
-        {
-            Flush();
-        }
-
-        void ILogWriter.Close()
-        {
-            if (_timer != null)
-            {
-                _timer.Dispose();
-                _timer = null;
-            }
-
-            Flush();
-        }
-
-        #endregion
-
-        #region IDisposable Members
-
-        void IDisposable.Dispose()
-        {
-            // TODO
-        }
-
-        #endregion
-
-        private void TimerCallback(object state)
-        {
-            lock (_lockObject)
-            {
-                if (_entryQueue.Count > 0)
+                lock (_entryQueue)
                 {
-                    if (_timer != null)
-                        _timer.Change(Timeout.Infinite, Timeout.Infinite);
-
-                    LogEntry[] array;
-
-                    lock (_entryQueue)
-                    {
-                        var count = _entryQueue.Count;
-                        array = new LogEntry[count];
-                        _entryQueue.CopyTo(array);
-                        _entryQueue.Clear();
-                    }
-
-                    _singleThreadPool.QueueUserWorkItem(WaitCallback, array);
-
-                    if (_timer != null)
-                        _timer.Change(Period, Period);
-                }
-            }
-        }
-
-        private void WaitCallback(object state)
-        {
-            try
-            {
-                var array = (LogEntry[])state;
-                var sb = new StringBuilder();
-                string commandText;
-
-                for (var i = 0; i < array.Length; i++)
-                {
-                    commandText = _logEntryToCommandText(array[i]);
-                    sb.AppendLine(commandText);
+                    var count = _entryQueue.Count;
+                    array = new LogEntry[count];
+                    _entryQueue.CopyTo(array);
+                    _entryQueue.Clear();
                 }
 
-                commandText = sb.ToString();
+                _singleThreadPool.QueueUserWorkItem(WaitCallback, array);
 
-                using (var connection = _createConnection())
-                {
-                    connection.Open();
-                    var command = connection.CreateCommand();
-                    command.CommandType = CommandType.Text;
-                    command.CommandText = commandText;
-                    command.CommandTimeout = _commandTimeout;
-                    command.ExecuteNonQuery();
-                }
+                if (_timer != null)
+                    _timer.Change(Period, Period);
             }
-            catch (Exception e)
+        }
+    }
+
+    private void WaitCallback(object state)
+    {
+        try
+        {
+            var array = (LogEntry[])state;
+            var sb = new StringBuilder();
+            string commandText;
+
+            for (var i = 0; i < array.Length; i++)
             {
-                Log.Error(e.ToString());
+                commandText = _logEntryToCommandText(array[i]);
+                sb.AppendLine(commandText);
             }
+
+            commandText = sb.ToString();
+
+            using (var connection = _createConnection())
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.Text;
+                command.CommandText = commandText;
+                command.CommandTimeout = _commandTimeout;
+                command.ExecuteNonQuery();
+            }
+        }
+        catch (Exception e)
+        {
+            Log.Error(e.ToString());
         }
     }
 }

@@ -1,22 +1,21 @@
 ﻿using System;
 
-namespace Foundation.Log
+namespace Foundation.Log;
+
+public interface ILogWriter : IDisposable
 {
-    public interface ILogWriter : IDisposable
-    {
-        void Open();
+    void Open();
 
-        /// <summary>
-        /// Writes a message to the output.
-        /// </summary>
-        /// <param name="logEntry"></param>
-        void Write(LogEntry logEntry);
+    /// <summary>
+    /// Writes a message to the output.
+    /// </summary>
+    /// <param name="logEntry"></param>
+    void Write(LogEntry logEntry);
 
-        void Flush();
+    void Flush();
 
-        /// <summary>
-        /// Closes the LogWriter (e.g. file, database connection etc.)
-        /// </summary>
-        void Close();
-    }
+    /// <summary>
+    /// Closes the LogWriter (e.g. file, database connection etc.)
+    /// </summary>
+    void Close();
 }

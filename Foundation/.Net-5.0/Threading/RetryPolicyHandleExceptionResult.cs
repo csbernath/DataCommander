@@ -1,19 +1,18 @@
 ﻿using System;
 using Foundation.Assertions;
 
-namespace Foundation.Threading
+namespace Foundation.Threading;
+
+public class RetryPolicyHandleExceptionResult
 {
-    public class RetryPolicyHandleExceptionResult
+    public readonly bool AnotherTryAllowed;
+    public readonly TimeSpan? WaitBeforeRetry;
+
+    public RetryPolicyHandleExceptionResult(bool anotherTryAllowed, TimeSpan? waitBeforeRetry)
     {
-        public readonly bool AnotherTryAllowed;
-        public readonly TimeSpan? WaitBeforeRetry;
+        Assert.IsTrue((anotherTryAllowed && waitBeforeRetry == null) || (!anotherTryAllowed && waitBeforeRetry != null));
 
-        public RetryPolicyHandleExceptionResult(bool anotherTryAllowed, TimeSpan? waitBeforeRetry)
-        {
-            Assert.IsTrue((anotherTryAllowed && waitBeforeRetry == null) || (!anotherTryAllowed && waitBeforeRetry != null));
-
-            AnotherTryAllowed = anotherTryAllowed;
-            WaitBeforeRetry = waitBeforeRetry;
-        }
+        AnotherTryAllowed = anotherTryAllowed;
+        WaitBeforeRetry = waitBeforeRetry;
     }
 }

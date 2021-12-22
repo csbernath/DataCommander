@@ -1,6 +1,5 @@
 ﻿
-namespace Foundation.Data.PTypes
-{
+namespace Foundation.Data.PTypes;
 #if DOC
     /// <summary>
     /// The <b>Foundation.Data.PTypes</b> namespace provides classes (parameter types) for native data types within SQL Server.
@@ -30,4 +29,3 @@ namespace Foundation.Data.PTypes
     {
     }
 #endif
-}

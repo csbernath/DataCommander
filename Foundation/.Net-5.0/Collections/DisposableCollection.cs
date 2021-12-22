@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
-namespace Foundation.Collections
+namespace Foundation.Collections;
+
+public class DisposableCollection<T> : Collection<T>, IDisposable where T : IDisposable
 {
-    public class DisposableCollection<T> : Collection<T>, IDisposable where T : IDisposable
+    #region IDisposable Members
+
+    public void Dispose()
     {
-        #region IDisposable Members
-
-        public void Dispose()
-        {
-            foreach (var item in this)
-                if (item != null)
-                    item.Dispose();
-        }
-
-        #endregion
+        foreach (var item in this)
+            if (item != null)
+                item.Dispose();
     }
+
+    #endregion
 }

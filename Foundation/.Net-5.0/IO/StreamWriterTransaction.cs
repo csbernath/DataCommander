@@ -3,52 +3,51 @@ using System.ComponentModel;
 using System.IO;
 using System.Text;
 
-namespace Foundation.IO
+namespace Foundation.IO;
+
+public sealed class StreamWriterTransaction : IDisposable
 {
-    public sealed class StreamWriterTransaction : IDisposable
+    #region Private Fields
+
+    private readonly string _path;
+    private readonly string _tempPath;
+    private bool _commited;
+
+    #endregion
+
+    public StreamWriterTransaction(string path, string tempPath)
     {
-        #region Private Fields
+        _path = path;
+        _tempPath = tempPath;
+        Writer = new StreamWriter(tempPath, false);
+    }
 
-        private readonly string _path;
-        private readonly string _tempPath;
-        private bool _commited;
+    public StreamWriterTransaction(string path, string tempPath, Encoding encoding)
+    {
+        _path = path;
+        _tempPath = tempPath;
+        Writer = new StreamWriter(tempPath, false, encoding);
+    }
 
-        #endregion
+    public StreamWriter Writer { get; }
 
-        public StreamWriterTransaction(string path, string tempPath)
-        {
-            _path = path;
-            _tempPath = tempPath;
-            Writer = new StreamWriter(tempPath, false);
-        }
+    public void Commit()
+    {
+        Writer.Close();
+        const NativeMethods.MoveFileExFlags flags = NativeMethods.MoveFileExFlags.ReplaceExisiting;
+        var succeeded = NativeMethods.MoveFileEx(_tempPath, _path, flags);
 
-        public StreamWriterTransaction(string path, string tempPath, Encoding encoding)
-        {
-            _path = path;
-            _tempPath = tempPath;
-            Writer = new StreamWriter(tempPath, false, encoding);
-        }
+        if (!succeeded)
+            throw new Win32Exception();
 
-        public StreamWriter Writer { get; }
+        _commited = true;
+    }
 
-        public void Commit()
-        {
-            Writer.Close();
-            const NativeMethods.MoveFileExFlags flags = NativeMethods.MoveFileExFlags.ReplaceExisiting;
-            var succeeded = NativeMethods.MoveFileEx(_tempPath, _path, flags);
+    void IDisposable.Dispose()
+    {
+        Writer.Dispose();
 
-            if (!succeeded)
-                throw new Win32Exception();
-
-            _commited = true;
-        }
-
-        void IDisposable.Dispose()
-        {
-            Writer.Dispose();
-
-            if (!_commited)
-                File.Delete(_tempPath);
-        }
+        if (!_commited)
+            File.Delete(_tempPath);
     }
 }

@@ -1,28 +1,27 @@
-﻿namespace DataCommander.Providers2.FieldNamespace
+﻿namespace DataCommander.Providers2.FieldNamespace;
+
+public sealed class BooleanField
 {
-    public sealed class BooleanField
+    private readonly bool _value;
+
+    public BooleanField(bool value)
     {
-		private readonly bool _value;
+        _value = value;
+    }
 
-        public BooleanField(bool value)
+    public override string ToString()
+    {
+        int int32Value;
+
+        if (_value)
         {
-            _value = value;
+            int32Value = 1;
+        }
+        else
+        {
+            int32Value = 0;
         }
 
-        public override string ToString()
-        {
-            int int32Value;
-
-            if (_value)
-            {
-                int32Value = 1;
-            }
-            else
-            {
-                int32Value = 0;
-            }
-
-            return int32Value.ToString();
-        }
+        return int32Value.ToString();
     }
 }

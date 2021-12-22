@@ -8,241 +8,240 @@ using DataCommander.Providers2;
 using DataCommander.Providers2.FieldNamespace;
 using DataCommander.Providers2.Query;
 
-namespace DataCommander.Providers.Query
+namespace DataCommander.Providers.Query;
+
+internal static class QueryFormStaticMethods
 {
-    internal static class QueryFormStaticMethods
+    //private static HtmlTextBox CreateHtmlTextBoxFromDataTable(DataTable dataTable)
+    //{
+    //    var fileName = Path.GetTempFileName();
+    //    var fileStream = new FileStream(fileName, FileMode.OpenOrCreate);
+    //    using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
+    //    {
+    //        var columnIndexes = new int[dataTable.Columns.Count];
+    //        for (var i = 0; i < columnIndexes.Length; i++)
+    //            columnIndexes[i] = i;
+    //        HtmlFormatter.Write(dataTable.DefaultView, columnIndexes, streamWriter);
+    //    }
+
+    //    var htmlTextBox = new HtmlTextBox();
+    //    htmlTextBox.Navigate(fileName);
+
+    //    return htmlTextBox;
+    //}
+
+    public static Control CreateControlFromDataTable(DbCommandBuilder commandBuilder, DataTable dataTable, GetTableSchemaResult getTableSchemaResult,
+        ResultWriterType tableStyle, bool readOnly, ToolStripStatusLabel toolStripStatusLabel, ColorTheme colorTheme)
     {
-        //private static HtmlTextBox CreateHtmlTextBoxFromDataTable(DataTable dataTable)
-        //{
-        //    var fileName = Path.GetTempFileName();
-        //    var fileStream = new FileStream(fileName, FileMode.OpenOrCreate);
-        //    using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
-        //    {
-        //        var columnIndexes = new int[dataTable.Columns.Count];
-        //        for (var i = 0; i < columnIndexes.Length; i++)
-        //            columnIndexes[i] = i;
-        //        HtmlFormatter.Write(dataTable.DefaultView, columnIndexes, streamWriter);
-        //    }
+        Control control;
 
-        //    var htmlTextBox = new HtmlTextBox();
-        //    htmlTextBox.Navigate(fileName);
-
-        //    return htmlTextBox;
-        //}
-
-        public static Control CreateControlFromDataTable(DbCommandBuilder commandBuilder, DataTable dataTable, GetTableSchemaResult getTableSchemaResult,
-            ResultWriterType tableStyle, bool readOnly, ToolStripStatusLabel toolStripStatusLabel, ColorTheme colorTheme)
+        switch (tableStyle)
         {
-            Control control;
+            case ResultWriterType.DataGrid:
+                control = CreateDataTableEditorFromDataTable(commandBuilder, dataTable, getTableSchemaResult, readOnly, toolStripStatusLabel, colorTheme);
+                break;
 
-            switch (tableStyle)
-            {
-                case ResultWriterType.DataGrid:
-                    control = CreateDataTableEditorFromDataTable(commandBuilder, dataTable, getTableSchemaResult, readOnly, toolStripStatusLabel, colorTheme);
-                    break;
+            //case ResultWriterType.Html:
+            //    control = CreateHtmlTextBoxFromDataTable(dataTable);
+            //    break;
 
-                //case ResultWriterType.Html:
-                //    control = CreateHtmlTextBoxFromDataTable(dataTable);
-                //    break;
+            case ResultWriterType.ListView:
+                control = CreateListViewFromDataTable(dataTable);
+                break;
 
-                case ResultWriterType.ListView:
-                    control = CreateListViewFromDataTable(dataTable);
-                    break;
-
-                default:
-                    throw new NotImplementedException();
-            }
-
-            return control;
+            default:
+                throw new NotImplementedException();
         }
 
-        private static DataTableEditor CreateDataTableEditorFromDataTable(
-            DbCommandBuilder commandBuilder,
-            DataTable dataTable,
-            GetTableSchemaResult getTableSchemaResult,
-            bool readOnly,
-            ToolStripStatusLabel toolStripStatusLabel,
-            ColorTheme colorTheme)
-        {
-            var editor = new DataTableEditor(commandBuilder, colorTheme);
-            editor.ReadOnly = readOnly;
-            editor.DataTable = dataTable;
-            editor.TableName = dataTable.TableName;
-            editor.TableSchema = getTableSchemaResult;
-            editor.StatusBarPanel = toolStripStatusLabel;
-            return editor;
-        }
+        return control;
+    }
 
-        private static ListView CreateListViewFromDataTable(DataTable dataTable)
+    private static DataTableEditor CreateDataTableEditorFromDataTable(
+        DbCommandBuilder commandBuilder,
+        DataTable dataTable,
+        GetTableSchemaResult getTableSchemaResult,
+        bool readOnly,
+        ToolStripStatusLabel toolStripStatusLabel,
+        ColorTheme colorTheme)
+    {
+        var editor = new DataTableEditor(commandBuilder, colorTheme);
+        editor.ReadOnly = readOnly;
+        editor.DataTable = dataTable;
+        editor.TableName = dataTable.TableName;
+        editor.TableSchema = getTableSchemaResult;
+        editor.StatusBarPanel = toolStripStatusLabel;
+        return editor;
+    }
+
+    private static ListView CreateListViewFromDataTable(DataTable dataTable)
+    {
+        var listView = new ListView
         {
-            var listView = new ListView
+            View = View.Details,
+            GridLines = true,
+            AllowColumnReorder = true,
+            Font = new Font("Tahoma", 8),
+            FullRowSelect = true
+        };
+
+        foreach (DataColumn dataColumn in dataTable.Columns)
+        {
+            var columnHeader = new ColumnHeader
             {
-                View = View.Details,
-                GridLines = true,
-                AllowColumnReorder = true,
-                Font = new Font("Tahoma", 8),
-                FullRowSelect = true
+                Text = dataColumn.ColumnName,
+                Width = -2
             };
 
-            foreach (DataColumn dataColumn in dataTable.Columns)
+            var type = (Type)dataColumn.ExtendedProperties[0];
+
+            if (type == null)
             {
-                var columnHeader = new ColumnHeader
-                {
-                    Text = dataColumn.ColumnName,
-                    Width = -2
-                };
-
-                var type = (Type)dataColumn.ExtendedProperties[0];
-
-                if (type == null)
-                {
-                    type = dataColumn.DataType;
-                }
-
-                columnHeader.TextAlign = GetHorizontalAlignment(type);
-
-                listView.Columns.Add(columnHeader);
+                type = dataColumn.DataType;
             }
 
-            var count = dataTable.Columns.Count;
-            var items = new string[count];
+            columnHeader.TextAlign = GetHorizontalAlignment(type);
 
-            foreach (DataRow dataRow in dataTable.Rows)
-            {
-                for (var i = 0; i < count; i++)
-                {
-                    var value = dataRow[i];
-
-                    if (value == DBNull.Value)
-                    {
-                        items[i] = "(null)";
-                    }
-                    else
-                    {
-                        items[i] = value.ToString();
-                    }
-                }
-
-                var listViewItem = new ListViewItem(items);
-                listView.Items.Add(listViewItem);
-            }
-
-            return listView;
+            listView.Columns.Add(columnHeader);
         }
 
-        public static HorizontalAlignment GetHorizontalAlignment(Type type)
+        var count = dataTable.Columns.Count;
+        var items = new string[count];
+
+        foreach (DataRow dataRow in dataTable.Rows)
         {
-            HorizontalAlignment align;
-
-            var typeCode = Type.GetTypeCode(type);
-
-            switch (typeCode)
+            for (var i = 0; i < count; i++)
             {
-                case TypeCode.SByte:
-                case TypeCode.Int16:
-                case TypeCode.Int32:
-                case TypeCode.Int64:
-                case TypeCode.Byte:
-                case TypeCode.UInt16:
-                case TypeCode.UInt32:
-                case TypeCode.UInt64:
-                case TypeCode.Decimal:
-                    align = HorizontalAlignment.Right;
-                    break;
+                var value = dataRow[i];
 
-                default:
-                    align = HorizontalAlignment.Left;
-                    break;
+                if (value == DBNull.Value)
+                {
+                    items[i] = "(null)";
+                }
+                else
+                {
+                    items[i] = value.ToString();
+                }
             }
 
-            return align;
+            var listViewItem = new ListViewItem(items);
+            listView.Items.Add(listViewItem);
         }
 
-        public static bool FindText(DataView dataView, IStringMatcher matcher, ref int rowIndex, ref int columnIndex)
-        {
-            var found = false;
-            var dataTable = dataView.Table;
-            var dataRows = dataTable.Rows;
-            var rowCount = dataView.Count;
-            var columnCount = dataTable.Columns.Count;
-            var currentValueObject = dataTable.DefaultView[rowIndex][columnIndex];
-            string currentValue;
-            if (currentValueObject is StringField)
-            {
-                var stringField = currentValueObject as StringField;
-                currentValue = stringField.Value;
-            }
-            else
-            {
-                currentValue = currentValueObject.ToString();
-            }
+        return listView;
+    }
 
-            if (matcher.IsMatch(currentValue))
+    public static HorizontalAlignment GetHorizontalAlignment(Type type)
+    {
+        HorizontalAlignment align;
+
+        var typeCode = Type.GetTypeCode(type);
+
+        switch (typeCode)
+        {
+            case TypeCode.SByte:
+            case TypeCode.Int16:
+            case TypeCode.Int32:
+            case TypeCode.Int64:
+            case TypeCode.Byte:
+            case TypeCode.UInt16:
+            case TypeCode.UInt32:
+            case TypeCode.UInt64:
+            case TypeCode.Decimal:
+                align = HorizontalAlignment.Right;
+                break;
+
+            default:
+                align = HorizontalAlignment.Left;
+                break;
+        }
+
+        return align;
+    }
+
+    public static bool FindText(DataView dataView, IStringMatcher matcher, ref int rowIndex, ref int columnIndex)
+    {
+        var found = false;
+        var dataTable = dataView.Table;
+        var dataRows = dataTable.Rows;
+        var rowCount = dataView.Count;
+        var columnCount = dataTable.Columns.Count;
+        var currentValueObject = dataTable.DefaultView[rowIndex][columnIndex];
+        string currentValue;
+        if (currentValueObject is StringField)
+        {
+            var stringField = currentValueObject as StringField;
+            currentValue = stringField.Value;
+        }
+        else
+        {
+            currentValue = currentValueObject.ToString();
+        }
+
+        if (matcher.IsMatch(currentValue))
+        {
+            if (columnIndex < columnCount - 1)
             {
-                if (columnIndex < columnCount - 1)
+                columnIndex++;
+            }
+            else if (rowIndex < rowCount - 1)
+            {
+                rowIndex++;
+            }
+        }
+
+        if (rowIndex == 0)
+        {
+            for (var i = columnIndex + 1; i < dataTable.Columns.Count; i++)
+            {
+                var dataColumn = dataTable.Columns[i];
+                found = matcher.IsMatch(dataColumn.ColumnName);
+
+                if (found)
+                {
+                    columnIndex = i;
+                    break;
+                }
+            }
+        }
+
+        if (!found)
+        {
+            var dataRow = dataTable.DefaultView[rowIndex].Row;
+
+            while (true)
+            {
+                found = matcher.IsMatch(dataRow[columnIndex].ToString());
+
+                if (found)
+                {
+                    //cell.DataGridView.Rows[row].Cells[col].Selected = true;
+                    // TODO
+                    // cell.RowIndex = row;
+                    // cell.ColumnIndex = col;
+                    break;
+                }
+
+                if ((columnIndex + 1) % columnCount != 0)
                 {
                     columnIndex++;
                 }
-                else if (rowIndex < rowCount - 1)
+                else
                 {
                     rowIndex++;
-                }
-            }
+                    columnIndex = 0;
 
-            if (rowIndex == 0)
-            {
-                for (var i = columnIndex + 1; i < dataTable.Columns.Count; i++)
-                {
-                    var dataColumn = dataTable.Columns[i];
-                    found = matcher.IsMatch(dataColumn.ColumnName);
-
-                    if (found)
+                    if (rowIndex < rowCount)
                     {
-                        columnIndex = i;
-                        break;
-                    }
-                }
-            }
-
-            if (!found)
-            {
-                var dataRow = dataTable.DefaultView[rowIndex].Row;
-
-                while (true)
-                {
-                    found = matcher.IsMatch(dataRow[columnIndex].ToString());
-
-                    if (found)
-                    {
-                        //cell.DataGridView.Rows[row].Cells[col].Selected = true;
-                        // TODO
-                        // cell.RowIndex = row;
-                        // cell.ColumnIndex = col;
-                        break;
-                    }
-
-                    if ((columnIndex + 1) % columnCount != 0)
-                    {
-                        columnIndex++;
+                        dataRow = dataTable.DefaultView[rowIndex].Row;
                     }
                     else
                     {
-                        rowIndex++;
-                        columnIndex = 0;
-
-                        if (rowIndex < rowCount)
-                        {
-                            dataRow = dataTable.DefaultView[rowIndex].Row;
-                        }
-                        else
-                        {
-                            break;
-                        }
+                        break;
                     }
                 }
             }
-
-            return found;
         }
+
+        return found;
     }
 }

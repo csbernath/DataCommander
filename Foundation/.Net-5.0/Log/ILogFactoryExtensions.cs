@@ -3,101 +3,100 @@ using System.Diagnostics;
 using System.Text;
 using Foundation.Assertions;
 
-namespace Foundation.Log
+namespace Foundation.Log;
+
+public static class LogFactoryExtensions
 {
-    public static class LogFactoryExtensions
+    public static ILog GetTypeLog(this ILogFactory logFactory, Type type)
     {
-        public static ILog GetTypeLog(this ILogFactory logFactory, Type type)
+        Assert.IsNotNull(logFactory);
+        Assert.IsNotNull(type);
+
+        var name = type.FullName;
+
+        var log = logFactory.GetLog(name);
+        //if (log is DefaultLog.Log foundationLog)
+        //    foundationLog.LoggedName = type.Name;
+
+        return log;
+    }
+
+    public static ILog GetCurrentTypeLog(this ILogFactory applicationLog)
+    {
+        var stackFrame = new StackFrame(1, false);
+        var type = stackFrame.GetMethod().DeclaringType;
+        return applicationLog.GetTypeLog(type);
+    }
+
+    public static ILog GetCurrentTypeSectionLog(this ILogFactory applicationLog, string sectionName)
+    {
+        var stackFrame = new StackFrame(1, false);
+        var type = stackFrame.GetMethod().DeclaringType;
+        var name = $"{type.FullName}.{sectionName}";
+        var log = applicationLog.GetLog(name);
+        //if (log is DefaultLog.Log foundationLog)
+        //    foundationLog.LoggedName = $"{type.Name}.{sectionName}";
+
+        return log;
+    }
+
+    public static ILog GetCurrentMethodLog(this ILogFactory applicationLog, params object[] parameters)
+    {
+        var stackFrame = new StackFrame(1, false);
+        var method = stackFrame.GetMethod();
+        var type = method.DeclaringType;
+        var name = $"{type.FullName}.{method.Name}";
+        var log = applicationLog.GetLog(name);
+        //if (log is DefaultLog.Log foundationLog)
+        //    foundationLog.LoggedName = $"{type.Name}.{method.Name}";
+
+        if (parameters.Length > 0)
         {
-            Assert.IsNotNull(logFactory);
-            Assert.IsNotNull(type);
+            var parameterInfos = method.GetParameters();
+            var sb = new StringBuilder();
+            sb.AppendFormat("Entering method {0}(", method.Name);
+            var count = Math.Min(parameterInfos.Length, parameters.Length);
 
-            var name = type.FullName;
-
-            var log = logFactory.GetLog(name);
-            //if (log is DefaultLog.Log foundationLog)
-            //    foundationLog.LoggedName = type.Name;
-
-            return log;
-        }
-
-        public static ILog GetCurrentTypeLog(this ILogFactory applicationLog)
-        {
-            var stackFrame = new StackFrame(1, false);
-            var type = stackFrame.GetMethod().DeclaringType;
-            return applicationLog.GetTypeLog(type);
-        }
-
-        public static ILog GetCurrentTypeSectionLog(this ILogFactory applicationLog, string sectionName)
-        {
-            var stackFrame = new StackFrame(1, false);
-            var type = stackFrame.GetMethod().DeclaringType;
-            var name = $"{type.FullName}.{sectionName}";
-            var log = applicationLog.GetLog(name);
-            //if (log is DefaultLog.Log foundationLog)
-            //    foundationLog.LoggedName = $"{type.Name}.{sectionName}";
-
-            return log;
-        }
-
-        public static ILog GetCurrentMethodLog(this ILogFactory applicationLog, params object[] parameters)
-        {
-            var stackFrame = new StackFrame(1, false);
-            var method = stackFrame.GetMethod();
-            var type = method.DeclaringType;
-            var name = $"{type.FullName}.{method.Name}";
-            var log = applicationLog.GetLog(name);
-            //if (log is DefaultLog.Log foundationLog)
-            //    foundationLog.LoggedName = $"{type.Name}.{method.Name}";
-
-            if (parameters.Length > 0)
+            for (var i = 0; i < count; i++)
             {
-                var parameterInfos = method.GetParameters();
-                var sb = new StringBuilder();
-                sb.AppendFormat("Entering method {0}(", method.Name);
-                var count = Math.Min(parameterInfos.Length, parameters.Length);
-
-                for (var i = 0; i < count; i++)
+                var parameterInfo = parameterInfos[i];
+                sb.AppendFormat("\r\n{0} {1}", parameterInfo.ParameterType.Name, parameterInfo.Name);
+                if (i < parameters.Length)
                 {
-                    var parameterInfo = parameterInfos[i];
-                    sb.AppendFormat("\r\n{0} {1}", parameterInfo.ParameterType.Name, parameterInfo.Name);
-                    if (i < parameters.Length)
-                    {
-                        sb.Append(" = ");
-                        var parameterString = ParameterValueToString(parameters[i]);
-                        sb.Append(parameterString);
-                    }
-
-                    if (i < count - 1)
-                    {
-                        sb.Append(',');
-                    }
+                    sb.Append(" = ");
+                    var parameterString = ParameterValueToString(parameters[i]);
+                    sb.Append(parameterString);
                 }
 
-                sb.Append(')');
-                var message = sb.ToString();
-                log.Trace(message);
+                if (i < count - 1)
+                {
+                    sb.Append(',');
+                }
             }
 
-            return log;
+            sb.Append(')');
+            var message = sb.ToString();
+            log.Trace(message);
         }
 
-        private static string ParameterValueToString(object value)
+        return log;
+    }
+
+    private static string ParameterValueToString(object value)
+    {
+        string parameterString;
+        if (value != null)
         {
-            string parameterString;
-            if (value != null)
-            {
-                parameterString = value as string;
+            parameterString = value as string;
 
-                if (parameterString != null)
-                    parameterString = "\"" + parameterString + '"';
-                else
-                    parameterString = value.ToString();
-            }
+            if (parameterString != null)
+                parameterString = "\"" + parameterString + '"';
             else
-                parameterString = "null";
-
-            return parameterString;
+                parameterString = value.ToString();
         }
+        else
+            parameterString = "null";
+
+        return parameterString;
     }
 }

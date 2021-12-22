@@ -1,8 +1,7 @@
-﻿namespace DataCommander.Providers2
+﻿namespace DataCommander.Providers2;
+
+public interface IStandardOutput
 {
-    public interface IStandardOutput
-    {
-        void WriteLine(params object[] args);
-        void Write(object arg);
-    }
+    void WriteLine(params object[] args);
+    void Write(object arg);
 }

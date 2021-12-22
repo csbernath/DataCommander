@@ -1,6 +1,5 @@
 ﻿
-namespace Foundation.Diagnostics
-{
+namespace Foundation.Diagnostics;
 #if DOC
     /// <summary>
     /// This namespace provides <see cref="Log"/> class
@@ -12,4 +11,3 @@ namespace Foundation.Diagnostics
     {
     }
 #endif
-}

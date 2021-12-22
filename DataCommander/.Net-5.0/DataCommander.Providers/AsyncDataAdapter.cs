@@ -11,300 +11,299 @@ using Foundation.Log;
 using Foundation.Threading;
 using ThreadState = System.Threading.ThreadState;
 
-namespace DataCommander.Providers
+namespace DataCommander.Providers;
+
+internal sealed class AsyncDataAdapter : IAsyncDataAdapter
 {
-    internal sealed class AsyncDataAdapter : IAsyncDataAdapter
+    #region Private Fields
+
+    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+
+    private readonly IProvider _provider;
+    private readonly IReadOnlyCollection<AsyncDataAdapterCommand> _commands;
+    private readonly int _maxRecords;
+    private readonly int _rowBlockSize;
+    private readonly IResultWriter _resultWriter;
+    private readonly Action<IAsyncDataAdapter, Exception> _endFill;
+    private readonly Action<IAsyncDataAdapter> _writeEnd;
+
+    private AsyncDataAdapterCommand _command;
+    private long _rowCount;
+    private WorkerThread _thread;
+    private int _tableCount;
+    private bool _isCommandCancelled;
+
+    #endregion
+
+    public AsyncDataAdapter(IProvider provider, IReadOnlyCollection<AsyncDataAdapterCommand> commands, int maxRecords, int rowBlockSize, IResultWriter resultWriter,
+        Action<IAsyncDataAdapter, Exception> endFill, Action<IAsyncDataAdapter> writeEnd)
     {
-        #region Private Fields
+        _provider = provider;
+        _commands = commands;
+        _maxRecords = maxRecords;
+        _rowBlockSize = rowBlockSize;
+        _resultWriter = resultWriter;
+        _endFill = endFill;
+        _writeEnd = writeEnd;
+    }
 
-        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    #region IAsyncDataAdapter Members
 
-        private readonly IProvider _provider;
-        private readonly IReadOnlyCollection<AsyncDataAdapterCommand> _commands;
-        private readonly int _maxRecords;
-        private readonly int _rowBlockSize;
-        private readonly IResultWriter _resultWriter;
-        private readonly Action<IAsyncDataAdapter, Exception> _endFill;
-        private readonly Action<IAsyncDataAdapter> _writeEnd;
+    IResultWriter IAsyncDataAdapter.ResultWriter => _resultWriter;
+    long IAsyncDataAdapter.RowCount => _rowCount;
+    int IAsyncDataAdapter.TableCount => _tableCount;
 
-        private AsyncDataAdapterCommand _command;
-        private long _rowCount;
-        private WorkerThread _thread;
-        private int _tableCount;
-        private bool _isCommandCancelled;
-
-        #endregion
-
-        public AsyncDataAdapter(IProvider provider, IReadOnlyCollection<AsyncDataAdapterCommand> commands, int maxRecords, int rowBlockSize, IResultWriter resultWriter,
-            Action<IAsyncDataAdapter, Exception> endFill, Action<IAsyncDataAdapter> writeEnd)
+    void IAsyncDataAdapter.Start()
+    {
+        if (_commands != null)
         {
-            _provider = provider;
-            _commands = commands;
-            _maxRecords = maxRecords;
-            _rowBlockSize = rowBlockSize;
-            _resultWriter = resultWriter;
-            _endFill = endFill;
-            _writeEnd = writeEnd;
-        }
-
-        #region IAsyncDataAdapter Members
-
-        IResultWriter IAsyncDataAdapter.ResultWriter => _resultWriter;
-        long IAsyncDataAdapter.RowCount => _rowCount;
-        int IAsyncDataAdapter.TableCount => _tableCount;
-
-        void IAsyncDataAdapter.Start()
-        {
-            if (_commands != null)
+            _thread = new WorkerThread(Fill)
             {
-                _thread = new WorkerThread(Fill)
-                {
-                    Name = "AsyncDataAdapter.Fill"
-                };
-                _thread.Start();
-            }
-            else
-                _writeEnd(this);
+                Name = "AsyncDataAdapter.Fill"
+            };
+            _thread.Start();
         }
+        else
+            _writeEnd(this);
+    }
 
-        void IAsyncDataAdapter.Cancel()
+    void IAsyncDataAdapter.Cancel()
+    {
+        using (LogFactory.Instance.GetCurrentMethodLog())
         {
-            using (LogFactory.Instance.GetCurrentMethodLog())
+            _isCommandCancelled = true;
+            if (_thread != null)
             {
-                _isCommandCancelled = true;
-                if (_thread != null)
+                _thread.Stop();
+                if (_provider.IsCommandCancelable)
+                    ThreadPool.QueueUserWorkItem(CancelWaitCallback);
+                else
                 {
-                    _thread.Stop();
-                    if (_provider.IsCommandCancelable)
-                        ThreadPool.QueueUserWorkItem(CancelWaitCallback);
-                    else
-                    {
-                        var joined = _thread.Join(5000);
-                        if (!joined)
-                            _thread.Abort();
-                    }
+                    var joined = _thread.Join(5000);
+                    if (!joined)
+                        _thread.Abort();
                 }
             }
         }
+    }
 
-        #endregion
+    #endregion
 
-        #region Private Methods
+    #region Private Methods
 
-        private void ReadTable(IDataReader dataReader, DataTable schemaTable, int tableIndex)
+    private void ReadTable(IDataReader dataReader, DataTable schemaTable, int tableIndex)
+    {
+        Assert.IsNotNull(dataReader);
+        Assert.IsNotNull(schemaTable);
+        Assert.IsInRange(tableIndex >= 0);
+
+        using (LogFactory.Instance.GetCurrentMethodLog())
         {
-            Assert.IsNotNull(dataReader);
-            Assert.IsNotNull(schemaTable);
-            Assert.IsInRange(tableIndex >= 0);
+            Exception exception = null;
+            var dataReaderHelper = _provider.CreateDataReaderHelper(dataReader);
+            var schemaRows = schemaTable.Rows;
+            var count = schemaRows.Count;
 
-            using (LogFactory.Instance.GetCurrentMethodLog())
+            _resultWriter.WriteTableBegin(schemaTable);
+
+            var fieldCount = dataReader.FieldCount;
+
+            if (fieldCount < 0)
+                fieldCount = 0;
+
+            var rows = new object[_rowBlockSize][];
+            int i;
+
+            for (i = 0; i < _rowBlockSize; i++)
+                rows[i] = new object[fieldCount];
+
+            _rowCount = 0;
+            i = 0;
+            var first = true;
+            var exitFromWhile = false;
+            var stopwatch = Stopwatch.StartNew();
+
+            while (!_isCommandCancelled && !_thread.IsStopRequested && !exitFromWhile)
             {
-                Exception exception = null;
-                var dataReaderHelper = _provider.CreateDataReaderHelper(dataReader);
-                var schemaRows = schemaTable.Rows;
-                var count = schemaRows.Count;
+                bool read;
 
-                _resultWriter.WriteTableBegin(schemaTable);
-
-                var fieldCount = dataReader.FieldCount;
-
-                if (fieldCount < 0)
-                    fieldCount = 0;
-
-                var rows = new object[_rowBlockSize][];
-                int i;
-
-                for (i = 0; i < _rowBlockSize; i++)
-                    rows[i] = new object[fieldCount];
-
-                _rowCount = 0;
-                i = 0;
-                var first = true;
-                var exitFromWhile = false;
-                var stopwatch = Stopwatch.StartNew();
-
-                while (!_isCommandCancelled && !_thread.IsStopRequested && !exitFromWhile)
+                if (first)
                 {
-                    bool read;
+                    first = false;
+                    _resultWriter.FirstRowReadBegin();
+                    read = dataReader.Read();
 
-                    if (first)
-                    {
-                        first = false;
-                        _resultWriter.FirstRowReadBegin();
-                        read = dataReader.Read();
-
-                        var dataTypeNames = new string[count];
-
-                        if (read)
-                            for (var j = 0; j < count; ++j)
-                                dataTypeNames[j] = dataReader.GetDataTypeName(j);
-
-                        _resultWriter.FirstRowReadEnd(dataTypeNames);
-                    }
-                    else
-                    {
-                        try
-                        {
-                            read = dataReader.Read();
-                        }
-                        catch (Exception e)
-                        {
-                            read = false;
-                            exception = e;
-                        }
-                    }
+                    var dataTypeNames = new string[count];
 
                     if (read)
-                    {
-                        ++_rowCount;
-                        dataReaderHelper.GetValues(rows[i]);
-                        ++i;
+                        for (var j = 0; j < count; ++j)
+                            dataTypeNames[j] = dataReader.GetDataTypeName(j);
 
-                        if (i == _rowBlockSize || stopwatch.ElapsedMilliseconds >= 5000)
-                        {
-                            _resultWriter.WriteRows(rows, i);
-                            i = 0;
-                            stopwatch.Restart();
-                        }
-
-                        if (_rowCount == _maxRecords)
-                        {
-                            CancelWaitCallback(null);
-                            break;
-                        }
-                    }
-                    else
-                        exitFromWhile = true;
+                    _resultWriter.FirstRowReadEnd(dataTypeNames);
                 }
-
-                if (i != _rowBlockSize)
-                {
-                    Log.Trace("resultWriter.WriteRows(rows,i);");
-                    _resultWriter.WriteRows(rows, i);
-                }
-
-                Log.Write(LogLevel.Trace, "resultWriter.WriteTableEnd(rowCount);");
-                _resultWriter.WriteTableEnd();
-
-                if (_rowCount > 0)
-                    ++_tableCount;
-
-                if (exception != null)
-                    throw exception;
-            }
-        }
-
-        private void Fill(AsyncDataAdapterCommand asyncDataAdapterCommand)
-        {
-            Assert.IsNotNull(asyncDataAdapterCommand);
-
-            Exception exception = null;
-            var command = asyncDataAdapterCommand.Command;
-
-            try
-            {
-                ExecuteReader(asyncDataAdapterCommand, command);
-            }
-            catch (ThreadAbortException)
-            {
-                Thread.ResetAbort();
-            }
-            catch (Exception e)
-            {
-                if (Thread.CurrentThread.ThreadState == ThreadState.AbortRequested)
+                else
                 {
                     try
                     {
-                        Thread.ResetAbort();
+                        read = dataReader.Read();
                     }
-                    catch
+                    catch (Exception e)
                     {
+                        read = false;
+                        exception = e;
                     }
                 }
 
-                exception = e;
-            }
-            finally
-            {
-                if (command != null && command.Parameters != null)
-                    _resultWriter.WriteParameters(command.Parameters);
-
-                _endFill(this, exception);
-            }
-        }
-
-        private void ExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand, IDbCommand command)
-        {
-            _resultWriter.BeforeExecuteReader(asyncDataAdapterCommand);
-            IDataReader dataReader = null;
-            try
-            {
-                dataReader = command.ExecuteReader();
-                var fieldCount = dataReader.FieldCount;
-                _resultWriter.AfterExecuteReader(fieldCount);
-                var tableIndex = 0;
-
-                while (!_thread.IsStopRequested)
+                if (read)
                 {
-                    if (fieldCount > 0)
-                    {
-                        var schemaTable = dataReader.GetSchemaTable();
-                        if (schemaTable != null)
-                        {
-                            Log.Trace("schemaTable:\r\n{0}", schemaTable.ToStringTableString());
-                            if (asyncDataAdapterCommand.Query != null)
-                            {
-                                Parser.ParseResult(asyncDataAdapterCommand.Query.Results[tableIndex], out var name, out var fieldName);
-                                schemaTable.TableName = name;
-                            }
-                        }
+                    ++_rowCount;
+                    dataReaderHelper.GetValues(rows[i]);
+                    ++i;
 
-                        ReadTable(dataReader, schemaTable, tableIndex);
+                    if (i == _rowBlockSize || stopwatch.ElapsedMilliseconds >= 5000)
+                    {
+                        _resultWriter.WriteRows(rows, i);
+                        i = 0;
+                        stopwatch.Restart();
                     }
 
-                    if (_rowCount >= _maxRecords || !dataReader.NextResult())
+                    if (_rowCount == _maxRecords)
+                    {
+                        CancelWaitCallback(null);
                         break;
-
-                    tableIndex++;
+                    }
                 }
+                else
+                    exitFromWhile = true;
             }
-            finally
+
+            if (i != _rowBlockSize)
             {
-                if (dataReader != null)
-                {
-                    dataReader.Close();
-                    var recordsAffected = dataReader.RecordsAffected;
-                    _resultWriter.AfterCloseReader(recordsAffected);
-                }
+                Log.Trace("resultWriter.WriteRows(rows,i);");
+                _resultWriter.WriteRows(rows, i);
             }
+
+            Log.Write(LogLevel.Trace, "resultWriter.WriteTableEnd(rowCount);");
+            _resultWriter.WriteTableEnd();
+
+            if (_rowCount > 0)
+                ++_tableCount;
+
+            if (exception != null)
+                throw exception;
         }
-
-        private void Fill()
-        {
-            _resultWriter.Begin(_provider);
-
-            try
-            {
-                foreach (var command in _commands)
-                {
-                    _command = command;
-                    Fill(command);
-                    command.Command.Dispose();
-                }
-            }
-            finally
-            {
-                _resultWriter.End();
-                _writeEnd(this);
-            }
-        }
-
-        private void CancelWaitCallback(object state)
-        {
-            using (LogFactory.Instance.GetCurrentMethodLog())
-                _command.Command.Cancel();
-        }
-
-        #endregion
     }
+
+    private void Fill(AsyncDataAdapterCommand asyncDataAdapterCommand)
+    {
+        Assert.IsNotNull(asyncDataAdapterCommand);
+
+        Exception exception = null;
+        var command = asyncDataAdapterCommand.Command;
+
+        try
+        {
+            ExecuteReader(asyncDataAdapterCommand, command);
+        }
+        catch (ThreadAbortException)
+        {
+            Thread.ResetAbort();
+        }
+        catch (Exception e)
+        {
+            if (Thread.CurrentThread.ThreadState == ThreadState.AbortRequested)
+            {
+                try
+                {
+                    Thread.ResetAbort();
+                }
+                catch
+                {
+                }
+            }
+
+            exception = e;
+        }
+        finally
+        {
+            if (command != null && command.Parameters != null)
+                _resultWriter.WriteParameters(command.Parameters);
+
+            _endFill(this, exception);
+        }
+    }
+
+    private void ExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand, IDbCommand command)
+    {
+        _resultWriter.BeforeExecuteReader(asyncDataAdapterCommand);
+        IDataReader dataReader = null;
+        try
+        {
+            dataReader = command.ExecuteReader();
+            var fieldCount = dataReader.FieldCount;
+            _resultWriter.AfterExecuteReader(fieldCount);
+            var tableIndex = 0;
+
+            while (!_thread.IsStopRequested)
+            {
+                if (fieldCount > 0)
+                {
+                    var schemaTable = dataReader.GetSchemaTable();
+                    if (schemaTable != null)
+                    {
+                        Log.Trace("schemaTable:\r\n{0}", schemaTable.ToStringTableString());
+                        if (asyncDataAdapterCommand.Query != null)
+                        {
+                            Parser.ParseResult(asyncDataAdapterCommand.Query.Results[tableIndex], out var name, out var fieldName);
+                            schemaTable.TableName = name;
+                        }
+                    }
+
+                    ReadTable(dataReader, schemaTable, tableIndex);
+                }
+
+                if (_rowCount >= _maxRecords || !dataReader.NextResult())
+                    break;
+
+                tableIndex++;
+            }
+        }
+        finally
+        {
+            if (dataReader != null)
+            {
+                dataReader.Close();
+                var recordsAffected = dataReader.RecordsAffected;
+                _resultWriter.AfterCloseReader(recordsAffected);
+            }
+        }
+    }
+
+    private void Fill()
+    {
+        _resultWriter.Begin(_provider);
+
+        try
+        {
+            foreach (var command in _commands)
+            {
+                _command = command;
+                Fill(command);
+                command.Command.Dispose();
+            }
+        }
+        finally
+        {
+            _resultWriter.End();
+            _writeEnd(this);
+        }
+    }
+
+    private void CancelWaitCallback(object state)
+    {
+        using (LogFactory.Instance.GetCurrentMethodLog())
+            _command.Command.Cancel();
+    }
+
+    #endregion
 }

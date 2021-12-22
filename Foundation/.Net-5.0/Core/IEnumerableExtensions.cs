@@ -2,25 +2,24 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
-namespace Foundation.Core
+namespace Foundation.Core;
+
+public static class IEnumerableExtensions
 {
-    public static class IEnumerableExtensions
+    [Pure]
+    public static Option<TSource> FirstOrOptionNone<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) where TSource : struct
     {
-        [Pure]
-        public static Option<TSource> FirstOrOptionNone<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) where TSource : struct
+        var result = Option<TSource>.None;
+
+        foreach (var item in source)
         {
-            var result = Option<TSource>.None;
-
-            foreach (var item in source)
+            if (predicate(item))
             {
-                if (predicate(item))
-                {
-                    result = item.ToOption();
-                    break;
-                }
+                result = item.ToOption();
+                break;
             }
-
-            return result;
         }
+
+        return result;
     }
 }

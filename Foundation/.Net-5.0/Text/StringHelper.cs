@@ -4,108 +4,107 @@ using System.IO;
 using Foundation.Assertions;
 using Foundation.Collections;
 
-namespace Foundation.Text
+namespace Foundation.Text;
+
+public static class StringHelper
 {
-    public static class StringHelper
+    public static string FormatColumn(string col, int colWidth, bool alignRight)
     {
-        public static string FormatColumn(string col, int colWidth, bool alignRight)
+        var length = col != null
+            ? col.Length
+            : 0;
+        var spaceLen = colWidth - length;
+        string formatted;
+
+        if (spaceLen >= 0)
         {
-            var length = col != null
-                ? col.Length
-                : 0;
-            var spaceLen = colWidth - length;
-            string formatted;
+            var space = new string(' ', spaceLen);
 
-            if (spaceLen >= 0)
+            if (alignRight)
             {
-                var space = new string(' ', spaceLen);
-
-                if (alignRight)
-                {
-                    formatted = space + col;
-                }
-                else
-                {
-                    formatted = col + space;
-                }
+                formatted = space + col;
             }
             else
             {
-                formatted = col.Substring(0, colWidth);
+                formatted = col + space;
             }
-
-            return formatted;
+        }
+        else
+        {
+            formatted = col.Substring(0, colWidth);
         }
 
-        public static unsafe void SetChar(string s, int index, char ch)
-        {
-            Assert.IsTrue(index >= 0);
-            Assert.IsTrue(index < s.Length);
+        return formatted;
+    }
 
-            fixed (char* p = s)
+    public static unsafe void SetChar(string s, int index, char ch)
+    {
+        Assert.IsTrue(index >= 0);
+        Assert.IsTrue(index < s.Length);
+
+        fixed (char* p = s)
+        {
+            p[index] = ch;
+        }
+    }
+
+    public static unsafe void ToLower(string s)
+    {
+        fixed (char* pfixed = s)
+        {
+            for (var p = pfixed; *p != 0; p++)
             {
-                p[index] = ch;
+                *p = char.ToLower(*p, CultureInfo.CurrentCulture);
             }
         }
+    }
 
-        public static unsafe void ToLower(string s)
+    public static unsafe void ToUpper(string s)
+    {
+        fixed (char* pfixed = s)
         {
-            fixed (char* pfixed = s)
+            for (var p = pfixed; *p != 0; p++)
             {
-                for (var p = pfixed; *p != 0; p++)
-                {
-                    *p = char.ToLower(*p, CultureInfo.CurrentCulture);
-                }
+                *p = char.ToUpper(*p, CultureInfo.CurrentCulture);
             }
         }
+    }
 
-        public static unsafe void ToUpper(string s)
+    public static void WriteMethod(TextWriter textWriter, object obj, string methodName, params object[] parameters)
+    {
+        Assert.IsNotNull(textWriter);
+        Assert.IsNotNull(obj);
+
+        var type = obj.GetType();
+        var methodInfo = type.GetMethod(methodName);
+        var parameterInfos = methodInfo.GetParameters();
+        var typeName = TypeNameCollection.GetTypeName(methodInfo.ReturnType);
+        var line = typeName + " " + methodName + "(" + Environment.NewLine;
+        var length = Math.Min(parameters.Length, parameterInfos.Length);
+
+        for (var i = 0; i < length; i++)
         {
-            fixed (char* pfixed = s)
-            {
-                for (var p = pfixed; *p != 0; p++)
-                {
-                    *p = char.ToUpper(*p, CultureInfo.CurrentCulture);
-                }
-            }
+            typeName = TypeNameCollection.GetTypeName(parameterInfos[i].ParameterType);
+
+            line +=
+                "  " + typeName + " " +
+                parameterInfos[i].Name + " = " +
+                parameters[i];
+
+            if (i < length - 1)
+                line += "," + Environment.NewLine;
         }
 
-        public static void WriteMethod(TextWriter textWriter, object obj, string methodName, params object[] parameters)
-        {
-            Assert.IsNotNull(textWriter);
-            Assert.IsNotNull(obj);
+        line += ')';
 
-            var type = obj.GetType();
-            var methodInfo = type.GetMethod(methodName);
-            var parameterInfos = methodInfo.GetParameters();
-            var typeName = TypeNameCollection.GetTypeName(methodInfo.ReturnType);
-            var line = typeName + " " + methodName + "(" + Environment.NewLine;
-            var length = Math.Min(parameters.Length, parameterInfos.Length);
+        textWriter.Write(line);
+    }
 
-            for (var i = 0; i < length; i++)
-            {
-                typeName = TypeNameCollection.GetTypeName(parameterInfos[i].ParameterType);
-
-                line +=
-                    "  " + typeName + " " +
-                    parameterInfos[i].Name + " = " +
-                    parameters[i];
-
-                if (i < length - 1)
-                    line += "," + Environment.NewLine;
-            }
-
-            line += ')';
-
-            textWriter.Write(line);
-        }
-
-        public static bool ParseBoolean(string value, bool nullValue)
-        {
-            var b = !string.IsNullOrEmpty(value)
-                ? bool.Parse(value)
-                : nullValue;
-            return b;
-        }
+    public static bool ParseBoolean(string value, bool nullValue)
+    {
+        var b = !string.IsNullOrEmpty(value)
+            ? bool.Parse(value)
+            : nullValue;
+        return b;
     }
 }

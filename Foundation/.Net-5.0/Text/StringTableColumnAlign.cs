@@ -1,8 +1,7 @@
-﻿namespace Foundation.Text
+﻿namespace Foundation.Text;
+
+public enum StringTableColumnAlign
 {
-    public enum StringTableColumnAlign
-    {
-        Left,
-        Right
-    }
+    Left,
+    Right
 }

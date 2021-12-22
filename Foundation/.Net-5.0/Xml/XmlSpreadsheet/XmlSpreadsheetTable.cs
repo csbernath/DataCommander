@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace Foundation.Xml.XmlSpreadsheet
+namespace Foundation.Xml.XmlSpreadsheet;
+
+public sealed class XmlSpreadsheetTable
 {
-    public sealed class XmlSpreadsheetTable
-    {
-        public string TableName;
-        public List<XmlSpreadsheetColumn> Columns = new();
-    }
+    public string TableName;
+    public List<XmlSpreadsheetColumn> Columns = new();
 }

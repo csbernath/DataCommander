@@ -1,43 +1,42 @@
 ﻿using System.Xml;
 using Foundation.Assertions;
 
-namespace Foundation.Xml.XmlSpreadsheet
+namespace Foundation.Xml.XmlSpreadsheet;
+
+/// <summary>
+/// 
+/// </summary>
+public sealed class XmlSpreadsheetAttribute
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed class XmlSpreadsheetAttribute
+    /// <param name="localName"></param>
+    /// <param name="value"></param>
+    public XmlSpreadsheetAttribute(string localName, string value)
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="localName"></param>
-        /// <param name="value"></param>
-        public XmlSpreadsheetAttribute(string localName, string value)
-        {
-            LocalName = localName;
-            Value = value;
-        }
+        LocalName = localName;
+        Value = value;
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public string LocalName { get; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public string LocalName { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Value { get; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public string Value { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="xmlWriter"></param>
-        public void Write(XmlWriter xmlWriter)
-        {
-            Assert.IsNotNull(xmlWriter);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="xmlWriter"></param>
+    public void Write(XmlWriter xmlWriter)
+    {
+        Assert.IsNotNull(xmlWriter);
 
-            xmlWriter.WriteAttributeString(LocalName, Value);
-        }
+        xmlWriter.WriteAttributeString(LocalName, Value);
     }
 }

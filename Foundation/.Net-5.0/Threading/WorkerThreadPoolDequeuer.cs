@@ -1,51 +1,50 @@
 ﻿using System.Diagnostics;
 using System.Threading;
 
-namespace Foundation.Threading
+namespace Foundation.Threading;
+
+/// <summary>
+/// 
+/// </summary>
+public class WorkerThreadPoolDequeuer
 {
+    private WorkerThreadPool _pool;
+    private readonly WaitCallback _callback;
+
     /// <summary>
     /// 
     /// </summary>
-    public class WorkerThreadPoolDequeuer
+    /// <param name="callback"></param>
+    public WorkerThreadPoolDequeuer(WaitCallback callback)
     {
-        private WorkerThreadPool _pool;
-        private readonly WaitCallback _callback;
+        _callback = callback;
+        Thread = new WorkerThread(Start);
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="callback"></param>
-        public WorkerThreadPoolDequeuer(WaitCallback callback)
+    private void Start()
+    {
+        WaitHandle[] waitHandles = { Thread.StopRequest, _pool.EnqueueEvent };
+
+        while (!Thread.IsStopRequested)
         {
-            _callback = callback;
-            Thread = new WorkerThread(Start);
-        }
+            var dequeued = _pool.Dequeue(_callback, waitHandles);
 
-        private void Start()
-        {
-            WaitHandle[] waitHandles = { Thread.StopRequest, _pool.EnqueueEvent };
-
-            while (!Thread.IsStopRequested)
+            if (dequeued)
             {
-                var dequeued = _pool.Dequeue(_callback, waitHandles);
-
-                if (dequeued)
-                {
-                    LastActivityTimestamp = Stopwatch.GetTimestamp();
-                }
+                LastActivityTimestamp = Stopwatch.GetTimestamp();
             }
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public WorkerThread Thread { get; }
-
-        internal WorkerThreadPool Pool
-        {
-            set => _pool = value;
-        }
-
-        internal long LastActivityTimestamp { get; private set; }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public WorkerThread Thread { get; }
+
+    internal WorkerThreadPool Pool
+    {
+        set => _pool = value;
+    }
+
+    internal long LastActivityTimestamp { get; private set; }
 }

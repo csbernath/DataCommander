@@ -1,9 +1,8 @@
-﻿namespace Foundation.Log
+﻿namespace Foundation.Log;
+
+public interface ILogFormatter
 {
-    public interface ILogFormatter
-    {
-        string Begin();
-        string Format(LogEntry entry);
-        string End();
-    }
+    string Begin();
+    string Format(LogEntry entry);
+    string End();
 }

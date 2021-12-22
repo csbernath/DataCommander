@@ -1,7 +1,6 @@
-﻿namespace DataCommander.Providers2.FieldNamespace
+﻿namespace DataCommander.Providers2.FieldNamespace;
+
+public interface IDataFieldReader
 {
-    public interface IDataFieldReader
-    {
-        object Value { get; }
-    }
+    object Value { get; }
 }

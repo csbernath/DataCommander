@@ -1,9 +1,8 @@
 ﻿
-namespace Foundation.Data.SqlClient.AppLock
+namespace Foundation.Data.SqlClient.AppLock;
+
+public enum LockOwner
 {
-    public enum LockOwner
-    {
-        Transaction,
-        Session
-    }
+    Transaction,
+    Session
 }

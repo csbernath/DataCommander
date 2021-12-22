@@ -1,9 +1,8 @@
-﻿namespace Foundation.Collections.IndexableCollection
+﻿namespace Foundation.Collections.IndexableCollection;
+
+public enum SortOrder
 {
-    public enum SortOrder
-    {
-        None,
-        Ascending,
-        Descending
-    }
+    None,
+    Ascending,
+    Descending
 }

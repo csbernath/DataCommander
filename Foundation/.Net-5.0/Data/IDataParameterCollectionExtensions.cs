@@ -6,87 +6,86 @@ using System.Text;
 using Foundation.Assertions;
 using Foundation.Data.SqlClient;
 
-namespace Foundation.Data
+namespace Foundation.Data;
+
+public static class IDataParameterCollectionExtensions
 {
-    public static class IDataParameterCollectionExtensions
+    public static void AddRange(this IDataParameterCollection dataParameterCollection, IEnumerable<object> parameters)
     {
-        public static void AddRange(this IDataParameterCollection dataParameterCollection, IEnumerable<object> parameters)
+        foreach (var parameter in parameters)
+            dataParameterCollection.Add(parameter);
+    }
+
+    public static string ToLogString(this IDataParameterCollection parameters)
+    {
+        Assert.IsNotNull(parameters);
+
+        var sqlParameters = parameters as SqlParameterCollection;
+        string s;
+
+        if (sqlParameters != null)
+            s = SqlParameterCollectionExtensions.ToLogString(sqlParameters);
+        else
         {
-            foreach (var parameter in parameters)
-                dataParameterCollection.Add(parameter);
-        }
+            var stringBuilder = new StringBuilder();
+            var first = true;
 
-        public static string ToLogString(this IDataParameterCollection parameters)
-        {
-            Assert.IsNotNull(parameters);
-
-            var sqlParameters = parameters as SqlParameterCollection;
-            string s;
-
-            if (sqlParameters != null)
-                s = SqlParameterCollectionExtensions.ToLogString(sqlParameters);
-            else
+            foreach (IDataParameter parameter in parameters)
             {
-                var stringBuilder = new StringBuilder();
-                var first = true;
-
-                foreach (IDataParameter parameter in parameters)
+                if (parameter.Direction != ParameterDirection.ReturnValue)
                 {
-                    if (parameter.Direction != ParameterDirection.ReturnValue)
+                    var value = parameter.Value;
+
+                    if (value != null)
                     {
-                        var value = parameter.Value;
+                        string valueString;
 
-                        if (value != null)
+                        if (value == DBNull.Value)
                         {
-                            string valueString;
-
-                            if (value == DBNull.Value)
-                            {
-                                valueString = SqlNull.NullString;
-                            }
-                            else
-                            {
-                                var dbType = parameter.DbType;
-
-                                switch (dbType)
-                                {
-                                    case DbType.DateTime:
-                                        var dateTime = (DateTime)value;
-                                        valueString = dateTime.ToSqlConstant();
-                                        break;
-
-                                    case DbType.Int32:
-                                        valueString = value.ToString();
-                                        break;
-
-                                    case DbType.String:
-                                        valueString = "'" + value.ToString().Replace("'", "''") + "'";
-                                        break;
-
-                                    default:
-                                        valueString = value.ToString();
-                                        break;
-                                }
-                            }
-
-                            if (first)
-                            {
-                                first = false;
-                            }
-                            else
-                            {
-                                stringBuilder.AppendLine(",");
-                            }
-
-                            stringBuilder.AppendFormat("  {0} = {1}", parameter.ParameterName, valueString);
+                            valueString = SqlNull.NullString;
                         }
+                        else
+                        {
+                            var dbType = parameter.DbType;
+
+                            switch (dbType)
+                            {
+                                case DbType.DateTime:
+                                    var dateTime = (DateTime)value;
+                                    valueString = dateTime.ToSqlConstant();
+                                    break;
+
+                                case DbType.Int32:
+                                    valueString = value.ToString();
+                                    break;
+
+                                case DbType.String:
+                                    valueString = "'" + value.ToString().Replace("'", "''") + "'";
+                                    break;
+
+                                default:
+                                    valueString = value.ToString();
+                                    break;
+                            }
+                        }
+
+                        if (first)
+                        {
+                            first = false;
+                        }
+                        else
+                        {
+                            stringBuilder.AppendLine(",");
+                        }
+
+                        stringBuilder.AppendFormat("  {0} = {1}", parameter.ParameterName, valueString);
                     }
                 }
-
-                s = stringBuilder.ToString();
             }
 
-            return s;
+            s = stringBuilder.ToString();
         }
+
+        return s;
     }
 }

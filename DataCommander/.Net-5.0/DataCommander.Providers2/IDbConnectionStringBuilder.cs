@@ -1,13 +1,12 @@
-﻿namespace DataCommander.Providers2
+﻿namespace DataCommander.Providers2;
+
+public interface IDbConnectionStringBuilder
 {
-    public interface IDbConnectionStringBuilder
-    {
-        string ConnectionString { get; set; }
+    string ConnectionString { get; set; }
 
-        bool IsKeywordSupported(string keyword);
+    bool IsKeywordSupported(string keyword);
 
-        void SetValue(string keyword, object value);
-        bool TryGetValue(string keyword, out object value);
-        bool Remove(string keyword);
-    }
+    void SetValue(string keyword, object value);
+    bool TryGetValue(string keyword, out object value);
+    bool Remove(string keyword);
 }

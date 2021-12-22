@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Data;
 
-namespace Foundation.Data
+namespace Foundation.Data;
+
+public interface IDbCommandExecutor
 {
-    public interface IDbCommandExecutor
-    {
-        void Execute(Action<IDbConnection> execute);
-    }
+    void Execute(Action<IDbConnection> execute);
 }

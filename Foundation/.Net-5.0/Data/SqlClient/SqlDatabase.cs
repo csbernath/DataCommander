@@ -3,20 +3,20 @@ using System.Data.SqlTypes;
 using System.Globalization;
 using System.Text;
 
-namespace Foundation.Data.SqlClient
-{
-    /// <summary>
-    /// Static helper methods for SQL Server connections.
-    /// </summary>
-    public static class SqlDatabase
-    {
-        public static readonly SqlDateTime SqlDateTimeZero = new(1900, 1, 1);
+namespace Foundation.Data.SqlClient;
 
-        public static string GetSysComments(IDbConnection connection, string database, string schema, string name)
-        {
-            var commandText = string.Format(
-                CultureInfo.InvariantCulture,
-                @"declare
+/// <summary>
+/// Static helper methods for SQL Server connections.
+/// </summary>
+public static class SqlDatabase
+{
+    public static readonly SqlDateTime SqlDateTimeZero = new(1900, 1, 1);
+
+    public static string GetSysComments(IDbConnection connection, string database, string schema, string name)
+    {
+        var commandText = string.Format(
+            CultureInfo.InvariantCulture,
+            @"declare
     @schema     sysname,
     @name       sysname,    
     @schema_id  int,
@@ -54,22 +54,21 @@ else
 begin
     raiserror(15471,-1,-1,@name)    
 end",
-                database,
-                schema.ToNullableNVarChar(),
-                name.ToNullableNVarChar());
+            database,
+            schema.ToNullableNVarChar(),
+            name.ToNullableNVarChar());
 
-            var stringBuilder = new StringBuilder();
-            var executor = connection.CreateCommandExecutor();
-            executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
+        var stringBuilder = new StringBuilder();
+        var executor = connection.CreateCommandExecutor();
+        executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
+        {
+            while (dataReader.Read())
             {
-                while (dataReader.Read())
-                {
-                    var s = dataReader.GetString(0);
-                    stringBuilder.Append(s);
-                }
-            });
+                var s = dataReader.GetString(0);
+                stringBuilder.Append(s);
+            }
+        });
 
-            return stringBuilder.ToString();
-        }
+        return stringBuilder.ToString();
     }
 }

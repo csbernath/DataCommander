@@ -2,35 +2,34 @@
 using Foundation.Core;
 using Foundation.Log;
 
-namespace Foundation.InternalLog
+namespace Foundation.InternalLog;
+
+internal sealed class InternalLog : ILog
 {
-    internal sealed class InternalLog : ILog
+    private readonly ILogWriter _logWriter;
+    private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly string _name;
+
+    public InternalLog(ILogWriter logWriter, IDateTimeProvider dateTimeProvider, string name)
     {
-        private readonly ILogWriter _logWriter;
-        private readonly IDateTimeProvider _dateTimeProvider;
-        private readonly string _name;
+        _logWriter = logWriter;
+        _name = name;
+        _dateTimeProvider = dateTimeProvider;
+    }
 
-        public InternalLog(ILogWriter logWriter, IDateTimeProvider dateTimeProvider, string name)
-        {
-            _logWriter = logWriter;
-            _name = name;
-            _dateTimeProvider = dateTimeProvider;
-        }
+    void IDisposable.Dispose()
+    {
+    }
 
-        void IDisposable.Dispose()
-        {
-        }
+    bool ILog.IsEnabled(LogLevel logLevel)
+    {
+        throw new NotImplementedException();
+    }
 
-        bool ILog.IsEnabled(LogLevel logLevel)
-        {
-            throw new NotImplementedException();
-        }
-
-        void ILog.Write(LogLevel logLevel, string message)
-        {
-            var now = _dateTimeProvider.Now;
-            var logEntry = LogEntryFactory.Create(_name, now, message, logLevel);
-            _logWriter.Write(logEntry);
-        }
+    void ILog.Write(LogLevel logLevel, string message)
+    {
+        var now = _dateTimeProvider.Now;
+        var logEntry = LogEntryFactory.Create(_name, now, message, logLevel);
+        _logWriter.Write(logEntry);
     }
 }

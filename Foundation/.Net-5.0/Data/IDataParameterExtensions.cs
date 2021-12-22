@@ -2,39 +2,38 @@
 using System.Data;
 using Foundation.Assertions;
 
-namespace Foundation.Data
+namespace Foundation.Data;
+
+public static class DataParameterExtensions
 {
-    public static class DataParameterExtensions
+    public static T GetValueOrDefault<T>(this IDataParameter parameter) => ValueReader.GetValueOrDefault<T>(parameter.Value);
+
+    public static void SetValue<T>(this IDataParameter parameter, DataParameterValue<T> value)
     {
-        public static T GetValueOrDefault<T>(this IDataParameter parameter) => ValueReader.GetValueOrDefault<T>(parameter.Value);
+        Assert.IsNotNull(parameter, nameof(parameter));
+        Assert.IsInRange(value.Type == DataParameterValueType.Value || value.Type == DataParameterValueType.Null ||
+                         value.Type == DataParameterValueType.Default);
 
-        public static void SetValue<T>(this IDataParameter parameter, DataParameterValue<T> value)
+        object valueObject;
+
+        switch (value.Type)
         {
-            Assert.IsNotNull(parameter, nameof(parameter));
-            Assert.IsInRange(value.Type == DataParameterValueType.Value || value.Type == DataParameterValueType.Null ||
-                             value.Type == DataParameterValueType.Default);
+            case DataParameterValueType.Value:
+                valueObject = value.Value;
+                break;
 
-            object valueObject;
+            case DataParameterValueType.Null:
+                valueObject = DBNull.Value;
+                break;
 
-            switch (value.Type)
-            {
-                case DataParameterValueType.Value:
-                    valueObject = value.Value;
-                    break;
+            case DataParameterValueType.Default:
+                valueObject = null;
+                break;
 
-                case DataParameterValueType.Null:
-                    valueObject = DBNull.Value;
-                    break;
-
-                case DataParameterValueType.Default:
-                    valueObject = null;
-                    break;
-
-                default:
-                    throw new ArgumentException();
-            }
-
-            parameter.Value = valueObject;
+            default:
+                throw new ArgumentException();
         }
+
+        parameter.Value = valueObject;
     }
 }

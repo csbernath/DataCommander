@@ -1,40 +1,39 @@
 ﻿using Foundation.Assertions;
 
-namespace Foundation.Data.TextData
+namespace Foundation.Data.TextData;
+
+/// <summary>
+/// 
+/// </summary>
+public sealed class TextDataSetTable
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed class TextDataSetTable
+    /// <param name="name"></param>
+    /// <param name="rowCount"></param>
+    /// <param name="table"></param>
+    public TextDataSetTable(string name, int rowCount, TextDataTable table)
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="rowCount"></param>
-        /// <param name="table"></param>
-        public TextDataSetTable(string name, int rowCount, TextDataTable table)
-        {
-            Assert.IsValidOperation(rowCount >= 0);
+        Assert.IsValidOperation(rowCount >= 0);
 
-            Name = name;
-            RowCount = rowCount;
-            Table = table;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Name { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public int RowCount { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public TextDataTable Table { get; }
+        Name = name;
+        RowCount = rowCount;
+        Table = table;
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string Name { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public int RowCount { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public TextDataTable Table { get; }
 }

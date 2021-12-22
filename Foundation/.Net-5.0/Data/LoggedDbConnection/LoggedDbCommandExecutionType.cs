@@ -1,10 +1,9 @@
 ﻿
-namespace Foundation.Data.LoggedDbConnection
+namespace Foundation.Data.LoggedDbConnection;
+
+public enum LoggedDbCommandExecutionType
 {
-    public enum LoggedDbCommandExecutionType
-    {
-        NonQuery,
-        Reader,
-        Scalar
-    }
+    NonQuery,
+    Reader,
+    Scalar
 }

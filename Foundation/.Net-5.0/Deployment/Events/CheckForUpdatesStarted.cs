@@ -1,7 +1,6 @@
 ﻿
-namespace Foundation.Deployment.Events
+namespace Foundation.Deployment.Events;
+
+public sealed class CheckForUpdatesStarted : Event
 {
-    public sealed class CheckForUpdatesStarted : Event
-    {
-    }
 }

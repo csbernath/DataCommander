@@ -1,11 +1,10 @@
 ﻿
-namespace Foundation.Data.SqlClient.SqlLog
+namespace Foundation.Data.SqlClient.SqlLog;
+
+internal interface ISqlLogItem
 {
-    internal interface ISqlLogItem
+    string CommandText
     {
-        string CommandText
-        {
-            get;
-        }
+        get;
     }
 }

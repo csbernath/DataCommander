@@ -9,147 +9,146 @@ using Foundation.Core;
 using Foundation.Data.SqlClient;
 using Foundation.IO;
 
-namespace Foundation.Data.MethodProfiler
+namespace Foundation.Data.MethodProfiler;
+
+public static class MethodProfiler
 {
-    public static class MethodProfiler
+    public const string ConditionString = "FOUNDATION_METHODPROFILER";
+
+    private static readonly MethodCollection Methods = new();
+    private static readonly Dictionary<string, MethodFraction> MethodFractions = new();
+    private static readonly MethodInvocationStackCollection Stacks = new();
+    private static readonly AsyncTextWriter TextWriter;
+    private static readonly MethodFormatter MethodFormatter = new();
+    private static readonly MethodProfilerMethodInvocationFormatter MethodProfilerMethodInvocationFormatter = new();
+
+    static MethodProfiler()
     {
-        public const string ConditionString = "FOUNDATION_METHODPROFILER";
+        var beginTime = Stopwatch.GetTimestamp();
+        var now = LocalTime.Default.Now;
+        string applicationName;
+        var assembly = Assembly.GetEntryAssembly();
 
-        private static readonly MethodCollection Methods = new();
-        private static readonly Dictionary<string, MethodFraction> MethodFractions = new();
-        private static readonly MethodInvocationStackCollection Stacks = new();
-        private static readonly AsyncTextWriter TextWriter;
-        private static readonly MethodFormatter MethodFormatter = new();
-        private static readonly MethodProfilerMethodInvocationFormatter MethodProfilerMethodInvocationFormatter = new();
-
-        static MethodProfiler()
+        if (assembly != null)
         {
-            var beginTime = Stopwatch.GetTimestamp();
-            var now = LocalTime.Default.Now;
-            string applicationName;
-            var assembly = Assembly.GetEntryAssembly();
+            var codeBase = assembly.CodeBase;
+            var uri = new Uri(codeBase);
+            var fileName = uri.LocalPath;
+            applicationName = fileName;
+        }
+        else
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            applicationName = baseDirectory;
+        }
 
-            if (assembly != null)
-            {
-                var codeBase = assembly.CodeBase;
-                var uri = new Uri(codeBase);
-                var fileName = uri.LocalPath;
-                applicationName = fileName;
-            }
-            else
-            {
-                var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                applicationName = baseDirectory;
-            }
+        var path = Path.GetTempFileName();
+        var streamWriter = new StreamWriter(path, false, Encoding.UTF8, 65536);
+        TextWriter = new AsyncTextWriter(streamWriter);
 
-            var path = Path.GetTempFileName();
-            var streamWriter = new StreamWriter(path, false, Encoding.UTF8, 65536);
-            TextWriter = new AsyncTextWriter(streamWriter);
-
-            var sb = new StringBuilder();
-            sb.AppendFormat(@"declare @applicationId int
+        var sb = new StringBuilder();
+        sb.AppendFormat(@"declare @applicationId int
 
 exec MethodProfilerApplication_Add {0},{1}",
-                applicationName.ToNullableNVarChar(),
-                now.ToSqlConstant()
-            );
-            sb.AppendFormat(",{0},{1}\r\n", beginTime, Stopwatch.Frequency);
-            sb.Append("set @applicationId    = @@identity\r\n");
-            TextWriter.Write(sb.ToString());
-        }
+            applicationName.ToNullableNVarChar(),
+            now.ToSqlConstant()
+        );
+        sb.AppendFormat(",{0},{1}\r\n", beginTime, Stopwatch.Frequency);
+        sb.Append("set @applicationId    = @@identity\r\n");
+        TextWriter.Write(sb.ToString());
+    }
 
-        [Conditional(ConditionString)]
-        public static void BeginMethod()
+    [Conditional(ConditionString)]
+    public static void BeginMethod()
+    {
+        var beginTime = Stopwatch.GetTimestamp();
+        var threadId = Thread.CurrentThread.ManagedThreadId;
+        var trace = new StackTrace(1);
+        var frame = trace.GetFrame(0);
+        var method = frame.GetMethod();
+        int methodId;
+        var added = false;
+
+        lock (Methods)
         {
-            var beginTime = Stopwatch.GetTimestamp();
-            var threadId = Thread.CurrentThread.ManagedThreadId;
-            var trace = new StackTrace(1);
-            var frame = trace.GetFrame(0);
-            var method = frame.GetMethod();
-            int methodId;
-            var added = false;
+            var contains = Methods.TryGetValue(method, out methodId);
 
-            lock (Methods)
+            if (!contains)
             {
-                var contains = Methods.TryGetValue(method, out methodId);
-
-                if (!contains)
-                {
-                    methodId = Methods.Add(method);
-                    added = true;
-                }
+                methodId = Methods.Add(method);
+                added = true;
             }
-
-            if (added)
-                TextWriter.Write(MethodFormatter, method, methodId);
-
-            Stacks.Push(threadId, methodId, beginTime);
         }
 
-        [Conditional(ConditionString)]
-        public static void BeginMethodFraction(string name)
-        {
-            var beginTime = Stopwatch.GetTimestamp();
-            var threadId = Thread.CurrentThread.ManagedThreadId;
-            var trace = new StackTrace(1);
-            var frame = trace.GetFrame(0);
-            var method = frame.GetMethod();
-            var key = MethodFraction.GetKey(method, name);
-            MethodFraction methodFraction;
-            int methodId;
-            var added = false;
+        if (added)
+            TextWriter.Write(MethodFormatter, method, methodId);
 
-            lock (Methods)
+        Stacks.Push(threadId, methodId, beginTime);
+    }
+
+    [Conditional(ConditionString)]
+    public static void BeginMethodFraction(string name)
+    {
+        var beginTime = Stopwatch.GetTimestamp();
+        var threadId = Thread.CurrentThread.ManagedThreadId;
+        var trace = new StackTrace(1);
+        var frame = trace.GetFrame(0);
+        var method = frame.GetMethod();
+        var key = MethodFraction.GetKey(method, name);
+        MethodFraction methodFraction;
+        int methodId;
+        var added = false;
+
+        lock (Methods)
+        {
+            if (MethodFractions.TryGetValue(key, out methodFraction))
+                Methods.TryGetValue(methodFraction, out methodId);
+            else
             {
-                if (MethodFractions.TryGetValue(key, out methodFraction))
-                    Methods.TryGetValue(methodFraction, out methodId);
-                else
-                {
-                    methodFraction = new MethodFraction(method, name);
-                    MethodFractions.Add(key, methodFraction);
-                    methodId = Methods.Add(methodFraction);
-                    added = true;
-                }
+                methodFraction = new MethodFraction(method, name);
+                MethodFractions.Add(key, methodFraction);
+                methodId = Methods.Add(methodFraction);
+                added = true;
             }
-
-            if (added)
-                TextWriter.Write(MethodFormatter, methodFraction, methodId);
-
-            Stacks.Push(threadId, methodId, beginTime);
         }
 
-        [Conditional(ConditionString)]
-        public static void EndMethod()
-        {
-            var endTime = Stopwatch.GetTimestamp();
-            var threadId = Thread.CurrentThread.ManagedThreadId;
-            var trace = new StackTrace(1);
-            var frame = trace.GetFrame(0);
-            var method = frame.GetMethod();
-            Methods.TryGetValue(method, out var methodId);
-            var item = Stacks.Pop(threadId);
+        if (added)
+            TextWriter.Write(MethodFormatter, methodFraction, methodId);
 
-            if (item.MethodId != methodId)
-                throw new InvalidOperationException();
+        Stacks.Push(threadId, methodId, beginTime);
+    }
 
-            item.EndTime = endTime;
-            TextWriter.Write(MethodProfilerMethodInvocationFormatter, item);
-        }
+    [Conditional(ConditionString)]
+    public static void EndMethod()
+    {
+        var endTime = Stopwatch.GetTimestamp();
+        var threadId = Thread.CurrentThread.ManagedThreadId;
+        var trace = new StackTrace(1);
+        var frame = trace.GetFrame(0);
+        var method = frame.GetMethod();
+        Methods.TryGetValue(method, out var methodId);
+        var item = Stacks.Pop(threadId);
 
-        [Conditional(ConditionString)]
-        public static void EndMethodFraction()
-        {
-            var endTime = Stopwatch.GetTimestamp();
-            var threadId = Thread.CurrentThread.ManagedThreadId;
-            var item = Stacks.Pop(threadId);
-            item.EndTime = endTime;
-            TextWriter.Write(MethodProfilerMethodInvocationFormatter, item);
-        }
+        if (item.MethodId != methodId)
+            throw new InvalidOperationException();
 
-        [Conditional(ConditionString)]
-        public static void Close()
-        {
-            TextWriter.Close();
-        }
+        item.EndTime = endTime;
+        TextWriter.Write(MethodProfilerMethodInvocationFormatter, item);
+    }
+
+    [Conditional(ConditionString)]
+    public static void EndMethodFraction()
+    {
+        var endTime = Stopwatch.GetTimestamp();
+        var threadId = Thread.CurrentThread.ManagedThreadId;
+        var item = Stacks.Pop(threadId);
+        item.EndTime = endTime;
+        TextWriter.Write(MethodProfilerMethodInvocationFormatter, item);
+    }
+
+    [Conditional(ConditionString)]
+    public static void Close()
+    {
+        TextWriter.Close();
     }
 }

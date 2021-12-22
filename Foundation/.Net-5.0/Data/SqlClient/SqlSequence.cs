@@ -1,31 +1,31 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 
-namespace Foundation.Data.SqlClient
+namespace Foundation.Data.SqlClient;
+
+/// <summary>
+/// 
+/// </summary>
+public sealed class SqlSequence
 {
+    private readonly int _id;
+
     /// <summary>
     /// 
     /// </summary>
-    public sealed class SqlSequence
+    /// <param name="id"></param>
+    public SqlSequence(int id)
     {
-        private readonly int _id;
+        _id = id;
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        public SqlSequence(int id)
-        {
-            _id = id;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="connection"></param>
-        public static void CreateSchema(IDbConnection connection)
-        {
-            var commandText = @"create table dbo.Sequence
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="connection"></param>
+    public static void CreateSchema(IDbConnection connection)
+    {
+        var commandText = @"create table dbo.Sequence
 (
     Id int not null,
     Name varchar(128) collate Latin1_General_CI_AS not null,
@@ -33,10 +33,10 @@ namespace Foundation.Data.SqlClient
     constraint PK_Sequence primary key clustered(Id)
 )";
 
-            var executor = connection.CreateCommandExecutor();
-            executor.ExecuteNonQuery(new CreateCommandRequest(commandText));
+        var executor = connection.CreateCommandExecutor();
+        executor.ExecuteNonQuery(new CreateCommandRequest(commandText));
 
-            commandText = @"create proc dbo.IncrementSequence
+        commandText = @"create proc dbo.IncrementSequence
 (
     @name varchar(128),
     @increment int = 1,
@@ -69,24 +69,23 @@ begin
     raiserror('Sequence not found.',16,1)
 end";
 
-            executor.ExecuteNonQuery(new CreateCommandRequest(commandText));
-        }
+        executor.ExecuteNonQuery(new CreateCommandRequest(commandText));
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <returns></returns>
-        public int GetNextSequenceValue(IDbConnection connection)
-        {
-            var command = connection.CreateCommand();
-            command.CommandType = CommandType.StoredProcedure;
-            command.CommandText = "GetNextSequenceValue";
-            var parameter = new SqlParameter("@id", SqlDbType.Int) { Value = _id };
-            command.Parameters.Add(parameter);
-            var scalar = command.ExecuteScalar();
-            var value = (int)scalar;
-            return value;
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="connection"></param>
+    /// <returns></returns>
+    public int GetNextSequenceValue(IDbConnection connection)
+    {
+        var command = connection.CreateCommand();
+        command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "GetNextSequenceValue";
+        var parameter = new SqlParameter("@id", SqlDbType.Int) { Value = _id };
+        command.Parameters.Add(parameter);
+        var scalar = command.ExecuteScalar();
+        var value = (int)scalar;
+        return value;
     }
 }

@@ -1,11 +1,10 @@
-﻿namespace Foundation.Text
-{
-    public class StringTableColumn
-    {
-        internal StringTableColumn()
-        {
-        }
+﻿namespace Foundation.Text;
 
-        public StringTableColumnAlign Align { get; set; } = StringTableColumnAlign.Left;
+public class StringTableColumn
+{
+    internal StringTableColumn()
+    {
     }
+
+    public StringTableColumnAlign Align { get; set; } = StringTableColumnAlign.Left;
 }

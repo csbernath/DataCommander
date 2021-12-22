@@ -1,13 +1,12 @@
 ﻿
-namespace Foundation.Data.LoggedDbConnection
-{
-    public sealed class BeforeOpenDbConnectionEventArgs : LoggedEventArgs
-    {
-        public BeforeOpenDbConnectionEventArgs(string connectionString)
-        {
-            ConnectionString = connectionString;
-        }
+namespace Foundation.Data.LoggedDbConnection;
 
-        public string ConnectionString { get; }
+public sealed class BeforeOpenDbConnectionEventArgs : LoggedEventArgs
+{
+    public BeforeOpenDbConnectionEventArgs(string connectionString)
+    {
+        ConnectionString = connectionString;
     }
+
+    public string ConnectionString { get; }
 }

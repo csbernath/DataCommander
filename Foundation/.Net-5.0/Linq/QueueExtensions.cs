@@ -1,23 +1,22 @@
 ﻿using System.Collections.Generic;
 using Foundation.Assertions;
 
-namespace Foundation.Linq
+namespace Foundation.Linq;
+
+public static class QueueExtensions
 {
-    public static class QueueExtensions
+    public static T DequeueTail<T>(this Queue<T> queue)
     {
-        public static T DequeueTail<T>(this Queue<T> queue)
-        {
-            Assert.IsNotNull(queue, nameof(queue));
-            Assert.IsTrue(queue.Count > 0);
+        Assert.IsNotNull(queue, nameof(queue));
+        Assert.IsTrue(queue.Count > 0);
 
-            var array = new T[queue.Count];
-            queue.CopyTo(array, 0);
-            queue.Clear();
-            var last = array.Length - 1;
-            for (var i = 0; i < last; i++)
-                queue.Enqueue(array[i]);
+        var array = new T[queue.Count];
+        queue.CopyTo(array, 0);
+        queue.Clear();
+        var last = array.Length - 1;
+        for (var i = 0; i < last; i++)
+            queue.Enqueue(array[i]);
 
-            return array[last];
-        }
+        return array[last];
     }
 }

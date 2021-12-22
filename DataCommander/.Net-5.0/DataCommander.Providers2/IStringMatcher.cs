@@ -1,7 +1,6 @@
-﻿namespace DataCommander.Providers2
+﻿namespace DataCommander.Providers2;
+
+public interface IStringMatcher
 {
-    public interface IStringMatcher
-    {
-        bool IsMatch(string text);
-    }
+    bool IsMatch(string text);
 }

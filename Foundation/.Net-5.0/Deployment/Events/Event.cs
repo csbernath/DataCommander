@@ -1,7 +1,6 @@
 ﻿
-namespace Foundation.Deployment.Events
+namespace Foundation.Deployment.Events;
+
+public abstract class Event
 {
-    public abstract class Event
-    {
-    }
 }
