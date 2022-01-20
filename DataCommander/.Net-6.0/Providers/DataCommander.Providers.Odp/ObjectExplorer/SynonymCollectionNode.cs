@@ -46,7 +46,7 @@ order by s.SYNONYM_NAME";
 
     public SchemaNode Schema => _schema;
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         throw new System.NotImplementedException();
     }

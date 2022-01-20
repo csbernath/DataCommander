@@ -56,7 +56,7 @@ where	name	= '{name}'";
         queryForm.ShowText(script);
     }
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         ContextMenu contextMenu = null;
 

@@ -25,7 +25,7 @@ internal sealed class TriggerNode : ITreeNode
     public bool Sortable => false;
     public string Query => null;
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         var menuItemScriptObject = new MenuItem("Script Object", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
         var items = new[] { menuItemScriptObject }.ToReadOnlyCollection();

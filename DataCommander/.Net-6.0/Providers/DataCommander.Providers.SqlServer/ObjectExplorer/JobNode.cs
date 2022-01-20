@@ -34,7 +34,7 @@ internal sealed class JobNode : ITreeNode
 
     string ITreeNode.Query => null;
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         var menuItems = new[]
         {

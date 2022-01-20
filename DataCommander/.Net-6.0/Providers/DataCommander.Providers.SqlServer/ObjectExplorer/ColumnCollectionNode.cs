@@ -116,7 +116,7 @@ order by fkc.parent_column_id";
 
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;
-    public ContextMenu GetContextMenu() => null;
+    public ContextMenu? GetContextMenu() => null;
 
     #endregion
 }

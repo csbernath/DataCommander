@@ -61,7 +61,7 @@ internal sealed class ViewNode : ITreeNode
 		}
 	}
 
-	public ContextMenu GetContextMenu()
+	public ContextMenu? GetContextMenu()
 	{
 		var menuItemScriptObject = new MenuItem("Script Object", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
 		var items = new[] { menuItemScriptObject }.ToReadOnlyCollection();

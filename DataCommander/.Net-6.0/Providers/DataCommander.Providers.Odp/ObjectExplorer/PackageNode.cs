@@ -88,7 +88,7 @@ order by procedure_name";
         queryForm.ShowText(append);
     }
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         var menuItemPackage = new MenuItem("Script Package", ScriptPackage, EmptyReadOnlyCollection<MenuItem>.Value);
         var menuItemPackageBody = new MenuItem("Script Package Body", ScriptPackageBody, EmptyReadOnlyCollection<MenuItem>.Value);

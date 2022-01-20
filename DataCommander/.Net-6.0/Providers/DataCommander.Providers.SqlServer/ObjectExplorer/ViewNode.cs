@@ -50,7 +50,7 @@ internal sealed class ViewNode : ITreeNode
         }
     }
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         var menuItemScriptObject = new MenuItem("Script View as CREATE to clipboard", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
         var items = new[] { menuItemScriptObject }.ToReadOnlyCollection();

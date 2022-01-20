@@ -48,5 +48,5 @@ internal sealed class PackageCollectionNode : ITreeNode
     public bool Sortable => false;
     public string Query => null;
     public SchemaNode Schema => _schema;
-    public ContextMenu GetContextMenu() => null;
+    public ContextMenu? GetContextMenu() => null;
 }

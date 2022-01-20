@@ -63,8 +63,5 @@ class CatalogNode : ITreeNode
     public OleDbConnection Connection { get; }
     public string Name { get; }
 
-    public ContextMenu GetContextMenu()
-    {
-        throw new System.NotImplementedException();
-    }
+    public ContextMenu? GetContextMenu() => null;
 }

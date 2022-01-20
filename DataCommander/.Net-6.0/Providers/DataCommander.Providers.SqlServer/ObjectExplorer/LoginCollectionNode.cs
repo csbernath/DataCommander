@@ -33,5 +33,5 @@ order by name";
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;
 
-    public ContextMenu GetContextMenu() => null;
+    public ContextMenu? GetContextMenu() => null;
 }

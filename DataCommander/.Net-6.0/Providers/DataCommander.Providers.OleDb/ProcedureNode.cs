@@ -49,7 +49,7 @@ internal sealed class ProcedureNode : ITreeNode
         }
     }
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         throw new System.NotImplementedException();
     }

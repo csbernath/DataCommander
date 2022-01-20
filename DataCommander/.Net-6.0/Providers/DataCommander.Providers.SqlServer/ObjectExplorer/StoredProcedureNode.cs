@@ -37,7 +37,7 @@ internal sealed class StoredProcedureNode : ITreeNode
         }
     }
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         var scriptObjectMenuItem = new MenuItem("Script Object", ScriptObjectMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
         var menuItems = new[] { scriptObjectMenuItem }.ToReadOnlyCollection();
