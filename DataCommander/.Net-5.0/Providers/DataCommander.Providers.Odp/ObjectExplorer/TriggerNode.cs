@@ -31,7 +31,7 @@ internal sealed class TriggerNode : ITreeNode
     public bool Sortable => false;
     public string Query => "select * from " + _tableNode.Schema.Name + "." + _name;
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         throw new System.NotImplementedException();
     }

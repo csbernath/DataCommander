@@ -40,7 +40,7 @@ order by OBJECT_NAME";
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         throw new System.NotImplementedException();
     }

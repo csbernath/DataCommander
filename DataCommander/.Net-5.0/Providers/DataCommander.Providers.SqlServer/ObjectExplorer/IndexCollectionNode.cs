@@ -60,5 +60,5 @@ order by i.name",
     public bool Sortable => false;
     public string Query => null;
 
-    public ContextMenu GetContextMenu() => null;
+    public ContextMenu? GetContextMenu() => null;
 }

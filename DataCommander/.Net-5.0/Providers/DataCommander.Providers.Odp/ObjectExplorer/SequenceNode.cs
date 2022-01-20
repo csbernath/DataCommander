@@ -30,7 +30,7 @@ internal sealed class SequenceNode : ITreeNode
 
 	string ITreeNode.Query => throw new NotImplementedException();
 
-	public ContextMenu GetContextMenu()
+	public ContextMenu? GetContextMenu()
 	{
 		throw new NotImplementedException();
 	}

@@ -79,7 +79,7 @@ sealed class TableNode : ITreeNode
         queryForm.ShowDataSet(dataSet);
     }
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         var menuItem = new MenuItem("Columns", Columns_Click, EmptyReadOnlyCollection<MenuItem>.Value);
         var items = new[] { menuItem }.ToReadOnlyCollection();

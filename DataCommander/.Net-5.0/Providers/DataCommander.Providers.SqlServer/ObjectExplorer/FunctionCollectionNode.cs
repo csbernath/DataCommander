@@ -22,5 +22,5 @@ internal sealed class FunctionCollectionNode : ITreeNode
     public bool Sortable => false;
     public string Query => null;
 
-    public ContextMenu GetContextMenu() => null;
+    public ContextMenu? GetContextMenu() => null;
 }

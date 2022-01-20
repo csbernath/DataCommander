@@ -2857,10 +2857,13 @@ public sealed class QueryForm : Form, IQueryForm
         }
     }
 
-    private ContextMenuStrip GetContextMenu(ITreeNode treeNode)
+    private ContextMenuStrip? GetContextMenu(ITreeNode treeNode)
     {
+        
         var contextMenu = treeNode.GetContextMenu();
-        var contextMenuStrip = ToContextMenuStrip(contextMenu);
+        var contextMenuStrip = contextMenu != null
+            ? ToContextMenuStrip(contextMenu)
+            : null;
         return contextMenuStrip;
     }
 

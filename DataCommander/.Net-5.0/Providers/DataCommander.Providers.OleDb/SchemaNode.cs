@@ -43,7 +43,7 @@ sealed class SchemaNode : ITreeNode
     public CatalogNode Catalog { get; }
     public string Name { get; }
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         throw new System.NotImplementedException();
     }

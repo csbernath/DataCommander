@@ -16,5 +16,5 @@ internal sealed class LoginNode : ITreeNode
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;
 
-    public ContextMenu GetContextMenu() => null;
+    public ContextMenu? GetContextMenu() => null;
 }

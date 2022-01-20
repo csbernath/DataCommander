@@ -15,7 +15,7 @@ internal sealed class ExtendedStoreProcedureCollectionNode : ITreeNode
     bool ITreeNode.IsLeaf => false;
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;
-    public ContextMenu GetContextMenu() => null;
+    public ContextMenu? GetContextMenu() => null;
 
     IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
     {

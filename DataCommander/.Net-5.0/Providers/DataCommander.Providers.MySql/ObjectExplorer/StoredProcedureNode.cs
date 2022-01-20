@@ -26,7 +26,7 @@ internal sealed class StoredProcedureNode : ITreeNode
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         var item = new MenuItem("Show create procedure", ShowCreateProcedure_Click, EmptyReadOnlyCollection<MenuItem>.Value);
         var items = new[] { item }.ToReadOnlyCollection();

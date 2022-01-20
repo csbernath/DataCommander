@@ -20,7 +20,7 @@ internal sealed class SchemaNode : ITreeNode
     public bool Sortable => false;
     public string Query => null;
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         throw new System.NotImplementedException();
     }

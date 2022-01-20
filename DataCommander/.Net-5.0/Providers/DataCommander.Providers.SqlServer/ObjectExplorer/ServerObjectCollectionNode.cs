@@ -30,7 +30,7 @@ internal sealed class ServerObjectCollectionNode : ITreeNode
 
     string ITreeNode.Query => null;
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         throw new System.NotImplementedException();
     }

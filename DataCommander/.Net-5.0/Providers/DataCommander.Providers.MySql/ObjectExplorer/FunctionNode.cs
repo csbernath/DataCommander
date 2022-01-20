@@ -28,7 +28,7 @@ internal sealed class FunctionNode : ITreeNode
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         var item = new MenuItem("Show create function", ShowCreateFunction_Click, EmptyReadOnlyCollection<MenuItem>.Value);
         var items = new[] { item }.ToReadOnlyCollection();

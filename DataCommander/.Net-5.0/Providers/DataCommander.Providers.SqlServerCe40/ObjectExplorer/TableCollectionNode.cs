@@ -46,7 +46,7 @@ internal sealed class TableCollectionNode : ITreeNode
 
     string ITreeNode.Query => null;
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         var menuItem = new MenuItem("Shrink database", ShrinkDatabase, EmptyReadOnlyCollection<MenuItem>.Value);
         var compactDatabase = new MenuItem("Compact database", CompactDatabase, EmptyReadOnlyCollection<MenuItem>.Value);

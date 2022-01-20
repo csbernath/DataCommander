@@ -39,7 +39,7 @@ internal sealed class TableNode : ITreeNode
 	public bool Sortable => false;
 	public string Query => "select * from " + _schema.Name + "." + _name;
 
-	public ContextMenu GetContextMenu()
+	public ContextMenu? GetContextMenu()
 	{
 		throw new System.NotImplementedException();
 	}

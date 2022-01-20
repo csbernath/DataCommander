@@ -39,5 +39,5 @@ group by u.name";
         }
     }
 
-    public ContextMenu GetContextMenu() => null;
+    public ContextMenu? GetContextMenu() => null;
 }

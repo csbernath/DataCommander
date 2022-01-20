@@ -75,7 +75,7 @@ order by line";
         queryForm.ShowText(text);
     }
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         ContextMenu contextMenu;
 

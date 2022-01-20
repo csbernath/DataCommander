@@ -45,7 +45,7 @@ order by s.name";
 
     string ITreeNode.Query => null;
 
-    public ContextMenu GetContextMenu() => null;
+    public ContextMenu? GetContextMenu() => null;
 
     #endregion
 }

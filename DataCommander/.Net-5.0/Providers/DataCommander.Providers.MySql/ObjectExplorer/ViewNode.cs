@@ -34,7 +34,7 @@ internal sealed class ViewNode : ITreeNode
     string ITreeNode.Query => $@"select *
 from {_databaseNode.Name}.{_name}";
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         var item = new MenuItem("Show create table", ShowCreateTable_Click, EmptyReadOnlyCollection<MenuItem>.Value);
         var items = new[] { item }.ToReadOnlyCollection();

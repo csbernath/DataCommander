@@ -59,7 +59,7 @@ internal sealed class DatabaseNode : ITreeNode
     public bool Sortable => false;
     string ITreeNode.Query => null;
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         var getInformationMenuItem = new MenuItem("Get information", GetInformationMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
         var createDatabaseSnapshotMenuItem =

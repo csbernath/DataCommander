@@ -33,7 +33,7 @@ order by s.SEQUENCE_NAME";
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;
 
-    public ContextMenu GetContextMenu()
+    public ContextMenu? GetContextMenu()
     {
         throw new NotImplementedException();
     }
