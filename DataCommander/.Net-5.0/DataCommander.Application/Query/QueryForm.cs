@@ -540,7 +540,16 @@ public sealed class QueryForm : Form, IQueryForm
             var hitTestInfo = new Tchittestinfo(e.X, e.Y);
             var index = SendMessage(tabControl.Handle, TcmHittest, IntPtr.Zero, ref hitTestInfo);
             if (index >= 0)
+            {
                 tabControl.TabPages.RemoveAt(index);
+
+                if (tabControl.TabPages.Count == 0)
+                {
+                    var tabPage = (TabPage)tabControl.Parent;
+                    tabControl = (TabControl)tabPage.Parent;
+                    tabControl.TabPages.Remove(tabPage);
+                }
+            }
         }
     }
 
