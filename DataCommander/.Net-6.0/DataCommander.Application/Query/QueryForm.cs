@@ -501,6 +501,8 @@ public sealed class QueryForm : Form, IQueryForm
                 if (dataSet.Tables.Count > 1)
                 {
                     var tabControl = new TabControl { Dock = DockStyle.Fill };
+                    tabControl.MouseUp += DataTableTabControl_MouseUp;
+                    
                     var index = 0;
                     foreach (DataTable dataTable in dataSet.Tables)
                     {
@@ -527,6 +529,18 @@ public sealed class QueryForm : Form, IQueryForm
                     resultSetTabPage.Controls.Add(control);
                 }
             }
+        }
+    }
+
+    private void DataTableTabControl_MouseUp(object? sender, MouseEventArgs e)
+    {
+        if (sender != null && e.Button == MouseButtons.Middle)
+        {
+            var tabControl = (TabControl)sender;
+            var hitTestInfo = new Tchittestinfo(e.X, e.Y);
+            var index = SendMessage(tabControl.Handle, TcmHittest, IntPtr.Zero, ref hitTestInfo);
+            if (index >= 0)
+                tabControl.TabPages.RemoveAt(index);
         }
     }
 
