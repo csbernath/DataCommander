@@ -320,7 +320,7 @@ set arithabort on";
                 var estimated = (long) Math.Round(100.0 / percent * elapsed);
                 var estimatedRemaining = remainingPercent * elapsed / percent;
                 var infoMessage = new InfoMessage(localTime, InfoMessageSeverity.Verbose, null,
-                    $"Estimated time: {StopwatchTimeSpan.ToString(estimated, 0)} remaining time: {StopwatchTimeSpan.ToString(estimatedRemaining, 0)}");
+                    $"Estimated time: {StopwatchTimeSpan.ToString(estimated, 0)} remaining time: {StopwatchTimeSpan.ToString(estimatedRemaining, 0)}, finishes at: {LocalTime.Default.Now.AddSeconds(estimatedRemaining * StopwatchConstants.SecondsPerTick)}");
                 infoMessages.Add(infoMessage);
             }
         }
