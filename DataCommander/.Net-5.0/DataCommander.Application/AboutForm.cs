@@ -55,14 +55,10 @@ Target Framework: {targetFrameworkAttribute.FrameworkDisplayName}
 <table style=""font-family:verdana;font-size:9pt"">
 <tr><td>Windows ProductName:</td><td>{windowsVersionInfo.ProductName}</td></tr>
 <tr><td>Windows DisplayVersion:</td><td>{windowsVersionInfo.DisplayVersion}</td></tr>
-<tr><td>Windows ReleaseId:</td><td>{windowsVersionInfo.ReleaseId}</td></tr>
-<tr><td>Windows CurrentBuild:</td><td>{windowsVersionInfo.CurrentBuild}</td></tr>
 <tr><td>.NET CLR version:</td><td>{Environment.Version}</td></tr>
-<tr><td>.NET Processor architecture:</td><td>{assembly.GetName().ProcessorArchitecture}</td></tr>
 </table>
-</br>
+<br/>
 Credits:
-</br>
 <ul style=""list-style-type:none"">
     <li><a href=""https://www.jetbrains.com/rider/"">JetBrains Rider 2021.3</a></li>
     <li><a href=""https://www.visualstudio.com/vs/community/"">Visual Studio Community 2022</a></li>
