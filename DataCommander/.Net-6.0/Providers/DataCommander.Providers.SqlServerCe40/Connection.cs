@@ -24,7 +24,7 @@ internal sealed class Connection : ConnectionBase
     public override string ConnectionName { get; set; }
     public override string Caption => _sqlCeConnection.DataSource;
     public override string DataSource => _sqlCeConnection.DataSource;
-    protected override void SetDatabase(string database) => throw new NotImplementedException();
+    protected void SetDatabase(string database) => throw new NotImplementedException();
     public override string ServerVersion => _sqlCeConnection.ServerVersion;
     public override int TransactionCount => 0;
 }

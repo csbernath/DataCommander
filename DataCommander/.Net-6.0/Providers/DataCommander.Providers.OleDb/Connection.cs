@@ -33,7 +33,7 @@ internal sealed class Connection : ConnectionBase
 
     public override IDbCommand CreateCommand() => oledbConnection.CreateCommand();
 
-    protected override void SetDatabase(string database)
+    protected void SetDatabase(string database)
     {
     }
 

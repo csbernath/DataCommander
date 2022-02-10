@@ -54,12 +54,14 @@ internal sealed class LogResultWriter : IResultWriter
         ++_commandCount;
 
         var command = asyncDataAdapterCommand.Command;
-        var message = $"Command[{_commandCount - 1}] executing from line {asyncDataAdapterCommand.LineIndex + 1}...\r\n{command.CommandText}";
+        const long duration = 0;
+        var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount-1}]";
+        var message = $"Before executing reader at line {asyncDataAdapterCommand.LineIndex + 1}...\r\n{command.CommandText}";
         var parameters = command.Parameters;
         if (!parameters.IsNullOrEmpty())
             message += "\r\n" + command.Parameters.ToLogString();
 
-        _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
+        _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
 
         _query = asyncDataAdapterCommand.Query;
         if (_query != null)
@@ -74,10 +76,9 @@ internal sealed class LogResultWriter : IResultWriter
     void IResultWriter.AfterExecuteReader(int fieldCount)
     {
         var duration = Stopwatch.GetTimestamp() - _beforeExecuteReaderTimestamp;
-
-        var header = StopwatchTimeSpan.ToString(duration, 3);
+        var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount-1}]";
         var stringBuilder = new StringBuilder();
-        stringBuilder.Append($"Command[{_commandCount - 1}] started.");
+        stringBuilder.Append($"Executing reader...");
         if (fieldCount > 0)
             stringBuilder.Append($" Field count: {fieldCount}");
         var message = stringBuilder.ToString();
@@ -90,11 +91,11 @@ internal sealed class LogResultWriter : IResultWriter
     void IResultWriter.AfterCloseReader(int affectedRows)
     {
         var duration = Stopwatch.GetTimestamp() - _beforeExecuteReaderTimestamp;
-        var header = StopwatchTimeSpan.ToString(duration, 3);
+        var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount-1}]";
         var stringBuilder = new StringBuilder();
-        stringBuilder.Append($"Command[{_commandCount - 1}] completed.");
+        stringBuilder.Append($"Reader closed.");
         if (affectedRows >= 0)
-            stringBuilder.Append($" {affectedRows} row(s) affected.");
+            stringBuilder.Append($" {SingularOrPlural(affectedRows, "row", "rows")} affected.");
         var message = stringBuilder.ToString();
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
 
@@ -143,9 +144,8 @@ internal sealed class LogResultWriter : IResultWriter
     void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
     {
         var duration = Stopwatch.GetTimestamp() - _firstRowReadBeginTimestamp;
-        var header = StopwatchTimeSpan.ToString(duration, 3);
-        var message =
-            $"Command[{_commandCount - 1}] result[{_tableCount - 1}] first row read completed.";
+        var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount-1}]";
+        var message = $"Result[{_tableCount - 1}] first row read completed.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
     }
 
@@ -154,9 +154,9 @@ internal sealed class LogResultWriter : IResultWriter
     void IResultWriter.WriteTableEnd()
     {
         var duration = Stopwatch.GetTimestamp() - _writeTableBeginTimestamp;
-        var header = StopwatchTimeSpan.ToString(duration, 3);
+        var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount-1}]";
         var message =
-            $"Command[{_commandCount - 1}] result[{_tableCount - 1}] finished. Table[{_tableCount - 1},{_query?.Results[_tableCount - 1]}] has {_fieldCount} column(s), {_rowCount} row(s).";
+            $"Result[{_tableCount - 1}] finished. Table[{_tableCount - 1},{_query?.Results[_tableCount - 1]}] has {SingularOrPlural(_fieldCount, "column", "columns")}, {SingularOrPlural(_rowCount, "row", "rows")}.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
     }
 
@@ -164,11 +164,18 @@ internal sealed class LogResultWriter : IResultWriter
     {
     }
 
+    private static string SingularOrPlural(int count, string singular, string plural)
+    {
+        return count == 1
+            ? $"{count} {singular}"
+            : $"{count} {plural}";
+    }
+
     void IResultWriter.End()
     {
         var duration = Stopwatch.GetTimestamp() - _beginTimestamp;
         var header = StopwatchTimeSpan.ToString(duration, 3);
-        var message = $"Query completed {_commandCount} command(s).";
+        var message = $"Query completed {SingularOrPlural(_commandCount, "command", "commands")}.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
     }
 

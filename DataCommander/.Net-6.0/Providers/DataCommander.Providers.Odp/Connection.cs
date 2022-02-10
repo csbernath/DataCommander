@@ -64,7 +64,7 @@ internal sealed class Connection : ConnectionBase
         return command;
     }
 
-    protected override void SetDatabase(string database)
+    protected void SetDatabase(string database)
     {
     }
 

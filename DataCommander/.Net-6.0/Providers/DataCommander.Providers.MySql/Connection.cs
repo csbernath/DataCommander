@@ -40,7 +40,7 @@ internal sealed class Connection : ConnectionBase
         }
     }
 
-    protected override void SetDatabase(string database)
+    protected void SetDatabase(string database)
     {
         throw new NotImplementedException();
     }

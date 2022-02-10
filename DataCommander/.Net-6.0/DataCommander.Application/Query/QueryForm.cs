@@ -2690,9 +2690,9 @@ public sealed class QueryForm : Form, IQueryForm
             if (Connection != null)
             {
                 var dataSource = Connection.DataSource;
-                _parentStatusBar.Items[0].Text = "Closing connection to database " + dataSource + "....";
+                _parentStatusBar.Items[0].Text = $"Closing connection to data source {dataSource}'....";
                 Connection.Close();
-                _parentStatusBar.Items[0].Text = "Connection to database " + dataSource + " closed.";
+                _parentStatusBar.Items[0].Text = $"Connection to data source {dataSource} closed.";
                 Connection.Connection.Dispose();
                 Connection = null;
             }

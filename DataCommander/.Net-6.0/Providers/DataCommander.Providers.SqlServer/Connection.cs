@@ -334,7 +334,7 @@ set arithabort on";
         return _sqlConnection.CreateCommand();
     }
 
-    protected override void SetDatabase(string database)
+    protected void SetDatabase(string database)
     {
         _sqlConnectionStringBuilder.InitialCatalog = database;
         _sqlConnection.Dispose();

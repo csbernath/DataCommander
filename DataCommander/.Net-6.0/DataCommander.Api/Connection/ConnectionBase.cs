@@ -23,7 +23,6 @@ public abstract class ConnectionBase
     public string ConnectionString => Connection.ConnectionString;
     public abstract string Caption { get; }
     public abstract string DataSource { get; }
-    protected abstract void SetDatabase(string database);
 
     public string Database
     {
@@ -32,8 +31,6 @@ public abstract class ConnectionBase
             var database = Connection?.Database;
             return database;
         }
-
-        set => SetDatabase(value);
     }
 
     public abstract string ServerVersion { get; }
