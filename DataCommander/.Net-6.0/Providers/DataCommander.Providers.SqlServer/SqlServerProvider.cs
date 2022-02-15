@@ -846,11 +846,7 @@ from
             var startIndex = statementTokens[0].StartPosition;
             var endIndex = statementTokens.Last().EndPosition;
             var length = endIndex - startIndex + 1;
-            var statement = new Statement
-            {
-                LineIndex = statementTokens[0].LineIndex,
-                CommandText = commandText.Substring(startIndex, length)
-            };
+            var statement = new Statement(statementTokens[0].LineIndex, commandText.Substring(startIndex, length));
             statements.Add(statement);
         }
 

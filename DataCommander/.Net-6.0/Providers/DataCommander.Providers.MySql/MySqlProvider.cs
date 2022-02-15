@@ -349,11 +349,7 @@ internal sealed class MySqlProvider : IProvider
     {
         return new List<Statement>
         {
-            new()
-            {
-                LineIndex = 0,
-                CommandText = commandText
-            }
+            new(0, commandText)
         };
     }
 

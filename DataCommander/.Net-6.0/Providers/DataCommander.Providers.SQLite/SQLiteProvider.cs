@@ -404,11 +404,7 @@ order by name collate nocase";
     {
         return new List<Statement>
         {
-            new()
-            {
-                LineIndex = 0,
-                CommandText = commandText
-            }
+            new(0, commandText)
         };
     }
 

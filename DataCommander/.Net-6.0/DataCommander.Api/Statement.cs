@@ -2,6 +2,12 @@
 
 public sealed class Statement
 {
-    public int LineIndex;
-    public string CommandText;
+    public readonly int LineIndex;
+    public readonly string CommandText;
+
+    public Statement(int lineIndex, string commandText)
+    {
+        LineIndex = lineIndex;
+        CommandText = commandText;
+    }
 }
