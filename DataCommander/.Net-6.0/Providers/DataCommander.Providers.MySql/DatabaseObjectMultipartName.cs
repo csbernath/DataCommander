@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Text;
-using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.MySql;
 
@@ -12,7 +10,6 @@ internal sealed class DatabaseObjectMultipartName
         if (nameParts != null)
         {
             var i = nameParts.Count - 1;
-            var commandBuilder = new SqlCommandBuilder();
 
             if (i >= 0)
             {
