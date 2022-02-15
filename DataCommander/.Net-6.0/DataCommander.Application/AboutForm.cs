@@ -66,7 +66,7 @@ Credits:
     <li><a href=""https://github.com/JanKallman/EPPlus"">EPPlus Excel generator</a></li>
     <li><a href=""https://system.data.sqlite.org"">SQLite provider</a></li>
     <li><a href=""https://www.nuget.org/packages/MySql.Data/"">MySQL provider</a></li>
-    <li><a href=""http://npgsql.projects.pgfoundry.org/"">PostgreSQL provider</a></li>  
+    <li><a href=""https://github.com/npgsql/npgsql"">PostgreSQL provider</a></li>  
 </ul>
 </div>";
 
