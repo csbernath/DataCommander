@@ -103,7 +103,7 @@ internal sealed class SqlServerProvider : IProvider
 
     string IProvider.CommandToString(IDbCommand command)
     {
-        var sqlCommand = (SqlCommand) command;
+        var sqlCommand = (SqlCommand)command;
         return sqlCommand.ToLogString();
     }
 
@@ -171,7 +171,7 @@ internal sealed class SqlServerProvider : IProvider
 
             var columnSize = columnSchema.ColumnSize;
             var providerType = columnSchema.ProviderType;
-            var dbType = (DbType) providerType;
+            var dbType = (DbType)providerType;
             var parameter = new SqlParameter();
             parameter.ParameterName = $"@p{i}";
             //parameter.DbType = dbType;
@@ -226,8 +226,8 @@ internal sealed class SqlServerProvider : IProvider
 
                 case SqlDataTypeName.Decimal:
                     parameter.SqlDbType = SqlDbType.Decimal;
-                    parameter.Precision = (byte) columnSchema.NumericPrecision.Value;
-                    parameter.Scale = (byte) columnSchema.NumericScale.Value;
+                    parameter.Precision = (byte)columnSchema.NumericPrecision.Value;
+                    parameter.Scale = (byte)columnSchema.NumericScale.Value;
                     converters[i] = ConvertToDecimal;
                     break;
 
@@ -251,7 +251,7 @@ internal sealed class SqlServerProvider : IProvider
 
     void IProvider.DeriveParameters(IDbCommand command)
     {
-        var sqlConnection = (SqlConnection) command.Connection;
+        var sqlConnection = (SqlConnection)command.Connection;
         var sqlCommand = new SqlCommand(command.CommandText, sqlConnection)
         {
             CommandType = command.CommandType,
@@ -270,7 +270,7 @@ internal sealed class SqlServerProvider : IProvider
 
     public XmlReader ExecuteXmlReader(IDbCommand command)
     {
-        var sqlCommand = (SqlCommand) command;
+        var sqlCommand = (SqlCommand)command;
         return sqlCommand.ExecuteXmlReader();
     }
 
@@ -312,7 +312,7 @@ internal sealed class SqlServerProvider : IProvider
 
     Type IProvider.GetColumnType(FoundationDbColumn column)
     {
-        var dbType = (SqlDbType) column.ProviderType;
+        var dbType = (SqlDbType)column.ProviderType;
         var columnSize = column.ColumnSize;
         Type type;
 
@@ -387,7 +387,7 @@ internal sealed class SqlServerProvider : IProvider
             {
                 if (value.IndexOf("@@") == 0)
                 {
-                    array = _keyWords.Where(k => k.StartsWith(value)).Select(keyWord => (IObjectName) new NonSqlObjectName(keyWord)).ToList();
+                    array = _keyWords.Where(k => k.StartsWith(value)).Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
                 }
                 else
                 {
@@ -403,7 +403,7 @@ internal sealed class SqlServerProvider : IProvider
                                 list.Add(token.Value, null);
                     }
 
-                    array = list.Keys.Select(keyWord => (IObjectName) new NonSqlObjectName(keyWord)).ToList();
+                    array = list.Keys.Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
                 }
             }
         }
@@ -490,9 +490,9 @@ internal sealed class SqlServerProvider : IProvider
                         string[] owners;
 
                         if (name.Schema != null)
-                            owners = new[] {name.Schema};
+                            owners = new[] { name.Schema };
                         else
-                            owners = new[] {"dbo", "sys"};
+                            owners = new[] { "dbo", "sys" };
 
                         var sb = new StringBuilder();
                         for (i = 0; i < owners.Length; i++)
@@ -568,7 +568,7 @@ order by 1", name.Database);
                                 {
                                     var token = tokens[tokenIndex];
                                     var tokenValue = token.Value;
-                                    var indexofAny = tokenValue.IndexOfAny(new[] {'\r', '\n'});
+                                    var indexofAny = tokenValue.IndexOfAny(new[] { '\r', '\n' });
                                     if (indexofAny >= 0) tokenValue = tokenValue.Substring(0, indexofAny);
 
                                     string? like;
@@ -656,7 +656,7 @@ from
 
     DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
     {
-        var sqlParameter = (SqlParameter) parameter;
+        var sqlParameter = (SqlParameter)parameter;
         return new SqlDataParameter(sqlParameter);
     }
 
@@ -779,7 +779,7 @@ from
                 }
 
                 var columnSize = dataColumnSchema.ColumnSize;
-                var dbType = (SqlDbType) dataColumnSchema.ProviderType;
+                var dbType = (SqlDbType)dataColumnSchema.ProviderType;
                 var dataTypeName = dataReader.GetDataTypeName(columnIndex);
                 var sb = new StringBuilder();
                 sb.Append(dataTypeName);
@@ -841,7 +841,9 @@ from
         var tokens = sqlStatement.Tokens;
         var statements = new List<Statement>();
 
-        foreach (var statementTokens in tokens.Split(token => IsBatchSeparator(commandText, token)).Where(statementTokens => statementTokens.Length > 0))
+        var statementTokenArrays = tokens.Split(token => IsBatchSeparator(commandText, token)).Where(statementTokens => statementTokens.Length > 0);
+        
+        foreach (var statementTokens in statementTokenArrays)
         {
             var startIndex = statementTokens[0].StartPosition;
             var endIndex = statementTokens.Last().EndPosition;
@@ -880,16 +882,14 @@ from
 
     #region Private Methods
 
-    private static object ConvertToString(object source)
+    private static object ConvertToString(object? source)
     {
         object target;
         if (source == null || source == DBNull.Value)
-        {
             target = DBNull.Value;
-        }
         else
         {
-            var convertible = (IConvertible) source;
+            var convertible = (IConvertible)source;
             target = convertible.ToString(null);
         }
 
@@ -900,12 +900,10 @@ from
     {
         object target;
         if (source == DBNull.Value)
-        {
             target = DBNull.Value;
-        }
         else
         {
-            var decimalField = (DecimalField) source;
+            var decimalField = (DecimalField)source;
             target = decimalField.DecimalValue;
         }
 

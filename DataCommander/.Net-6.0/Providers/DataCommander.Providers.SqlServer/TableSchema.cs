@@ -7,7 +7,7 @@ using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer;
 
-internal sealed class TableSchema
+internal static class TableSchema
 {
     public static GetTableSchemaResult GetTableSchema(IDbConnection connection, string? tableName)
     {
