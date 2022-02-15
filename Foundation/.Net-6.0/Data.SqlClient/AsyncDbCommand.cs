@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using Foundation.Assertions;
 
-namespace Foundation.Data;
+namespace Foundation.Data.SqlClient;
 
 public class AsyncDbCommand : IDbCommand
 {

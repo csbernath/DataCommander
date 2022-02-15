@@ -7,7 +7,7 @@ using Foundation.Log;
 using Foundation.Threading;
 using Microsoft.Data.SqlClient;
 
-namespace Foundation.Data;
+namespace Foundation.Data.SqlClient;
 
 public sealed class AsyncDbConnection : IDbConnection
 {
@@ -114,7 +114,7 @@ public sealed class AsyncDbConnection : IDbConnection
                 var sb = new StringBuilder();
                 sb.AppendFormat("exec {0}", command.CommandText);
                 var parameters = (SqlParameterCollection)command.Parameters;
-                var parametersString = parameters.ToLogString();
+                var parametersString = IDataParameterCollectionExtensions.ToLogString(parameters);
 
                 if (parametersString.Length > 0)
                 {
