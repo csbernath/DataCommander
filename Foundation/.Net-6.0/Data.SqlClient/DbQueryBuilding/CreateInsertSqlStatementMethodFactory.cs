@@ -2,7 +2,7 @@
 using Foundation.Linq;
 using Foundation.Text;
 
-namespace Foundation.Data.DbQueryBuilding;
+namespace Foundation.Data.SqlClient.DbQueryBuilding;
 
 public static class CreateInsertSqlStatementMethodFactory
 {

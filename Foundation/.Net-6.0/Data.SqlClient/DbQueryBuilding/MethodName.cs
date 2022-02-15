@@ -1,6 +1,4 @@
-﻿using Foundation.Data.SqlClient;
-
-namespace Foundation.Data.DbQueryBuilding;
+﻿namespace Foundation.Data.SqlClient.DbQueryBuilding;
 
 internal static class MethodName
 {

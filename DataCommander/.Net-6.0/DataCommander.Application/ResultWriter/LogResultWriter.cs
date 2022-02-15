@@ -13,7 +13,7 @@ using Foundation.Assertions;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
-using Foundation.Data.DbQueryBuilding;
+using Foundation.Data.SqlClient.DbQueryBuilding;
 using Foundation.Linq;
 using Foundation.Log;
 

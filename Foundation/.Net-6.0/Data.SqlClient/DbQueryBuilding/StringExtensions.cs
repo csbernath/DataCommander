@@ -1,6 +1,6 @@
 ﻿using Foundation.Core;
 
-namespace Foundation.Data.DbQueryBuilding;
+namespace Foundation.Data.SqlClient.DbQueryBuilding;
 
 public static class StringExtensions
 {

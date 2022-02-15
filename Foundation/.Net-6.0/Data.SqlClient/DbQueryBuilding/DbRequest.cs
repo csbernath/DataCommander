@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Foundation.Data.DbQueryBuilding;
+namespace Foundation.Data.SqlClient.DbQueryBuilding;
 
 public class DbRequest
 {

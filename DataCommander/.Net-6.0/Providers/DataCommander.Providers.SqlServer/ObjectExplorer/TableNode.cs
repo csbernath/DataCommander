@@ -13,8 +13,8 @@ using Foundation.Collections;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
-using Foundation.Data.DbQueryBuilding;
 using Foundation.Data.SqlClient;
+using Foundation.Data.SqlClient.DbQueryBuilding;
 using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
@@ -602,13 +602,13 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
         var dataTransferObject = DataTransferObjectFactory.CreateDataTransferObject(_name, dataTransferObjectFields).ToIndentedString("    ");
 
         var columns = getTableSchemaResult.Columns
-            .Select(i => new Foundation.Data.DbQueryBuilding.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
+            .Select(i => new Foundation.Data.SqlClient.DbQueryBuilding.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
             .ToReadOnlyCollection();
         var createInsertSqlSqlStatementMethod = CreateInsertSqlStatementMethodFactory.Create(_owner, _name, columns);
 
         var identifierColumn = getTableSchemaResult.UniqueIndexColumns
             .Select(i => getTableSchemaResult.Columns.First(j => j.ColumnId == i.ColumnId))
-            .Select(i => new Foundation.Data.DbQueryBuilding.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
+            .Select(i => new Foundation.Data.SqlClient.DbQueryBuilding.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
             .FirstOrDefault();
         var versionColumn = columns.FirstOrDefault(i => i.ColumnName == "Version");
 

@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Foundation.Data.SqlClient;
 using Foundation.Linq;
 using Foundation.Text;
 
-namespace Foundation.Data.DbQueryBuilding;
+namespace Foundation.Data.SqlClient.DbQueryBuilding;
 
 public static class CreateUpdateSqlStatementMethodFactory
 {

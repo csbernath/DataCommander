@@ -6,9 +6,8 @@ using System.Text;
 using Foundation.Assertions;
 using Foundation.Collections;
 using Foundation.Core;
-using Foundation.Data.SqlClient;
 
-namespace Foundation.Data.DbQueryBuilding;
+namespace Foundation.Data.SqlClient.DbQueryBuilding;
 
 public sealed class DbRequestBuilder
 {
