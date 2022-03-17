@@ -494,7 +494,6 @@ Oracle|Oracle using [Oracle provider](https://msdn.microsoft.com/en-us/library/s
 PostgreSQL|[PostgreSQL](https://github.com/npgsql/Npgsql)|
 SQLite|[SQLite .NET Data Provider](http://system.data.sqlite.org)|
 SqlServer|[Microsoft SQL Server](http://www.microsoft.com/en-us/server-cloud/products/sql-server/) 2005 or greater|
-SqlServer2|[Microsoft SQL Server](http://www.microsoft.com/en-us/server-cloud/products/sql-server/) 2005 or greater|
 SqlServerCe40|[Microsoft SQL Server Compact Edition 4.0](http://www.microsoft.com/en-us/download/details.aspx?id=17876)|
 Tfs-16.0.0.0|[Microsoft Team Foundation Server](https://msdn.microsoft.com/en-us/vstudio/ff637362.aspx) using nuget TFS client|
 Wmi|[Windows Management Instrumentation](https://msdn.microsoft.com/en-us/library/aa394582(v=vs.85).aspx)
@@ -935,11 +934,11 @@ This program is freeware and released under the [GNU General Public License](htt
 
 ## Development environment
 
-.NET 5 version:
-- [JetBrains Rider 2021.1](https://www.jetbrains.com/rider/)
+.NET 5/6 versions:
+- [JetBrains Rider 2021.3.3](https://www.jetbrains.com/rider/)
 - Microsoft Visual Studio Community 2019 Version 16.11.6 (editing Forms)
-- .NET 5
-- C# 9.0
+- .NET 5/6
+- C# 9.0/10.0
 
 .NET 4.8 version:
 - Microsoft Visual Studio Community 2019 Version 16.9.3
@@ -960,7 +959,7 @@ This program is freeware and released under the [GNU General Public License](htt
 
 ## References
 
-- [Microsoft SQL Server Management Studio v18.8](https://msdn.microsoft.com/en-us/library/hh213248.aspx)
+- [Microsoft SQL Server Management Studio v18.11.1](https://docs.microsoft.com/en-us/sql/ssms/sql-server-management-studio-ssms?redirectedfrom=MSDN&view=sql-server-ver15)
 - [pgAdmin: PostgreSQL Tools](http://www.pgadmin.org/)
 - [TOAD for SQL Server](http://www.quest.com/toad-for-sql-server/)
 - [PL/SQL Developer](http://www.allroundautomations.com/plsqldev.html)

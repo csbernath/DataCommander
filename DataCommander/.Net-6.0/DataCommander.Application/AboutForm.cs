@@ -60,7 +60,7 @@ Target Framework: {targetFrameworkAttribute.FrameworkDisplayName}
 <br/>
 Credits:
 <ul style=""list-style-type:none"">
-    <li><a href=""https://www.jetbrains.com/rider/"">JetBrains Rider 2021.3</a></li>
+    <li><a href=""https://www.jetbrains.com/rider/"">JetBrains Rider 2021.3.3</a></li>
     <li><a href=""https://www.visualstudio.com/vs/community/"">Visual Studio Community 2022</a></li>
     <li><a href=""https://www.jetbrains.com/resharper/"">JetBrains R# ReSharper</a></li>
     <li><a href=""https://github.com/JanKallman/EPPlus"">EPPlus Excel generator</a></li>
