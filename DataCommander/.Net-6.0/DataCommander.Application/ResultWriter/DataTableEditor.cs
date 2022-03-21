@@ -32,12 +32,13 @@ internal class DataTableEditor : UserControl
 {
     #region Private Fields
 
+    private readonly IQueryForm _queryForm;
     private readonly DbCommandBuilder _commandBuilder;
+    private readonly ColorTheme _colorTheme;
     private DoubleBufferedDataGridView _dataGrid;
     private string? _tableName;
     private GetTableSchemaResult _tableSchema;
     private DataTable _dataTable;
-    private ToolStripStatusLabel _statusBarPanel;
     private int _columnIndex;
     private string _columnName;
     private object _cellValue;
@@ -52,9 +53,11 @@ internal class DataTableEditor : UserControl
 
     #region Constructors
 
-    public DataTableEditor(DbCommandBuilder commandBuilder, ColorTheme colorTheme)
+    public DataTableEditor(IQueryForm queryForm, DbCommandBuilder commandBuilder, ColorTheme colorTheme)
     {
+        _queryForm = queryForm;
         _commandBuilder = commandBuilder;
+        _colorTheme = colorTheme;
 
         // This call is required by the Windows.Forms Form Designer.
         InitializeComponent();
@@ -237,11 +240,6 @@ internal class DataTableEditor : UserControl
                 queryForm.AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, message));
             }
         }
-    }
-
-    public ToolStripStatusLabel StatusBarPanel
-    {
-        set => _statusBarPanel = value;
     }
 
     private IEnumerable<Column> UniqueIndexColumns =>
@@ -648,7 +646,7 @@ internal class DataTableEditor : UserControl
 
             var path = saveFileDialog.FileName;
 
-            _statusBarPanel.Text = "Saving table...";
+            _queryForm.SetStatusbarPanelText("Saving table...", _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
 
             Task.Factory.StartNew(() =>
             {
@@ -726,7 +724,8 @@ internal class DataTableEditor : UserControl
                     }
 
                     stopwatch.Stop();
-                    _statusBarPanel.Text = $"Table saved successfully in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.";
+                    _queryForm.SetStatusbarPanelText($"Table saved successfully in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.",
+                        _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
                 }
                 catch (Exception ex)
                 {
@@ -747,11 +746,8 @@ internal class DataTableEditor : UserControl
             Cursor = Cursors.WaitCursor;
             var dataObject = new MyDataObject(_dataTable.DefaultView, GetColumnIndexes());
             Clipboard.SetDataObject(dataObject);
-            if (_statusBarPanel != null)
-            {
-                _statusBarPanel.Text =
-                    string.Format("Data copied to clipboard. Data is available in 3 formats: HTML, TAB separated text, FIXED width text.");
-            }
+            _queryForm.SetStatusbarPanelText("Data copied to clipboard. Data is available in 3 formats: HTML, TAB separated text, FIXED width text.",
+                _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
         }
         finally
         {
@@ -770,7 +766,8 @@ internal class DataTableEditor : UserControl
         {
             dataView.RowFilter = properties.RowFilter;
             dataView.Sort = properties.Sort;
-            _statusBarPanel.Text = $"RowFilter = \"{properties.RowFilter}\" applied. dataView.Count: {dataView.Count}";
+            _queryForm.SetStatusbarPanelText($"RowFilter = \"{properties.RowFilter}\" applied. dataView.Count: {dataView.Count}",
+                _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
         }
     }
 
@@ -799,7 +796,7 @@ internal class DataTableEditor : UserControl
 
     private void OpenAsExcelFile_Click(object sender, EventArgs e)
     {
-        var binaryField = (BinaryField) _cellValue;
+        var binaryField = (BinaryField)_cellValue;
         var path = Path.Combine(Path.GetTempPath(), Path.GetTempFileName() + ".zip");
         File.WriteAllBytes(path, binaryField.Value);
         var processStartInfo = new ProcessStartInfo
@@ -867,7 +864,7 @@ internal class DataTableEditor : UserControl
         string value = null;
         Encoding encoding = null;
 
-        if (_cellValue.IfAsNotNull(delegate (StringField stringField)
+        if (_cellValue.IfAsNotNull(delegate(StringField stringField)
             {
                 var stringReader = new StringReader(stringField.Value);
                 var xmlTextReader = new XmlTextReader(stringReader);
@@ -922,12 +919,8 @@ internal class DataTableEditor : UserControl
         {
             var dataView = _dataTable.DefaultView;
             dataView.RowFilter = rowFilter;
-
-            if (_statusBarPanel != null)
-            {
-                _statusBarPanel.Text =
-                    $"RowFilter ({rowFilter}) applied. {dataView.Count} row(s) found from {_dataTable.Rows.Count} row(s).";
-            }
+            _queryForm.SetStatusbarPanelText($"RowFilter ({rowFilter}) applied. {dataView.Count} row(s) found from {_dataTable.Rows.Count} row(s).",
+                _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
         }
         catch (Exception ex)
         {
@@ -986,7 +979,7 @@ internal class DataTableEditor : UserControl
     {
         using (new CursorManager(Cursors.WaitCursor))
         {
-            _statusBarPanel.Text = "Copying table to clipboard as XML...";
+            _queryForm.SetStatusbarPanelText("Copying table to clipboard as XML...", _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
             var textWriter = new StringWriter();
             var xmlWriter = new XmlTextWriter(textWriter);
             xmlWriter.Formatting = Formatting.Indented;
@@ -1068,7 +1061,8 @@ internal class DataTableEditor : UserControl
             xmlWriter.Close();
             var xml = textWriter.ToString();
             Clipboard.SetDataObject(xml, true, 5, 200);
-            _statusBarPanel.Text = "Table succesfully copied to clipboard as XML.";
+            _queryForm.SetStatusbarPanelText("Table succesfully copied to clipboard as XML.",
+                _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
         }
     }
 

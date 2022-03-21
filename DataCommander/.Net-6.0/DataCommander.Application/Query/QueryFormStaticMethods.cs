@@ -30,15 +30,16 @@ internal static class QueryFormStaticMethods
     //    return htmlTextBox;
     //}
 
-    public static Control CreateControlFromDataTable(DbCommandBuilder commandBuilder, DataTable dataTable, GetTableSchemaResult getTableSchemaResult,
-        ResultWriterType tableStyle, bool readOnly, ToolStripStatusLabel toolStripStatusLabel, ColorTheme colorTheme)
+    public static Control CreateControlFromDataTable(IQueryForm queryForm, DbCommandBuilder commandBuilder, DataTable dataTable,
+        GetTableSchemaResult getTableSchemaResult,
+        ResultWriterType tableStyle, bool readOnly, ColorTheme colorTheme)
     {
         Control control;
 
         switch (tableStyle)
         {
             case ResultWriterType.DataGrid:
-                control = CreateDataTableEditorFromDataTable(commandBuilder, dataTable, getTableSchemaResult, readOnly, toolStripStatusLabel, colorTheme);
+                control = CreateDataTableEditorFromDataTable(queryForm, commandBuilder, dataTable, getTableSchemaResult, readOnly, colorTheme);
                 break;
 
             //case ResultWriterType.Html:
@@ -56,20 +57,14 @@ internal static class QueryFormStaticMethods
         return control;
     }
 
-    private static DataTableEditor CreateDataTableEditorFromDataTable(
-        DbCommandBuilder commandBuilder,
-        DataTable dataTable,
-        GetTableSchemaResult getTableSchemaResult,
-        bool readOnly,
-        ToolStripStatusLabel toolStripStatusLabel,
-        ColorTheme colorTheme)
+    private static DataTableEditor CreateDataTableEditorFromDataTable(IQueryForm queryForm, DbCommandBuilder commandBuilder, DataTable dataTable,
+        GetTableSchemaResult getTableSchemaResult, bool readOnly, ColorTheme colorTheme)
     {
-        var editor = new DataTableEditor(commandBuilder, colorTheme);
+        var editor = new DataTableEditor(queryForm, commandBuilder, colorTheme);
         editor.ReadOnly = readOnly;
         editor.DataTable = dataTable;
         editor.TableName = dataTable.TableName;
         editor.TableSchema = getTableSchemaResult;
-        editor.StatusBarPanel = toolStripStatusLabel;
         return editor;
     }
 

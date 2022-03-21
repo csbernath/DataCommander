@@ -507,8 +507,8 @@ public sealed class QueryForm : Form, IQueryForm
                     foreach (DataTable dataTable in dataSet.Tables)
                     {
                         var commandBuilder = Provider.DbProviderFactory.CreateCommandBuilder();
-                        var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataTable, getTableSchemaResult, TableStyle,
-                            !_openTableMode, _sbPanelText, _colorTheme);
+                        var control = QueryFormStaticMethods.CreateControlFromDataTable(this, commandBuilder, dataTable, getTableSchemaResult, TableStyle,
+                            !_openTableMode, _colorTheme);
                         control.Dock = DockStyle.Fill;
                         text = dataTable.TableName;
                         var tabPage = new TabPage(text);
@@ -523,8 +523,8 @@ public sealed class QueryForm : Form, IQueryForm
                 else
                 {
                     var commandBuilder = Provider.DbProviderFactory.CreateCommandBuilder();
-                    var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataSet.Tables[0], getTableSchemaResult, TableStyle,
-                        !_openTableMode, _sbPanelText, _colorTheme);
+                    var control = QueryFormStaticMethods.CreateControlFromDataTable(this, commandBuilder, dataSet.Tables[0], getTableSchemaResult, TableStyle,
+                        !_openTableMode, _colorTheme);
                     control.Dock = DockStyle.Fill;
                     resultSetTabPage.Controls.Add(control);
                 }
@@ -1963,8 +1963,7 @@ public sealed class QueryForm : Form, IQueryForm
     private void ShowDataTableDataGrid(DataTable dataTable)
     {
         var commandBuilder = Provider.DbProviderFactory.CreateCommandBuilder();
-        var dataTableEditor = new DataTableEditor(commandBuilder, _colorTheme);
-        dataTableEditor.StatusBarPanel = _sbPanelText;
+        var dataTableEditor = new DataTableEditor(this, commandBuilder, _colorTheme);
         dataTableEditor.ReadOnly = !_openTableMode;
 
         if (_openTableMode)
@@ -1976,7 +1975,6 @@ public sealed class QueryForm : Form, IQueryForm
         }
 
         GarbageMonitor.Default.Add("dataTableEditor", dataTableEditor);
-        dataTableEditor.StatusBarPanel = _sbPanelText;
         dataTableEditor.DataTable = dataTable;
         ShowTabPage(dataTable.TableName, GetToolTipText(dataTable), dataTableEditor);
     }
