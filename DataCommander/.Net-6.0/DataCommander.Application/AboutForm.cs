@@ -18,7 +18,6 @@ public partial class AboutForm : Form
         var assembly = Assembly.GetEntryAssembly();
         var path = assembly.Location;
         var lastWriteTime = File.GetLastWriteTime(path);
-        var targetFrameworkAttribute = assembly.GetCustomAttribute<TargetFrameworkAttribute>();
         var windowsVersionInfo = WindowsVersionInfo.Get();
 
         var text =
@@ -30,21 +29,18 @@ public partial class AboutForm : Form
 <a href=""https://github.com/csbernath/DataCommander"">Data Commander</a>
 <br/>
 <br/>
+Build date: {lastWriteTime.ToString("yyyy-MM-dd")}
+<br/>
+<br/>
 Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.Net-6.0/README.md"">Foundation (.NET 6.0) Class Library</a>
 <br/>
 <br/>
 Version: {assembly.GetName().Version}
 <br/>
 <br/>
-Build date: {lastWriteTime.ToString("yyyy-MM-dd")}
-<br/>
-<br/>
 Copyright © 2002-2022 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Bernáth</a>
 <br/>
 This program is freeware and released under the <a href=""https://www.gnu.org/licenses/gpl.txt"">GNU General Public Licence</a>.
-<br/>
-<br/>
-Target Framework: {targetFrameworkAttribute.FrameworkDisplayName}
 <br/>
 <br/>
 <a href=""applicationdatafile://"">Application Data file</a>
