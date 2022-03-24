@@ -2,8 +2,8 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Runtime.Versioning;
 using System.Windows.Forms;
+using DataCommander.Api;
 using Foundation.Diagnostics;
 using Foundation.Log;
 
@@ -13,41 +13,42 @@ public partial class AboutForm : Form
 {
     private bool _first = true;
 
-    public AboutForm()
+    public AboutForm(ColorTheme colorTheme)
     {
         var assembly = Assembly.GetEntryAssembly();
         var path = assembly.Location;
         var lastWriteTime = File.GetLastWriteTime(path);
         var windowsVersionInfo = WindowsVersionInfo.Get();
 
+        var brightness = colorTheme?.BackColor.GetBrightness();
+
+        var bodyStyle = brightness < 0.12f
+            ? "body {background-color: #202020;color:#dcdcdc}"
+            : null;
+
         var text =
             $@"
 <style>
+    {bodyStyle}
     a {{text-decoration:none}}
 </style>
 <div style=""font-family:verdana;font-size:9pt"">
-<a href=""https://github.com/csbernath/DataCommander"">Data Commander</a>
-<br/>
-<br/>
 Build date: {lastWriteTime.ToString("yyyy-MM-dd")}
-<br/>
-<br/>
-Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.Net-6.0/README.md"">Foundation (.NET 6.0) Class Library</a>
-<br/>
-<br/>
+<br/><br/>
 Version: {assembly.GetName().Version}
-<br/>
-<br/>
+<br/><br/>
 Copyright © 2002-2022 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Bernáth</a>
 <br/>
 This program is freeware and released under the <a href=""https://www.gnu.org/licenses/gpl.txt"">GNU General Public Licence</a>.
-<br/>
-<br/>
+<br/><br/>
+<a href=""https://github.com/csbernath/DataCommander"">GitHub repository</a>
+<br/><br/>
+Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.Net-6.0/README.md"">Foundation (.NET 6.0) Class Library</a>
+<br/><br/>
 <a href=""applicationdatafile://"">Application Data file</a>
 <br/>
 <a href=""logfile://"">Log file</a>
-<br/>
-<br/>
+<br/><br/>
 <table style=""font-family:verdana;font-size:9pt"">
 <tr><td>Windows ProductName:</td><td>{windowsVersionInfo.ProductName}</td></tr>
 <tr><td>Windows DisplayVersion:</td><td>{windowsVersionInfo.DisplayVersion}</td></tr>

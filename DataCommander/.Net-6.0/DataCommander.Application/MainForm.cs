@@ -624,7 +624,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
     private void mnuAbout_Click(object sender, EventArgs e)
     {
-        var aboutForm = new AboutForm();
+        var aboutForm = new AboutForm(_colorTheme);
         aboutForm.ShowDialog();
 
         //MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);

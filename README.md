@@ -5,7 +5,8 @@ Data Commander is a front-end for SQL and other databases.
 The program has a plugin architecture for adding arbitrary data providers.
 
 ## How to build executable from source code
-Open <git repository>\DataCommander\DataCommander.sln in Visual Studio 2019. Build the solution.
+Open git_repository\DataCommander\DataCommander.sln in JetBrains Rider 2021.3 or Visual Studio 2022. Build the solution.
+
 [Comparing to SQL Server Managament Studio](ComparingToManagementStudio.md)
 
 ## [Object-relational mapping (ORM)](https://en.wikipedia.org/wiki/Object-relational_mapping)
