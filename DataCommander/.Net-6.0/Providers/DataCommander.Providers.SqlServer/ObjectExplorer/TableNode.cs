@@ -581,7 +581,12 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
         using (var connection = new SqlConnection(connectionString))
         {
             connection.Open();
-            var tableName = $"{DatabaseNode.Name}.{_owner}.{_name}";
+
+            var databaseName = DatabaseNode.Name.Contains('.')
+                ? $"[{DatabaseNode.Name}]"
+                : DatabaseNode.Name;
+
+            var tableName = $"{databaseName}.{_owner}.{_name}";
             getTableSchemaResult = TableSchema.GetTableSchema(connection, tableName);
         }
 
