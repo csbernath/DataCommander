@@ -7,17 +7,17 @@ namespace DataCommander.Application.Connection;
 public sealed class ConnectionProperties
 {
     public readonly string ConnectionName;
-    public readonly string ProviderName;
+    public readonly string ProviderIdentifier;
 
     public Option<string> Password;
     public IProvider Provider;
     public string ConnectionString;
     public ConnectionBase Connection;
 
-    public ConnectionProperties(string connectionName, string providerName, IProvider provider)
+    public ConnectionProperties(string connectionName, string providerIdentifier, IProvider provider)
     {
         ConnectionName = connectionName;
-        ProviderName = providerName;
+        ProviderIdentifier = providerIdentifier;
         Provider = provider;
     }
 }

@@ -209,7 +209,9 @@ internal sealed class ConnectionForm : Form
     {
         var connectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(configurationNode);
         row["ConnectionName"] = connectionProperties.ConnectionName;
-        row["ProviderName"] = connectionProperties.ProviderName;
+
+        var provider = ProviderFactory.GetProviders().First(i => i.Identifier == connectionProperties.ProviderIdentifier);
+        row["ProviderName"] = provider.Name;
 
         var dbConnectionStringBuilder = new DbConnectionStringBuilder();
         dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;

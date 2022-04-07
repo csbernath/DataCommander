@@ -92,14 +92,14 @@ internal sealed class OpenConnectionForm : Form
         dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out var userId);
         var dataSource = (string)dataSourceObject;
         _textBox.Text = $@"Connection name: {connectionProperties.ConnectionName}
-Provider name: {connectionProperties.ProviderName}
+Provider identifier: {connectionProperties.ProviderIdentifier}
 {ConnectionStringKeyword.DataSource}: {dataSource}
 {ConnectionStringKeyword.UserId}: {userId}";
         _connectionProperties = connectionProperties;
         Cursor = Cursors.AppStarting;
 
         if (_connectionProperties.Provider == null)
-            _connectionProperties.Provider = ProviderFactory.CreateProvider(_connectionProperties.ProviderName);
+            _connectionProperties.Provider = ProviderFactory.CreateProvider(_connectionProperties.ProviderIdentifier);
 
         var connection = _connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
         _cancellationTokenSource = new CancellationTokenSource();

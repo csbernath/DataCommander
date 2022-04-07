@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Common;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using DataCommander.Api.Connection;
@@ -18,10 +19,10 @@ public static class ConnectionPropertiesRepository
     {
         var attributes = configurationNode.Attributes;
         var connectionName = attributes["ConnectionName"].GetValue<string>();
-        var providerName = attributes["ProviderName"].GetValue<string>();
+        var providerIdentifier = attributes["ProviderIdentifier"].GetValue<string>();
         var connectionString = attributes["ConnectionString"].GetValue<string>();
 
-        var connectionProperties = new ConnectionProperties(connectionName, providerName, null);
+        var connectionProperties = new ConnectionProperties(connectionName, providerIdentifier, null);
         connectionProperties.ConnectionString = connectionString;
 
         LoadProtectedPassword(configurationNode, connectionProperties);
@@ -33,7 +34,7 @@ public static class ConnectionPropertiesRepository
     {
         var attributes = configurationNode.Attributes;
         attributes.SetAttributeValue("ConnectionName", connectionProperties.ConnectionName);
-        attributes.SetAttributeValue("ProviderName", connectionProperties.ProviderName);
+        attributes.SetAttributeValue("ProviderIdentifier", connectionProperties.ProviderIdentifier);
 
         if (connectionProperties.Password != null)
             attributes.SetAttributeValue(ConnectionStringKeyword.Password, ProtectPassword(connectionProperties.Password.Value));

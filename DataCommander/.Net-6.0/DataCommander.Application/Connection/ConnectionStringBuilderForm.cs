@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
+using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
+using Foundation.Linq;
 
 namespace DataCommander.Application.Connection;
 
@@ -16,7 +20,7 @@ internal partial class ConnectionStringBuilderForm : Form
 {
     private ConnectionProperties _tempConnectionProperties;
     private ConnectionProperties _connectionProperties;
-    private readonly IList<string> _providers;
+    private readonly ReadOnlyCollection<Provider> _providers;
     private DbProviderFactory _dbProviderFactory;
     private IDbConnectionStringBuilder _dbConnectionStringBuilder;
     private DataTable _dataSources;
@@ -30,12 +34,12 @@ internal partial class ConnectionStringBuilderForm : Form
         oleDbProviderLabel.Visible = false;
         oleDbProvidersComboBox.Visible = false;
 
-        var list = ProviderFactory.Providers;
-        list.Sort();
-        _providers = list;
+        _providers = ProviderFactory.GetProviders()
+            .OrderBy(i => i.Name)
+            .ToReadOnlyCollection();
 
         foreach (var provider in _providers)
-            providersComboBox.Items.Add(provider);
+            providersComboBox.Items.Add(provider.Name);
     }
 
     private static string TryGetValue(IDbConnectionStringBuilder connectionStringBuilder, string keyword)
@@ -54,9 +58,10 @@ internal partial class ConnectionStringBuilderForm : Form
         {
             _connectionProperties = value;
             connectionNameTextBox.Text = _connectionProperties.ConnectionName;
-            var providerName = _connectionProperties.ProviderName;
-            providersComboBox.Text = providerName;
-            var provider = ProviderFactory.CreateProvider(providerName);
+            var providerIdentifier = _connectionProperties.ProviderIdentifier;
+            var index = _providers.IndexOf(i => i.Identifier == providerIdentifier);
+            providersComboBox.SelectedIndex = index;
+            var provider = ProviderFactory.CreateProvider(providerIdentifier);
             _dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
             _dbConnectionStringBuilder.ConnectionString = _connectionProperties.ConnectionString;
             dataSourcesComboBox.Text = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.DataSource);
@@ -102,9 +107,9 @@ internal partial class ConnectionStringBuilderForm : Form
         try
         {
             var index = providersComboBox.SelectedIndex;
-            var providerName = _providers[index];
-            var provider = ProviderFactory.CreateProvider(providerName);
-            _tempConnectionProperties = new ConnectionProperties(null,providerName, provider);
+            var providerIdentifier = _providers[index].Identifier;
+            var provider = ProviderFactory.CreateProvider(providerIdentifier);
+            _tempConnectionProperties = new ConnectionProperties(null,providerIdentifier, provider);
             _dbProviderFactory = provider.DbProviderFactory;
 
             if (_dbProviderFactory is OleDbFactory oleDbFactory)
@@ -309,9 +314,9 @@ internal partial class ConnectionStringBuilderForm : Form
     private ConnectionProperties CreateConnectionProperties()
     {
         var connectionName = connectionNameTextBox.Text;
-        var providerName = providersComboBox.Text;
-        var provider = ProviderFactory.CreateProvider(providerName);        
-        var connectionProperties = new ConnectionProperties(connectionName, providerName, provider);
+        var providerInfo = _providers[providersComboBox.SelectedIndex];
+        var provider = ProviderFactory.CreateProvider(providerInfo.Identifier);      
+        var connectionProperties = new ConnectionProperties(connectionName, providerInfo.Identifier, provider);
         _dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
         SaveTo(_dbConnectionStringBuilder);
 
