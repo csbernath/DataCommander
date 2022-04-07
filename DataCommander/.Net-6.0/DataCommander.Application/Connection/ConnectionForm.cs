@@ -25,14 +25,12 @@ internal sealed class ConnectionForm : Form
     private DoubleBufferedDataGridView _dataGrid;
     private Button _btnCancel;
     private Button _newButton;
-    private StatusStrip _statusBar;
     private readonly DataTable _dataTable = new();
     private bool _isDirty;
     private readonly Container _components = new();
 
     public ConnectionForm(StatusStrip statusBar, ColorTheme colorTheme)
     {
-        _statusBar = statusBar;
         InitializeComponent();
 
         _dataTable.Columns.Add("ConnectionName", typeof(string));
@@ -86,12 +84,7 @@ internal sealed class ConnectionForm : Form
                 {
                     dataRowMaxWidth = 95;
                 }
-
-                //columnStyle.Width = (int)dataRowMaxWidth;
-                //dataGridViewTextBoxColumn.Width = (int)dataRowMaxWidth;
             }
-
-            //this.dataGrid.Columns.Add(dataGridViewTextBoxColumn);
         }
 
         _dataGrid.DataSource = _dataTable;
@@ -345,10 +338,10 @@ internal sealed class ConnectionForm : Form
         var index = SelectedIndex;
         if (index > 0)
         {
-            var connectionsFolder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
-            var folder = connectionsFolder.ChildNodes[index];
-            connectionsFolder.RemoveChildNode(folder);
-            connectionsFolder.InsertChildNode(index - 1, folder);
+            var connectionsConfigurationNode = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
+            var folder = connectionsConfigurationNode.ChildNodes[index];
+            connectionsConfigurationNode.RemoveChildNode(folder);
+            connectionsConfigurationNode.InsertChildNode(index - 1, folder);
 
             _dataTable.Rows.RemoveAt(index);
             var row = _dataTable.NewRow();
