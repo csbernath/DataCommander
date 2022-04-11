@@ -294,7 +294,7 @@ namespace DataCommander.Application.Connection
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "ConnectionStringBuilderForm";
+            this.Text = "Connection properties";
             this.ResumeLayout(false);
             this.PerformLayout();
 
