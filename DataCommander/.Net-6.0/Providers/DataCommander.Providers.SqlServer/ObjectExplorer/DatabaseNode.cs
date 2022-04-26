@@ -86,10 +86,10 @@ use [{0}]
 select
     f.name,
     f.physical_name,
-	convert(decimal(15,4),f.size * 8096.0 / 1000000)						as [Total Size (MB)],
-	convert(decimal(15,4),fileproperty(f.name, 'SpaceUsed') * 8096.0 / 1000000)		as [Used (MB)],
+	convert(decimal(15),f.size * 8096.0 / 1000000000)						as [Total Size (GB)],
+	convert(decimal(15),fileproperty(f.name, 'SpaceUsed') * 8096.0 / 1000000000)		as [Used (GB)],
 	convert(decimal(15,2),convert(float,fileproperty(name, 'SpaceUsed')) * 100.0 / size)	as [Used%],
-	convert(decimal(15,4),(f.size-fileproperty(name, 'SpaceUsed')) * 8096.0 / 1000000)	as [Free (MB)]
+	convert(decimal(15,2),(f.size-fileproperty(name, 'SpaceUsed')) * 8096.0 / 1000000000)	as [Free (GB)]
 from	[{0}].sys.database_files f", _name);
         var connectionString = Databases.Server.ConnectionString;
 
@@ -108,7 +108,8 @@ from	[{0}].sys.database_files f", _name);
             }
         }
 
-        if (dataSet != null) queryForm.ShowDataSet(dataSet);
+        if (dataSet != null)
+            queryForm.ShowDataSet(dataSet);
     }
 
     private void CreateDatabaseSnapshotScriptToClipboardMenuItem_Click(object? sender, EventArgs e)
