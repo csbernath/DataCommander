@@ -32,7 +32,7 @@ internal sealed class StoredProcedureNode : ITreeNode
     {
         get
         {
-            var query = "exec " + _name;
+            var query = $"exec {_owner}.{_name}";
             return query;
         }
     }
