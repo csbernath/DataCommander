@@ -56,11 +56,14 @@ internal sealed class StoredProcedureNode : ITreeNode
             text = SqlDatabase.GetSysComments(connection, _database.Name, _owner, _name);
         }
 
-        var queryForm = (IQueryForm)sender;
-        queryForm.ClipboardSetText(text);
+        if (text != null)
+        {
+            var queryForm = (IQueryForm)sender;
+            queryForm.ClipboardSetText(text);
 
-        queryForm.SetStatusbarPanelText(
-            $"Copying stored prcoedure script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.",
-            SystemColors.ControlText);
+            queryForm.SetStatusbarPanelText(
+                $"Copying stored prcoedure script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.",
+                SystemColors.ControlText);
+        }
     }
 }
