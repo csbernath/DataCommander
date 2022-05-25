@@ -5,7 +5,7 @@ Data Commander is a front-end for SQL and other databases.
 The program has a plugin architecture for adding arbitrary data providers.
 
 ## How to build executable from source code
-Open git_repository\DataCommander\DataCommander.sln in [JetBrains Rider 2021.3.3](https://www.jetbrains.com/rider/) or Visual Studio 2022. Build the solution.
+Open git_repository\DataCommander\DataCommander.sln in [JetBrains Rider 2022.1.1](https://www.jetbrains.com/rider/) or Visual Studio 2022. Build the solution.
 
 [Comparing to SQL Server Managament Studio](ComparingToManagementStudio.md)
 
@@ -937,7 +937,7 @@ This program is freeware and released under the [GNU General Public License](htt
 
 .NET 6 version:
 - C# 10.0
-- [JetBrains Rider 2021.3.3](https://www.jetbrains.com/rider/)
+- [JetBrains Rider 2022.1.1](https://www.jetbrains.com/rider/)
  
 .NET 5 version:
 - C# 9.0
