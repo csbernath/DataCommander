@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Principal;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Assertions;
 using Foundation.Core;
+using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
@@ -24,21 +26,29 @@ internal sealed class ServerNode : ITreeNode
     {
         get
         {
+            var connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString);
+
             string serverVersion;
+            string userName = null;
             using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
                 serverVersion = new Version(connection.ServerVersion).ToString();
+
+                if (connectionStringBuilder.IntegratedSecurity)
+                {
+                    var commanExecutor = connection.CreateCommandExecutor();
+                    const string commandText = "select suser_sname()";
+                    var createCommandRequest = new CreateCommandRequest(commandText);
+                    var scalar = commanExecutor.ExecuteScalar(createCommandRequest);
+                    userName = (string)scalar;
+                }
             }
 
-            var csb = new SqlConnectionStringBuilder(ConnectionString);
-            string userName;
-            if (csb.IntegratedSecurity)
-                userName = Environment.UserDomainName + "\\" + Environment.UserName;
-            else
-                userName = csb.UserID;
+            if (!connectionStringBuilder.IntegratedSecurity)
+                userName = connectionStringBuilder.UserID;
 
-            return $"{csb.DataSource}(SQL Server {serverVersion} - {userName})";
+            return $"{connectionStringBuilder.DataSource}(SQL Server {serverVersion} - {userName})";
         }
     }
 

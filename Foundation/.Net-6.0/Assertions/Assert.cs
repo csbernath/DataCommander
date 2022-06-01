@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 namespace Foundation.Assertions;
 
@@ -16,13 +18,7 @@ public static class Assert
             throw new ArgumentException(message);
     }
 
-    public static void IsNotNull<T>(T value) where T : class
-    {
-        if (value == null)
-            throw new ArgumentNullException();
-    }
-
-    public static void IsNotNull<T>(T value, string paramName) where T : class
+    public static void IsNotNull([NotNull] object? value, [CallerArgumentExpression("value")] string? paramName = null)
     {
         if (value == null)
             throw new ArgumentNullException(paramName);

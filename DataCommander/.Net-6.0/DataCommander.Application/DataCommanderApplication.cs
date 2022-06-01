@@ -37,7 +37,10 @@ public sealed class DataCommanderApplication
 
     private static Assembly Default_Resolving(AssemblyLoadContext assemblyLoadContext, AssemblyName assemblyName)
     {
-        var assemblyPath = Path.Combine(Environment.CurrentDirectory, $"{assemblyName.Name}.dll");
+        var location = Assembly.GetEntryAssembly().Location;
+        var directory = Path.GetDirectoryName(location);
+        //var assemblyPath = Path.Combine(Environment.CurrentDirectory, $"{assemblyName.Name}.dll");
+        var assemblyPath = Path.Combine(directory, $"{assemblyName.Name}.dll");
         var assembly = assemblyLoadContext.LoadFromAssemblyPath(assemblyPath);
         return assembly;
     }
