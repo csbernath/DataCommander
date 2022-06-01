@@ -18,7 +18,7 @@ public static class StringExtensions
                     break;
 
                 var lineString = stringReader.ReadLine();
-                var line = lineString.ToLine(indentation);
+                var line = lineString!.ToLine(indentation);
                 lines.Add(line);
             }
         }

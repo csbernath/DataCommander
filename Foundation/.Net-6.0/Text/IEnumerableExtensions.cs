@@ -46,7 +46,7 @@ public static class IEnumerableExtensions
             columnIndex = 0;
             foreach (var column in columns)
             {
-                row[columnIndex] = column.ToStringFunction(item);
+                row[columnIndex] = column.ToStringFunction(item)!;
                 ++columnIndex;
             }
 

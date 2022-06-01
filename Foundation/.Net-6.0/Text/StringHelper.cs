@@ -31,7 +31,7 @@ public static class StringHelper
         }
         else
         {
-            formatted = col.Substring(0, colWidth);
+            formatted = col!.Substring(0, colWidth);
         }
 
         return formatted;
@@ -77,7 +77,7 @@ public static class StringHelper
 
         var type = obj.GetType();
         var methodInfo = type.GetMethod(methodName);
-        var parameterInfos = methodInfo.GetParameters();
+        var parameterInfos = methodInfo!.GetParameters();
         var typeName = TypeNameCollection.GetTypeName(methodInfo.ReturnType);
         var line = typeName + " " + methodName + "(" + Environment.NewLine;
         var length = Math.Min(parameters.Length, parameterInfos.Length);
