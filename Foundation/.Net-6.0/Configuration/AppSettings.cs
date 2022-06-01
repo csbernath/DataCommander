@@ -39,7 +39,7 @@ public static class AppSettings
 
         public Reader(NameValueCollection nameValueCollection)
         {
-            Assert.IsNotNull(nameValueCollection);
+            ArgumentNullException.ThrowIfNull(nameValueCollection);
 
             _nameValueCollection = nameValueCollection;
         }
@@ -59,8 +59,8 @@ public static class AppSettings
 
         public PrefixedReader(NameValueCollection nameValueCollection, string prefix)
         {
-            Assert.IsNotNull(nameValueCollection);
-            Assert.IsNotNull(prefix);
+            ArgumentNullException.ThrowIfNull(nameValueCollection);
+            ArgumentNullException.ThrowIfNull(prefix);
 
             _nameValueCollection = nameValueCollection;
             _prefix = prefix;

@@ -28,9 +28,9 @@ public class SequenceIndex<TKey, T> : ICollectionIndex<T>
         Func<T, TKey> getKey,
         IDictionary<TKey, T> dictionary)
     {
-        Assert.IsNotNull(getNextKey);
-        Assert.IsNotNull(getKey);
-        Assert.IsNotNull(dictionary);
+        ArgumentNullException.ThrowIfNull(getNextKey);
+        ArgumentNullException.ThrowIfNull(getKey);
+        ArgumentNullException.ThrowIfNull(dictionary);
 
         _name = name;
         _getNextKey = getNextKey;

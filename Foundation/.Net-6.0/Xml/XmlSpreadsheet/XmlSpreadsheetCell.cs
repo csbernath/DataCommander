@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
 using Foundation.Assertions;
 
 namespace Foundation.Xml.XmlSpreadsheet;
@@ -35,7 +36,7 @@ public sealed class XmlSpreadsheetCell
 
     public void Write(XmlWriter xmlWriter)
     {
-        Assert.IsNotNull(xmlWriter);
+        ArgumentNullException.ThrowIfNull(xmlWriter);
 
         using (xmlWriter.WriteElement("Cell"))
         {

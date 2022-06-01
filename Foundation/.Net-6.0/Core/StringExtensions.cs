@@ -36,7 +36,7 @@ public static class StringExtensions
 
     public static string IncreaseLineIndent(this string line, int indentSize)
     {
-        Assert.IsNotNull(line);
+        ArgumentNullException.ThrowIfNull(line);
         Assert.IsInRange(indentSize > 0);
         var stringBuilder = new StringBuilder();
         stringBuilder.Append(new string(' ', indentSize));
@@ -154,7 +154,7 @@ public static class StringExtensions
 
     public static string Right(this string value, int length)
     {
-        Assert.IsNotNull(value);
+        ArgumentNullException.ThrowIfNull(value);
         Assert.IsInRange(value.Length >= length);
 
         var startIndex = value.Length - length;

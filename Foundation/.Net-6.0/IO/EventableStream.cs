@@ -10,7 +10,7 @@ public class EventableStream : Stream
 
     public EventableStream(Stream stream)
     {
-        Assert.IsNotNull(stream);
+        ArgumentNullException.ThrowIfNull(stream);
         _stream = stream;
     }
 

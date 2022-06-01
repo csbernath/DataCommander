@@ -23,7 +23,7 @@ public sealed class TextBuilder
 
     public void Add(Line line)
     {
-        Assert.IsNotNull(line);
+        ArgumentNullException.ThrowIfNull(line);
 
         var modifiedLine = line.Indent(_indentation);
         _lines.Add(modifiedLine);
@@ -31,7 +31,7 @@ public sealed class TextBuilder
 
     public void Add(IEnumerable<Line> lines)
     {
-        Assert.IsNotNull(lines);
+        ArgumentNullException.ThrowIfNull(lines);
 
         var modifiedLines = lines.Select(line => line.Indent(_indentation));
         _lines.AddRange(modifiedLines);

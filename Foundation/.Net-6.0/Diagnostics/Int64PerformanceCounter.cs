@@ -19,7 +19,7 @@ public sealed class Int64PerformanceCounter
 
     public Int64PerformanceCounter(string name, Func<long, string> toString)
     {
-        Assert.IsNotNull(toString);
+        ArgumentNullException.ThrowIfNull(toString);
 
         _name = name;
         _toString = toString;

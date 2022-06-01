@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Text;
 using Foundation.Assertions;
 
@@ -8,7 +9,7 @@ internal static class StackFrameExtensions
 {
     public static string ToLogString(this StackFrame frame)
     {
-        Assert.IsNotNull(frame);
+        ArgumentNullException.ThrowIfNull(frame);
 
         var stringBuilder = new StringBuilder();
         var method = frame.GetMethod();

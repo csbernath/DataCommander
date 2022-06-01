@@ -12,8 +12,8 @@ public sealed class ExecuteCommandAsyncRequest
 
     public ExecuteCommandAsyncRequest(CreateCommandRequest createCommandRequest, Func<DbCommand, Task> execute)
     {
-        Assert.IsNotNull(createCommandRequest);
-        Assert.IsNotNull(execute);
+        ArgumentNullException.ThrowIfNull(createCommandRequest);
+        ArgumentNullException.ThrowIfNull(execute);
 
         CreateCommandRequest = createCommandRequest;
         Execute = execute;

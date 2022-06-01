@@ -10,7 +10,7 @@ public static class IListExtensions
     [Pure]
     public static int IndexOf<T>(this IList<T> source, Func<T, bool> predicate)
     {
-        Assert.IsNotNull(source);
+        ArgumentNullException.ThrowIfNull(source);
 
         const int minIndex = 0;
         var maxIndex = source.Count - 1;
@@ -20,7 +20,7 @@ public static class IListExtensions
     [Pure]
     public static int LastIndexOf<T>(this IList<T> source, Func<T, bool> predicate)
     {
-        Assert.IsNotNull(source);
+        ArgumentNullException.ThrowIfNull(source);
 
         const int minIndex = 0;
         var maxIndex = source.Count - 1;
@@ -30,7 +30,7 @@ public static class IListExtensions
     [Pure]
     public static T Last<T>(this IList<T> source)
     {
-        Assert.IsNotNull(source);
+        ArgumentNullException.ThrowIfNull(source);
         Assert.IsTrue(source.Count > 0);
 
         var lastIndex = source.Count - 1;

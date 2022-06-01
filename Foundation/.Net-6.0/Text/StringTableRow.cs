@@ -1,4 +1,5 @@
-﻿using Foundation.Assertions;
+﻿using System;
+using Foundation.Assertions;
 
 namespace Foundation.Text;
 
@@ -8,7 +9,7 @@ public sealed class StringTableRow
 
     internal StringTableRow(StringTable table)
     {
-        Assert.IsNotNull(table);
+        ArgumentNullException.ThrowIfNull(table);
 
         Table = table;
         _cells = new string[table.Columns.Count];

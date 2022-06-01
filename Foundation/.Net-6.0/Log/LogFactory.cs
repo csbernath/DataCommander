@@ -1,4 +1,5 @@
-﻿using Foundation.Assertions;
+﻿using System;
+using Foundation.Assertions;
 
 namespace Foundation.Log;
 
@@ -10,7 +11,7 @@ public static class LogFactory
 
     public static void Set(ILogFactory logFactory)
     {
-        Assert.IsNotNull(logFactory);
+        ArgumentNullException.ThrowIfNull(logFactory);
         _logFactory = logFactory;
     }
 }

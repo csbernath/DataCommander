@@ -99,14 +99,14 @@ public static class SqlConstantMapper
     [Pure]
     public static string ToNVarChar(this string source)
     {
-        Assert.IsNotNull(source);
+        ArgumentNullException.ThrowIfNull(source);
         return "N" + source.ToVarChar();
     }
 
     [Pure]
     public static string ToVarChar(this string source)
     {
-        Assert.IsNotNull(source);
+        ArgumentNullException.ThrowIfNull(source);
         return "'" + source.Replace("'", "''") + "'";
     }
 }

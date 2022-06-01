@@ -20,7 +20,7 @@ public static class ICollectionExtensions
 
     public static ReadOnlyCollection<T> AsReadOnly<T>(this ICollection<T> collection)
     {
-        Assert.IsNotNull(collection, nameof(collection));
+        ArgumentNullException.ThrowIfNull(collection, nameof(collection));
         return new ReadOnlyCollection<T>(collection.ToList());
     }
 
@@ -63,7 +63,7 @@ public static class ICollectionExtensions
 
     public static T[] ToArray<T>(ICollection<T> source)
     {
-        Assert.IsNotNull(source, nameof(source));
+        ArgumentNullException.ThrowIfNull(source, nameof(source));
 
         var target = new T[source.Count];
         source.CopyTo(target, 0);
@@ -85,7 +85,7 @@ public static class ICollectionExtensions
 
         public CastedCollection(ICollection source)
         {
-            Assert.IsNotNull(source);
+            ArgumentNullException.ThrowIfNull(source);
 
             _source = source;
             _sourceAsList = source as IList;

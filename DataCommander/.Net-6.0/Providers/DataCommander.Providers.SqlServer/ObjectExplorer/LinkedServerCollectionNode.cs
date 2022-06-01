@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Assertions;
@@ -10,7 +11,7 @@ internal sealed class LinkedServerCollectionNode : ITreeNode
 {
     public LinkedServerCollectionNode(ServerNode serverNode)
     {
-        Assert.IsNotNull(serverNode);
+        ArgumentNullException.ThrowIfNull(serverNode);
         Server = serverNode;
     }
 

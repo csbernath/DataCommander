@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Foundation.Assertions;
 
@@ -8,7 +9,7 @@ internal sealed class ReadOnlyListSegment<T> : IReadOnlyList<T>
 {
     public ReadOnlyListSegment(IReadOnlyList<T> list, int offset, int count)
     {
-        Assert.IsNotNull(list);
+        ArgumentNullException.ThrowIfNull(list);
         Assert.IsInRange(offset >= 0);
         Assert.IsInRange(count >= 0);
         Assert.IsInRange(0 <= offset && offset < list.Count);

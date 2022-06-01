@@ -8,8 +8,8 @@ public static class BreadthFirstSearch
 {
     public static void Search<TNode>(TNode node, Func<TNode, IEnumerable<TNode>> getChildNodes, Func<TNode, bool> visit)
     {
-        Assert.IsNotNull(getChildNodes);
-        Assert.IsNotNull(visit);
+        ArgumentNullException.ThrowIfNull(getChildNodes);
+        ArgumentNullException.ThrowIfNull(visit);
 
         var queue = new Queue<TNode>();
         queue.Enqueue(node);

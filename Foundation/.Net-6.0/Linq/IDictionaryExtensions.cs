@@ -8,9 +8,9 @@ public static class IDictionaryExtensions
 {
     public static void Add<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, IEnumerable<TValue> items, Func<TValue, TKey> keySelector)
     {
-        Assert.IsNotNull(dictionary);
-        Assert.IsNotNull(items);
-        Assert.IsNotNull(keySelector);
+        ArgumentNullException.ThrowIfNull(dictionary);
+        ArgumentNullException.ThrowIfNull(items);
+        ArgumentNullException.ThrowIfNull(keySelector);
 
         foreach (var item in items)
         {
@@ -24,8 +24,8 @@ public static class IDictionaryExtensions
         TKey key,
         Func<TKey, TValue> valueFactory)
     {
-        Assert.IsNotNull(dictionary);
-        Assert.IsNotNull(valueFactory);
+        ArgumentNullException.ThrowIfNull(dictionary);
+        ArgumentNullException.ThrowIfNull(valueFactory);
 
         if (!dictionary.TryGetValue(key, out var value))
         {
@@ -38,7 +38,7 @@ public static class IDictionaryExtensions
 
     public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
     {
-        Assert.IsNotNull(dictionary);
+        ArgumentNullException.ThrowIfNull(dictionary);
 
         dictionary.TryGetValue(key, out var value);
         return value;

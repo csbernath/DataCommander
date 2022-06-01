@@ -11,7 +11,7 @@ internal sealed class LinkedServerCatalogNode : ITreeNode
 
     public LinkedServerCatalogNode(LinkedServerNode linkedServer, string name)
     {
-        Assert.IsNotNull(linkedServer);
+        ArgumentNullException.ThrowIfNull(linkedServer);
         _name = name;
     }
 

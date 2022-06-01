@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -20,7 +21,7 @@ public class AsyncTextWriter
 
     public AsyncTextWriter(TextWriter textWriter)
     {
-        Assert.IsNotNull(textWriter);
+        ArgumentNullException.ThrowIfNull(textWriter);
         _textWriter = textWriter;
     }
 

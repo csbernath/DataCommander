@@ -1,4 +1,5 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
 using Foundation.Assertions;
 
 namespace Foundation.Data;
@@ -7,7 +8,7 @@ public static class DbConnectionExtensions
 {
     public static DbCommand CreateCommand(this DbConnection connection, CreateCommandRequest request)
     {
-        Assert.IsNotNull(connection);
+        ArgumentNullException.ThrowIfNull(connection);
         var command = connection.CreateCommand();
         command.Initialize(request);
         return command;

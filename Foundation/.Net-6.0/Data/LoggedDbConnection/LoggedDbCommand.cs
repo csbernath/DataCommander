@@ -24,10 +24,10 @@ internal sealed class LoggedDbCommand : IDbCommand
         EventHandler<AfterExecuteCommandEventArgs> afterExecuteCommand,
         EventHandler<AfterReadEventArgs> afterRead)
     {
-        Assert.IsNotNull(command);
-        Assert.IsNotNull(beforeExecuteCommand);
-        Assert.IsNotNull(afterExecuteCommand);
-        Assert.IsNotNull(afterRead);
+        ArgumentNullException.ThrowIfNull(command);
+        ArgumentNullException.ThrowIfNull(beforeExecuteCommand);
+        ArgumentNullException.ThrowIfNull(afterExecuteCommand);
+        ArgumentNullException.ThrowIfNull(afterRead);
 
         _commandId = Interlocked.Increment(ref _commandIdCounter);
         _command = command;

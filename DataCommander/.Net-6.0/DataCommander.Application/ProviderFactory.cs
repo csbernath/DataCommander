@@ -47,17 +47,17 @@ public static class ProviderFactory
 
     public static IProvider CreateProvider(string name)
     {
-        Assert.IsNotNull(name);
+        ArgumentNullException.ThrowIfNull(name);
         var folder = Settings.SelectNode("DataCommander/Providers", true);
         folder = folder.ChildNodes[name];
         var attributes = folder.Attributes;
         var typeName = attributes["TypeName"].GetValue<string>();
         var type = Type.GetType(typeName, true);
         var instance = Activator.CreateInstance(type);
-        Assert.IsNotNull(instance);
+        ArgumentNullException.ThrowIfNull(instance);
         Assert.IsTrue(instance is IProvider);
         var provider = (IProvider) instance;
-        Assert.IsNotNull(provider);
+        ArgumentNullException.ThrowIfNull(provider);
         return provider;
     }
 

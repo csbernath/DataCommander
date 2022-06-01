@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DataCommander.Api;
 using Foundation.Assertions;
 using Foundation.Data;
@@ -12,7 +13,7 @@ internal sealed class LoginCollectionNode : ITreeNode
 
     public LoginCollectionNode(ServerNode server)
     {
-        Assert.IsNotNull(server);
+        ArgumentNullException.ThrowIfNull(server);
         _server = server;
     }
 

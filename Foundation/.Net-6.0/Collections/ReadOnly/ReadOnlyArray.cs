@@ -12,7 +12,7 @@ public class ReadOnlyArray<T> : IReadOnlyList<T>
 
     public ReadOnlyArray(T[] items)
     {
-        Assert.IsNotNull(items);
+        ArgumentNullException.ThrowIfNull(items);
         _items = items;
     }
 

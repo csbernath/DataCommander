@@ -1,4 +1,5 @@
-﻿using Foundation.Assertions;
+﻿using System;
+using Foundation.Assertions;
 
 namespace Foundation.Collections.IndexableCollection;
 
@@ -56,7 +57,7 @@ public partial class IndexableCollection<T>
 
     public IndexableCollection(ICollectionIndex<T> defaultIndex)
     {
-        Assert.IsNotNull(defaultIndex);
+        ArgumentNullException.ThrowIfNull(defaultIndex);
 
         _defaultIndex = defaultIndex;
         Indexes.Add(defaultIndex);

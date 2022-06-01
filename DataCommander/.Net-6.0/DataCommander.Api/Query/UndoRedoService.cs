@@ -9,8 +9,8 @@ public static class UndoRedoService
 {
     public static void Do<T>(this UndoRedoState<T> undoRedoState, IEnumerable<T> items)
     {
-        Assert.IsNotNull(undoRedoState);
-        Assert.IsNotNull(items);
+        ArgumentNullException.ThrowIfNull(undoRedoState);
+        ArgumentNullException.ThrowIfNull(items);
 
         var unprocessedItemCount = undoRedoState.GetUnprocessedItemCount();
         if (unprocessedItemCount > 0)
@@ -23,9 +23,9 @@ public static class UndoRedoService
 
     public static void Undo<T>(this UndoRedoState<T> undoRedoState, int itemCount, Action<IReadOnlyList<T>> process)
     {
-        Assert.IsNotNull(undoRedoState);
+        ArgumentNullException.ThrowIfNull(undoRedoState);
         Assert.IsInRange(itemCount > 0);
-        Assert.IsNotNull(process);
+        ArgumentNullException.ThrowIfNull(process);
 
         if (undoRedoState.ProcessedItemCount < itemCount)
             throw new InvalidOperationException("Nincs meg a megadott darabszámú visszavonható művelet.");
@@ -38,9 +38,9 @@ public static class UndoRedoService
 
     public static void Redo<T>(this UndoRedoState<T> undoRedoState, int itemCount, Action<IReadOnlyList<T>> process)
     {
-        Assert.IsNotNull(undoRedoState);
+        ArgumentNullException.ThrowIfNull(undoRedoState);
         Assert.IsInRange(itemCount > 0);
-        Assert.IsNotNull(process);
+        ArgumentNullException.ThrowIfNull(process);
 
         var unprocessedItemCount = undoRedoState.GetUnprocessedItemCount();
         if (unprocessedItemCount < itemCount)
@@ -53,7 +53,7 @@ public static class UndoRedoService
 
     private static int GetUnprocessedItemCount<T>(this UndoRedoState<T> undoRedoState)
     {
-        Assert.IsNotNull(undoRedoState);
+        ArgumentNullException.ThrowIfNull(undoRedoState);
 
         return undoRedoState.Items.Count - undoRedoState.ProcessedItemCount;
     }

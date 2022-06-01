@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Foundation.Assertions;
 
@@ -9,7 +10,7 @@ public static class IReadOnlyListExtensions
     [Pure]
     public static TSource First<TSource>(this IReadOnlyList<TSource> source)
     {
-        Assert.IsNotNull(source);
+        ArgumentNullException.ThrowIfNull(source);
         Assert.IsTrue(source.Count > 0);
         return source[0];
     }

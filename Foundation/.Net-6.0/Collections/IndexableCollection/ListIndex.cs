@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Foundation.Assertions;
 
@@ -10,14 +11,14 @@ public class ListIndex<T> : ICollectionIndex<T>, IList<T>
 
     public ListIndex(string name)
     {
-        Assert.IsNotNull(name);
+        ArgumentNullException.ThrowIfNull(name);
         Initialize(name, new List<T>());
     }
 
     public ListIndex(string name, IList<T> list)
     {
-        Assert.IsNotNull(name);
-        Assert.IsNotNull(list);
+        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(list);
 
         Initialize(name, list);
     }
@@ -69,8 +70,8 @@ public class ListIndex<T> : ICollectionIndex<T>, IList<T>
 
     private void Initialize(string name, IList<T> list)
     {
-        Assert.IsNotNull(name);
-        Assert.IsNotNull(list);
+        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(list);
 
         Name = name;
         _list = list;

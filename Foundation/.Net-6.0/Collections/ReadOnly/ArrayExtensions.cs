@@ -9,7 +9,7 @@ public static class ArrayExtensions
     [Pure]
     public static ReadOnlyArray<T> ToReadOnlyArray<T>(this T[] items)
     {
-        Assert.IsNotNull(items);
+        ArgumentNullException.ThrowIfNull(items);
 
         return items.Length > 0
             ? new ReadOnlyArray<T>(items)

@@ -10,8 +10,8 @@ public static class IEnumerableExtensionsIndexedItem
     [Pure]
     public static IndexedItem<TSource> FirstIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
     {
-        Assert.IsNotNull(source);
-        Assert.IsNotNull(predicate);
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(predicate);
 
         var firstIndex = -1;
         var firstItem = default(TSource);
@@ -32,8 +32,8 @@ public static class IEnumerableExtensionsIndexedItem
     [Pure]
     public static IndexedItem<TSource> ExtremumIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, TSource, bool> firstArgumentIsExtremum)
     {
-        Assert.IsNotNull(source);
-        Assert.IsNotNull(firstArgumentIsExtremum);
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(firstArgumentIsExtremum);
 
         var extremumIndex = -1;
         var extremumItem = default(TSource);
@@ -55,8 +55,8 @@ public static class IEnumerableExtensionsIndexedItem
 
     public static IndexedItem<TSource> MinIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, int> selector)
     {
-        Assert.IsNotNull(source);
-        Assert.IsNotNull(selector);
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(selector);
 
         var minIndex = -1;
         var minItem = default(TSource);

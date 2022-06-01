@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DataCommander.Api;
 using Foundation.Assertions;
 
@@ -10,7 +11,7 @@ internal sealed class DatabaseSecurityNode : ITreeNode
 
     public DatabaseSecurityNode(DatabaseNode databaseNode)
     {
-        Assert.IsNotNull(databaseNode);
+        ArgumentNullException.ThrowIfNull(databaseNode);
         _databaseNode = databaseNode;
     }
 

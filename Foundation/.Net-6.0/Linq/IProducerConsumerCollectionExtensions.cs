@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using Foundation.Assertions;
 
 namespace Foundation.Linq;
@@ -7,8 +8,8 @@ public static class ProducerConsumerCollectionExtensions
 {
     public static int Take<T>(this IProducerConsumerCollection<T> collection, T[] target)
     {
-        Assert.IsNotNull(collection);
-        Assert.IsNotNull(target);
+        ArgumentNullException.ThrowIfNull(collection);
+        ArgumentNullException.ThrowIfNull(target);
 
         var i = 0;
         while (i < target.Length)

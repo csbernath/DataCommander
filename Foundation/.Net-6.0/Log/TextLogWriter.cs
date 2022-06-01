@@ -11,8 +11,8 @@ public sealed class TextLogWriter : ILogWriter
 
     public TextLogWriter(TextWriter textWriter, ILogFormatter logFormatter)
     {
-        Assert.IsNotNull(textWriter, nameof(textWriter));
-        Assert.IsNotNull(logFormatter, nameof(logFormatter));
+        ArgumentNullException.ThrowIfNull(textWriter, nameof(textWriter));
+        ArgumentNullException.ThrowIfNull(logFormatter, nameof(logFormatter));
         _textWriter = textWriter;
         _formatter = logFormatter;
     }

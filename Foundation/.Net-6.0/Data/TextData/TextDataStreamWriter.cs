@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Foundation.Assertions;
 
@@ -12,9 +13,9 @@ internal sealed class TextDataStreamWriter
 
     public TextDataStreamWriter(TextWriter textWriter, IList<TextDataColumn> columns, IList<ITextDataConverter> converters)
     {
-        Assert.IsNotNull(textWriter);
-        Assert.IsNotNull(columns);
-        Assert.IsNotNull(converters);
+        ArgumentNullException.ThrowIfNull(textWriter);
+        ArgumentNullException.ThrowIfNull(columns);
+        ArgumentNullException.ThrowIfNull(converters);
 
         _textWriter = textWriter;
         Columns = columns;
@@ -25,7 +26,7 @@ internal sealed class TextDataStreamWriter
 
     public void WriteRow(object[] values)
     {
-        Assert.IsNotNull(values);
+        ArgumentNullException.ThrowIfNull(values);
         Assert.IsTrue(Columns.Count == values.Length);
 
         for (var i = 0; i < values.Length; i++)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DataCommander.Api;
 using Foundation.Assertions;
 using Foundation.Linq;
@@ -11,7 +12,7 @@ internal sealed class ServerObjectCollectionNode : ITreeNode
 
     public ServerObjectCollectionNode(ServerNode serverNode)
     {
-        Assert.IsNotNull(serverNode);
+        ArgumentNullException.ThrowIfNull(serverNode);
         _server = serverNode;
     }
 

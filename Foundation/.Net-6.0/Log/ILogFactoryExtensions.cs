@@ -9,8 +9,8 @@ public static class LogFactoryExtensions
 {
     public static ILog GetTypeLog(this ILogFactory logFactory, Type type)
     {
-        Assert.IsNotNull(logFactory);
-        Assert.IsNotNull(type);
+        ArgumentNullException.ThrowIfNull(logFactory);
+        ArgumentNullException.ThrowIfNull(type);
 
         var name = type.FullName;
 

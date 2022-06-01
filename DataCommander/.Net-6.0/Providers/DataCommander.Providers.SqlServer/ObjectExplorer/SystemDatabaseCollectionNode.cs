@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
@@ -13,7 +14,7 @@ internal sealed class SystemDatabaseCollectionNode : ITreeNode
 
     public SystemDatabaseCollectionNode(DatabaseCollectionNode databaseCollectionNode)
     {
-        Assert.IsNotNull(databaseCollectionNode);
+        ArgumentNullException.ThrowIfNull(databaseCollectionNode);
         _databaseCollectionNode = databaseCollectionNode;
     }
 

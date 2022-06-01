@@ -42,9 +42,9 @@ internal sealed class SqlLogWriter : ILogWriter
         int commandTimeout,
         SingleThreadPool singleThreadPool)
     {
-        Assert.IsNotNull(createConnection);
-        Assert.IsNotNull(logEntryToCommandText);
-        Assert.IsNotNull(singleThreadPool);
+        ArgumentNullException.ThrowIfNull(createConnection);
+        ArgumentNullException.ThrowIfNull(logEntryToCommandText);
+        ArgumentNullException.ThrowIfNull(singleThreadPool);
 
         _createConnection = createConnection;
         _logEntryToCommandText = logEntryToCommandText;

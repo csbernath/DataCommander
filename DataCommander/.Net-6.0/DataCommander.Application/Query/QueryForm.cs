@@ -1758,7 +1758,7 @@ public sealed class QueryForm : Form, IQueryForm
 
     private static GetQueryConfigurationResult GetQueryConfiguration(string commandText)
     {
-        Assert.IsNotNull(commandText);
+        ArgumentNullException.ThrowIfNull(commandText);
 
         var succeeded = false;
         Api.QueryConfiguration.Query query = null;

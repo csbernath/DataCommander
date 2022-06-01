@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Foundation.Assertions;
@@ -73,7 +74,7 @@ public class StringTable
 
     public string ToString(IReadOnlyList<int> columnWidths, string columnSeparator)
     {
-        Assert.IsNotNull(columnWidths);
+        ArgumentNullException.ThrowIfNull(columnWidths);
 
         var stringBuilder = new StringBuilder();
         var first = true;
@@ -97,9 +98,9 @@ public class StringTable
         string columnSeparator,
         StringBuilder stringBuilder)
     {
-        Assert.IsNotNull(row);
-        Assert.IsNotNull(columnWidths);
-        Assert.IsNotNull(stringBuilder);
+        ArgumentNullException.ThrowIfNull(row);
+        ArgumentNullException.ThrowIfNull(columnWidths);
+        ArgumentNullException.ThrowIfNull(stringBuilder);
 
         var last = Columns.Count - 1;
 

@@ -8,8 +8,8 @@ public static class PreOrderTreeTraversal
 {
     public static void ForEach<T>(T rootNode, Func<T, IEnumerable<T>> getChildNodes, Action<T> action)
     {
-        Assert.IsNotNull(getChildNodes);
-        Assert.IsNotNull(action);
+        ArgumentNullException.ThrowIfNull(getChildNodes);
+        ArgumentNullException.ThrowIfNull(action);
 
         action(rootNode);
 
@@ -19,9 +19,9 @@ public static class PreOrderTreeTraversal
 
     public static T FirstOrDefault<T>(T rootNode, Func<T, IEnumerable<T>> getChildNodes, Func<T, bool> predicate) where T : class
     {
-        Assert.IsNotNull(rootNode);
-        Assert.IsNotNull(getChildNodes);
-        Assert.IsNotNull(predicate);
+        ArgumentNullException.ThrowIfNull(rootNode);
+        ArgumentNullException.ThrowIfNull(getChildNodes);
+        ArgumentNullException.ThrowIfNull(predicate);
 
         T firstOrDefault = null;
 

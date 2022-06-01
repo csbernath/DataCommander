@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Foundation.Assertions;
 
@@ -8,7 +9,7 @@ public static class ICollectionExtensions
 {
     public static ReadOnlyArray<T> ToReadOnlyArray<T>(this ICollection<T> source)
     {
-        Assert.IsNotNull(source);
+        ArgumentNullException.ThrowIfNull(source);
 
         var items = source.ToArray();
         return new ReadOnlyArray<T>(items);

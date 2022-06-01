@@ -10,7 +10,7 @@ public sealed class Disposer : IDisposable
 
     public Disposer(Action dispose)
     {
-        Assert.IsNotNull(dispose);
+        ArgumentNullException.ThrowIfNull(dispose);
         _dispose = dispose;
     }
 

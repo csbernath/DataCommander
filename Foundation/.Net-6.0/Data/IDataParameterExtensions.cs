@@ -10,7 +10,7 @@ public static class DataParameterExtensions
 
     public static void SetValue<T>(this IDataParameter parameter, DataParameterValue<T> value)
     {
-        Assert.IsNotNull(parameter, nameof(parameter));
+        ArgumentNullException.ThrowIfNull(parameter, nameof(parameter));
         Assert.IsInRange(value.Type == DataParameterValueType.Value || value.Type == DataParameterValueType.Null ||
                          value.Type == DataParameterValueType.Default);
 

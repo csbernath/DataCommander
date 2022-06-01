@@ -12,7 +12,7 @@ public static partial class IEnumerableExtensions
     [Pure]
     public static bool CountIsGreaterThan<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate, int count)
     {
-        Assert.IsNotNull(source, nameof(source));
+        ArgumentNullException.ThrowIfNull(source, nameof(source));
 
         var countIsGreaterThan = false;
         var filteredCount = 0;
@@ -56,7 +56,7 @@ public static partial class IEnumerableExtensions
     [Pure]
     public static IEnumerable<List<TSource>> GetPartitions<TSource>(this IEnumerable<TSource> source, int count, int partitionCount)
     {
-        Assert.IsNotNull(source);
+        ArgumentNullException.ThrowIfNull(source);
         Assert.IsInRange(count >= 0);
         Assert.IsInRange(partitionCount > 0);
 
@@ -132,7 +132,7 @@ public static partial class IEnumerableExtensions
     [Pure]
     public static string ToString<T>(this IEnumerable<T> source, string separator, Func<T, string> toString)
     {
-        Assert.IsNotNull(toString);
+        ArgumentNullException.ThrowIfNull(toString);
 
         string result;
         if (source != null)

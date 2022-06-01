@@ -17,7 +17,7 @@ internal sealed class JobNode : ITreeNode
 
     public JobNode(JobCollectionNode jobs, string name)
     {
-        Assert.IsNotNull(jobs);
+        ArgumentNullException.ThrowIfNull(jobs);
 
         _jobs = jobs;
         _name = name;

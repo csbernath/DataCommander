@@ -13,7 +13,7 @@ public static class BinarySearch
     {
         Assert.IsInRange(minIndex >= 0);
         Assert.IsInRange(minIndex <= maxIndex);
-        Assert.IsNotNull(compareTo);
+        ArgumentNullException.ThrowIfNull(compareTo);
 
         var result = -1;
 

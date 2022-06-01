@@ -29,8 +29,8 @@ namespace Foundation.IO
         /// <param name="bufferSize"></param>
         public static void CopyTo( this Stream inputStream, Stream outputStream, int bufferSize )
         {
-            Assert.IsNotNull( inputStream != null );
-            Assert.IsNotNull( outputStream != null );
+            ArgumentNullException.ThrowIfNull( inputStream != null );
+            ArgumentNullException.ThrowIfNull( outputStream != null );
             Assert.IsInRange( bufferSize > 0 );
 
             var buffer = new byte[bufferSize];

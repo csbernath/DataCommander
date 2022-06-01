@@ -60,7 +60,7 @@ public static class ArrayExtensions
 
         if (array != null)
         {
-            Assert.IsNotNull(comparer);
+            ArgumentNullException.ThrowIfNull(comparer);
 
             for (var i = 0; i < array.Length; i++)
             {

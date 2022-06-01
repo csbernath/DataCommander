@@ -144,7 +144,7 @@ public sealed class ConfigurationAttribute
     {
         public static XmlElement Serialize(object obj)
         {
-            Assert.IsNotNull(obj);
+            ArgumentNullException.ThrowIfNull(obj);
 
             var type = obj.GetType();
             var xmlSerializer = new XmlSerializer(type);

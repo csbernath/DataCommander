@@ -10,7 +10,7 @@ public static class XmlSerialization
 {
     public static object Deserialize(string xml, Type type)
     {
-        Assert.IsNotNull(type);
+        ArgumentNullException.ThrowIfNull(type);
 
         var stringReader = new StringReader(xml);
         var xmlSerializer = new XmlSerializer(type);
@@ -20,8 +20,8 @@ public static class XmlSerialization
 
     public static object Deserialize(XmlReader xmlReader, Type type)
     {
-        Assert.IsNotNull(xmlReader);
-        Assert.IsNotNull(type);
+        ArgumentNullException.ThrowIfNull(xmlReader);
+        ArgumentNullException.ThrowIfNull(type);
 
         var xmlSerializer = new XmlSerializer(type);
         var obj = xmlSerializer.Deserialize(xmlReader);
@@ -42,7 +42,7 @@ public static class XmlSerialization
 
     public static string Serialize(object source)
     {
-        Assert.IsNotNull(source);
+        ArgumentNullException.ThrowIfNull(source);
         var type = source.GetType();
         var xmlSerializer = new XmlSerializer(type);
 

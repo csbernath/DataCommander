@@ -10,7 +10,7 @@ public sealed class CursorManager : IDisposable
 
     public CursorManager(Cursor cursor)
     {
-        Assert.IsNotNull(cursor);
+        ArgumentNullException.ThrowIfNull(cursor);
 
         originalCursor = Cursor.Current;
         Cursor.Current = cursor;

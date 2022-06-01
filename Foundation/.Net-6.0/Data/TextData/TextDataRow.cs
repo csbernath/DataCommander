@@ -9,8 +9,8 @@ public sealed class TextDataRow
 
     public TextDataRow(TextDataColumnCollection columns, Convert convert)
     {
-        Assert.IsNotNull(columns);
-        Assert.IsNotNull(convert);
+        ArgumentNullException.ThrowIfNull(columns);
+        ArgumentNullException.ThrowIfNull(convert);
 
         Columns = columns;
         _convert = convert;

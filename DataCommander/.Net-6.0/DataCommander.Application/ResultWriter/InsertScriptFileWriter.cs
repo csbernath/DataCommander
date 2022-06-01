@@ -25,7 +25,7 @@ internal sealed class InsertScriptFileWriter : IResultWriter
 
     public InsertScriptFileWriter(string? tableName, TextWriter messageWriter)
     {
-        Assert.IsNotNull(messageWriter);
+        ArgumentNullException.ThrowIfNull(messageWriter);
 
         _tableName = tableName;
         _messageWriter = messageWriter;

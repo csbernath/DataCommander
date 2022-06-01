@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using Foundation.Assertions;
 
@@ -8,8 +9,8 @@ public static class DataSetExtensions
 {
     public static void SetDataTableNames(this DataSet dataSet, IEnumerable<string> dataTableNames)
     {
-        Assert.IsNotNull(dataSet, nameof(dataSet));
-        Assert.IsNotNull(dataTableNames, nameof(dataTableNames));
+        ArgumentNullException.ThrowIfNull(dataSet, nameof(dataSet));
+        ArgumentNullException.ThrowIfNull(dataTableNames, nameof(dataTableNames));
 
         var dataTables = dataSet.Tables;
         var count = dataTables.Count;

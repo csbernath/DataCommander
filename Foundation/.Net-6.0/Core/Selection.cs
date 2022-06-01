@@ -9,7 +9,7 @@ public sealed class MultipleDispatchSelection<TArgument>
 
     public MultipleDispatchSelection(params Func<TArgument, bool>[] selections)
     {
-        Assert.IsNotNull(selections);
+        ArgumentNullException.ThrowIfNull(selections);
         _selections = selections;
     }
 

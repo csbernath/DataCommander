@@ -49,7 +49,7 @@ public static class ThreadMonitor
 
     internal static void Add(WorkerThread thread)
     {
-        Assert.IsNotNull(thread);
+        ArgumentNullException.ThrowIfNull(thread);
 
         lock (Threads)
             Threads.Add(thread.ManagedThreadId, thread);

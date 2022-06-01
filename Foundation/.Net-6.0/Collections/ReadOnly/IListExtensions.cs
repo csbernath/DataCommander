@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Foundation.Assertions;
 
@@ -8,7 +9,7 @@ public static class IListExtensions
 {
     public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IList<T> list)
     {
-        Assert.IsNotNull(list);
+        ArgumentNullException.ThrowIfNull(list);
 
         var readOnlyCollection = list.Count == 0
             ? EmptyReadOnlyCollection<T>.Value

@@ -29,7 +29,7 @@ public sealed class TextDataReader : DbDataReader
 
     internal TextDataReader(TextDataCommand command, CommandBehavior behavior)
     {
-        Assert.IsNotNull(command);
+        ArgumentNullException.ThrowIfNull(command);
 
         _command = command;
         _behavior = behavior;

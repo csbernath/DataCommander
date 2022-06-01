@@ -40,7 +40,7 @@ internal sealed class LogResultWriter : IResultWriter
 
     public LogResultWriter(Action<InfoMessage> addInfoMessage)
     {
-        Assert.IsNotNull(addInfoMessage);
+        ArgumentNullException.ThrowIfNull(addInfoMessage);
         _addInfoMessage = addInfoMessage;
     }
 

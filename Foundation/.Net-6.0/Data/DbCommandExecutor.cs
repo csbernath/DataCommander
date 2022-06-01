@@ -10,13 +10,13 @@ public sealed class DbCommandExecutor : IDbCommandExecutor
 
     public DbCommandExecutor(IDbConnection connection)
     {
-        Assert.IsNotNull(connection);
+        ArgumentNullException.ThrowIfNull(connection);
         _connection = connection;
     }
 
     public void Execute(Action<IDbConnection> execute)
     {
-        Assert.IsNotNull(execute);
+        ArgumentNullException.ThrowIfNull(execute);
         execute(_connection);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
 using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Log;
@@ -18,7 +19,7 @@ internal sealed class DbConnectionLogger
 
     public DbConnectionLogger(LoggedDbConnection connection)
     {
-        Assert.IsNotNull(connection);
+        ArgumentNullException.ThrowIfNull(connection);
 
         _connection = connection;
 

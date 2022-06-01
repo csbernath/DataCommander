@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Foundation.Assertions;
 using Foundation.Core;
@@ -11,7 +12,7 @@ public static class DeleteSqlStatementFactory
     public static ReadOnlyCollection<Line> Create(string table, IReadOnlyCollection<ColumnNameValue> whereColumns)
     {
         Assert.IsTrue(!table.IsNullOrEmpty());
-        Assert.IsNotNull(whereColumns);
+        ArgumentNullException.ThrowIfNull(whereColumns);
         Assert.IsTrue(whereColumns.Count > 0);
         var textBuilder = new TextBuilder();
         textBuilder.Add($"delete {table}");

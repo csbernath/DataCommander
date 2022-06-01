@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
 using Foundation.Assertions;
 
 namespace Foundation.Configuration;
@@ -9,13 +10,13 @@ public sealed class XmlAttributeReader
 
     public XmlAttributeReader(XmlAttributeCollection attributes)
     {
-        Assert.IsNotNull(attributes);
+        ArgumentNullException.ThrowIfNull(attributes);
         _attributes = attributes;
     }
 
     public static bool TryGetValue(XmlAttributeCollection attributes, string name, out string value)
     {
-        Assert.IsNotNull(attributes, nameof(attributes));
+        ArgumentNullException.ThrowIfNull(attributes, nameof(attributes));
         var attribute = attributes[name];
         var contains = attribute != null;
         value = contains ? attribute.Value : null;

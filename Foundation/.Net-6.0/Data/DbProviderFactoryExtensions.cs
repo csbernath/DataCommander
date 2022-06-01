@@ -11,8 +11,8 @@ public static class DbProviderFactoryExtensions
 {
     public static DataTable ExecuteDataTable(this DbProviderFactory factory, DbConnection connection, string commandText)
     {
-        Assert.IsNotNull(factory);
-        Assert.IsNotNull(connection);
+        ArgumentNullException.ThrowIfNull(factory);
+        ArgumentNullException.ThrowIfNull(connection);
 
         var command = connection.CreateCommand();
         command.CommandText = commandText;

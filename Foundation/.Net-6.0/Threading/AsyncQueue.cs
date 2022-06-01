@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Threading;
 using Foundation.Assertions;
 
@@ -110,7 +111,7 @@ public class AsyncQueue
     /// <param name="item"></param>
     public void Enqueue(object item)
     {
-        Assert.IsNotNull(item);
+        ArgumentNullException.ThrowIfNull(item);
 
         lock (_queue)
             _queue.Enqueue(item);
@@ -138,7 +139,7 @@ public class AsyncQueue
 
     private void Consume(ConsumerThread consumerThread, object item)
     {
-        Assert.IsNotNull(consumerThread);
+        ArgumentNullException.ThrowIfNull(consumerThread);
 
         var args = new AsyncQueueConsumeEventArgs(item);
         var eventHandler = _asyncQueue.BeforeConsume;

@@ -25,7 +25,7 @@ public static class ExternalSystem
     /// <returns></returns>
     public static ConfigurationAttributeCollection GetProperties(string name, IDbConnection connection)
     {
-        Assert.IsNotNull(connection);
+        ArgumentNullException.ThrowIfNull(connection);
 
         var properties = new ConfigurationAttributeCollection { Name = name };
         var dataSet = ExternalSystem_GetProperties(connection, name);

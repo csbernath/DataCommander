@@ -21,8 +21,8 @@ internal sealed class ExcelResultWriter : IResultWriter
 
     public ExcelResultWriter(IProvider provider, Action<InfoMessage> addInfoMessage)
     {
-        Assert.IsNotNull(provider);
-        Assert.IsNotNull(addInfoMessage);
+        ArgumentNullException.ThrowIfNull(provider);
+        ArgumentNullException.ThrowIfNull(addInfoMessage);
 
         _provider = provider;
         _addInfoMessage = addInfoMessage;

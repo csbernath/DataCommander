@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Foundation.Assertions;
@@ -13,9 +14,9 @@ public static class UpdateSqlStatementFactory
         IReadOnlyCollection<ColumnNameValue> whereColumns)
     {
         Assert.IsTrue(!table.IsNullOrEmpty());
-        Assert.IsNotNull(setColumns);
+        ArgumentNullException.ThrowIfNull(setColumns);
         Assert.IsTrue(setColumns.Count > 0);
-        Assert.IsNotNull(whereColumns);
+        ArgumentNullException.ThrowIfNull(whereColumns);
         Assert.IsTrue(whereColumns.Count > 0);
         Assert.IsTrue(whereColumns.All(column => !column.Value.IsNullOrEmpty()));
 

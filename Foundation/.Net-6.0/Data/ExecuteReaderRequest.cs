@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Threading;
 using Foundation.Assertions;
@@ -13,7 +14,7 @@ public sealed class ExecuteReaderRequest
 
     public ExecuteReaderRequest(CreateCommandRequest createCommandRequest, CommandBehavior commandBehavior, CancellationToken cancellationToken)
     {
-        Assert.IsNotNull(createCommandRequest);
+        ArgumentNullException.ThrowIfNull(createCommandRequest);
 
         CreateCommandRequest = createCommandRequest;
         CommandBehavior = commandBehavior;

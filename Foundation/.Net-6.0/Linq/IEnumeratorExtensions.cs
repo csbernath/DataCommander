@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Foundation.Assertions;
 
@@ -10,13 +11,13 @@ public static class IEnumeratorExtensions
 
     public static IEnumerable<T> AsEnumerable<T>(this IEnumerator<T> enumerator)
     {
-        Assert.IsNotNull(enumerator);
+        ArgumentNullException.ThrowIfNull(enumerator);
         return new Enumerable<T>(enumerator);
     }
 
     public static List<T> TakeRange<T>(this IEnumerator<T> enumerator, int count)
     {
-        Assert.IsNotNull(enumerator);
+        ArgumentNullException.ThrowIfNull(enumerator);
         Assert.IsInRange(count >= 0);
 
         var list = new List<T>(count);
@@ -45,7 +46,7 @@ public static class IEnumeratorExtensions
 
         public Enumerable(IEnumerator<T> enumerator)
         {
-            Assert.IsNotNull(enumerator, nameof(enumerator));
+            ArgumentNullException.ThrowIfNull(enumerator, nameof(enumerator));
             _enumerator = enumerator;
         }
 

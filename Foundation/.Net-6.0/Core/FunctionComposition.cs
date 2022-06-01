@@ -18,8 +18,8 @@ public static class FunctionComposition
 
         public UnaryFunctionComposition(Func<TX, TY> func1, Func<TY, TZ> func2)
         {
-            Assert.IsNotNull(func1);
-            Assert.IsNotNull(func2);
+            ArgumentNullException.ThrowIfNull(func1);
+            ArgumentNullException.ThrowIfNull(func2);
 
             _func1 = func1;
             _func2 = func2;

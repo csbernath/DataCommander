@@ -95,8 +95,8 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
 
     private void ReadTable(IDataReader dataReader, DataTable schemaTable, int tableIndex)
     {
-        Assert.IsNotNull(dataReader);
-        Assert.IsNotNull(schemaTable);
+        ArgumentNullException.ThrowIfNull(dataReader);
+        ArgumentNullException.ThrowIfNull(schemaTable);
         Assert.IsInRange(tableIndex >= 0);
 
         using (LogFactory.Instance.GetCurrentMethodLog())
@@ -198,7 +198,7 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
 
     private void Fill(AsyncDataAdapterCommand asyncDataAdapterCommand)
     {
-        Assert.IsNotNull(asyncDataAdapterCommand);
+        ArgumentNullException.ThrowIfNull(asyncDataAdapterCommand);
 
         Exception exception = null;
         var command = asyncDataAdapterCommand.Command;

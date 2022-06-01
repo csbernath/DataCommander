@@ -11,7 +11,7 @@ public sealed class StringTableColumnInfo<T>
 
     public StringTableColumnInfo(string columnName, StringTableColumnAlign align, Func<T, string?> toStringFunction)
     {
-        Assert.IsNotNull(toStringFunction);
+        ArgumentNullException.ThrowIfNull(toStringFunction);
 
         ColumnName = columnName;
         Align = align;

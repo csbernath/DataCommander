@@ -13,8 +13,8 @@ public sealed class ReadOnlySortedList<TKey, TValue> : IReadOnlyDictionary<TKey,
 
     public ReadOnlySortedList(IReadOnlyList<KeyValuePair<TKey, TValue>> items, Comparison<TKey> comparison)
     {
-        Assert.IsNotNull(items);
-        Assert.IsNotNull(comparison);
+        ArgumentNullException.ThrowIfNull(items);
+        ArgumentNullException.ThrowIfNull(comparison);
         Assert.IsTrue(items.Select(i => i.Key).SelectPreviousAndCurrent().All(k => comparison(k.Previous, k.Current) < 0));
 
         _items = items;

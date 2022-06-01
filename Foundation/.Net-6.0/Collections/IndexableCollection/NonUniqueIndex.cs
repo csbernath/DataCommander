@@ -24,9 +24,9 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
         IDictionary<TKey, ICollection<T>> dictionary,
         Func<ICollection<T>> createCollection)
     {
-        Assert.IsNotNull(getKey);
-        Assert.IsNotNull(dictionary);
-        Assert.IsNotNull(createCollection);
+        ArgumentNullException.ThrowIfNull(getKey);
+        ArgumentNullException.ThrowIfNull(dictionary);
+        ArgumentNullException.ThrowIfNull(createCollection);
 
         Initialize(name, getKey, dictionary, createCollection);
     }
@@ -122,7 +122,7 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
 
         if (contains)
         {
-            Assert.IsNotNull(collection);
+            ArgumentNullException.ThrowIfNull(collection);
             value = collection.First();
         }
         else
@@ -139,9 +139,9 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
         IDictionary<TKey, ICollection<T>> dictionary,
         Func<ICollection<T>> createCollection)
     {
-        Assert.IsNotNull(getKey);
-        Assert.IsNotNull(dictionary);
-        Assert.IsNotNull(createCollection);
+        ArgumentNullException.ThrowIfNull(getKey);
+        ArgumentNullException.ThrowIfNull(dictionary);
+        ArgumentNullException.ThrowIfNull(createCollection);
 
         Name = name;
         _getKey = getKey;

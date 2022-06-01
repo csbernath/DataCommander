@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Xml;
 using Foundation.Assertions;
@@ -19,8 +20,8 @@ public sealed class ConfigurationNodeTree
 
     public void Save(XmlWriter xmlWriter, string sectionName)
     {
-        Assert.IsNotNull(xmlWriter);
-        Assert.IsNotNull(sectionName);
+        ArgumentNullException.ThrowIfNull(xmlWriter);
+        ArgumentNullException.ThrowIfNull(sectionName);
 
         xmlWriter.WriteStartElement(sectionName);
         ConfigurationWriter.Write(xmlWriter, _rootNode.Attributes);

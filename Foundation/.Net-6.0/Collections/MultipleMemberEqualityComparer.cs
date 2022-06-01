@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Foundation.Assertions;
 
@@ -14,9 +15,9 @@ public sealed class MultipleMemberEqualityComparer<T> : IEqualityComparer<T>
 
     public MultipleMemberEqualityComparer(params IEqualityComparer<T>[] equalityComparers)
     {
-        Assert.IsNotNull(equalityComparers);
+        ArgumentNullException.ThrowIfNull(equalityComparers);
         Assert.IsInRange(equalityComparers.Length > 0);
-        //Assert.IsNotNull(Contract.ForAll(equalityComparers, c => c != null));
+        //ArgumentNullException.ThrowIfNull(Contract.ForAll(equalityComparers, c => c != null));
 
         _equalityComparers = equalityComparers;
     }

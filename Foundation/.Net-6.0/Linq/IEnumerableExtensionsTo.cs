@@ -45,8 +45,8 @@ public static class IEnumerableExtensionsTo
     [Pure]
     public static SortedDictionary<TKey, TValue> ToSortedDictionary<TKey, TValue>(this IEnumerable<TValue> source, Func<TValue, TKey> keySelector)
     {
-        Assert.IsNotNull(source);
-        Assert.IsNotNull(keySelector);
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(keySelector);
 
         var dictionary = new SortedDictionary<TKey, TValue>();
         dictionary.Add(source, keySelector);
@@ -71,8 +71,8 @@ public static class IEnumerableExtensionsTo
     [Pure]
     public static SortedList<TKey, TValue> ToSortedList<TKey, TValue>(this IEnumerable<TValue> source, Func<TValue, TKey> keySelector)
     {
-        Assert.IsNotNull(source);
-        Assert.IsNotNull(keySelector);
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(keySelector);
 
         var list = new SortedList<TKey, TValue>();
         foreach (var sourceItem in source)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DataCommander.Api;
 using Foundation.Assertions;
 using Foundation.Data;
@@ -11,7 +12,7 @@ internal sealed class IndexCollectionNode : ITreeNode
 
     public IndexCollectionNode(TableNode tableNode)
     {
-        Assert.IsNotNull(tableNode);
+        ArgumentNullException.ThrowIfNull(tableNode);
         _tableNode = tableNode;
     }
 

@@ -150,7 +150,7 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
     /// <param name="stopEvent"></param>
     public void Stop(EventWaitHandle stopEvent)
     {
-        Assert.IsNotNull(stopEvent);
+        ArgumentNullException.ThrowIfNull(stopEvent);
         var stopper = new Stopper(_threads, stopEvent);
         stopper.Stop();
     }

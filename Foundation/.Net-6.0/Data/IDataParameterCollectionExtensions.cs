@@ -17,7 +17,7 @@ public static class IDataParameterCollectionExtensions
 
     public static string ToLogString(this IDataParameterCollection parameters)
     {
-        Assert.IsNotNull(parameters);
+        ArgumentNullException.ThrowIfNull(parameters);
 
         var stringBuilder = new StringBuilder();
         var first = true;

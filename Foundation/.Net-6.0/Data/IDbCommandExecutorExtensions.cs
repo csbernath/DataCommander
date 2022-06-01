@@ -11,7 +11,7 @@ public static class IDbCommandExecutorExtensions
 {
     private static void Execute(this IDbCommandExecutor executor, IEnumerable<ExecuteCommandRequest> requests)
     {
-        Assert.IsNotNull(executor);
+        ArgumentNullException.ThrowIfNull(executor);
 
         executor.Execute(connection =>
         {
@@ -23,14 +23,14 @@ public static class IDbCommandExecutorExtensions
 
     public static void Execute(this IDbCommandExecutor executor, CreateCommandRequest request, Action<IDbCommand> execute)
     {
-        Assert.IsNotNull(executor);
+        ArgumentNullException.ThrowIfNull(executor);
         var requests = new ExecuteCommandRequest(request, execute).ItemToArray();
         executor.Execute(requests);
     }
 
     public static int ExecuteNonQuery(this IDbCommandExecutor executor, CreateCommandRequest request)
     {
-        Assert.IsNotNull(executor);
+        ArgumentNullException.ThrowIfNull(executor);
         var affectedRows = 0;
         executor.Execute(request, command => affectedRows = command.ExecuteNonQuery());
         return affectedRows;
@@ -38,7 +38,7 @@ public static class IDbCommandExecutorExtensions
 
     public static object ExecuteScalar(this IDbCommandExecutor executor, CreateCommandRequest request)
     {
-        Assert.IsNotNull(executor);
+        ArgumentNullException.ThrowIfNull(executor);
         object scalar = null;
         executor.Execute(request, command => scalar = command.ExecuteScalar());
         return scalar;
@@ -46,8 +46,8 @@ public static class IDbCommandExecutorExtensions
 
     public static void ExecuteReader(this IDbCommandExecutor executor, ExecuteReaderRequest request, Action<IDataReader> readResults)
     {
-        Assert.IsNotNull(executor);
-        Assert.IsNotNull(request);
+        ArgumentNullException.ThrowIfNull(executor);
+        ArgumentNullException.ThrowIfNull(request);
 
         executor.Execute(request.CreateCommandRequest, command =>
         {
@@ -59,7 +59,7 @@ public static class IDbCommandExecutorExtensions
     public static ReadOnlySegmentLinkedList<T> ExecuteReader<T>(this IDbCommandExecutor executor, ExecuteReaderRequest request, int segmentLength,
         Func<IDataRecord, T> readRecord)
     {
-        Assert.IsNotNull(executor);
+        ArgumentNullException.ThrowIfNull(executor);
         ReadOnlySegmentLinkedList<T> rows = null;
         executor.ExecuteReader(request, dataReader => rows = dataReader.ReadResult(segmentLength, readRecord));
         return rows;
@@ -67,7 +67,7 @@ public static class IDbCommandExecutorExtensions
 
     public static DataTable ExecuteDataTable(this IDbCommandExecutor executor, ExecuteReaderRequest request)
     {
-        Assert.IsNotNull(executor);
+        ArgumentNullException.ThrowIfNull(executor);
         DataTable dataTable = null;
         executor.Execute(request.CreateCommandRequest, command => { dataTable = command.ExecuteDataTable(request.CancellationToken); });
         return dataTable;
@@ -75,8 +75,8 @@ public static class IDbCommandExecutorExtensions
 
     public static DataSet ExecuteDataSet(this IDbCommandExecutor executor, ExecuteReaderRequest request)
     {
-        Assert.IsNotNull(executor);
-        Assert.IsNotNull(request);
+        ArgumentNullException.ThrowIfNull(executor);
+        ArgumentNullException.ThrowIfNull(request);
         DataSet dataSet = null;
         executor.Execute(request.CreateCommandRequest, command => { dataSet = command.ExecuteDataSet(request.CancellationToken); });
         return dataSet;

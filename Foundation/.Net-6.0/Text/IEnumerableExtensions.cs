@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using Foundation.Assertions;
@@ -13,8 +14,8 @@ public static class IEnumerableExtensions
     [Pure]
     public static string ToString<TSource>(this IEnumerable<TSource> source, IReadOnlyCollection<StringTableColumnInfo<TSource>> columns)
     {
-        Assert.IsNotNull(source);
-        Assert.IsNotNull(columns);
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(columns);
 
         var table = new StringTable(columns.Count);
 

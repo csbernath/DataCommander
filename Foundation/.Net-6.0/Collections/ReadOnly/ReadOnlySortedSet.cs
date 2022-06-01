@@ -13,8 +13,8 @@ public class ReadOnlySortedSet<T> : IReadOnlySortedSet<T>
 
     public ReadOnlySortedSet(IReadOnlyList<T> items, Comparison<T> comparison)
     {
-        Assert.IsNotNull(items);
-        Assert.IsNotNull(comparison);
+        ArgumentNullException.ThrowIfNull(items);
+        ArgumentNullException.ThrowIfNull(comparison);
         Assert.IsTrue(items.SelectPreviousAndCurrent().All(i => comparison(i.Previous, i.Current) < 0));
 
         _items = items;

@@ -39,7 +39,7 @@ public sealed class TextDataParameterCollection : DbParameterCollection, IList<T
     /// <returns></returns>
     public override int Add(object value)
     {
-        Assert.IsNotNull(value);
+        ArgumentNullException.ThrowIfNull(value);
         Assert.IsTrue(value is TextDataParameter);
 
         var parameter = (TextDataParameter)value;

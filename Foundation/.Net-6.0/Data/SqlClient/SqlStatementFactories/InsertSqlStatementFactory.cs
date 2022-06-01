@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Foundation.Assertions;
@@ -14,8 +15,8 @@ public static class InsertSqlStatementFactory
     {
         Assert.IsTrue(!table.IsNullOrEmpty());
         Assert.IsTrue(!table.IsNullOrEmpty());
-        Assert.IsNotNull(columns);
-        Assert.IsNotNull(rows);
+        ArgumentNullException.ThrowIfNull(columns);
+        ArgumentNullException.ThrowIfNull(rows);
         Assert.IsTrue(columns.Count > 0);
         Assert.IsTrue(rows.All(row => row.Count == columns.Count));
 

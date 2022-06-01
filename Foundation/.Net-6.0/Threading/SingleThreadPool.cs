@@ -41,7 +41,7 @@ public sealed class SingleThreadPool
     /// <param name="state"></param>
     public void QueueUserWorkItem(WaitCallback callback, object state)
     {
-        Assert.IsNotNull(callback);
+        ArgumentNullException.ThrowIfNull(callback);
 
         var tuple = Tuple.Create(callback, state);
 

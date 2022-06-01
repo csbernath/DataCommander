@@ -15,7 +15,7 @@ public sealed class DbRequestBuilder
 
     public DbRequestBuilder(DbRequest request)
     {
-        Assert.IsNotNull(request);
+        ArgumentNullException.ThrowIfNull(request);
         _request = request;
     }
 
@@ -156,7 +156,7 @@ namespace {_request.Namespace}
         stringBuilder.Append("    private readonly IDbTransaction _transaction;\r\n\r\n");
         stringBuilder.Append($"    public {_request.Name}Db{GetRequestType()}Handler(IDbConnection connection, IDbTransaction transaction)\r\n");
         stringBuilder.Append("    {\r\n");
-        stringBuilder.Append("        Assert.IsNotNull(connection);\r\n");
+        stringBuilder.Append("        ArgumentNullException.ThrowIfNull(connection);\r\n");
         stringBuilder.Append("        _connection = connection;\r\n");
         stringBuilder.Append("        _transaction = transaction;\r\n");
         stringBuilder.Append("    }\r\n\r\n");
@@ -263,7 +263,7 @@ namespace {_request.Namespace}
         var stringBuilder = new StringBuilder();
         stringBuilder.Append($@"public {responseType} Handle({_request.Name}Db{GetRequestType()} {requestParameter})
 {{
-    Assert.IsNotNull({requestParameter});
+    ArgumentNullException.ThrowIfNull({requestParameter});
 ");
 
         if (_request.Results.Count == 0)
@@ -288,7 +288,7 @@ namespace {_request.Namespace}
         var stringBuilder = new StringBuilder();
         stringBuilder.Append($@"public Task<{result}> HandleAsync({_request.Name}Db{GetRequestType()} {request}, CancellationToken cancellationToken)
 {{
-    Assert.IsNotNull({request});
+    ArgumentNullException.ThrowIfNull({request});
 ");
 
         if (_request.Results.Count == 0)

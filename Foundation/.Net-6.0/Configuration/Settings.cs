@@ -151,7 +151,7 @@ public static class Settings
     /// <returns></returns>
     public static string GetAssemblyConfigFileName(Assembly assembly)
     {
-        Assert.IsNotNull(assembly);
+        ArgumentNullException.ThrowIfNull(assembly);
 
         var location = assembly.Location;
         var uri = new Uri(location);

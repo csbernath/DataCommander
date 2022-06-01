@@ -12,7 +12,7 @@ public static class IEnumerableExtensions
     [Pure]
     public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> source)
     {
-        Assert.IsNotNull(source);
+        ArgumentNullException.ThrowIfNull(source);
 
         var list = source.ToList();
         var readOnlyCollection = list.ToReadOnlyCollection();
@@ -23,7 +23,7 @@ public static class IEnumerableExtensions
     [Pure]
     public static ReadOnlySegmentLinkedList<T> ToReadOnlySegmentLinkedList<T>(this IEnumerable<T> source, int segmentLength)
     {
-        Assert.IsNotNull(source);
+        ArgumentNullException.ThrowIfNull(source);
         var segmentLinkedListBuilder = new SegmentLinkedListBuilder<T>(segmentLength);
 
         foreach (var item in source)
@@ -36,8 +36,8 @@ public static class IEnumerableExtensions
     [Pure]
     public static ReadOnlySortedList<TKey, TValue> ToReadOnlySortedList<TKey, TValue>(this IEnumerable<TValue> values, Func<TValue, TKey> keySelector)
     {
-        Assert.IsNotNull(values);
-        Assert.IsNotNull(keySelector);
+        ArgumentNullException.ThrowIfNull(values);
+        ArgumentNullException.ThrowIfNull(keySelector);
 
         var items = values.Select(value => KeyValuePair.Create(keySelector(value), value)).ToList();
         var comparer = Comparer<TKey>.Default;

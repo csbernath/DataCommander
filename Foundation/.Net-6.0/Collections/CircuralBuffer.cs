@@ -86,7 +86,7 @@ public sealed class CircularBuffer<T> : IList<T>
 
     public void AddTail(IEnumerable<T> items)
     {
-        Assert.IsNotNull(items);
+        ArgumentNullException.ThrowIfNull(items);
 
         foreach (var item in items) AddTail(item);
     }

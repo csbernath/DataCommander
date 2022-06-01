@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DataCommander.Api;
 using Foundation.Assertions;
 using Foundation.Linq;
@@ -9,7 +10,7 @@ internal sealed class LinkedServerNode : ITreeNode
 {
     public LinkedServerNode(LinkedServerCollectionNode linkedServers, string name)
     {
-        Assert.IsNotNull(linkedServers);
+        ArgumentNullException.ThrowIfNull(linkedServers);
         LinkedServers = linkedServers;
         Name = name;
     }

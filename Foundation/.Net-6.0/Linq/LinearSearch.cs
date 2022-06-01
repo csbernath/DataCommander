@@ -7,7 +7,7 @@ public static class LinearSearch
 {
     public static int IndexOf(int minIndex, int maxIndex, Func<int, bool> predicate)
     {
-        Assert.IsNotNull(predicate);
+        ArgumentNullException.ThrowIfNull(predicate);
 
         var index = -1;
 
@@ -27,7 +27,7 @@ public static class LinearSearch
 
     public static int LastIndexOf(int minIndex, int maxIndex, Func<int, bool> predicate)
     {
-        Assert.IsNotNull(predicate);
+        ArgumentNullException.ThrowIfNull(predicate);
 
         var index = -1;
 

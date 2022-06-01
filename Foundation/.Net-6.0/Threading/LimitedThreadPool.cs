@@ -50,7 +50,7 @@ namespace Foundation.Threading
         public bool QueueUserWorkItem(Action<T> waitCallback, T state)
         {
 #if FOUNDATION_2_0 || FOUNDATION_3_5
-            Assert.IsNotNull(waitCallback, "waitCallback");           
+            ArgumentNullException.ThrowIfNull(waitCallback, "waitCallback");           
 #else
             Contract.Requires(waitCallback != null);
 #endif

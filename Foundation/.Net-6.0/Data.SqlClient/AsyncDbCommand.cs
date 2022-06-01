@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using Foundation.Assertions;
 
 namespace Foundation.Data.SqlClient;
@@ -14,8 +15,8 @@ public class AsyncDbCommand : IDbCommand
 
     internal AsyncDbCommand(AsyncDbConnection connection, IDbCommand command)
     {
-        Assert.IsNotNull(connection);
-        Assert.IsNotNull(command);
+        ArgumentNullException.ThrowIfNull(connection);
+        ArgumentNullException.ThrowIfNull(command);
 
         _connection = connection;
         _command = command;

@@ -21,9 +21,9 @@ public sealed class ReadOnlyNonUniqueSortedList<TKey, TValue>
 
     public ReadOnlyNonUniqueSortedList(IReadOnlyList<TValue> values, Func<TValue, TKey> keySelector, Comparison<TKey> comparison)
     {
-        Assert.IsNotNull(values);
-        Assert.IsNotNull(keySelector);
-        Assert.IsNotNull(comparison);
+        ArgumentNullException.ThrowIfNull(values);
+        ArgumentNullException.ThrowIfNull(keySelector);
+        ArgumentNullException.ThrowIfNull(comparison);
         Assert.IsTrue(
             values.SelectPreviousAndCurrentKey(keySelector).All(key => comparison(key.Previous, key.Current) <= 0),
             "keys must be ordered");
@@ -63,7 +63,7 @@ public sealed class ReadOnlyNonUniqueSortedList<TKey, TValue>
             else
                 readOnlyList = EmptyReadOnlyCollection<TValue>.Value;
 
-            Assert.IsNotNull(readOnlyList);
+            ArgumentNullException.ThrowIfNull(readOnlyList);
             return readOnlyList;
         }
     }

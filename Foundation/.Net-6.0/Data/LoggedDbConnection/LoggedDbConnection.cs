@@ -15,7 +15,7 @@ public sealed class LoggedDbConnection : IDbConnection
 
     public LoggedDbConnection(IDbConnection connection)
     {
-        Assert.IsNotNull(connection);
+        ArgumentNullException.ThrowIfNull(connection);
 
         _connection = connection;
     }

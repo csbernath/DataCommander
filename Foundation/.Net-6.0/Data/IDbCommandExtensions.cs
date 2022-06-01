@@ -11,7 +11,7 @@ public static class DbCommandExtensions
 {
     public static void AddParameterIfNotNull(this IDbCommand command, string parameterName, object value)
     {
-        Assert.IsNotNull(command);
+        ArgumentNullException.ThrowIfNull(command);
 
         if (value != null)
         {
@@ -32,7 +32,7 @@ public static class DbCommandExtensions
 
     public static DataTable ExecuteDataTable(this IDbCommand command, CancellationToken cancellationToken)
     {
-        Assert.IsNotNull(command);
+        ArgumentNullException.ThrowIfNull(command);
 
         var dataTable = new DataTable
         {
@@ -45,7 +45,7 @@ public static class DbCommandExtensions
 
     public static T ExecuteScalarValue<T>(this IDbCommand command)
     {
-        Assert.IsNotNull(command);
+        ArgumentNullException.ThrowIfNull(command);
 
         var scalar = command.ExecuteScalar();
         Assert.IsTrue(scalar is T);
@@ -54,7 +54,7 @@ public static class DbCommandExtensions
 
     public static T ExecuteScalarValueOrDefault<T>(this IDbCommand command)
     {
-        Assert.IsNotNull(command);
+        ArgumentNullException.ThrowIfNull(command);
 
         var scalar = command.ExecuteScalar();
         return ValueReader.GetValueOrDefault<T>(scalar);
@@ -62,8 +62,8 @@ public static class DbCommandExtensions
 
     public static int Fill(this IDbCommand command, DataSet dataSet, CancellationToken cancellationToken)
     {
-        Assert.IsNotNull(command);
-        Assert.IsNotNull(dataSet);
+        ArgumentNullException.ThrowIfNull(command);
+        ArgumentNullException.ThrowIfNull(dataSet);
 
         var rowCount = 0;
         var resultIndex = 0;
@@ -136,7 +136,7 @@ public static class DbCommandExtensions
     /// <returns></returns>
     public static int Fill(this IDbCommand command, DataTable dataTable, CancellationToken cancellationToken)
     {
-        Assert.IsNotNull(command);
+        ArgumentNullException.ThrowIfNull(command);
 
         var rowCount = 0;
 
@@ -165,7 +165,7 @@ public static class DbCommandExtensions
 
     public static string ToLogString(this IDbCommand command)
     {
-        Assert.IsNotNull(command);
+        ArgumentNullException.ThrowIfNull(command);
 
         var sb = new StringBuilder();
 

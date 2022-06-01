@@ -12,7 +12,7 @@ public class NameValueCollectionReader
 
     public NameValueCollectionReader(TryGetValue<string, string> tryGetValue)
     {
-        Assert.IsNotNull(tryGetValue);
+        ArgumentNullException.ThrowIfNull(tryGetValue);
         _tryGetValue = tryGetValue;
     }
 
@@ -159,7 +159,7 @@ public class NameValueCollectionReader
 
     public bool TryGetValue<T>(string name, TryParse<T> tryParse, out T value)
     {
-        Assert.IsNotNull(tryParse);
+        ArgumentNullException.ThrowIfNull(tryParse);
 
         var contains = _tryGetValue(name, out var s);
 

@@ -12,7 +12,7 @@ public sealed class XmlSpreadsheetWriter
 
     public XmlSpreadsheetWriter(XmlWriter xmlWriter)
     {
-        Assert.IsNotNull(xmlWriter);
+        ArgumentNullException.ThrowIfNull(xmlWriter);
 
         XmlWriter = xmlWriter;
 
@@ -89,7 +89,7 @@ public sealed class XmlSpreadsheetWriter
     /// <param name="table"></param>
     public void WriteStartTable(XmlSpreadsheetTable table)
     {
-        Assert.IsNotNull(table);
+        ArgumentNullException.ThrowIfNull(table);
         _tableIndex++;
         _table = table;
 
@@ -174,7 +174,7 @@ public sealed class XmlSpreadsheetWriter
     /// <param name="values"></param>
     public void WriteRow(object[] values)
     {
-        Assert.IsNotNull(values);
+        ArgumentNullException.ThrowIfNull(values);
 
         WriteStartRow();
 

@@ -72,8 +72,8 @@ public static class StringHelper
 
     public static void WriteMethod(TextWriter textWriter, object obj, string methodName, params object[] parameters)
     {
-        Assert.IsNotNull(textWriter);
-        Assert.IsNotNull(obj);
+        ArgumentNullException.ThrowIfNull(textWriter);
+        ArgumentNullException.ThrowIfNull(obj);
 
         var type = obj.GetType();
         var methodInfo = type.GetMethod(methodName);

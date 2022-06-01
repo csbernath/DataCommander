@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using Foundation.Assertions;
 using Foundation.Core;
@@ -12,7 +13,7 @@ public sealed class UpdaterStartup
 
     public UpdaterStartup(ISerializer serializer)
     {
-        Assert.IsNotNull(serializer);
+        ArgumentNullException.ThrowIfNull(serializer);
         _serializer = serializer;
     }
 

@@ -92,7 +92,7 @@ public sealed class ConfigurationNode
 
     public void RemoveChildNode(ConfigurationNode childNode)
     {
-        Assert.IsNotNull(childNode);
+        ArgumentNullException.ThrowIfNull(childNode);
         Assert.IsValidOperation(this == childNode.Parent);
 
         ChildNodes.Remove(childNode);
@@ -120,7 +120,7 @@ public sealed class ConfigurationNode
 
     public ConfigurationNode CreateNode(string nodeName)
     {
-        Assert.IsNotNull(nodeName);
+        ArgumentNullException.ThrowIfNull(nodeName);
 
         var node = this;
         var nodeNames = nodeName.Split(Delimiter);
@@ -211,7 +211,7 @@ public sealed class ConfigurationNode
     /// <param name="level">Recursion level</param>
     public void WriteDocumentation(TextWriter textWriter, int level)
     {
-        Assert.IsNotNull(textWriter);
+        ArgumentNullException.ThrowIfNull(textWriter);
 
         var sb = new StringBuilder();
         var indent = new string(' ', level * 2);

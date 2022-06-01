@@ -131,7 +131,7 @@ public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
 
     internal static void HandleException(Exception exception, IDbCommand command, CancellationToken cancellationToken)
     {
-        Assert.IsNotNull(command);
+        ArgumentNullException.ThrowIfNull(command);
 
         var separator = new string('-', 80);
         var sb = new StringBuilder();

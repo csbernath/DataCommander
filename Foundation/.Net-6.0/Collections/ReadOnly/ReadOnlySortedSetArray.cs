@@ -12,8 +12,8 @@ public class ReadOnlySortedSetArray<T> : IReadOnlySortedSet<T>
 
     public ReadOnlySortedSetArray(T[] items, Comparison<T> comparison)
     {
-        Assert.IsNotNull(items);
-        Assert.IsNotNull(comparison);
+        ArgumentNullException.ThrowIfNull(items);
+        ArgumentNullException.ThrowIfNull(comparison);
 
         _items = items;
         _comparison = comparison;

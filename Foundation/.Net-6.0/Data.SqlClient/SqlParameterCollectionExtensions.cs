@@ -26,7 +26,7 @@ public static class SqlParameterCollectionExtensions
 
     public static string ToLogString(this SqlParameterCollection parameters)
     {
-        Assert.IsNotNull(parameters);
+        ArgumentNullException.ThrowIfNull(parameters);
 
         var stringBuilder = new StringBuilder();
         var first = true;

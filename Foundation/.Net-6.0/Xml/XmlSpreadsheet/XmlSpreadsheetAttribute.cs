@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
 using Foundation.Assertions;
 
 namespace Foundation.Xml.XmlSpreadsheet;
@@ -35,7 +36,7 @@ public sealed class XmlSpreadsheetAttribute
     /// <param name="xmlWriter"></param>
     public void Write(XmlWriter xmlWriter)
     {
-        Assert.IsNotNull(xmlWriter);
+        ArgumentNullException.ThrowIfNull(xmlWriter);
 
         xmlWriter.WriteAttributeString(LocalName, Value);
     }

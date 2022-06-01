@@ -11,7 +11,7 @@ internal partial class DataViewPropertiesForm : Form
 
     public DataViewPropertiesForm(DataViewProperties properties)
     {
-        Assert.IsNotNull(properties);
+        ArgumentNullException.ThrowIfNull(properties);
 
         _properties = properties;
         InitializeComponent();

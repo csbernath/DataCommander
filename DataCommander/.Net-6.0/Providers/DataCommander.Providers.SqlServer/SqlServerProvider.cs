@@ -39,7 +39,7 @@ internal sealed class SqlServerProvider : IProvider
 
     internal static List<InfoMessage> ToInfoMessages(SqlErrorCollection sqlErrors, DateTime creationTime)
     {
-        Assert.IsNotNull(sqlErrors);
+        ArgumentNullException.ThrowIfNull(sqlErrors);
 
         var messages = new List<InfoMessage>(sqlErrors.Count);
 

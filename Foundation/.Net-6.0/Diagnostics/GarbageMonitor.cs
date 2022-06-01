@@ -70,7 +70,7 @@ public sealed class GarbageMonitor
 
     public void Add(string name, object target)
     {
-        Assert.IsNotNull(target);
+        ArgumentNullException.ThrowIfNull(target);
         var size = 0;
 
         var type = target.GetType();
@@ -87,7 +87,7 @@ public sealed class GarbageMonitor
 
     public void Add(string name, string typeName, int size, object target)
     {
-        Assert.IsNotNull(target);
+        ArgumentNullException.ThrowIfNull(target);
 
         var id = _interlockedSequence.Next();
 
@@ -102,7 +102,7 @@ public sealed class GarbageMonitor
 
     public void SetDisposeTime(object target, DateTime disposeTime)
     {
-        Assert.IsNotNull(target);
+        ArgumentNullException.ThrowIfNull(target);
 
         lock (_monitoredObjects)
         {

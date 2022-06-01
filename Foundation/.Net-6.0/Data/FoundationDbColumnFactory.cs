@@ -9,7 +9,7 @@ public static class FoundationDbColumnFactory
 {
     public static FoundationDbColumn Create(DataRow schemaTableRow)
     {
-        Assert.IsNotNull(schemaTableRow);
+        ArgumentNullException.ThrowIfNull(schemaTableRow);
 
         var columnName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.ColumnName);
         var columnOrdinal = (int)schemaTableRow[SchemaTableColumn.ColumnOrdinal];

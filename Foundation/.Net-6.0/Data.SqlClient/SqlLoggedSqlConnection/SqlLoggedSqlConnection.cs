@@ -19,7 +19,7 @@ public sealed class SqlLoggedSqlConnection : IDbConnection
     public SqlLoggedSqlConnection(SqlLog.SqlLog sqlLog, int applicationId, string userName, string hostName, string connectionString,
         ISqlLoggedSqlCommandFilter filter)
     {
-        Assert.IsNotNull(sqlLog);
+        ArgumentNullException.ThrowIfNull(sqlLog);
 
         _sqlLog = sqlLog;
         _applicationId = applicationId;

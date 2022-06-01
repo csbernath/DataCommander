@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Text;
 using Foundation.Assertions;
@@ -10,7 +11,7 @@ public static class IndentedLineCollectionExtensions
     [Pure]
     public static string ToIndentedString(this IEnumerable<Line> lines, string indentation)
     {
-        Assert.IsNotNull(lines);
+        ArgumentNullException.ThrowIfNull(lines);
 
         var stringBuilder = new StringBuilder();
         var first = true;
@@ -33,8 +34,8 @@ public static class IndentedLineCollectionExtensions
     [Pure]
     public static IEnumerable<Line> Join(this IEnumerable<IEnumerable<Line>> lineGroups, Line separator)
     {
-        Assert.IsNotNull(lineGroups);
-        Assert.IsNotNull(separator);
+        ArgumentNullException.ThrowIfNull(lineGroups);
+        ArgumentNullException.ThrowIfNull(separator);
 
         var first = true;
         foreach (var lineGroup in lineGroups)

@@ -100,7 +100,7 @@ public sealed class PriorityMonitor<T>
 
     internal void Exit(LockRequest lockRequest)
     {
-        Assert.IsNotNull(lockRequest);
+        ArgumentNullException.ThrowIfNull(lockRequest);
         Assert.IsTrue(lockRequest.Monitor == this);
         Assert.IsTrue(lockRequest == CurrentLockRequest);
 
@@ -131,7 +131,7 @@ public sealed class PriorityMonitor<T>
 
         internal LockRequest(PriorityMonitor<T> monitor, int priority)
         {
-            Assert.IsNotNull(monitor);
+            ArgumentNullException.ThrowIfNull(monitor);
 
             Monitor = monitor;
             Priority = priority;

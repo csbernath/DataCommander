@@ -14,7 +14,7 @@ public sealed class CommandLine
 
     public CommandLine(string commandLine)
     {
-        Assert.IsNotNull(commandLine);
+        ArgumentNullException.ThrowIfNull(commandLine);
 
         _arguments = new IndexableCollection<CommandLineArgument>(ListIndex);
         var dictionary = new Dictionary<string, ICollection<CommandLineArgument>>(StringComparer.InvariantCultureIgnoreCase);

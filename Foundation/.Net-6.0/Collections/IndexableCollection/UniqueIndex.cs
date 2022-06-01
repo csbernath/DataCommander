@@ -81,9 +81,9 @@ public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey
 
     private void Initialize(string name, Func<T, GetKeyResponse<TKey>> getKey, IDictionary<TKey, T> dictionary)
     {
-        Assert.IsNotNull(name);
-        Assert.IsNotNull(getKey);
-        Assert.IsNotNull(dictionary);
+        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(getKey);
+        ArgumentNullException.ThrowIfNull(dictionary);
 
         Name = name;
         _getKey = getKey;

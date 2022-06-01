@@ -16,8 +16,8 @@ public sealed class MemberEqualityComparer<T, T1> : IEqualityComparer<T>
 
     public MemberEqualityComparer(Func<T, T1> get, IEqualityComparer<T1> equalityComparer)
     {
-        Assert.IsNotNull(get);
-        Assert.IsNotNull(equalityComparer);
+        ArgumentNullException.ThrowIfNull(get);
+        ArgumentNullException.ThrowIfNull(equalityComparer);
 
         _get = get;
         _equalityComparer = equalityComparer;

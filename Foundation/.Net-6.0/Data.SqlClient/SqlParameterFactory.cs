@@ -66,7 +66,7 @@ public static class SqlParameterFactory
 
     public static SqlParameter CreateStructured(string parameterName, string typeName, IReadOnlyCollection<SqlDataRecord> sqlDataRecords)
     {
-        Assert.IsNotNull(sqlDataRecords);
+        ArgumentNullException.ThrowIfNull(sqlDataRecords);
         var parameter = new SqlParameter
         {
             ParameterName = parameterName,

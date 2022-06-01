@@ -49,7 +49,7 @@ public class StringTableColumnCollection : IList<StringTableColumn>
 
     internal void Add(StringTableColumn item)
     {
-        Assert.IsNotNull(item);
+        ArgumentNullException.ThrowIfNull(item);
 
         _columns.Add(item);
     }

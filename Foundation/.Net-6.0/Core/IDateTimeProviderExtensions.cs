@@ -7,7 +7,7 @@ public static class IDateTimeProviderExtensions
 {
     public static DateTime Today(this IDateTimeProvider dateTimeProvider)
     {
-        Assert.IsNotNull(dateTimeProvider, nameof(dateTimeProvider));
+        ArgumentNullException.ThrowIfNull(dateTimeProvider, nameof(dateTimeProvider));
         return dateTimeProvider.Now.Date;
     }
 }

@@ -1,4 +1,5 @@
-﻿using Foundation.Assertions;
+﻿using System;
+using Foundation.Assertions;
 
 namespace Foundation.Core.ClockAggregate;
 
@@ -8,7 +9,7 @@ public class ClockAggregateRoot
 
     internal ClockAggregateRoot(ClockAggregateState clockAggregateState)
     {
-        Assert.IsNotNull(clockAggregateState);
+        ArgumentNullException.ThrowIfNull(clockAggregateState);
         _clockAggregateState = clockAggregateState;
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.IO;
 using System.Text;
 using Foundation.Assertions;
@@ -14,8 +15,8 @@ public static class Writer
     /// <param name="textWriter"></param>
     public static void Write(DataTable dataTable, TextWriter textWriter)
     {
-        Assert.IsNotNull(dataTable);
-        Assert.IsNotNull(textWriter);
+        ArgumentNullException.ThrowIfNull(dataTable);
+        ArgumentNullException.ThrowIfNull(textWriter);
 
         var columns = dataTable.Columns;
 
@@ -52,7 +53,7 @@ public static class Writer
     public static void Write(DataView dataView, char columnSeparator, string lineSeparator, TextWriter textWriter)
     {
         Assert.IsValidOperation(!string.IsNullOrEmpty(lineSeparator));
-        Assert.IsNotNull(textWriter);
+        ArgumentNullException.ThrowIfNull(textWriter);
 
         if (dataView != null)
         {

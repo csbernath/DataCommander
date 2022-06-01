@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using Foundation.Assertions;
 using Microsoft.Data.SqlClient;
 
@@ -8,7 +9,7 @@ public static class SqlErrorExtensions
 {
     public static string GetHeader(this SqlError error)
     {
-        Assert.IsNotNull(error);
+        ArgumentNullException.ThrowIfNull(error);
         var stringBuilder = new StringBuilder();
         var hasProcedure = !string.IsNullOrEmpty(error.Procedure);
 
@@ -36,7 +37,7 @@ public static class SqlErrorExtensions
 
     public static string ToLogString(this SqlError error)
     {
-        Assert.IsNotNull(error);
+        ArgumentNullException.ThrowIfNull(error);
         var stringBuilder = new StringBuilder();
         stringBuilder.Append(error.GetHeader());
         stringBuilder.Append(error.Message);

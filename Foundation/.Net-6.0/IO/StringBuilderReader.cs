@@ -12,7 +12,7 @@ public sealed class StringBuilderReader : TextReader
 
     public StringBuilderReader(StringBuilder stringBuilder)
     {
-        Assert.IsNotNull(stringBuilder, nameof(stringBuilder));
+        ArgumentNullException.ThrowIfNull(stringBuilder, nameof(stringBuilder));
         _stringBuilder = stringBuilder;
     }
 

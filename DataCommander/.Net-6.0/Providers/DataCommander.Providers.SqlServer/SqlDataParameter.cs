@@ -1,4 +1,5 @@
-﻿using DataCommander.Api;
+﻿using System;
+using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Assertions;
 
@@ -11,7 +12,7 @@ internal sealed class SqlDataParameter : DataParameterBase
     public SqlDataParameter(SqlParameter parameter)
         : base(parameter, parameter.Size, parameter.Precision, parameter.Scale)
     {
-        Assert.IsNotNull(parameter);
+        ArgumentNullException.ThrowIfNull(parameter);
         _parameter = parameter;
     }
 

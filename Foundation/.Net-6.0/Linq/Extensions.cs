@@ -21,7 +21,7 @@ public static class Extensions
 
     public static bool In<T>(this T item, params T[] collection)
     {
-        Assert.IsNotNull(collection, nameof(collection));
+        ArgumentNullException.ThrowIfNull(collection, nameof(collection));
         return collection.Contains(item);
     }
 

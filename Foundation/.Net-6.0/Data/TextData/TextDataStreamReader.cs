@@ -28,9 +28,9 @@ public sealed class TextDataStreamReader
     /// <param name="converters"></param>
     public TextDataStreamReader(TextReader textReader, IList<TextDataColumn> columns, IList<ITextDataConverter> converters)
     {
-        Assert.IsNotNull(textReader);
-        Assert.IsNotNull(columns);
-        Assert.IsNotNull(converters);
+        ArgumentNullException.ThrowIfNull(textReader);
+        ArgumentNullException.ThrowIfNull(columns);
+        ArgumentNullException.ThrowIfNull(converters);
 
         _textReader = textReader;
         _columns = columns;

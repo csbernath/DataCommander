@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Foundation.Assertions;
 
@@ -11,7 +12,7 @@ public class ReadOnlySegmentLinkedList<T> : IReadOnlyCollection<T>
 
     internal ReadOnlySegmentLinkedList(LinkedList<T[]> linkedList, int count)
     {
-        Assert.IsNotNull(linkedList);
+        ArgumentNullException.ThrowIfNull(linkedList);
         Assert.IsInRange(count >= 0);
 
         _linkedList = linkedList;

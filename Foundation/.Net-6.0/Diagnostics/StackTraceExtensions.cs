@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Text;
 using Foundation.Assertions;
 
@@ -8,7 +9,7 @@ public static class StackTraceExtensions
 {
     public static string ToLogString(this StackTrace trace)
     {
-        Assert.IsNotNull(trace);
+        ArgumentNullException.ThrowIfNull(trace);
 
         var stringBuilder = new StringBuilder();
         var count = trace.FrameCount;

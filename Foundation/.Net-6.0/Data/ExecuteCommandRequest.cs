@@ -11,8 +11,8 @@ public sealed class ExecuteCommandRequest
 
     public ExecuteCommandRequest(CreateCommandRequest createCommandRequest, Action<IDbCommand> execute)
     {
-        Assert.IsNotNull(createCommandRequest);
-        Assert.IsNotNull(execute);
+        ArgumentNullException.ThrowIfNull(createCommandRequest);
+        ArgumentNullException.ThrowIfNull(execute);
 
         CreateCommandRequest = createCommandRequest;
         Execute = execute;

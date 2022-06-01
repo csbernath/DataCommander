@@ -26,7 +26,7 @@ public sealed class SimpleSqlConnectionFactory
     /// <param name="nodeName"></param>
     public SimpleSqlConnectionFactory(ConfigurationSection section, string nodeName)
     {
-        Assert.IsNotNull(section);
+        ArgumentNullException.ThrowIfNull(section);
 
         var node = section.SelectNode(nodeName, true);
         _connectionString = node.Attributes["ConnectionString"].GetValue<string>();

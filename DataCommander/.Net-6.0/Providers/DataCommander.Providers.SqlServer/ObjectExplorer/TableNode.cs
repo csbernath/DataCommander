@@ -97,8 +97,8 @@ internal sealed class TableNode : ITreeNode
 
     internal static string GetSelectStatement(IDbConnection connection, DatabaseObjectMultipartName databaseObjectMultipartName)
     {
-        Assert.IsNotNull(connection);
-        Assert.IsNotNull(databaseObjectMultipartName);
+        ArgumentNullException.ThrowIfNull(connection);
+        ArgumentNullException.ThrowIfNull(databaseObjectMultipartName);
 
         var commandText = $@"select  c.name
 from    [{databaseObjectMultipartName.Database}].sys.schemas s (nolock)

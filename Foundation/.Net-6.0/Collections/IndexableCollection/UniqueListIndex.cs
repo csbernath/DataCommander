@@ -12,9 +12,9 @@ public class UniqueListIndex<TKey, T> : ICollectionIndex<T>
 
     public UniqueListIndex(string name, Func<T, TKey> keySelector, IList<T> list)
     {
-        Assert.IsNotNull(name);
-        Assert.IsNotNull(keySelector);
-        Assert.IsNotNull(list);
+        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(keySelector);
+        ArgumentNullException.ThrowIfNull(list);
 
         Name = name;
         _keySelector = keySelector;

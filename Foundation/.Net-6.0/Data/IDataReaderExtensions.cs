@@ -53,8 +53,8 @@ public static class IDataReaderExtensions
 
     public static int Fill(this IDataReader dataReader, DataSet dataSet, CancellationToken cancellationToken)
     {
-        Assert.IsNotNull(dataReader);
-        Assert.IsNotNull(dataSet);
+        ArgumentNullException.ThrowIfNull(dataReader);
+        ArgumentNullException.ThrowIfNull(dataSet);
 
         var rowCount = 0;
 
@@ -80,8 +80,8 @@ public static class IDataReaderExtensions
 
     public static int Fill(this IDataReader dataReader, DataTable dataTable, CancellationToken cancellationToken)
     {
-        Assert.IsNotNull(dataReader);
-        Assert.IsNotNull(dataTable);
+        ArgumentNullException.ThrowIfNull(dataReader);
+        ArgumentNullException.ThrowIfNull(dataTable);
 
         var schemaTable = dataReader.GetSchemaTable();
 

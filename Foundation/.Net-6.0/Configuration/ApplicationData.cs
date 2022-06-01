@@ -123,8 +123,8 @@ public sealed class ApplicationData
 
     public void Save(XmlWriter xmlWriter, string sectionName)
     {
-        Assert.IsNotNull(xmlWriter);
-        Assert.IsNotNull(sectionName);
+        ArgumentNullException.ThrowIfNull(xmlWriter);
+        ArgumentNullException.ThrowIfNull(sectionName);
 
         xmlWriter.WriteStartElement(sectionName);
         ConfigurationWriter.Write(xmlWriter, RootNode.Attributes);

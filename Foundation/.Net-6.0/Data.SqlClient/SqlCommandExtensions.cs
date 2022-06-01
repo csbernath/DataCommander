@@ -10,7 +10,7 @@ public static class SqlCommandExtensions
 {
     public static string ToLogString(this SqlCommand command)
     {
-        Assert.IsNotNull(command);
+        ArgumentNullException.ThrowIfNull(command);
 
         var sb = new StringBuilder();
         switch (command.CommandType)

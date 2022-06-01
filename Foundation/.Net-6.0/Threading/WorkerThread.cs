@@ -29,7 +29,7 @@ public class WorkerThread
 
     public WorkerThread(ThreadStart start)
     {
-        Assert.IsNotNull(start);
+        ArgumentNullException.ThrowIfNull(start);
 
         _start = start;
         _thread = new Thread(PrivateStart);

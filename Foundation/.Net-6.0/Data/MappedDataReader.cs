@@ -15,8 +15,8 @@ public class MappedDataReader : DbDataReader
 
     public MappedDataReader(IDataReader dataReader, GetValues getValues)
     {
-        Assert.IsNotNull(dataReader);
-        Assert.IsNotNull(getValues);
+        ArgumentNullException.ThrowIfNull(dataReader);
+        ArgumentNullException.ThrowIfNull(getValues);
 
         _dataReader = dataReader;
         _getValues = getValues;

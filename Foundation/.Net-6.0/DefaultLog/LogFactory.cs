@@ -177,7 +177,7 @@ internal sealed class LogFactory : ILogFactory
     {
         public MultipleLog(IEnumerable<LogWriter> logWriters)
         {
-            Assert.IsNotNull(logWriters);
+            ArgumentNullException.ThrowIfNull(logWriters);
             LogWriters = logWriters.ToArray();
         }
 

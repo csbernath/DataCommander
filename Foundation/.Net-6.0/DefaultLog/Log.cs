@@ -15,7 +15,7 @@ internal sealed class Log : ILog
 
     public Log(LogFactory applicationLog, string name)
     {
-        Assert.IsNotNull(applicationLog);
+        ArgumentNullException.ThrowIfNull(applicationLog);
 
         _applicationLog = applicationLog;
         _name = name;

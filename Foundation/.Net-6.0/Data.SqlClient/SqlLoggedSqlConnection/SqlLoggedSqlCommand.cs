@@ -13,8 +13,8 @@ internal sealed class SqlLoggedSqlCommand : IDbCommand
         SqlLoggedSqlConnection connection,
         IDbCommand command)
     {
-        Assert.IsNotNull(connection);
-        Assert.IsNotNull(command);
+        ArgumentNullException.ThrowIfNull(connection);
+        ArgumentNullException.ThrowIfNull(command);
 
         _connection = connection;
         _command = command;

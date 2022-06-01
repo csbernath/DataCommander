@@ -8,7 +8,7 @@ public static partial class IEnumerableExtensions
 {
     public static IEnumerable<TSource[]> Chunk<TSource>(this IEnumerable<TSource> source, int size)
     {
-        Assert.IsNotNull(source);
+        ArgumentNullException.ThrowIfNull(source);
         Assert.IsTrue(size >= 1);
 
         return ChunkIterator(source, size);

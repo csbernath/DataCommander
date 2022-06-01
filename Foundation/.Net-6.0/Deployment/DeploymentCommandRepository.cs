@@ -13,7 +13,7 @@ public sealed class DeploymentCommandRepository
 
     public DeploymentCommandRepository(ISerializer serializer)
     {
-        Assert.IsNotNull(serializer);
+        ArgumentNullException.ThrowIfNull(serializer);
         _serializer = serializer;
     }
 

@@ -9,7 +9,7 @@ public static class ConfigurationNodeName
 {
     public static string FromType(Type type)
     {
-        Assert.IsNotNull(type, nameof(type));
+        ArgumentNullException.ThrowIfNull(type, nameof(type));
 
         var name = type.FullName;
         var nodeName = FromTypeDelimitedName(name);
@@ -18,7 +18,7 @@ public static class ConfigurationNodeName
 
     private static MethodBase GetMethod(StackTrace trace, int frameIndex)
     {
-        Assert.IsNotNull(trace);
+        ArgumentNullException.ThrowIfNull(trace);
 
         var frame = trace.GetFrame(frameIndex);
         var method = frame.GetMethod();
@@ -27,7 +27,7 @@ public static class ConfigurationNodeName
 
     internal static string FromMethod(MethodBase method)
     {
-        Assert.IsNotNull(method, nameof(method));
+        ArgumentNullException.ThrowIfNull(method, nameof(method));
 
         var name = method.DeclaringType.FullName + Type.Delimiter + method.Name;
         var nodeName = FromTypeDelimitedName(name);
@@ -36,7 +36,7 @@ public static class ConfigurationNodeName
 
     internal static string FromMethod(StackTrace trace, int frameIndex)
     {
-        Assert.IsNotNull(trace, nameof(trace));
+        ArgumentNullException.ThrowIfNull(trace, nameof(trace));
 
         var method = GetMethod(trace, frameIndex);
         var nodeName = FromMethod(method);
@@ -45,7 +45,7 @@ public static class ConfigurationNodeName
 
     internal static string FromNamespace(StackTrace trace, int frameIndex)
     {
-        Assert.IsNotNull(trace);
+        ArgumentNullException.ThrowIfNull(trace);
 
         var method = GetMethod(trace, frameIndex);
         var name = method.DeclaringType.Namespace;
@@ -55,7 +55,7 @@ public static class ConfigurationNodeName
 
     internal static string FromType(StackTrace trace, int frameIndex)
     {
-        Assert.IsNotNull(trace, nameof(trace));
+        ArgumentNullException.ThrowIfNull(trace, nameof(trace));
 
         var method = GetMethod(trace, frameIndex);
         var type = method.DeclaringType;
@@ -65,7 +65,7 @@ public static class ConfigurationNodeName
 
     private static string FromTypeDelimitedName(string name)
     {
-        Assert.IsNotNull(name, nameof(name));
+        ArgumentNullException.ThrowIfNull(name, nameof(name));
 
         var nodeName = name.Replace(Type.Delimiter, ConfigurationNode.Delimiter);
         return nodeName;

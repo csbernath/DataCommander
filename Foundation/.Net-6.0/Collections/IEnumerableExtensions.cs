@@ -39,8 +39,8 @@ public static class IEnumerableExtensions
         this IEnumerable<TSource> source,
         Func<TSource, TKey> keySelector)
     {
-        Assert.IsNotNull(source);
-        Assert.IsNotNull(keySelector);
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(keySelector);
 
         return source.Select(keySelector).SelectPreviousAndCurrent();
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Foundation.Assertions;
 
 namespace Foundation.Linq;
@@ -7,7 +8,7 @@ public static class QueueExtensions
 {
     public static T DequeueTail<T>(this Queue<T> queue)
     {
-        Assert.IsNotNull(queue, nameof(queue));
+        ArgumentNullException.ThrowIfNull(queue, nameof(queue));
         Assert.IsTrue(queue.Count > 0);
 
         var array = new T[queue.Count];

@@ -12,8 +12,8 @@ internal sealed class LoggedDataReader : IDataReader
 
     public LoggedDataReader(IDataReader dataReader, EventHandler<AfterReadEventArgs> afterRead)
     {
-        Assert.IsNotNull(dataReader);
-        Assert.IsNotNull(afterRead);
+        ArgumentNullException.ThrowIfNull(dataReader);
+        ArgumentNullException.ThrowIfNull(afterRead);
 
         _dataReader = dataReader;
         _afterRead = afterRead;

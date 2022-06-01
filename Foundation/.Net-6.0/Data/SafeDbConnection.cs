@@ -23,8 +23,8 @@ public class SafeDbConnection : IDbConnection
 
     protected void Initialize(IDbConnection connection, ISafeDbConnection safeDbConnection)
     {
-        Assert.IsNotNull(connection);
-        Assert.IsNotNull(safeDbConnection);
+        ArgumentNullException.ThrowIfNull(connection);
+        ArgumentNullException.ThrowIfNull(safeDbConnection);
 
         Connection = connection;
         _safeDbConnection = safeDbConnection;
@@ -102,7 +102,7 @@ public class SafeDbConnection : IDbConnection
 
     internal IDataReader ExecuteReader(IDbCommand command, CommandBehavior behavior)
     {
-        Assert.IsNotNull(command);
+        ArgumentNullException.ThrowIfNull(command);
 
         if (Connection.State != ConnectionState.Open)
             Open();
@@ -154,7 +154,7 @@ public class SafeDbConnection : IDbConnection
 
     internal object ExecuteScalar(IDbCommand command)
     {
-        Assert.IsNotNull(command);
+        ArgumentNullException.ThrowIfNull(command);
 
         object scalar = null;
 
