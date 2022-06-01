@@ -4,7 +4,6 @@ using System.Data.Common;
 using System.IO;
 using System.Text;
 using DataCommander.Api;
-using DataCommander.Api.ResultWriter;
 using Foundation.Assertions;
 using Foundation.Text;
 

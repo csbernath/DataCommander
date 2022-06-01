@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using Foundation.Assertions;
 
 namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection;
 

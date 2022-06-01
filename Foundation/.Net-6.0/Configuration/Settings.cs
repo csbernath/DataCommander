@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Foundation.Assertions;
 
 namespace Foundation.Configuration;
 

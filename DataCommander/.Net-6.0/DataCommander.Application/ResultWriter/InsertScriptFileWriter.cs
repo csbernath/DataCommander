@@ -7,7 +7,6 @@ using DataCommander.Application.Query;
 using DataCommander.Api;
 using DataCommander.Api.FieldNamespace;
 using DataCommander.Api.ResultWriter;
-using Foundation.Assertions;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 using Foundation.Text;

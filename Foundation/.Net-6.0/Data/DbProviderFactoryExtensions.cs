@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.Common;
 using System.Globalization;
-using Foundation.Assertions;
 using Foundation.Collections.ReadOnly;
 
 namespace Foundation.Data;

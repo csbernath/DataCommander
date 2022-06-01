@@ -1,6 +1,5 @@
 ﻿using System;
 using DataCommander.Api.FieldNamespace;
-using DataCommander.Api.ResultWriter;
 
 namespace DataCommander.Application.ResultWriter;
 

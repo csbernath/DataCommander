@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Common;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using DataCommander.Api.Connection;

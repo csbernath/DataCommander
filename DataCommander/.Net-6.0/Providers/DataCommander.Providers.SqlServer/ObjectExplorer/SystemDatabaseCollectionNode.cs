@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
-using Foundation.Assertions;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;

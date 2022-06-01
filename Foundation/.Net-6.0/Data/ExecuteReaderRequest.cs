@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Threading;
-using Foundation.Assertions;
 
 namespace Foundation.Data;
 

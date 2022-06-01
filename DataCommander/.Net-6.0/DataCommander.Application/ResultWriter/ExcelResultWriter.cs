@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
-using Foundation.Assertions;
 using Foundation.Data;
 using OfficeOpenXml;
 

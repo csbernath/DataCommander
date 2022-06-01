@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using DataCommander.Api.ResultWriter;
-using Foundation.Assertions;
 
 namespace DataCommander.Application.ResultWriter;
 

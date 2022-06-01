@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using Foundation.Assertions;
 
 namespace Foundation.Collections.ReadOnly;
 

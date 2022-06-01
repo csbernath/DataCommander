@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Globalization;
-using Foundation.Assertions;
 using Foundation.Core;
 
 namespace Foundation.Data.SqlClient;

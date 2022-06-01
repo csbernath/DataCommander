@@ -5,7 +5,6 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Xml;
-using Foundation.Assertions;
 
 namespace Foundation.Configuration;
 

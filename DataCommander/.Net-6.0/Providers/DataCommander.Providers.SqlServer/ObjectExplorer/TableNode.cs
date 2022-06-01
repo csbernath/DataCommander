@@ -8,7 +8,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using DataCommander.Api;
-using Foundation.Assertions;
 using Foundation.Collections;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;

@@ -2,7 +2,6 @@
 using System.Data;
 using System.Globalization;
 using System.Security.Principal;
-using Foundation.Assertions;
 using Foundation.Configuration;
 using Foundation.Data.SqlClient.SqlLoggedSqlConnection;
 using Microsoft.Data.SqlClient;

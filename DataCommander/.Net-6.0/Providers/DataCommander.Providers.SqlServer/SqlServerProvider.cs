@@ -12,7 +12,6 @@ using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.FieldNamespace;
 using DataCommander.Api.Query;
-using Foundation.Assertions;
 using Foundation.Configuration;
 using Foundation.Core;
 using Foundation.Data;

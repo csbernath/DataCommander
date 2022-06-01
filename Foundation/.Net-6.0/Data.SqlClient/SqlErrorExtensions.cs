@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using Foundation.Assertions;
 using Microsoft.Data.SqlClient;
 
 namespace Foundation.Data.SqlClient;

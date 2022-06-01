@@ -9,7 +9,6 @@ using System.Text;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.QueryConfiguration;
-using Foundation.Assertions;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;

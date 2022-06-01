@@ -4,7 +4,6 @@ using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
-using Foundation.Assertions;
 using Foundation.Configuration;
 using Microsoft.Data.SqlClient;
 

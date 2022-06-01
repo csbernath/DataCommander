@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Principal;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Assertions;

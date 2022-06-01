@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using Foundation.Assertions;
 using Foundation.Data.SqlClient;
 
 namespace Foundation.Data;

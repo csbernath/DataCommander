@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using Foundation.Assertions;
 using Foundation.Collections.ReadOnly;
 using Foundation.Linq;
 

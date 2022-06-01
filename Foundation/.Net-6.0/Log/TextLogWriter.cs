@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Foundation.Assertions;
 
 namespace Foundation.Log;
 

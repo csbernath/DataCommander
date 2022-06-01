@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using Foundation.Assertions;
 using Foundation.Linq;
 
 namespace Foundation.Collections;

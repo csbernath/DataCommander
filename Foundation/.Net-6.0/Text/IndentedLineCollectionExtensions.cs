@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Text;
-using Foundation.Assertions;
 
 namespace Foundation.Text;
 

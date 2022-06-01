@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
-using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Log;
 using ThreadState = System.Threading.ThreadState;
