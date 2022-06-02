@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Foundation.Assertions;
 
@@ -12,7 +13,7 @@ public class IndexCollection<T> : ICollection<ICollectionIndex<T>>
 
     public void Add(ICollectionIndex<T> item)
     {
-        Assert.IsTrue(item != null);
+        ArgumentNullException.ThrowIfNull(item);
         _dictionary.Add(item.Name, item);
     }
 

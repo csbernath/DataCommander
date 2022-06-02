@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace Foundation.Assertions;
 
@@ -10,27 +11,32 @@ public static class Assert
             throw new ArgumentException();
     }
 
-    public static void IsTrue(bool condition, string message)
+    public static void ArgumentConditionIsTrue(bool condition, [CallerArgumentExpression("condition")] string? conditionString = null)
     {
         if (!condition)
+            throw new ArgumentException(conditionString);
+    }
+
+    public static void IsNull<T>(T argument, [CallerArgumentExpression("argument")] string? argumentString = null) where T : class
+    {
+        if (argument != null)
+        {
+            var message = $"Argument must be null: {argumentString}";
             throw new ArgumentException(message);
+        }
     }
 
-    public static void IsNull<T>(T value) where T : class
-    {
-        if (value != null)
-            throw new ArgumentException();
-    }
-
-    public static void IsInRange(bool condition)
+    public static void IsInRange(bool condition, [CallerArgumentExpression("condition")] string? conditionString = null)
     {
         if (!condition)
-            throw new ArgumentOutOfRangeException();
+            throw new ArgumentOutOfRangeException(conditionString);
     }
 
-    public static void IsValidOperation(bool condition)
+    public static void IsValidOperation(bool condition, [CallerArgumentExpression("condition")] string? conditionString = null)
     {
         if (!condition)
-            throw new InvalidOperationException();
+        {
+            throw new InvalidOperationException(conditionString);
+        }
     }
 }

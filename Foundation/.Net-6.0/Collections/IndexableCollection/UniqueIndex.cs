@@ -120,7 +120,8 @@ public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey
 
     public bool Contains(T item)
     {
-        Assert.IsTrue(item != null);
+        ArgumentNullException.ThrowIfNull(item);
+        
         var response = _getKey(item);
         var contains = response.HasKey && _dictionary.ContainsKey(response.Key);
         return contains;
@@ -128,7 +129,8 @@ public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey
 
     bool ICollection<T>.Remove(T item)
     {
-        Assert.IsTrue(item != null);
+        ArgumentNullException.ThrowIfNull(item);
+        
         var response = _getKey(item);
         var succeeded = response.HasKey && _dictionary.Remove(response.Key);
         return succeeded;

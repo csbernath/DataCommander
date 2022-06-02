@@ -24,7 +24,7 @@ public sealed class ReadOnlyNonUniqueSortedList<TKey, TValue>
         ArgumentNullException.ThrowIfNull(values);
         ArgumentNullException.ThrowIfNull(keySelector);
         ArgumentNullException.ThrowIfNull(comparison);
-        Assert.IsTrue(
+        Assert.ArgumentConditionIsTrue(
             values.SelectPreviousAndCurrentKey(keySelector).All(key => comparison(key.Previous, key.Current) <= 0),
             "keys must be ordered");
 
