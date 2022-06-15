@@ -206,6 +206,10 @@ internal sealed class Connection : ConnectionBase
                 case "13.00.5026":
                     description = "Microsoft SQL Server 2016 Service Pack 2 (SP2)";
                     break;
+                
+                case "13.00.6300":
+                    description = "Microsoft SQL Server 2016 Service Pack 3 (SP3)";
+                    break;
 
                 #endregion
 
