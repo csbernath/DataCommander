@@ -684,6 +684,7 @@ from
         dataTable.Columns.Add("Scale", typeof(int));
         dataTable.Columns.Add("Direction");
         dataTable.Columns.Add("Value", typeof(object));
+        dataTable.Columns.Add("TypeName", typeof(string));
         var index = 0;
 
         foreach (SqlParameter p in parameters)
@@ -723,6 +724,8 @@ from
                 row[8] = DBNull.Value;
             else
                 row[8] = p.Value;
+
+            row[9] = p.TypeName;
 
             dataTable.Rows.Add(row);
 
