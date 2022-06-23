@@ -5,7 +5,7 @@ namespace DataCommander.Providers.MySql;
 
 internal sealed class DatabaseObjectMultipartName
 {
-    public DatabaseObjectMultipartName(string currentDatabase, List<string> nameParts)
+    public DatabaseObjectMultipartName(string? currentDatabase, List<string?> nameParts)
     {
         if (nameParts != null)
         {
@@ -46,9 +46,9 @@ internal sealed class DatabaseObjectMultipartName
         }
     }
 
-    public string Database { get; set; }
+    public string? Database { get; set; }
 
-    public string Name { get; }
+    public string? Name { get; }
 
     public override string ToString()
     {

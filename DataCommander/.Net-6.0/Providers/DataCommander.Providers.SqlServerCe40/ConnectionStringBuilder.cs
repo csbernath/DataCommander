@@ -15,7 +15,7 @@ internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
     }
 
     bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword) => true;
-    void IDbConnectionStringBuilder.SetValue(string keyword, object value) => _sqlCeConnectionStringBuilder[keyword] = value;
+    void IDbConnectionStringBuilder.SetValue(string keyword, object? value) => _sqlCeConnectionStringBuilder[keyword] = value;
     bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value) => _sqlCeConnectionStringBuilder.TryGetValue(keyword, out value);
     bool IDbConnectionStringBuilder.Remove(string keyword) => throw new NotImplementedException();
 }

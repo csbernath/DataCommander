@@ -11,10 +11,10 @@ internal sealed class ViewNode : ITreeNode
 {
     private readonly DatabaseNode _database;
     private readonly int _id;
-    private readonly string _name;
-    private readonly string _schema;
+    private readonly string? _name;
+    private readonly string? _schema;
 
-    public ViewNode(DatabaseNode database, int id, string schema, string name)
+    public ViewNode(DatabaseNode database, int id, string? schema, string? name)
     {
         _database = database;
         _id = id;

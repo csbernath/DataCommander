@@ -13,7 +13,7 @@ internal static class SqlServerObject
         return @"select SCHEMA_NAME from information_schema.SCHEMATA order by SCHEMA_NAME";
     }
 
-    public static string GetTables(string tableSchema, IEnumerable<string> tableTypes)
+    public static string GetTables(string? tableSchema, IEnumerable<string> tableTypes)
     {
         Assert.IsTrue(!tableSchema.IsNullOrWhiteSpace());
         Assert.IsTrue(tableTypes != null && tableTypes.Any());
@@ -26,7 +26,7 @@ where
 order by TABLE_NAME";
     }
 
-    public static string GetColumns(string tableSchema, string tableName)
+    public static string GetColumns(string? tableSchema, string? tableName)
     {
         return $@"select COLUMN_NAME
 from information_schema.COLUMNS

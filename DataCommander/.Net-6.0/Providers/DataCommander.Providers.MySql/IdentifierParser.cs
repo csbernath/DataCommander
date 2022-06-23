@@ -13,7 +13,7 @@ internal sealed class IdentifierParser
         _textReader = textReader;
     }
 
-    public IEnumerable<string> Parse()
+    public IEnumerable<string?> Parse()
     {
         var peekChar = default(char);
 
@@ -50,7 +50,7 @@ internal sealed class IdentifierParser
 
     #region Private Methods
 
-    private string ReadQuotedIdentifier()
+    private string? ReadQuotedIdentifier()
     {
         _textReader.Read();
         var identifier = new StringBuilder();
@@ -79,7 +79,7 @@ internal sealed class IdentifierParser
         return identifier.ToString();
     }
 
-    private string ReadUnquotedIdentifier()
+    private string? ReadUnquotedIdentifier()
     {
         var identifier = new StringBuilder();
 

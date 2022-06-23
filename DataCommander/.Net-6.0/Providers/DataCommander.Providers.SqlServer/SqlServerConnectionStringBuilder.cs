@@ -27,7 +27,7 @@ internal sealed class SqlServerConnectionStringBuilder : IDbConnectionStringBuil
     }
 
     bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value) => _sqlConnectionStringBuilder.TryGetValue(keyword, out value);
-    void IDbConnectionStringBuilder.SetValue(string keyword, object value) => _sqlConnectionStringBuilder[keyword] = value;
+    void IDbConnectionStringBuilder.SetValue(string keyword, object? value) => _sqlConnectionStringBuilder[keyword] = value;
     bool IDbConnectionStringBuilder.Remove(string keyword) => _sqlConnectionStringBuilder.Remove(keyword);
 
     #endregion

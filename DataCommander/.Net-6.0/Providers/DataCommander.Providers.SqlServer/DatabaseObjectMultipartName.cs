@@ -10,9 +10,9 @@ namespace DataCommander.Providers.SqlServer;
 /// </summary>
 internal sealed class DatabaseObjectMultipartName
 {
-    private string _server;
+    private string? _server;
 
-    public DatabaseObjectMultipartName(string server, string database, string schema, string name)
+    public DatabaseObjectMultipartName(string? server, string? database, string? schema, string? name)
     {
         _server = server;
         Database = database;
@@ -20,12 +20,12 @@ internal sealed class DatabaseObjectMultipartName
         Name = name;
     }
 
-    public DatabaseObjectMultipartName(string currentDatabase, string? name)
+    public DatabaseObjectMultipartName(string? currentDatabase, string? name)
     {
         if (name != null)
         {
             var parser = new IdentifierParser(new StringReader(name));
-            var parts = parser.Parse().ToArray();
+            string?[] parts = parser.Parse().ToArray();
 
             var i = parts.Length - 1;
             var commandBuilder = new SqlCommandBuilder();
@@ -69,9 +69,9 @@ internal sealed class DatabaseObjectMultipartName
         }
     }
 
-    public string Database { get; }
-    public string Schema { get; set; }
-    public string Name { get; }
+    public string? Database { get; }
+    public string? Schema { get; set; }
+    public string? Name { get; }
 
     public override string ToString()
     {

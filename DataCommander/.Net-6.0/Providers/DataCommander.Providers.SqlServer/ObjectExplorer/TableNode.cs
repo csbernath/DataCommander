@@ -26,10 +26,10 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 internal sealed class TableNode : ITreeNode
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-    private readonly string _name;
-    private readonly string _owner;
+    private readonly string? _name;
+    private readonly string? _owner;
 
-    public TableNode(DatabaseNode databaseNode, string owner, string name, int id)
+    public TableNode(DatabaseNode databaseNode, string? owner, string? name, int id)
     {
         DatabaseNode = databaseNode;
         _owner = owner;

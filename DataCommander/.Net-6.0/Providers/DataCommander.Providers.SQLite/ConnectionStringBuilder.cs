@@ -16,7 +16,7 @@ internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
     }
 
     bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword) => true;
-    void IDbConnectionStringBuilder.SetValue(string keyword, object value) => _sqLiteConnectionStringBuilder[keyword] = value;
+    void IDbConnectionStringBuilder.SetValue(string keyword, object? value) => _sqLiteConnectionStringBuilder[keyword] = value;
 
     bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value)
     {

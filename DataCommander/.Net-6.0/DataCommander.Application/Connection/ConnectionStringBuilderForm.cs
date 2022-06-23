@@ -276,7 +276,7 @@ internal partial class ConnectionStringBuilderForm : Form
         DialogResult = DialogResult.OK;
     }
 
-    private static void SetValue(IDbConnectionStringBuilder dbConnectionStringBuilder, string keyword, string value)
+    private static void SetValue(IDbConnectionStringBuilder dbConnectionStringBuilder, string keyword, string? value)
     {
         if (!value.IsNullOrWhiteSpace())
         {

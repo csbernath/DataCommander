@@ -486,7 +486,7 @@ internal sealed class SqlServerProvider : IProvider
 
                     case SqlObjectTypes.Column:
                         name = new DatabaseObjectMultipartName(connection.Database, sqlObject.ParentName);
-                        string[] owners;
+                        string?[] owners;
 
                         if (name.Schema != null)
                             owners = new[] { name.Schema };

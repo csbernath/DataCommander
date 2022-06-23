@@ -24,7 +24,7 @@ public abstract class ConnectionBase
     public abstract string Caption { get; }
     public abstract string DataSource { get; }
 
-    public string Database
+    public string? Database
     {
         get
         {

@@ -118,7 +118,7 @@ public sealed class QueryForm : Form, IQueryForm
     private FindTextForm _findTextForm;
     private readonly int _rowBlockSize;
     private readonly StandardOutput _standardOutput;
-    private string _database;
+    private string? _database;
     private string _fileName;
     private int _commandTimeout;
     private Font _font;

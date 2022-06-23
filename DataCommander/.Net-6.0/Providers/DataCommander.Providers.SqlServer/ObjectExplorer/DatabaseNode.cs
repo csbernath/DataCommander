@@ -13,10 +13,10 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class DatabaseNode : ITreeNode
 {
-    private readonly string _name;
+    private readonly string? _name;
     private readonly byte _state;
 
-    public DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string name, byte state)
+    public DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string? name, byte state)
     {
         Databases = databaseCollectionNode;
         _name = name;
@@ -25,7 +25,7 @@ internal sealed class DatabaseNode : ITreeNode
 
     public DatabaseCollectionNode Databases { get; }
 
-    public string Name => _name;
+    public string? Name => _name;
 
     string ITreeNode.Name
     {
@@ -144,7 +144,7 @@ from	[{0}].sys.database_files f", _name);
         queryForm.ClipboardSetText(text);
     }
 
-    private object GetLogicalFileName(string database)
+    private object GetLogicalFileName(string? database)
     {
         string logicalFileName;
             

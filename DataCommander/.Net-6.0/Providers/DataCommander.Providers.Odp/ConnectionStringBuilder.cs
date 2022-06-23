@@ -15,6 +15,6 @@ internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
 
     bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword) => false;
     bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value) => _oracleConnectionStringBuilder.TryGetValue(keyword, out value);
-    void IDbConnectionStringBuilder.SetValue(string keyword, object value) => _oracleConnectionStringBuilder[keyword] = value;
+    void IDbConnectionStringBuilder.SetValue(string keyword, object? value) => _oracleConnectionStringBuilder[keyword] = value;
     bool IDbConnectionStringBuilder.Remove(string keyword) => _oracleConnectionStringBuilder.Remove(keyword);
 }
