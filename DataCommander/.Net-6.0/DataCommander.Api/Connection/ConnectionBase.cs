@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
-using Foundation.Assertions;
 
 namespace DataCommander.Api.Connection;
 
@@ -39,7 +38,7 @@ public abstract class ConnectionBase
     {
         get
         {
-            Assert.IsTrue(Connection != null);
+            ArgumentNullException.ThrowIfNull(Connection);
             return Connection.State;
         }
     }
