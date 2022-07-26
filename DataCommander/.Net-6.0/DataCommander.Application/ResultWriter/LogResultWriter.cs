@@ -24,7 +24,6 @@ internal sealed class LogResultWriter : IResultWriter
     private readonly Action<InfoMessage> _addInfoMessage;
     private int _commandCount;
     private int _tableCount;
-    private int _fieldCount;
     private int _rowCount;
     private long _beginTimestamp;
     private long _beforeExecuteReaderTimestamp;
@@ -72,19 +71,14 @@ internal sealed class LogResultWriter : IResultWriter
         }
     }
 
-    void IResultWriter.AfterExecuteReader(int fieldCount)
+    void IResultWriter.AfterExecuteReader()
     {
         var duration = Stopwatch.GetTimestamp() - _beforeExecuteReaderTimestamp;
-        var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount-1}]";
-        var stringBuilder = new StringBuilder();
-        stringBuilder.Append($"Executing reader...");
-        if (fieldCount > 0)
-            stringBuilder.Append($" Field count: {fieldCount}");
-        var message = stringBuilder.ToString();
+        var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount - 1}]";
+        var message = "Executing reader...";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
 
         _tableCount = 0;
-        _fieldCount = fieldCount;
     }
 
     void IResultWriter.AfterCloseReader(int affectedRows)
@@ -120,6 +114,14 @@ internal sealed class LogResultWriter : IResultWriter
     void IResultWriter.WriteTableBegin(DataTable schemaTable)
     {
         _writeTableBeginTimestamp = Stopwatch.GetTimestamp();
+        ++_tableCount;
+        _rowCount = 0;        
+        
+        var duration = _writeTableBeginTimestamp - _beforeExecuteReaderTimestamp;
+        var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount-1}]";
+        var message =
+            $"Result[{_tableCount - 1}] has {SingularOrPlural(schemaTable.Rows.Count, "column", "columns")}.";
+        _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
 
         Log.Trace($"SchemaTable of table[{_tableCount - 1}], {schemaTable.TableName}:\r\n{schemaTable.ToStringTableString()}");
 
@@ -133,9 +135,6 @@ internal sealed class LogResultWriter : IResultWriter
             var result = new Result(fields);
             _results.Add(result);
         }
-
-        ++_tableCount;
-        _rowCount = 0;
     }
 
     void IResultWriter.FirstRowReadBegin() => _firstRowReadBeginTimestamp = Stopwatch.GetTimestamp();
@@ -153,9 +152,9 @@ internal sealed class LogResultWriter : IResultWriter
     void IResultWriter.WriteTableEnd()
     {
         var duration = Stopwatch.GetTimestamp() - _writeTableBeginTimestamp;
-        var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount-1}]";
+        var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount - 1}]";
         var message =
-            $"Result[{_tableCount - 1}] finished. Table[{_tableCount - 1},{_query?.Results[_tableCount - 1]}] has {SingularOrPlural(_fieldCount, "column", "columns")}, {SingularOrPlural(_rowCount, "row", "rows")}.";
+            $"Result[{_tableCount - 1}] has {SingularOrPlural(_rowCount, "row", "rows")}.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
     }
 

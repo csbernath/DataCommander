@@ -35,7 +35,7 @@ internal sealed class SqlCeResultWriter : IResultWriter
     {
     }
 
-    void IResultWriter.AfterExecuteReader(int fieldCount)
+    void IResultWriter.AfterExecuteReader()
     {
         var fileName = Path.GetTempFileName() + ".sdf";
         _messageWriter.WriteLine(fileName);

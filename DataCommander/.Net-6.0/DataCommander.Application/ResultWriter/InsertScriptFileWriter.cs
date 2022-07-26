@@ -254,7 +254,7 @@ internal sealed class InsertScriptFileWriter : IResultWriter
     {
     }
 
-    void IResultWriter.AfterExecuteReader(int fieldCount)
+    void IResultWriter.AfterExecuteReader()
     {
     }
 

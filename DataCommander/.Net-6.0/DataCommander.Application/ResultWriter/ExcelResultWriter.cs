@@ -38,9 +38,9 @@ internal sealed class ExcelResultWriter : IResultWriter
 
     void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command) => _logResultWriter.BeforeExecuteReader(command);
 
-    void IResultWriter.AfterExecuteReader(int fieldCount)
+    void IResultWriter.AfterExecuteReader()
     {
-        _logResultWriter.AfterExecuteReader(fieldCount);
+        _logResultWriter.AfterExecuteReader();
 
         var fileName = Path.GetTempFileName() + ".xlsx";
         _excelPackage = new ExcelPackage(new FileInfo(fileName));

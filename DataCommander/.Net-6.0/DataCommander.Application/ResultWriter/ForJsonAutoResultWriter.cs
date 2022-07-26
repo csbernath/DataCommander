@@ -16,7 +16,7 @@ internal sealed class ForJsonAutoResultWriter : IResultWriter
 {
     private readonly Action<InfoMessage> _addInfoMessage;
     private readonly IResultWriter _logResultWriter;
-    private bool isJsonAuto;
+    private bool _isJsonAuto;
     private string _path;
     private TextWriter _textWriter;
     private string _formattedPath;
@@ -37,10 +37,9 @@ internal sealed class ForJsonAutoResultWriter : IResultWriter
         _logResultWriter.BeforeExecuteReader(asyncDataAdapterCommand);
     }
 
-    void IResultWriter.AfterExecuteReader(int fieldCount)
+    void IResultWriter.AfterExecuteReader()
     {
-        _logResultWriter.AfterExecuteReader(fieldCount);
-        isJsonAuto = fieldCount == 1;
+        _logResultWriter.AfterExecuteReader();
     }
 
     void IResultWriter.AfterCloseReader(int affectedRows)
@@ -51,14 +50,15 @@ internal sealed class ForJsonAutoResultWriter : IResultWriter
     void IResultWriter.WriteTableBegin(DataTable schemaTable)
     {
         _logResultWriter.WriteTableBegin(schemaTable);
+        _isJsonAuto = schemaTable.Rows.Count == 1;
 
-        if (isJsonAuto)
+        if (_isJsonAuto)
         {
             var column = FoundationDbColumnFactory.Create(schemaTable.Rows[0]);
-            isJsonAuto = column.DataType == typeof(string);
+            _isJsonAuto = column.DataType == typeof(string);
         }
 
-        if (isJsonAuto)
+        if (_isJsonAuto)
         {
             Assert.IsNull(_path);
 
@@ -87,7 +87,7 @@ internal sealed class ForJsonAutoResultWriter : IResultWriter
     {
         _logResultWriter.WriteRows(rows, rowCount);
 
-        if (isJsonAuto)
+        if (_isJsonAuto)
         {
             for (var rowIndex = 0; rowIndex < rowCount; ++rowIndex)
             {
@@ -103,7 +103,7 @@ internal sealed class ForJsonAutoResultWriter : IResultWriter
     {
         _logResultWriter.WriteTableEnd();
 
-        if (isJsonAuto)
+        if (_isJsonAuto)
         {
             _textWriter.Close();
             _textWriter = null;

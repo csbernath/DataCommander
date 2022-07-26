@@ -7,7 +7,7 @@ internal interface IResultWriter
 {
     void Begin(IProvider provider);
     void BeforeExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand);
-    void AfterExecuteReader(int fieldCount);
+    void AfterExecuteReader();
     void AfterCloseReader(int affectedRows);
     void WriteTableBegin(DataTable schemaTable);
     void FirstRowReadBegin();

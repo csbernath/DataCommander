@@ -32,7 +32,7 @@ internal sealed class FileResultWriter : IResultWriter
     {
     }
 
-    void IResultWriter.AfterExecuteReader(int fieldCount)
+    void IResultWriter.AfterExecuteReader()
     {
     }
 

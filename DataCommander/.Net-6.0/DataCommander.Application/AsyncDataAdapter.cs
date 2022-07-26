@@ -243,7 +243,7 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
         {
             dataReader = command.ExecuteReader();
             var fieldCount = dataReader.FieldCount;
-            _resultWriter.AfterExecuteReader(fieldCount);
+            _resultWriter.AfterExecuteReader();
             var tableIndex = 0;
 
             while (!_thread.IsStopRequested)

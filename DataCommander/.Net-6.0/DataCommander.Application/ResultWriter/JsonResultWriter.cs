@@ -24,7 +24,7 @@ public class JsonResultWriter : IResultWriter
     }
 
     void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);
-    void IResultWriter.AfterExecuteReader(int fieldCount) => _logResultWriter.AfterExecuteReader(fieldCount);
+    void IResultWriter.AfterExecuteReader() => _logResultWriter.AfterExecuteReader();
     void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand) => _logResultWriter.BeforeExecuteReader(asyncDataAdapterCommand);
     void IResultWriter.Begin(IProvider provider) => _logResultWriter.Begin(provider);
     void IResultWriter.End() => _logResultWriter.End();

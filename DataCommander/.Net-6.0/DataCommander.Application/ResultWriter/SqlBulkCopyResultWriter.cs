@@ -66,7 +66,7 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
 
     void IResultWriter.Begin(IProvider provider) => _logResultWriter.Begin(provider);
     void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command) => _logResultWriter.BeforeExecuteReader(command);
-    void IResultWriter.AfterExecuteReader(int fieldCount) => _logResultWriter.AfterExecuteReader(fieldCount);
+    void IResultWriter.AfterExecuteReader() => _logResultWriter.AfterExecuteReader();
     void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);
 
     void IResultWriter.WriteTableBegin(DataTable schemaTable)

@@ -25,7 +25,7 @@ internal sealed class DataGridViewResultWriter : IResultWriter
     {
     }
 
-    void IResultWriter.AfterExecuteReader(int fieldCount)
+    void IResultWriter.AfterExecuteReader()
     {
     }
 

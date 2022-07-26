@@ -35,7 +35,7 @@ internal sealed class TextResultWriter : IResultWriter
     }
 
     void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command) => _logResultWriter.BeforeExecuteReader(command);
-    void IResultWriter.AfterExecuteReader(int fieldCount) => _logResultWriter.AfterExecuteReader(fieldCount);
+    void IResultWriter.AfterExecuteReader() => _logResultWriter.AfterExecuteReader();
     void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);
 
     private void Write(StringBuilder stringBuilder, string text, int width)

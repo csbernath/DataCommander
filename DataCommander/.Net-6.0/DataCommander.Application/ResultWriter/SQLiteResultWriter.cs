@@ -34,7 +34,7 @@ internal sealed class SqLiteResultWriter : IResultWriter
     {
     }
 
-    void IResultWriter.AfterExecuteReader(int fieldCount)
+    void IResultWriter.AfterExecuteReader()
     {
         var fileName = Path.GetTempFileName() + ".sqlite";
         _messageWriter.WriteLine(fileName);

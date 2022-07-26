@@ -18,7 +18,7 @@ public class HtmlResultWriter : IResultWriter
     public HtmlResultWriter(Action<InfoMessage> addInfoMessage) => _logResultWriter = new LogResultWriter(addInfoMessage);
 
     void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);
-    void IResultWriter.AfterExecuteReader(int fieldCount) => _logResultWriter.AfterExecuteReader(fieldCount);
+    void IResultWriter.AfterExecuteReader() => _logResultWriter.AfterExecuteReader();
 
     void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand) =>
         _logResultWriter.BeforeExecuteReader(asyncDataAdapterCommand);

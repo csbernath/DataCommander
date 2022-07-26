@@ -46,9 +46,9 @@ internal sealed class DataSetResultWriter : IResultWriter
         _logResultWriter.BeforeExecuteReader(command);
     }
 
-    void IResultWriter.AfterExecuteReader(int fieldCount)
+    void IResultWriter.AfterExecuteReader()
     {
-        _logResultWriter.AfterExecuteReader(fieldCount);
+        _logResultWriter.AfterExecuteReader();
         DataSet = new DataSet();
     }
 
