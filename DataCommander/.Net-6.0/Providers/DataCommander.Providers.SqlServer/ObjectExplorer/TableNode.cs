@@ -264,33 +264,13 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
 
     private void ScriptTable_Click(object sender, EventArgs e)
     {
-
         var queryForm = (IQueryForm)sender;
         queryForm.SetStatusbarPanelText("Copying table script to clipboard...",
             queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
         var stopwatch = Stopwatch.StartNew();
 
         var connectionString = DatabaseNode.Databases.Server.ConnectionString;
-        var csb = new SqlConnectionStringBuilder(connectionString);
-
-        var connectionInfo = new SqlConnectionInfo();
-        connectionInfo.ApplicationName = csb.ApplicationName;
-        connectionInfo.ConnectionTimeout = csb.ConnectTimeout;
-        connectionInfo.DatabaseName = csb.InitialCatalog;
-        connectionInfo.EncryptConnection = csb.Encrypt;
-        connectionInfo.MaxPoolSize = csb.MaxPoolSize;
-        connectionInfo.MinPoolSize = csb.MinPoolSize;
-        connectionInfo.PacketSize = csb.PacketSize;
-        connectionInfo.Pooled = csb.Pooling;
-        connectionInfo.ServerName = csb.DataSource;
-        connectionInfo.UseIntegratedSecurity = csb.IntegratedSecurity;
-        connectionInfo.WorkstationId = csb.WorkstationID;
-        connectionInfo.TrustServerCertificate = csb.TrustServerCertificate;
-        if (!csb.IntegratedSecurity)
-        {
-            connectionInfo.UserName = csb.UserID;
-            connectionInfo.Password = csb.Password;
-        }
+        var connectionInfo = SqlObjectScripter.CreateSqlConnectionInfo(connectionString);
 
         var connection = new ServerConnection(connectionInfo);
         connection.Connect();

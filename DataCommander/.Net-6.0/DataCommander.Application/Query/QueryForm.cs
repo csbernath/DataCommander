@@ -2880,7 +2880,6 @@ public sealed class QueryForm : Form, IQueryForm
 
     private ContextMenuStrip? GetContextMenu(ITreeNode treeNode)
     {
-        
         var contextMenu = treeNode.GetContextMenu();
         var contextMenuStrip = contextMenu != null
             ? ToContextMenuStrip(contextMenu)
