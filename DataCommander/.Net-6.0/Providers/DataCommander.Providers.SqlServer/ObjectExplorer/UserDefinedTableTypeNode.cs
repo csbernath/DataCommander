@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Text;
 using DataCommander.Api;
 using Foundation.Collections.ReadOnly;
 using Microsoft.SqlServer.Management.Common;
@@ -50,6 +50,7 @@ internal sealed class UserDefinedTableTypeNode : ITreeNode
 
     private void Script_OnClick(object? sender, EventArgs e)
     {
+        var queryForm = (IQueryForm)sender;
         var connectionInfo = SqlObjectScripter.CreateSqlConnectionInfo(_database.Databases.Server.ConnectionString);
         var connection = new ServerConnection(connectionInfo);
         connection.Connect();
@@ -57,5 +58,19 @@ internal sealed class UserDefinedTableTypeNode : ITreeNode
         var database = server.Databases[_database.Name];
         var userDefinedTableType = database.UserDefinedTableTypes[_name, _schema];
         var stringCollection = userDefinedTableType.Script();
+
+        var sb = new StringBuilder();
+        var first = true;
+        foreach (var s in stringCollection)
+        {
+            if (first)
+                first = false;
+            else
+                sb.AppendLine("GO");
+
+            sb.AppendLine(s);
+        }
+
+        queryForm.ClipboardSetText(sb.ToString());
     }
 }
