@@ -122,7 +122,8 @@ public sealed class TokenIterator
         while (_index < _length)
         {
             var c = _text[_index];
-            if (char.IsWhiteSpace(c) || c == ',' || c == '(' || c == ')' || c == '=' || c == '+' || c == '*')
+            if (char.IsWhiteSpace(c) || c == ',' || c == '(' || c == ')' || c == '=' || c == '+' || c == '*' ||
+                c == ';')
                 break;
             else
                 _index++;
