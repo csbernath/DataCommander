@@ -62,7 +62,10 @@ where
     i.object_id = @id
     and i.is_unique = 1
     and i.has_filter = 0
-order by c.[Count],i.index_id
+order by
+    case when i.is_primary_key = 1 then 0 else 1 end,
+    c.[Count],
+    i.index_id
 
 if @index_id is null
     select @index_id = i.index_id
