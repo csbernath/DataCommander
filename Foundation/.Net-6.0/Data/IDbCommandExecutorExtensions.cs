@@ -43,19 +43,21 @@ public static class IDbCommandExecutorExtensions
         return scalar;
     }
 
-    public static void ExecuteReader(this IDbCommandExecutor executor, ExecuteReaderRequest request, Action<IDataReader> readResults)
+    public static void ExecuteReader(this IDbCommandExecutor executor, ExecuteReaderRequest request,
+        Action<IDataReader> readResults)
     {
         ArgumentNullException.ThrowIfNull(executor);
         ArgumentNullException.ThrowIfNull(request);
 
         executor.Execute(request.CreateCommandRequest, command =>
         {
-            using (var dataReader = command.ExecuteReader(request.CommandBehavior))
-                readResults(dataReader);
+            using var dataReader = command.ExecuteReader(request.CommandBehavior);
+            readResults(dataReader);
         });
     }
 
-    public static ReadOnlySegmentLinkedList<T> ExecuteReader<T>(this IDbCommandExecutor executor, ExecuteReaderRequest request, int segmentLength,
+    public static ReadOnlySegmentLinkedList<T> ExecuteReader<T>(this IDbCommandExecutor executor,
+        ExecuteReaderRequest request, int segmentLength,
         Func<IDataRecord, T> readRecord)
     {
         ArgumentNullException.ThrowIfNull(executor);

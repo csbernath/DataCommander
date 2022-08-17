@@ -47,6 +47,7 @@ internal sealed class TableNode : ITreeNode
         return new ITreeNode[]
         {
             new ColumnCollectionNode(DatabaseNode, Id),
+            new KeyCollectionNode(DatabaseNode, Id),
             new TriggerCollectionNode(DatabaseNode, Id),
             new IndexCollectionNode(DatabaseNode, Id)
         };

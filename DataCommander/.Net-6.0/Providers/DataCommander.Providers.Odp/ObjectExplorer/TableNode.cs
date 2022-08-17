@@ -2,11 +2,7 @@
 using DataCommander.Api;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer;
-//using Core = Citibank.Infociti.Core.Data;
 
-/// <summary>
-/// Summary description for TablesNode.
-/// </summary>
 internal sealed class TableNode : ITreeNode
 {
 	private readonly SchemaNode _schema;
@@ -16,7 +12,7 @@ internal sealed class TableNode : ITreeNode
 	public TableNode(
 		SchemaNode schema,
 		string name,
-		bool showFullName )
+		bool showFullName)
 	{
 		_schema = schema;
 		_name = name;
@@ -27,7 +23,7 @@ internal sealed class TableNode : ITreeNode
 
 	public bool IsLeaf => false;
 
-	public IEnumerable<ITreeNode> GetChildren( bool refresh )
+	public IEnumerable<ITreeNode> GetChildren(bool refresh)
 	{
 		return new ITreeNode[]
 		{
@@ -43,7 +39,6 @@ internal sealed class TableNode : ITreeNode
 	{
 		throw new System.NotImplementedException();
 	}
-
 
 	public SchemaNode Schema => _schema;
 }

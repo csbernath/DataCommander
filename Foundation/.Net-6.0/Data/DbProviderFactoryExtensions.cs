@@ -16,7 +16,7 @@ public static class DbProviderFactoryExtensions
         var command = connection.CreateCommand();
         command.CommandText = commandText;
         var adapter = factory.CreateDataAdapter();
-        adapter.SelectCommand = command;
+        adapter!.SelectCommand = command;
         var table = new DataTable
         {
             Locale = CultureInfo.InvariantCulture
@@ -27,24 +27,21 @@ public static class DbProviderFactoryExtensions
 
     public static DataTable ExecuteDataTable(this DbProviderFactory dbProviderFactory, string connectionString, string commandText)
     {
-        using (var connection = dbProviderFactory.CreateConnection())
-        {
-            connection.ConnectionString = connectionString;
-            connection.Open();
-            return ExecuteDataTable(dbProviderFactory, connection, commandText);
-        }
+        using var connection = dbProviderFactory.CreateConnection();
+        connection!.ConnectionString = connectionString;
+        connection.Open();
+        return ExecuteDataTable(dbProviderFactory, connection, commandText);
     }
 
-    public static void ExecuteReader(this DbProviderFactory dbProviderFactory, string connectionString, ExecuteReaderRequest request,
-        Action<IDataReader> read)
+    public static void ExecuteReader(this DbProviderFactory dbProviderFactory, string connectionString,
+        ExecuteReaderRequest request,
+        Action<IDataReader> readResults)
     {
-        using (var connection = dbProviderFactory.CreateConnection())
-        {
-            connection.ConnectionString = connectionString;
-            connection.Open();
-            var executor = connection.CreateCommandExecutor();
-            executor.ExecuteReader(request, read);
-        }
+        using var connection = dbProviderFactory.CreateConnection();
+        connection!.ConnectionString = connectionString;
+        connection.Open();
+        var executor = connection.CreateCommandExecutor();
+        executor.ExecuteReader(request, readResults);
     }
 
     public static ReadOnlySegmentLinkedList<T> ExecuteReader<T>(this DbProviderFactory dbProviderFactory, string connectionString,
