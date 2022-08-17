@@ -89,8 +89,5 @@ internal sealed class IndexNode : ITreeNode
     //    QueryForm.ShowText(text);
     //}
 
-    public ContextMenu? GetContextMenu()
-    {
-        throw new System.NotImplementedException();
-    }
+    public ContextMenu? GetContextMenu() => null;
 }

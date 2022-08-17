@@ -25,10 +25,7 @@ internal sealed class TableNode : ITreeNode
 
     string ITreeNode.Query => null;
 
-    public ContextMenu? GetContextMenu()
-    {
-        throw new NotImplementedException();
-    }
+    public ContextMenu? GetContextMenu() => null;
 
     #endregion
 }

@@ -36,8 +36,5 @@ order by u.name", _database.Name, Name);
         }
     }
 
-    public ContextMenu? GetContextMenu()
-    {
-        throw new System.NotImplementedException();
-    }
+    public ContextMenu? GetContextMenu() => null;
 }

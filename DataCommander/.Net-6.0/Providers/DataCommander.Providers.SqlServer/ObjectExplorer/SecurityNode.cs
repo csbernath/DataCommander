@@ -21,10 +21,7 @@ internal sealed class SecurityNode : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
-    {
-        return new LoginCollectionNode(_server).ItemToArray();
-    }
+    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => new LoginCollectionNode(_server).ItemToArray();
 
     bool ITreeNode.Sortable => false;
 
