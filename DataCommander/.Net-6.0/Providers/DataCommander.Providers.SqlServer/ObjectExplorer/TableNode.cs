@@ -82,7 +82,8 @@ internal sealed class TableNode : ITreeNode
             new MenuItem("SELECT to clipboard", SelectScript_Click, EmptyReadOnlyCollection<MenuItem>.Value),
             new MenuItem("INSERT to clipboard", InsertScript_Click, EmptyReadOnlyCollection<MenuItem>.Value),
             new MenuItem("UPDATE to clipboard", UpdateScript_Click, EmptyReadOnlyCollection<MenuItem>.Value),
-            new MenuItem("C# ORM to clipboard", CsharpOrm_Click, EmptyReadOnlyCollection<MenuItem>.Value)
+            new MenuItem("C# ORM to clipboard", CsharpOrm_Click, EmptyReadOnlyCollection<MenuItem>.Value),
+            new MenuItem("C# class with properties to clipboard", CsharpClassWithProperties_Click, EmptyReadOnlyCollection<MenuItem>.Value)
         }.ToReadOnlyCollection();
         var scriptTableAs = new MenuItem("Script Table as", null, dropdownItems);
 
@@ -639,6 +640,45 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
 
         var queryForm = (IQueryForm)sender;
         queryForm.ClipboardSetText(textBuilder.ToLines().ToIndentedString("    "));
+        queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
+            queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
+    }
+
+    private void CsharpClassWithProperties_Click(object? sender, EventArgs e)
+    {
+        var connectionString = DatabaseNode.Databases.Server.ConnectionString;
+        GetTableSchemaResult getTableSchemaResult;
+        using (var connection = new SqlConnection(connectionString))
+        {
+            connection.Open();
+
+            var databaseName = DatabaseNode.Name.Contains('.')
+                ? $"[{DatabaseNode.Name}]"
+                : DatabaseNode.Name;
+
+            var tableName = $"{databaseName}.{_owner}.{_name}";
+            getTableSchemaResult = TableSchema.GetTableSchema(connection, tableName);
+        }
+        
+        var dataTransferObjectFields = getTableSchemaResult.Columns
+            .Select(column =>
+            {
+                var name = column.ColumnName;
+                var typeName = column.TypeName;
+                var isNullable = column.IsNullable;
+                var csharpTypeName = SqlDataTypeArray.SqlDataTypes.First(i => i.SqlDataTypeName == typeName).CSharpTypeName;
+                var csharpType = CSharpTypeArray.CSharpTypes.First(i => i.Name == csharpTypeName);
+                if (isNullable == true && csharpType.Type.IsValueType)
+                    csharpTypeName += "?";
+
+                return new DataTransferObjectField(name, csharpTypeName);
+            })
+            .ToReadOnlyCollection();
+        
+        var classWithProperties = ClassWithPropertiesFactory.Create(_name, dataTransferObjectFields).ToIndentedString("    ");
+
+        var queryForm = (IQueryForm)sender;
+        queryForm.ClipboardSetText(classWithProperties);
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
             queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
     }

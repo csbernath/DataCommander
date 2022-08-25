@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.0" />
-    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="170.5.0-preview" />
+    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="170.7.0-preview" />
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.70" />
   </ItemGroup>
 
