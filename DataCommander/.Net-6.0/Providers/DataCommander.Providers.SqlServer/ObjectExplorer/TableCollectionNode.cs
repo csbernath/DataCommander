@@ -21,8 +21,9 @@ internal sealed class TableCollectionNode : ITreeNode
         var commandText = $@"select
     s.name,
     tbl.name,
-    tbl.object_id
-from [{DatabaseNode.Name}].sys.tables as tbl (nolock)
+    tbl.object_id,
+    tbl.temporal_type
+from [{DatabaseNode.Name}].sys.tables tbl (nolock)
 join [{DatabaseNode.Name}].sys.schemas s (nolock)
     on tbl.schema_id = s.schema_id
 where
@@ -52,7 +53,8 @@ order by 1,2";
                 var schema = dataReader.GetString(0);
                 var name = dataReader.GetString(1);
                 var objectId = dataReader.GetInt32(2);
-                var tableNode = new TableNode(DatabaseNode, schema, name, objectId);
+                var temporalType = (TemporalType)dataReader.GetByte(3);
+                var tableNode = new TableNode(DatabaseNode, schema, name, objectId, temporalType);
                 childNodes.Add(tableNode);
             }
         });

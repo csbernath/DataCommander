@@ -28,18 +28,46 @@ internal sealed class TableNode : ITreeNode
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private readonly string? _name;
     private readonly string? _owner;
+    private readonly TemporalType _temporalType;
 
-    public TableNode(DatabaseNode databaseNode, string? owner, string? name, int id)
+    public TableNode(DatabaseNode databaseNode, string? owner, string? name, int id, TemporalType temporalType)
     {
         DatabaseNode = databaseNode;
         _owner = owner;
         _name = name;
         Id = id;
+        _temporalType = temporalType;
     }
 
     public DatabaseNode DatabaseNode { get; }
     public int Id { get; }
-    public string Name => $"{_owner}.{_name}";
+    public string Name
+    {
+        get
+        {
+            string temporalType;
+            switch (_temporalType)
+            {
+                case TemporalType.NonTemporalTable:
+                    temporalType = null;
+                    break;
+                case TemporalType.HistoryTable:
+                    temporalType = "History";
+                    break;
+                case TemporalType.SystemVersionedTemporalTable:
+                    temporalType = "System-Versioned";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            if (temporalType != null)
+                temporalType = $" ({temporalType})";
+
+            return $"{_owner}.{_name}{temporalType}";
+        }
+    }
+
     public bool IsLeaf => false;
 
     IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
