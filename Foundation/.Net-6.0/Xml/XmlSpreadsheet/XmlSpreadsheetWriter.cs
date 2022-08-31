@@ -81,11 +81,7 @@ public sealed class XmlSpreadsheetWriter
             }
         }
     }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="table"></param>
+    
     public void WriteStartTable(XmlSpreadsheetTable table)
     {
         ArgumentNullException.ThrowIfNull(table);
@@ -126,10 +122,7 @@ public sealed class XmlSpreadsheetWriter
             }
         }
     }
-
-    /// <summary>
-    /// 
-    /// </summary>
+    
     public void WriteEndTable()
     {
         // Table
@@ -151,26 +144,10 @@ public sealed class XmlSpreadsheetWriter
         XmlWriter.WriteEndElement();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public void WriteStartRow()
-    {
-        XmlWriter.WriteStartElement("Row");
-    }
+    public void WriteStartRow() => XmlWriter.WriteStartElement("Row");
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public void WriteEndRow()
-    {
-        XmlWriter.WriteEndElement();
-    }
+    public void WriteEndRow() => XmlWriter.WriteEndElement();
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="values"></param>
     public void WriteRow(object[] values)
     {
         ArgumentNullException.ThrowIfNull(values);

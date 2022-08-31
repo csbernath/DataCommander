@@ -8,18 +8,12 @@ using Foundation.Collections.IndexableCollection;
 
 namespace Foundation.Data.TextData;
 
-/// <summary>
-/// 
-/// </summary>
 public sealed class TextDataParameterCollection : DbParameterCollection, IList<TextDataParameter>
 {
     private readonly IndexableCollection<TextDataParameter> _collection;
     private readonly ListIndex<TextDataParameter> _listIndex;
     private readonly UniqueIndex<string, TextDataParameter> _nameIndex;
 
-    /// <summary>
-    /// 
-    /// </summary>
     public TextDataParameterCollection()
     {
         _listIndex = new ListIndex<TextDataParameter>("List");
@@ -32,11 +26,6 @@ public sealed class TextDataParameterCollection : DbParameterCollection, IList<T
         _collection.Indexes.Add(_nameIndex);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
     public override int Add(object value)
     {
         ArgumentNullException.ThrowIfNull(value);
@@ -47,11 +36,6 @@ public sealed class TextDataParameterCollection : DbParameterCollection, IList<T
         return _collection.Count - 1;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="parameter"></param>
-    /// <returns></returns>
     public TextDataParameter Add(TextDataParameter parameter)
     {
         Assert.IsTrue(parameter != null);
@@ -60,191 +44,82 @@ public sealed class TextDataParameterCollection : DbParameterCollection, IList<T
         return parameter;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="values"></param>
     public override void AddRange(Array values)
     {
         throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public override void Clear()
     {
         _collection.Clear();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
     [Pure]
     public override bool Contains(string value)
     {
         return _nameIndex.ContainsKey(value);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
     public override bool Contains(object value)
     {
         throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="array"></param>
-    /// <param name="index"></param>
     public override void CopyTo(Array array, int index)
     {
         throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public override int Count => _collection.Count;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
     public override IEnumerator GetEnumerator()
     {
         throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="parameterName"></param>
-    /// <returns></returns>
     protected override DbParameter GetParameter(string parameterName)
     {
         throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="index"></param>
-    /// <returns></returns>
     protected override DbParameter GetParameter(int index)
     {
         throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="parameterName"></param>
-    /// <returns></returns>
     public override int IndexOf(string parameterName)
     {
         throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
     public override int IndexOf(object value)
     {
         throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="index"></param>
-    /// <param name="value"></param>
     public override void Insert(int index, object value)
     {
         throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public override bool IsFixedSize => throw new NotImplementedException();
 
-    /// <summary>
-    /// 
-    /// </summary>
     public override bool IsReadOnly => throw new NotImplementedException();
 
-    /// <summary>
-    /// 
-    /// </summary>
     public override bool IsSynchronized => throw new NotImplementedException();
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="value"></param>
-    public override void Remove(object value)
-    {
-        throw new NotImplementedException();
-    }
+    public override void Remove(object value) => throw new NotImplementedException();
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="parameterName"></param>
-    public override void RemoveAt(string parameterName)
-    {
-        throw new NotImplementedException();
-    }
+    public override void RemoveAt(string parameterName) => throw new NotImplementedException();
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="index"></param>
-    public override void RemoveAt(int index)
-    {
-        throw new NotImplementedException();
-    }
+    public override void RemoveAt(int index) => throw new NotImplementedException();
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="parameterName"></param>
-    /// <param name="value"></param>
-    protected override void SetParameter(string parameterName, DbParameter value)
-    {
-        throw new NotImplementedException();
-    }
+    protected override void SetParameter(string parameterName, DbParameter value) => throw new NotImplementedException();
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="index"></param>
-    /// <param name="value"></param>
-    protected override void SetParameter(int index, DbParameter value)
-    {
-        throw new NotImplementedException();
-    }
+    protected override void SetParameter(int index, DbParameter value) => throw new NotImplementedException();
 
-    /// <summary>
-    /// 
-    /// </summary>
     public override object SyncRoot => throw new NotImplementedException();
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="parameterName"></param>
-    /// <returns></returns>
     public TResult GetParameterValue<TResult>(string parameterName)
     {
         Assert.IsTrue(Contains(parameterName));
@@ -256,16 +131,7 @@ public sealed class TextDataParameterCollection : DbParameterCollection, IList<T
         return (TResult)value;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="parameterName"></param>
-    /// <param name="parameter"></param>
-    /// <returns></returns>
-    public bool TryGetValue(string parameterName, out TextDataParameter parameter)
-    {
-        return _nameIndex.TryGetValue(parameterName, out parameter);
-    }
+    public bool TryGetValue(string parameterName, out TextDataParameter parameter) => _nameIndex.TryGetValue(parameterName, out parameter);
 
     #region IList<TextDataParameter> Members
 
@@ -276,10 +142,7 @@ public sealed class TextDataParameterCollection : DbParameterCollection, IList<T
         return _listIndex.IndexOf(item);
     }
 
-    void IList<TextDataParameter>.Insert(int index, TextDataParameter item)
-    {
-        throw new NotImplementedException();
-    }
+    void IList<TextDataParameter>.Insert(int index, TextDataParameter item) => throw new NotImplementedException();
 
     void IList<TextDataParameter>.RemoveAt(int index)
     {
@@ -300,6 +163,7 @@ public sealed class TextDataParameterCollection : DbParameterCollection, IList<T
 
     void ICollection<TextDataParameter>.Add(TextDataParameter item)
     {
+        ArgumentNullException.ThrowIfNull(item);
         Assert.IsTrue(item != null);
 
         _collection.Add(item);

@@ -202,13 +202,6 @@ public sealed class SqlLog
         Log.Trace("queue.Count: {0}", _queue.Count);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="name"></param>
-    /// <param name="startDate"></param>
-    /// <param name="safe"></param>
-    /// <returns></returns>
     public int ApplicationStart(string name, DateTime startDate, bool safe)
     {
         var sb = new StringBuilder();

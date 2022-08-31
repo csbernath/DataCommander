@@ -21,19 +21,8 @@ public sealed class TextDataRow
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="value"></param>
-    /// <param name="column"></param>
-    /// <returns></returns>
     public delegate object Convert(object value, TextDataColumn column);
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="columnName"></param>
-    /// <returns></returns>
     public object this[string columnName]
     {
         get
@@ -51,21 +40,10 @@ public sealed class TextDataRow
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public object[] ItemArray { get; }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public TextDataColumnCollection Columns { get; }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="column"></param>
-    /// <returns></returns>
     public object this[TextDataColumn column]
     {
         get

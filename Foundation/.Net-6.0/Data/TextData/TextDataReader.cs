@@ -119,94 +119,23 @@ public sealed class TextDataReader : DbDataReader
         throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="ordinal"></param>
-    /// <returns></returns>
-    public override string GetDataTypeName(int ordinal)
-    {
-        throw new NotImplementedException();
-    }
+    public override string GetDataTypeName(int ordinal) => throw new NotImplementedException();
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="ordinal"></param>
-    /// <returns></returns>
-    public override DateTime GetDateTime(int ordinal)
-    {
-        return (DateTime)_values[ordinal];
-    }
+    public override DateTime GetDateTime(int ordinal) => (DateTime)_values[ordinal];
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="ordinal"></param>
-    /// <returns></returns>
-    public override decimal GetDecimal(int ordinal)
-    {
-        return (decimal)_values[ordinal];
-    }
+    public override decimal GetDecimal(int ordinal) => (decimal)_values[ordinal];
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="ordinal"></param>
-    /// <returns></returns>
-    public override double GetDouble(int ordinal)
-    {
-        return (double)_values[ordinal];
-    }
+    public override double GetDouble(int ordinal) => (double)_values[ordinal];
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    public override IEnumerator GetEnumerator()
-    {
-        throw new NotImplementedException();
-    }
+    public override IEnumerator GetEnumerator() => throw new NotImplementedException();
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="ordinal"></param>
-    /// <returns></returns>
-    public override Type GetFieldType(int ordinal)
-    {
-        throw new NotImplementedException();
-    }
+    public override Type GetFieldType(int ordinal) => throw new NotImplementedException();
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="ordinal"></param>
-    /// <returns></returns>
-    public override float GetFloat(int ordinal)
-    {
-        return (float)_values[ordinal];
-    }
+    public override float GetFloat(int ordinal) => (float)_values[ordinal];
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="ordinal"></param>
-    /// <returns></returns>
-    public override Guid GetGuid(int ordinal)
-    {
-        return (Guid)_values[ordinal];
-    }
+    public override Guid GetGuid(int ordinal) => (Guid)_values[ordinal];
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="ordinal"></param>
-    /// <returns></returns>
-    public override short GetInt16(int ordinal)
-    {
-        return (short)_values[ordinal];
-    }
+    public override short GetInt16(int ordinal) => (short)_values[ordinal];
 
     /// <summary>
     /// 

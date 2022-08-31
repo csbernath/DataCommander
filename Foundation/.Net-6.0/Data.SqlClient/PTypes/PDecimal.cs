@@ -32,22 +32,11 @@ public struct PDecimal : INullable
     public static implicit operator PDecimal(decimal value) => new(value);
     public static implicit operator PDecimal(SqlDecimal value) => new(value);
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
     public static implicit operator decimal(PDecimal value)
     {
         return (decimal)value._sql;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <returns></returns>
     public static bool operator ==(PDecimal x, PDecimal y)
     {
         var isEqual = x.ValueType == y.ValueType;
@@ -62,38 +51,14 @@ public struct PDecimal : INullable
 
         return isEqual;
     }
+    
+    public static bool operator !=(PDecimal x, PDecimal y) => !(x == y);
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <returns></returns>
-    public static bool operator !=(PDecimal x, PDecimal y)
-    {
-        return !(x == y);
-    }
+    public static PDecimal Parse(string s, PValueType type) =>
+        string.IsNullOrEmpty(s)
+            ? new PDecimal(type)
+            : SqlDecimal.Parse(s);
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="s"></param>
-    /// <param name="type"></param>
-    /// <returns></returns>
-    public static PDecimal Parse(string s, PValueType type)
-    {
-        PDecimal sp;
-
-        sp = string.IsNullOrEmpty(s) ? new PDecimal(type) : SqlDecimal.Parse(s);
-
-        return sp;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="y"></param>
-    /// <returns></returns>
     public override bool Equals(object y)
     {
         var equals = y is PDecimal;

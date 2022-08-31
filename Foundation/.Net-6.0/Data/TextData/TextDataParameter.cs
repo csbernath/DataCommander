@@ -4,19 +4,11 @@ using System.Data.Common;
 
 namespace Foundation.Data.TextData;
 
-/// <summary>
-/// 
-/// </summary>
 public sealed class TextDataParameter : DbParameter
 {
     private string _name;
     private object _value;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="name"></param>
-    /// <param name="value"></param>
     public TextDataParameter(string name, object value)
     {
         _name = name;
@@ -81,9 +73,6 @@ public sealed class TextDataParameter : DbParameter
         set => throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public override string SourceColumn
     {
         get => throw new NotImplementedException();
@@ -91,9 +80,6 @@ public sealed class TextDataParameter : DbParameter
         set => throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public override bool SourceColumnNullMapping
     {
         get => throw new NotImplementedException();
@@ -101,9 +87,6 @@ public sealed class TextDataParameter : DbParameter
         set => throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public override DataRowVersion SourceVersion
     {
         get => throw new NotImplementedException();
@@ -111,9 +94,6 @@ public sealed class TextDataParameter : DbParameter
         set => throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public override object Value
     {
         get => _value;
