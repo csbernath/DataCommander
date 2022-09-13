@@ -27,16 +27,16 @@ internal sealed class IndexNode : ITreeNode
     {
         get
         {
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
-            sb.Append(_name);
-            sb.Append('(');
+            stringBuilder.Append(_name);
+            stringBuilder.Append(" (");
 
-            sb.Append(_isUnique
+            stringBuilder.Append(_isUnique
                 ? "Unique"
                 : "Non-Unique");
 
-            sb.Append(',');
+            stringBuilder.Append(',');
 
             string typeString;
             switch (_type)
@@ -58,10 +58,10 @@ internal sealed class IndexNode : ITreeNode
                     break;
             }
 
-            sb.Append(typeString);
-            sb.Append(')');
+            stringBuilder.Append(typeString);
+            stringBuilder.Append(')');
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
     }
 
