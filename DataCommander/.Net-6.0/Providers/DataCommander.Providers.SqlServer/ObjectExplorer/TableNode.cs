@@ -111,7 +111,7 @@ internal sealed class TableNode : ITreeNode
             new MenuItem("INSERT to clipboard", InsertScript_Click, EmptyReadOnlyCollection<MenuItem>.Value),
             new MenuItem("UPDATE to clipboard", UpdateScript_Click, EmptyReadOnlyCollection<MenuItem>.Value),
             new MenuItem("C# ORM to clipboard", CsharpOrm_Click, EmptyReadOnlyCollection<MenuItem>.Value),
-            new MenuItem("C# class with properties to clipboard", CsharpClassWithProperties_Click, EmptyReadOnlyCollection<MenuItem>.Value)
+            new MenuItem("C# DTO with properties to clipboard", DataTransferObjectWithProperties_Click, EmptyReadOnlyCollection<MenuItem>.Value)
         }.ToReadOnlyCollection();
         var scriptTableAs = new MenuItem("Script Table as", null, dropdownItems);
 
@@ -672,7 +672,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
     }
 
-    private void CsharpClassWithProperties_Click(object? sender, EventArgs e)
+    private void DataTransferObjectWithProperties_Click(object? sender, EventArgs e)
     {
         var connectionString = DatabaseNode.Databases.Server.ConnectionString;
         GetTableSchemaResult getTableSchemaResult;
@@ -703,7 +703,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             })
             .ToReadOnlyCollection();
         
-        var classWithProperties = ClassWithPropertiesFactory.Create(_name, dataTransferObjectFields).ToIndentedString("    ");
+        var classWithProperties = DataTransferObjectWithPropertiesFactory.Create(_name, dataTransferObjectFields).ToIndentedString("    ");
 
         var queryForm = (IQueryForm)sender;
         queryForm.ClipboardSetText(classWithProperties);

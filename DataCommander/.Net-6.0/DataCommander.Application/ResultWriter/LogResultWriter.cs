@@ -9,12 +9,14 @@ using System.Text;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.QueryConfiguration;
+using Foundation.Collections;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Data.SqlClient.DbQueryBuilding;
 using Foundation.Linq;
 using Foundation.Log;
+using Foundation.Text;
 
 namespace DataCommander.Application.ResultWriter;
 
@@ -124,17 +126,35 @@ internal sealed class LogResultWriter : IResultWriter
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
 
         Log.Trace($"SchemaTable of table[{_tableCount - 1}], {schemaTable.TableName}:\r\n{schemaTable.ToStringTableString()}");
-
+        
+        var dbColumns = schemaTable.Rows.Cast<DataRow>().Select(FoundationDbColumnFactory.Create).ToList();
+        var dataTransferObjectFields = dbColumns.Select(ToDataTransferObjectField).ToList();
+        var dataTransferObject = DataTransferObjectWithPropertiesFactory.Create(schemaTable.TableName, dataTransferObjectFields);
+        message = $"\r\n{dataTransferObject.ToIndentedString("    ")}";
+        _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, message));
+        
         if (_query != null)
         {
-            var fields = schemaTable.Rows
-                .Cast<DataRow>()
-                .Select(FoundationDbColumnFactory.Create)
-                .Select(ToField)
-                .ToReadOnlyCollection();
+            var fields = dbColumns.Select(ToField).ToReadOnlyCollection();
             var result = new Result(fields);
             _results.Add(result);
         }
+    }
+
+    private DataTransferObjectField ToDataTransferObjectField(FoundationDbColumn dbColumn)
+    {
+        var name = dbColumn.ColumnName;
+        
+        var cSharpType = CSharpTypeArray.CSharpTypes.First(t => t.Type == dbColumn.DataType);       
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append(cSharpType.Name);
+
+        if (dbColumn.AllowDbNull == true && cSharpType.Type != typeof(string))
+            stringBuilder.Append('?');
+
+        var type = stringBuilder.ToString();
+        
+        return new DataTransferObjectField(name, type);
     }
 
     void IResultWriter.FirstRowReadBegin() => _firstRowReadBeginTimestamp = Stopwatch.GetTimestamp();
