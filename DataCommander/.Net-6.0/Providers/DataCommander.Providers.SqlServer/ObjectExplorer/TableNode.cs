@@ -29,18 +29,21 @@ internal sealed class TableNode : ITreeNode
     private readonly string? _name;
     private readonly string? _owner;
     private readonly TemporalType _temporalType;
+    private readonly int _id;
 
     public TableNode(DatabaseNode databaseNode, string? owner, string? name, int id, TemporalType temporalType)
     {
         DatabaseNode = databaseNode;
         _owner = owner;
         _name = name;
-        Id = id;
+        _id = id;
         _temporalType = temporalType;
     }
 
     public DatabaseNode DatabaseNode { get; }
-    public int Id { get; }
+
+    public int Id => _id;
+
     public string Name
     {
         get
@@ -72,13 +75,40 @@ internal sealed class TableNode : ITreeNode
 
     IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
     {
-        return new ITreeNode[]
+        var treeNodes = new List<ITreeNode>();
+
+        if (_temporalType == TemporalType.SystemVersionedTemporalTable)
+        {
+            var commandText = @$"select t.name,t.object_id
+from [{DatabaseNode.Name}].sys.tables t
+where
+    t.object_id in
+    (
+        select t.history_table_id
+        from [{DatabaseNode.Name}].sys.tables t
+        where object_id = {_id}
+    )";
+            string? historyTableName = null;
+            int historyTableId = 0;
+            var request = new ExecuteReaderRequest(commandText);
+            SqlClientFactory.Instance.ExecuteReader(DatabaseNode.Databases.Server.ConnectionString, request, dataReader =>
+            {
+                dataReader.Read();
+                historyTableName = dataReader.GetString(0);
+                historyTableId = dataReader.GetInt32(1);
+            });
+            treeNodes.Add(new TableNode(DatabaseNode, _owner, historyTableName, historyTableId, TemporalType.HistoryTable));
+        }
+
+        treeNodes.AddRange(new ITreeNode[]
         {
             new ColumnCollectionNode(DatabaseNode, Id),
             new KeyCollectionNode(DatabaseNode, Id),
             new TriggerCollectionNode(DatabaseNode, Id),
             new IndexCollectionNode(DatabaseNode, Id)
-        };
+        });
+
+        return treeNodes;
     }
 
     public bool Sortable => false;

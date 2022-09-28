@@ -52,6 +52,15 @@ public static class DbProviderFactoryExtensions
         return rows;
     }
 
+    public static object ExecuteScalar(this DbProviderFactory dbProviderFactory, string connectionString, CreateCommandRequest request)
+    {
+        using var connection = dbProviderFactory.CreateConnection();
+        connection!.ConnectionString = connectionString;
+        connection.Open();
+        var executor = connection.CreateCommandExecutor();
+        return executor.ExecuteScalar(request);
+    }
+
     public static void ExecuteTransaction(this DbProviderFactory dbProviderFactory, string connectionString, Action<IDbTransaction> action)
     {
         using (var connection = dbProviderFactory.CreateConnection())

@@ -43,7 +43,8 @@ where
         is not null then 1
     else 0
 end          
-             AS bit)=0)
+             AS bit)=0) and
+    tbl.temporal_type in(0,2)
 order by 1,2";
         var connectionString = DatabaseNode.Databases.Server.ConnectionString;
         SqlClientFactory.Instance.ExecuteReader(connectionString, new ExecuteReaderRequest(commandText), dataReader =>
