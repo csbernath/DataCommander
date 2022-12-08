@@ -14,7 +14,7 @@
     <PackageReference Include="HtmlTextWriter" Version="2.1.1" />
     <PackageReference Include="Microsoft.Office.Interop.Word" Version="15.0.4797.1004" />
     <PackageReference Include="Microsoft.SqlServer.Compact" Version="4.0.8876.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.116" />
   </ItemGroup>
 
