@@ -43,7 +43,7 @@ This program is freeware and released under the <a href=""https://www.gnu.org/li
 <br/><br/>
 <a href=""https://github.com/csbernath/DataCommander"">GitHub repository</a>
 <br/><br/>
-Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.Net-6.0/README.md"">Foundation (.NET 6.0) Class Library</a>
+Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.Net-7.0/README.md"">Foundation (.NET 7.0) Class Library</a>
 <br/><br/>
 <a href=""applicationdatafile://"">Application Data file</a>
 <br/>

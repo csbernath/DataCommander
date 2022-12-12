@@ -1,27 +1,29 @@
-
 # Data Commander
 
 Data Commander is a front-end for SQL and other databases.
 The program has a plugin architecture for adding arbitrary data providers.
 
 ## How to build executable from source code
-Open git_repository\DataCommander\DataCommander.sln in [JetBrains Rider 2022.1.1](https://www.jetbrains.com/rider/) or Visual Studio 2022. Build the solution.
+Open git_repository\DataCommander\DataCommander\.Net-7.0\DataCommander.Net-7.0.sln
+in [JetBrains Rider](https://www.jetbrains.com/rider/)
+or [Visual Studio](https://visualstudio.microsoft.com/vs/).
+Build the solution.
 
 [Comparing to SQL Server Managament Studio](ComparingToManagementStudio.md)
 
 ## [Object-relational mapping (ORM)](https://en.wikipedia.org/wiki/Object-relational_mapping)
 
 ### Basic concepts of Data Commander C# ORM
-ORM Feature|Data Commander|Dapper|NHibernate
----|---|---|---
-C# source code|Generated|Manual|Manual
-C# source code: typed input parameters|Yes|No|No
-C# source code: typed result set|Yes|No|No
-Magic framework|No|Reflection|Reflection
-Magic SQL statement manipulation|No|No|Yes
-Compile vs runtime errors|Compile time|Runtime|Runtime
-Debuggable|Yes|No|No
-Performance|Yes|No|No
+| ORM Feature                            | Data Commander | Dapper     | NHibernate |
+|----------------------------------------|----------------|------------|------------|
+| C# source code                         | Generated      | Manual     | Manual     |
+| C# source code: typed input parameters | Yes            | No         | No         |
+| C# source code: typed result set       | Yes            | No         | No         |
+| Magic framework                        | No             | Reflection | Reflection |
+| Magic SQL statement manipulation       | No             | No         | Yes        |
+| Compile vs runtime errors              | Compile time   | Runtime    | Runtime    |
+| Debuggable                             | Yes            | No         | No         |
+| Performance                            | Yes            | No         | No         |
 
 ### How to generate insert/update/delete SQL statements to a SQL table
 #### Requirements
@@ -485,19 +487,19 @@ Features:
 - The output of a query can be displayed as data grid, text, html.
 - The data grid can be exported into Excel file.
 
-Provider.Name|Description
----|---
-Msi|[Windows Installer](https://msdn.microsoft.com/en-us/library/cc185688(v=vs.85).aspx) using [Wix](http://wixtoolset.org)|
-MySql|[MySQL](https://www.mysql.com/)|
-Odp|Oracle using [ODP.NET provider](http://www.oracle.com/technetwork/topics/dotnet/index-085163.html) from Oracle|
-OleDb|[OLE DB](https://msdn.microsoft.com/en-us/library/system.data.oledb%28v=vs.110%29.aspx)|
-Oracle|Oracle using [Oracle provider](https://msdn.microsoft.com/en-us/library/system.data.oracleclient%28v=vs.110%29.aspx) from Microsoft|
-PostgreSQL|[PostgreSQL](https://github.com/npgsql/Npgsql)|
-SQLite|[SQLite .NET Data Provider](http://system.data.sqlite.org)|
-SqlServer|[Microsoft SQL Server](http://www.microsoft.com/en-us/server-cloud/products/sql-server/) 2005 or greater|
-SqlServerCe40|[Microsoft SQL Server Compact Edition 4.0](http://www.microsoft.com/en-us/download/details.aspx?id=17876)|
-Tfs-16.0.0.0|[Microsoft Team Foundation Server](https://msdn.microsoft.com/en-us/vstudio/ff637362.aspx) using nuget TFS client|
-Wmi|[Windows Management Instrumentation](https://msdn.microsoft.com/en-us/library/aa394582(v=vs.85).aspx)
+| Provider.Name | Description                                                                                                                         |
+|---------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| Msi           | [Windows Installer](https://msdn.microsoft.com/en-us/library/cc185688(v=vs.85).aspx) using [Wix](http://wixtoolset.org)             |
+| MySql         | [MySQL](https://www.mysql.com/)                                                                                                     |
+| Odp           | Oracle using [ODP.NET provider](http://www.oracle.com/technetwork/topics/dotnet/index-085163.html) from Oracle                      |
+| OleDb         | [OLE DB](https://msdn.microsoft.com/en-us/library/system.data.oledb%28v=vs.110%29.aspx)                                             |
+| Oracle        | Oracle using [Oracle provider](https://msdn.microsoft.com/en-us/library/system.data.oracleclient%28v=vs.110%29.aspx) from Microsoft |
+| PostgreSQL    | [PostgreSQL](https://github.com/npgsql/Npgsql)                                                                                      |
+| SQLite        | [SQLite .NET Data Provider](http://system.data.sqlite.org)                                                                          |
+| SqlServer     | [Microsoft SQL Server](http://www.microsoft.com/en-us/server-cloud/products/sql-server/) 2005 or greater                            |
+| SqlServerCe40 | [Microsoft SQL Server Compact Edition 4.0](http://www.microsoft.com/en-us/download/details.aspx?id=17876)                           |
+| Tfs-16.0.0.0  | [Microsoft Team Foundation Server](https://msdn.microsoft.com/en-us/vstudio/ff637362.aspx) using nuget TFS client                   |
+| Wmi           | [Windows Management Instrumentation](https://msdn.microsoft.com/en-us/library/aa394582(v=vs.85).aspx)                               |
 
 General functions
 -----------------
@@ -568,36 +570,36 @@ Query TextBox
 - Provider specific keywords are marked with red.
 - The Data Commander specific exec keyword is marked with green.
 
-Function|Hotkey
----|---
-Database/Connect to database|Ctrl+N
-Database/Open file database|Ctrl+O
-Database/Save all|Ctrl+Shift+S
-Database/Exit|Alt+F4
-Edit/Paste|Ctrl+V
-Edit/Find|Ctrl+F
-Edit/Find Next|F3
-Edit/List Members|Ctrl+J
-Edit/Goto|Ctrl+G
-Edit/Increase Line Indent|Tab
-Edit/Decrease Line Indent|Shift+Tab
-Query/Describe Parameters|Ctrl+P
-Query/Execute Query|Ctrl+E or F5
-Query/Execute Query (Single Row)|Ctrl+1
-Query/Execute Query (Schema Only)|Ctrl+R
-Query/Execute Query (KeyInfo)|Ctrl+K
-Query/Execute Query (XML)|Ctrl+Shift+X
-Query/Open Table|Ctrl+Shift+O
-Query/Cancel Executing Query|Alt+Pause
-Query/Parse|Ctrl+F5
-Query/Result Mode/Text|Ctrl+T
-Query/Result Mode/DataGrid|Ctrl+D
-Query/Result Mode/ListView|Ctrl+L
-Query/Close All TabPages|Ctrl+Shift+F4
-Query/Create Insert Statements|Ctrl+I
-Object Explorer|F8
-Help/Contents|F1
-Check for updates|F12
+| Function                          | Hotkey        |
+|-----------------------------------|---------------|
+| Database/Connect to database      | Ctrl+N        |
+| Database/Open file database       | Ctrl+O        |
+| Database/Save all                 | Ctrl+Shift+S  |
+| Database/Exit                     | Alt+F4        |
+| Edit/Paste                        | Ctrl+V        |
+| Edit/Find                         | Ctrl+F        |
+| Edit/Find Next                    | F3            |
+| Edit/List Members                 | Ctrl+J        |
+| Edit/Goto                         | Ctrl+G        |
+| Edit/Increase Line Indent         | Tab           |
+| Edit/Decrease Line Indent         | Shift+Tab     |
+| Query/Describe Parameters         | Ctrl+P        |
+| Query/Execute Query               | Ctrl+E or F5  |
+| Query/Execute Query (Single Row)  | Ctrl+1        |
+| Query/Execute Query (Schema Only) | Ctrl+R        |
+| Query/Execute Query (KeyInfo)     | Ctrl+K        |
+| Query/Execute Query (XML)         | Ctrl+Shift+X  |
+| Query/Open Table                  | Ctrl+Shift+O  |
+| Query/Cancel Executing Query      | Alt+Pause     |
+| Query/Parse                       | Ctrl+F5       |
+| Query/Result Mode/Text            | Ctrl+T        |
+| Query/Result Mode/DataGrid        | Ctrl+D        |
+| Query/Result Mode/ListView        | Ctrl+L        |
+| Query/Close All TabPages          | Ctrl+Shift+F4 |
+| Query/Create Insert Statements    | Ctrl+I        |
+| Object Explorer                   | F8            |
+| Help/Contents                     | F1            |
+| Check for updates                 | F12           |
 
 How to open a file in the query text box
 
