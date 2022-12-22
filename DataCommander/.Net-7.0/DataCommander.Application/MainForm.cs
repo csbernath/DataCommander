@@ -102,7 +102,7 @@ public class MainForm : Form
         var end = DateTime.Now;
         var elapsed = end - start;
 
-        var message = $"Current user: {WindowsIdentity.GetCurrent().Name}. Application loaded in {new StopwatchTimeSpan(elapsed).ToString(3)} seconds.";
+        var message = $"Application loaded in {new StopwatchTimeSpan(elapsed).ToString(3)} seconds.";
         _toolStripStatusLabel.Text = message;
         Log.Trace(message);
 

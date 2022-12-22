@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -91,8 +92,9 @@ internal sealed class OpenConnectionForm : Form
         dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
         dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out var userId);
         var dataSource = (string)dataSourceObject;
+        var provider = ProviderFactory.GetProviders().First(p => p.Identifier == connectionProperties.ProviderIdentifier);
         _textBox.Text = $@"Connection name: {connectionProperties.ConnectionName}
-Provider identifier: {connectionProperties.ProviderIdentifier}
+Provider name: {provider.Name}
 {ConnectionStringKeyword.DataSource}: {dataSource}
 {ConnectionStringKeyword.UserId}: {userId}";
         _connectionProperties = connectionProperties;
