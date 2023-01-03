@@ -8,8 +8,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -590,6 +588,9 @@ public class MainForm : Form
             }
 
             var message = $@"Connection opened in {StopwatchTimeSpan.ToString(connectionForm.Duration, 3)} seconds.
+ConnectionName: {connectionProperties.ConnectionName}
+ProviderIdentifier: {connectionProperties.ProviderIdentifier}
+DataSource: {connectionProperties.Connection.DataSource}
 ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
             var infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message);

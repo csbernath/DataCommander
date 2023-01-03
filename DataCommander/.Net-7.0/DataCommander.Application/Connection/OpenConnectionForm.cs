@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,7 +26,60 @@ internal sealed class OpenConnectionForm : Form
     private readonly Stopwatch _stopwatch = new();
     private readonly EventWaitHandle _handleCreatedEvent = new(false, EventResetMode.ManualReset);
     private readonly CancellationTokenSource _cancellationTokenSource;
-    private readonly Task _task;
+
+    public OpenConnectionForm(ConnectionProperties connectionProperties)
+    {
+        InitializeComponent();
+        HandleCreated += OpenConnectionForm_HandleCreated;
+
+        _stopwatch.Start();
+        _timer.Enabled = true;
+
+        var dbConnectionStringBuilder = new DbConnectionStringBuilder();
+        dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
+        dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
+        var containsIntegratedSecurity = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
+        var containsUserId = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out var userId);
+        var dataSource = (string)dataSourceObject;
+        var provider = ProviderFactory.GetProviders().First(p => p.Identifier == connectionProperties.ProviderIdentifier);
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append($@"Connection name: {connectionProperties.ConnectionName}
+Provider name: {provider.Name}
+{ConnectionStringKeyword.DataSource}: {dataSource}");
+        
+        if (containsIntegratedSecurity)
+            stringBuilder.Append($"\r\n{ConnectionStringKeyword.IntegratedSecurity}: {integratedSecurity}");
+        
+        if (containsUserId) 
+            stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {userId}");
+
+        _textBox.Text = stringBuilder.ToString();
+        _connectionProperties = connectionProperties;
+        Cursor = Cursors.AppStarting;
+
+        if (_connectionProperties.Provider == null)
+            _connectionProperties.Provider = ProviderFactory.CreateProvider(_connectionProperties.ProviderIdentifier);
+
+        var connection = _connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
+        _cancellationTokenSource = new CancellationTokenSource();
+
+        var stopwatch = Stopwatch.StartNew();
+
+        Task.Factory.StartNew(() =>
+        {
+            var task = connection.OpenAsync(_cancellationTokenSource.Token);
+            task.ContinueWith(t =>
+            {
+                Duration = stopwatch.ElapsedTicks;
+
+                if (!_cancellationTokenSource.IsCancellationRequested)
+                {
+                    connectionProperties.Connection = connection;
+                    EndConnectionOpen(task.Exception);
+                }
+            });
+        });
+    }
 
     public long Duration { get; private set; }
 
@@ -76,58 +130,10 @@ internal sealed class OpenConnectionForm : Form
     {
         _timer.Enabled = false;
         _handleCreatedEvent.WaitOne();
-        this.Invoke(() => EndConnectionOpenInvoke(exception));
+        Invoke(() => EndConnectionOpenInvoke(exception));
     }
 
-    public OpenConnectionForm(ConnectionProperties connectionProperties)
-    {
-        InitializeComponent();
-        HandleCreated += OpenConnectionForm_HandleCreated;
-
-        _stopwatch.Start();
-        _timer.Enabled = true;
-
-        var dbConnectionStringBuilder = new DbConnectionStringBuilder();
-        dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
-        dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
-        dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out var userId);
-        var dataSource = (string)dataSourceObject;
-        var provider = ProviderFactory.GetProviders().First(p => p.Identifier == connectionProperties.ProviderIdentifier);
-        _textBox.Text = $@"Connection name: {connectionProperties.ConnectionName}
-Provider name: {provider.Name}
-{ConnectionStringKeyword.DataSource}: {dataSource}
-{ConnectionStringKeyword.UserId}: {userId}";
-        _connectionProperties = connectionProperties;
-        Cursor = Cursors.AppStarting;
-
-        if (_connectionProperties.Provider == null)
-            _connectionProperties.Provider = ProviderFactory.CreateProvider(_connectionProperties.ProviderIdentifier);
-
-        var connection = _connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
-        _cancellationTokenSource = new CancellationTokenSource();
-
-        var stopwatch = Stopwatch.StartNew();
-
-        _task = Task.Factory.StartNew(() =>
-        {
-            var task = connection.OpenAsync(_cancellationTokenSource.Token);
-            task.ContinueWith(t =>
-            {
-                Duration = stopwatch.ElapsedTicks;
-
-                if (!_cancellationTokenSource.IsCancellationRequested)
-                {
-                    connectionProperties.Connection = connection;
-                    EndConnectionOpen(task.Exception);
-                }
-            });
-        });
-    }
-
-    private void OpenConnectionForm_HandleCreated(object sender, EventArgs e)
-    {
-        _handleCreatedEvent.Set();
-    }
+    private void OpenConnectionForm_HandleCreated(object sender, EventArgs e) => _handleCreatedEvent.Set();
 
     /// <summary>
     /// Clean up any resources being used.
