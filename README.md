@@ -937,9 +937,13 @@ This program is freeware and released under the [GNU General Public License](htt
 
 ## Development environment
 
+.NET 7 version:
+- C# 11
+- [JetBrains Rider](https://www.jetbrains.com/rider/)
+
 .NET 6 version:
-- C# 10.0
-- [JetBrains Rider 2022.1.1](https://www.jetbrains.com/rider/)
+- C# 10
+- [JetBrains Rider](https://www.jetbrains.com/rider/)
  
 .NET 5 version:
 - C# 9.0
@@ -964,7 +968,7 @@ This program is freeware and released under the [GNU General Public License](htt
 
 ## References
 
-- [Microsoft SQL Server Management Studio v18.11.1](https://docs.microsoft.com/en-us/sql/ssms/sql-server-management-studio-ssms?redirectedfrom=MSDN&view=sql-server-ver15)
+- [Microsoft SQL Server Management Studio](https://learn.microsoft.com/en-us/sql/ssms)
 - [pgAdmin: PostgreSQL Tools](http://www.pgadmin.org/)
 - [TOAD for SQL Server](http://www.quest.com/toad-for-sql-server/)
 - [PL/SQL Developer](http://www.allroundautomations.com/plsqldev.html)
