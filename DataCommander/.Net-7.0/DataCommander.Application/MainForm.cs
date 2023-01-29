@@ -582,9 +582,6 @@ public class MainForm : Form
                 case FormWindowState.Maximized:
                     //queryForm.WindowState = FormWindowState.Maximized;
                     break;
-
-                default:
-                    break;
             }
 
             var message = $@"Connection opened in {StopwatchTimeSpan.ToString(connectionForm.Duration, 3)} seconds.
