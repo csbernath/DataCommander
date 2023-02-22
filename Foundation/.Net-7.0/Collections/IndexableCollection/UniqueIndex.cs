@@ -26,7 +26,7 @@ public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey
                 break;
 
             case SortOrder.Descending:
-                var comparer = ReversedComparer<TKey>.Default;
+                var comparer = ReverseComparer<TKey>.Default;
                 dictionary = new SortedDictionary<TKey, T>(comparer);
                 break;
 

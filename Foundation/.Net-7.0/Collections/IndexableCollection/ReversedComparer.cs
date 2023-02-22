@@ -3,28 +3,21 @@ using System.Collections.Generic;
 
 namespace Foundation.Collections.IndexableCollection;
 
-public sealed class ReversedComparer<T> : IComparer<T>
+public sealed class ReverseComparer<T> : IComparer<T>
 {
-    private static readonly Lazy<ReversedComparer<T>> Instance = new(CreateReversedComparer);
+    private static readonly Lazy<ReverseComparer<T>> Instance = new(CreateReversedComparer);
 
     private readonly IComparer<T> _comparer;
 
-    private ReversedComparer(IComparer<T> comparer) => _comparer = comparer;
+    private ReverseComparer(IComparer<T> comparer) => _comparer = comparer;
 
     public static IComparer<T> Default => Instance.Value;
 
-    #region IComparer<T> Members
+    public int Compare(T x, T y) => _comparer.Compare(y, x);
 
-    int IComparer<T>.Compare(T x, T y)
-    {
-        return _comparer.Compare(y, x);
-    }
-
-    #endregion
-
-    private static ReversedComparer<T> CreateReversedComparer()
+    private static ReverseComparer<T> CreateReversedComparer()
     {
         var comparer = Comparer<T>.Default;
-        return new ReversedComparer<T>(comparer);
+        return new ReverseComparer<T>(comparer);
     }
 }

@@ -49,7 +49,7 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
                 break;
 
             case SortOrder.Descending:
-                var comparer = ReversedComparer<TKey>.Default;
+                var comparer = ReverseComparer<TKey>.Default;
                 dictionary = new SortedDictionary<TKey, ICollection<T>>(comparer);
                 break;
 

@@ -246,11 +246,13 @@ public class MainForm : Form
         // 
         this._mainMenu.Dock = System.Windows.Forms.DockStyle.None;
         this._mainMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
-        this._mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this._mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+        {
             this._menuItem1,
             this.optionsMenuItem,
             this._mnuWindow,
-            this._mnuHelp});
+            this._mnuHelp
+        });
         this._mainMenu.Location = new System.Drawing.Point(0, 0);
         this._mainMenu.MdiWindowListItem = this._mnuWindow;
         this._mainMenu.Name = "_mainMenu";
@@ -259,14 +261,16 @@ public class MainForm : Form
         // 
         // _menuItem1
         // 
-        this._menuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this._menuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+        {
             this._newToolStripMenuItem,
             this._mnuConnect,
             this._mnuOpen,
             this._recentConnectionsToolStripMenuItem,
             this._saveAllToolStripMenuItem,
             this._mnuRecentFileList,
-            this._mnuExit});
+            this._mnuExit
+        });
         this._menuItem1.MergeIndex = 1;
         this._menuItem1.Name = "_menuItem1";
         this._menuItem1.Size = new System.Drawing.Size(67, 20);
@@ -339,8 +343,10 @@ public class MainForm : Form
         // 
         // _mnuWindow
         // 
-        this._mnuWindow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._closeAllDocumentsMenuItem});
+        this._mnuWindow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+        {
+            this._closeAllDocumentsMenuItem
+        });
         this._mnuWindow.MergeIndex = 6;
         this._mnuWindow.Name = "_mnuWindow";
         this._mnuWindow.Size = new System.Drawing.Size(63, 20);
@@ -355,10 +361,12 @@ public class MainForm : Form
         // 
         // _mnuHelp
         // 
-        this._mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this._mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+        {
             this._contentsToolStripMenuItem,
             this._checkForToolStripMenuItem,
-            this._mnuAbout});
+            this._mnuAbout
+        });
         this._mnuHelp.MergeIndex = 7;
         this._mnuHelp.Name = "_mnuHelp";
         this._mnuHelp.Size = new System.Drawing.Size(44, 20);
@@ -392,14 +400,16 @@ public class MainForm : Form
         this._toolStrip.Dock = System.Windows.Forms.DockStyle.None;
         this._toolStrip.ImageList = this._imageList;
         this._toolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
-        this._toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this._toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+        {
             this._btnConnect,
             this._openButton,
             this._saveButton,
             this._toolStripSeparator1,
             this._helpButton,
             this._toolStripSeparator2,
-            this._activeMdiChildToolStripTextBox});
+            this._activeMdiChildToolStripTextBox
+        });
         this._toolStrip.Location = new System.Drawing.Point(3, 24);
         this._toolStrip.Name = "_toolStrip";
         this._toolStrip.Size = new System.Drawing.Size(522, 27);
@@ -472,9 +482,11 @@ public class MainForm : Form
         // _statusBar
         // 
         this._statusBar.ImageScalingSize = new System.Drawing.Size(20, 20);
-        this._statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this._statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+        {
             this._toolStripStatusLabel,
-            this._managedMemoryToolStripStatusLabel});
+            this._managedMemoryToolStripStatusLabel
+        });
         this._statusBar.Location = new System.Drawing.Point(0, 731);
         this._statusBar.Name = "_statusBar";
         this._statusBar.ShowItemToolTips = true;
@@ -606,9 +618,6 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
     {
         if (!e.Cancel)
         {
-            var form = (Form)sender;
-            // form.MdiParent = null;
-
             if (_queryFormToolStrip != null)
             {
                 _toolStripPanel.Controls.Remove(_queryFormToolStrip);
@@ -625,8 +634,6 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
     {
         var aboutForm = new AboutForm(_colorTheme);
         aboutForm.ShowDialog();
-
-        //MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void SaveLayout()
@@ -1015,14 +1022,14 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
     {
         GC.Collect();
 
-        var sb = new StringBuilder();
-        sb.AppendLine();
-        sb.Append(GarbageMonitor.Default.State);
-        sb.AppendLine();
-        sb.Append(ThreadMonitor.ToStringTableString());
-        sb.AppendLine();
-        sb.Append(AppDomainMonitor.GetCurrentDomainState());
-        Log.Trace(sb.ToString());
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine();
+        stringBuilder.Append(GarbageMonitor.Default.State);
+        stringBuilder.AppendLine();
+        stringBuilder.Append(ThreadMonitor.ToStringTableString());
+        stringBuilder.AppendLine();
+        stringBuilder.Append(AppDomainMonitor.GetCurrentDomainState());
+        Log.Trace(stringBuilder.ToString());
 
         ThreadMonitor.Join(0);
     }

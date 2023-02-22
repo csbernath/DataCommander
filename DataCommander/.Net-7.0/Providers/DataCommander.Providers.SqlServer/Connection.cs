@@ -58,26 +58,7 @@ internal sealed class Connection : ConnectionBase
         {
             var executor = _sqlConnection.CreateCommandExecutor();
             var commandText = "select @@version";
-            var version = (string) executor.ExecuteScalar(new CreateCommandRequest(commandText));
-
-            /* select
-      serverproperty('Collation') as Collation,
-      serverproperty('Edition') as Edition,
-      serverproperty('Engine Edition') as [Engine Edition],
-      serverproperty('InstanceName') as InstanceName,
-      serverproperty('IsClustered') as IsClustered,
-      serverproperty('IsFullTextInstalled') as IsFullTextInstalled,
-      serverproperty('IsIntegratedSecurityOnly') as IsIntegratedSecurityOnly,
-      serverproperty('IsSingleUser') as IsSingleUser,
-      serverproperty('IsSyncWithBackup') as IsSyncWithBackup,
-      serverproperty('LicenseType') as LicenseType,
-      serverproperty('MachineName') as MachineName,
-      serverproperty('NumLicenses') as NumLicenses,
-      serverproperty('ProcessID') as ProcessID,
-      serverproperty('ProductVersion') as ProductVersion,
-      serverproperty('ProductLevel') as ProductLevel,
-      serverproperty('ServerName') as ServerName
-      */
+            var version = (string)executor.ExecuteScalar(new CreateCommandRequest(commandText));
             var serverVersion = _sqlConnection.ServerVersion;
             string description;
 
@@ -206,7 +187,7 @@ internal sealed class Connection : ConnectionBase
                 case "13.00.5026":
                     description = "Microsoft SQL Server 2016 Service Pack 2 (SP2)";
                     break;
-                
+
                 case "13.00.6300":
                     description = "Microsoft SQL Server 2016 Service Pack 3 (SP3)";
                     break;
@@ -260,7 +241,7 @@ internal sealed class Connection : ConnectionBase
         {
             var executor = DbCommandExecutorFactory.Create(_sqlConnection);
             var scalar = executor.ExecuteScalar(new CreateCommandRequest("select @@trancount"));
-            var transactionCount = (int) scalar;
+            var transactionCount = (int)scalar;
             return transactionCount;
         }
     }
@@ -289,7 +270,7 @@ internal sealed class Connection : ConnectionBase
 
         if (!cancellationToken.IsCancellationRequested)
         {
-            _spid = (short) _sqlConnection.ServerProcessId;
+            _spid = (short)_sqlConnection.ServerProcessId;
 
             const string commandText = @"select @@servername
 set arithabort on";
@@ -321,7 +302,7 @@ set arithabort on";
                 var percentString = error.Message.Substring(0, index);
                 var percent = int.Parse(percentString);
                 var remainingPercent = 100 - percent;
-                var estimated = (long) Math.Round(100.0 / percent * elapsed);
+                var estimated = (long)Math.Round(100.0 / percent * elapsed);
                 var estimatedRemaining = remainingPercent * elapsed / percent;
                 var infoMessage = new InfoMessage(localTime, InfoMessageSeverity.Verbose, null,
                     $"Estimated time: {StopwatchTimeSpan.ToString(estimated, 0)} remaining time: {StopwatchTimeSpan.ToString(estimatedRemaining, 0)}, finishes at: {LocalTime.Default.Now.AddSeconds(estimatedRemaining * StopwatchConstants.SecondsPerTick)}");
