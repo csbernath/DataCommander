@@ -36,6 +36,7 @@ using Foundation.Log;
 using Foundation.Text;
 using Foundation.Threading;
 using Foundation.Windows.Forms;
+using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using Timer = System.Windows.Forms.Timer;
 
@@ -3527,6 +3528,12 @@ public sealed class QueryForm : Form, IQueryForm
     {
         try
         {
+            var sqlKeyWords = Settings.CurrentType.Attributes["Sql92ReservedWords"].GetValue<string[]>();
+            var providerKeyWords = Provider.KeyWords;
+            var keyWordHashSet = sqlKeyWords.Concat(providerKeyWords)
+                .Select(keyWord => keyWord.ToUpper())
+                .ToHashSet();
+            
             var textWriter = _standardOutput.TextWriter;
 
             _sqlStatement = new SqlParser(Query);
@@ -3566,6 +3573,10 @@ public sealed class QueryForm : Form, IQueryForm
 
                             var schemaRow = schemaRows[i];
                             var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
+
+                            if (keyWordHashSet.Contains((columnName.ToUpper()))) 
+                                columnName = new SqlCommandBuilder().QuoteIdentifier(columnName);
+
                             sb.Append(columnName);
                         }
                     }
