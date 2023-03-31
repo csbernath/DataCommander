@@ -72,4 +72,20 @@ begin
     end
 end";
     }
+    
+    public static string GetObjectsByDatabase(string database, IEnumerable<string> objectTypes)
+    {
+        Assert.IsTrue(!database.IsNullOrWhiteSpace());
+        Assert.IsTrue(objectTypes != null && objectTypes.Any());
+
+        return $@"if exists(select * from sys.databases (nolock) where name = '{database}')
+begin
+    select s.name,o.name
+    from [{database}].sys.all_objects o (nolock)
+    join [{database}].sys.schemas s (nolock)
+        on o.schema_id = s.schema_id 
+    where o.type in({string.Join(",", objectTypes.Select(t => t.ToNullableVarChar()))})
+    order by s.name,o.name
+end";
+    }    
 }
