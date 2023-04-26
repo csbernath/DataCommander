@@ -4,5 +4,5 @@ namespace Foundation.IO;
 
 public interface IFormatter
 {
-    void AppendTo(StringBuilder sb, object[] args);
+    void AppendTo(StringBuilder stringBuilder, object[] args);
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Foundation.Assertions;
 
@@ -64,5 +65,5 @@ public readonly struct DateOnlyInterval
             yield return date;
     }
 
-    private string DebuggerDisplay => $"{Start.DebuggerDisplay}-{End.DebuggerDisplay}";
+    // TODO private string DebuggerDisplay => $"{Start.DebuggerDisplay}-{End.DebuggerDisplay}";
 }

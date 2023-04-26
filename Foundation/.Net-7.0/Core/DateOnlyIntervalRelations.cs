@@ -4,8 +4,8 @@ namespace Foundation.Core;
 
 public static class DateOnlyIntervalRelations
 {
-    public static bool Precedes(this DateOnlyInterval x, DateOnlyInterval y) => x.End.Next < y.Start;
-    public static bool Meets(this DateOnlyInterval x, DateOnlyInterval y) => x.End.Next == y.Start;
+    public static bool Precedes(this DateOnlyInterval x, DateOnlyInterval y) => x.End.AddDays(1) < y.Start;
+    public static bool Meets(this DateOnlyInterval x, DateOnlyInterval y) => x.End.AddDays(1) == y.Start;
     public static bool OverlapsWith(this DateOnlyInterval x, DateOnlyInterval y) => x.Start < y.Start && y.Start <= x.End && x.End < y.End;
     public static bool Starts(this DateOnlyInterval x, DateOnlyInterval y) => x.Start == y.Start && x.End < y.End;
     public static bool During(this DateOnlyInterval x, DateOnlyInterval y) => y.Start < x.Start && x.End < y.End;

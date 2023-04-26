@@ -37,7 +37,7 @@ public sealed class CommandLine
     private static string ReadString(TextReader textReader)
     {
         var read = textReader.Read();
-        var c = (char) read;
+        var c = (char)read;
 
         Assert.IsTrue(c == '"');
 
@@ -48,7 +48,7 @@ public sealed class CommandLine
             read = textReader.Read();
             Assert.IsTrue(read >= 0);
 
-            c = (char) read;
+            c = (char)read;
 
             if (c == '"')
                 break;
@@ -62,7 +62,7 @@ public sealed class CommandLine
     private static string ReadName(TextReader textReader)
     {
         var read = textReader.Read();
-        var c = (char) read;
+        var c = (char)read;
         Assert.IsTrue(c == '/' || c == '-');
 
         var sb = new StringBuilder();
@@ -73,7 +73,7 @@ public sealed class CommandLine
 
             if (peek == -1) break;
 
-            c = (char) peek;
+            c = (char)peek;
 
             if (c == ':' || c == '=' || char.IsWhiteSpace(c)) break;
 
@@ -94,12 +94,14 @@ public sealed class CommandLine
         {
             var peek = textReader.Peek();
 
-            if (peek == -1) break;
+            if (peek == -1)
+                break;
 
-            var c = (char) peek;
+            var c = (char)peek;
 
             if (char.IsWhiteSpace(c))
                 break;
+
             sb.Append(c);
 
             textReader.Read();
@@ -117,13 +119,13 @@ public sealed class CommandLine
 
         if (peek >= 0)
         {
-            var c = (char) peek;
+            var c = (char)peek;
 
             if (c == ':' || c == '=')
             {
                 textReader.Read();
                 peek = textReader.Peek();
-                c = (char) peek;
+                c = (char)peek;
 
                 value = peek == '"'
                     ? ReadString(textReader)
@@ -148,7 +150,7 @@ public sealed class CommandLine
 
             if (peek == -1) break;
 
-            var c = (char) peek;
+            var c = (char)peek;
 
             if (c == '"')
             {

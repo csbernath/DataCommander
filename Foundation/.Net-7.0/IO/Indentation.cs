@@ -21,7 +21,7 @@ public sealed class Indentation : IDisposable
     {
         Assert.IsTrue(_textWriter.Indent == _indent);
 
-        _textWriter.Indent--;
+        --_textWriter.Indent;
     }
 
     #endregion
