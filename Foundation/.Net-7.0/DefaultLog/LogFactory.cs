@@ -22,7 +22,7 @@ internal sealed class LogFactory : ILogFactory
 
         node.Attributes.TryGetAttributeValue("DateTimeKind", DateTimeKind.Utc, out var dateTimeKind);
         _dateTimeProvider = dateTimeKind == DateTimeKind.Utc
-            ? (IDateTimeProvider)UniversalTime.Default
+            ? UniversalTime.Default
             : LocalTime.Default;
 
         var logWritersNode = node.ChildNodes["LogWriters"];

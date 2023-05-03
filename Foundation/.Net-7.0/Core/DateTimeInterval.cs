@@ -6,12 +6,12 @@ using Foundation.Assertions;
 namespace Foundation.Core;
 
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public struct FoundationDateTimeInterval
+public struct DateTimeInterval
 {
     public readonly DateTime Start;
     public readonly DateTime End;
 
-    public FoundationDateTimeInterval(DateTime start, DateTime end)
+    public DateTimeInterval(DateTime start, DateTime end)
     {
         Assert.IsTrue(start <= end);
         Start = start;
@@ -19,21 +19,21 @@ public struct FoundationDateTimeInterval
     }
 
     [Pure]
-    public bool Contains(FoundationDateTimeInterval other) => Start <= other.Start && other.End <= End;
+    public bool Contains(DateTimeInterval other) => Start <= other.Start && other.End <= End;
 
     [Pure]
-    public FoundationDateTimeInterval? Intersect(FoundationDateTimeInterval other)
+    public DateTimeInterval? Intersect(DateTimeInterval other)
     {
         var start = ElementPair.Max(Start, other.Start);
         var end = ElementPair.Min(End, other.End);
         var intersects = start < end;
         return intersects
-            ? new FoundationDateTimeInterval(start, end)
-            : (FoundationDateTimeInterval?) null;
+            ? new DateTimeInterval(start, end)
+            : (DateTimeInterval?) null;
     }
 
     [Pure]
-    public bool Intersects(FoundationDateTimeInterval other)
+    public bool Intersects(DateTimeInterval other)
     {
         var start = ElementPair.Max(Start, other.Start);
         var end = ElementPair.Min(End, other.End);

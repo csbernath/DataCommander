@@ -744,8 +744,8 @@ from
 
         if (schemaTable != null)
         {
-            Log.Trace(CallerInformation.Get(), schemaTable.ToStringTableString());
-            Log.Trace(CallerInformation.Get(), "{0}", schemaTable.TableName);
+            Log.Trace(CallerInformation.Create(), schemaTable.ToStringTableString());
+            Log.Trace(CallerInformation.Create(), "{0}", schemaTable.TableName);
 
             table = new DataTable("SchemaTable");
             var columns = table.Columns;
@@ -771,16 +771,7 @@ from
                         columnOrdinalAddition = 0;
                 }
 
-                var pk = string.Empty;
-
-                if (dataColumnSchema.IsKey == true) pk = "PKEY";
-
-                if (dataColumnSchema.IsIdentity == true)
-                {
-                    if (pk.Length > 0) pk += ',';
-
-                    pk += "IDENTITY";
-                }
+                var primaryKey = GetPrimaryKey(dataColumnSchema);
 
                 var columnSize = dataColumnSchema.ColumnSize;
                 var dbType = (SqlDbType)dataColumnSchema.ProviderType;
@@ -829,7 +820,7 @@ from
                 var allowDbNull = dataColumnSchema.AllowDbNull.GetValueOrDefault();
                 if (!allowDbNull) sb.Append(" not null");
 
-                table.Rows.Add(columnOrdinal + columnOrdinalAddition, pk, dataColumnSchema.ColumnName, columnSize, sb.ToString(),
+                table.Rows.Add(columnOrdinal + columnOrdinalAddition, primaryKey, dataColumnSchema.ColumnName, columnSize, sb.ToString(),
                     dataColumnSchema.DataType);
 
                 columnIndex++;
@@ -837,6 +828,23 @@ from
         }
 
         return table;
+    }
+
+    private static string GetPrimaryKey(FoundationDbColumn dataColumnSchema)
+    {
+        var primaryKey = dataColumnSchema.IsKey == true
+            ? "PKEY"
+            : string.Empty;
+
+        if (dataColumnSchema.IsIdentity == true)
+        {
+            if (primaryKey.Length > 0)
+                primaryKey += ',';
+
+            primaryKey += "IDENTITY";
+        }
+
+        return primaryKey;
     }
 
     List<Statement> IProvider.GetStatements(string commandText)

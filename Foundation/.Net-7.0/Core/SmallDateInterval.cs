@@ -67,11 +67,11 @@ public struct SmallDateInterval
     }
 
     [Pure]
-    public FoundationDateTimeInterval ToFoundationDateTimeInterval()
+    public DateTimeInterval ToFoundationDateTimeInterval()
     {
         var start = Start.ToDateTime();
         var end = End.ToDateTime().AddDays(1);
-        return new FoundationDateTimeInterval(start, end);
+        return new DateTimeInterval(start, end);
     }
 
     private string DebuggerDisplay => $"{Start.DebuggerDisplay}-{End.DebuggerDisplay}";

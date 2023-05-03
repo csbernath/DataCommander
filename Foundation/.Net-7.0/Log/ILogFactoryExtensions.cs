@@ -87,11 +87,9 @@ public static class LogFactoryExtensions
         if (value != null)
         {
             parameterString = value as string;
-
-            if (parameterString != null)
-                parameterString = "\"" + parameterString + '"';
-            else
-                parameterString = value.ToString();
+            parameterString = parameterString != null
+                ? $"\"{parameterString}\""
+                : value.ToString();
         }
         else
             parameterString = "null";
