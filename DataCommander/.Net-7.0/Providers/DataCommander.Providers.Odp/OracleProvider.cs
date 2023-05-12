@@ -292,39 +292,6 @@ internal sealed class OracleProvider : IProvider
         return new OracleDataReaderHelper(dataReader);
     }
 
-    public DbDataAdapter CreateDataAdapter(string selectCommandText, IDbConnection connection)
-    {
-        var oracleConnection = (OracleConnection) connection;
-        var dataAdapter = new OracleDataAdapter(selectCommandText, oracleConnection);
-        var commandBuilder = new OracleCommandBuilder(dataAdapter);
-
-        try
-        {
-            dataAdapter.InsertCommand = commandBuilder.GetInsertCommand();
-        }
-        catch
-        {
-        }
-
-        try
-        {
-            dataAdapter.UpdateCommand = commandBuilder.GetUpdateCommand();
-        }
-        catch
-        {
-        }
-
-        try
-        {
-            dataAdapter.DeleteCommand = commandBuilder.GetDeleteCommand();
-        }
-        catch
-        {
-        }
-
-        return dataAdapter;
-    }
-
     public IObjectExplorer CreateObjectExplorer() => _objectExplorer;
 
     GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
@@ -713,11 +680,6 @@ order by OBJECT_NAME";
     {
         // TODO
         return dataReader.GetSchemaTable();
-    }
-
-    DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection)
-    {
-        throw new NotImplementedException();
     }
 
     void IProvider.ClearCompletionCache()

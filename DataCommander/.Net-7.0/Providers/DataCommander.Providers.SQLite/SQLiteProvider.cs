@@ -124,11 +124,6 @@ public sealed class SqLiteProvider : IProvider
         return new SqLiteDataReaderHelper(dataReader);
     }
 
-    DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection)
-    {
-        throw new Exception("The method or operation is not implemented.");
-    }
-
     public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
 
     GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)

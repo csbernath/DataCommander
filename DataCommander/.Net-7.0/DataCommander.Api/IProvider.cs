@@ -26,7 +26,6 @@ public interface IProvider
     string CommandToString(IDbCommand command);
     ConnectionBase CreateConnection(string connectionString);
     IDbConnectionStringBuilder CreateConnectionStringBuilder();
-    DbDataAdapter CreateDataAdapter(string selectCommandText, IDbConnection connection);
     IDataReaderHelper CreateDataReaderHelper(IDataReader dataReader);
 
     void CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationConnection, string? destinationTableName,

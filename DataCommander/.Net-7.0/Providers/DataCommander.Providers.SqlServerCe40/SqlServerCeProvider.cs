@@ -58,11 +58,6 @@ public sealed class SqlServerCeProvider : IProvider
         return new SqlCeDataReaderHelper(sqlCeDataReader);
     }
 
-    DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection)
-    {
-        throw new NotImplementedException();
-    }
-
     public IObjectExplorer CreateObjectExplorer() => new SqlCeObjectExplorer();
 
     GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)

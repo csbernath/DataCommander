@@ -65,11 +65,6 @@ internal sealed class MySqlProvider : IProvider
         return new Connection(connectionString);
     }
 
-    DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection)
-    {
-        throw new NotImplementedException();
-    }
-
     IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
     {
         return new MySqlDataReaderHelper((MySqlDataReader)dataReader);

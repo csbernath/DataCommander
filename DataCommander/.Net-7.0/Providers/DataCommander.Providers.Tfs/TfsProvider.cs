@@ -51,11 +51,6 @@ public sealed class TfsProvider : IProvider
         throw new NotImplementedException();
     }
 
-    DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection)
-    {
-        throw new NotImplementedException();
-    }
-
     IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
     {
         throw new NotImplementedException();

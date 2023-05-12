@@ -233,16 +233,6 @@ internal sealed class OleDbProvider : IProvider
         return new OleDbDataReaderHelper(oleDbDataReader);
     }
 
-    //    public void GetValues(IDataReader dataReader,object[] values)
-    //    {
-    //      dataReader.GetValues(values);
-    //    }
-
-    public DbDataAdapter CreateDataAdapter(string selectCommandText, IDbConnection connection)
-    {
-        return null;
-    }
-
     public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer();
 
     public void ClearCompletionCache()
@@ -278,7 +268,6 @@ internal sealed class OleDbProvider : IProvider
     }
 
     DataTable IProvider.GetSchemaTable(IDataReader dataReader) => throw new NotImplementedException();
-    DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection) => throw new NotImplementedException();
 
     GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position) =>
         throw new NotImplementedException();

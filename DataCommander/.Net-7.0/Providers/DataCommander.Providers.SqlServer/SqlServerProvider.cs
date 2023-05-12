@@ -114,8 +114,6 @@ internal sealed class SqlServerProvider : IProvider
         return sqlDataReaderHelper;
     }
 
-    public DbDataAdapter CreateDataAdapter(string selectCommandText, IDbConnection connection) => null;
-
     void IProvider.CreateInsertCommand(
         DataTable sourceSchemaTable,
         string[] sourceDataTypeNames,
