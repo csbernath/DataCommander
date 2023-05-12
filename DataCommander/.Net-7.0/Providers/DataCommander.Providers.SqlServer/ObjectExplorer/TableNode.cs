@@ -325,8 +325,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
     private void ScriptTable_Click(object sender, EventArgs e)
     {
         var queryForm = (IQueryForm)sender;
-        queryForm.SetStatusbarPanelText("Copying table script to clipboard...",
-            queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
+        queryForm.SetStatusbarPanelText("Copying table script to clipboard...");
         var stopwatch = Stopwatch.StartNew();
 
         var connectionString = DatabaseNode.Databases.Server.ConnectionString;
@@ -361,9 +360,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
 
         queryForm.ClipboardSetText(sb.ToString());
         stopwatch.Stop();
-        queryForm.SetStatusbarPanelText(
-            $"Copying table script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.",
-            queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
+        queryForm.SetStatusbarPanelText($"Copying table script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.");
     }
 
     private void Indexes_Click(object sender, EventArgs e)
@@ -398,8 +395,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
 
         var queryForm = (IQueryForm)sender;
         queryForm.ClipboardSetText(selectStatement);
-        queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
-            queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
+        queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
 
     private sealed class Column
@@ -546,8 +542,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
 
         var queryForm = (IQueryForm)sender;
         queryForm.ClipboardSetText(stringBuilder.ToString());            
-        queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
-            queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
+        queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
 
     private string CreateUpdateScript()
@@ -609,8 +604,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
         var queryForm = (IQueryForm)sender;
         queryForm.ClipboardSetText(script);
 
-        queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
-            queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
+        queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
 
     private void CsharpOrm_Click(object sender, EventArgs e)
@@ -698,8 +692,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
 
         var queryForm = (IQueryForm)sender;
         queryForm.ClipboardSetText(textBuilder.ToLines().ToIndentedString("    "));
-        queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
-            queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
+        queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
 
     private void DataTransferObjectWithProperties_Click(object? sender, EventArgs e)
@@ -737,7 +730,6 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
 
         var queryForm = (IQueryForm)sender;
         queryForm.ClipboardSetText(classWithProperties);
-        queryForm.SetStatusbarPanelText("Copying script to clipboard finished.",
-            queryForm.ColorTheme != null ? queryForm.ColorTheme.ForeColor : SystemColors.ControlText);
+        queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
 }

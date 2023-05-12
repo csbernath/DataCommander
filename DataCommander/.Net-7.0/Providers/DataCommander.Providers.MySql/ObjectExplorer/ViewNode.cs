@@ -53,6 +53,6 @@ from {_databaseNode.Name}.{_name}";
 
         var queryForm = (IQueryForm)sender;
         queryForm.ClipboardSetText(createTableStatement);
-        queryForm.SetStatusbarPanelText("Copying create table statement to clipboard finished.", SystemColors.ControlText);
+        queryForm.SetStatusbarPanelText("Copying create table statement to clipboard finished.");
     }
 }

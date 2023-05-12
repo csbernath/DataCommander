@@ -1435,8 +1435,7 @@ public sealed class QueryForm : Form, IQueryForm
         }
 
         ticks = Stopwatch.GetTimestamp() - ticks;
-        SetStatusbarPanelText($"{count} item(s) added to Object Explorer in {StopwatchTimeSpan.ToString(ticks, 3)}.",
-            _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
+        SetStatusbarPanelText($"{count} item(s) added to Object Explorer in {StopwatchTimeSpan.ToString(ticks, 3)}.");
     }
 
     public void AddInfoMessage(InfoMessage infoMessage)
@@ -1585,7 +1584,7 @@ public sealed class QueryForm : Form, IQueryForm
 
         try
         {
-            SetStatusbarPanelText("Executing query...", _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
+            SetStatusbarPanelText("Executing query...");
             var statements = Provider.GetStatements(query);
             Log.Write(LogLevel.Trace, "Query:\r\n{0}", query);
             IReadOnlyCollection<AsyncDataAdapterCommand> commands;
@@ -2017,7 +2016,7 @@ public sealed class QueryForm : Form, IQueryForm
     {
         try
         {
-            SetStatusbarPanelText("Creating Word document...", SystemColors.ControlText);
+            SetStatusbarPanelText("Creating Word document...");
 
             var fileName = WordDocumentCreator.CreateWordDocument(dataTable);
 
@@ -2027,7 +2026,7 @@ public sealed class QueryForm : Form, IQueryForm
             richTextBox.LoadFile(fileName);
             File.Delete(fileName);
 
-            SetStatusbarPanelText("Word document created.", SystemColors.ControlText);
+            SetStatusbarPanelText("Word document created.");
 
             ShowTabPage(dataTable.TableName, GetToolTipText(dataTable), richTextBox);
         }
@@ -2106,7 +2105,7 @@ public sealed class QueryForm : Form, IQueryForm
 
         _tabControl.SelectedTab = _messagesTabPage;
 
-        SetStatusbarPanelText("Query batch completed with errors.", Color.Red);
+        SetStatusbarPanelText("Query batch completed with errors.", _colorTheme != null ? _colorTheme.ProviderKeyWordColor : Color.Red);
         _sbPanelRows.Text = null;
     }
 
@@ -2269,13 +2268,13 @@ public sealed class QueryForm : Form, IQueryForm
         if (_cancel)
         {
             AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Query was cancelled by user."));
-            SetStatusbarPanelText("Query was cancelled by user.", _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
+            SetStatusbarPanelText("Query was cancelled by user.");
             _cancel = false;
         }
         else
         {
             if (_errorCount == 0)
-                SetStatusbarPanelText("Query executed successfully.", _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
+                SetStatusbarPanelText("Query executed successfully.");
             else
                 SetStatusbarPanelText("Query completed with errors.", _colorTheme != null ? _colorTheme.ProviderKeyWordColor : Color.Red);
         }
@@ -2534,7 +2533,7 @@ public sealed class QueryForm : Form, IQueryForm
 
         _tabControl.SelectedTab = _messagesTabPage;
         _messagesTextBox.Clear();
-        SetStatusbarPanelText(null, SystemColors.ControlText);
+        SetStatusbarPanelText(null);
 
         if (_dataAdapter == null)
         {
@@ -2550,7 +2549,7 @@ public sealed class QueryForm : Form, IQueryForm
         Log.Trace(ThreadMonitor.ToStringTableString());
         const string message = "Cancelling command...";
         AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, message));
-        SetStatusbarPanelText("Cancel Executing Command/Query...", _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
+        SetStatusbarPanelText("Cancel Executing Command/Query...");
         _cancel = true;
         SetGui(CommandState.None);
         _dataAdapter.Cancel();
@@ -2777,7 +2776,7 @@ public sealed class QueryForm : Form, IQueryForm
             else
             {
                 var count = treeNode.GetNodeCount(false);
-                SetStatusbarPanelText(treeNode.Text + " node has " + count + " children.", SystemColors.ControlText);
+                SetStatusbarPanelText(treeNode.Text + " node has " + count + " children.");
             }
         }
     }
@@ -3001,7 +3000,7 @@ public sealed class QueryForm : Form, IQueryForm
         try
         {
             Cursor = Cursors.WaitCursor;
-            SetStatusbarPanelText($"Finding {text}...", SystemColors.ControlText);
+            SetStatusbarPanelText($"Finding {text}...");
             StringComparison comparison;
             var options = _findTextForm.RichTextBoxFinds;
             switch (options)
@@ -3068,14 +3067,14 @@ public sealed class QueryForm : Form, IQueryForm
                             dataView.RowFilter = rowFilter;
                             var count = dataView.Count;
                             found = count > 0;
-                            SetStatusbarPanelText($"{count} rows found. RowFilter: {rowFilter}", SystemColors.ControlText);
+                            SetStatusbarPanelText($"{count} rows found. RowFilter: {rowFilter}");
                         }
                         else if (text.StartsWith("Sort="))
                         {
                             var sort = text.Substring(5);
                             var dataView = dataTable.DefaultView;
                             dataView.Sort = sort;
-                            SetStatusbarPanelText($"Rows sorted by {sort}.", SystemColors.ControlText);
+                            SetStatusbarPanelText($"Rows sorted by {sort}.");
                         }
                         else
                         {
@@ -3111,7 +3110,7 @@ public sealed class QueryForm : Form, IQueryForm
         }
         finally
         {
-            SetStatusbarPanelText(null, SystemColors.ControlText);
+            SetStatusbarPanelText(null);
             Cursor = Cursors.Default;
         }
 
@@ -3172,7 +3171,7 @@ public sealed class QueryForm : Form, IQueryForm
 
         try
         {
-            SetStatusbarPanelText($"Saving file {fileName}...", SystemColors.ControlText);
+            SetStatusbarPanelText($"Saving file {fileName}...");
             const RichTextBoxStreamType type = RichTextBoxStreamType.UnicodePlainText;
             var encoding = Encoding.Unicode;
 
@@ -3185,7 +3184,7 @@ public sealed class QueryForm : Form, IQueryForm
 
             _fileName = fileName;
             SetText();
-            SetStatusbarPanelText($"File {fileName} saved successfully.", SystemColors.ControlText);
+            SetStatusbarPanelText($"File {fileName} saved successfully.");
         }
         finally
         {
@@ -3250,8 +3249,7 @@ public sealed class QueryForm : Form, IQueryForm
         var from = response.FromCache ? "cache" : "data source";
         ticks = Stopwatch.GetTimestamp() - ticks;
         var length = response.Items != null ? response.Items.Count : 0;
-        SetStatusbarPanelText($"GetCompletion returned {length} items from {@from} in {StopwatchTimeSpan.ToString(ticks, 3)} seconds.",
-            _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
+        SetStatusbarPanelText($"GetCompletion returned {length} items from {@from} in {StopwatchTimeSpan.ToString(ticks, 3)} seconds.");
         return response;
     }
 
@@ -3706,7 +3704,7 @@ public sealed class QueryForm : Form, IQueryForm
         QueryTextBox.Text = text;
         _fileName = path;
         SetText();
-        SetStatusbarPanelText($"File {_fileName} loaded successfully.", SystemColors.ControlText);
+        SetStatusbarPanelText($"File {_fileName} loaded successfully.");
     }
 
     private void tvObjectBrowser_ItemDrag(object sender, ItemDragEventArgs e)
@@ -3934,7 +3932,7 @@ public sealed class QueryForm : Form, IQueryForm
             var maxRecords = int.MaxValue;
             var rowBlockSize = 10000;
             AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, "Copying table..."));
-            SetStatusbarPanelText("Copying table...", _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
+            SetStatusbarPanelText("Copying table...");
             SetGui(CommandState.Cancel);
             _errorCount = 0;
             _stopwatch.Start();
@@ -4099,11 +4097,16 @@ public sealed class QueryForm : Form, IQueryForm
             executor.ExecuteNonQuery(new CreateCommandRequest("SET PARSEONLY OFF"));
     }
 
-    public void SetStatusbarPanelText(string text, Color color)
+    public void SetStatusbarPanelText(string text)
+    {
+        var color = _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText;
+        SetStatusbarPanelText(text, color);
+    }
+
+    private void SetStatusbarPanelText(string text, Color color)
     {
         _sbPanelText.Text = text;
         _sbPanelText.ForeColor = color;
-        //Refresh();
     }
 
     #endregion

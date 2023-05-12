@@ -45,6 +45,6 @@ internal sealed class TableNode : ITreeNode
 
         var queryForm = (IQueryForm)sender;
         queryForm.ClipboardSetText(createTableStatement);        
-        queryForm.SetStatusbarPanelText("Copying create table statement to clipboard finished.", SystemColors.ControlText);
+        queryForm.SetStatusbarPanelText("Copying create table statement to clipboard finished.");
     }
 }

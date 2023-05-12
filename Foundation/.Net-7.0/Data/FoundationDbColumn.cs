@@ -23,9 +23,9 @@ public sealed class FoundationDbColumn
     public readonly short? NumericScale;
     public readonly int ProviderType;
 
-    public FoundationDbColumn(bool? allowDbNull, string baseColumnName, string baseSchemaName, string baseTableName, string columnName, int columnOrdinal, int columnSize,
-        Type dataType, bool? isAliased, bool? isExpression, bool? isKey, bool? isIdentity, bool? isLong, bool? isUnique, int nonVersionedProviderType, short? numericPrecision,
-        short? numericScale, int providerType)
+    public FoundationDbColumn(bool? allowDbNull, string baseColumnName, string baseSchemaName, string baseTableName, string columnName, int columnOrdinal,
+        int columnSize, Type dataType, bool? isAliased, bool? isExpression, bool? isKey, bool? isIdentity, bool? isLong, bool? isUnique,
+        int nonVersionedProviderType, short? numericPrecision, short? numericScale, int providerType)
     {
         AllowDbNull = allowDbNull;
         BaseColumnName = baseColumnName;

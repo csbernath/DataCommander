@@ -62,8 +62,7 @@ internal sealed class StoredProcedureNode : ITreeNode
             queryForm.ClipboardSetText(text);
 
             queryForm.SetStatusbarPanelText(
-                $"Copying stored prcoedure script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.",
-                SystemColors.ControlText);
+                $"Copying stored prcoedure script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.");
         }
     }
 }

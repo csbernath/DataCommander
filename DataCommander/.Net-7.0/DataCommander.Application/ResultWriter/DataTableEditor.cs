@@ -646,7 +646,7 @@ internal class DataTableEditor : UserControl
 
             var path = saveFileDialog.FileName;
 
-            _queryForm.SetStatusbarPanelText("Saving table...", _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
+            _queryForm.SetStatusbarPanelText("Saving table...");
 
             Task.Factory.StartNew(() =>
             {
@@ -724,8 +724,7 @@ internal class DataTableEditor : UserControl
                     }
 
                     stopwatch.Stop();
-                    _queryForm.SetStatusbarPanelText($"Table saved successfully in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.",
-                        _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
+                    _queryForm.SetStatusbarPanelText($"Table saved successfully in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.");
                 }
                 catch (Exception ex)
                 {
@@ -746,8 +745,7 @@ internal class DataTableEditor : UserControl
             Cursor = Cursors.WaitCursor;
             var dataObject = new MyDataObject(_dataTable.DefaultView, GetColumnIndexes());
             Clipboard.SetDataObject(dataObject);
-            _queryForm.SetStatusbarPanelText("Data copied to clipboard. Data is available in 3 formats: HTML, TAB separated text, FIXED width text.",
-                _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
+            _queryForm.SetStatusbarPanelText("Data copied to clipboard. Data is available in 3 formats: HTML, TAB separated text, FIXED width text.");
         }
         finally
         {
@@ -766,8 +764,7 @@ internal class DataTableEditor : UserControl
         {
             dataView.RowFilter = properties.RowFilter;
             dataView.Sort = properties.Sort;
-            _queryForm.SetStatusbarPanelText($"RowFilter = \"{properties.RowFilter}\" applied. dataView.Count: {dataView.Count}",
-                _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
+            _queryForm.SetStatusbarPanelText($"RowFilter = \"{properties.RowFilter}\" applied. dataView.Count: {dataView.Count}");
         }
     }
 
@@ -919,8 +916,7 @@ internal class DataTableEditor : UserControl
         {
             var dataView = _dataTable.DefaultView;
             dataView.RowFilter = rowFilter;
-            _queryForm.SetStatusbarPanelText($"RowFilter ({rowFilter}) applied. {dataView.Count} row(s) found from {_dataTable.Rows.Count} row(s).",
-                _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
+            _queryForm.SetStatusbarPanelText($"RowFilter ({rowFilter}) applied. {dataView.Count} row(s) found from {_dataTable.Rows.Count} row(s).");
         }
         catch (Exception ex)
         {
@@ -979,7 +975,7 @@ internal class DataTableEditor : UserControl
     {
         using (new CursorManager(Cursors.WaitCursor))
         {
-            _queryForm.SetStatusbarPanelText("Copying table to clipboard as XML...", _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
+            _queryForm.SetStatusbarPanelText("Copying table to clipboard as XML...");
             var textWriter = new StringWriter();
             var xmlWriter = new XmlTextWriter(textWriter);
             xmlWriter.Formatting = Formatting.Indented;
@@ -1061,8 +1057,7 @@ internal class DataTableEditor : UserControl
             xmlWriter.Close();
             var xml = textWriter.ToString();
             Clipboard.SetDataObject(xml, true, 5, 200);
-            _queryForm.SetStatusbarPanelText("Table succesfully copied to clipboard as XML.",
-                _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText);
+            _queryForm.SetStatusbarPanelText("Table succesfully copied to clipboard as XML.");
         }
     }
 

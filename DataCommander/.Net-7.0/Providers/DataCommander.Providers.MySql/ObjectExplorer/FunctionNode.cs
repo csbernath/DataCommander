@@ -48,6 +48,6 @@ internal sealed class FunctionNode : ITreeNode
 
         var queryForm = (IQueryForm)sender;
         queryForm.ClipboardSetText(statement);        
-        queryForm.SetStatusbarPanelText("Copying create function statement to clipboard finished.", SystemColors.ControlText);
+        queryForm.SetStatusbarPanelText("Copying create function statement to clipboard finished.");
     }
 }
