@@ -2220,7 +2220,7 @@ public sealed class QueryForm : Form, IQueryForm
                     var connectionProperties = new ConnectionProperties(null, Provider.Name, Provider);
                     connectionProperties.ConnectionString = connectionStringBuilder.ConnectionString;
                     
-                    var openConnectionForm = new OpenConnectionForm(connectionProperties);
+                    var openConnectionForm = new OpenConnectionForm(connectionProperties, _colorTheme);
                     if (openConnectionForm.ShowDialog() == DialogResult.OK)
                     {
                         Connection.Connection.Dispose();

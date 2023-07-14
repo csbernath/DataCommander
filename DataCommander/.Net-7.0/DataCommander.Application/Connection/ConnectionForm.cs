@@ -28,9 +28,12 @@ internal sealed class ConnectionForm : Form
     private readonly DataTable _dataTable = new();
     private bool _isDirty;
     private readonly Container _components = new();
+    private readonly ColorTheme _colorTheme;
 
     public ConnectionForm(StatusStrip statusBar, ColorTheme colorTheme)
     {
+        _colorTheme = colorTheme;
+        
         InitializeComponent();
 
         _dataTable.Columns.Add("ConnectionName", typeof(string));
@@ -301,7 +304,7 @@ internal sealed class ConnectionForm : Form
     private void Edit_Click(object sender, EventArgs e)
     {
         var configurationNode = SelectedConfigurationNode;
-        var form = new ConnectionStringBuilderForm();
+        var form = new ConnectionStringBuilderForm(_colorTheme);
         form.ConnectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(configurationNode);
         var dialogResult = form.ShowDialog();
         if (dialogResult == DialogResult.OK)
@@ -487,7 +490,7 @@ internal sealed class ConnectionForm : Form
         using (new CursorManager(Cursors.WaitCursor))
         {
             var connectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(folder);
-            var form = new OpenConnectionForm(connectionProperties);
+            var form = new OpenConnectionForm(connectionProperties, _colorTheme);
             if (form.ShowDialog() == DialogResult.OK)
             {
                 ConnectionProperties = connectionProperties;
@@ -573,7 +576,7 @@ internal sealed class ConnectionForm : Form
 
     private void newButton_Click(object sender, EventArgs e)
     {
-        var form = new ConnectionStringBuilderForm();
+        var form = new ConnectionStringBuilderForm(_colorTheme);
 
         if (form.ShowDialog() == DialogResult.OK)
         {

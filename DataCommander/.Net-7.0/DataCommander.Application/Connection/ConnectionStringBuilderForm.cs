@@ -26,13 +26,19 @@ internal partial class ConnectionStringBuilderForm : Form
     private DataTable _dataSources;
     private List<string> _initialCatalogs;
     private List<OleDbProviderInfo> _oleDbProviders;
+    private readonly ColorTheme _colorTheme;
 
-    public ConnectionStringBuilderForm()
+    public ConnectionStringBuilderForm(ColorTheme colorTheme)
     {
+        _colorTheme = colorTheme;
+
         InitializeComponent();
 
         oleDbProviderLabel.Visible = false;
         oleDbProvidersComboBox.Visible = false;
+        
+        if (colorTheme != null)
+            colorTheme.Apply(this);
 
         _providers = ProviderFactory.GetProviders()
             .OrderBy(i => i.Name)
@@ -340,7 +346,7 @@ internal partial class ConnectionStringBuilderForm : Form
         try
         {
             var connectionProperties = CreateConnectionProperties();
-            var form = new OpenConnectionForm(connectionProperties);
+            var form = new OpenConnectionForm(connectionProperties, _colorTheme);
 
             if (form.ShowDialog() == DialogResult.OK)
                 MessageBox.Show("The connection was tested successfully.", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Information);

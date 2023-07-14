@@ -19,4 +19,13 @@ internal static class ColorThemeApplier
         dataGridView.RowHeadersDefaultCellStyle.BackColor = colorTheme.BackColor;
         dataGridView.RowHeadersDefaultCellStyle.ForeColor = colorTheme.BackColor;
     }
+
+    public static void Apply(this ColorTheme colorTheme, Control control)
+    {
+        control.ForeColor = colorTheme.ForeColor;
+        control.BackColor = colorTheme.BackColor;
+
+        foreach (Control childControl in control.Controls)
+            colorTheme.Apply(childControl);
+    }
 }
