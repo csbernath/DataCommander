@@ -38,27 +38,8 @@ public static class Settings
         {
             if (_configFileName == null)
             {
-#if FOUNDATION_4_7
-                    var setup = AppDomain.CurrentDomain.SetupInformation;
-                    bool contains;
-
-                    try
-                    {
-                        contains = AppSettings.CurrentType.TryGetString("ConfigFileName", out _configFileName);
-                    }
-                    catch
-                    {
-                        contains = false;
-                    }
-
-                    if (contains && !string.IsNullOrEmpty(_configFileName))
-                        _configFileName = Path.Combine(setup.ApplicationBase, _configFileName);
-                    else
-                        _configFileName = setup.ConfigurationFile;
-#else
-                var domain = AppDomain.CurrentDomain;
-                _configFileName = $"{domain.BaseDirectory}{domain.FriendlyName}.config";
-#endif
+                var location = Assembly.GetEntryAssembly().Location;
+                _configFileName = $"{location}.config";
             }
 
             return _configFileName;
