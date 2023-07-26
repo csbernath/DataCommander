@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using System.Diagnostics;
-using System.Drawing;
 using DataCommander.Api;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
@@ -62,7 +61,7 @@ internal sealed class StoredProcedureNode : ITreeNode
             queryForm.ClipboardSetText(text);
 
             queryForm.SetStatusbarPanelText(
-                $"Copying stored prcoedure script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.");
+                $"Copying stored procedure script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.");
         }
     }
 }
