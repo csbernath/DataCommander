@@ -1,6 +1,6 @@
-﻿using System.Data.SqlClient;
-using System.Text;
-using DataCommander.Providers2;
+﻿using System.Text;
+using DataCommander.Api;
+using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.PostgreSql
 {

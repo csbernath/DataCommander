@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
+using DataCommander.Api;
 using Foundation.Data;
 using Npgsql;
 
@@ -10,10 +10,11 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
         public SchemaCollectionNode(ObjectExplorer objectExplorer) => ObjectExplorer = objectExplorer;
 
         public ObjectExplorer ObjectExplorer { get; }
-        ContextMenuStrip ITreeNode.ContextMenu => null;
         bool ITreeNode.IsLeaf => false;
         string ITreeNode.Name => "Schemas";
         string ITreeNode.Query => null;
+        public ContextMenu? GetContextMenu() => null;
+
         bool ITreeNode.Sortable => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
+using DataCommander.Api;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 {
@@ -24,9 +24,7 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
         }
 
         bool ITreeNode.Sortable => false;
-
         string ITreeNode.Query => null;
-
-        ContextMenuStrip ITreeNode.ContextMenu => null;
+        public ContextMenu? GetContextMenu() => null;
     }
 }

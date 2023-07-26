@@ -6,10 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using DataCommander.Providers.Connection;
-using DataCommander.Providers.Query;
-using DataCommander.Providers2;
-using DataCommander.Providers2.Connection;
+using DataCommander.Api;
+using DataCommander.Api.Connection;
 using Foundation.Data;
 using Foundation.Log;
 using Npgsql;
@@ -29,7 +27,6 @@ namespace DataCommander.Providers.PostgreSql
         void IProvider.ClearCompletionCache() => throw new NotImplementedException();
         string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
         ConnectionBase IProvider.CreateConnection(string connectionString) => new Connection(connectionString);
-        DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection) => throw new NotImplementedException();
         IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader) => new PostgreSqlDataReaderHelper((NpgsqlDataReader) dataReader);
 
         void IProvider.CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationconnection,
@@ -338,11 +335,7 @@ order by 1", name.Database);
         {
             return new List<Statement>
             {
-                new Statement
-                {
-                    LineIndex = 0,
-                    CommandText = commandText
-                }
+                new(0, commandText)
             };
         }
 

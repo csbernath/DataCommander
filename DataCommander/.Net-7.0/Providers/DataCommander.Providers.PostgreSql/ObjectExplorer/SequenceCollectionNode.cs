@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
+using DataCommander.Api;
 using Foundation.Data;
 using Npgsql;
 
@@ -38,6 +38,6 @@ order by sequence_name";
 
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
-        ContextMenuStrip ITreeNode.ContextMenu => null;
+        public ContextMenu? GetContextMenu() => null;
     }
 }

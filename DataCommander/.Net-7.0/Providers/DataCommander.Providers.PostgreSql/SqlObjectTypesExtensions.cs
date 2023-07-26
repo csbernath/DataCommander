@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using DataCommander.Providers2;
+using DataCommander.Api;
 
 namespace DataCommander.Providers.PostgreSql
 {

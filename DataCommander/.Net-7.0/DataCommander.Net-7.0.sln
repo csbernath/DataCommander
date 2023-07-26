@@ -68,6 +68,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Odp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.Assertions.Test", "..\..\Foundation\.Net-7.0\Assertions.Test\Foundation.Assertions.Test.csproj", "{4CCB9E25-FA57-4BDD-AB78-842D7BEFE8F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.PostgreSql", "Providers\DataCommander.Providers.PostgreSql\DataCommander.Providers.PostgreSql.csproj", "{F4553DD9-F793-4DD1-9D34-98449264018B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -190,6 +192,10 @@ Global
 		{4CCB9E25-FA57-4BDD-AB78-842D7BEFE8F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CCB9E25-FA57-4BDD-AB78-842D7BEFE8F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CCB9E25-FA57-4BDD-AB78-842D7BEFE8F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4553DD9-F793-4DD1-9D34-98449264018B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4553DD9-F793-4DD1-9D34-98449264018B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4553DD9-F793-4DD1-9D34-98449264018B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4553DD9-F793-4DD1-9D34-98449264018B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -221,6 +227,7 @@ Global
 		{8321DB29-34C0-4A27-AE1D-C3CE807A9353} = {71C8735D-181F-43FF-8CFF-5DB64B9CC5AE}
 		{E6E924FD-41D2-4A5E-909B-AD4BE7AB4084} = {71C8735D-181F-43FF-8CFF-5DB64B9CC5AE}
 		{4CCB9E25-FA57-4BDD-AB78-842D7BEFE8F8} = {2E4B255C-096E-45D0-A27B-2725C7CBE13A}
+		{F4553DD9-F793-4DD1-9D34-98449264018B} = {71C8735D-181F-43FF-8CFF-5DB64B9CC5AE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0C5BD4E9-0123-4824-9688-9D29D59A3FDE}
