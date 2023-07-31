@@ -484,8 +484,13 @@ internal sealed class ConnectionForm : Form
     private void Connect(ConfigurationNode folder)
     {
         if (_isDirty)
-            if (MessageBox.Show(this, "Do you want to save changes?", null, MessageBoxButtons.YesNo) == DialogResult.Yes)
+        {
+            const string text = "Do you want to save changes ?";
+            const string caption = "Data Commander";
+            var dialogResult = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialogResult == DialogResult.Yes)
                 DataCommanderApplication.Instance.SaveApplicationData();
+        }
 
         using (new CursorManager(Cursors.WaitCursor))
         {
