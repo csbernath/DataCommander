@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>DataCommander.Providers.PostgreSql</AssemblyName>
     <RootNamespace>DataCommander.Providers.PostgreSql</RootNamespace>
-    <LangVersion>10</LangVersion>
+    <LangVersion>11</LangVersion>
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <BaseOutputPath>..\..\DataCommander\bin</BaseOutputPath>

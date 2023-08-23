@@ -10,7 +10,7 @@
     <Authors>Data Commander</Authors>
     <PackageId>Data Commander</PackageId>
     <Description>Data Commander</Description>
-    <LangVersion>10</LangVersion>
+    <LangVersion>11</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 

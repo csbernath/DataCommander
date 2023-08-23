@@ -3,7 +3,7 @@
   <PropertyGroup>    
     <AssemblyName>DataCommander.Providers.SqlServer</AssemblyName>
     <RootNamespace>DataCommander.Providers.SqlServer</RootNamespace>
-    <LangVersion>10</LangVersion>
+    <LangVersion>11</LangVersion>
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <BaseOutputPath>..\..\DataCommander\bin</BaseOutputPath>
