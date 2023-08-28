@@ -28,5 +28,9 @@ internal sealed class Connection : ConnectionBase
     public override string Caption => _npgsqlConnection.Database;
     public override string DataSource => _npgsqlConnection.DataSource;
     public override string ServerVersion => _npgsqlConnection.ServerVersion;
-    public override int TransactionCount => 0;
+
+    public override Task<int> GetTransactionCountAsync(CancellationToken cancellationToken)
+    {
+        return Task.FromResult(0);
+    }
 }

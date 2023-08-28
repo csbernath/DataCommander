@@ -68,5 +68,8 @@ internal sealed class Connection : ConnectionBase
     {
     }
 
-    public override int TransactionCount => 0;
+    public override Task<int> GetTransactionCountAsync(CancellationToken cancellationToken)
+    {
+        return Task.FromResult(0);
+    }
 }

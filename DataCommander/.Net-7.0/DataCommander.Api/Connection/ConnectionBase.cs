@@ -43,7 +43,7 @@ public abstract class ConnectionBase
         }
     }
 
-    public abstract int TransactionCount { get; }
+    public abstract Task<int> GetTransactionCountAsync(CancellationToken cancellationToken);
     protected void InvokeInfoMessage(IReadOnlyCollection<InfoMessage> messages) => InfoMessage?.Invoke(messages);
     public event InfoMessageEventHandler InfoMessage;
     public event EventHandler<DatabaseChangedEventArgs> DatabaseChanged;

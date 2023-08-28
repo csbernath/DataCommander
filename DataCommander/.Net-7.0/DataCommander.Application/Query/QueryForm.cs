@@ -106,7 +106,7 @@ public sealed class QueryForm : Form, IQueryForm
     private SqlParser _sqlStatement;
     private IDbCommand _command;
     private CommandType _commandType = CommandType.Text;
-    private IAsyncDataAdapter _dataAdapter;
+    private IAsyncDataAdapter? _dataAdapter;
     private bool _cancel;
     private readonly Timer _timer = new();
     private readonly Stopwatch _stopwatch = new();
@@ -120,7 +120,7 @@ public sealed class QueryForm : Form, IQueryForm
     private readonly int _rowBlockSize;
     private readonly StandardOutput _standardOutput;
     private string? _database;
-    private string _fileName;
+    private string? _fileName;
     private int _commandTimeout;
     private Font _font;
     private ToolStripMenuItem _mnuRefreshObjectExplorer;
@@ -141,7 +141,7 @@ public sealed class QueryForm : Form, IQueryForm
 
     private readonly TabPage _resultSetsTabPage;
     private readonly TabControl _resultSetsTabControl;
-    private ToolStrip _toolStrip;
+    private ToolStrip? _toolStrip;
     private ToolStripSeparator _toolStripSeparator4;
     private ToolStripSplitButton _executeQuerySplitButton;
     private ToolStripMenuItem _executeQueryMenuItem;
@@ -161,7 +161,7 @@ public sealed class QueryForm : Form, IQueryForm
     private ToolStripMenuItem createCCommandQueryToolStripMenuItem;
     private ToolStripMenuItem undoToolStripMenuItem;
     private ToolStripMenuItem redoToolStripMenuItem;
-    private readonly ColorTheme _colorTheme;
+    private readonly ColorTheme? _colorTheme;
 
     #endregion
 
@@ -173,7 +173,7 @@ public sealed class QueryForm : Form, IQueryForm
     }
 
     public QueryForm(MainForm mainForm, int index, IProvider provider, string connectionString, ConnectionBase connection, StatusStrip parentStatusBar,
-        ColorTheme colorTheme)
+        ColorTheme? colorTheme)
     {
         GarbageMonitor.Default.Add("QueryForm", this);
 
@@ -384,7 +384,7 @@ public sealed class QueryForm : Form, IQueryForm
 
     public CommandState ButtonState { get; private set; }
 
-    public ConnectionBase Connection { get; private set; }
+    public ConnectionBase? Connection { get; private set; }
 
     public override Font Font
     {
@@ -503,7 +503,7 @@ public sealed class QueryForm : Form, IQueryForm
                 {
                     var tabControl = new TabControl { Dock = DockStyle.Fill };
                     tabControl.MouseUp += DataTableTabControl_MouseUp;
-                    
+
                     var index = 0;
                     foreach (DataTable dataTable in dataSet.Tables)
                     {
@@ -660,11 +660,13 @@ public sealed class QueryForm : Form, IQueryForm
         // 
         // _mainMenu
         // 
-        this._mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this._mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+        {
             this._menuItem9,
             this._menuItem8,
             this._menuItem1,
-            this._menuItem3});
+            this._menuItem3
+        });
         this._mainMenu.Location = new System.Drawing.Point(0, 0);
         this._mainMenu.Name = "_mainMenu";
         this._mainMenu.Size = new System.Drawing.Size(1016, 24);
@@ -673,10 +675,12 @@ public sealed class QueryForm : Form, IQueryForm
         // 
         // _menuItem9
         // 
-        this._menuItem9.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this._menuItem9.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+        {
             this._mnuSave,
             this._mnuSaveAs,
-            this._mnuDuplicateConnection});
+            this._mnuDuplicateConnection
+        });
         this._menuItem9.MergeAction = System.Windows.Forms.MergeAction.MatchOnly;
         this._menuItem9.MergeIndex = 0;
         this._menuItem9.Name = "_menuItem9";
@@ -714,14 +718,16 @@ public sealed class QueryForm : Form, IQueryForm
         // 
         // _menuItem8
         // 
-        this._menuItem8.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this._menuItem8.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+        {
             this._mnuPaste,
             this._mnuFind,
             this._mnuFindNext,
             this._mnuCodeCompletion,
             this._mnuGoTo,
             this.undoToolStripMenuItem,
-            this.redoToolStripMenuItem});
+            this.redoToolStripMenuItem
+        });
         this._menuItem8.MergeAction = System.Windows.Forms.MergeAction.Insert;
         this._menuItem8.MergeIndex = 2;
         this._menuItem8.Name = "_menuItem8";
@@ -756,9 +762,11 @@ public sealed class QueryForm : Form, IQueryForm
         // 
         // _mnuCodeCompletion
         // 
-        this._mnuCodeCompletion.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this._mnuCodeCompletion.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+        {
             this._mnuListMembers,
-            this._mnuClearCache});
+            this._mnuClearCache
+        });
         this._mnuCodeCompletion.MergeIndex = 3;
         this._mnuCodeCompletion.Name = "_mnuCodeCompletion";
         this._mnuCodeCompletion.Size = new System.Drawing.Size(166, 22);
@@ -808,7 +816,8 @@ public sealed class QueryForm : Form, IQueryForm
         // 
         // _menuItem1
         // 
-        this._menuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this._menuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+        {
             this._menuItem7,
             this._mnuDescribeParameters,
             this._toolStripSeparator2,
@@ -835,7 +844,8 @@ public sealed class QueryForm : Form, IQueryForm
             this._beginTransactionToolStripMenuItem,
             this._commitTransactionToolStripMenuItem,
             this._rollbackTransactionToolStripMenuItem,
-            this.createCCommandQueryToolStripMenuItem});
+            this.createCCommandQueryToolStripMenuItem
+        });
         this._menuItem1.MergeAction = System.Windows.Forms.MergeAction.Insert;
         this._menuItem1.MergeIndex = 3;
         this._menuItem1.Name = "_menuItem1";
@@ -844,9 +854,11 @@ public sealed class QueryForm : Form, IQueryForm
         // 
         // _menuItem7
         // 
-        this._menuItem7.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this._menuItem7.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+        {
             this._mnuCommandTypeText,
-            this._mnuCommandTypeStoredProcedure});
+            this._mnuCommandTypeStoredProcedure
+        });
         this._menuItem7.MergeIndex = 0;
         this._menuItem7.Name = "_menuItem7";
         this._menuItem7.Size = new System.Drawing.Size(298, 22);
@@ -972,7 +984,8 @@ public sealed class QueryForm : Form, IQueryForm
         // 
         // _menuItem2
         // 
-        this._menuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this._menuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+        {
             this._mnuText,
             this._mnuDataGrid,
             this._mnuHtml,
@@ -981,7 +994,8 @@ public sealed class QueryForm : Form, IQueryForm
             this._mnuExcel,
             this._menuResultModeFile,
             this._sQLiteDatabaseToolStripMenuItem,
-            this._insertScriptFileToolStripMenuItem});
+            this._insertScriptFileToolStripMenuItem
+        });
         this._menuItem2.MergeIndex = 13;
         this._menuItem2.Name = "_menuItem2";
         this._menuItem2.Size = new System.Drawing.Size(298, 22);
@@ -1156,17 +1170,20 @@ public sealed class QueryForm : Form, IQueryForm
         // createCCommandQueryToolStripMenuItem
         // 
         this.createCCommandQueryToolStripMenuItem.Name = "createCCommandQueryToolStripMenuItem";
-        this.createCCommandQueryToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                                                                                               | System.Windows.Forms.Keys.Q)));
+        this.createCCommandQueryToolStripMenuItem.ShortcutKeys =
+            ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                                          | System.Windows.Forms.Keys.Q)));
         this.createCCommandQueryToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
         this.createCCommandQueryToolStripMenuItem.Text = "Create C# Command/Query";
         this.createCCommandQueryToolStripMenuItem.Click += new System.EventHandler(this.createCCommandQueryToolStripMenuItem_Click);
         // 
         // _menuItem3
         // 
-        this._menuItem3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this._menuItem3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+        {
             this._mnuObjectExplorer,
-            this._mnuRefreshObjectExplorer});
+            this._mnuRefreshObjectExplorer
+        });
         this._menuItem3.MergeAction = System.Windows.Forms.MergeAction.Insert;
         this._menuItem3.MergeIndex = 4;
         this._menuItem3.Name = "_menuItem3";
@@ -1192,12 +1209,14 @@ public sealed class QueryForm : Form, IQueryForm
         // 
         // _statusBar
         // 
-        this._statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this._statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+        {
             this._sbPanelText,
             this._sbPanelTableStyle,
             this._sbPanelTimer,
             this._sbPanelRows,
-            this._sbPanelCaretPosition});
+            this._sbPanelCaretPosition
+        });
         this._statusBar.Location = new System.Drawing.Point(300, 543);
         this._statusBar.Name = "_statusBar";
         this._statusBar.Size = new System.Drawing.Size(716, 22);
@@ -1249,7 +1268,8 @@ public sealed class QueryForm : Form, IQueryForm
         // _tvObjectExplorer
         // 
         this._tvObjectExplorer.Dock = System.Windows.Forms.DockStyle.Left;
-        this._tvObjectExplorer.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+        this._tvObjectExplorer.Font =
+            new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
         this._tvObjectExplorer.Location = new System.Drawing.Point(0, 24);
         this._tvObjectExplorer.Name = "_tvObjectExplorer";
         this._tvObjectExplorer.Size = new System.Drawing.Size(300, 541);
@@ -1290,10 +1310,12 @@ public sealed class QueryForm : Form, IQueryForm
         // _toolStrip
         // 
         this._toolStrip.Dock = System.Windows.Forms.DockStyle.None;
-        this._toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this._toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+        {
             this._toolStripSeparator4,
             this._executeQuerySplitButton,
-            this._cancelQueryButton});
+            this._cancelQueryButton
+        });
         this._toolStrip.Location = new System.Drawing.Point(303, 281);
         this._toolStrip.Name = "_toolStrip";
         this._toolStrip.Size = new System.Drawing.Size(73, 25);
@@ -1308,11 +1330,13 @@ public sealed class QueryForm : Form, IQueryForm
         // _executeQuerySplitButton
         // 
         this._executeQuerySplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-        this._executeQuerySplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this._executeQuerySplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+        {
             this._executeQueryMenuItem,
             this._executeQuerySingleRowToolStripMenuItem,
             this._cToolStripMenuItem,
-            this._openTableToolStripMenuItem});
+            this._openTableToolStripMenuItem
+        });
         this._executeQuerySplitButton.Image = ((System.Drawing.Image)(resources.GetObject("_executeQuerySplitButton.Image")));
         this._executeQuerySplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
         this._executeQuerySplitButton.Name = "_executeQuerySplitButton";
@@ -2219,7 +2243,7 @@ public sealed class QueryForm : Form, IQueryForm
 
                     var connectionProperties = new ConnectionProperties(null, Provider.Name, Provider);
                     connectionProperties.ConnectionString = connectionStringBuilder.ConnectionString;
-                    
+
                     var openConnectionForm = new OpenConnectionForm(connectionProperties, _colorTheme);
                     if (openConnectionForm.ShowDialog() == DialogResult.OK)
                     {
@@ -2363,43 +2387,57 @@ public sealed class QueryForm : Form, IQueryForm
                 hasElements = true;
                 var infoMessages = new InfoMessage[_infoMessages.Count];
                 var count = _infoMessages.Take(infoMessages);
-                for (var i = 0; i < count; i++)
+                try
                 {
-                    this.Invoke(() =>
+                    for (var i = 0; i < count; i++)
                     {
-                        var message = infoMessages[i];
-                        var color = _messagesTextBox.SelectionColor;
-
-                        switch (message.Severity)
+                        Invoke(() =>
                         {
-                            case InfoMessageSeverity.Error:
-                                _messagesTextBox.SelectionColor = _colorTheme != null ? _colorTheme.ProviderKeyWordColor : Color.Red;
-                                break;
+                            var message = infoMessages[i];
+                            var color = _messagesTextBox.SelectionColor;
 
-                            case InfoMessageSeverity.Information:
-                                _messagesTextBox.SelectionColor = _colorTheme != null ? _colorTheme.SqlKeyWordColor : Color.Blue;
-                                break;
-                        }
+                            switch (message.Severity)
+                            {
+                                case InfoMessageSeverity.Error:
+                                    _messagesTextBox.SelectionColor = _colorTheme?.ProviderKeyWordColor ?? Color.Red;
+                                    break;
 
-                        AppendMessageText(message.CreationTime, message.Severity, message.Header, message.Message);
+                                case InfoMessageSeverity.Information:
+                                    _messagesTextBox.SelectionColor = _colorTheme?.SqlKeyWordColor ?? Color.Blue;
+                                    break;
+                            }
 
-                        switch (message.Severity)
-                        {
-                            case InfoMessageSeverity.Error:
-                            case InfoMessageSeverity.Information:
-                                _messagesTextBox.SelectionColor = color;
-                                break;
-                        }
-                    });
+                            AppendMessageText(message.CreationTime, message.Severity, message.Header, message.Message);
+
+                            switch (message.Severity)
+                            {
+                                case InfoMessageSeverity.Error:
+                                case InfoMessageSeverity.Information:
+                                    _messagesTextBox.SelectionColor = color;
+                                    break;
+                            }
+                        });
+                    }
+                }
+                catch
+                {
                 }
             }
 
             if (hasElements)
-                this.Invoke(() =>
+            {
+                try
                 {
-                    _messagesTextBox.ScrollToCaret();
-                    _messagesTextBox.Update();
-                });
+                    Invoke(() =>
+                    {
+                        _messagesTextBox.ScrollToCaret();
+                        _messagesTextBox.Update();
+                    });
+                }
+                catch
+                {
+                }
+            }
 
             if (_infoMessages.Count == 0)
             {
@@ -2512,7 +2550,7 @@ public sealed class QueryForm : Form, IQueryForm
     private void mnuCloseTabPage_Click(object sender, EventArgs e)
     {
         var tabPage = _tabControl.SelectedTab;
-            
+
         if (tabPage != null && tabPage != _messagesTabPage && tabPage != _resultSetsTabPage)
             CloseResultSetTabPage(tabPage);
     }
@@ -2520,7 +2558,7 @@ public sealed class QueryForm : Form, IQueryForm
     private void CloseResultSetTabPages()
     {
         var tabPages = _resultSetsTabControl.TabPages.Cast<TabPage>().ToArray();
-            
+
         foreach (var tabPage in tabPages)
             CloseResultSetTabPage(tabPage);
 
@@ -2544,10 +2582,10 @@ public sealed class QueryForm : Form, IQueryForm
         this.Invoke(() => FocusControl(QueryTextBox));
     }
 
-    public void CancelCommandQuery()
+    private void CancelCommandQuery()
     {
         Log.Trace(ThreadMonitor.ToStringTableString());
-        const string message = "Cancelling command...";
+        const string message = "Canceling command...";
         AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, message));
         SetStatusbarPanelText("Cancel Executing Command/Query...");
         _cancel = true;
@@ -2580,127 +2618,297 @@ public sealed class QueryForm : Form, IQueryForm
         }
     }
 
-    private void Timer_Tick(object o, EventArgs e) => this.Invoke(ShowTimer);
+    private void Timer_Tick(object o, EventArgs e) => Invoke(ShowTimer);
 
-    protected override void OnClosing(CancelEventArgs e)
+    private OnFormClosingState _onFormClosingState;
+    private Task<bool> _hasTransactionsTask;
+
+    protected override void OnFormClosing(FormClosingEventArgs formClosingEventArgs)
     {
-        var text = QueryTextBox.RichTextBox.Text;
-        if (Connection != null)
-            Log.Write(LogLevel.Trace, "Saving text before closing form(connectionName: {0}):\r\n{1}", Connection.ConnectionName, text);
-
-        if (_dataAdapter == null)
+        // AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, "Closing form..."));
+        base.OnFormClosing(formClosingEventArgs);
+        switch (_onFormClosingState)
         {
-            bool hasTransactions;
-            if (_transaction != null)
-                hasTransactions = true;
-            else if (Connection != null && Connection.State == ConnectionState.Open)
-            {
-                try
+            case OnFormClosingState.None:
+                SaveTextOnFormClosing(formClosingEventArgs);
+                if (!formClosingEventArgs.Cancel)
                 {
-                    hasTransactions = Connection.TransactionCount > 0;
-                }
-                catch (Exception ex)
-                {
-                    var message = Provider.GetExceptionMessage(ex);
-                    var color = _messagesTextBox.SelectionColor;
-                    _messagesTextBox.SelectionColor = Color.Red;
-                    AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, message));
-                    _messagesTextBox.SelectionColor = color;
-                    hasTransactions = false;
-                }
-            }
-            else
-                hasTransactions = false;
-
-            if (hasTransactions)
-            {
-                text = "There are uncommitted transactions. Do you wish to commit these transactions before closing the window?";
-                var caption = DataCommanderApplication.Instance.Name;
-                var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
-                switch (result)
-                {
-                    case DialogResult.Yes:
-                        // TODO
-                        // this.connection.COmmit();
-                        e.Cancel = true;
-                        break;
-
-                    case DialogResult.No:
-                        break;
-
-                    case DialogResult.Cancel:
-                        e.Cancel = true;
-                        break;
-                }
-            }
-
-            if (!e.Cancel)
-            {
-                var length = QueryTextBox.Text.Length;
-
-                if (length > 0)
-                {
-                    text = $"The text in {Text} has been changed.\r\nDo you want to save the changes?";
-                    var caption = DataCommanderApplication.Instance.Name;
-                    var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
-
-                    switch (result)
+                    CancelQueryOnFormClosing(formClosingEventArgs);
+                    if (!formClosingEventArgs.Cancel)
                     {
-                        case DialogResult.Yes:
-                            if (_fileName != null)
-                                Save(_fileName);
-                            else
-                                ShowSaveFileDialog();
-
-                            break;
-
-                        case DialogResult.No:
-                            break;
-
-                        case DialogResult.Cancel:
-                            e.Cancel = true;
-                            break;
+                        if (Connection.State == ConnectionState.Open)
+                        {
+                            formClosingEventArgs.Cancel = true;
+                            _hasTransactionsTask = StartHasTransactionsTask();
+                        }
                     }
                 }
-            }
+
+                break;
+            case OnFormClosingState.HasTransactionTaskCompleted:
+                var hasTransactions = _hasTransactionsTask.Result;
+                _hasTransactionsTask = null;
+                if (hasTransactions)
+                    CommitTransactionOnFormClosing(formClosingEventArgs);
+                CloseConnectionOnFormClosing();
+                // var message = formClosingEventArgs.Cancel
+                //     ? "Closing form canceled."
+                //     : "Form closed.";
+                // AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, message));
+                break;
         }
-        else
+    }
+
+    private void SaveTextOnFormClosing(FormClosingEventArgs formClosingEventArgs)
+    {
+        var length = QueryTextBox.Text.Length;
+        if (length > 0)
         {
-            text = "Are you sure you wish to cancel this query?";
+            var text = $"The text in {Text} has been changed.\r\nDo you want to save the changes?";
             var caption = DataCommanderApplication.Instance.Name;
             var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+            switch (result)
+            {
+                case DialogResult.Yes:
+                    if (_fileName != null)
+                        Save(_fileName);
+                    else
+                        ShowSaveFileDialog();
 
+                    break;
+
+                case DialogResult.No:
+                    break;
+
+                case DialogResult.Cancel:
+                    formClosingEventArgs.Cancel = true;
+                    break;
+            }
+        }
+    }
+
+    private void CancelQueryOnFormClosing(FormClosingEventArgs formClosingEventArgs)
+    {
+        if (_dataAdapter != null)
+        {
+            var text = "Are you sure you wish to cancel this query?";
+            var caption = DataCommanderApplication.Instance.Name;
+            var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
             if (result == DialogResult.Yes)
             {
                 CancelCommandQuery();
                 _timer.Enabled = false;
             }
             else
-            {
-                e.Cancel = true;
-            }
+                formClosingEventArgs.Cancel = true;
         }
+    }
 
-        if (!e.Cancel)
+    private void CommitTransactionOnFormClosing(FormClosingEventArgs formClosingEventArgs)
+    {
+        var text = "There are uncommitted transactions. Do you wish to commit these transactions before closing the window?";
+        var caption = DataCommanderApplication.Instance.Name;
+        var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+        switch (result)
         {
-            _cancellationTokenSource.Cancel();
+            case DialogResult.Yes:
+            case DialogResult.Cancel:
+                formClosingEventArgs.Cancel = true;
+                break;
 
-            if (Connection != null)
-            {
-                var dataSource = Connection.DataSource;
-                _parentStatusBar.Items[0].Text = $"Closing connection to data source {dataSource}'....";
-                Connection.Close();
-                _parentStatusBar.Items[0].Text = $"Connection to data source {dataSource} closed.";
-                Connection.Connection.Dispose();
-                Connection = null;
-            }
-
-            if (_toolStrip != null)
-            {
-                _toolStrip.Dispose();
-                _toolStrip = null;
-            }
+            case DialogResult.No:
+                break;
         }
+    }
+
+    private void CloseConnectionOnFormClosing()
+    {
+        _cancellationTokenSource.Cancel();
+        
+        if (Connection != null)
+        {
+            var dataSource = Connection.DataSource;
+            _parentStatusBar.Items[0].Text = $"Closing connection to data source {dataSource}'....";
+            Connection.Close();
+            _parentStatusBar.Items[0].Text = $"Connection to data source {dataSource} closed.";
+            Connection.Connection.Dispose();
+            Connection = null;
+        }
+        
+        if (_toolStrip != null)
+        {
+            _toolStrip.Dispose();
+            _toolStrip = null;
+        }
+    }
+
+    // protected override void OnClosing(CancelEventArgs e)
+    // {
+    //     var text = QueryTextBox.RichTextBox.Text;
+    //     if (Connection != null)
+    //         Log.Write(LogLevel.Trace, "Saving text before closing form(connectionName: {0}):\r\n{1}", Connection.ConnectionName, text);
+    //
+    //     if (_dataAdapter == null)
+    //     {
+    //         bool hasTransactions;
+    //         if (_transaction != null)
+    //             hasTransactions = true;
+    //         else if (Connection != null && Connection.State == ConnectionState.Open)
+    //         {
+    //             try
+    //             {
+    //                 hasTransactions = HasTransations();
+    //             }
+    //             catch (Exception ex)
+    //             {
+    //                 var message = Provider.GetExceptionMessage(ex);
+    //                 var color = _messagesTextBox.SelectionColor;
+    //                 _messagesTextBox.SelectionColor = Color.Red;
+    //                 AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, message));
+    //                 _messagesTextBox.SelectionColor = color;
+    //                 hasTransactions = false;
+    //             }
+    //         }
+    //         else
+    //             hasTransactions = false;
+    //
+    //         if (hasTransactions)
+    //         {
+    //             text = "There are uncommitted transactions. Do you wish to commit these transactions before closing the window?";
+    //             var caption = DataCommanderApplication.Instance.Name;
+    //             var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+    //             switch (result)
+    //             {
+    //                 case DialogResult.Yes:
+    //                     // TODO
+    //                     // this.connection.COmmit();
+    //                     e.Cancel = true;
+    //                     break;
+    //
+    //                 case DialogResult.No:
+    //                     break;
+    //
+    //                 case DialogResult.Cancel:
+    //                     e.Cancel = true;
+    //                     break;
+    //             }
+    //         }
+    //
+    //         if (!e.Cancel)
+    //         {
+    //             var length = QueryTextBox.Text.Length;
+    //
+    //             if (length > 0)
+    //             {
+    //                 text = $"The text in {Text} has been changed.\r\nDo you want to save the changes?";
+    //                 var caption = DataCommanderApplication.Instance.Name;
+    //                 var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+    //
+    //                 switch (result)
+    //                 {
+    //                     case DialogResult.Yes:
+    //                         if (_fileName != null)
+    //                             Save(_fileName);
+    //                         else
+    //                             ShowSaveFileDialog();
+    //
+    //                         break;
+    //
+    //                     case DialogResult.No:
+    //                         break;
+    //
+    //                     case DialogResult.Cancel:
+    //                         e.Cancel = true;
+    //                         break;
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     else
+    //     {
+    //         text = "Are you sure you wish to cancel this query?";
+    //         var caption = DataCommanderApplication.Instance.Name;
+    //         var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+    //
+    //         if (result == DialogResult.Yes)
+    //         {
+    //             CancelCommandQuery();
+    //             _timer.Enabled = false;
+    //         }
+    //         else
+    //         {
+    //             e.Cancel = true;
+    //         }
+    //     }
+    //
+    //     if (!e.Cancel)
+    //     {
+    //         _cancellationTokenSource.Cancel();
+    //
+    //         if (Connection != null)
+    //         {
+    //             var dataSource = Connection.DataSource;
+    //             _parentStatusBar.Items[0].Text = $"Closing connection to data source {dataSource}'....";
+    //             Connection.Close();
+    //             _parentStatusBar.Items[0].Text = $"Connection to data source {dataSource} closed.";
+    //             Connection.Connection.Dispose();
+    //             Connection = null;
+    //         }
+    //
+    //         if (_toolStrip != null)
+    //         {
+    //             _toolStrip.Dispose();
+    //             _toolStrip = null;
+    //         }
+    //     }
+    // }
+
+    private Task<bool> StartHasTransactionsTask()
+    {
+        var cancellationTokenSource = new CancellationTokenSource();
+        var cancelActionForm = new CancelActionForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), "Getting transaction count...", _colorTheme);
+        cancelActionForm.BeforeExecuteAction();
+        var cancellationToken = cancellationTokenSource.Token;        
+        var hasTransactionsTask = new Task<bool>(() =>
+        {
+            var hasTransactions = false;
+            Exception? exception = null;
+            try
+            {
+                var transactionCount = Connection.GetTransactionCountAsync(cancellationToken).Result;
+                //AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, $"Transaction count: {transactionCount}"));
+                hasTransactions = transactionCount > 0;
+            }
+            catch (Exception e)
+            {
+                exception = e;
+            }
+            finally
+            {
+                cancelActionForm.AfterExecuteAction();
+            }
+
+            if (exception == null)
+            {
+                _onFormClosingState = OnFormClosingState.HasTransactionTaskCompleted;
+            }
+            else
+            {
+                _onFormClosingState = OnFormClosingState.None;
+                var exceptionString = exception.ToString();
+                var message = $"Getting transaction count failed.\r\n{exceptionString}";
+                AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Error, string.Empty, message));
+            }
+
+            return hasTransactions;
+        });
+        hasTransactionsTask.ContinueWith(_ =>
+        {
+            if (_onFormClosingState == OnFormClosingState.HasTransactionTaskCompleted)
+                Invoke(Close);
+        }, cancellationToken);
+        hasTransactionsTask.Start();
+        return hasTransactionsTask;
     }
 
     private void SetResultWriterType(ResultWriterType tableStyle)
@@ -3531,8 +3739,6 @@ public sealed class QueryForm : Form, IQueryForm
             var keyWordHashSet = sqlKeyWords.Concat(providerKeyWords)
                 .Select(keyWord => keyWord.ToUpper())
                 .ToHashSet();
-            
-            var textWriter = _standardOutput.TextWriter;
 
             _sqlStatement = new SqlParser(Query);
             _command = _sqlStatement.CreateCommand(Provider, Connection, CommandType.Text, _commandTimeout);
@@ -3572,7 +3778,7 @@ public sealed class QueryForm : Form, IQueryForm
                             var schemaRow = schemaRows[i];
                             var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
 
-                            if (keyWordHashSet.Contains((columnName.ToUpper()))) 
+                            if (keyWordHashSet.Contains((columnName.ToUpper())))
                                 columnName = new SqlCommandBuilder().QuoteIdentifier(columnName);
 
                             sb.Append(columnName);
@@ -3710,7 +3916,6 @@ public sealed class QueryForm : Form, IQueryForm
     private void tvObjectBrowser_ItemDrag(object sender, ItemDragEventArgs e)
     {
         var treeNode = (TreeNode)e.Item;
-        var treeNode2 = (ITreeNode)treeNode.Tag;
         var text = treeNode.Text;
         _tvObjectExplorer.DoDragDrop(text, DragDropEffects.All);
     }
@@ -4005,7 +4210,7 @@ public sealed class QueryForm : Form, IQueryForm
     {
         var mainForm = DataCommanderApplication.Instance.MainForm;
         mainForm.Cursor = Cursors.WaitCursor;
-            
+
         try
         {
             var selectionStart = _queryTextBox.RichTextBox.TextLength;

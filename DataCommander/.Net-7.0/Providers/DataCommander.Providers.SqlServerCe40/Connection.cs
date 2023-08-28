@@ -26,5 +26,9 @@ internal sealed class Connection : ConnectionBase
     public override string DataSource => _sqlCeConnection.DataSource;
     protected void SetDatabase(string database) => throw new NotImplementedException();
     public override string ServerVersion => _sqlCeConnection.ServerVersion;
-    public override int TransactionCount => 0;
+    
+    public override Task<int> GetTransactionCountAsync(CancellationToken cancellationToken)
+    {
+        return Task.FromResult(0);
+    }
 }

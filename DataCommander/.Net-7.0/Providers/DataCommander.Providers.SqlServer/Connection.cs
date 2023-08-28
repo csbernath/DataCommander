@@ -235,15 +235,16 @@ internal sealed class Connection : ConnectionBase
         }
     }
 
-    public override int TransactionCount
+    public override async Task<int> GetTransactionCountAsync(CancellationToken cancellationToken)
     {
-        get
-        {
-            var executor = DbCommandExecutorFactory.Create(_sqlConnection);
-            var scalar = executor.ExecuteScalar(new CreateCommandRequest("select @@trancount"));
-            var transactionCount = (int)scalar;
-            return transactionCount;
-        }
+        var executor = DbCommandExecutorFactory.Create(_sqlConnection);
+        var createCommandRequest = new CreateCommandRequest("select @@trancount");
+        var executeNonReaderRequest = new ExecuteNonReaderRequest(createCommandRequest, cancellationToken);
+        var scalar = await executor.ExecuteScalarAsync(executeNonReaderRequest);
+        var transactionCount = (int)scalar;
+        // cancellationToken.WaitHandle.WaitOne(10000);
+        // cancellationToken.ThrowIfCancellationRequested();
+        return transactionCount;
     }
 
     private void CreateConnection()
