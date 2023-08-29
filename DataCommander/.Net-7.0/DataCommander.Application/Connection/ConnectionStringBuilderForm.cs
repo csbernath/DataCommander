@@ -6,6 +6,8 @@ using System.Data.Common;
 using System.Data.OleDb;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
@@ -36,7 +38,7 @@ internal partial class ConnectionStringBuilderForm : Form
 
         oleDbProviderLabel.Visible = false;
         oleDbProvidersComboBox.Visible = false;
-        
+
         if (colorTheme != null)
             colorTheme.Apply(this);
 
@@ -115,7 +117,7 @@ internal partial class ConnectionStringBuilderForm : Form
             var index = providersComboBox.SelectedIndex;
             var providerIdentifier = _providers[index].Identifier;
             var provider = ProviderFactory.CreateProvider(providerIdentifier);
-            _tempConnectionProperties = new ConnectionProperties(null,providerIdentifier, provider);
+            _tempConnectionProperties = new ConnectionProperties(null, providerIdentifier, provider);
             _dbProviderFactory = provider.DbProviderFactory;
 
             if (_dbProviderFactory is OleDbFactory oleDbFactory)
@@ -321,7 +323,7 @@ internal partial class ConnectionStringBuilderForm : Form
     {
         var connectionName = connectionNameTextBox.Text;
         var providerInfo = _providers[providersComboBox.SelectedIndex];
-        var provider = ProviderFactory.CreateProvider(providerInfo.Identifier);      
+        var provider = ProviderFactory.CreateProvider(providerInfo.Identifier);
         var connectionProperties = new ConnectionProperties(connectionName, providerInfo.Identifier, provider);
         _dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
         SaveTo(_dbConnectionStringBuilder);
@@ -343,22 +345,35 @@ internal partial class ConnectionStringBuilderForm : Form
 
     private void testButton_Click(object sender, EventArgs e)
     {
-        try
+        var connectionProperties = CreateConnectionProperties();
+        var cancellationTokenSource = new CancellationTokenSource();
+        var cancellationToken = cancellationTokenSource.Token;
+        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, "Opening connection...", string.Empty, _colorTheme);
+        cancelableOperationForm.OpenForm(TimeSpan.Zero);
+        var task = new Task(() =>
         {
-            var connectionProperties = CreateConnectionProperties();
-            var form = new OpenConnectionForm(connectionProperties, _colorTheme);
+            Exception? exception = null;
+            try
+            {
+                var connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
+                connection.OpenAsync(cancellationToken)
+                    .Wait(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                exception = e;
+            }
 
-            if (form.ShowDialog() == DialogResult.OK)
+            cancelableOperationForm.CloseForm();
+            if (exception == null)
                 MessageBox.Show("The connection was tested successfully.", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-        catch (Exception ex)
-        {
-            DataCommanderApplication.Instance.MainForm.StatusBar.Items[0].Text = ex.Message;
-        }
-        finally
-        {
-            Cursor = Cursors.Default;
-        }
+            else
+            {
+                if (!cancelableOperationForm.OperationCanceled)
+                    MessageBox.Show(exception.Message, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }, cancellationToken);
+        task.Start();
     }
 
     private sealed class OleDbProviderInfo

@@ -10,11 +10,11 @@ public sealed class ConnectionProperties
     public readonly string ProviderIdentifier;
 
     public Option<string> Password;
-    public IProvider Provider;
+    public IProvider? Provider;
     public string ConnectionString;
     public ConnectionBase Connection;
 
-    public ConnectionProperties(string connectionName, string providerIdentifier, IProvider provider)
+    public ConnectionProperties(string connectionName, string providerIdentifier, IProvider? provider)
     {
         ConnectionName = connectionName;
         ProviderIdentifier = providerIdentifier;

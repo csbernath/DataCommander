@@ -175,6 +175,7 @@ public sealed class QueryForm : Form, IQueryForm
     public QueryForm(MainForm mainForm, int index, IProvider provider, string connectionString, ConnectionBase connection, StatusStrip parentStatusBar,
         ColorTheme? colorTheme)
     {
+        Log.Trace(CallerInformation.Create(), "Queryform.ctor...");        
         GarbageMonitor.Default.Add("QueryForm", this);
 
         _mainForm = mainForm;
@@ -312,6 +313,8 @@ public sealed class QueryForm : Form, IQueryForm
                 item.BackColor = colorTheme.BackColor;
             }
         }
+
+        Log.Trace(CallerInformation.Create(), "Queryform.ctor finished.");
     }
 
     private void CloseResultTabPage(TabPage tabPage)
@@ -2866,9 +2869,9 @@ public sealed class QueryForm : Form, IQueryForm
     private Task<bool> StartHasTransactionsTask()
     {
         var cancellationTokenSource = new CancellationTokenSource();
-        var cancelActionForm = new CancelActionForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), "Getting transaction count...", _colorTheme);
-        cancelActionForm.BeforeExecuteAction();
-        var cancellationToken = cancellationTokenSource.Token;        
+        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, "Getting transaction count...", string.Empty, _colorTheme);
+        cancelableOperationForm.OpenForm(TimeSpan.FromSeconds(1));
+        var cancellationToken = cancellationTokenSource.Token;
         var hasTransactionsTask = new Task<bool>(() =>
         {
             var hasTransactions = false;
@@ -2885,7 +2888,7 @@ public sealed class QueryForm : Form, IQueryForm
             }
             finally
             {
-                cancelActionForm.AfterExecuteAction();
+                cancelableOperationForm.CloseForm();
             }
 
             if (exception == null)
@@ -2906,7 +2909,7 @@ public sealed class QueryForm : Form, IQueryForm
         {
             if (_onFormClosingState == OnFormClosingState.HasTransactionTaskCompleted)
                 Invoke(Close);
-        }, cancellationToken);
+        });
         hasTransactionsTask.Start();
         return hasTransactionsTask;
     }

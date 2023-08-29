@@ -6,47 +6,60 @@ using System.Windows.Forms;
 using DataCommander.Api;
 using DataCommander.Application.Connection;
 using Foundation.Core;
+using Foundation.Log;
 
 namespace DataCommander.Application;
 
-public partial class CancelActionForm : Form
+public partial class CancelableOperationForm : Form
 {
+    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();    
     private readonly Control _owner;
-    private CancellationTokenSource _cancellationTokenSource;
-    private readonly TimeSpan _dueTime;
+    private readonly CancellationTokenSource _cancellationTokenSource;
     private System.Threading.Timer? _elapsedTimeTimer;
     private long _startTimestamp;
+    private long _elapsedTicks;
+    private bool _operationCanceled;
 
-    public CancelActionForm(Control owner, CancellationTokenSource cancellationTokenSource, TimeSpan dueTime, string text, ColorTheme? colorTheme)
+    public CancelableOperationForm(
+        Control owner,
+        CancellationTokenSource cancellationTokenSource,
+        string formText,
+        string textBoxText,
+        ColorTheme? colorTheme)
     {
         ArgumentNullException.ThrowIfNull(owner);
         _owner = owner;
-        _dueTime = dueTime;
         _cancellationTokenSource = cancellationTokenSource;
         _elapsedTimeTimer = new System.Threading.Timer(ElapsedTimeTimerCallback, null, Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
         InitializeComponent();
         colorTheme?.Apply(this);
-        textBox.AppendText(text);
+        Text = formText;
+        textBox.AppendText(textBoxText);
     }
 
-    public void BeforeExecuteAction()
+    public bool OperationCanceled => _operationCanceled;
+    public long ElapsedTicks => _elapsedTicks;
+
+    public void OpenForm(TimeSpan delay)
     {
         _startTimestamp = Stopwatch.GetTimestamp();
         var cancellationToken = _cancellationTokenSource.Token;
-        Task.Delay(TimeSpan.FromSeconds(2), cancellationToken)
+        Task.Delay(delay, cancellationToken)
             .ContinueWith(_ =>
             {
                 var period = TimeSpan.FromSeconds(1);
                 if (_elapsedTimeTimer != null && !cancellationToken.IsCancellationRequested)
                 {
-                    _elapsedTimeTimer.Change(_dueTime, period);
+                    _elapsedTimeTimer.Change(TimeSpan.Zero, period);
                     _owner.Invoke(() => ShowDialog(_owner));
                 }
             }, cancellationToken);
     }
 
-    public void AfterExecuteAction()
+    public void CloseForm()
     {
+        _elapsedTicks = Stopwatch.GetTimestamp() - _startTimestamp;
+
         if (_elapsedTimeTimer != null)
         {
             _elapsedTimeTimer.Dispose();
@@ -66,9 +79,10 @@ public partial class CancelActionForm : Form
         }
     }
 
-    private void cancelButton_Click(object sender, EventArgs e)
+    private void CancelButton_Click(object sender, EventArgs e)
     {
         cancelButton.Enabled = false;
+        _operationCanceled = true;
         textBox.AppendText("\r\nCanceling action...");
         _cancellationTokenSource.Cancel();
     }

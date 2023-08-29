@@ -28,7 +28,7 @@ internal sealed class OpenConnectionForm : Form
     private readonly EventWaitHandle _handleCreatedEvent = new(false, EventResetMode.ManualReset);
     private readonly CancellationTokenSource _cancellationTokenSource;
 
-    public OpenConnectionForm(ConnectionProperties connectionProperties, ColorTheme colorTheme)
+    public OpenConnectionForm(ConnectionProperties connectionProperties, ColorTheme? colorTheme)
     {
         InitializeComponent();
         HandleCreated += OpenConnectionForm_HandleCreated;
@@ -36,20 +36,7 @@ internal sealed class OpenConnectionForm : Form
         _stopwatch.Start();
         _timer.Enabled = true;
 
-        if (colorTheme != null)
-        {
-            colorTheme.Apply(this);
-            // ForeColor = colorTheme.ForeColor;
-            // BackColor = colorTheme.BackColor;
-            //
-            // _textBox.ForeColor = colorTheme.ForeColor;
-            // _textBox.BackColor = colorTheme.BackColor;
-            //
-            // _tbTimer.ForeColor
-            //
-            // _btnCancel.ForeColor = colorTheme.ForeColor;
-            // _btnCancel.BackColor = colorTheme.BackColor;
-        }
+        colorTheme?.Apply(this);
 
         var dbConnectionStringBuilder = new DbConnectionStringBuilder();
         dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;

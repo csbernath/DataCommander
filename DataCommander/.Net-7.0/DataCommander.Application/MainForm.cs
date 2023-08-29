@@ -570,6 +570,7 @@ public class MainForm : Form
 
         if (connectionForm.ShowDialog() == DialogResult.OK)
         {
+            Log.Trace(CallerInformation.Create(), "connectionForm.ShowDialog() finished.");
             var connectionProperties = connectionForm.ConnectionProperties;
 
             var queryForm = new QueryForm(this, MdiChildren.Length, connectionProperties.Provider, connectionProperties.ConnectionString,
@@ -596,7 +597,7 @@ public class MainForm : Form
                     break;
             }
 
-            var message = $@"Connection opened in {StopwatchTimeSpan.ToString(connectionForm.Duration, 3)} seconds.
+            var message = $@"Connection opened in {StopwatchTimeSpan.ToString(connectionForm.ElapsedTicks, 3)} seconds.
 ConnectionName: {connectionProperties.ConnectionName}
 ProviderIdentifier: {connectionProperties.ProviderIdentifier}
 DataSource: {connectionProperties.Connection.DataSource}

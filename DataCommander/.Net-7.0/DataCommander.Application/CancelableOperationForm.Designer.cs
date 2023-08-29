@@ -1,6 +1,6 @@
 ﻿namespace DataCommander.Application
 {
-    partial class CancelActionForm
+    partial class CancelableOperationForm
     {
         /// <summary>
         /// Required designer variable.
@@ -40,13 +40,13 @@
             textBox.Multiline = true;
             textBox.Name = "textBox";
             textBox.ReadOnly = true;
-            textBox.Size = new System.Drawing.Size(431, 94);
+            textBox.Size = new System.Drawing.Size(586, 94);
             textBox.TabIndex = 0;
             // 
             // elapsedTimeTextBox
             // 
             elapsedTimeTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            elapsedTimeTextBox.Location = new System.Drawing.Point(8, 100);
+            elapsedTimeTextBox.Location = new System.Drawing.Point(12, 194);
             elapsedTimeTextBox.Name = "elapsedTimeTextBox";
             elapsedTimeTextBox.ReadOnly = true;
             elapsedTimeTextBox.Size = new System.Drawing.Size(87, 20);
@@ -54,28 +54,28 @@
             // 
             // cancelButton
             // 
-            cancelButton.Location = new System.Drawing.Point(325, 100);
+            cancelButton.Location = new System.Drawing.Point(226, 190);
             cancelButton.Name = "cancelButton";
             cancelButton.Size = new System.Drawing.Size(94, 29);
             cancelButton.TabIndex = 2;
             cancelButton.Text = "Cancel";
             cancelButton.UseVisualStyleBackColor = true;
-            cancelButton.Click += cancelButton_Click;
+            cancelButton.Click += CancelButton_Click;
             // 
-            // CancelActionForm
+            // CancelableOperationForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(431, 156);
+            ClientSize = new System.Drawing.Size(586, 231);
             ControlBox = false;
             Controls.Add(cancelButton);
             Controls.Add(elapsedTimeTextBox);
             Controls.Add(textBox);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "CancelActionForm";
+            Name = "CancelableOperationForm";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            Text = "Data Commander - cancel action";
             ResumeLayout(false);
             PerformLayout();
         }
