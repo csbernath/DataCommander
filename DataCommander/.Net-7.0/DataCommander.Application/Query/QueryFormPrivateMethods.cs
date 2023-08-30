@@ -176,11 +176,6 @@ public sealed partial class QueryForm
         TableStyle = tableStyle;
         _sbPanelTableStyle.Text = tableStyle.ToString();
     }
-}
-
-public sealed partial class QueryForm
-{
-    #region Private Methods
 
     private void AddTable(OleDbConnection oleDbConnection, DataSet dataSet, Guid guid, string name)
     {
@@ -728,8 +723,6 @@ public sealed partial class QueryForm
         else
             AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Please open a destination connection."));
     }
-
-    #endregion
 
     private void redoToolStripMenuItem_Click(object sender, EventArgs e)
     {

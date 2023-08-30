@@ -35,8 +35,6 @@ namespace DataCommander.Application.Query;
 
 public sealed partial class QueryForm : Form, IQueryForm
 {
-    #region Constructors
-
     static QueryForm()
     {
         NumberFormat = new NumberFormatInfo { NumberDecimalSeparator = "." };
@@ -215,10 +213,6 @@ public sealed partial class QueryForm : Form, IQueryForm
         }
     }
 
-    #endregion
-
-    #region Properties
-
     public ColorTheme ColorTheme => _colorTheme;
 
     public CommandState ButtonState { get; private set; }
@@ -248,8 +242,6 @@ public sealed partial class QueryForm : Form, IQueryForm
     public ResultWriterType TableStyle { get; private set; }
 
     internal ToolStrip ToolStrip => _toolStrip;
-
-    #endregion
 
     #region Windows Form Designer generated code
 
@@ -1104,8 +1096,6 @@ public sealed partial class QueryForm : Form, IQueryForm
     }
 
     #endregion
-
-    #region Private Methods
 
     private void AddNodes(TreeNodeCollection parent, IEnumerable<ITreeNode> children, bool sortable)
     {
@@ -2138,6 +2128,4 @@ public sealed partial class QueryForm : Form, IQueryForm
         _sbPanelText.Text = text;
         _sbPanelText.ForeColor = color;
     }
-
-    #endregion
 }

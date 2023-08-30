@@ -104,8 +104,6 @@ public sealed partial class QueryForm
         SetStatusbarPanelText(text, color);
     }
 
-    #region Properties
-
     public override Font Font
     {
         set
@@ -129,10 +127,6 @@ public sealed partial class QueryForm
             _messagesTextBox.SelectionTabs = tabs;
         }
     }
-
-    #endregion
-
-    #region Public Methods
 
     public void ShowDataSet(DataSet dataSet)
     {
@@ -193,10 +187,6 @@ public sealed partial class QueryForm
             }
         }
     }
-
-    #endregion
-
-    #region Private Methods
 
     public void ShowMessage(Exception exception)
     {
@@ -280,6 +270,4 @@ public sealed partial class QueryForm
     }
 
     public void ClipboardSetText(string text) => Clipboard.SetText(text);
-
-    #endregion
 }
