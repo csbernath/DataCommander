@@ -14,9 +14,6 @@
     <Compile Update="Connection\ConnectionStringBuilderForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Connection\OpenConnectionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -36,6 +33,18 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Query\QueryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Query\QueryFormEventHandlers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Query\QueryFormPrivateFields.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Query\QueryFormPrivateMethods.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Query\QueryFormPublicMethods.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Query\QueryTextBox.cs">

@@ -47,12 +47,11 @@
             // elapsedTimeTextBox
             // 
             elapsedTimeTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            elapsedTimeTextBox.Location = new System.Drawing.Point(97, 190);
+            elapsedTimeTextBox.Location = new System.Drawing.Point(91, 191);
             elapsedTimeTextBox.Name = "elapsedTimeTextBox";
             elapsedTimeTextBox.ReadOnly = true;
-            elapsedTimeTextBox.Size = new System.Drawing.Size(103, 20);
+            elapsedTimeTextBox.Size = new System.Drawing.Size(44, 20);
             elapsedTimeTextBox.TabIndex = 1;
-            elapsedTimeTextBox.Text = "aaa";
             // 
             // cancelButton
             // 
@@ -67,13 +66,13 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(-1, 190);
+            label1.Location = new System.Drawing.Point(3, 190);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(98, 20);
             label1.TabIndex = 3;
             label1.Text = "Elapsed time:";
             // 
-            // CancelableOperationForm2
+            // CancelableOperationForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

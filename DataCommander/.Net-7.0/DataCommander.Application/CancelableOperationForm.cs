@@ -12,9 +12,9 @@ namespace DataCommander.Application;
 public sealed partial class CancelableOperationForm : Form
 {
     private readonly Control _owner;
-    private readonly CancellationTokenSource _cancellationTokenSource;    
+    private readonly CancellationTokenSource _cancellationTokenSource;
     private System.Threading.Timer? _elapsedTimeTimer;
-    private long _startTimestamp;    
+    private long _startTimestamp;
     private bool _operationCanceled;
 
     public CancelableOperationForm(
@@ -46,7 +46,7 @@ public sealed partial class CancelableOperationForm : Form
         var completed = task.Wait(showDialogDelay);
         if (!completed)
         {
-            _elapsedTimeTimer = new System.Threading.Timer(ElapsedTimeTimerCallback, null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));            
+            _elapsedTimeTimer = new System.Threading.Timer(ElapsedTimeTimerCallback, null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
             ShowDialog(_owner);
         }
     }

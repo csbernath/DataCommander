@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
+using System.Data.OleDb;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -10,11 +11,13 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
+using ADODB;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.Query;
 using DataCommander.Application.ResultWriter;
 using Foundation.Configuration;
+using Foundation.Core;
 using Foundation.Data;
 using Foundation.Diagnostics;
 using Foundation.Linq;
@@ -713,5 +716,308 @@ public sealed partial class QueryForm
     private void insertScriptFileToolStripMenuItem_Click(object sender, EventArgs e)
     {
         SetResultWriterType(ResultWriterType.InsertScriptFile);
+    }
+
+    #region Public Methods
+
+    private void DataTableTabControl_MouseUp(object? sender, MouseEventArgs e)
+    {
+        if (sender != null && e.Button == MouseButtons.Middle)
+        {
+            var tabControl = (TabControl)sender;
+            var hitTestInfo = new Tchittestinfo(e.X, e.Y);
+            var index = SendMessage(tabControl.Handle, TcmHittest, IntPtr.Zero, ref hitTestInfo);
+            if (index >= 0)
+            {
+                tabControl.TabPages.RemoveAt(index);
+
+                if (tabControl.TabPages.Count == 0)
+                {
+                    var tabPage = (TabPage)tabControl.Parent;
+                    tabControl = (TabControl)tabPage.Parent;
+                    tabControl.TabPages.Remove(tabPage);
+                }
+            }
+        }
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private void Connection_InfoMessage(IReadOnlyCollection<InfoMessage> messages) => AddInfoMessages(messages);
+
+    private void sbPanelTableStyle_MouseUp(object sender, MouseEventArgs e)
+    {
+        if (e.Button == MouseButtons.Right)
+        {
+            var contextMenu = new ContextMenuStrip(components);
+            var values = Enum.GetValues(typeof(ResultWriterType));
+
+            for (var i = 0; i < values.Length; i++)
+            {
+                var tableStyle = (ResultWriterType)values.GetValue(i);
+                var item = new ToolStripMenuItem();
+                item.Text = tableStyle.ToString();
+                item.Tag = tableStyle;
+                item.Click += TableStyleMenuItem_Click;
+                contextMenu.Items.Add(item);
+            }
+
+            var bounds = _sbPanelTableStyle.Bounds;
+            var location = e.Location;
+            contextMenu.Show(_statusBar, bounds.X + location.X, bounds.Y + location.Y);
+        }
+    }
+
+    private void bToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        ExecuteQuerySingleRow();
+    }
+
+    private void textBox_SelectionChanged(object sender, EventArgs e)
+    {
+        var richTextBox = (RichTextBox)sender;
+        var charIndex = richTextBox.SelectionStart;
+        var line = richTextBox.GetLineFromCharIndex(charIndex) + 1;
+        var lineIndex = QueryTextBox.GetLineIndex(richTextBox, -1);
+        var col = charIndex - lineIndex + 1;
+        _sbPanelCaretPosition.Text = "Ln " + line + " Col " + col;
+    }
+
+    private void mnuDescribeParameters_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            Cursor = Cursors.WaitCursor;
+
+            var oldDbConnection = Connection.Connection as OleDbConnection;
+
+            if (oldDbConnection != null && string.IsNullOrEmpty(Query))
+            {
+                var dataSet = new DataSet();
+                AddTable(oldDbConnection, dataSet, OleDbSchemaGuid.Provider_Types, "Provider Types");
+                AddTable(oldDbConnection, dataSet, OleDbSchemaGuid.DbInfoLiterals, "DbInfoLiterals");
+
+                var c2 = new ConnectionClass();
+                c2.Open(_connectionString, null, null, 0);
+                var rs = c2.OpenSchema(SchemaEnum.adSchemaDBInfoKeywords, Type.Missing, Type.Missing);
+                var dataTable = OleDbHelper.Convert(rs);
+                c2.Close();
+                dataSet.Tables.Add(dataTable);
+
+                AddTable(oldDbConnection, dataSet, OleDbSchemaGuid.Sql_Languages, "Sql Languages");
+                ShowDataSet(dataSet);
+            }
+            else
+            {
+                _sqlStatement = new SqlParser(Query);
+                _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
+
+                if (_command != null)
+                {
+                    AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, _command.ToLogString()));
+                    var dataTable = Provider.GetParameterTable(_command.Parameters);
+
+                    if (dataTable != null)
+                    {
+                        dataTable.TableName = "Parameters";
+
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            var value = row["Value"];
+                            var type = value.GetType();
+                            var typeCode = Type.GetTypeCode(type);
+
+                            switch (typeCode)
+                            {
+                                case TypeCode.DateTime:
+                                    var dateTime = (DateTime)value;
+                                    var ticks = dateTime.Ticks;
+
+                                    if (ticks % StopwatchConstants.TicksPerDay == 0)
+                                        row["Value"] = dateTime.ToString("yyyy-MM-dd");
+                                    else
+                                        row["Value"] = dateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+                                    break;
+                            }
+                        }
+
+                        var dataSet = new DataSet();
+                        dataSet.Tables.Add(dataTable);
+                        ShowDataSet(dataSet);
+                    }
+                }
+            }
+
+            Cursor = Cursors.Default;
+        }
+        catch (Exception ex)
+        {
+            Cursor = Cursors.Default;
+            ShowMessage(ex);
+        }
+    }
+
+    private void mnuCloseTabPage_Click(object sender, EventArgs e)
+    {
+        var tabPage = _tabControl.SelectedTab;
+
+        if (tabPage != null && tabPage != _messagesTabPage && tabPage != _resultSetsTabPage)
+            CloseResultSetTabPage(tabPage);
+    }
+
+    private void mnuCloseAllTabPages_Click(object sender, EventArgs e)
+    {
+        CloseResultSetTabPages();
+
+        _tabControl.SelectedTab = _messagesTabPage;
+        _messagesTextBox.Clear();
+        SetStatusbarPanelText(null);
+
+        if (_dataAdapter == null)
+        {
+            _sbPanelRows.Text = null;
+            _sbPanelTimer.Text = null;
+        }
+
+        this.Invoke(() => FocusControl(QueryTextBox));
+    }
+
+    private void mnuCancel_Click(object sender, EventArgs e) => CancelCommandQuery();
+
+    private void tvObjectBrowser_DoubleClick(object sender, EventArgs e)
+    {
+        var selectedNode = _tvObjectExplorer.SelectedNode;
+        if (selectedNode != null)
+        {
+            var treeNode = (ITreeNode)selectedNode.Tag;
+
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+                var query = treeNode.Query;
+                if (query != null)
+                {
+                    var text0 = QueryTextBox.Text;
+                    string append = null;
+                    var selectionStart = QueryTextBox.RichTextBox.TextLength;
+
+                    if (!string.IsNullOrEmpty(text0))
+                    {
+                        append = Environment.NewLine + Environment.NewLine;
+                        selectionStart += 2;
+                    }
+
+                    append += query;
+
+                    QueryTextBox.RichTextBox.AppendText(append);
+                    QueryTextBox.RichTextBox.SelectionStart = selectionStart;
+                    QueryTextBox.RichTextBox.SelectionLength = query.Length;
+
+                    QueryTextBox.Focus();
+                }
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+        }
+    }
+
+    private void TableStyleMenuItem_Click(object sender, EventArgs e)
+    {
+        var item = (ToolStripMenuItem)sender;
+        var tableStyle = (ResultWriterType)item.Tag;
+        SetResultWriterType(tableStyle);
+    }
+
+    private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e) => ExecuteQuery();
+    private void aToolStripMenuItem_Click(object sender, EventArgs e) => ExecuteQuery();
+    private void cancelExecutingQueryButton_Click(object sender, EventArgs e) => CancelCommandQuery();
+    private void toolStripMenuItem1_Click(object sender, EventArgs e) => ExecuteQuery();
+    private void editRowsToolStripMenuItem_Click(object sender, EventArgs e) => EditRows(Query);
+
+    private void parseToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        var executor = Connection.Connection.CreateCommandExecutor();
+        var on = false;
+        try
+        {
+            executor.ExecuteNonQuery(new CreateCommandRequest("SET PARSEONLY ON"));
+            on = true;
+            var query = Query;
+            bool succeeded;
+
+            try
+            {
+                executor.ExecuteNonQuery(new CreateCommandRequest(query));
+                succeeded = _infoMessages.Count == 0;
+            }
+            catch (Exception exception)
+            {
+                succeeded = false;
+                var infoMessages = Provider.ToInfoMessages(exception);
+                AddInfoMessages(infoMessages);
+            }
+
+            if (succeeded)
+                AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Command(s) completed successfully."));
+        }
+        catch (Exception exception)
+        {
+            var infoMessages = Provider.ToInfoMessages(exception);
+            AddInfoMessages(infoMessages);
+        }
+
+        if (on)
+            executor.ExecuteNonQuery(new CreateCommandRequest("SET PARSEONLY OFF"));
+    }
+
+    #endregion
+
+    private void createCCommandQueryToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        const string text = @"/* Query Configuration
+{
+  ""Using"": ""using Foundation.Assertions;
+using Foundation.Collections.ReadOnly;
+using Foundation.Data;
+using Foundation.Data.SqlClient;"",
+  ""Namespace"": ""Company.Product.CommandOrQueryName"",
+  ""Name"": ""CommandOrQueryName"",
+  ""Results"": [
+    ""Result1Item(s)"",
+    ""Result2Item(s)"",
+  ]
+}
+*/
+declare @int int = 0
+declare @date date = getdate()
+-- CommandText
+select
+    @int as [Int],
+    @date as [Date]
+	
+select
+    @int as [Int],
+    @date as [Date]";
+
+        AppendQueryText(text);
+    }
+
+    private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        //var canUndo = _queryTextBox.RichTextBox.CanUndo;
+        //if (canUndo)
+        //{
+        //    var actionName = _queryTextBox.RichTextBox.UndoActionName;
+        //    Trace.WriteLine($"UndoActionName:{actionName}");
+        //    _queryTextBox.RichTextBox.Undo();
+        //    _queryTextBox.RichTextBox.ClearUndo();
+        //}
+
+        _queryTextBox.Undo();
     }
 }

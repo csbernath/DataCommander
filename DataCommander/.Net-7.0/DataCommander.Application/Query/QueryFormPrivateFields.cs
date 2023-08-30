@@ -16,8 +16,6 @@ namespace DataCommander.Application.Query;
 
 public sealed partial class QueryForm
 {
-    #region Private Fields
-
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private readonly MainForm _mainForm;
     private MenuStrip _mainMenu;
@@ -130,6 +128,4 @@ public sealed partial class QueryForm
     private ToolStripMenuItem undoToolStripMenuItem;
     private ToolStripMenuItem redoToolStripMenuItem;
     private readonly ColorTheme? _colorTheme;
-
-    #endregion
 }
