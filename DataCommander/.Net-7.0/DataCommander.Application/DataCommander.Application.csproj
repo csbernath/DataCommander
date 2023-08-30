@@ -29,4 +29,10 @@
     <ProjectReference Include="..\DataCommander.Api\DataCommander.Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="CancelableOperationForm2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

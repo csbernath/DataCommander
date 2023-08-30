@@ -242,8 +242,6 @@ internal sealed class Connection : ConnectionBase
         var executeNonReaderRequest = new ExecuteNonReaderRequest(createCommandRequest, cancellationToken);
         var scalar = await executor.ExecuteScalarAsync(executeNonReaderRequest);
         var transactionCount = (int)scalar;
-        // cancellationToken.WaitHandle.WaitOne(10000);
-        // cancellationToken.ThrowIfCancellationRequested();
         return transactionCount;
     }
 

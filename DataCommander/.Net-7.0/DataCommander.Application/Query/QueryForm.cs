@@ -35,6 +35,7 @@ using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
 using Foundation.Threading;
+using Foundation.Threading.Tasks;
 using Foundation.Windows.Forms;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
@@ -2628,42 +2629,26 @@ public sealed class QueryForm : Form, IQueryForm
 
     protected override void OnFormClosing(FormClosingEventArgs formClosingEventArgs)
     {
-        // AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, "Closing form..."));
         base.OnFormClosing(formClosingEventArgs);
-        switch (_onFormClosingState)
+        var cancel = SaveTextOnFormClosing();
+        if (!cancel)
         {
-            case OnFormClosingState.None:
-                SaveTextOnFormClosing(formClosingEventArgs);
-                if (!formClosingEventArgs.Cancel)
-                {
-                    CancelQueryOnFormClosing(formClosingEventArgs);
-                    if (!formClosingEventArgs.Cancel)
-                    {
-                        if (Connection.State == ConnectionState.Open)
-                        {
-                            formClosingEventArgs.Cancel = true;
-                            _hasTransactionsTask = StartHasTransactionsTask();
-                        }
-                    }
-                }
-
-                break;
-            case OnFormClosingState.HasTransactionTaskCompleted:
-                var hasTransactions = _hasTransactionsTask.Result;
-                _hasTransactionsTask = null;
-                if (hasTransactions)
-                    CommitTransactionOnFormClosing(formClosingEventArgs);
-                CloseConnectionOnFormClosing();
-                // var message = formClosingEventArgs.Cancel
-                //     ? "Closing form canceled."
-                //     : "Form closed.";
-                // AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, message));
-                break;
+            cancel = CancelQueryOnFormClosing();
+            if (!cancel)
+            {
+                cancel = CommitTransactionOnFormClosing();
+                if (!cancel) 
+                    CloseConnectionOnFormClosing();
+            }
         }
+
+        if (cancel)
+            formClosingEventArgs.Cancel = cancel;
     }
 
-    private void SaveTextOnFormClosing(FormClosingEventArgs formClosingEventArgs)
+    private bool SaveTextOnFormClosing()
     {
+        var cancel = false;
         var length = QueryTextBox.Text.Length;
         if (length > 0)
         {
@@ -2684,14 +2669,17 @@ public sealed class QueryForm : Form, IQueryForm
                     break;
 
                 case DialogResult.Cancel:
-                    formClosingEventArgs.Cancel = true;
+                    cancel = true;
                     break;
             }
         }
+
+        return cancel;
     }
 
-    private void CancelQueryOnFormClosing(FormClosingEventArgs formClosingEventArgs)
+    private bool CancelQueryOnFormClosing()
     {
+        var cancel = false;
         if (_dataAdapter != null)
         {
             var text = "Are you sure you wish to cancel this query?";
@@ -2703,25 +2691,61 @@ public sealed class QueryForm : Form, IQueryForm
                 _timer.Enabled = false;
             }
             else
-                formClosingEventArgs.Cancel = true;
+                cancel = true;
         }
+
+        return cancel;
     }
 
-    private void CommitTransactionOnFormClosing(FormClosingEventArgs formClosingEventArgs)
+    private bool AskUserToCommitTransactions()
     {
-        var text = "There are uncommitted transactions. Do you wish to commit these transactions before closing the window?";
+        var cancel = false;
+        var text = "There are uncommitted transaction(s). Do you wish to commit these transaction(s) before closing the window?";
         var caption = DataCommanderApplication.Instance.Name;
-        var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+        var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
         switch (result)
         {
             case DialogResult.Yes:
             case DialogResult.Cancel:
-                formClosingEventArgs.Cancel = true;
+                cancel = true;
                 break;
 
             case DialogResult.No:
                 break;
         }
+
+        return cancel;
+    }
+
+    private bool CommitTransactionOnFormClosing()
+    {
+        var cancel = false;
+        if (Connection is { State: ConnectionState.Open })
+        {
+            try
+            {
+                var cancellationTokenSource = new CancellationTokenSource();
+                var cancellationToken = cancellationTokenSource.Token;
+                var getTransactionCountTask = new Task<int>(() => Connection.GetTransactionCountAsync(cancellationToken).Result);
+                var cancelableOperationForm = new CancelableOperationForm2(this, cancellationTokenSource, "Getting transaction count...",
+                    string.Empty, _colorTheme);
+                cancelableOperationForm.Start(getTransactionCountTask, TimeSpan.FromSeconds(1));
+                var transactionCount = getTransactionCountTask.Result;
+                var hasTransactions = transactionCount > 0;
+                if (hasTransactions)
+                    cancel = AskUserToCommitTransactions();
+            }
+            catch (Exception exception)
+            {
+                var text = exception.ToString();
+                var caption = "Getting transaction count failed. Close window?";
+                var dialogResult = MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                if (dialogResult == DialogResult.No)
+                    cancel = true;
+            }
+        }
+
+        return cancel;
     }
 
     private void CloseConnectionOnFormClosing()
