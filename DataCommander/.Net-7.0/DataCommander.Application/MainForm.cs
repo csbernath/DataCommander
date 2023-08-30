@@ -573,7 +573,7 @@ public class MainForm : Form
             Log.Trace(CallerInformation.Create(), "connectionForm.ShowDialog() finished.");
             var connectionProperties = connectionForm.ConnectionProperties;
 
-            var queryForm = new QueryForm(this, MdiChildren.Length, connectionProperties.Provider, connectionProperties.ConnectionString,
+            var queryForm = new QueryForm(this, connectionProperties.Provider, connectionProperties.ConnectionString,
                 connectionProperties.Connection, _statusBar, _colorTheme);
 
             queryForm.MdiParent = this;
@@ -783,7 +783,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                     node.AddChildNode(subNode);
                     ConnectionPropertiesRepository.Save(connectionProperties, subNode);
 
-                    var queryForm = new QueryForm(this, MdiChildren.Length, provider, connectionString, connection, _statusBar, _colorTheme);
+                    var queryForm = new QueryForm(this, provider, connectionString, connection, _statusBar, _colorTheme);
 
                     queryForm.MdiParent = this;
                     queryForm.Font = SelectedFont;
@@ -891,7 +891,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             var connection = provider.CreateConnection(connectionString);
             await connection.OpenAsync(CancellationToken.None);
 
-            var queryForm = new QueryForm(this, MdiChildren.Length, provider, connectionString, connection, _statusBar, _colorTheme);
+            var queryForm = new QueryForm(this, provider, connectionString, connection, _statusBar, _colorTheme);
             queryForm.MdiParent = this;
             queryForm.Font = SelectedFont;
             queryForm.Show();

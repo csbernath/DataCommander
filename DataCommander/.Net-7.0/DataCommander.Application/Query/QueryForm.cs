@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
@@ -16,7 +14,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
 using ADODB;
 using DataCommander.Application.Connection;
 using DataCommander.Application.ResultWriter;
@@ -35,137 +32,12 @@ using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
 using Foundation.Threading;
-using Foundation.Threading.Tasks;
-using Foundation.Windows.Forms;
-using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
-using Timer = System.Windows.Forms.Timer;
 
 namespace DataCommander.Application.Query;
 
-public sealed class QueryForm : Form, IQueryForm
+public sealed partial class QueryForm : Form, IQueryForm
 {
-    #region Private Fields
-
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-
-    private readonly MainForm _mainForm;
-    private MenuStrip _mainMenu;
-    private ToolStripMenuItem _menuItem1;
-    private StatusStrip _statusBar;
-    private ToolStripMenuItem _mnuDescribeParameters;
-    private ToolStripMenuItem _mnuCloseTabPage;
-    private ToolStripMenuItem _mnuCancel;
-    private ToolStripStatusLabel _sbPanelText;
-    private ToolStripStatusLabel _sbPanelTimer;
-    private ToolStripStatusLabel _sbPanelRows;
-    private ToolStripMenuItem _menuItem2;
-    private ToolStripMenuItem _mnuDataGrid;
-    private ToolStripMenuItem _mnuHtml;
-    private ToolStripMenuItem _mnuRtf;
-    private ToolStripMenuItem _menuItem7;
-    private ToolStripMenuItem _mnuCommandTypeText;
-    private ToolStripMenuItem _mnuCommandTypeStoredProcedure;
-    private ToolStripMenuItem _mnuText;
-    private TreeView _tvObjectExplorer;
-    private Splitter _splitterObjectExplorer;
-    private ToolStripMenuItem _menuItem3;
-    private Splitter _splitterQuery;
-    private TabControl _tabControl;
-    private ToolStripMenuItem _menuItem8;
-    private ToolStripMenuItem _mnuPaste;
-    private ToolStripStatusLabel _sbPanelCaretPosition;
-    private ToolStripMenuItem _mnuFind;
-    private ToolStripMenuItem _mnuFindNext;
-    private ToolStripMenuItem _mnuObjectExplorer;
-    private ToolStripMenuItem _menuItem9;
-    private ToolStripMenuItem _mnuSaveAs;
-    private ToolStripMenuItem _mnuExcel;
-    private ToolStripMenuItem _mnuCodeCompletion;
-    private ToolStripMenuItem _mnuListMembers;
-    private ToolStripMenuItem _mnuGotoQueryEditor;
-    private ToolStripMenuItem _mnuCloseAllTabPages;
-    private ToolStripMenuItem _mnuGotoMessageTabPage;
-    private ToolStripMenuItem _mnuClearCache;
-    private ToolStripMenuItem _mnuListView;
-    private ToolStripMenuItem _mnuExecuteQueryKeyInfo;
-    private ToolStripMenuItem _mnuExecuteQuerySchemaOnly;
-    private ToolStripMenuItem _mnuExecuteQuerySingleRow;
-    private ToolStripMenuItem _mnuShowShemaTable;
-    private ToolStripMenuItem _mnuExecuteQueryXml;
-    private ToolStripMenuItem _mnuSave;
-    private ToolStripMenuItem _mnuCreateInsert;
-    private ToolStripMenuItem _menuResultModeFile;
-    private ToolStripStatusLabel _sbPanelTableStyle;
-    private ToolStripMenuItem _mnuGoTo;
-    private ToolStripMenuItem _mnuDuplicateConnection;
-    private ToolStripMenuItem _mnuCreateInsertSelect;
-    private ToolStripMenuItem _mnuOpenTable;
-    private readonly IContainer components = new Container();
-    private readonly string _connectionString;
-    private IDbTransaction _transaction;
-    private SqlParser _sqlStatement;
-    private IDbCommand _command;
-    private CommandType _commandType = CommandType.Text;
-    private IAsyncDataAdapter? _dataAdapter;
-    private bool _cancel;
-    private readonly Timer _timer = new();
-    private readonly Stopwatch _stopwatch = new();
-    private readonly int _htmlMaxRecords;
-    private readonly int _wordMaxRecords;
-    private DataSetResultWriter _dataSetResultWriter;
-    private bool _showSchemaTable;
-    private readonly StatusStrip _parentStatusBar;
-    private readonly TextBoxWriter _textBoxWriter;
-    private FindTextForm _findTextForm;
-    private readonly int _rowBlockSize;
-    private readonly StandardOutput _standardOutput;
-    private string? _database;
-    private string? _fileName;
-    private int _commandTimeout;
-    private Font _font;
-    private ToolStripMenuItem _mnuRefreshObjectExplorer;
-    private ToolStripSeparator _toolStripSeparator2;
-    private ToolStripSeparator _toolStripSeparator1;
-    private ToolStripSeparator _toolStripSeparator3;
-    private ToolStripMenuItem _sQLiteDatabaseToolStripMenuItem;
-    private ToolStripMenuItem _exportToolStripMenuItem;
-    private ToolStripMenuItem _commitTransactionToolStripMenuItem;
-    private ToolStripMenuItem _beginTransactionToolStripMenuItem;
-    private ToolStripMenuItem _rollbackTransactionToolStripMenuItem;
-    private ToolStripMenuItem _createSqlCeDatabaseToolStripMenuItem;
-    private ToolStripMenuItem _insertScriptFileToolStripMenuItem;
-    private bool _openTableMode;
-
-    private readonly TabPage _messagesTabPage;
-    private readonly RichTextBox _messagesTextBox;
-
-    private readonly TabPage _resultSetsTabPage;
-    private readonly TabControl _resultSetsTabControl;
-    private ToolStrip? _toolStrip;
-    private ToolStripSeparator _toolStripSeparator4;
-    private ToolStripSplitButton _executeQuerySplitButton;
-    private ToolStripMenuItem _executeQueryMenuItem;
-    private ToolStripMenuItem _executeQuerySingleRowToolStripMenuItem;
-    private ToolStripMenuItem _cToolStripMenuItem;
-    private ToolStripButton _cancelQueryButton;
-    private ToolStripMenuItem _executeQueryToolStripMenuItem;
-    private ToolStripMenuItem _openTableToolStripMenuItem;
-    private ToolStripMenuItem _parseToolStripMenuItem;
-    private QueryTextBox _queryTextBox;
-
-    private readonly ConcurrentQueue<InfoMessage> _infoMessages = new();
-    private int _errorCount;
-    private readonly LimitedConcurrencyLevelTaskScheduler _scheduler = new(1);
-    private readonly CancellationTokenSource _cancellationTokenSource = new();
-    private readonly EventWaitHandle _enqueueEvent = new(false, EventResetMode.AutoReset);
-    private ToolStripMenuItem createCCommandQueryToolStripMenuItem;
-    private ToolStripMenuItem undoToolStripMenuItem;
-    private ToolStripMenuItem redoToolStripMenuItem;
-    private readonly ColorTheme? _colorTheme;
-
-    #endregion
-
     #region Constructors
 
     static QueryForm()
@@ -173,8 +45,7 @@ public sealed class QueryForm : Form, IQueryForm
         NumberFormat = new NumberFormatInfo { NumberDecimalSeparator = "." };
     }
 
-    public QueryForm(MainForm mainForm, int index, IProvider provider, string connectionString, ConnectionBase connection, StatusStrip parentStatusBar,
-        ColorTheme? colorTheme)
+    public QueryForm(MainForm mainForm, IProvider provider, string connectionString, ConnectionBase connection, StatusStrip parentStatusBar, ColorTheme? colorTheme)
     {
         Log.Trace(CallerInformation.Create(), "Queryform.ctor...");        
         GarbageMonitor.Default.Add("QueryForm", this);
@@ -257,8 +128,6 @@ public sealed class QueryForm : Form, IQueryForm
             _mnuObjectExplorer.Enabled = false;
         }
 
-        var text = $"&{index + 1} - {Text}";
-
         _database = connection.Database;
         SetResultWriterType(ResultWriterType.DataGrid);
 
@@ -273,82 +142,51 @@ public sealed class QueryForm : Form, IQueryForm
         SettingsChanged(null, null);
         Settings.Changed += SettingsChanged;
 
-        if (colorTheme != null)
-        {
-            foreach (var menuItem in _mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
-            {
-                foreach (ToolStripItem x in menuItem.DropDownItems)
-                {
-                    x.ForeColor = colorTheme.ForeColor;
-                    x.BackColor = colorTheme.BackColor;
-                }
-            }
+        colorTheme?.Apply(this);
 
-            _toolStrip.ForeColor = colorTheme.ForeColor;
-            _toolStrip.BackColor = colorTheme.BackColor;
-
-            _tvObjectExplorer.ForeColor = colorTheme.ForeColor;
-            _tvObjectExplorer.BackColor = colorTheme.BackColor;
-
-            _tabControl.ForeColor = colorTheme.ForeColor;
-            _tabControl.BackColor = colorTheme.BackColor;
-
-            foreach (Control control in _tabControl.Controls)
-            {
-                control.BackColor = colorTheme.BackColor;
-                control.ForeColor = colorTheme.ForeColor;
-            }
-
-            _resultSetsTabControl.ForeColor = colorTheme.ForeColor;
-            _resultSetsTabControl.BackColor = colorTheme.BackColor;
-
-            _messagesTextBox.ForeColor = colorTheme.ForeColor;
-            _messagesTextBox.BackColor = colorTheme.BackColor;
-
-            _statusBar.ForeColor = colorTheme.ForeColor;
-            _statusBar.BackColor = colorTheme.BackColor;
-
-            foreach (ToolStripItem item in _statusBar.Items)
-            {
-                item.ForeColor = colorTheme.ForeColor;
-                item.BackColor = colorTheme.BackColor;
-            }
-        }
+        // if (colorTheme != null)
+        // {
+        //     foreach (var menuItem in _mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
+        //     {
+        //         foreach (ToolStripItem x in menuItem.DropDownItems)
+        //         {
+        //             x.ForeColor = colorTheme.ForeColor;
+        //             x.BackColor = colorTheme.BackColor;
+        //         }
+        //     }
+        //
+        //     _toolStrip.ForeColor = colorTheme.ForeColor;
+        //     _toolStrip.BackColor = colorTheme.BackColor;
+        //
+        //     _tvObjectExplorer.ForeColor = colorTheme.ForeColor;
+        //     _tvObjectExplorer.BackColor = colorTheme.BackColor;
+        //
+        //     _tabControl.ForeColor = colorTheme.ForeColor;
+        //     _tabControl.BackColor = colorTheme.BackColor;
+        //
+        //     foreach (Control control in _tabControl.Controls)
+        //     {
+        //         control.BackColor = colorTheme.BackColor;
+        //         control.ForeColor = colorTheme.ForeColor;
+        //     }
+        //
+        //     _resultSetsTabControl.ForeColor = colorTheme.ForeColor;
+        //     _resultSetsTabControl.BackColor = colorTheme.BackColor;
+        //
+        //     _messagesTextBox.ForeColor = colorTheme.ForeColor;
+        //     _messagesTextBox.BackColor = colorTheme.BackColor;
+        //
+        //     _statusBar.ForeColor = colorTheme.ForeColor;
+        //     _statusBar.BackColor = colorTheme.BackColor;
+        //
+        //     foreach (ToolStripItem item in _statusBar.Items)
+        //     {
+        //         item.ForeColor = colorTheme.ForeColor;
+        //         item.BackColor = colorTheme.BackColor;
+        //     }
+        // }
 
         Log.Trace(CallerInformation.Create(), "Queryform.ctor finished.");
-    }
-
-    private void CloseResultTabPage(TabPage tabPage)
-    {
-        foreach (Control control in tabPage.Controls)
-            control.Dispose();
-
-        tabPage.Controls.Clear();
-    }
-
-    private void CloseResultSetTabPage(TabPage tabPage)
-    {
-        _resultSetsTabControl.TabPages.Remove(tabPage);
-        var control = tabPage.Controls[0];
-        if (control is TabControl tabControl)
-        {
-            var tabPages = tabControl.TabPages.Cast<TabPage>().ToList();
-            foreach (var subTabPage in tabPages)
-            {
-                tabControl.TabPages.Remove(subTabPage);
-                CloseResultTabPage(subTabPage);
-            }
-        }
-        else
-            CloseResultTabPage(tabPage);
-    }
-
-    private void CloseResultSetTabPage_Click(object sender, EventArgs e)
-    {
-        var toolStripMenuItem = (ToolStripMenuItem)sender;
-        var tabPage = (TabPage)toolStripMenuItem.Tag;
-        CloseResultSetTabPage(tabPage);
-        toolStripMenuItem.Tag = null;
     }
 
     private void resultSetsTabControl_MouseUp(object sender, MouseEventArgs e)
@@ -442,41 +280,6 @@ public sealed class QueryForm : Form, IQueryForm
 
     #region Public Methods
 
-    public void AddDataTable(DataTable dataTable, ResultWriterType tableStyle)
-    {
-        switch (tableStyle)
-        {
-            case ResultWriterType.Text:
-                ShowDataTableText(dataTable);
-                break;
-
-            case ResultWriterType.DataGrid:
-                ShowDataTableDataGrid(dataTable);
-                break;
-
-            //case ResultWriterType.Html:
-            //    ShowDataViewHtml(dataTable.DefaultView);
-            //    break;
-
-            case ResultWriterType.Rtf:
-                ShowDataTableRtf(dataTable);
-                break;
-
-            case ResultWriterType.ListView:
-                ShowDataTableListView(dataTable);
-                break;
-
-            case ResultWriterType.Excel:
-                ShowDataTableExcel(dataTable);
-                break;
-        }
-    }
-
-    public void AppendQueryText(string text)
-    {
-        QueryTextBox.RichTextBox.AppendText(text);
-    }
-
     public void ShowDataSet(DataSet dataSet)
     {
         using (var log = LogFactory.Instance.GetCurrentMethodLog())
@@ -556,18 +359,6 @@ public sealed class QueryForm : Form, IQueryForm
                 }
             }
         }
-    }
-
-    public void ShowXml(string tabPageName, string xml)
-    {
-        var htmlTextBox = new HtmlTextBox();
-        htmlTextBox.Dock = DockStyle.Fill;
-
-        var tabPage = new TabPage(tabPageName);
-        _tabControl.TabPages.Add(tabPage);
-        tabPage.Controls.Add(htmlTextBox);
-
-        htmlTextBox.Xml = xml;
     }
 
     #endregion
@@ -1466,17 +1257,6 @@ public sealed class QueryForm : Form, IQueryForm
         SetStatusbarPanelText($"{count} item(s) added to Object Explorer in {StopwatchTimeSpan.ToString(ticks, 3)}.");
     }
 
-    public void AddInfoMessage(InfoMessage infoMessage)
-    {
-        WriteInfoMessageToLog(infoMessage);
-
-        if (infoMessage.Severity == InfoMessageSeverity.Error)
-            _errorCount++;
-
-        _infoMessages.Enqueue(infoMessage);
-        _enqueueEvent.Set();
-    }
-
     private void AddInfoMessages(IReadOnlyCollection<InfoMessage> infoMessages)
     {
         foreach (var infoMessage in infoMessages)
@@ -2354,8 +2134,6 @@ public sealed class QueryForm : Form, IQueryForm
         _cancelQueryButton.Enabled = cancel;
     }
 
-    private void EditRows_Click(object sender, EventArgs e) => EditRows(Query);
-
     private static void WriteInfoMessageToLog(InfoMessage infoMessage)
     {
         LogLevel logLevel;
@@ -2627,327 +2405,8 @@ public sealed class QueryForm : Form, IQueryForm
         }
     }
 
-    private void Timer_Tick(object o, EventArgs e) => Invoke(ShowTimer);
-
     private OnFormClosingState _onFormClosingState;
     private Task<bool> _hasTransactionsTask;
-
-    protected override void OnFormClosing(FormClosingEventArgs formClosingEventArgs)
-    {
-        base.OnFormClosing(formClosingEventArgs);
-        var cancel = SaveTextOnFormClosing();
-        if (!cancel)
-        {
-            cancel = CancelQueryOnFormClosing();
-            if (!cancel)
-            {
-                cancel = CommitTransactionOnFormClosing();
-                if (!cancel) 
-                    CloseConnectionOnFormClosing();
-            }
-        }
-
-        if (cancel)
-            formClosingEventArgs.Cancel = cancel;
-    }
-
-    private bool SaveTextOnFormClosing()
-    {
-        var cancel = false;
-        var length = QueryTextBox.Text.Length;
-        if (length > 0)
-        {
-            var text = $"The text in {Text} has been changed.\r\nDo you want to save the changes?";
-            var caption = DataCommanderApplication.Instance.Name;
-            var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
-            switch (result)
-            {
-                case DialogResult.Yes:
-                    if (_fileName != null)
-                        Save(_fileName);
-                    else
-                        ShowSaveFileDialog();
-
-                    break;
-
-                case DialogResult.No:
-                    break;
-
-                case DialogResult.Cancel:
-                    cancel = true;
-                    break;
-            }
-        }
-
-        return cancel;
-    }
-
-    private bool CancelQueryOnFormClosing()
-    {
-        var cancel = false;
-        if (_dataAdapter != null)
-        {
-            var text = "Are you sure you wish to cancel this query?";
-            var caption = DataCommanderApplication.Instance.Name;
-            var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
-            if (result == DialogResult.Yes)
-            {
-                CancelCommandQuery();
-                _timer.Enabled = false;
-            }
-            else
-                cancel = true;
-        }
-
-        return cancel;
-    }
-
-    private bool AskUserToCommitTransactions()
-    {
-        var cancel = false;
-        var text = "There are uncommitted transaction(s). Do you wish to commit these transaction(s) before closing the window?";
-        var caption = DataCommanderApplication.Instance.Name;
-        var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
-        switch (result)
-        {
-            case DialogResult.Yes:
-            case DialogResult.Cancel:
-                cancel = true;
-                break;
-
-            case DialogResult.No:
-                break;
-        }
-
-        return cancel;
-    }
-
-    private bool CommitTransactionOnFormClosing()
-    {
-        var cancel = false;
-        if (Connection is { State: ConnectionState.Open })
-        {
-            try
-            {
-                var cancellationTokenSource = new CancellationTokenSource();
-                var cancellationToken = cancellationTokenSource.Token;
-                var getTransactionCountTask = new Task<int>(() => Connection.GetTransactionCountAsync(cancellationToken).Result);
-                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, "Getting transaction count...",
-                    string.Empty, _colorTheme);
-                cancelableOperationForm.Start(getTransactionCountTask, TimeSpan.FromSeconds(1));
-                var transactionCount = getTransactionCountTask.Result;
-                var hasTransactions = transactionCount > 0;
-                if (hasTransactions)
-                    cancel = AskUserToCommitTransactions();
-            }
-            catch (Exception exception)
-            {
-                var text = exception.ToString();
-                var caption = "Getting transaction count failed. Close window?";
-                var dialogResult = MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-                if (dialogResult == DialogResult.No)
-                    cancel = true;
-            }
-        }
-
-        return cancel;
-    }
-
-    private void CloseConnectionOnFormClosing()
-    {
-        _cancellationTokenSource.Cancel();
-        
-        if (Connection != null)
-        {
-            var dataSource = Connection.DataSource;
-            _parentStatusBar.Items[0].Text = $"Closing connection to data source {dataSource}'....";
-            Connection.Close();
-            _parentStatusBar.Items[0].Text = $"Connection to data source {dataSource} closed.";
-            Connection.Connection.Dispose();
-            Connection = null;
-        }
-        
-        if (_toolStrip != null)
-        {
-            _toolStrip.Dispose();
-            _toolStrip = null;
-        }
-    }
-
-    private void SetResultWriterType(ResultWriterType tableStyle)
-    {
-        TableStyle = tableStyle;
-        _sbPanelTableStyle.Text = tableStyle.ToString();
-    }
-
-    private void mnuText_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.Text);
-    private void mnuDataGrid_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.DataGrid);
-    private void mnuHtml_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.Html);
-    private void mnuRtf_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.Rtf);
-    private void mnuListView_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.ListView);
-    private void mnuExcel_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.Excel);
-    private void menuResultModeFile_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.File);
-
-    private void mnuCommandTypeText_Click(object sender, EventArgs e)
-    {
-        _mnuCommandTypeText.Checked = true;
-        _mnuCommandTypeStoredProcedure.Checked = false;
-        _commandType = CommandType.Text;
-    }
-
-    private void mnuCommandTypeStoredProcedure_Click(object sender, EventArgs e)
-    {
-        _mnuCommandTypeText.Checked = false;
-        _mnuCommandTypeStoredProcedure.Checked = true;
-        _commandType = CommandType.StoredProcedure;
-    }
-
-    private void menuObjectExplorer_Click(object sender, EventArgs e)
-    {
-        var visible = !_tvObjectExplorer.Visible;
-        _tvObjectExplorer.Visible = visible;
-        _splitterObjectExplorer.Visible = visible;
-    }
-
-    private void tvObjectBrowser_BeforeExpand(object sender, TreeViewCancelEventArgs e)
-    {
-        var treeNode = e.Node;
-
-        if (treeNode.Nodes.Count > 0)
-        {
-            var treeNode2 = (ITreeNode)treeNode.Nodes[0].Tag;
-
-            if (treeNode2 == null)
-            {
-                Cursor = Cursors.WaitCursor;
-
-                try
-                {
-                    treeNode.Nodes.Clear();
-                    treeNode2 = (ITreeNode)treeNode.Tag;
-                    IEnumerable<ITreeNode> children = null;
-
-                    try
-                    {
-                        children = treeNode2.GetChildren(false);
-                    }
-                    catch (Exception ex)
-                    {
-                        ShowMessage(ex);
-                    }
-
-                    if (children != null)
-                        AddNodes(treeNode.Nodes, children, treeNode2.Sortable);
-                }
-                finally
-                {
-                    Cursor = Cursors.Default;
-                }
-            }
-            else
-            {
-                var count = treeNode.GetNodeCount(false);
-                SetStatusbarPanelText(treeNode.Text + " node has " + count + " children.");
-            }
-        }
-    }
-
-    private void tvObjectBrowser_MouseDown(object sender, MouseEventArgs e)
-    {
-        switch (e.Button)
-        {
-            case MouseButtons.Left:
-            case MouseButtons.Right:
-                var treeNode = _tvObjectExplorer.GetNodeAt(e.X, e.Y);
-                if (treeNode != null)
-                {
-                    var treeNode2 = (ITreeNode)treeNode.Tag;
-
-                    if (e.Button != MouseButtons.Left)
-                        _tvObjectExplorer.SelectedNode = treeNode;
-
-                    var text = treeNode.Text;
-                }
-
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    private void mnuRefresh_Click(object sender, EventArgs e)
-    {
-        var treeNodeV = _tvObjectExplorer.SelectedNode;
-        if (treeNodeV != null)
-        {
-            var treeNode = (ITreeNode)treeNodeV.Tag;
-            treeNodeV.Nodes.Clear();
-            AddNodes(treeNodeV.Nodes, treeNode.GetChildren(true), treeNode.Sortable);
-        }
-    }
-
-    private void mnuRefreshObjectExplorer_Click(object sender, EventArgs e)
-    {
-        var objectExplorer = Provider.CreateObjectExplorer();
-        if (objectExplorer != null)
-        {
-            using (new CursorManager(Cursors.WaitCursor))
-            {
-                var rootNodes = _tvObjectExplorer.Nodes;
-                rootNodes.Clear();
-                var treeNodes = objectExplorer.GetChildren(true);
-                AddNodes(rootNodes, treeNodes, objectExplorer.Sortable);
-            }
-        }
-    }
-
-    private void tvObjectExplorer_MouseUp(object sender, MouseEventArgs e)
-    {
-        try
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                var treeNodeV = _tvObjectExplorer.SelectedNode;
-                if (treeNodeV != null)
-                {
-                    var treeNode = (ITreeNode)treeNodeV.Tag;
-                    var contextMenu = GetContextMenu(treeNode);
-
-                    if (!treeNode.IsLeaf)
-                    {
-                        if (contextMenu == null)
-                            contextMenu = new ContextMenuStrip(components);
-
-                        contextMenu.Items.Add(new ToolStripMenuItem("Refresh", null, mnuRefresh_Click));
-                    }
-
-                    if (contextMenu != null)
-                    {
-                        if (_colorTheme != null)
-                        {
-                            contextMenu.ForeColor = _colorTheme.ForeColor;
-                            contextMenu.BackColor = _colorTheme.BackColor;
-                        }
-
-                        var contains = components.Components.Cast<IComponent>().Contains(contextMenu);
-                        if (!contains)
-                        {
-                            components.Add(contextMenu);
-                            GarbageMonitor.Default.Add("contextMenu", contextMenu);
-                        }
-
-                        var pos = new Point(e.X, e.Y);
-                        contextMenu.Show(_tvObjectExplorer, pos);
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.ToString());
-        }
-    }
 
     private ContextMenuStrip? GetContextMenu(ITreeNode treeNode)
     {
@@ -3017,29 +2476,6 @@ public sealed class QueryForm : Form, IQueryForm
             {
                 Cursor = Cursors.Default;
             }
-        }
-    }
-
-    private void mnuPaste_Click(object sender, EventArgs e) => QueryTextBox.Paste();
-
-    private void mnuGoTo_Click(object sender, EventArgs e)
-    {
-        var control = ActiveControl;
-        var richTextBox = control as RichTextBox;
-        if (richTextBox == null)
-            richTextBox = QueryTextBox.RichTextBox;
-
-        var charIndex = richTextBox.SelectionStart;
-        var currentLineNumber = richTextBox.GetLineFromCharIndex(charIndex) + 1;
-        var form = new GotoLineForm();
-        var maxLineNumber = richTextBox.Lines.Length;
-        form.Init(currentLineNumber, maxLineNumber);
-
-        if (form.ShowDialog(this) == DialogResult.OK)
-        {
-            var lineNumber = form.LineNumber;
-            charIndex = NativeMethods.SendMessage(richTextBox.Handle.ToInt32(), (int)NativeMethods.Message.EditBox.LineIndex, lineNumber - 1, 0);
-            richTextBox.SelectionStart = charIndex;
         }
     }
 
@@ -3192,50 +2628,6 @@ public sealed class QueryForm : Form, IQueryForm
         }
     }
 
-    private void mnuFind_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            if (_findTextForm == null)
-                _findTextForm = new FindTextForm();
-
-            var control = ActiveControl;
-            var dataTableViewer = control as DataTableEditor;
-
-            if (dataTableViewer == null)
-            {
-                control = control.Parent;
-                dataTableViewer = control as DataTableEditor;
-            }
-
-            if (dataTableViewer != null)
-            {
-                var dataTable = dataTableViewer.DataTable;
-                var name = dataTable.TableName;
-                _findTextForm.Text = $"Find (DataTable: {name})";
-            }
-            else
-                _findTextForm.Text = "Find";
-
-            if (_findTextForm.ShowDialog() == DialogResult.OK)
-                FindText(_findTextForm.FindText);
-        }
-        catch (Exception ex)
-        {
-            ShowMessage(ex);
-        }
-    }
-
-    private void mnuFindNext_Click(object sender, EventArgs e)
-    {
-        if (_findTextForm != null)
-        {
-            var text = _findTextForm.FindText;
-            if (text != null)
-                FindText(text);
-        }
-    }
-
     private void Save(string fileName)
     {
         Cursor = Cursors.WaitCursor;
@@ -3281,34 +2673,6 @@ public sealed class QueryForm : Form, IQueryForm
         }
     }
 
-    public void Save()
-    {
-        if (_fileName != null)
-            Save(_fileName);
-        else
-            ShowSaveFileDialog();
-    }
-
-    private void mnuSave_Click(object sender, EventArgs e)
-    {
-        Save();
-    }
-
-    private void mnuSaveAs_Click(object sender, EventArgs e)
-    {
-        ShowSaveFileDialog();
-    }
-
-    private void mnuGotoQueryEditor_Click(object sender, EventArgs e)
-    {
-        QueryTextBox.Select();
-    }
-
-    private void mnuGotoMessageTabPage_Click(object sender, EventArgs e)
-    {
-        _tabControl.SelectedTab = _messagesTabPage;
-    }
-
     private GetCompletionResponse GetCompletion()
     {
         var textBox = QueryTextBox.RichTextBox;
@@ -3322,48 +2686,6 @@ public sealed class QueryForm : Form, IQueryForm
         var length = response.Items != null ? response.Items.Count : 0;
         SetStatusbarPanelText($"GetCompletion returned {length} items from {@from} in {StopwatchTimeSpan.ToString(ticks, 3)} seconds.");
         return response;
-    }
-
-    private void mnuListMembers_Click(object sender, EventArgs e)
-    {
-        if (QueryTextBox.KeyboardHandler == null)
-        {
-            using (new CursorManager(Cursors.WaitCursor))
-            {
-                var response = GetCompletion();
-                if (response.Items != null)
-                {
-                    var completionForm = new CompletionForm(this);
-                    completionForm.Initialize(QueryTextBox, response, _colorTheme);
-                    completionForm.ItemSelected += completionForm_ItemSelected;
-                    completionForm.Show(this);
-                    QueryTextBox.RichTextBox.Focus();
-                }
-            }
-        }
-    }
-
-    private void completionForm_ItemSelected(object sender, ItemSelectedEventArgs e)
-    {
-        var textBox = QueryTextBox;
-
-        var intPtr = textBox.RichTextBox.Handle;
-        var hWnd = intPtr.ToInt32();
-        NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.Gdi.SetRedraw, 0, 0);
-
-        var objectName = e.ObjectName.QuotedName;
-
-        textBox.RichTextBox.SelectionStart = e.StartIndex;
-        textBox.RichTextBox.SelectionLength = e.Length;
-        textBox.RichTextBox.SelectedText = objectName;
-        textBox.RichTextBox.SelectionStart = e.StartIndex + objectName.Length;
-
-        NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.Gdi.SetRedraw, 1, 0);
-    }
-
-    private void mnuClearCache_Click(object sender, EventArgs e)
-    {
-        Provider.ClearCompletionCache();
     }
 
     private async void ExecuteReader(CommandBehavior commandBehavior)
@@ -3437,16 +2759,6 @@ public sealed class QueryForm : Form, IQueryForm
         }
     }
 
-    private void mnuResultSchema_Click(object sender, EventArgs e)
-    {
-        ExecuteReader(CommandBehavior.SchemaOnly);
-    }
-
-    private void mnuKeyInfo_Click(object sender, EventArgs e)
-    {
-        ExecuteReader(CommandBehavior.KeyInfo);
-    }
-
     private void ExecuteQuerySingleRow()
     {
         try
@@ -3511,301 +2823,6 @@ public sealed class QueryForm : Form, IQueryForm
         }
     }
 
-    private void mnuSingleRow_Click(object sender, EventArgs e)
-    {
-        ExecuteQuerySingleRow();
-    }
-
-    private void mnuShowShemaTable_Click(object sender, EventArgs e)
-    {
-        _mnuShowShemaTable.Checked = !_mnuShowShemaTable.Checked;
-        _showSchemaTable = !_showSchemaTable;
-    }
-
-    private void mnuXml_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            _sqlStatement = new SqlParser(Query);
-            _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
-
-            using (var dataReader = _command.ExecuteReader())
-            {
-                while (true)
-                {
-                    var writer = new StringWriter();
-                    var read = false;
-
-                    while (dataReader.Read())
-                    {
-                        if (!read)
-                        {
-                            read = true;
-                        }
-
-                        var fragment = (string)dataReader[0];
-                        writer.Write(fragment);
-                    }
-
-                    if (read)
-                    {
-                        var xml = writer.ToString();
-                        var xmlDocument = new XmlDocument();
-                        var path = Path.GetTempFileName() + ".xml";
-
-                        try
-                        {
-                            xmlDocument.LoadXml(xml);
-                            xmlDocument.Save(path);
-                        }
-                        catch
-                        {
-                            var xmlWriter = new XmlTextWriter(path, Encoding.UTF8);
-                            xmlWriter.WriteStartElement("DataCommanderRoot");
-                            xmlWriter.WriteRaw(xml);
-                            xmlWriter.WriteEndElement();
-                            xmlWriter.Close();
-                        }
-
-                        var resultSetTabPage = new TabPage("Xml");
-                        _resultSetsTabControl.TabPages.Add(resultSetTabPage);
-
-                        var htmlTextBox = new HtmlTextBox();
-                        htmlTextBox.Dock = DockStyle.Fill;
-
-                        resultSetTabPage.Controls.Add(htmlTextBox);
-
-                        htmlTextBox.Navigate(path);
-                        _resultSetsTabControl.SelectedTab = resultSetTabPage;
-                        _tabControl.SelectedTab = _resultSetsTabPage;
-                    }
-
-                    if (!dataReader.NextResult())
-                    {
-                        break;
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            ShowMessage(ex);
-        }
-    }
-
-    private void mnuCreateInsert_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            var sqlKeyWords = Settings.CurrentType.Attributes["Sql92ReservedWords"].GetValue<string[]>();
-            var providerKeyWords = Provider.KeyWords;
-            var keyWordHashSet = sqlKeyWords.Concat(providerKeyWords)
-                .Select(keyWord => keyWord.ToUpper())
-                .ToHashSet();
-
-            _sqlStatement = new SqlParser(Query);
-            _command = _sqlStatement.CreateCommand(Provider, Connection, CommandType.Text, _commandTimeout);
-            var tableName = _sqlStatement.FindTableName();
-            var tableIndex = 0;
-
-            using (var dataReader = _command.ExecuteReader())
-            {
-                while (true)
-                {
-                    if (tableIndex > 0)
-                    {
-                        tableName = $"Table{tableIndex}";
-                    }
-
-                    var dataReaderHelper = Provider.CreateDataReaderHelper(dataReader);
-                    var schemaTable = dataReader.GetSchemaTable();
-                    var sb = new StringBuilder();
-
-                    if (schemaTable != null)
-                    {
-                        if (tableName != null)
-                            schemaTable.TableName = tableName;
-                        else
-                            tableName = schemaTable.TableName;
-
-                        _standardOutput.WriteLine(InsertScriptFileWriter.GetCreateTableStatement(schemaTable));
-                        var schemaRows = schemaTable.Rows;
-                        var columnCount = schemaRows.Count;
-                        sb.AppendFormat("insert into {0}(", tableName);
-
-                        for (var i = 0; i < columnCount; i++)
-                        {
-                            if (i > 0)
-                                sb.Append(',');
-
-                            var schemaRow = schemaRows[i];
-                            var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
-
-                            if (keyWordHashSet.Contains((columnName.ToUpper())))
-                                columnName = new SqlCommandBuilder().QuoteIdentifier(columnName);
-
-                            sb.Append(columnName);
-                        }
-                    }
-
-                    sb.Append(") values(");
-                    var insertInto = sb.ToString();
-                    var fieldCount = dataReader.FieldCount;
-                    sb.Length = 0;
-                    var statementCount = 0;
-
-                    while (dataReader.Read())
-                    {
-                        var values = new object[fieldCount];
-                        dataReaderHelper.GetValues(values);
-                        sb.Append(insertInto);
-
-                        for (var i = 0; i < fieldCount; i++)
-                        {
-                            if (i > 0)
-                                sb.Append(',');
-
-                            var s = InsertScriptFileWriter.ToString(values[i]);
-                            sb.Append(s);
-                        }
-
-                        sb.AppendLine(");");
-                        ++statementCount;
-
-                        if (statementCount % 100 == 0)
-                        {
-                            _standardOutput.Write(sb);
-                            sb.Length = 0;
-                        }
-                    }
-
-                    if (statementCount % 100 != 0)
-                        _standardOutput.Write(sb);
-
-                    if (!dataReader.NextResult())
-                    {
-                        break;
-                    }
-
-                    tableIndex++;
-                }
-            }
-
-            _tabControl.SelectedTab = _messagesTabPage;
-
-        }
-        catch (Exception ex)
-        {
-            ShowMessage(ex);
-        }
-    }
-
-    private void mnuCreateInsertSelect_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            _sqlStatement = new SqlParser(Query);
-            _command = _sqlStatement.CreateCommand(Provider, Connection, CommandType.Text, _commandTimeout);
-            var tableName = _sqlStatement.FindTableName();
-
-            if (tableName != null)
-            {
-                using (var dataReader = _command.ExecuteReader())
-                {
-                    var dataReaderHelper = Provider.CreateDataReaderHelper(dataReader);
-                    var schemaTable = dataReader.GetSchemaTable();
-                    var schemaRows = schemaTable.Rows;
-                    var columnCount = schemaRows.Count;
-                    var sb = new StringBuilder();
-                    sb.AppendFormat("insert into {0}(", tableName);
-
-                    for (var i = 0; i < columnCount; ++i)
-                    {
-                        if (i > 0)
-                            sb.Append(',');
-
-                        var schemaRow = schemaRows[i];
-                        var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
-                        sb.Append(columnName);
-                    }
-
-                    sb.Append(")\r\nselect\r\n");
-                    var insertInto = sb.ToString();
-                    var fieldCount = dataReader.FieldCount;
-
-                    while (dataReader.Read())
-                    {
-                        var values = new object[fieldCount];
-                        dataReaderHelper.GetValues(values);
-                        sb = new StringBuilder();
-                        sb.Append(insertInto);
-
-                        for (var i = 0; i < fieldCount; i++)
-                        {
-                            if (i > 0)
-                                sb.Append(",\r\n");
-
-                            var s = InsertScriptFileWriter.ToString(values[i]);
-                            sb.AppendFormat("    {0} as {1}", s, dataReader.GetName(i));
-                        }
-
-                        _standardOutput.WriteLine(sb);
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            ShowMessage(ex);
-        }
-    }
-
-    public void LoadFile(string path)
-    {
-        string text;
-
-        using (var reader = new StreamReader(path, Encoding.Default, true))
-        {
-            Log.Write(LogLevel.Trace, "reader.CurrentEncoding.EncodingName: {0}", reader.CurrentEncoding.EncodingName);
-            text = reader.ReadToEnd();
-        }
-
-        QueryTextBox.Text = text;
-        _fileName = path;
-        SetText();
-        SetStatusbarPanelText($"File {_fileName} loaded successfully.");
-    }
-
-    private void tvObjectBrowser_ItemDrag(object sender, ItemDragEventArgs e)
-    {
-        var treeNode = (TreeNode)e.Item;
-        var text = treeNode.Text;
-        _tvObjectExplorer.DoDragDrop(text, DragDropEffects.All);
-    }
-
-    private async void mnuDuplicateConnection_Click(object sender, EventArgs e)
-    {
-        var mainForm = DataCommanderApplication.Instance.MainForm;
-        var index = mainForm.MdiChildren.Length;
-
-        var connection = Provider.CreateConnection(_connectionString);
-        connection.ConnectionName = Connection.ConnectionName;
-        await connection.OpenAsync(CancellationToken.None);
-        var database = Connection.Database;
-
-        if (connection.Database != Connection.Database)
-            connection.Connection.ChangeDatabase(database);
-
-        var queryForm = new QueryForm(_mainForm, index, Provider, _connectionString, connection, mainForm.StatusBar, _colorTheme);
-
-        if (mainForm.SelectedFont != null)
-            queryForm.Font = mainForm.SelectedFont;
-
-        queryForm.MdiParent = mainForm;
-        queryForm.WindowState = WindowState;
-        queryForm.Show();
-    }
-
     public void EditRows(string query)
     {
         try
@@ -3831,25 +2848,6 @@ public sealed class QueryForm : Form, IQueryForm
         }
     }
 
-    private void sQLiteDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        SetResultWriterType(ResultWriterType.SqLite);
-    }
-
-    private void createSqlCeDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        var sqlStatement = new SqlParser(Query);
-        _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
-        var maxRecords = int.MaxValue;
-        var tableName = sqlStatement.FindTableName();
-        var sqlCeResultWriter = new SqlCeResultWriter(_textBoxWriter, tableName);
-        IAsyncDataAdapter asyncDataAdatper = new AsyncDataAdapter(
-            Provider,
-            new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray(),
-            maxRecords, _rowBlockSize, sqlCeResultWriter, EndFillInvoker, WriteEndInvoker);
-        asyncDataAdatper.Start();
-    }
-
     private void SetTransaction(IDbTransaction transaction)
     {
         if (_transaction == null && transaction != null)
@@ -3866,56 +2864,6 @@ public sealed class QueryForm : Form, IQueryForm
     private void InvokeSetTransaction(IDbTransaction transaction)
     {
         Invoke(new Action<IDbTransaction>(SetTransaction), transaction);
-    }
-
-    private void beginTransactionToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        if (_transaction == null)
-        {
-            var transaction = Connection.Connection.BeginTransaction();
-            SetTransaction(transaction);
-        }
-    }
-
-    private void commitTransactionToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        if (_transaction != null)
-        {
-            _transaction.Commit();
-            _transaction.Dispose();
-            _transaction = null;
-
-            AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Transaction commited successfully."));
-
-            _tabControl.SelectedTab = _messagesTabPage;
-            _beginTransactionToolStripMenuItem.Enabled = true;
-            _commitTransactionToolStripMenuItem.Enabled = false;
-            _rollbackTransactionToolStripMenuItem.Enabled = false;
-        }
-    }
-
-    private void rollbackTransactionToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        if (_transaction != null)
-        {
-            try
-            {
-                _transaction.Rollback();
-                _transaction.Dispose();
-                AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Transaction rolled back successfully."));
-            }
-            catch (Exception ex)
-            {
-                var message = $"Rollback failed. Exception:\r\n{ex.ToLogString()}";
-                AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Error, null, message));
-            }
-
-            _transaction = null;
-            _tabControl.SelectedTab = _messagesTabPage;
-            _beginTransactionToolStripMenuItem.Enabled = true;
-            _commitTransactionToolStripMenuItem.Enabled = false;
-            _rollbackTransactionToolStripMenuItem.Enabled = false;
-        }
     }
 
     internal void ScriptQueryAsCreateTable()
@@ -4057,11 +3005,6 @@ public sealed class QueryForm : Form, IQueryForm
         //     AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Please open a destination connection."));
     }
 
-    private void insertScriptFileToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        SetResultWriterType(ResultWriterType.InsertScriptFile);
-    }
-
     private void TableStyleMenuItem_Click(object sender, EventArgs e)
     {
         var item = (ToolStripMenuItem)sender;
@@ -4163,12 +3106,6 @@ public sealed class QueryForm : Form, IQueryForm
 
         if (on)
             executor.ExecuteNonQuery(new CreateCommandRequest("SET PARSEONLY OFF"));
-    }
-
-    public void SetStatusbarPanelText(string text)
-    {
-        var color = _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText;
-        SetStatusbarPanelText(text, color);
     }
 
     private void SetStatusbarPanelText(string text, Color color)
