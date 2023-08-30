@@ -1,6 +1,6 @@
 ﻿namespace DataCommander.Application
 {
-    partial class CancelableOperationForm
+    sealed partial class CancelableOperationForm
     {
         /// <summary>
         /// Required designer variable.
@@ -31,6 +31,7 @@
             textBox = new System.Windows.Forms.TextBox();
             elapsedTimeTextBox = new System.Windows.Forms.TextBox();
             cancelButton = new System.Windows.Forms.Button();
+            label1 = new System.Windows.Forms.Label();
             SuspendLayout();
             // 
             // textBox
@@ -40,21 +41,22 @@
             textBox.Multiline = true;
             textBox.Name = "textBox";
             textBox.ReadOnly = true;
-            textBox.Size = new System.Drawing.Size(586, 94);
+            textBox.Size = new System.Drawing.Size(586, 175);
             textBox.TabIndex = 0;
             // 
             // elapsedTimeTextBox
             // 
             elapsedTimeTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            elapsedTimeTextBox.Location = new System.Drawing.Point(12, 194);
+            elapsedTimeTextBox.Location = new System.Drawing.Point(97, 190);
             elapsedTimeTextBox.Name = "elapsedTimeTextBox";
             elapsedTimeTextBox.ReadOnly = true;
-            elapsedTimeTextBox.Size = new System.Drawing.Size(87, 20);
+            elapsedTimeTextBox.Size = new System.Drawing.Size(103, 20);
             elapsedTimeTextBox.TabIndex = 1;
+            elapsedTimeTextBox.Text = "aaa";
             // 
             // cancelButton
             // 
-            cancelButton.Location = new System.Drawing.Point(226, 190);
+            cancelButton.Location = new System.Drawing.Point(245, 190);
             cancelButton.Name = "cancelButton";
             cancelButton.Size = new System.Drawing.Size(94, 29);
             cancelButton.TabIndex = 2;
@@ -62,12 +64,23 @@
             cancelButton.UseVisualStyleBackColor = true;
             cancelButton.Click += CancelButton_Click;
             // 
-            // CancelableOperationForm
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(-1, 190);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(98, 20);
+            label1.TabIndex = 3;
+            label1.Text = "Elapsed time:";
+            // 
+            // CancelableOperationForm2
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            CancelButton = cancelButton;
             ClientSize = new System.Drawing.Size(586, 231);
             ControlBox = false;
+            Controls.Add(label1);
             Controls.Add(cancelButton);
             Controls.Add(elapsedTimeTextBox);
             Controls.Add(textBox);
@@ -75,6 +88,8 @@
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "CancelableOperationForm";
+            ShowIcon = false;
+            ShowInTaskbar = false;
             StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             ResumeLayout(false);
             PerformLayout();
@@ -85,5 +100,6 @@
         private System.Windows.Forms.TextBox textBox;
         private System.Windows.Forms.TextBox elapsedTimeTextBox;
         private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.Label label1;
     }
 }

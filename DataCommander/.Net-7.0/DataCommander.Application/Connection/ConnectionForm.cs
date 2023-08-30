@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -495,67 +496,45 @@ internal sealed class ConnectionForm : Form
                 DataCommanderApplication.Instance.SaveApplicationData();
         }
 
-        using (new CursorManager(Cursors.WaitCursor))
+        try
         {
-            var connectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(folder);
-            // var form = new OpenConnectionForm(connectionProperties, _colorTheme);
-            // if (form.ShowDialog() == DialogResult.OK)
-            // {
-            //     ConnectionProperties = connectionProperties;
-            //     DialogResult = DialogResult.OK;
-            //     Duration = form.Duration;
-            // }
-
-            var cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = cancellationTokenSource.Token;
-
-            connectionProperties.Provider ??= ProviderFactory.CreateProvider(connectionProperties.ProviderIdentifier);
-
-            var dbConnectionStringBuilder = new DbConnectionStringBuilder();
-            dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
-            dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
-            var containsIntegratedSecurity = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
-            var containsUserId = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out var userId);
-            var dataSource = (string)dataSourceObject;
-
-            var stringBuilder = new StringBuilder();
-            stringBuilder.Append($@"Connection name: {connectionProperties.ConnectionName}
+            using (new CursorManager(Cursors.WaitCursor))
+            {
+                var connectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(folder);
+                connectionProperties.Provider ??= ProviderFactory.CreateProvider(connectionProperties.ProviderIdentifier);
+                var dbConnectionStringBuilder = new DbConnectionStringBuilder();
+                dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
+                dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
+                var containsIntegratedSecurity = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
+                var containsUserId = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out var userId);
+                var dataSource = (string)dataSourceObject;
+                var stringBuilder = new StringBuilder();
+                stringBuilder.Append($@"Connection name: {connectionProperties.ConnectionName}
 Provider name: {connectionProperties.Provider.Name}
 {ConnectionStringKeyword.DataSource}: {dataSource}");
-            if (containsIntegratedSecurity)
-                stringBuilder.Append($"\r\n{ConnectionStringKeyword.IntegratedSecurity}: {integratedSecurity}");
-            if (containsUserId)
-                stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {userId}");
-            var text = stringBuilder.ToString();
-            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, "Opening connection...", text, _colorTheme);
-            cancelableOperationForm.OpenForm(TimeSpan.FromSeconds(2));
-            var task = new Task(() =>
-            {
-                Exception? exception = null;
-                try
-                {
-                    var connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
-                    connection.OpenAsync(cancellationToken)
-                        .Wait(cancellationToken);
-                    connectionProperties.Connection = connection;
-                }
-                catch (Exception e)
-                {
-                    exception = e;
-                }
-
-                cancelableOperationForm.CloseForm();
-
-                if (exception == null)
-                {
-                    ConnectionProperties = connectionProperties;
-                    Invoke(() => DialogResult = DialogResult.OK);
-                    ElapsedTicks = cancelableOperationForm.ElapsedTicks;
-                }
-                else
-                    MessageBox.Show(this, exception.Message, "Opening connection failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            });
-            task.Start();
+                if (containsIntegratedSecurity)
+                    stringBuilder.Append($"\r\n{ConnectionStringKeyword.IntegratedSecurity}: {integratedSecurity}");
+                if (containsUserId)
+                    stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {userId}");
+                var text = stringBuilder.ToString();
+                var connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
+                var cancellationTokenSource = new CancellationTokenSource();
+                var cancellationToken = cancellationTokenSource.Token;
+                var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
+                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, "Opening connection...", text, _colorTheme);
+                cancelableOperationForm.Start(openConnectionTask, TimeSpan.FromSeconds(2));
+                openConnectionTask.Wait(cancellationToken);
+                connectionProperties.Connection = connection;
+                ElapsedTicks = Stopwatch.GetTimestamp() - cancelableOperationForm.StartTimestamp;                
+                ConnectionProperties = connectionProperties;
+                DialogResult = DialogResult.OK;
+            }
+        }
+        catch (Exception exception)
+        {
+            var text = exception.Message;
+            var caption = "Opening connection failed.";
+            MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

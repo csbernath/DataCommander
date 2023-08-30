@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="CancelableOperationForm2.cs">
+    <Compile Update="CancelableOperationForm.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

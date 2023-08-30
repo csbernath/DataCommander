@@ -6,18 +6,15 @@ using System.Windows.Forms;
 using DataCommander.Api;
 using DataCommander.Application.Connection;
 using Foundation.Core;
-using Foundation.Log;
 
 namespace DataCommander.Application;
 
-public partial class CancelableOperationForm : Form
+public sealed partial class CancelableOperationForm : Form
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();    
     private readonly Control _owner;
-    private readonly CancellationTokenSource _cancellationTokenSource;
+    private readonly CancellationTokenSource _cancellationTokenSource;    
     private System.Threading.Timer? _elapsedTimeTimer;
-    private long _startTimestamp;
-    private long _elapsedTicks;
+    private long _startTimestamp;    
     private bool _operationCanceled;
 
     public CancelableOperationForm(
@@ -30,44 +27,37 @@ public partial class CancelableOperationForm : Form
         ArgumentNullException.ThrowIfNull(owner);
         _owner = owner;
         _cancellationTokenSource = cancellationTokenSource;
-        _elapsedTimeTimer = new System.Threading.Timer(ElapsedTimeTimerCallback, null, Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
         InitializeComponent();
         colorTheme?.Apply(this);
         Text = formText;
         textBox.AppendText(textBoxText);
     }
 
-    public bool OperationCanceled => _operationCanceled;
-    public long ElapsedTicks => _elapsedTicks;
-
-    public void OpenForm(TimeSpan delay)
+    public void Start(Task task, TimeSpan showDialogDelay)
     {
         _startTimestamp = Stopwatch.GetTimestamp();
         var cancellationToken = _cancellationTokenSource.Token;
-        Task.Delay(delay, cancellationToken)
-            .ContinueWith(_ =>
-            {
-                var period = TimeSpan.FromSeconds(1);
-                if (_elapsedTimeTimer != null && !cancellationToken.IsCancellationRequested)
-                {
-                    _elapsedTimeTimer.Change(TimeSpan.Zero, period);
-                    _owner.Invoke(() => ShowDialog(_owner));
-                }
-            }, cancellationToken);
+        task.ContinueWith(_ =>
+        {
+            if (IsHandleCreated)
+                Invoke(Close);
+        }, cancellationToken);
+        task.Start();
+        var completed = task.Wait(showDialogDelay);
+        if (!completed)
+        {
+            _elapsedTimeTimer = new System.Threading.Timer(ElapsedTimeTimerCallback, null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));            
+            ShowDialog(_owner);
+        }
     }
 
-    public void CloseForm()
+    public long StartTimestamp => _startTimestamp;
+    public bool OperationCanceled => _operationCanceled;
+
+    protected override void OnFormClosing(FormClosingEventArgs e)
     {
-        _elapsedTicks = Stopwatch.GetTimestamp() - _startTimestamp;
-
-        if (_elapsedTimeTimer != null)
-        {
-            _elapsedTimeTimer.Dispose();
-            _elapsedTimeTimer = null;
-        }
-
-        if (IsHandleCreated)
-            Invoke(Close);
+        base.OnFormClosing(e);
+        _elapsedTimeTimer.Dispose();
     }
 
     private void ElapsedTimeTimerCallback(object? state)
@@ -75,7 +65,8 @@ public partial class CancelableOperationForm : Form
         if (IsHandleCreated)
         {
             var elapsed = Stopwatch.GetTimestamp() - _startTimestamp;
-            Invoke(() => { elapsedTimeTextBox.Text = StopwatchTimeSpan.ToString(elapsed, 0); });
+            var text = StopwatchTimeSpan.ToString(elapsed, 0);
+            Invoke(() => { elapsedTimeTextBox.Text = text; });
         }
     }
 
@@ -83,7 +74,7 @@ public partial class CancelableOperationForm : Form
     {
         cancelButton.Enabled = false;
         _operationCanceled = true;
-        textBox.AppendText("\r\nCanceling action...");
+        textBox.AppendText("\r\nCanceling operation...");
         _cancellationTokenSource.Cancel();
     }
 }

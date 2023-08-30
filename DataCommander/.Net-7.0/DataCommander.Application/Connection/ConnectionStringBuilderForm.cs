@@ -345,35 +345,25 @@ internal partial class ConnectionStringBuilderForm : Form
 
     private void testButton_Click(object sender, EventArgs e)
     {
-        var connectionProperties = CreateConnectionProperties();
-        var cancellationTokenSource = new CancellationTokenSource();
-        var cancellationToken = cancellationTokenSource.Token;
-        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, "Opening connection...", string.Empty, _colorTheme);
-        cancelableOperationForm.OpenForm(TimeSpan.Zero);
-        var task = new Task(() =>
+        try
         {
-            Exception? exception = null;
-            try
-            {
-                var connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
-                connection.OpenAsync(cancellationToken)
-                    .Wait(cancellationToken);
-            }
-            catch (Exception e)
-            {
-                exception = e;
-            }
-
-            cancelableOperationForm.CloseForm();
-            if (exception == null)
-                MessageBox.Show("The connection was tested successfully.", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            else
-            {
-                if (!cancelableOperationForm.OperationCanceled)
-                    MessageBox.Show(exception.Message, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }, cancellationToken);
-        task.Start();
+            var connectionProperties = CreateConnectionProperties();
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = cancellationTokenSource.Token;
+            var connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
+            var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken));
+            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, "Opening connection...", string.Empty, _colorTheme);
+            cancelableOperationForm.Start(openConnectionTask, TimeSpan.FromSeconds(2));
+            openConnectionTask.Wait(cancellationToken);
+            MessageBox.Show("The connection was tested successfully.", DataCommanderApplication.Instance.Name, MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+        catch (Exception exception)
+        {
+            var text = exception.Message;
+            var caption = "Opening connection failed.";
+            MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     private sealed class OleDbProviderInfo

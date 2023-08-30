@@ -2239,24 +2239,29 @@ public sealed class QueryForm : Form, IQueryForm
             {
                 if (Connection.State == ConnectionState.Closed)
                 {
-                    AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Connection is closed. Opening connection..."));
-
-                    var connectionStringBuilder = Provider.CreateConnectionStringBuilder();
-                    connectionStringBuilder.ConnectionString = _connectionString;
-                    connectionStringBuilder.SetValue(ConnectionStringKeyword.InitialCatalog, _database);
-
-                    var connectionProperties = new ConnectionProperties(null, Provider.Name, Provider);
-                    connectionProperties.ConnectionString = connectionStringBuilder.ConnectionString;
-
-                    var openConnectionForm = new OpenConnectionForm(connectionProperties, _colorTheme);
-                    if (openConnectionForm.ShowDialog() == DialogResult.OK)
+                    try
                     {
+                        AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Connection is closed. Opening connection..."));
+                        var connectionStringBuilder = Provider.CreateConnectionStringBuilder();
+                        connectionStringBuilder.ConnectionString = _connectionString;
+                        connectionStringBuilder.SetValue(ConnectionStringKeyword.InitialCatalog, _database);
+                        var connectionProperties = new ConnectionProperties(null, Provider.Name, Provider);
+                        connectionProperties.ConnectionString = connectionStringBuilder.ConnectionString;
+                        var connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
+                        var cancellationTokenSource = new CancellationTokenSource();
+                        var cancellationToken = cancellationTokenSource.Token;
+                        var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
+                        var cancelableOperationForm =
+                            new CancelableOperationForm(this, cancellationTokenSource, "Opening connection...", string.Empty, _colorTheme);
+                        cancelableOperationForm.Start(openConnectionTask, TimeSpan.Zero);
                         Connection.Connection.Dispose();
                         Connection = connectionProperties.Connection;
                         AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Opening connection succeeded."));
                     }
-                    else
-                        AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Opening connection canceled."));
+                    catch (Exception exception)
+                    {
+                        AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Error, null, $"Opening connection failed.\r\n{exception.Message}"));
+                    }
                 }
             }
 
@@ -2727,7 +2732,7 @@ public sealed class QueryForm : Form, IQueryForm
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
                 var getTransactionCountTask = new Task<int>(() => Connection.GetTransactionCountAsync(cancellationToken).Result);
-                var cancelableOperationForm = new CancelableOperationForm2(this, cancellationTokenSource, "Getting transaction count...",
+                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, "Getting transaction count...",
                     string.Empty, _colorTheme);
                 cancelableOperationForm.Start(getTransactionCountTask, TimeSpan.FromSeconds(1));
                 var transactionCount = getTransactionCountTask.Result;
@@ -2767,175 +2772,6 @@ public sealed class QueryForm : Form, IQueryForm
             _toolStrip.Dispose();
             _toolStrip = null;
         }
-    }
-
-    // protected override void OnClosing(CancelEventArgs e)
-    // {
-    //     var text = QueryTextBox.RichTextBox.Text;
-    //     if (Connection != null)
-    //         Log.Write(LogLevel.Trace, "Saving text before closing form(connectionName: {0}):\r\n{1}", Connection.ConnectionName, text);
-    //
-    //     if (_dataAdapter == null)
-    //     {
-    //         bool hasTransactions;
-    //         if (_transaction != null)
-    //             hasTransactions = true;
-    //         else if (Connection != null && Connection.State == ConnectionState.Open)
-    //         {
-    //             try
-    //             {
-    //                 hasTransactions = HasTransations();
-    //             }
-    //             catch (Exception ex)
-    //             {
-    //                 var message = Provider.GetExceptionMessage(ex);
-    //                 var color = _messagesTextBox.SelectionColor;
-    //                 _messagesTextBox.SelectionColor = Color.Red;
-    //                 AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, message));
-    //                 _messagesTextBox.SelectionColor = color;
-    //                 hasTransactions = false;
-    //             }
-    //         }
-    //         else
-    //             hasTransactions = false;
-    //
-    //         if (hasTransactions)
-    //         {
-    //             text = "There are uncommitted transactions. Do you wish to commit these transactions before closing the window?";
-    //             var caption = DataCommanderApplication.Instance.Name;
-    //             var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
-    //             switch (result)
-    //             {
-    //                 case DialogResult.Yes:
-    //                     // TODO
-    //                     // this.connection.COmmit();
-    //                     e.Cancel = true;
-    //                     break;
-    //
-    //                 case DialogResult.No:
-    //                     break;
-    //
-    //                 case DialogResult.Cancel:
-    //                     e.Cancel = true;
-    //                     break;
-    //             }
-    //         }
-    //
-    //         if (!e.Cancel)
-    //         {
-    //             var length = QueryTextBox.Text.Length;
-    //
-    //             if (length > 0)
-    //             {
-    //                 text = $"The text in {Text} has been changed.\r\nDo you want to save the changes?";
-    //                 var caption = DataCommanderApplication.Instance.Name;
-    //                 var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
-    //
-    //                 switch (result)
-    //                 {
-    //                     case DialogResult.Yes:
-    //                         if (_fileName != null)
-    //                             Save(_fileName);
-    //                         else
-    //                             ShowSaveFileDialog();
-    //
-    //                         break;
-    //
-    //                     case DialogResult.No:
-    //                         break;
-    //
-    //                     case DialogResult.Cancel:
-    //                         e.Cancel = true;
-    //                         break;
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     else
-    //     {
-    //         text = "Are you sure you wish to cancel this query?";
-    //         var caption = DataCommanderApplication.Instance.Name;
-    //         var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
-    //
-    //         if (result == DialogResult.Yes)
-    //         {
-    //             CancelCommandQuery();
-    //             _timer.Enabled = false;
-    //         }
-    //         else
-    //         {
-    //             e.Cancel = true;
-    //         }
-    //     }
-    //
-    //     if (!e.Cancel)
-    //     {
-    //         _cancellationTokenSource.Cancel();
-    //
-    //         if (Connection != null)
-    //         {
-    //             var dataSource = Connection.DataSource;
-    //             _parentStatusBar.Items[0].Text = $"Closing connection to data source {dataSource}'....";
-    //             Connection.Close();
-    //             _parentStatusBar.Items[0].Text = $"Connection to data source {dataSource} closed.";
-    //             Connection.Connection.Dispose();
-    //             Connection = null;
-    //         }
-    //
-    //         if (_toolStrip != null)
-    //         {
-    //             _toolStrip.Dispose();
-    //             _toolStrip = null;
-    //         }
-    //     }
-    // }
-
-    private Task<bool> StartHasTransactionsTask()
-    {
-        var cancellationTokenSource = new CancellationTokenSource();
-        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, "Getting transaction count...", string.Empty, _colorTheme);
-        cancelableOperationForm.OpenForm(TimeSpan.FromSeconds(1));
-        var cancellationToken = cancellationTokenSource.Token;
-        var hasTransactionsTask = new Task<bool>(() =>
-        {
-            var hasTransactions = false;
-            Exception? exception = null;
-            try
-            {
-                var transactionCount = Connection.GetTransactionCountAsync(cancellationToken).Result;
-                //AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, $"Transaction count: {transactionCount}"));
-                hasTransactions = transactionCount > 0;
-            }
-            catch (Exception e)
-            {
-                exception = e;
-            }
-            finally
-            {
-                cancelableOperationForm.CloseForm();
-            }
-
-            if (exception == null)
-            {
-                _onFormClosingState = OnFormClosingState.HasTransactionTaskCompleted;
-            }
-            else
-            {
-                _onFormClosingState = OnFormClosingState.None;
-                var exceptionString = exception.ToString();
-                var message = $"Getting transaction count failed.\r\n{exceptionString}";
-                AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Error, string.Empty, message));
-            }
-
-            return hasTransactions;
-        });
-        hasTransactionsTask.ContinueWith(_ =>
-        {
-            if (_onFormClosingState == OnFormClosingState.HasTransactionTaskCompleted)
-                Invoke(Close);
-        });
-        hasTransactionsTask.Start();
-        return hasTransactionsTask;
     }
 
     private void SetResultWriterType(ResultWriterType tableStyle)
