@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,7 +29,6 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
 
     private AsyncDataAdapterCommand _command;
     private long _rowCount;
-    //private WorkerThread _thread;
     private Task? _task;
     private CancellationTokenSource _cancellationTokenSource;
     private CancellationToken _cancellationToken;
@@ -61,7 +61,7 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
         {
             _cancellationTokenSource = new CancellationTokenSource();
             _cancellationToken = _cancellationTokenSource.Token;
-            _task = new Task(Fill, _cancellationToken, TaskCreationOptions.LongRunning);
+            _task = new Task(async () => await Fill(), _cancellationToken, TaskCreationOptions.LongRunning);
             _task.Start();
         }
         else
@@ -86,7 +86,7 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
 
     #region Private Methods
 
-    private void ReadTable(IDataReader dataReader, DataTable schemaTable, int tableIndex)
+    private void ReadTable(DbDataReader dataReader, DataTable schemaTable, int tableIndex)
     {
         ArgumentNullException.ThrowIfNull(dataReader);
         ArgumentNullException.ThrowIfNull(schemaTable);
@@ -189,7 +189,7 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
         }
     }
 
-    private void Fill(AsyncDataAdapterCommand asyncDataAdapterCommand)
+    private async Task Fill(AsyncDataAdapterCommand asyncDataAdapterCommand)
     {
         ArgumentNullException.ThrowIfNull(asyncDataAdapterCommand);
 
@@ -198,7 +198,7 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
 
         try
         {
-            ExecuteReader(asyncDataAdapterCommand, command);
+            await ExecuteReader(asyncDataAdapterCommand, command);
         }
         catch (Exception e)
         {
@@ -213,13 +213,13 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
         }
     }
 
-    private void ExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand, IDbCommand command)
+    private async Task ExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand, DbCommand command)
     {
         _resultWriter.BeforeExecuteReader(asyncDataAdapterCommand);
-        IDataReader dataReader = null;
+        DbDataReader dataReader = null;
         try
         {
-            dataReader = command.ExecuteReader();
+            dataReader = await command.ExecuteReaderAsync(_cancellationToken);
             var fieldCount = dataReader.FieldCount;
             _resultWriter.AfterExecuteReader();
             var tableIndex = 0;
@@ -259,7 +259,7 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
         }
     }
 
-    private void Fill()
+    private async Task Fill()
     {
         _resultWriter.Begin(_provider);
 
@@ -268,7 +268,7 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
             foreach (var command in _commands)
             {
                 _command = command;
-                Fill(command);
+                await Fill(command);
                 command.Command.Dispose();
             }
         }
