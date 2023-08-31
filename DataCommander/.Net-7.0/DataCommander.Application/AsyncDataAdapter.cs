@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using DataCommander.Api.QueryConfiguration;
 using Foundation.Assertions;
 using Foundation.Data;
 using Foundation.Log;
-using Foundation.Threading;
-using ThreadState = System.Threading.ThreadState;
 
 namespace DataCommander.Application;
 
@@ -29,7 +28,10 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
 
     private AsyncDataAdapterCommand _command;
     private long _rowCount;
-    private WorkerThread _thread;
+    //private WorkerThread _thread;
+    private Task? _task;
+    private CancellationTokenSource _cancellationTokenSource;
+    private CancellationToken _cancellationToken;
     private int _tableCount;
     private bool _isCommandCancelled;
 
@@ -57,11 +59,10 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
     {
         if (_commands != null)
         {
-            _thread = new WorkerThread(Fill)
-            {
-                Name = "AsyncDataAdapter.Fill"
-            };
-            _thread.Start();
+            _cancellationTokenSource = new CancellationTokenSource();
+            _cancellationToken = _cancellationTokenSource.Token;
+            _task = new Task(Fill, _cancellationToken, TaskCreationOptions.LongRunning);
+            _task.Start();
         }
         else
             _writeEnd(this);
@@ -72,19 +73,11 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
         using (LogFactory.Instance.GetCurrentMethodLog())
         {
             _isCommandCancelled = true;
-            if (_thread != null)
+            _cancellationTokenSource.Cancel();
+            if (_provider.IsCommandCancelable)
             {
-                _thread.Stop();
-                if (_provider.IsCommandCancelable)
-                    ThreadPool.QueueUserWorkItem(CancelWaitCallback);
-                else
-                {
-                    var joined = _thread.Join(5000);
-                    if (!joined)
-                    {
-                        //TODO _thread.Abort();
-                    }
-                }
+                var task = new Task(() => { _command.Command.Cancel(); });
+                task.Start();
             }
         }
     }
@@ -125,7 +118,7 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
             var exitFromWhile = false;
             var stopwatch = Stopwatch.StartNew();
 
-            while (!_isCommandCancelled && !_thread.IsStopRequested && !exitFromWhile)
+            while (!_isCommandCancelled && !_cancellationTokenSource.IsCancellationRequested && !exitFromWhile)
             {
                 bool read;
 
@@ -207,23 +200,8 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
         {
             ExecuteReader(asyncDataAdapterCommand, command);
         }
-        catch (ThreadAbortException)
-        {
-            Thread.ResetAbort();
-        }
         catch (Exception e)
         {
-            if (Thread.CurrentThread.ThreadState == ThreadState.AbortRequested)
-            {
-                try
-                {
-                    Thread.ResetAbort();
-                }
-                catch
-                {
-                }
-            }
-
             exception = e;
         }
         finally
@@ -246,7 +224,7 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
             _resultWriter.AfterExecuteReader();
             var tableIndex = 0;
 
-            while (!_thread.IsStopRequested)
+            while (!_cancellationToken.IsCancellationRequested)
             {
                 if (fieldCount > 0)
                 {
