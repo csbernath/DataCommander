@@ -47,7 +47,9 @@ public sealed partial class CancelableOperationForm : Form
         var completed = task.Wait(showDialogDelay);
         if (!completed)
         {
-            _elapsedTimeTimer = new System.Threading.Timer(ElapsedTimeTimerCallback, null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
+            var dueTime = TimeSpan.FromSeconds(1);
+            var period = TimeSpan.FromSeconds(1);
+            _elapsedTimeTimer = new System.Threading.Timer(ElapsedTimeTimerCallback, null, dueTime, period);
             ShowDialog(_owner);
         }
     }
