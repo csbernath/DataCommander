@@ -43,7 +43,7 @@ internal sealed class StoredProcedureNode : ITreeNode
             dataRecord => dataRecord.GetString(2)).First();
 
         var queryForm = (IQueryForm)sender;
-        queryForm.ClipboardSetText(statement);        
+        queryForm.SetClipboardText(statement);        
         queryForm.SetStatusbarPanelText("Copying create procedure statement to clipboard finished.");
     }
 }

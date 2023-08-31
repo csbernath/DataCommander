@@ -100,7 +100,7 @@ internal sealed class ConnectionForm : Form
             BackColor = colorTheme.BackColor;
             ForeColor = colorTheme.ForeColor;
 
-            ColorThemeApplier.Apply(_dataGrid, colorTheme);
+            colorTheme.Apply(_dataGrid);
         }
     }
 

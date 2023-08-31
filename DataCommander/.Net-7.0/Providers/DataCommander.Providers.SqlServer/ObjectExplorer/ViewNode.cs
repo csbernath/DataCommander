@@ -69,6 +69,6 @@ internal sealed class ViewNode : ITreeNode
         }
 
         var queryForm = (IQueryForm)sender;
-        queryForm.ClipboardSetText(text);
+        queryForm.SetClipboardText(text);
     }
 }

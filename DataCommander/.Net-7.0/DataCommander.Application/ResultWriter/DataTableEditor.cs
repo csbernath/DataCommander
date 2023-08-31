@@ -34,7 +34,6 @@ internal class DataTableEditor : UserControl
 
     private readonly IQueryForm _queryForm;
     private readonly DbCommandBuilder _commandBuilder;
-    private readonly ColorTheme _colorTheme;
     private DoubleBufferedDataGridView _dataGrid;
     private string? _tableName;
     private GetTableSchemaResult _tableSchema;
@@ -57,7 +56,6 @@ internal class DataTableEditor : UserControl
     {
         _queryForm = queryForm;
         _commandBuilder = commandBuilder;
-        _colorTheme = colorTheme;
 
         // This call is required by the Windows.Forms Form Designer.
         InitializeComponent();
@@ -65,8 +63,7 @@ internal class DataTableEditor : UserControl
         // TODO: Add any initialization after the InitForm call
         GarbageMonitor.Default.Add("DataTableEditor", this);
 
-        if (colorTheme != null)
-            ColorThemeApplier.Apply(_dataGrid, colorTheme);
+        colorTheme.Apply(_dataGrid);
     }
 
     #endregion

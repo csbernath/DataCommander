@@ -71,6 +71,6 @@ internal sealed class UserDefinedTableTypeNode : ITreeNode
             sb.AppendLine(s);
         }
 
-        queryForm.ClipboardSetText(sb.ToString());
+        queryForm.SetClipboardText(sb.ToString());
     }
 }

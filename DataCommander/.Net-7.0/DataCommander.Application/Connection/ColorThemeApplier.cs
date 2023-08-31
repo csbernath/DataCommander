@@ -5,7 +5,7 @@ namespace DataCommander.Application.Connection;
 
 internal static class ColorThemeApplier
 {
-    public static void Apply(DataGridView dataGridView, ColorTheme colorTheme)
+    public static void Apply(this ColorTheme colorTheme, DataGridView dataGridView)
     {
         dataGridView.BackgroundColor = colorTheme.BackColor;
         dataGridView.BackColor = colorTheme.BackColor;

@@ -357,7 +357,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
             sb.AppendLine("GO");
         }
 
-        queryForm.ClipboardSetText(sb.ToString());
+        queryForm.SetClipboardText(sb.ToString());
         stopwatch.Stop();
         queryForm.SetStatusbarPanelText($"Copying table script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.");
     }
@@ -393,7 +393,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
         }
 
         var queryForm = (IQueryForm)sender;
-        queryForm.ClipboardSetText(selectStatement);
+        queryForm.SetClipboardText(selectStatement);
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
 
@@ -540,7 +540,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
         stringBuilder.Append(stringTable.ToString(4));
 
         var queryForm = (IQueryForm)sender;
-        queryForm.ClipboardSetText(stringBuilder.ToString());            
+        queryForm.SetClipboardText(stringBuilder.ToString());            
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
 
@@ -601,7 +601,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
         var script = CreateUpdateScript();
 
         var queryForm = (IQueryForm)sender;
-        queryForm.ClipboardSetText(script);
+        queryForm.SetClipboardText(script);
 
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
@@ -690,7 +690,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
         }
 
         var queryForm = (IQueryForm)sender;
-        queryForm.ClipboardSetText(textBuilder.ToLines().ToIndentedString("    "));
+        queryForm.SetClipboardText(textBuilder.ToLines().ToIndentedString("    "));
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
 
@@ -728,7 +728,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
         var classWithProperties = DataTransferObjectWithPropertiesFactory.Create(_name, dataTransferObjectFields).ToIndentedString("    ");
 
         var queryForm = (IQueryForm)sender;
-        queryForm.ClipboardSetText(classWithProperties);
+        queryForm.SetClipboardText(classWithProperties);
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
 }

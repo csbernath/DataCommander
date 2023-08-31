@@ -51,7 +51,7 @@ from {_databaseNode.Name}.{_name}";
             dataRecord => dataRecord.GetString(0)).First();
 
         var queryForm = (IQueryForm)sender;
-        queryForm.ClipboardSetText(createTableStatement);
+        queryForm.SetClipboardText(createTableStatement);
         queryForm.SetStatusbarPanelText("Copying create table statement to clipboard finished.");
     }
 }

@@ -21,7 +21,7 @@ internal sealed class Connection : ConnectionBase
     private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder;
     private SqlConnection _sqlConnection;
     private string _serverName;
-    private short _spid;
+    private short _serverProcessId;
 
     #endregion
 
@@ -45,7 +45,7 @@ internal sealed class Connection : ConnectionBase
             var userName = _sqlConnectionStringBuilder.IntegratedSecurity
                 ? WindowsIdentity.GetCurrent().Name
                 : _sqlConnectionStringBuilder.UserID;
-            var caption = $"{_sqlConnection.DataSource}.{_sqlConnection.Database} ({userName} ({_spid}))";
+            var caption = $"{_sqlConnection.DataSource}.{_sqlConnection.Database} ({userName} ({_serverProcessId}))";
             return caption;
         }
     }
@@ -269,16 +269,17 @@ internal sealed class Connection : ConnectionBase
 
         if (!cancellationToken.IsCancellationRequested)
         {
-            _spid = (short)_sqlConnection.ServerProcessId;
+            _serverProcessId = (short)_sqlConnection.ServerProcessId;
 
             const string commandText = @"select @@servername
 set arithabort on";
 
             var executor = DbCommandExecutorFactory.Create(_sqlConnection);
-            var item = executor.ExecuteReader(new ExecuteReaderRequest(commandText), 1, dataRecord => new
+            var items = await executor.ExecuteReaderAsync(new ExecuteReaderRequest(commandText), 1, dataRecord => new
             {
                 ServerName = dataRecord.GetString(0)
-            }).First();
+            });
+            var item = items.First();
             _serverName = item.ServerName;
         }
     }

@@ -43,7 +43,7 @@ internal sealed class TableNode : ITreeNode
             dataRecord => dataRecord.GetString(1)).First();
 
         var queryForm = (IQueryForm)sender;
-        queryForm.ClipboardSetText(createTableStatement);        
+        queryForm.SetClipboardText(createTableStatement);        
         queryForm.SetStatusbarPanelText("Copying create table statement to clipboard finished.");
     }
 }

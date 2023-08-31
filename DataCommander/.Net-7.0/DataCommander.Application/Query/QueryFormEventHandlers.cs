@@ -41,21 +41,24 @@ public sealed partial class QueryForm
 
     protected override void OnFormClosing(FormClosingEventArgs formClosingEventArgs)
     {
-        base.OnFormClosing(formClosingEventArgs);
-        var cancel = SaveTextOnFormClosing();
-        if (!cancel)
+        using (new CursorManager(Cursors.WaitCursor))
         {
-            cancel = CancelQueryOnFormClosing();
+            base.OnFormClosing(formClosingEventArgs);
+            var cancel = SaveTextOnFormClosing();
             if (!cancel)
             {
-                cancel = CommitTransactionOnFormClosing();
+                cancel = CancelQueryOnFormClosing();
                 if (!cancel)
-                    CloseConnectionOnFormClosing();
+                {
+                    cancel = CommitTransactionOnFormClosing();
+                    if (!cancel)
+                        CloseConnectionOnFormClosing();
+                }
             }
-        }
 
-        if (cancel)
-            formClosingEventArgs.Cancel = cancel;
+            if (cancel)
+                formClosingEventArgs.Cancel = cancel;
+        }
     }
 
     private void mnuText_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.Text);

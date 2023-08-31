@@ -141,7 +141,7 @@ from	[{0}].sys.database_files f", _name);
 
         var text = textBuilder.ToLines().ToIndentedString("  ");
         var queryForm = (IQueryForm)sender;
-        queryForm.ClipboardSetText(text);
+        queryForm.SetClipboardText(text);
     }
 
     private object GetLogicalFileName(string? database)

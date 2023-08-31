@@ -269,5 +269,5 @@ public sealed partial class QueryForm
         }
     }
 
-    public void ClipboardSetText(string text) => Clipboard.SetText(text);
+    public void SetClipboardText(string text) => Clipboard.SetText(text);
 }

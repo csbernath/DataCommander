@@ -9,6 +9,6 @@ public interface IQueryForm
     void ShowDataSet(DataSet dataSet);
     void SetStatusbarPanelText(string text);
     void ShowText(string text);
-    void ClipboardSetText(string text);
+    void SetClipboardText(string text);
     void EditRows(string query);
 }

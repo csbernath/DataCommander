@@ -31,6 +31,7 @@ public sealed partial class CancelableOperationForm : Form
         colorTheme?.Apply(this);
         Text = formText;
         textBox.AppendText(textBoxText);
+        ActiveControl = cancelButton;
     }
 
     public void Start(Task task, TimeSpan showDialogDelay)

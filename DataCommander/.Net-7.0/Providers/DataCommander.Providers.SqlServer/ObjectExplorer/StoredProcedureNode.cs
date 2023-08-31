@@ -58,7 +58,7 @@ internal sealed class StoredProcedureNode : ITreeNode
         if (text != null)
         {
             var queryForm = (IQueryForm)sender;
-            queryForm.ClipboardSetText(text);
+            queryForm.SetClipboardText(text);
 
             queryForm.SetStatusbarPanelText(
                 $"Copying stored procedure script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.");
