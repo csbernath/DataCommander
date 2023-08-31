@@ -15,7 +15,7 @@ using DataCommander.Application.Connection;
 using DataCommander.Application.Query;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
-using DataCommander.Api.FieldNamespace;
+using DataCommander.Api.FieldReaders;
 using DataCommander.Api.ResultWriter;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;

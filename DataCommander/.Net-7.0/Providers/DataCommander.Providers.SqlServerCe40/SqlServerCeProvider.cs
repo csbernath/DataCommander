@@ -9,7 +9,7 @@ using System.Text;
 using DataCommander.Providers.SqlServerCe40.ObjectExplorer;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
-using DataCommander.Api.FieldNamespace;
+using DataCommander.Api.FieldReaders;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 

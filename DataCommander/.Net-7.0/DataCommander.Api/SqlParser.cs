@@ -5,7 +5,7 @@ using System.Data.Common;
 using System.Globalization;
 using System.Linq;
 using DataCommander.Api.Connection;
-using DataCommander.Api.FieldNamespace;
+using DataCommander.Api.FieldReaders;
 using DataCommander.Api.Query;
 using Foundation.Linq;
 using Foundation.Log;

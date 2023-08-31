@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 
-namespace DataCommander.Api.FieldNamespace;
+namespace DataCommander.Api.FieldReaders;
 
 public sealed class DateTimeOffsetDataFieldReader : IDataFieldReader
 {

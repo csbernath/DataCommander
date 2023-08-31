@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace DataCommander.Api.FieldNamespace;
+namespace DataCommander.Api.FieldReaders;
 
 public sealed class DoubleField
 {

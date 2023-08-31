@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
-using DataCommander.Api.FieldNamespace;
+using DataCommander.Api.FieldReaders;
 using Foundation.Data;
 using Newtonsoft.Json;
 

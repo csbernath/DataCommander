@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace DataCommander.Api.FieldNamespace;
+namespace DataCommander.Api.FieldReaders;
 
 public sealed class StreamField
 {

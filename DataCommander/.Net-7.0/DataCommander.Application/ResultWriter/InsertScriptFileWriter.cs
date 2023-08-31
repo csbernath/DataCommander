@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using DataCommander.Application.Query;
 using DataCommander.Api;
-using DataCommander.Api.FieldNamespace;
+using DataCommander.Api.FieldReaders;
 using DataCommander.Api.ResultWriter;
 using Foundation.Data;
 using Foundation.Data.SqlClient;

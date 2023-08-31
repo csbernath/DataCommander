@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Api.FieldNamespace;
+﻿namespace DataCommander.Api.FieldReaders;
 
 public sealed class BooleanField
 {

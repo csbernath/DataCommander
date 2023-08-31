@@ -4,7 +4,7 @@ using System.Data.Common;
 using System.Data.SqlServerCe;
 using System.Globalization;
 using DataCommander.Api;
-using DataCommander.Api.FieldNamespace;
+using DataCommander.Api.FieldReaders;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServerCe40;

@@ -2,7 +2,7 @@
 using System.Data;
 using Microsoft.Data.SqlClient;
 using DataCommander.Api;
-using DataCommander.Api.FieldNamespace;
+using DataCommander.Api.FieldReaders;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.FieldReader;

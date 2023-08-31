@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Data;
 
-namespace DataCommander.Api.FieldNamespace;
+namespace DataCommander.Api.FieldReaders;
 
-public sealed class SingleFieldDataReader : IDataFieldReader
+public sealed class BooleanDataFieldReader : IDataFieldReader
 {
     private readonly IDataRecord _dataRecord;
     private readonly int _columnOrdinal;
 
-    public SingleFieldDataReader(IDataRecord dataRecord, int columnOrdinal)
+    public BooleanDataFieldReader(IDataRecord dataRecord, int columnOrdinal)
     {
         _dataRecord = dataRecord;
         _columnOrdinal = columnOrdinal;
     }
-
-    #region IDataFieldReader Members
 
     object IDataFieldReader.Value
     {
@@ -28,13 +26,11 @@ public sealed class SingleFieldDataReader : IDataFieldReader
             }
             else
             {
-                var singleValue = (float)_dataRecord[_columnOrdinal];
-                value = new SingleField(singleValue);
+                var booleanValue = _dataRecord.GetBoolean(_columnOrdinal);
+                value = new BooleanField(booleanValue);
             }
 
             return value;
         }
     }
-
-    #endregion
 }

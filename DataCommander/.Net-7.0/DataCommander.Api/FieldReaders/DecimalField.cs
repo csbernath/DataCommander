@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace DataCommander.Api.FieldNamespace;
+namespace DataCommander.Api.FieldReaders;
 
 /// <summary>
 /// Summary description for DecimalField.

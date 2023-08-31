@@ -1,5 +1,5 @@
 ﻿using System;
-using DataCommander.Api.FieldNamespace;
+using DataCommander.Api.FieldReaders;
 using Foundation.Core;
 
 namespace DataCommander.Api.ResultWriter;

@@ -10,7 +10,7 @@ using System.Xml;
 using DataCommander.Providers.SqlServer.FieldReader;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
-using DataCommander.Api.FieldNamespace;
+using DataCommander.Api.FieldReaders;
 using DataCommander.Api.Query;
 using Foundation.Configuration;
 using Foundation.Core;

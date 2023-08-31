@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Data;
 
-namespace DataCommander.Api.FieldNamespace;
+namespace DataCommander.Api.FieldReaders;
 
-public sealed class BooleanDataFieldReader : IDataFieldReader
+public sealed class DateTimeDataFieldReader : IDataFieldReader
 {
     private readonly IDataRecord _dataRecord;
     private readonly int _columnOrdinal;
 
-    public BooleanDataFieldReader(IDataRecord dataRecord, int columnOrdinal)
+    public DateTimeDataFieldReader(
+        IDataRecord dataRecord,
+        int columnOrdinal)
     {
         _dataRecord = dataRecord;
         _columnOrdinal = columnOrdinal;
@@ -26,8 +28,8 @@ public sealed class BooleanDataFieldReader : IDataFieldReader
             }
             else
             {
-                var booleanValue = _dataRecord.GetBoolean(_columnOrdinal);
-                value = new BooleanField(booleanValue);
+                var dateTime = _dataRecord.GetDateTime(_columnOrdinal);
+                value = new DateTimeField(dateTime);
             }
 
             return value;

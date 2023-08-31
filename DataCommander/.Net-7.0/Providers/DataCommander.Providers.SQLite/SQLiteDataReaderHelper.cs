@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
 using DataCommander.Api;
-using DataCommander.Api.FieldNamespace;
+using DataCommander.Api.FieldReaders;
 
 namespace DataCommander.Providers.SQLite;
 

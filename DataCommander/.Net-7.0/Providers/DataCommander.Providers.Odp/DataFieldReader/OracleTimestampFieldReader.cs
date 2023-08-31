@@ -1,5 +1,5 @@
 ﻿using System;
-using DataCommander.Api.FieldNamespace;
+using DataCommander.Api.FieldReaders;
 using Oracle.ManagedDataAccess.Client;
 
 namespace DataCommander.Providers.Odp.DataFieldReader;

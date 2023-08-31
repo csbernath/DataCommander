@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using DataCommander.Application.ResultWriter;
 using DataCommander.Api;
-using DataCommander.Api.FieldNamespace;
+using DataCommander.Api.FieldReaders;
 using DataCommander.Api.Query;
 
 namespace DataCommander.Application.Query;

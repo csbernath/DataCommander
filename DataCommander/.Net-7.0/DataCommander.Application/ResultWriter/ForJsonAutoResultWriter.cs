@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
-using DataCommander.Api.FieldNamespace;
+using DataCommander.Api.FieldReaders;
 using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Data;
