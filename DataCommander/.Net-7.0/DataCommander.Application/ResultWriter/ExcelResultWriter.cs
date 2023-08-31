@@ -85,9 +85,7 @@ internal sealed class ExcelResultWriter : IResultWriter
     void IResultWriter.End()
     {
         _logResultWriter.End();
-
         _excelPackage.Save();
-
         Process.Start(_excelPackage.File.FullName);
     }
 
@@ -105,14 +103,10 @@ internal sealed class ExcelResultWriter : IResultWriter
         {
             var dataColumnSchema = FoundationDbColumnFactory.Create(schemaRow);
             var columnName = dataColumnSchema.ColumnName;
-            var columnSize = dataColumnSchema.ColumnSize;
-            var dataType = _provider.GetColumnType(dataColumnSchema);
-
             var cell = cells[1, columnIndex];
             cell.Value = columnName;
             cell.Style.Font.Bold = true;
-
-            columnIndex++;
+            ++columnIndex;
         }
 
         _excelWorksheet.View.FreezePanes(2, 1);

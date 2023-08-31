@@ -3,23 +3,18 @@ using System.Data;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
 using Foundation.Data;
-using Foundation.Data.MethodProfiler;
 using Foundation.Diagnostics;
+using static Foundation.Data.MethodProfiler.MethodProfiler;
 
 namespace DataCommander.Application.ResultWriter;
 
 internal sealed class DataSetResultWriter : IResultWriter
 {
-    #region Private Fields
-
     private readonly IResultWriter _logResultWriter;
     private readonly bool _showShemaTable;
     private IProvider _provider;
     private DataTable _dataTable;
     private int _tableIndex = -1;
-    private int _rowIndex;
-
-    #endregion
 
     public DataSetResultWriter(Action<InfoMessage> addInfoMessage, bool showShemaTable)
     {
@@ -27,11 +22,7 @@ internal sealed class DataSetResultWriter : IResultWriter
         _showShemaTable = showShemaTable;
     }
 
-    #region Public Properties
-
     public DataSet DataSet { get; private set; }
-
-    #endregion
 
     #region IResultWriter Members
 
@@ -41,10 +32,7 @@ internal sealed class DataSetResultWriter : IResultWriter
         _provider = provider;
     }
 
-    void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command)
-    {
-        _logResultWriter.BeforeExecuteReader(command);
-    }
+    void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command) => _logResultWriter.BeforeExecuteReader(command);
 
     void IResultWriter.AfterExecuteReader()
     {
@@ -52,10 +40,7 @@ internal sealed class DataSetResultWriter : IResultWriter
         DataSet = new DataSet();
     }
 
-    void IResultWriter.AfterCloseReader(int affectedRows)
-    {
-        _logResultWriter.AfterCloseReader(affectedRows);
-    }
+    void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);
 
     void IResultWriter.WriteTableBegin(DataTable schemaTable)
     {
@@ -64,42 +49,21 @@ internal sealed class DataSetResultWriter : IResultWriter
         CreateTable(schemaTable);
     }
 
-    void IResultWriter.FirstRowReadBegin()
-    {
-        _logResultWriter.FirstRowReadBegin();
-    }
+    void IResultWriter.FirstRowReadBegin() => _logResultWriter.FirstRowReadBegin();
 
-    void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
-    {
-        _logResultWriter.FirstRowReadEnd(dataTypeNames);
-    }
+    void IResultWriter.FirstRowReadEnd(string[] dataTypeNames) => _logResultWriter.FirstRowReadEnd(dataTypeNames);
 
     void IResultWriter.WriteRows(object[][] rows, int rowCount)
     {
-        MethodProfiler.BeginMethod();
         _logResultWriter.WriteRows(rows, rowCount);
-
-        try
-        {
-            var targetRows = _dataTable.Rows;
-
-            for (var i = 0; i < rowCount; i++)
-            {
-                targetRows.Add(rows[i]);
-            }
-
-            _rowIndex += rowCount;
-        }
-        finally
-        {
-            MethodProfiler.EndMethod();
-        }
+        var targetRows = _dataTable.Rows;
+        for (var i = 0; i < rowCount; i++)
+            targetRows.Add(rows[i]);
     }
 
     void IResultWriter.WriteTableEnd()
     {
         _logResultWriter.WriteTableEnd();
-
         GarbageMonitor.Default.Add("DataSetResultWriter", "System.Data.DataTable", _dataTable.Rows.Count, _dataTable);
     }
 
@@ -108,18 +72,7 @@ internal sealed class DataSetResultWriter : IResultWriter
         // TODO TextResultWriter.WriteParameters(parameters, textWriter, queryForm);
     }
 
-    void IResultWriter.End()
-    {
-        _logResultWriter.End();
-
-        //int last = this.tableCount - 1;
-        //if (last >= 0)
-        //{
-        //    DataTable table = dataSet.Tables[ last ];
-        //    string name = string.Format( "DataTable({0})", table.Rows.Count );
-        //    GarbageMonitor.Default.Add( name, dataTable );
-        //}
-    }
+    void IResultWriter.End() => _logResultWriter.End();
 
     #endregion
 

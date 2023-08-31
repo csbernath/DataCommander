@@ -8,22 +8,17 @@ using DataCommander.Api;
 
 namespace DataCommander.Application;
 
-/// <summary>
-/// Summary description for StandardOutput.
-/// </summary>
 internal sealed class StandardOutput : IStandardOutput
 {
     private readonly QueryForm _queryForm;
 
-    public StandardOutput(
-        TextWriter textWriter,
-        QueryForm queryForm)
+    public StandardOutput(TextWriter textWriter, QueryForm queryForm)
     {
         TextWriter = textWriter;
         _queryForm = queryForm;
     }
 
-    public TextWriter TextWriter { get; }
+    private TextWriter TextWriter { get; }
 
     public void WriteLine(params object[] args)
     {
@@ -48,9 +43,7 @@ internal sealed class StandardOutput : IStandardOutput
 
     public void Write(object arg)
     {
-        var rs = arg as Recordset;
-
-        if (rs != null)
+        if (arg is Recordset recordset)
         {
             var dataSet = new DataSet();
             var adapter = new OleDbDataAdapter();
@@ -64,7 +57,7 @@ internal sealed class StandardOutput : IStandardOutput
 
                 try
                 {
-                    objRs = rs.NextRecordset(out var recordsAffected);
+                    objRs = recordset.NextRecordset(out var recordsAffected);
                     TextWriter.WriteLine(recordsAffected + " row(s) affected.");
                 }
                 catch

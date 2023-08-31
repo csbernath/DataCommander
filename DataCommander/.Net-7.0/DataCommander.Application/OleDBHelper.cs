@@ -7,13 +7,6 @@ namespace DataCommander.Application;
 
 public static class OleDbHelper
 {
-    public static int ExecuteNonQuery(string commandText, OleDbConnection connection)
-    {
-        var command = connection.CreateCommand();
-        command.CommandText = commandText;
-        return command.ExecuteNonQuery();
-    }
-
     public static DataTable Convert(object adodbRecordset)
     {
         var adapter = new OleDbDataAdapter();
@@ -23,15 +16,15 @@ public static class OleDbHelper
     }
 
     [CLSCompliant(false)]
-    public static DataTable Convert(_Recordset rs, out OleDbParameter[] columns)
+    public static DataTable Convert(_Recordset recordset, out OleDbParameter[] columns)
     {
         var adapter = new OleDbDataAdapter();
         var dataTable = new DataTable();
-        adapter.Fill(dataTable, rs);
-        columns = new OleDbParameter[rs.Fields.Count];
+        adapter.Fill(dataTable, recordset);
+        columns = new OleDbParameter[recordset.Fields.Count];
         var index = 0;
 
-        foreach (Field field in rs.Fields)
+        foreach (Field field in recordset.Fields)
         {
             var param = new OleDbParameter();
             param.SourceColumn = field.Name;
@@ -40,10 +33,8 @@ public static class OleDbHelper
             var size = field.DefinedSize;
             var precision = field.Precision;
 
-            if (size == 0)
-            {
+            if (size == 0) 
                 size = precision;
-            }
 
             param.Size = size;
             param.Precision = precision;
@@ -58,14 +49,7 @@ public static class OleDbHelper
         return dataTable;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="connection"></param>
-    public static void DropTable(
-        string tableName,
-        OleDbConnection connection)
+    public static void DropTable(string tableName, OleDbConnection connection)
     {
         var command = connection.CreateCommand();
         command.CommandText = "drop table " + tableName;
@@ -79,16 +63,7 @@ public static class OleDbHelper
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="columns"></param>
-    /// <param name="connection"></param>
-    private static void CreateTableSql(
-        string tableName,
-        OleDbParameter[] columns,
-        OleDbConnection connection)
+    private static void CreateTableSql(string tableName, OleDbParameter[] columns, OleDbConnection connection)
     {
         var cmdText = "create table " + tableName + "(";
         var i = 0;
@@ -141,18 +116,12 @@ public static class OleDbHelper
             cmdText += column.SourceColumn + " " + sqlType;
 
             if (column.IsNullable)
-            {
                 cmdText += " NULL";
-            }
             else
-            {
                 cmdText += " NOT NULL";
-            }
 
-            if (i < count - 1)
-            {
+            if (i < count - 1) 
                 cmdText += ",";
-            }
 
             cmdText += Environment.NewLine;
 
@@ -166,16 +135,7 @@ public static class OleDbHelper
         command.ExecuteNonQuery();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="columns"></param>
-    /// <param name="connection"></param>
-    private static void CreateTableJet(
-        string tableName,
-        OleDbParameter[] columns,
-        OleDbConnection connection)
+    private static void CreateTableJet(string tableName, OleDbParameter[] columns, OleDbConnection connection)
     {
         var cmdText = "create table " + tableName + "(";
         var i = 0;
@@ -230,18 +190,12 @@ public static class OleDbHelper
             cmdText += "[" + column.SourceColumn + "] " + sqlType;
 
             if (column.IsNullable)
-            {
                 cmdText += " NULL";
-            }
             else
-            {
                 cmdText += " NOT NULL";
-            }
 
             if (i < count - 1)
-            {
                 cmdText += ",";
-            }
 
             cmdText += Environment.NewLine;
 
@@ -255,16 +209,7 @@ public static class OleDbHelper
         command.ExecuteNonQuery();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="columns"></param>
-    /// <param name="connection"></param>
-    private static void CreateTable(
-        string tableName,
-        OleDbParameter[] columns,
-        OleDbConnection connection)
+    private static void CreateTable(string tableName, OleDbParameter[] columns, OleDbConnection connection)
     {
         switch (connection.Provider)
         {
@@ -275,20 +220,10 @@ public static class OleDbHelper
             case "Microsoft.Jet.OLEDB.4.0":
                 CreateTableJet(tableName, columns, connection);
                 break;
-
-            default:
-                break;
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="sourceTable"></param>
-    /// <param name="connection"></param>
-    public static void CopyTable(
-        DataTable sourceTable,
-        OleDbConnection connection)
+    public static void CopyTable(DataTable sourceTable, OleDbConnection connection)
     {
         var adapter = new OleDbDataAdapter("select * from " + sourceTable.TableName + " where 0=1", connection);
         var destTable = new DataTable();
@@ -303,12 +238,6 @@ public static class OleDbHelper
         adapter.Update(destTable);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="adodbRecordset"></param>
-    /// <param name="tableName"></param>
-    /// <param name="connection"></param>
     public static void CopyTable(
         object adodbRecordset,
         string tableName,
@@ -320,18 +249,5 @@ public static class OleDbHelper
         DropTable(tableName, connection);
         CreateTable(tableName, columns, connection);
         CopyTable(sourceTable, connection);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="adodbStreamXml"></param>
-    /// <param name="tableName"></param>
-    /// <param name="connection"></param>
-    public static void CopyTable(string adodbStreamXml, string tableName, OleDbConnection connection)
-    {
-        var rs = AdoDb.XmlToRecordset(adodbStreamXml);
-        object oRs = rs;
-        CopyTable(oRs, tableName, connection);
     }
 }

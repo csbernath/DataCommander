@@ -68,16 +68,15 @@ internal sealed class DataGridViewResultWriter : IResultWriter
 
     void IResultWriter.WriteRows(object[][] rows, int rowCount)
     {
-        var dataGridView = DataGridViews[DataGridViews.Count - 1];
+        var dataGridView = DataGridViews[^1];
         var targetRows = dataGridView.Rows;
         for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
         {
             var sourceRow = rows[rowIndex];
             var targetRow = new DataGridViewRow();
             var cells = targetRow.Cells;
-            for (var columnIndex = 0; columnIndex < sourceRow.Length; columnIndex++)
+            foreach (var sourceValue in sourceRow)
             {
-                var sourceValue = sourceRow[columnIndex];
                 var cell = new DataGridViewTextBoxCell();
                 cell.Value = sourceValue;
                 cells.Add(cell);

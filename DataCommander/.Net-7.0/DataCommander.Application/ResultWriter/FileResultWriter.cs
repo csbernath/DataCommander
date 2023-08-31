@@ -12,8 +12,8 @@ namespace DataCommander.Application.ResultWriter;
 internal sealed class FileResultWriter : IResultWriter
 {
     private readonly TextWriter _messageWriter;
-    private StreamWriter _streamWriter;
-    private DataWriterBase[] _dataWriters;
+    private StreamWriter? _streamWriter;
+    private DataWriterBase[]? _dataWriters;
 
     public FileResultWriter(TextWriter messageWriter)
     {
@@ -150,32 +150,28 @@ internal sealed class FileResultWriter : IResultWriter
 
     public void FirstRowReadBegin()
     {
-        // TODO:  Add FileResultWriter.FirstRowReadBegin implementation
     }
 
     public void FirstRowReadEnd(string[] dataTypeNames)
     {
-        // TODO:  Add FileResultWriter.FirstRowReadEnd implementation
     }
 
     public void WriteRows(object[][] rows, int rowCount)
     {
-        var sb = new StringBuilder();
-
+        var stringBuilder = new StringBuilder();
         for (var i = 0; i < rowCount; i++)
         {
             var row = rows[i];
-
             for (var j = 0; j < row.Length; j++)
             {
                 var s = _dataWriters[j].ToString(row[j]);
-                sb.Append(s);
+                stringBuilder.Append(s);
             }
 
-            sb.Append("\r\n");
+            stringBuilder.Append("\r\n");
         }
 
-        _streamWriter.Write(sb);
+        _streamWriter.Write(stringBuilder);
     }
 
     public void WriteTableEnd()

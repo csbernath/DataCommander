@@ -7,29 +7,15 @@ using Foundation.Configuration;
 
 namespace DataCommander.Application;
 
-public class Provider
-{
-    public readonly string Identifier;
-    public readonly string Name;
-
-    public Provider(string identifier, string name)
-    {
-        Identifier = identifier;
-        Name = name;
-    }
-}
-
 public static class ProviderFactory
 {
-    public static IReadOnlyCollection<Provider> GetProviders()
+    public static IEnumerable<Provider> GetProviders()
     {
-        var providers = new List<Provider>();
         var node = Settings.SelectNode("DataCommander/Providers", true);
 
         foreach (var childNode in node.ChildNodes)
         {
             childNode.Attributes.TryGetAttributeValue("Enabled", out bool enabled);
-
             if (enabled)
             {
                 var identifier = childNode.Name;
@@ -38,11 +24,9 @@ public static class ProviderFactory
                     name = identifier;
 
                 var provider = new Provider(identifier, name);
-                providers.Add(provider);
+                yield return provider;
             }
         }
-
-        return providers;
     }
 
     public static IProvider CreateProvider(string name)
@@ -56,7 +40,7 @@ public static class ProviderFactory
         var instance = Activator.CreateInstance(type);
         ArgumentNullException.ThrowIfNull(instance);
         Assert.IsTrue(instance is IProvider);
-        var provider = (IProvider) instance;
+        var provider = (IProvider)instance;
         ArgumentNullException.ThrowIfNull(provider);
         return provider;
     }

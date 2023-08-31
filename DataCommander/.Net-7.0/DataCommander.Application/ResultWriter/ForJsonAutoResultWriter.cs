@@ -37,15 +37,8 @@ internal sealed class ForJsonAutoResultWriter : IResultWriter
         _logResultWriter.BeforeExecuteReader(asyncDataAdapterCommand);
     }
 
-    void IResultWriter.AfterExecuteReader()
-    {
-        _logResultWriter.AfterExecuteReader();
-    }
-
-    void IResultWriter.AfterCloseReader(int affectedRows)
-    {
-        _logResultWriter.AfterCloseReader(affectedRows);
-    }
+    void IResultWriter.AfterExecuteReader() => _logResultWriter.AfterExecuteReader();
+    void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);
 
     void IResultWriter.WriteTableBegin(DataTable schemaTable)
     {
@@ -73,15 +66,8 @@ internal sealed class ForJsonAutoResultWriter : IResultWriter
             _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Error, null, "This is not FOR JSON AUTO"));
     }
 
-    void IResultWriter.FirstRowReadBegin()
-    {
-        _logResultWriter.FirstRowReadBegin();
-    }
-
-    void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
-    {
-        _logResultWriter.FirstRowReadEnd(dataTypeNames);
-    }
+    void IResultWriter.FirstRowReadBegin() => _logResultWriter.FirstRowReadBegin();
+    void IResultWriter.FirstRowReadEnd(string[] dataTypeNames) => _logResultWriter.FirstRowReadEnd(dataTypeNames);
 
     void IResultWriter.WriteRows(object[][] rows, int rowCount)
     {
@@ -195,13 +181,6 @@ internal sealed class ForJsonAutoResultWriter : IResultWriter
         }
     }
 
-    void IResultWriter.WriteParameters(IDataParameterCollection parameters)
-    {
-        _logResultWriter.WriteParameters(parameters);
-    }
-
-    void IResultWriter.End()
-    {
-        _logResultWriter.End();
-    }
+    void IResultWriter.WriteParameters(IDataParameterCollection parameters) => _logResultWriter.WriteParameters(parameters);
+    void IResultWriter.End() => _logResultWriter.End();
 }
