@@ -34,7 +34,12 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
 
     #endregion
 
-    public AsyncDataAdapter(IProvider provider, int maxRecords, int rowBlockSize, IResultWriter resultWriter, Action<IAsyncDataAdapter, Exception> endFill,
+    public AsyncDataAdapter(
+        IProvider provider, 
+        int maxRecords, 
+        int rowBlockSize,
+        IResultWriter resultWriter,
+        Action<IAsyncDataAdapter, Exception> endFill,
         Action<IAsyncDataAdapter> writeEnd)
     {
         _provider = provider;
