@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Application;
+﻿using System.Collections.Generic;
+
+namespace DataCommander.Application;
 
 internal interface IAsyncDataAdapter
 {
@@ -6,6 +8,6 @@ internal interface IAsyncDataAdapter
     long RowCount { get; }
     int TableCount { get; }
 
-    void Start();
+    void Start(IEnumerable<AsyncDataAdapterCommand> commands);
     void Cancel();
 }

@@ -714,9 +714,8 @@ public sealed partial class QueryForm
             _errorCount = 0;
             _stopwatch.Start();
             _timer.Start();
-            _dataAdapter = new AsyncDataAdapter(Provider, new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray(), maxRecords,
-                rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
-            _dataAdapter.Start();
+            _dataAdapter = new AsyncDataAdapter(Provider, maxRecords, rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
+            _dataAdapter.Start(new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray());
         }
         else
             AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Please open a destination connection."));

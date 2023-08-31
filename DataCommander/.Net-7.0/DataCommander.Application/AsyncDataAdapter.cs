@@ -20,7 +20,6 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
 
     private readonly IProvider _provider;
-    private readonly IReadOnlyCollection<AsyncDataAdapterCommand> _commands;
     private readonly int _maxRecords;
     private readonly int _rowBlockSize;
     private readonly IResultWriter _resultWriter;
@@ -31,17 +30,14 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
     private long _rowCount;
     private Task? _task;
     private CancellationTokenSource _cancellationTokenSource;
-    private CancellationToken _cancellationToken;
     private int _tableCount;
-    private bool _isCommandCancelled;
 
     #endregion
 
-    public AsyncDataAdapter(IProvider provider, IReadOnlyCollection<AsyncDataAdapterCommand> commands, int maxRecords, int rowBlockSize, IResultWriter resultWriter,
-        Action<IAsyncDataAdapter, Exception> endFill, Action<IAsyncDataAdapter> writeEnd)
+    public AsyncDataAdapter(IProvider provider, int maxRecords, int rowBlockSize, IResultWriter resultWriter, Action<IAsyncDataAdapter, Exception> endFill,
+        Action<IAsyncDataAdapter> writeEnd)
     {
         _provider = provider;
-        _commands = commands;
         _maxRecords = maxRecords;
         _rowBlockSize = rowBlockSize;
         _resultWriter = resultWriter;
@@ -55,13 +51,13 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
     long IAsyncDataAdapter.RowCount => _rowCount;
     int IAsyncDataAdapter.TableCount => _tableCount;
 
-    void IAsyncDataAdapter.Start()
+    public void Start(IEnumerable<AsyncDataAdapterCommand> commands)
     {
-        if (_commands != null)
+        if (commands != null)
         {
             _cancellationTokenSource = new CancellationTokenSource();
-            _cancellationToken = _cancellationTokenSource.Token;
-            _task = new Task(async () => await Fill(), _cancellationToken, TaskCreationOptions.LongRunning);
+            var cancellationToken = _cancellationTokenSource.Token;
+            _task = new Task(async () => await Fill(commands, cancellationToken), cancellationToken, TaskCreationOptions.LongRunning);
             _task.Start();
         }
         else
@@ -72,7 +68,6 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
     {
         using (LogFactory.Instance.GetCurrentMethodLog())
         {
-            _isCommandCancelled = true;
             _cancellationTokenSource.Cancel();
             if (_provider.IsCommandCancelable)
             {
@@ -86,7 +81,7 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
 
     #region Private Methods
 
-    private void ReadTable(DbDataReader dataReader, DataTable schemaTable, int tableIndex)
+    private async Task ReadTable(DbDataReader dataReader, DataTable schemaTable, int tableIndex, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(dataReader);
         ArgumentNullException.ThrowIfNull(schemaTable);
@@ -118,7 +113,7 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
             var exitFromWhile = false;
             var stopwatch = Stopwatch.StartNew();
 
-            while (!_isCommandCancelled && !_cancellationTokenSource.IsCancellationRequested && !exitFromWhile)
+            while (!cancellationToken.IsCancellationRequested && !exitFromWhile)
             {
                 bool read;
 
@@ -126,7 +121,7 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
                 {
                     first = false;
                     _resultWriter.FirstRowReadBegin();
-                    read = dataReader.Read();
+                    read = await dataReader.ReadAsync(cancellationToken);
 
                     var dataTypeNames = new string[count];
 
@@ -140,7 +135,7 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
                 {
                     try
                     {
-                        read = dataReader.Read();
+                        read = await dataReader.ReadAsync(cancellationToken);
                     }
                     catch (Exception e)
                     {
@@ -189,16 +184,15 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
         }
     }
 
-    private async Task Fill(AsyncDataAdapterCommand asyncDataAdapterCommand)
+    private async Task Fill(AsyncDataAdapterCommand asyncDataAdapterCommand, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(asyncDataAdapterCommand);
-
         Exception exception = null;
         var command = asyncDataAdapterCommand.Command;
 
         try
         {
-            await ExecuteReader(asyncDataAdapterCommand, command);
+            await ExecuteReader(asyncDataAdapterCommand, command, cancellationToken);
         }
         catch (Exception e)
         {
@@ -213,25 +207,26 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
         }
     }
 
-    private async Task ExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand, DbCommand command)
+    private async Task ExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand, DbCommand command, CancellationToken cancellationToken)
     {
         _resultWriter.BeforeExecuteReader(asyncDataAdapterCommand);
-        DbDataReader dataReader = null;
+        DbDataReader? dataReader = null;
         try
         {
-            dataReader = await command.ExecuteReaderAsync(_cancellationToken);
+            _command = asyncDataAdapterCommand;            
+            dataReader = await command.ExecuteReaderAsync(cancellationToken);
             var fieldCount = dataReader.FieldCount;
             _resultWriter.AfterExecuteReader();
             var tableIndex = 0;
 
-            while (!_cancellationToken.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 if (fieldCount > 0)
                 {
-                    var schemaTable = dataReader.GetSchemaTable();
+                    var schemaTable = await dataReader.GetSchemaTableAsync(cancellationToken);
                     if (schemaTable != null)
                     {
-                        Log.Trace("schemaTable:\r\n{0}", schemaTable.ToStringTableString());
+                        Log.Trace($"schemaTable:\r\n{schemaTable.ToStringTableString()}");
                         if (asyncDataAdapterCommand.Query != null)
                         {
                             Parser.ParseResult(asyncDataAdapterCommand.Query.Results[tableIndex], out var name, out var fieldName);
@@ -239,10 +234,10 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
                         }
                     }
 
-                    ReadTable(dataReader, schemaTable, tableIndex);
+                    await ReadTable(dataReader, schemaTable, tableIndex, cancellationToken);
                 }
 
-                if (_rowCount >= _maxRecords || !dataReader.NextResult())
+                if (_rowCount >= _maxRecords || !await dataReader.NextResultAsync(cancellationToken))
                     break;
 
                 tableIndex++;
@@ -252,23 +247,22 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
         {
             if (dataReader != null)
             {
-                dataReader.Close();
+                await dataReader.CloseAsync();
                 var recordsAffected = dataReader.RecordsAffected;
                 _resultWriter.AfterCloseReader(recordsAffected);
             }
         }
     }
 
-    private async Task Fill()
+    private async Task Fill(IEnumerable<AsyncDataAdapterCommand> commands, CancellationToken cancellationToken)
     {
         _resultWriter.Begin(_provider);
 
         try
         {
-            foreach (var command in _commands)
+            foreach (var command in commands)
             {
-                _command = command;
-                await Fill(command);
+                await Fill(command, cancellationToken);
                 command.Command.Dispose();
             }
         }

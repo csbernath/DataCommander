@@ -233,10 +233,9 @@ public sealed partial class QueryForm
             _timer.Start();
             const int maxRecords = int.MaxValue;
             _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
-            IResultWriter resultWriter = _dataSetResultWriter;
-            _dataAdapter = new AsyncDataAdapter(Provider, new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray(), maxRecords,
-                _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
-            _dataAdapter.Start();
+            var resultWriter = _dataSetResultWriter;
+            _dataAdapter = new AsyncDataAdapter(Provider,  maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
+            _dataAdapter.Start(new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray());
         }
         catch (Exception ex)
         {

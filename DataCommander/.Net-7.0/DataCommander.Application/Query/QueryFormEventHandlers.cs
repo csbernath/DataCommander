@@ -659,11 +659,8 @@ public sealed partial class QueryForm
         var maxRecords = int.MaxValue;
         var tableName = sqlStatement.FindTableName();
         var sqlCeResultWriter = new SqlCeResultWriter(_textBoxWriter, tableName);
-        IAsyncDataAdapter asyncDataAdatper = new AsyncDataAdapter(
-            Provider,
-            new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray(),
-            maxRecords, _rowBlockSize, sqlCeResultWriter, EndFillInvoker, WriteEndInvoker);
-        asyncDataAdatper.Start();
+        var asyncDataAdatper = new AsyncDataAdapter(Provider, maxRecords, _rowBlockSize, sqlCeResultWriter, EndFillInvoker, WriteEndInvoker);
+        asyncDataAdatper.Start(new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray());
     }
 
     private void beginTransactionToolStripMenuItem_Click(object sender, EventArgs e)

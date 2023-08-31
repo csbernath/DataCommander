@@ -1385,8 +1385,8 @@ public sealed partial class QueryForm : Form, IQueryForm
             ShowTimer();
 
             _errorCount = 0;
-            _dataAdapter = new AsyncDataAdapter(Provider, commands, maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
-            _dataAdapter.Start();
+            _dataAdapter = new AsyncDataAdapter(Provider, maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
+            _dataAdapter.Start(commands);
         }
         catch (Exception ex)
         {
