@@ -1,4 +1,4 @@
-﻿using System.Data;
+﻿using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api.Connection;
@@ -23,7 +23,7 @@ internal sealed class Connection : ConnectionBase
     }
 
     public override Task OpenAsync(CancellationToken cancellationToken) => _npgsqlConnection.OpenAsync(cancellationToken);
-    public override IDbCommand CreateCommand() => _npgsqlConnection.CreateCommand();
+    public override DbCommand CreateCommand() => _npgsqlConnection.CreateCommand();
     public override string ConnectionName { get; set; }
     public override string Caption => _npgsqlConnection.Database;
     public override string DataSource => _npgsqlConnection.DataSource;

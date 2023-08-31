@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data;
+using System.Data.Common;
 using System.Data.SqlServerCe;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,7 +19,7 @@ internal sealed class Connection : ConnectionBase
 
     public override Task OpenAsync(CancellationToken cancellationToken) => _sqlCeConnection.OpenAsync(cancellationToken);
 
-    public override IDbCommand CreateCommand() => _sqlCeConnection.CreateCommand();
+    public override DbCommand CreateCommand() => _sqlCeConnection.CreateCommand();
 
     public override string ConnectionName { get; set; }
     public override string Caption => _sqlCeConnection.DataSource;

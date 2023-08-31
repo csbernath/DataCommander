@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Principal;
@@ -313,7 +314,7 @@ set arithabort on";
         InvokeInfoMessage(infoMessages);
     }
 
-    public override IDbCommand CreateCommand()
+    public override DbCommand CreateCommand()
     {
         _createCommandTimestamp = Stopwatch.GetTimestamp();
         return _sqlConnection.CreateCommand();

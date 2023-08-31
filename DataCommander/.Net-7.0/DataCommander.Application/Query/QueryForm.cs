@@ -1247,7 +1247,7 @@ public sealed partial class QueryForm : Form, IQueryForm
 
             if (statements.Count == 1)
             {
-                IDbCommand command;
+                DbCommand command;
 
                 var getQueryConfigurationResult = GetQueryConfiguration(statements[0].CommandText);
                 if (getQueryConfigurationResult.Succeeded)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ namespace DataCommander.Api.Connection;
 
 public abstract class ConnectionBase
 {
-    public IDbConnection Connection { get; protected set; }
+    public DbConnection Connection { get; protected set; }
     public abstract Task OpenAsync(CancellationToken cancellationToken);
 
     public void Close()
@@ -17,7 +18,7 @@ public abstract class ConnectionBase
             Connection.Close();
     }
 
-    public abstract IDbCommand CreateCommand();
+    public abstract DbCommand CreateCommand();
     public abstract string ConnectionName { get; set; }
     public string ConnectionString => Connection.ConnectionString;
     public abstract string Caption { get; }

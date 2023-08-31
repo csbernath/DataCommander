@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data;
+using System.Data.Common;
 using System.Data.SQLite;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,7 +37,7 @@ internal sealed class Connection : ConnectionBase
         return _sqliteConnection.OpenAsync(cancellationToken);
     }
 
-    public override IDbCommand CreateCommand()
+    public override DbCommand CreateCommand()
     {
         return _sqliteConnection.CreateCommand();
     }

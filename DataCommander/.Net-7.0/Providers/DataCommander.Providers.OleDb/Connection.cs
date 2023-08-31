@@ -1,5 +1,5 @@
 ﻿using DataCommander.Api.Connection;
-using System.Data;
+using System.Data.Common;
 using System.Data.OleDb;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,7 +31,7 @@ internal sealed class Connection : ConnectionBase
     public override string DataSource => oledbConnection.DataSource;
     public override string ServerVersion => oledbConnection.ServerVersion;
 
-    public override IDbCommand CreateCommand() => oledbConnection.CreateCommand();
+    public override DbCommand CreateCommand() => oledbConnection.CreateCommand();
 
     protected void SetDatabase(string database)
     {

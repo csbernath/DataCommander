@@ -1,6 +1,7 @@
 ﻿using DataCommander.Api.Connection;
 using MySql.Data.MySqlClient;
 using System;
+using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ internal sealed class Connection : ConnectionBase
     }
 
     public override Task OpenAsync(CancellationToken cancellationToken) => _mySqlConnection.OpenAsync(cancellationToken);
-    public override System.Data.IDbCommand CreateCommand() => _mySqlConnection.CreateCommand();
+    public override DbCommand CreateCommand() => _mySqlConnection.CreateCommand();
 
     public override string ConnectionName
     {

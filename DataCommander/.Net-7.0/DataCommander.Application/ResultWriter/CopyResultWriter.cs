@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -23,9 +24,9 @@ internal sealed class CopyResultWriter : IResultWriter
     private readonly IProvider _destinationProvider;
     private readonly ConnectionBase _destinationConnection;
     private readonly string? _tableName;
-    private readonly Action<IDbTransaction> _setTransaction;
+    private readonly Action<DbTransaction> _setTransaction;
     private readonly CancellationToken _cancellationToken;
-    private IDbTransaction _transaction;
+    private DbTransaction _transaction;
     private IDbCommand _insertCommand;
     private Converter<object, object>[] _converters;
     private IDbDataParameter[] _parameters;
@@ -39,7 +40,7 @@ internal sealed class CopyResultWriter : IResultWriter
     private long _waitMilliseconds;
 
     public CopyResultWriter(Action<InfoMessage> addInfoMessage, IProvider destinationProvider, ConnectionBase destinationConnection, string? tableName,
-        Action<IDbTransaction> setTransaction, CancellationToken cancellationToken)
+        Action<DbTransaction> setTransaction, CancellationToken cancellationToken)
     {
         _logResultWriter = new LogResultWriter(addInfoMessage);
         _addInfoMessage = addInfoMessage;

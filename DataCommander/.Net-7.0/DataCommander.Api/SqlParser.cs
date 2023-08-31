@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Globalization;
 using System.Linq;
 using DataCommander.Api.Connection;
@@ -41,7 +42,7 @@ public sealed class SqlParser
 
     #region Public Methods
 
-    public IDbCommand CreateCommand(IProvider provider, ConnectionBase connection, CommandType commandType, int commandTimeout)
+    public DbCommand CreateCommand(IProvider provider, ConnectionBase connection, CommandType commandType, int commandTimeout)
     {
         var command = connection.CreateCommand();
         command.CommandType = commandType;

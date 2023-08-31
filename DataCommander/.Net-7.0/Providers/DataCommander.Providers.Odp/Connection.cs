@@ -1,4 +1,4 @@
-﻿using System.Data;
+﻿using System.Data.Common;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -56,7 +56,7 @@ internal sealed class Connection : ConnectionBase
 
     public override string ServerVersion => _oracleConnection.ServerVersion;
 
-    public override IDbCommand CreateCommand()
+    public override DbCommand CreateCommand()
     {
         var command = _oracleConnection.CreateCommand();
         command.InitialLONGFetchSize = 8 * 1024;

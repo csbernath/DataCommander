@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 using System.Data.OleDb;
 using System.Diagnostics;
 using System.IO;
@@ -611,7 +612,7 @@ public sealed partial class QueryForm
         }
     }
 
-    private void SetTransaction(IDbTransaction transaction)
+    private void SetTransaction(DbTransaction transaction)
     {
         if (_transaction == null && transaction != null)
         {
@@ -624,10 +625,7 @@ public sealed partial class QueryForm
         }
     }
 
-    private void InvokeSetTransaction(IDbTransaction transaction)
-    {
-        Invoke(new Action<IDbTransaction>(SetTransaction), transaction);
-    }
+    private void InvokeSetTransaction(DbTransaction transaction) => Invoke(() => SetTransaction(transaction));
 
     internal void ScriptQueryAsCreateTable()
     {

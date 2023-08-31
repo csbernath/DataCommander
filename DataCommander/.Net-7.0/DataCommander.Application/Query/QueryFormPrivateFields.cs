@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
@@ -71,9 +72,9 @@ public sealed partial class QueryForm
     private ToolStripMenuItem _mnuOpenTable;
     private readonly IContainer components = new Container();
     private readonly string _connectionString;
-    private IDbTransaction _transaction;
+    private DbTransaction _transaction;
     private SqlParser _sqlStatement;
-    private IDbCommand _command;
+    private DbCommand _command;
     private CommandType _commandType = CommandType.Text;
     private IAsyncDataAdapter? _dataAdapter;
     private bool _cancel;
