@@ -9,7 +9,7 @@ using Foundation.Core;
 
 namespace DataCommander.Application;
 
-public sealed partial class CancelableOperationForm : Form
+public sealed partial class CancelableOperationForm : Form, ICancelableOperationForm
 {
     private readonly Control _owner;
     private readonly CancellationTokenSource _cancellationTokenSource;

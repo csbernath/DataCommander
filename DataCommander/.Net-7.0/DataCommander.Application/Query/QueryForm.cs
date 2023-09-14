@@ -2128,4 +2128,9 @@ public sealed partial class QueryForm : Form, IQueryForm
         _sbPanelText.Text = text;
         _sbPanelText.ForeColor = color;
     }
+
+    public ICancelableOperationForm CreateCancelableOperationForm(CancellationTokenSource cancellationTokenSource, string formText, string textBoxText)
+    {
+        return new CancelableOperationForm(this, cancellationTokenSource, formText, textBoxText, _colorTheme);
+    }
 }

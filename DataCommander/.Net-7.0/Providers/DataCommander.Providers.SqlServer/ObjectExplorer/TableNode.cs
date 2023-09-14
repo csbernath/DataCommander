@@ -6,6 +6,8 @@ using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Collections;
 using Foundation.Collections.ReadOnly;
@@ -325,40 +327,45 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
     {
         var queryForm = (IQueryForm)sender;
         queryForm.SetStatusbarPanelText("Copying table script to clipboard...");
-        var stopwatch = Stopwatch.StartNew();
-
-        var connectionString = DatabaseNode.Databases.Server.ConnectionString;
-        var connectionInfo = SqlObjectScripter.CreateSqlConnectionInfo(connectionString);
-
-        var connection = new ServerConnection(connectionInfo);
-        connection.Connect();
-        var server = new Server(connection);
-        var database = server.Databases[DatabaseNode.Name];
-        var table = database.Tables[_name, _owner];
-
-        var options = new ScriptingOptions();
-        options.Indexes = true;
-        options.Permissions = true;
-        options.IncludeDatabaseContext = false;
-        options.Default = true;
-        options.AnsiPadding = true;
-        options.DriAll = true;
-        options.ExtendedProperties = true;
-        options.ScriptBatchTerminator = true;
-        options.SchemaQualify = true;
-        options.SchemaQualifyForeignKeysReferences = true;
-        options.TargetServerVersion = SqlServerVersion.Version100;
-
-        var stringCollection = table.Script(options);
-        var sb = new StringBuilder();
-        foreach (var s in stringCollection)
+        var cancellationTokenSource = new CancellationTokenSource();
+        var cancelableOperationForm = queryForm.CreateCancelableOperationForm(cancellationTokenSource, "Copying table script to clipboard...", string.Empty);
+        var task = new Task<string>(() =>
         {
-            sb.AppendLine(s);
-            sb.AppendLine("GO");
-        }
+            var connectionString = DatabaseNode.Databases.Server.ConnectionString;
+            var connectionInfo = SqlObjectScripter.CreateSqlConnectionInfo(connectionString);
 
-        queryForm.SetClipboardText(sb.ToString());
-        stopwatch.Stop();
+            var connection = new ServerConnection(connectionInfo);
+            connection.Connect();
+            var server = new Server(connection);
+            var database = server.Databases[DatabaseNode.Name];
+            var table = database.Tables[_name, _owner];
+
+            var options = new ScriptingOptions();
+            options.Indexes = true;
+            options.Permissions = true;
+            options.IncludeDatabaseContext = false;
+            options.Default = true;
+            options.AnsiPadding = true;
+            options.DriAll = true;
+            options.ExtendedProperties = true;
+            options.ScriptBatchTerminator = true;
+            options.SchemaQualify = true;
+            options.SchemaQualifyForeignKeysReferences = true;
+            options.TargetServerVersion = SqlServerVersion.Version100;
+
+            var stringCollection = table.Script(options);
+            var sb = new StringBuilder();
+            foreach (var s in stringCollection)
+            {
+                sb.AppendLine(s);
+                sb.AppendLine("GO");
+            }
+
+            return sb.ToString();
+        });
+        var stopwatch = Stopwatch.StartNew();
+        cancelableOperationForm.Start(task, TimeSpan.FromSeconds(1));
+        queryForm.SetClipboardText(task.Result);
         queryForm.SetStatusbarPanelText($"Copying table script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.");
     }
 
