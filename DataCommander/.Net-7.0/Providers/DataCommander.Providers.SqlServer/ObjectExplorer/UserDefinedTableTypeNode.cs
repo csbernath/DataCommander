@@ -50,7 +50,7 @@ internal sealed class UserDefinedTableTypeNode : ITreeNode
 
     private void Script_OnClick(object? sender, EventArgs e)
     {
-        var queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender!;
         var connectionInfo = SqlObjectScripter.CreateSqlConnectionInfo(_database.Databases.Server.ConnectionString);
         var connection = new ServerConnection(connectionInfo);
         connection.Connect();

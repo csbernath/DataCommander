@@ -137,7 +137,7 @@ where
 
         var dropdownItems = new[]
         {
-            new MenuItem("CREATE to clipboard", ScriptTable_Click, EmptyReadOnlyCollection<MenuItem>.Value),
+            new MenuItem("CREATE to clipboard", CreateTableScriptToClipboard, EmptyReadOnlyCollection<MenuItem>.Value),
             new MenuItem("SELECT to clipboard", SelectScript_Click, EmptyReadOnlyCollection<MenuItem>.Value),
             new MenuItem("INSERT to clipboard", InsertScript_Click, EmptyReadOnlyCollection<MenuItem>.Value),
             new MenuItem("UPDATE to clipboard", UpdateScript_Click, EmptyReadOnlyCollection<MenuItem>.Value),
@@ -323,50 +323,54 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
         queryForm.ShowDataSet(dataSet);
     }
 
-    private void ScriptTable_Click(object sender, EventArgs e)
+    private void CreateTableScriptToClipboard(object? sender, EventArgs e)
     {
         var queryForm = (IQueryForm)sender;
         queryForm.SetStatusbarPanelText("Copying table script to clipboard...");
         var cancellationTokenSource = new CancellationTokenSource();
         var cancelableOperationForm = queryForm.CreateCancelableOperationForm(cancellationTokenSource, "Copying table script to clipboard...", string.Empty);
-        var task = new Task<string>(() =>
-        {
-            var connectionString = DatabaseNode.Databases.Server.ConnectionString;
-            var connectionInfo = SqlObjectScripter.CreateSqlConnectionInfo(connectionString);
-
-            var connection = new ServerConnection(connectionInfo);
-            connection.Connect();
-            var server = new Server(connection);
-            var database = server.Databases[DatabaseNode.Name];
-            var table = database.Tables[_name, _owner];
-
-            var options = new ScriptingOptions();
-            options.Indexes = true;
-            options.Permissions = true;
-            options.IncludeDatabaseContext = false;
-            options.Default = true;
-            options.AnsiPadding = true;
-            options.DriAll = true;
-            options.ExtendedProperties = true;
-            options.ScriptBatchTerminator = true;
-            options.SchemaQualify = true;
-            options.SchemaQualifyForeignKeysReferences = true;
-            options.TargetServerVersion = SqlServerVersion.Version100;
-
-            var stringCollection = table.Script(options);
-            var sb = new StringBuilder();
-            foreach (var s in stringCollection)
-            {
-                sb.AppendLine(s);
-                sb.AppendLine("GO");
-            }
-
-            return sb.ToString();
-        });
+        var task = new Task<string>(GetCreateTableScript);
         var stopwatch = Stopwatch.StartNew();
         cancelableOperationForm.Start(task, TimeSpan.FromSeconds(1));
         queryForm.SetClipboardText(task.Result);
-        queryForm.SetStatusbarPanelText($"Copying table script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.");
+        queryForm.SetStatusbarPanelText($"Copying CREATE TABLE script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.");
+    }
+
+    private string GetCreateTableScript()
+    {
+        var connectionString = DatabaseNode.Databases.Server.ConnectionString;
+        var connectionInfo = SqlObjectScripter.CreateSqlConnectionInfo(connectionString);
+
+        var connection = new ServerConnection(connectionInfo);
+        connection.Connect();
+        var server = new Server(connection);
+        var database = server.Databases[DatabaseNode.Name];
+        var table = database.Tables[_name, _owner];
+
+        var options = new ScriptingOptions
+        {
+            Indexes = true,
+            Permissions = true,
+            IncludeDatabaseContext = false,
+            Default = true,
+            AnsiPadding = true,
+            DriAll = true,
+            ExtendedProperties = true,
+            ScriptBatchTerminator = true,
+            SchemaQualify = true,
+            SchemaQualifyForeignKeysReferences = true,
+            TargetServerVersion = SqlServerVersion.Version100
+        };
+
+        var stringCollection = table.Script(options);
+        var stringBuilder = new StringBuilder();
+        foreach (var s in stringCollection)
+        {
+            stringBuilder.AppendLine(s);
+            stringBuilder.AppendLine("GO");
+        }
+
+        return stringBuilder.ToString();
     }
 
     private void Indexes_Click(object sender, EventArgs e)
@@ -389,7 +393,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
         queryForm.ShowDataSet(dataSet);
     }
 
-    private void SelectScript_Click(object sender, EventArgs e)
+    private void SelectScript_Click(object? sender, EventArgs e)
     {
         var name = new DatabaseObjectMultipartName(null, DatabaseNode.Name, _owner, _name);
         var connectionString = DatabaseNode.Databases.Server.ConnectionString;
@@ -436,7 +440,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
         return new Column(columnName, typeName, maxLength, precision, scale, isNullable);
     }
 
-    private void InsertScript_Click(object sender, EventArgs e)
+    private void InsertScript_Click(object? sender, EventArgs e)
     {
         var commandText = string.Format(@"select
     c.name,
@@ -603,7 +607,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
         return script;
     }
 
-    private void UpdateScript_Click(object sender, EventArgs e)
+    private void UpdateScript_Click(object? sender, EventArgs e)
     {
         var script = CreateUpdateScript();
 
@@ -613,7 +617,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
 
-    private void CsharpOrm_Click(object sender, EventArgs e)
+    private void CsharpOrm_Click(object? sender, EventArgs e)
     {
         var connectionString = DatabaseNode.Databases.Server.ConnectionString;
         GetTableSchemaResult getTableSchemaResult;
@@ -656,8 +660,8 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             .FirstOrDefault();
         var versionColumn = columns.FirstOrDefault(i => i.ColumnName == "Version");
 
-        ReadOnlyCollection<Line> createUpdateSqlStatementMethod;            
-        ReadOnlyCollection<Line> createDeleteSqlStatementMethod;
+        ReadOnlyCollection<Line>? createUpdateSqlStatementMethod;            
+        ReadOnlyCollection<Line>? createDeleteSqlStatementMethod;
 
         if (identifierColumn != null)
         {
