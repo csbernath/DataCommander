@@ -31,8 +31,7 @@ internal static class QueryFormStaticMethods
     //}
 
     public static Control CreateControlFromDataTable(IQueryForm queryForm, DbCommandBuilder commandBuilder, DataTable dataTable,
-        GetTableSchemaResult getTableSchemaResult,
-        ResultWriterType tableStyle, bool readOnly, ColorTheme colorTheme)
+        GetTableSchemaResult getTableSchemaResult, ResultWriterType tableStyle, bool readOnly, ColorTheme colorTheme)
     {
         Control control;
 

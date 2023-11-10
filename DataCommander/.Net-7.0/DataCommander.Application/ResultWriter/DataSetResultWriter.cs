@@ -4,7 +4,6 @@ using DataCommander.Api;
 using DataCommander.Api.Connection;
 using Foundation.Data;
 using Foundation.Diagnostics;
-using static Foundation.Data.MethodProfiler.MethodProfiler;
 
 namespace DataCommander.Application.ResultWriter;
 
