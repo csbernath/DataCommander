@@ -19,6 +19,7 @@ public partial class AboutForm : Form
         var path = assembly.Location;
         var lastWriteTime = File.GetLastWriteTime(path);
         var windowsVersionInfo = WindowsVersionInfo.Get();
+        var windowsName = GetWindowsNameFromCurrentBuild(windowsVersionInfo.CurrentBuild);
 
         var brightness = colorTheme?.BackColor.GetBrightness();
 
@@ -43,15 +44,15 @@ This program is freeware and released under the <a href=""https://www.gnu.org/li
 <br/><br/>
 <a href=""https://github.com/csbernath/DataCommander"">GitHub repository</a>
 <br/><br/>
-Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.Net-7.0/README.md"">Foundation (.NET 7.0) Class Library</a>
+Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.Net-8.0/README.md"">Foundation (.NET 8.0) Class Library</a>
 <br/><br/>
 <a href=""applicationdatafile://"">Application Data file</a>
 <br/>
 <a href=""logfile://"">Log file</a>
 <br/><br/>
 <table style=""font-family:verdana;font-size:9pt"">
-<tr><td>Windows ProductName:</td><td>{windowsVersionInfo.ProductName}</td></tr>
-<tr><td>Windows DisplayVersion:</td><td>{windowsVersionInfo.DisplayVersion}</td></tr>
+<tr><td>Windows Name:</td><td>{windowsName}</td></tr>
+<tr><td>Windows CurrentBuild</td><td>{windowsVersionInfo.CurrentBuild}</td></tr>
 <tr><td>.NET CLR version:</td><td>{Environment.Version}</td></tr>
 </table>
 <br/>
@@ -70,6 +71,22 @@ Credits:
         InitializeComponent();
 
         webBrowser1.DocumentText = text;
+    }
+
+    private static string GetWindowsNameFromCurrentBuild(string currentBuild)
+    {
+        string windowsName = null;
+        switch (currentBuild)
+        {
+            case "19045":
+                windowsName = "Windows 10 version 22H2";
+                break;
+            case "22621":
+                windowsName = "Windows 11 version 22H2";
+                break;
+        }
+
+        return windowsName;
     }
 
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
