@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "DataCommander": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "COREHOST_TRACEFILE": "C:\\TEMP\\trace.log",
+        "COREHOST_TRACE_VERBOSITY": "4",
+        "COREHOST_TRACE": "0"
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>11</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Assertions\Foundation.Assertions.csproj" />
+    <ProjectReference Include="..\Collections\Foundation.Collections.csproj" />
+    <ProjectReference Include="..\Core\Foundation.Core.csproj" />
+    <ProjectReference Include="..\Log\Foundation.Log.csproj" />
+    <ProjectReference Include="..\Text\Foundation.Text.csproj" />
+  </ItemGroup>
+
+</Project>
