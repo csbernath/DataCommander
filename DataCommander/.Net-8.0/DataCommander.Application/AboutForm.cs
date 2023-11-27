@@ -19,7 +19,7 @@ public partial class AboutForm : Form
         var path = assembly.Location;
         var lastWriteTime = File.GetLastWriteTime(path);
         var windowsVersionInfo = WindowsVersionInfo.Get();
-        var windowsName = GetWindowsNameFromCurrentBuild(windowsVersionInfo.CurrentBuild);
+        var windowsName = GetWindowsNameFromCurrentBuildAndEditionId(windowsVersionInfo.CurrentBuild, windowsVersionInfo.EditionId);
 
         var brightness = colorTheme?.BackColor.GetBrightness();
 
@@ -73,16 +73,16 @@ Credits:
         webBrowser1.DocumentText = text;
     }
 
-    private static string GetWindowsNameFromCurrentBuild(string currentBuild)
+    private static string GetWindowsNameFromCurrentBuildAndEditionId(string currentBuild, string editionId)
     {
         string windowsName = null;
         switch (currentBuild)
         {
             case "19045":
-                windowsName = "Windows 10 version 22H2";
+                windowsName = $"Windows 10 {editionId} version 22H2";
                 break;
             case "22621":
-                windowsName = "Windows 11 version 22H2";
+                windowsName = $"Windows 11 {editionId} version 22H2";
                 break;
         }
 

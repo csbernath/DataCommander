@@ -6,13 +6,15 @@ public sealed class WindowsVersionInfo
 {
     public readonly string ProductName;
     public readonly string DisplayVersion;
+    public readonly string EditionId;
     public readonly string ReleaseId;
     public readonly string CurrentBuild;
 
-    public WindowsVersionInfo(string productName, string displayVersion, string releaseId, string currentBuild)
+    private WindowsVersionInfo(string productName, string displayVersion, string editionId, string releaseId, string currentBuild)
     {
         ProductName = productName;
         DisplayVersion = displayVersion;
+        EditionId = editionId;
         ReleaseId = releaseId;
         CurrentBuild = currentBuild;
     }
@@ -24,10 +26,11 @@ public sealed class WindowsVersionInfo
         {
             var productName = (string)key.GetValue("ProductName");
             var displayVersion = (string)key.GetValue("DisplayVersion");
+            var editionId = (string)key.GetValue("EditionID");
             var releaseId = (string)key.GetValue("ReleaseId");
             var currentBuild = (string)key.GetValue("CurrentBuild");
 
-            return new WindowsVersionInfo(productName, displayVersion, releaseId, currentBuild);
+            return new WindowsVersionInfo(productName, displayVersion, editionId, releaseId, currentBuild);
         }
 #pragma warning restore CA1416
     }
