@@ -6,7 +6,7 @@
     <Company>Csaba Bernáth</Company>
     <Authors>Csaba Bernáth</Authors>
     <Product>Data Commander</Product>
-    <LangVersion>11</LangVersion>
+    <LangVersion>12</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
