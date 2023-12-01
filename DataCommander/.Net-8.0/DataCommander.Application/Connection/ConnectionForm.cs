@@ -221,7 +221,8 @@ internal sealed class ConnectionForm : Form
         if (dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.InitialCatalog, out var value))
             row[ConnectionStringKeyword.InitialCatalog] = (string)value;
 
-        row[ConnectionStringKeyword.IntegratedSecurity] = bool.Parse((string)dbConnectionStringBuilder[ConnectionStringKeyword.IntegratedSecurity]);
+        if (dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out value))
+            row[ConnectionStringKeyword.IntegratedSecurity] = bool.Parse((string)value);
 
         if (dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out value))
             row[ConnectionStringKeyword.UserId] = (string)value;
