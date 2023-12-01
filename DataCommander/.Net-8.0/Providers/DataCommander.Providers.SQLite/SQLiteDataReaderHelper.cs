@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
 using DataCommander.Api;
@@ -7,60 +6,12 @@ using DataCommander.Api.FieldReaders;
 
 namespace DataCommander.Providers.SQLite;
 
-internal sealed class DecimalDataFieldReader : IDataFieldReader
-{
-    readonly SQLiteDataReader _dataReader;
-    readonly int _columnOrdinal;
-
-    public DecimalDataFieldReader( SQLiteDataReader dataReader, int columnOrdinal )
-    {
-        _dataReader = dataReader;
-        _columnOrdinal = columnOrdinal;
-    }
-
-    #region IDataFieldReader Members
-
-    object IDataFieldReader.Value
-    {
-        get
-        {
-            object value;
-            var isDbNull = _dataReader.IsDBNull(_columnOrdinal );
-
-            if (isDbNull)
-            {
-                value = DBNull.Value;
-            }
-            else
-            {
-                //try
-                //{
-                //    string stringValue = this.dataReader.GetString( columnOrdinal );
-                //    value = new DecimalField( null, default( decimal ), stringValue );
-                //}
-                //catch
-                //{
-                //    decimal decimalValue = this.dataReader.GetDecimal( columnOrdinal );
-                //    value = new DecimalField( null, decimalValue, null );
-                //}
-
-                var decimalValue = _dataReader.GetDecimal(_columnOrdinal );
-                value = new DecimalField( null, decimalValue, null );
-            }
-
-            return value;
-        }
-    }
-
-    #endregion
-}
-
-internal sealed class SqLiteDataReaderHelper : IDataReaderHelper
+internal sealed class SQLiteDataReaderHelper : IDataReaderHelper
 {
     private SQLiteDataReader _sqLiteDataReader;
     private readonly IDataFieldReader[] _dataFieldReaders;
 
-    public SqLiteDataReaderHelper( IDataReader dataReader )
+    public SQLiteDataReaderHelper( IDataReader dataReader )
     {
         _sqLiteDataReader = (SQLiteDataReader) dataReader;
         var schemaTable = dataReader.GetSchemaTable();

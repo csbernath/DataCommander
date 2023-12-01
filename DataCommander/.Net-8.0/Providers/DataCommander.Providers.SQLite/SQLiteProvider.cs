@@ -14,7 +14,7 @@ using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SQLite;
 
-public sealed class SqLiteProvider : IProvider
+public sealed class SQLiteProvider : IProvider
 {
     #region IProvider Members
 
@@ -121,7 +121,7 @@ public sealed class SqLiteProvider : IProvider
 
     IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
     {
-        return new SqLiteDataReaderHelper(dataReader);
+        return new SQLiteDataReaderHelper(dataReader);
     }
 
     public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();

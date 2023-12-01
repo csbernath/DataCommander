@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <LangVersion>12</LangVersion>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <BaseOutputPath>..\..\DataCommander\bin</BaseOutputPath>	
   </PropertyGroup>
 
   <ItemGroup>
