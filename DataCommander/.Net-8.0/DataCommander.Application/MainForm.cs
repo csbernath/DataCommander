@@ -596,12 +596,13 @@ public class MainForm : Form
                     //queryForm.WindowState = FormWindowState.Maximized;
                     break;
             }
-
+            
+            var provider = ProviderFactory.GetProviders().First(i => i.Identifier == connectionProperties.ProviderIdentifier);           
             var message = $@"Connection opened in {StopwatchTimeSpan.ToString(connectionForm.ElapsedTicks, 3)} seconds.
-ConnectionName: {connectionProperties.ConnectionName}
-ProviderIdentifier: {connectionProperties.ProviderIdentifier}
-DataSource: {connectionProperties.Connection.DataSource}
-ServerVersion: {connectionProperties.Connection.ServerVersion}";
+Connection name: {connectionProperties.ConnectionName}
+Provider name: {provider.Name}
+Data source: {connectionProperties.Connection.DataSource}
+Server version: {connectionProperties.Connection.ServerVersion}";
 
             var infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message);
             queryForm.AddInfoMessage(infoMessage);

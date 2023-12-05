@@ -21,6 +21,11 @@ public sealed class SqlServerCeProvider : IProvider
 
     string IProvider.Name => "SqlServerCe40";
     DbProviderFactory IProvider.DbProviderFactory => SqlCeProviderFactory.Instance;
+    public string GetConnectionName(string connectionString)
+    {
+        throw new NotImplementedException();
+    }
+
     ConnectionBase IProvider.CreateConnection(string connectionString) => new Connection(connectionString);
     string[] IProvider.KeyWords => null;
     bool IProvider.IsCommandCancelable => true;

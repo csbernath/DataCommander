@@ -40,8 +40,8 @@ internal sealed class ConnectionForm : Form
 
         InitializeComponent();
 
-        _dataTable.Columns.Add("ConnectionName", typeof(string));
-        _dataTable.Columns.Add("ProviderName", typeof(string));
+        _dataTable.Columns.Add(ConnectionFormColumnName.ConnectionName, typeof(string));
+        _dataTable.Columns.Add(ConnectionFormColumnName.ProviderName, typeof(string));
         _dataTable.Columns.Add(ConnectionStringKeyword.DataSource);
         _dataTable.Columns.Add(ConnectionStringKeyword.InitialCatalog);
         _dataTable.Columns.Add(ConnectionStringKeyword.IntegratedSecurity);
@@ -73,7 +73,7 @@ internal sealed class ConnectionForm : Form
             dataGridViewTextBoxColumn.DataPropertyName = columnName;
             dataGridViewTextBoxColumn.HeaderText = columnName;
 
-            if (columnName == "ConnectionName" ||
+            if (columnName == ConnectionFormColumnName.ConnectionName ||
                 columnName == ConnectionStringKeyword.DataSource ||
                 columnName == ConnectionStringKeyword.InitialCatalog ||
                 columnName == ConnectionStringKeyword.UserId)
@@ -208,10 +208,10 @@ internal sealed class ConnectionForm : Form
     private void LoadConnection(ConfigurationNode configurationNode, DataRow row)
     {
         var connectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(configurationNode);
-        row["ConnectionName"] = connectionProperties.ConnectionName;
+        row[ConnectionFormColumnName.ConnectionName] = connectionProperties.ConnectionName;
 
         var provider = ProviderFactory.GetProviders().First(i => i.Identifier == connectionProperties.ProviderIdentifier);
-        row["ProviderName"] = provider.Name;
+        row[ConnectionFormColumnName.ProviderName] = provider.Name;
 
         var dbConnectionStringBuilder = new DbConnectionStringBuilder();
         dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;

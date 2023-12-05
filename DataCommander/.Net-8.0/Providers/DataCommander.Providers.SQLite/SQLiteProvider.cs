@@ -20,6 +20,11 @@ public sealed class SQLiteProvider : IProvider
 
     string IProvider.Name => ProviderName.SqLite;
 
+    public string GetConnectionName(string connectionString)
+    {
+        throw new NotImplementedException();
+    }
+
     ConnectionBase IProvider.CreateConnection(string connectionString)
     {
         return new Connection(connectionString);

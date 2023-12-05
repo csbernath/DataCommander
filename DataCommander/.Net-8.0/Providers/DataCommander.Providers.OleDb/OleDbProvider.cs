@@ -20,6 +20,11 @@ internal sealed class OleDbProvider : IProvider
     string IProvider.Name => ProviderName.OleDb;
     DbProviderFactory IProvider.DbProviderFactory => OleDbFactory.Instance;
 
+    public string GetConnectionName(string connectionString)
+    {
+        throw new NotImplementedException();
+    }
+
     public ConnectionBase CreateConnection(string connectionString)
     {
         this.connectionString = connectionString;

@@ -1199,18 +1199,11 @@ public sealed partial class QueryForm : Form, IQueryForm
 
     private void SetText()
     {
-        var sb = new StringBuilder();
-        sb.Append(Connection.ConnectionName);
-        sb.Append(" - ");
-        sb.Append(Connection.Caption);
-
-        if (_fileName != null)
-            sb.AppendFormat(" - {0}", _fileName);
-
-        Text = sb.ToString();
+        var connectionName = Provider.GetConnectionName(_connectionString);
+        Text = connectionName;
 
         var mainForm = DataCommanderApplication.Instance.MainForm;
-        mainForm.ActiveMdiChildToolStripTextBox.Text = sb.ToString();
+        mainForm.ActiveMdiChildToolStripTextBox.Text = connectionName;
     }
 
     private void ExecuteQuery()

@@ -26,6 +26,11 @@ namespace DataCommander.Providers.PostgreSql
         public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
         void IProvider.ClearCompletionCache() => throw new NotImplementedException();
         string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
+        public string GetConnectionName(string connectionString)
+        {
+            throw new NotImplementedException();
+        }
+
         ConnectionBase IProvider.CreateConnection(string connectionString) => new Connection(connectionString);
         IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader) => new PostgreSqlDataReaderHelper((NpgsqlDataReader) dataReader);
 

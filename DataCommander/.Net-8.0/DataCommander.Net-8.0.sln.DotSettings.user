@@ -3,6 +3,7 @@
   &lt;Assembly Path="C:\Users\Csabi\.nuget\packages\system.configuration.configurationmanager\7.0.0\lib\net7.0\System.Configuration.ConfigurationManager.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Users\Csabi\.nuget\packages\microsoft.data.sqlclient\5.1.1\ref\net6.0\Microsoft.Data.SqlClient.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
+	<s:Boolean x:Key="/Default/Environment/InlayHints/GeneralInlayHintsOptions/EnableInlayHints/@EntryValue">False</s:Boolean>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=afd5894f_002Db21e_002D43eb_002D8785_002Daf8d82b23721/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Test1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::4CCB9E25-FA57-4BDD-AB78-842D7BEFE8F8::net6.0::Foundation.Assertions.Test.UnitTest1.Test1&lt;/TestId&gt;&#xD;

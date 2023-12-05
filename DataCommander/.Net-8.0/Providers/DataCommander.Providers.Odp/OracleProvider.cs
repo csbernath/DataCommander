@@ -665,6 +665,10 @@ order by OBJECT_NAME";
 
     #region IProvider Members
 
+    public string GetConnectionName(string connectionString)
+    {
+        throw new NotImplementedException();
+    }
 
     ConnectionBase IProvider.CreateConnection(string connectionString)
     {

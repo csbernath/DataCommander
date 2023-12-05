@@ -41,6 +41,11 @@ public sealed class TfsProvider : IProvider
         throw new NotImplementedException();
     }
 
+    public string GetConnectionName(string connectionString)
+    {
+        throw new NotImplementedException();
+    }
+
     ConnectionBase IProvider.CreateConnection(string connectionString)
     {
         throw new NotImplementedException();

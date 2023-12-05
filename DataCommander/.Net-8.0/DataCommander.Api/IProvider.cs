@@ -24,6 +24,7 @@ public interface IProvider
     IObjectExplorer CreateObjectExplorer();
     void ClearCompletionCache();
     string CommandToString(IDbCommand command);
+    string GetConnectionName(string connectionString);    
     ConnectionBase CreateConnection(string connectionString);
     IDbConnectionStringBuilder CreateConnectionStringBuilder();
     IDataReaderHelper CreateDataReaderHelper(IDataReader dataReader);

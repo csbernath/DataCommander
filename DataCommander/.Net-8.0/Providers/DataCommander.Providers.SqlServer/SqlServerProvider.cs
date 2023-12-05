@@ -12,6 +12,7 @@ using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.FieldReaders;
 using DataCommander.Api.Query;
+using DataCommander.Providers.SqlServer.ObjectExplorer;
 using Foundation.Configuration;
 using Foundation.Core;
 using Foundation.Data;
@@ -69,6 +70,11 @@ internal sealed class SqlServerProvider : IProvider
 
     string IProvider.Name => "SqlServer";
     DbProviderFactory IProvider.DbProviderFactory => Microsoft.Data.SqlClient.SqlClientFactory.Instance;
+
+    public string GetConnectionName(string connectionString)
+    {
+        return ConnectionNameProvider.GetConnectionName(connectionString);
+    }
 
     ConnectionBase IProvider.CreateConnection(string connectionString) => new Connection(connectionString);
 

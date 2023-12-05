@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DataCommander.Api;
-using Microsoft.Data.SqlClient;
 using Foundation.Assertions;
 using Foundation.Core;
-using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
@@ -21,35 +18,7 @@ internal sealed class ServerNode : ITreeNode
 
     #region ITreeNode Members
 
-    string ITreeNode.Name
-    {
-        get
-        {
-            var connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString);
-
-            string serverVersion;
-            string userName = null;
-            using (var connection = new SqlConnection(ConnectionString))
-            {
-                connection.Open();
-                serverVersion = new Version(connection.ServerVersion).ToString();
-
-                if (connectionStringBuilder.IntegratedSecurity)
-                {
-                    var commanExecutor = connection.CreateCommandExecutor();
-                    const string commandText = "select suser_sname()";
-                    var createCommandRequest = new CreateCommandRequest(commandText);
-                    var scalar = commanExecutor.ExecuteScalar(createCommandRequest);
-                    userName = (string)scalar;
-                }
-            }
-
-            if (!connectionStringBuilder.IntegratedSecurity)
-                userName = connectionStringBuilder.UserID;
-
-            return $"{connectionStringBuilder.DataSource}(SQL Server {serverVersion} - {userName})";
-        }
-    }
+    string ITreeNode.Name => ConnectionNameProvider.GetConnectionName(ConnectionString);
 
     bool ITreeNode.IsLeaf => false;
 
@@ -59,7 +28,7 @@ internal sealed class ServerNode : ITreeNode
         var securityNode = new SecurityNode(this);
         var serverObjectCollectionNode = new ServerObjectCollectionNode(this);
         var jobCollectionNode = new JobCollectionNode(this);
-        return new ITreeNode[] {node, securityNode, serverObjectCollectionNode, jobCollectionNode};
+        return new ITreeNode[] { node, securityNode, serverObjectCollectionNode, jobCollectionNode };
     }
 
     bool ITreeNode.Sortable => false;

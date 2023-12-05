@@ -60,6 +60,11 @@ internal sealed class MySqlProvider : IProvider
         throw new NotImplementedException();
     }
 
+    public string GetConnectionName(string connectionString)
+    {
+        throw new NotImplementedException();
+    }
+
     ConnectionBase IProvider.CreateConnection(string connectionString)
     {
         return new Connection(connectionString);
