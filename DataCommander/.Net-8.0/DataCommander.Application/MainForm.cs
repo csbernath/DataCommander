@@ -574,7 +574,7 @@ public class MainForm : Form
             var connectionProperties = connectionForm.ConnectionProperties;
 
             var queryForm = new QueryForm(this, connectionProperties.Provider, connectionProperties.ConnectionString,
-                connectionProperties.Connection, _statusBar, _colorTheme);
+                connectionProperties.Connection, _statusBar, _colorTheme, connectionProperties.ConnectionName);
 
             queryForm.MdiParent = this;
 
@@ -784,7 +784,7 @@ Server version: {connectionProperties.Connection.ServerVersion}";
                     node.AddChildNode(subNode);
                     ConnectionPropertiesRepository.Save(connectionProperties, subNode);
 
-                    var queryForm = new QueryForm(this, provider, connectionString, connection, _statusBar, _colorTheme);
+                    var queryForm = new QueryForm(this, provider, connectionString, connection, _statusBar, _colorTheme, connectionProperties.ConnectionName);
 
                     queryForm.MdiParent = this;
                     queryForm.Font = SelectedFont;
@@ -892,7 +892,7 @@ Server version: {connectionProperties.Connection.ServerVersion}";
             var connection = provider.CreateConnection(connectionString);
             await connection.OpenAsync(CancellationToken.None);
 
-            var queryForm = new QueryForm(this, provider, connectionString, connection, _statusBar, _colorTheme);
+            var queryForm = new QueryForm(this, provider, connectionString, connection, _statusBar, _colorTheme, connection.ConnectionName);
             queryForm.MdiParent = this;
             queryForm.Font = SelectedFont;
             queryForm.Show();

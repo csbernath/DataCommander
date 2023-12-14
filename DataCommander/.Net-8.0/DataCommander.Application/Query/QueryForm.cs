@@ -40,14 +40,16 @@ public sealed partial class QueryForm : Form, IQueryForm
         NumberFormat = new NumberFormatInfo { NumberDecimalSeparator = "." };
     }
 
-    public QueryForm(MainForm mainForm, IProvider provider, string connectionString, ConnectionBase connection, StatusStrip parentStatusBar, ColorTheme? colorTheme)
+    public QueryForm(MainForm mainForm, IProvider provider, string connectionString, ConnectionBase connection, StatusStrip parentStatusBar,
+        ColorTheme? colorTheme, string connectionName)
     {
-        Log.Trace(CallerInformation.Create(), "Queryform.ctor...");        
+        Log.Trace(CallerInformation.Create(), "Queryform.ctor...");
         GarbageMonitor.Default.Add("QueryForm", this);
 
         _mainForm = mainForm;
         Provider = provider;
         _connectionString = connectionString;
+        _connectionName = connectionName;
         Connection = connection;
         _parentStatusBar = parentStatusBar;
         _colorTheme = colorTheme;
@@ -1199,11 +1201,11 @@ public sealed partial class QueryForm : Form, IQueryForm
 
     private void SetText()
     {
-        var connectionName = Provider.GetConnectionName(_connectionString);
-        Text = connectionName;
+        var text = $"{_connectionName} - {Provider.GetConnectionName(_connectionString)}";
+        Text = text;
 
         var mainForm = DataCommanderApplication.Instance.MainForm;
-        mainForm.ActiveMdiChildToolStripTextBox.Text = connectionName;
+        mainForm.ActiveMdiChildToolStripTextBox.Text = text;
     }
 
     private void ExecuteQuery()

@@ -637,7 +637,7 @@ public sealed partial class QueryForm
         if (connection.Database != Connection.Database)
             connection.Connection.ChangeDatabase(database);
 
-        var queryForm = new QueryForm(_mainForm, Provider, _connectionString, connection, mainForm.StatusBar, _colorTheme);
+        var queryForm = new QueryForm(_mainForm, Provider, _connectionString, connection, mainForm.StatusBar, _colorTheme, connection.ConnectionName);
 
         if (mainForm.SelectedFont != null)
             queryForm.Font = mainForm.SelectedFont;
