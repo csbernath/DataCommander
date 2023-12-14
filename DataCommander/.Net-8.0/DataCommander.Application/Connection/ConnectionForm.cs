@@ -509,9 +509,10 @@ internal sealed class ConnectionForm : Form
                 var containsIntegratedSecurity = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
                 var containsUserId = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out var userId);
                 var dataSource = (string)dataSourceObject;
+                var provider = ProviderFactory.GetProviders().First(i => i.Identifier == connectionProperties.ProviderIdentifier);
                 var stringBuilder = new StringBuilder();
                 stringBuilder.Append($@"Connection name: {connectionProperties.ConnectionName}
-Provider name: {connectionProperties.Provider.Name}
+Provider name: {provider.Name}
 {ConnectionStringKeyword.DataSource}: {dataSource}");
                 if (containsIntegratedSecurity)
                     stringBuilder.Append($"\r\n{ConnectionStringKeyword.IntegratedSecurity}: {integratedSecurity}");
