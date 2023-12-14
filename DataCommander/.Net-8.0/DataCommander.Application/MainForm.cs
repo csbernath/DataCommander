@@ -513,7 +513,7 @@ public class MainForm : Form
 
     private void optionsMenuItem_Click(object sender, EventArgs e)
     {
-        var optionsForm = new OptionsForm(_colorTheme != null, SelectedFont);
+        var optionsForm = new OptionsForm(_colorTheme != null, SelectedFont, _colorTheme);
         if (optionsForm.ShowDialog() == DialogResult.OK)
         {
             var darkColorTheme = optionsForm.DarkColorTheme;

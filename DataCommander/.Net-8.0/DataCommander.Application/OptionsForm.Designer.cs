@@ -106,7 +106,7 @@ namespace DataCommander.Application
             this.Name = "OptionsForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "OptionsForm";
+            this.Text = "Data Commander options";
             this.ResumeLayout(false);
             this.PerformLayout();
 

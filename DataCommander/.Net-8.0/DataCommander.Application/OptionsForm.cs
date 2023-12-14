@@ -1,5 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
+using DataCommander.Api;
+using DataCommander.Application.Connection;
 
 namespace DataCommander.Application;
 
@@ -8,7 +10,7 @@ public partial class OptionsForm : Form
     private bool _darkColorTheme;
     private Font _font;
 
-    public OptionsForm(bool darkColorTheme, Font font)
+    public OptionsForm(bool darkColorTheme, Font font, ColorTheme? colorTheme)
     {
         InitializeComponent();
 
@@ -16,6 +18,8 @@ public partial class OptionsForm : Form
         _font = font;
 
         colorThemeComboBox.SelectedIndex = _darkColorTheme ? 1 : 0;
+
+        colorTheme?.Apply(this);
     }
 
     public bool DarkColorTheme => _darkColorTheme;
