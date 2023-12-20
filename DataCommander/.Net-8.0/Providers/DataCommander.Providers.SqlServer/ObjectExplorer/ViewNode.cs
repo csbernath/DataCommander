@@ -67,7 +67,7 @@ internal sealed class ViewNode : ITreeNode
         using (var connection = new SqlConnection(connectionString))
         {
             connection.Open();
-            text = SqlDatabase.GetSysComments(connection, _database.Name, _schema, _name);
+            text = SqlDatabase.GetSysComments(connection, _database.Name, _schema, _name, CancellationToken.None).Result;
         }
 
         var queryForm = (IQueryForm)sender;

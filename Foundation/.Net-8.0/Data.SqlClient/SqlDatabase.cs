@@ -1,18 +1,17 @@
-﻿using System.Data;
+﻿using System.Data.Common;
 using System.Data.SqlTypes;
 using System.Globalization;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Foundation.Data.SqlClient;
 
-/// <summary>
-/// Static helper methods for SQL Server connections.
-/// </summary>
 public static class SqlDatabase
 {
     public static readonly SqlDateTime SqlDateTimeZero = new(1900, 1, 1);
 
-    public static string GetSysComments(IDbConnection connection, string database, string schema, string name)
+    public static async Task<string> GetSysComments(DbConnection connection, string database, string schema, string name, CancellationToken cancellationToken)
     {
         var commandText = string.Format(
             CultureInfo.InvariantCulture,
@@ -59,16 +58,17 @@ end",
             name.ToNullableNVarChar());
 
         var stringBuilder = new StringBuilder();
-        var executor = connection.CreateCommandExecutor();
-        executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
-        {
-            while (dataReader.Read())
+        var executor = connection.CreateCommandAsyncExecutor();
+        await executor.ExecuteReaderAsync(
+            new ExecuteReaderRequest(commandText),
+            async dataReader =>
             {
-                var s = dataReader.GetString(0);
-                stringBuilder.Append(s);
-            }
-        });
-
+                while (await dataReader.ReadAsync(cancellationToken))
+                {
+                    var s = dataReader.GetString(0);
+                    stringBuilder.Append(s);
+                }
+            });
         return stringBuilder.ToString();
     }
 }

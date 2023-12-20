@@ -259,9 +259,19 @@ public sealed partial class QueryForm
 
     private ToolStripMenuItem ToToolStripMenuItem(MenuItem source)
     {
-        var item = new ToolStripMenuItem(source.Text, null, (sender, args) => source.OnClick(this, args));
+        var item = new ToolStripMenuItem(source.Text, null, (sender, args) =>
+        {
+            try
+            {
+                source.OnClick(this, args);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message);
+            }
+        });
         var dropdownItems = source.DropDownItems
-            .Select<MenuItem, ToolStripMenuItem>(ToToolStripMenuItem)
+            .Select(ToToolStripMenuItem)
             .Cast<ToolStripItem>()
             .ToArray();
         item.DropDownItems.AddRange(dropdownItems);

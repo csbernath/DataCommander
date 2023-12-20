@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using System.Diagnostics;
+using System.Management;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
+using Foundation.Data;
 using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
@@ -31,7 +33,7 @@ internal sealed class StoredProcedureNode : ITreeNode
     {
         return Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
     }
-    
+
     public bool Sortable => false;
 
     public string Query
@@ -54,21 +56,31 @@ internal sealed class StoredProcedureNode : ITreeNode
     private void ScriptObjectMenuItem_Click(object sender, EventArgs e)
     {
         var stopwatch = Stopwatch.StartNew();
-        var connectionString = _database.Databases.Server.ConnectionString;
-        string text;
-        using (var connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
-            text = SqlDatabase.GetSysComments(connection, _database.Name, _owner, _name);
-        }
-
+        var queryForm = (IQueryForm)sender;
+        var cancellationTokenSource = new CancellationTokenSource();
+        var cancellationToken = cancellationTokenSource.Token;
+        var cancelableOperationForm = queryForm.CreateCancelableOperationForm(cancellationTokenSource, "Getting stored procedure text...", "Please wait...");
+        var task = new Task<string>(() => GetText(cancellationToken).Result);
+        cancelableOperationForm.Start(task, TimeSpan.FromSeconds(1));
+        task.Wait(cancellationToken);
+        var text = task.Result;
         if (text != null)
         {
-            var queryForm = (IQueryForm)sender;
             queryForm.SetClipboardText(text);
-
             queryForm.SetStatusbarPanelText(
                 $"Copying stored procedure script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.");
+        }
+    }
+
+    private async Task<string> GetText(CancellationToken cancellationToken)
+    {
+        Thread.Sleep(10000);
+        var connectionString = _database.Databases.Server.ConnectionString;
+        using (var connection = new SqlConnection(connectionString))
+        {
+            await connection.OpenAsync(cancellationToken);
+            var text = await SqlDatabase.GetSysComments(connection, _database.Name, _owner, _name, cancellationToken);
+            return text;
         }
     }
 }

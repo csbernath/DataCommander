@@ -117,7 +117,8 @@ public sealed partial class QueryForm : Form, IQueryForm
         {
             objectExplorer.SetConnection(connectionString, connection.Connection);
             var cancellationTokenSource = new CancellationTokenSource();
-            var cancelableOperationForm = new CancelableOperationForm(mainForm, cancellationTokenSource, "formText", "textBoxText", colorTheme);
+            var cancelableOperationForm =
+                new CancelableOperationForm(mainForm, cancellationTokenSource, "Getting children...", "Please wait...", colorTheme);
             var cancellationToken = cancellationTokenSource.Token;
             var getChildrenTask = new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result);
             cancelableOperationForm.Start(getChildrenTask, TimeSpan.FromSeconds(1));

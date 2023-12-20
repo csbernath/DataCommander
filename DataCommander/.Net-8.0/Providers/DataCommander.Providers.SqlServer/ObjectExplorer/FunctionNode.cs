@@ -82,7 +82,7 @@ from	{_database.Name}.{_owner}.[{_name}]()";
         using (var connection = new SqlConnection(connectionString))
         {
             connection.Open();
-            text = SqlDatabase.GetSysComments(connection, _database.Name, _owner, _name);
+            text = SqlDatabase.GetSysComments(connection, _database.Name, _owner, _name, CancellationToken.None).Result;
         }
 
         var queryForm = (IQueryForm)sender;
