@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Data;
@@ -18,14 +20,33 @@ internal sealed class SystemTableCollectionNode : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    {
+        var commandText = CreateCommandText();
+        var tableNodes = await SqlClientFactory.Instance.ExecuteReaderAsync(
+            DatabaseNode.Databases.Server.ConnectionString,
+            new ExecuteReaderRequest(commandText),
+            128,
+            dataRecord =>
+            {
+                var schema = dataRecord.GetString(0);
+                var name = dataRecord.GetString(1);
+                var id = dataRecord.GetInt32(2);
+                var temporalType = (TemporalType)dataRecord.GetByte(3);
+                return new TableNode(DatabaseNode, schema, name, id, temporalType);
+            },
+            cancellationToken);
+        return tableNodes;
+    }
+
+    private string CreateCommandText()
     {
         var commandText = $@"select
     s.name,
     tbl.name,
     tbl.object_id,
     tlb.temporal_type
-from [{DatabaseNode.Name}].sys.tables AS tbl
+from [{DatabaseNode.Name}].sys.tables tbl
 join [{DatabaseNode.Name}].sys.schemas s (nolock)
 on tbl.schema_id = s.schema_id
 where
@@ -47,20 +68,7 @@ where
 end          
              AS bit)=1)
 order by 1,2";
-        var connectionString = DatabaseNode.Databases.Server.ConnectionString;
-        using (var connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
-            var executor = connection.CreateCommandExecutor();
-            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataReader =>
-            {
-                var schema = dataReader.GetString(0);
-                var name = dataReader.GetString(1);
-                var id = dataReader.GetInt32(2);
-                var temporalType = (TemporalType)dataReader.GetByte(3);
-                return new TableNode(DatabaseNode, schema, name, id, temporalType);
-            });
-        }
+        return commandText;
     }
 
     bool ITreeNode.Sortable => false;

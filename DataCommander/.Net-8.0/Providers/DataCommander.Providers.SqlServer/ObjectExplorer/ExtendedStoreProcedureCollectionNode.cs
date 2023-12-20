@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
@@ -17,7 +19,7 @@ internal sealed class ExtendedStoreProcedureCollectionNode : ITreeNode
     string ITreeNode.Query => null;
     public ContextMenu? GetContextMenu() => null;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var executor = new SqlCommandExecutor(_database.Databases.Server.ConnectionString);
         var commandText = @"select
@@ -35,6 +37,6 @@ order by 1,2";
             var name = dataRecord.GetString(1);
             return new ExtendedStoreProcedureNode(_database, schema, name);
         });
-        return childNodes;
+        return Task.FromResult<IEnumerable<ITreeNode>>(childNodes);
     }
 }

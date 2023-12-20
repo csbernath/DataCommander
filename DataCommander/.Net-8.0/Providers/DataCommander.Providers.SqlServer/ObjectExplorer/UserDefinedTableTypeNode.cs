@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Collections.ReadOnly;
 using Microsoft.SqlServer.Management.Common;
@@ -26,12 +28,12 @@ internal sealed class UserDefinedTableTypeNode : ITreeNode
     string ITreeNode.Name => $"{_schema}.{_name}";
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        return new ITreeNode[]
+        return Task.FromResult<IEnumerable<ITreeNode>>(new ITreeNode[]
         {
             new ColumnCollectionNode(_database, _id)
-        };
+        });
     }
 
     bool ITreeNode.Sortable => false;

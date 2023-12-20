@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
@@ -16,7 +19,9 @@ internal sealed class SchemaNode : ITreeNode
     public string Name { get; }
     public bool IsLeaf => true;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => null;
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
+        Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
+
     public bool Sortable => false;
     public string Query => null;
 

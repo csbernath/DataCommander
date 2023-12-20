@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
@@ -14,16 +18,21 @@ internal sealed class RoleCollectionNode : ITreeNode
     public string Name => "Roles";
     public bool IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var commandText = $"select name from {_database.Name}..sysusers where issqlrole = 1 order by name";
-        var connectionString = _database.Databases.Server.ConnectionString;
-        var executor = new SqlCommandExecutor(connectionString);
-        return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
-        {
-            var name = dataRecord.GetString(0);
-            return new RoleNode(_database, name);
-        });
+        return await SqlClientFactory.Instance.ExecuteReaderAsync(
+            _database.Databases.Server.ConnectionString,
+            new ExecuteReaderRequest(commandText),
+            128,
+            ReadRecord,
+            cancellationToken);
+    }
+
+    private RoleNode ReadRecord(IDataRecord dataRecord)
+    {
+        var name = dataRecord.GetString(0);
+        return new RoleNode(_database, name);
     }
 
     public bool Sortable => false;

@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Data;
@@ -20,7 +23,18 @@ internal sealed class TriggerCollectionNode : ITreeNode
     public string Name => "Triggers";
     public bool IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    {
+        var commandText = CreateCommandText();
+        return await SqlClientFactory.Instance.ExecuteReaderAsync(
+            _databaseNode.Databases.Server.ConnectionString,
+            new ExecuteReaderRequest(commandText),
+            128,
+            ReadRecord,
+            cancellationToken);
+    }
+
+    private string CreateCommandText()
     {
         var cb = new SqlCommandBuilder();
         var databaseName = cb.QuoteIdentifier(_databaseNode.Name);
@@ -31,15 +45,14 @@ internal sealed class TriggerCollectionNode : ITreeNode
 from {databaseName}.sys.triggers
 where object_id = {_id.ToSqlConstant()}
 order by name";
+        return commandText;
+    }
 
-        var connectionString = _databaseNode.Databases.Server.ConnectionString;
-        var executor = new SqlCommandExecutor(connectionString);
-        return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
-        {
-            var name = dataRecord.GetString(0);
-            var id = dataRecord.GetInt32(1);
-            return new TriggerNode(_databaseNode, id, name);
-        });
+    private TriggerNode ReadRecord(IDataRecord dataRecord)
+    {
+        var name = dataRecord.GetString(0);
+        var id = dataRecord.GetInt32(1);
+        return new TriggerNode(_databaseNode, id, name);
     }
 
     public bool Sortable => false;

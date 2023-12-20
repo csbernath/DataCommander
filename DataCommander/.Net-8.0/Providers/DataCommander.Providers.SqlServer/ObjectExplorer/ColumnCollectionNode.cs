@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Data;
@@ -44,18 +46,40 @@ internal sealed class ColumnCollectionNode : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        SortedDictionary<int, ColumnNode> columnNodes = null;
-
-        using (var methodLog = LogFactory.Instance.GetCurrentMethodLog())
-        {
-            using (var connection = new SqlConnection(_databaseNode.Databases.Server.ConnectionString))
+        var commandText = CreateCommandText();
+        SortedDictionary<int, ColumnNode> columnNodes = null; 
+        await SqlClientFactory.Instance.ExecuteReaderAsync(
+            _databaseNode.Databases.Server.ConnectionString,
+            new ExecuteReaderRequest(commandText), async dataReader =>
             {
-                connection.Open();
-                var cb = new SqlCommandBuilder();
-                var databaseName = cb.QuoteIdentifier(_databaseNode.Name);
-                var commandText = $@"select
+                columnNodes = (await dataReader.ReadResultAsync(128, ToColumnNode, cancellationToken))
+                    .ToSortedDictionary(c => c.Id);
+                await dataReader.NextResultAsync(cancellationToken);
+                while (await dataReader.ReadAsync(cancellationToken))
+                {
+                    var columnId = dataReader.GetInt32(0);
+                    var columnNode = columnNodes[columnId];
+                    columnNode.IsPrimaryKey = true;
+                }
+
+                await dataReader.NextResultAsync(cancellationToken);
+                while (await dataReader.ReadAsync(cancellationToken))
+                {
+                    var columnId = dataReader.GetInt32(0);
+                    var columnNode = columnNodes[columnId];
+                    columnNode.IsForeignKey = true;
+                }
+            });
+        return columnNodes.Values;
+    }
+
+    private string CreateCommandText()
+    {
+        var cb = new SqlCommandBuilder();
+        var databaseName = cb.QuoteIdentifier(_databaseNode.Name);
+        var commandText = $@"select
      c.column_id
     ,c.name
     ,c.system_type_id
@@ -86,32 +110,7 @@ select  fkc.parent_column_id
 from    {databaseName}.sys.foreign_key_columns fkc
 where   fkc.parent_object_id = {_id}
 order by fkc.parent_column_id";
-
-                methodLog.Write(LogLevel.Trace, "commandText:\r\n{0}", commandText);
-                var executor = DbCommandExecutorFactory.Create(connection);
-                executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
-                {
-                    columnNodes = dataReader.ReadResult(128, ToColumnNode).ToSortedDictionary(c => c.Id);
-                    dataReader.NextResult();
-                    while (dataReader.Read())
-                    {
-                        var columnId = dataReader.GetInt32(0);
-                        var columnNode = columnNodes[columnId];
-                        columnNode.IsPrimaryKey = true;
-                    }
-
-                    dataReader.NextResult();
-                    while (dataReader.Read())
-                    {
-                        var columnId = dataReader.GetInt32(0);
-                        var columnNode = columnNodes[columnId];
-                        columnNode.IsForeignKey = true;
-                    }
-                });
-            }
-        }
-
-        return columnNodes.Values;
+        return commandText;
     }
 
     bool ITreeNode.Sortable => false;

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
@@ -43,7 +45,7 @@ internal sealed class DatabaseNode : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var children = new ITreeNode[]
         {
@@ -53,7 +55,7 @@ internal sealed class DatabaseNode : ITreeNode
             new DatabaseSecurityNode(this)
         };
 
-        return children;
+        return Task.FromResult<IEnumerable<ITreeNode>>(children);
     }
 
     public bool Sortable => false;

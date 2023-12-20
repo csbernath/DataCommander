@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using ADODB;
@@ -104,21 +105,27 @@ public sealed partial class QueryForm
 
                 try
                 {
-                    treeNode.Nodes.Clear();
-                    treeNode2 = (ITreeNode)treeNode.Tag;
-                    IEnumerable<ITreeNode> children = null;
-
                     try
                     {
-                        children = treeNode2.GetChildren(false);
+                        var cancellationTokenSource = new CancellationTokenSource();
+                        var cancellationToken = cancellationTokenSource.Token;
+                        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, "Getting tree node children...",
+                            "Please wait...", _colorTheme);
+                        IEnumerable<ITreeNode> children = null;
+                        treeNode2 = (ITreeNode)treeNode.Tag;
+                        var task = new Task(() => children = treeNode2.GetChildren(false, cancellationToken).Result);
+                        cancelableOperationForm.Start(task, TimeSpan.FromSeconds(1));
+                        task.Wait(cancellationToken);
+                        if (children != null)
+                        {
+                            treeNode.Nodes.Clear();                            
+                            AddNodes(treeNode.Nodes, children, treeNode2.Sortable);
+                        }
                     }
                     catch (Exception ex)
                     {
                         ShowMessage(ex);
                     }
-
-                    if (children != null)
-                        AddNodes(treeNode.Nodes, children, treeNode2.Sortable);
                 }
                 finally
                 {
@@ -164,7 +171,22 @@ public sealed partial class QueryForm
         {
             var treeNode = (ITreeNode)treeNodeV.Tag;
             treeNodeV.Nodes.Clear();
-            AddNodes(treeNodeV.Nodes, treeNode.GetChildren(true), treeNode.Sortable);
+
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = cancellationTokenSource.Token;
+            var cancelableOperationForm =
+                new CancelableOperationForm(this, cancellationTokenSource, "Getting tree node children...", "Please wait...", _colorTheme);
+            ITreeNode[]? children = null;
+            var task = new Task(() =>
+            {
+                var x = treeNode.GetChildren(true, cancellationToken);
+                x.Wait(cancellationToken);
+                children = x.Result.ToArray();
+            });
+            cancelableOperationForm.Start(task, TimeSpan.FromSeconds(1));
+            task.Wait(cancellationToken);
+            if (children != null)
+                AddNodes(treeNodeV.Nodes, children, treeNode.Sortable);
         }
     }
 
@@ -177,7 +199,7 @@ public sealed partial class QueryForm
             {
                 var rootNodes = _tvObjectExplorer.Nodes;
                 rootNodes.Clear();
-                var treeNodes = objectExplorer.GetChildren(true);
+                var treeNodes = objectExplorer.GetChildren(true, CancellationToken.None).Result;
                 AddNodes(rootNodes, treeNodes, objectExplorer.Sortable);
             }
         }

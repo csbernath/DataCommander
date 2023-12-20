@@ -127,13 +127,6 @@ public static class DbCommandExtensions
         return rowCount;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="command"></param>
-    /// <param name="dataTable"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     public static int Fill(this IDbCommand command, DataTable dataTable, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(command);

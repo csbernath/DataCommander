@@ -1,6 +1,8 @@
 ﻿using Foundation.Data;
 using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Data.SqlClient;
 
@@ -20,7 +22,7 @@ internal sealed class IndexCollectionNode : ITreeNode
     public string Name => "Indexes";
     public bool IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var cb = new SqlCommandBuilder();
 
@@ -47,14 +49,14 @@ order by i.name",
         var connectionString = _databaseNode.Databases.Server.ConnectionString;
         var executor = new SqlCommandExecutor(connectionString);
 
-        return executor.ExecuteReader(request, 128, dataRecord =>
+        return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(request, 128, dataRecord =>
         {
             var name = dataRecord.GetStringOrDefault(0);
             var indexId = dataRecord.GetInt32(1);
             var type = dataRecord.GetByte(2);
             var isUnique = dataRecord.GetBoolean(3);
             return new IndexNode(_databaseNode, _id, indexId, name, type, isUnique);
-        });
+        }));
     }
 
     public bool Sortable => false;

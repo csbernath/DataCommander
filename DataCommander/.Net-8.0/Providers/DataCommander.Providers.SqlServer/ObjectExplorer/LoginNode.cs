@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
@@ -12,7 +14,10 @@ internal sealed class LoginNode : ITreeNode
 
     string ITreeNode.Name => _name;
     bool ITreeNode.IsLeaf => true;
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => throw new NotImplementedException();
+
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
+        Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
+
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;
 

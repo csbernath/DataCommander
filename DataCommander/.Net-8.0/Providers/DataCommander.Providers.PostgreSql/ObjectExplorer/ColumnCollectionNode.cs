@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Data;
 using Npgsql;
@@ -18,7 +20,7 @@ internal sealed class ColumnCollectionNode : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var nodes = new List<ITreeNode>();
         var schemaNode = _tableNode.TableCollectionNode.SchemaNode;

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Data;
@@ -18,16 +20,19 @@ internal sealed class DatabaseSnapshotCollectionNode : ITreeNode
     string ITreeNode.Name => "Database Snapshots";
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var connectionString = _databaseCollectionNode.Server.ConnectionString;
         const string commandText = @"select name
 from sys.databases d
 where
 	d.source_database_id is not null
 order by 1";
-        var executeReaderRequest = new ExecuteReaderRequest(commandText);
-        return SqlClientFactory.Instance.ExecuteReader(connectionString, executeReaderRequest, 128, ReadDatabaseNode);
+        return await SqlClientFactory.Instance.ExecuteReaderAsync(
+            _databaseCollectionNode.Server.ConnectionString,
+            new ExecuteReaderRequest(commandText),
+            128,
+            ReadDatabaseNode,
+            cancellationToken);
     }
 
     private DatabaseNode ReadDatabaseNode(IDataRecord dataRecord)

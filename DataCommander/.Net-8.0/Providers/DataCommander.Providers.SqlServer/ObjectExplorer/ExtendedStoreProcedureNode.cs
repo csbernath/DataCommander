@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
@@ -23,5 +25,5 @@ internal sealed class ExtendedStoreProcedureNode : ITreeNode
     string ITreeNode.Query => null;
     public ContextMenu? GetContextMenu() => null;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => throw new NotSupportedException();
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => throw new NotSupportedException();
 }

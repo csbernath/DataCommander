@@ -530,53 +530,60 @@ public class MainForm : Form
 
     private void Connect()
     {
-        var connectionForm = new ConnectionForm(_statusBar, _colorTheme);
-
-        if (connectionForm.ShowDialog() == DialogResult.OK)
+        try
         {
-            Log.Trace(CallerInformation.Create(), "connectionForm.ShowDialog() finished.");
-            var connectionProperties = connectionForm.ConnectionProperties;
+            var connectionForm = new ConnectionForm(_statusBar, _colorTheme);
 
-            var queryForm = new QueryForm(this, connectionProperties.Provider, connectionProperties.ConnectionString,
-                connectionProperties.Connection, _statusBar, _colorTheme, connectionProperties.ConnectionName);
-
-            queryForm.MdiParent = this;
-
-            if (SelectedFont != null)
-                queryForm.Font = SelectedFont;
-
-            queryForm.FormClosing += queryForm_FormClosing;
-
-            switch (WindowState)
+            if (connectionForm.ShowDialog() == DialogResult.OK)
             {
-                case FormWindowState.Normal:
-                    //var width = Math.Max(ClientSize.Width + 70, 100);
-                    //var height = Math.Max(ClientSize.Height - 120, 50);
-                    //queryForm.ClientSize = new Size(width, height);
-                    queryForm.WindowState = FormWindowState.Maximized;
-                    break;
+                Log.Trace(CallerInformation.Create(), "connectionForm.ShowDialog() finished.");
+                var connectionProperties = connectionForm.ConnectionProperties;
 
-                case FormWindowState.Maximized:
-                    //queryForm.WindowState = FormWindowState.Maximized;
-                    break;
-            }
-            
-            var provider = ProviderFactory.GetProviders().First(i => i.Identifier == connectionProperties.ProviderIdentifier);           
-            var message = $@"Connection opened in {StopwatchTimeSpan.ToString(connectionForm.ElapsedTicks, 3)} seconds.
+                var queryForm = new QueryForm(this, connectionProperties.Provider, connectionProperties.ConnectionString,
+                    connectionProperties.Connection, _statusBar, _colorTheme, connectionProperties.ConnectionName);
+
+                queryForm.MdiParent = this;
+
+                if (SelectedFont != null)
+                    queryForm.Font = SelectedFont;
+
+                queryForm.FormClosing += queryForm_FormClosing;
+
+                switch (WindowState)
+                {
+                    case FormWindowState.Normal:
+                        //var width = Math.Max(ClientSize.Width + 70, 100);
+                        //var height = Math.Max(ClientSize.Height - 120, 50);
+                        //queryForm.ClientSize = new Size(width, height);
+                        queryForm.WindowState = FormWindowState.Maximized;
+                        break;
+
+                    case FormWindowState.Maximized:
+                        //queryForm.WindowState = FormWindowState.Maximized;
+                        break;
+                }
+
+                var provider = ProviderFactory.GetProviders().First(i => i.Identifier == connectionProperties.ProviderIdentifier);
+                var message = $@"Connection opened in {StopwatchTimeSpan.ToString(connectionForm.ElapsedTicks, 3)} seconds.
 Connection name: {connectionProperties.ConnectionName}
 Provider name: {provider.Name}
 Data source: {connectionProperties.Connection.DataSource}
 Server version: {connectionProperties.Connection.ServerVersion}";
 
-            var infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message);
-            queryForm.AddInfoMessage(infoMessage);
+                var infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message);
+                queryForm.AddInfoMessage(infoMessage);
 
-            queryForm.Show();
+                queryForm.Show();
 
-            if (WindowState == FormWindowState.Maximized)
-            {
-                queryForm.WindowState = FormWindowState.Maximized;
+                if (WindowState == FormWindowState.Maximized)
+                {
+                    queryForm.WindowState = FormWindowState.Maximized;
+                }
             }
+        }
+        catch (Exception exception)
+        {
+            MessageBox.Show(this, exception.Message);
         }
     }
 

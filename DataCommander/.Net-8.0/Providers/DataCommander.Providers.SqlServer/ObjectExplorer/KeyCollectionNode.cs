@@ -1,4 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Data;
 using Microsoft.Data.SqlClient;
@@ -19,10 +23,20 @@ internal class KeyCollectionNode : ITreeNode
     public string Name => "Keys";
     public bool IsLeaf => false;
 
-    public IEnumerable<ITreeNode> GetChildren(bool refresh)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    {
+        var commandText = CreateCommandText();
+        return await SqlClientFactory.Instance.ExecuteReaderAsync(
+            _databaseNode.Databases.Server.ConnectionString,
+            new ExecuteReaderRequest(commandText),
+            128,
+            ReadRecord,
+            cancellationToken);
+    }
+
+    private string CreateCommandText()
     {
         var sqlCommandBuilder = new SqlCommandBuilder();
-        var connectionString = _databaseNode.Databases.Server.ConnectionString;
         var commandText = @$"select name
 from {sqlCommandBuilder.QuoteIdentifier(_databaseNode.Name)}.sys.objects o
 where
@@ -34,21 +48,13 @@ order by
         when 'F' then 1
         when 'UQ' then 2
     end";
-        var executeReaderRequest = new ExecuteReaderRequest(commandText);
+        return commandText;
+    }
 
-        var keyNodes = new List<KeyNode>();
-        
-        SqlClientFactory.Instance.ExecuteReader(connectionString, executeReaderRequest, dataReader =>
-        {
-            while (dataReader.Read())
-            {
-                var name = dataReader.GetString(0);
-                var keyNode = new KeyNode(_databaseNode, _id, name);
-                keyNodes.Add(keyNode);
-            }
-        });
-
-        return keyNodes;
+    private KeyNode ReadRecord(IDataRecord dataRecord)
+    {
+        var name = dataRecord.GetString(0);
+        return new KeyNode(_databaseNode, _id, name);
     }
 
     public bool Sortable => false;

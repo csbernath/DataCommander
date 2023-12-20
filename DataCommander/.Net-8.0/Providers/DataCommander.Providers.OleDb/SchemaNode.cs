@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 
 namespace DataCommander.Providers.OleDb;
@@ -29,13 +31,13 @@ sealed class SchemaNode : ITreeNode
 
     public bool IsLeaf => false;
 
-    public IEnumerable<ITreeNode> GetChildren(bool refresh)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var treeNodes = new ITreeNode[2];
         treeNodes[0] = new TableCollectionNode(this);
         treeNodes[1] = new ProcedureCollectionNode(this);
 
-        return treeNodes;
+        return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
     }
 
     public bool Sortable => false;

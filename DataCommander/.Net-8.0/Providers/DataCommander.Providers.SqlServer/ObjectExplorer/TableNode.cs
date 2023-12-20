@@ -74,7 +74,7 @@ internal sealed class TableNode : ITreeNode
 
     public bool IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var treeNodes = new List<ITreeNode>();
 
@@ -109,7 +109,7 @@ where
             new IndexCollectionNode(DatabaseNode, Id)
         });
 
-        return treeNodes;
+        return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
     }
 
     public bool Sortable => false;

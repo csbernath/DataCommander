@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Linq;
 
@@ -21,9 +23,9 @@ internal sealed class ServerObjectCollectionNode : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        return new LinkedServerCollectionNode(_server).ItemToArray();
+        return Task.FromResult<IEnumerable<ITreeNode>>(new LinkedServerCollectionNode(_server).ItemToArray());
     }
 
     bool ITreeNode.Sortable => false;

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
@@ -12,7 +14,7 @@ internal sealed class ProgrammabilityNode : ITreeNode
     string ITreeNode.Name => "Programmability";
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var childNodes = new List<ITreeNode>();
         childNodes.Add(new StoredProcedureCollectionNode(_database, false));
@@ -23,7 +25,7 @@ internal sealed class ProgrammabilityNode : ITreeNode
 
         childNodes.Add(new UserDefinedTableTypeCollectionNode(_database));
 
-        return childNodes;
+        return Task.FromResult<IEnumerable<ITreeNode>>(childNodes);
     }
 
     bool ITreeNode.Sortable => false;

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Collections.ReadOnly;
@@ -25,14 +27,14 @@ internal sealed class ViewNode : ITreeNode
     public string Name => $"{_schema}.{_name}";
     public bool IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        return new ITreeNode[]
+        return Task.FromResult<IEnumerable<ITreeNode>>(new ITreeNode[]
         {
             new ColumnCollectionNode(_database, _id),
             new TriggerCollectionNode(_database, _id),
             new IndexCollectionNode(_database, _id)
-        };
+        });
     }
 
     public bool Sortable => false;

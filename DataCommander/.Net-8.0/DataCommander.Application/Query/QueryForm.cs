@@ -116,7 +116,13 @@ public sealed partial class QueryForm : Form, IQueryForm
         if (objectExplorer != null)
         {
             objectExplorer.SetConnection(connectionString, connection.Connection);
-            AddNodes(_tvObjectExplorer.Nodes, objectExplorer.GetChildren(true), objectExplorer.Sortable);
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancelableOperationForm = new CancelableOperationForm(mainForm, cancellationTokenSource, "formText", "textBoxText", colorTheme);
+            var cancellationToken = cancellationTokenSource.Token;
+            var getChildrenTask = new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result);
+            cancelableOperationForm.Start(getChildrenTask, TimeSpan.FromSeconds(1));
+            getChildrenTask.Wait(cancellationToken);
+            AddNodes(_tvObjectExplorer.Nodes, getChildrenTask.Result, objectExplorer.Sortable);
         }
         else
         {

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Collections.ReadOnly;
@@ -27,7 +29,7 @@ internal sealed class JobNode : ITreeNode
     string ITreeNode.Name => _name;
     bool ITreeNode.IsLeaf => true;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => throw new NotSupportedException();
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => throw new NotSupportedException();
 
     bool ITreeNode.Sortable => false;
 

@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
@@ -19,18 +23,34 @@ internal sealed class LoginCollectionNode : ITreeNode
     string ITreeNode.Name => "Logins";
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    {
+        var commandText = CreateCommandText();
+        return await SqlClientFactory.Instance.ExecuteReaderAsync(
+            _server.ConnectionString,
+            new ExecuteReaderRequest(commandText),
+            128,
+            ReadRecord,
+            cancellationToken);
+    }
+
+    private static string CreateCommandText()
     {
         const string commandText = @"select name
 from sys.server_principals sp (nolock)
 where   sp.type in('S','U','G')
 order by name";
-        var request = new ExecuteReaderRequest(commandText);
-        var executor = new SqlCommandExecutor(_server.ConnectionString);
-        return executor.ExecuteReader(request, 128, dataRecord => new LoginNode(dataRecord.GetString(0)));
+        return commandText;
+    }
+
+    private static LoginNode ReadRecord(IDataRecord dataRecord)
+    {
+        var name = dataRecord.GetString(0);
+        return new LoginNode(name);
     }
 
     bool ITreeNode.Sortable => false;
+
     string ITreeNode.Query => null;
 
     public ContextMenu? GetContextMenu() => null;

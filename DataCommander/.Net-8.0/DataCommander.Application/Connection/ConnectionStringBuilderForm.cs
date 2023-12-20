@@ -353,7 +353,7 @@ internal partial class ConnectionStringBuilderForm : Form
             var connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
             var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken));
             var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, "Opening connection...", string.Empty, _colorTheme);
-            cancelableOperationForm.Start(openConnectionTask, TimeSpan.FromSeconds(2));
+            cancelableOperationForm.Start(openConnectionTask, TimeSpan.FromSeconds(1));
             openConnectionTask.Wait(cancellationToken);
             MessageBox.Show("The connection was tested successfully.", DataCommanderApplication.Instance.Name, MessageBoxButtons.OK,
                 MessageBoxIcon.Information);

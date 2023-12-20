@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Data;
@@ -11,9 +13,7 @@ internal sealed class StoredProcedureCollectionNode : ITreeNode
     private readonly DatabaseNode _database;
     private readonly bool _isMsShipped;
 
-    public StoredProcedureCollectionNode(
-        DatabaseNode database,
-        bool isMsShipped)
+    public StoredProcedureCollectionNode(DatabaseNode database, bool isMsShipped)
     {
         _database = database;
         _isMsShipped = isMsShipped;
@@ -25,7 +25,30 @@ internal sealed class StoredProcedureCollectionNode : ITreeNode
 
     public bool IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    {
+        var treeNodes = new List<ITreeNode>();
+        if (!_isMsShipped)
+            treeNodes.Add(new StoredProcedureCollectionNode(_database, true));
+
+        var commandText = GetCommandText();
+        var rows = await SqlClientFactory.Instance.ExecuteReaderAsync(
+            _database.Databases.Server.ConnectionString,
+            new ExecuteReaderRequest(commandText),
+            128,
+            dataRecord =>
+            {
+                var owner = dataRecord.GetString(0);
+                var name = dataRecord.GetString(1);
+                return new StoredProcedureNode(_database, owner, name);
+            },
+            cancellationToken);
+        treeNodes.AddRange(rows);
+
+        return treeNodes;
+    }
+
+    private string GetCommandText()
     {
         var commandText = string.Format(@"
 select  s.name as Owner,
@@ -42,31 +65,7 @@ where
 order by s.name,o.name", _database.Name, _isMsShipped
             ? 1
             : 0);
-
-        DataTable dataTable;
-        var connectionString = _database.Databases.Server.ConnectionString;
-        using (var connection = new SqlConnection(connectionString))
-        {
-            var executor = connection.CreateCommandExecutor();
-            dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
-        }
-
-        var dataRows = dataTable.Rows;
-        var count = dataRows.Count;
-        var treeNodes = new List<ITreeNode>();
-        if (!_isMsShipped)
-            treeNodes.Add(new StoredProcedureCollectionNode(_database, true));
-
-        for (var i = 0; i < count; i++)
-        {
-            var row = dataRows[i];
-            var owner = (string) row["Owner"];
-            var name = (string) row["Name"];
-
-            treeNodes.Add(new StoredProcedureNode(_database, owner, name));
-        }
-
-        return treeNodes;
+        return commandText;
     }
 
     public bool Sortable => false;

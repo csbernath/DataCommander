@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Data;
@@ -15,7 +17,7 @@ internal sealed class UserCollectionNode : ITreeNode
     public string Name => "Users";
     public bool IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var commandText = $"select name from {_database.Name}..sysusers where islogin = 1 order by name";
         var connectionString = _database.Databases.Server.ConnectionString;
@@ -36,7 +38,7 @@ internal sealed class UserCollectionNode : ITreeNode
             treeNodes[i] = new UserNode(_database, name);
         }
 
-        return treeNodes;
+        return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
     }
 
     public bool Sortable => false;

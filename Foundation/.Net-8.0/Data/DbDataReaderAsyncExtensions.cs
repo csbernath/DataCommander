@@ -9,7 +9,7 @@ using Foundation.Collections.ReadOnly;
 
 namespace Foundation.Data;
 
-public static class DbDataReaderExtensions
+public static class DbDataReaderAsyncExtensions
 {
     public static async Task ReadResultAsync(this DbDataReader dataReader, Action readRecord, CancellationToken cancellationToken)
     {

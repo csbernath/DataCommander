@@ -33,7 +33,9 @@ public static class DbProviderFactoryExtensions
         return ExecuteDataTable(dbProviderFactory, connection, commandText);
     }
 
-    public static void ExecuteReader(this DbProviderFactory dbProviderFactory, string connectionString,
+    public static void ExecuteReader(
+        this DbProviderFactory dbProviderFactory,
+        string connectionString,
         ExecuteReaderRequest request,
         Action<IDataReader> readResults)
     {

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Assertions;
 using Foundation.Core;
@@ -22,13 +24,13 @@ internal sealed class ServerNode : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var node = new DatabaseCollectionNode(this);
         var securityNode = new SecurityNode(this);
         var serverObjectCollectionNode = new ServerObjectCollectionNode(this);
         var jobCollectionNode = new JobCollectionNode(this);
-        return new ITreeNode[] { node, securityNode, serverObjectCollectionNode, jobCollectionNode };
+        return Task.FromResult<IEnumerable<ITreeNode>>(new ITreeNode[] { node, securityNode, serverObjectCollectionNode, jobCollectionNode });
     }
 
     bool ITreeNode.Sortable => false;

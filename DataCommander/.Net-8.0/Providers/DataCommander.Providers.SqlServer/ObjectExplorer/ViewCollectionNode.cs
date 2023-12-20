@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Data;
@@ -14,7 +16,7 @@ internal sealed class ViewCollectionNode : ITreeNode
     public string Name => "Views";
     public bool IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var treeNodes = new List<ITreeNode>();
         treeNodes.Add(new SystemViewCollectionNode(_database));
@@ -38,7 +40,7 @@ order by 1,2";
                 treeNodes.Add(new ViewNode(_database, id, schema, name));
             }
         });
-        return treeNodes;
+        return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
     }
 
     public bool Sortable => false;

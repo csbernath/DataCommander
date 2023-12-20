@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Linq;
 
@@ -18,7 +20,7 @@ internal sealed class LinkedServerNode : ITreeNode
     public string Name { get; }
     string ITreeNode.Name => Name;
     bool ITreeNode.IsLeaf => false;
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => new LinkedServerCatalogCollectionNode(this).ItemAsEnumerable();
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>(new LinkedServerCatalogCollectionNode(this).ItemAsEnumerable());
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;
 

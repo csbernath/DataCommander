@@ -533,18 +533,10 @@ end", name.Database, ownersString, name.Name);
                     case SqlObjectTypes.Procedure:
                         name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
 
-                        if (name.Schema == null) name.Schema = "dbo";
+                        if (name.Schema == null)
+                            name.Schema = "dbo";
 
                         commandText = SqlServerObject.GetObjectsByDatabase(name.Database, new[] { "P", "X" });
-
-//                         commandText = string.Format(@"select
-//      s.name
-//     ,o.name
-// from [{0}].sys.objects o
-// join [{0}].sys.schemas s
-// on o.schema_id = s.schema_id
-// where   o.type in('P','X')
-// order by 1", name.Database);
                         break;
 
                     case SqlObjectTypes.Trigger:

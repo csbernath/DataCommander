@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
@@ -24,7 +26,12 @@ internal sealed class StoredProcedureNode : ITreeNode
 
     public string Name => _owner + '.' + _name;
     public bool IsLeaf => true;
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => null;
+
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    {
+        return Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
+    }
+    
     public bool Sortable => false;
 
     public string Query

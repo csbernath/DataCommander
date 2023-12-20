@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Data;
@@ -22,7 +24,7 @@ internal sealed class LinkedServerCatalogCollectionNode : ITreeNode
     string ITreeNode.Name => "Catalogs";
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         const string commandText = @"declare @provider nvarchar(128)
 select  @provider = s.provider
@@ -66,8 +68,8 @@ drop table #catalog";
 
             var executor = connection.CreateCommandExecutor();
             var executeReaderRequest = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
-            return executor.ExecuteReader(executeReaderRequest, 128,
-                dataRecord => new LinkedServerCatalogNode(_linkedServer, dataRecord.GetString(0)));
+            return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(executeReaderRequest, 128,
+                dataRecord => new LinkedServerCatalogNode(_linkedServer, dataRecord.GetString(0))));
         }
     }
 

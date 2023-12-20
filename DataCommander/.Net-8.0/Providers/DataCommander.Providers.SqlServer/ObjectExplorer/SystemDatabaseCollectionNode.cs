@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Data;
@@ -23,29 +26,30 @@ internal sealed class SystemDatabaseCollectionNode : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var connectionString = _databaseCollectionNode.Server.ConnectionString;
-        DataTable dataTable;
-        using (var connection = new SqlConnection(connectionString))
-        {
-            var executor = connection.CreateCommandExecutor();
-            const string commandText = @"select d.name
+        var commandText = CreateCommandText();
+        return await SqlClientFactory.Instance.ExecuteReaderAsync(
+            _databaseCollectionNode.Server.ConnectionString,
+            new ExecuteReaderRequest(commandText),
+            128,
+            ReadRecord,
+            cancellationToken);
+    }
+
+    private DatabaseNode ReadRecord(IDataRecord dataRecord)
+    {
+        var name = dataRecord.GetString(0);
+        return new DatabaseNode(_databaseCollectionNode, name, 0);
+    }
+    
+    private static string CreateCommandText()
+    {
+        const string commandText = @"select d.name
 from sys.databases d (nolock)
 where name in('master','model','msdb','tempdb')
 order by d.name";
-            dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
-        }
-
-        var list = new List<ITreeNode>();
-        foreach (DataRow dataRow in dataTable.Rows)
-        {
-            var name = (string) dataRow[0];
-            var node = new DatabaseNode(_databaseCollectionNode, name, 0);
-            list.Add(node);
-        }
-
-        return list;
+        return commandText;
     }
 
     bool ITreeNode.Sortable => false;

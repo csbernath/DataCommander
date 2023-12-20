@@ -1,5 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
+using Foundation.Collections.ReadOnly;
 using Microsoft.Data.SqlClient;
 using Foundation.Data;
 
@@ -13,11 +18,29 @@ internal sealed class TableCollectionNode : ITreeNode
     public string Name => "Tables";
     public bool IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var childNodes = new List<ITreeNode>();
-        childNodes.Add(new SystemTableCollectionNode(DatabaseNode));
+        var tableNodes = await GetTableNodes(cancellationToken);
+        var childNodes = new ITreeNode[] { new SystemTableCollectionNode(DatabaseNode) }
+            .Concat(tableNodes);
+        return childNodes;
+    }
 
+    private async Task<ReadOnlySegmentLinkedList<TableNode>> GetTableNodes(CancellationToken cancellationToken)
+    {
+        var commandText = CreateCommandText();
+        var connectionString = DatabaseNode.Databases.Server.ConnectionString;
+        var tableNodes = await SqlClientFactory.Instance.ExecuteReaderAsync(
+            connectionString,
+            new ExecuteReaderRequest(commandText),
+            128,
+            ReadRecord,
+            cancellationToken);
+        return tableNodes;
+    }
+
+    private string CreateCommandText()
+    {
         var commandText = $@"select
     s.name,
     tbl.name,
@@ -46,21 +69,16 @@ end
              AS bit)=0) and
     tbl.temporal_type in(0,2)
 order by 1,2";
-        var connectionString = DatabaseNode.Databases.Server.ConnectionString;
-        SqlClientFactory.Instance.ExecuteReader(connectionString, new ExecuteReaderRequest(commandText), dataReader =>
-        {
-            while (dataReader.Read())
-            {
-                var schema = dataReader.GetString(0);
-                var name = dataReader.GetString(1);
-                var objectId = dataReader.GetInt32(2);
-                var temporalType = (TemporalType)dataReader.GetByte(3);
-                var tableNode = new TableNode(DatabaseNode, schema, name, objectId, temporalType);
-                childNodes.Add(tableNode);
-            }
-        });
+        return commandText;
+    }
 
-        return childNodes;
+    private TableNode ReadRecord(IDataRecord dataRecord)
+    {
+        var schema = dataRecord.GetString(0);
+        var name = dataRecord.GetString(1);
+        var objectId = dataRecord.GetInt32(2);
+        var temporalType = (TemporalType)dataRecord.GetByte(3);
+        return new TableNode(DatabaseNode, schema, name, objectId, temporalType);
     }
 
     public bool Sortable => false;

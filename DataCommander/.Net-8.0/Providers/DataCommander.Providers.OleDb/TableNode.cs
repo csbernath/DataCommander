@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Collections.ReadOnly;
 
@@ -33,7 +35,7 @@ sealed class TableNode : ITreeNode
 
     public bool IsLeaf => true;
 
-    public IEnumerable<ITreeNode> GetChildren(bool refresh)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         return null;
     }

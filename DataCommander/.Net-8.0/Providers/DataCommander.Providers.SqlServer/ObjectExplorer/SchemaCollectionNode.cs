@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Data;
@@ -14,7 +17,19 @@ internal sealed class SchemaCollectionNode : ITreeNode
     public string Name => "Schemas";
     public bool IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    {
+        var commandText = CreateCommandText();
+        var treeNodes = await SqlClientFactory.Instance.ExecuteReaderAsync(
+            _database.Databases.Server.ConnectionString,
+            new ExecuteReaderRequest(commandText),
+            128,
+            ReadRecord,
+            cancellationToken);
+        return treeNodes;
+    }
+
+    private string CreateCommandText()
     {
         var commandText = @"select s.name
 from {0}.sys.schemas s (nolock)
@@ -22,19 +37,13 @@ order by s.name";
 
         var sqlCommandBuilder = new SqlCommandBuilder();
         commandText = string.Format(commandText, sqlCommandBuilder.QuoteIdentifier(_database.Name));
-        var connectionString = _database.Databases.Server.ConnectionString;
-        var treeNodes = new List<ITreeNode>();
+        return commandText;
+    }
 
-        using (var connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
-            var executor = connection.CreateCommandExecutor();
-            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
-            {
-                var name = dataRecord.GetString(0);
-                return new SchemaNode(_database, name);
-            });
-        }
+    private SchemaNode ReadRecord(IDataRecord dataRecord)
+    {
+        var name = dataRecord.GetString(0);
+        return new SchemaNode(_database, name);
     }
 
     public bool Sortable => false;

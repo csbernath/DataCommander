@@ -524,7 +524,7 @@ Provider name: {provider.Name}
                 var cancellationToken = cancellationTokenSource.Token;
                 var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
                 var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, "Opening connection...", text, _colorTheme);
-                cancelableOperationForm.Start(openConnectionTask, TimeSpan.FromSeconds(2));
+                cancelableOperationForm.Start(openConnectionTask, TimeSpan.FromMilliseconds(100));
                 openConnectionTask.Wait(cancellationToken);
                 connectionProperties.Connection = connection;
                 ElapsedTicks = Stopwatch.GetTimestamp() - cancelableOperationForm.StartTimestamp;                

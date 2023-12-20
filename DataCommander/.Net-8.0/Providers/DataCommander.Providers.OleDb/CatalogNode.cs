@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 
 namespace DataCommander.Providers.OleDb;
@@ -31,7 +33,7 @@ class CatalogNode : ITreeNode
 
     public bool IsLeaf => false;
 
-    public IEnumerable<ITreeNode> GetChildren(bool refresh)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         ITreeNode[] treeNodes;
 
@@ -55,7 +57,7 @@ class CatalogNode : ITreeNode
             treeNodes[0] = new SchemaNode(this, null);
         }
 
-        return treeNodes;
+        return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
     }
 
     public bool Sortable => false;

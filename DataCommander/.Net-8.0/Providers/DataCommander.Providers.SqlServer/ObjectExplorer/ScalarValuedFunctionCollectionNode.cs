@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Data;
@@ -14,7 +17,18 @@ internal sealed class ScalarValuedFunctionCollectionNode : ITreeNode
     public string Name => "Scalar-valued Functions";
     public bool IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    {
+        var commandText = CreateCommandText();
+        return await SqlClientFactory.Instance.ExecuteReaderAsync(
+            _database.Databases.Server.ConnectionString,
+            new ExecuteReaderRequest(commandText),
+            128,
+            ReadRecord,
+            cancellationToken);
+    }
+
+    private string CreateCommandText()
     {
         var commandText = @"select
     s.name	as SchemaName,
@@ -26,15 +40,15 @@ on	s.schema_id = o.schema_id
 where o.type = 'FN'
 order by 1,2";
         commandText = string.Format(commandText, _database.Name);
+        return commandText;
+    }
 
-        return SqlClientFactory.Instance.ExecuteReader(_database.Databases.Server.ConnectionString, new ExecuteReaderRequest(commandText), 128,
-            dataRecord =>
-            {
-                var owner = dataRecord.GetString(0);
-                var name = dataRecord.GetString(1);
-                var xtype = dataRecord.GetString(2);
-                return new FunctionNode(_database, owner, name, xtype);
-            });
+    private FunctionNode ReadRecord(IDataRecord dataRecord)
+    {
+        var owner = dataRecord.GetString(0);
+        var name = dataRecord.GetString(1);
+        var xtype = dataRecord.GetString(2);
+        return new FunctionNode(_database, owner, name, xtype);
     }
 
     public bool Sortable => false;
