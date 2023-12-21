@@ -74,7 +74,6 @@ internal sealed class StoredProcedureNode : ITreeNode
 
     private async Task<string> GetText(CancellationToken cancellationToken)
     {
-        Thread.Sleep(10000);
         var connectionString = _database.Databases.Server.ConnectionString;
         using (var connection = new SqlConnection(connectionString))
         {
