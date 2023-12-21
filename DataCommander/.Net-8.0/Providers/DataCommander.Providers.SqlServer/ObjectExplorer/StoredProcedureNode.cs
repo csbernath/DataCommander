@@ -57,10 +57,10 @@ internal sealed class StoredProcedureNode : ITreeNode
         var queryForm = (IQueryForm)sender;
         var cancellationTokenSource = new CancellationTokenSource();
         var cancellationToken = cancellationTokenSource.Token;
-        var cancelableOperationForm = queryForm.CreateCancelableOperationForm(cancellationTokenSource, TimeSpan.FromMilliseconds(100),
+        var cancelableOperationForm = queryForm.CreateCancelableOperationForm(cancellationTokenSource, TimeSpan.FromMilliseconds(300),
             "Getting stored procedure text...", "Please wait...");
         var text = cancelableOperationForm.Execute(new Task<string?>(() => GetText(cancellationToken).Result));
-        if (text != null)
+        if (string.IsNullOrEmpty(text))
         {
             queryForm.SetClipboardText(text);
             queryForm.SetStatusbarPanelText(
@@ -70,6 +70,7 @@ internal sealed class StoredProcedureNode : ITreeNode
 
     private async Task<string?> GetText(CancellationToken cancellationToken)
     {
+        Thread.Sleep(5000);
         var connectionString = _database.Databases.Server.ConnectionString;
         using (var connection = new SqlConnection(connectionString))
         {

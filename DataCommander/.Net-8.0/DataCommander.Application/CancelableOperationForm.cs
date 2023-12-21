@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DataCommander.Api;
 using DataCommander.Application.Connection;
-using Foundation.Assertions;
 using Foundation.Core;
+using Foundation.Windows.Forms;
 
 namespace DataCommander.Application;
 
@@ -42,25 +42,57 @@ public sealed partial class CancelableOperationForm : Form, ICancelableOperation
         Execute((Task)cancelableOperation);
         return cancelableOperation.Result;
     }
-    
+
     public void Execute(Task cancelableOperation)
     {
+        StartAndWaitBeforeShowDialog(cancelableOperation);
+        ShowDialogIfNotCompleted(cancelableOperation);
+    }
+
+    private void StartAndWaitBeforeShowDialog(Task cancelableOperation)
+    {
+        _startTimestamp = Stopwatch.GetTimestamp();
         var cancellationToken = _cancellationTokenSource.Token;
         cancelableOperation.ContinueWith(_ =>
         {
             if (IsHandleCreated)
                 Invoke(Close);
         }, cancellationToken);
-        _startTimestamp = Stopwatch.GetTimestamp();
         cancelableOperation.Start();
-        var completed = cancelableOperation.Wait(_showDialogDelay);
-        if (!completed)
+
+        var timeSpan = TimeSpan.FromSeconds(1);
+
+        if (_showDialogDelay <= timeSpan)
         {
-            var dueTime = TimeSpan.Zero;
-            var period = TimeSpan.FromSeconds(1);
-            _elapsedTimeTimer = new System.Threading.Timer(ElapsedTimeTimerCallback, null, dueTime, period);
+            cancelableOperation.Wait(_showDialogDelay);
+        }
+        else
+        {
+            cancelableOperation.Wait(timeSpan);
+            if (!cancelableOperation.IsCompleted)
+            {
+                using (new CursorManager(Cursors.AppStarting))
+                {
+                    cancelableOperation.Wait(_showDialogDelay - timeSpan);
+                }
+            }
+        }
+    }
+
+    private void ShowDialogIfNotCompleted(Task cancelableOperation)
+    {
+        if (!cancelableOperation.IsCompleted)
+        {
+            StartTimer();
             ShowDialog(_owner);
         }
+    }
+
+    private void StartTimer()
+    {
+        var dueTime = TimeSpan.Zero;
+        var period = TimeSpan.FromSeconds(1);
+        _elapsedTimeTimer = new System.Threading.Timer(ElapsedTimeTimerCallback, null, dueTime, period);
     }
 
     protected override void OnFormClosing(FormClosingEventArgs e)
