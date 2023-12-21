@@ -328,7 +328,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
         var queryForm = (IQueryForm)sender;
         queryForm.SetStatusbarPanelText("Copying table script to clipboard...");
         var cancellationTokenSource = new CancellationTokenSource();
-        var cancelableOperationForm = queryForm.CreateCancelableOperationForm(cancellationTokenSource, TimeSpan.FromMilliseconds(100),
+        var cancelableOperationForm = queryForm.CreateCancelableOperationForm(cancellationTokenSource, TimeSpan.FromSeconds(2),
             "Copying table script to clipboard...", string.Empty);
         var stopwatch = Stopwatch.StartNew();
         var text = cancelableOperationForm.Execute(new Task<string>(GetCreateTableScript));

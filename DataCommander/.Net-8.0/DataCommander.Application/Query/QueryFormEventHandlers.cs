@@ -109,7 +109,7 @@ public sealed partial class QueryForm
                     {
                         var cancellationTokenSource = new CancellationTokenSource();
                         var cancellationToken = cancellationTokenSource.Token;
-                        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromMilliseconds(100),
+                        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2),
                             "Getting tree node children...", "Please wait...", _colorTheme);
                         treeNode2 = (ITreeNode)treeNode.Tag;
                         var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() =>
@@ -169,7 +169,7 @@ public sealed partial class QueryForm
 
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
-            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromMilliseconds(100),
+            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2),
                 "Getting tree node children...", "Please wait...", _colorTheme);
             var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => treeNode.GetChildren(true, cancellationToken).Result));
             AddNodes(treeNodeV.Nodes, children, treeNode.Sortable);

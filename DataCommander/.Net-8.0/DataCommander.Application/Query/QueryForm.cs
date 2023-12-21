@@ -117,7 +117,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         {
             objectExplorer.SetConnection(connectionString, connection.Connection);
             var cancellationTokenSource = new CancellationTokenSource();
-            var cancelableOperationForm = new CancelableOperationForm(mainForm, cancellationTokenSource, TimeSpan.FromMilliseconds(100), "Getting children...",
+            var cancelableOperationForm = new CancelableOperationForm(mainForm, cancellationTokenSource, TimeSpan.FromSeconds(2), "Getting children...",
                 "Please wait...", colorTheme);
             var cancellationToken = cancellationTokenSource.Token;
             var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result));
@@ -1847,7 +1847,7 @@ public sealed partial class QueryForm : Form, IQueryForm
                         var connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
                         var cancellationTokenSource = new CancellationTokenSource();
                         var cancellationToken = cancellationTokenSource.Token;
-                        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromMilliseconds(100),
+                        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2),
                             "Opening connection...", string.Empty, _colorTheme);
                         cancelableOperationForm.Execute(new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken)));
                         Connection.Connection.Dispose();

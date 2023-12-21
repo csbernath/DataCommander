@@ -60,8 +60,7 @@ public sealed partial class CancelableOperationForm : Form, ICancelableOperation
         }, cancellationToken);
         cancelableOperation.Start();
 
-        var timeSpan = TimeSpan.FromSeconds(1);
-
+        var timeSpan = TimeSpan.FromMilliseconds(300);
         if (_showDialogDelay <= timeSpan)
         {
             cancelableOperation.Wait(_showDialogDelay);

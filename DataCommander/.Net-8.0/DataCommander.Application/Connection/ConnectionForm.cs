@@ -523,7 +523,7 @@ Provider name: {provider.Name}
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
                 var cancelableOperationForm =
-                    new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.Zero, "Opening connection...", text, _colorTheme);
+                    new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2), "Opening connection...", text, _colorTheme);
                 var startTimestamp = Stopwatch.GetTimestamp();
                 cancelableOperationForm.Execute(new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken)));
                 connectionProperties.Connection = connection;
