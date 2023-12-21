@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using System.Diagnostics;
-using System.Management;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
-using Foundation.Data;
 using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
@@ -59,11 +57,9 @@ internal sealed class StoredProcedureNode : ITreeNode
         var queryForm = (IQueryForm)sender;
         var cancellationTokenSource = new CancellationTokenSource();
         var cancellationToken = cancellationTokenSource.Token;
-        var cancelableOperationForm = queryForm.CreateCancelableOperationForm(cancellationTokenSource, "Getting stored procedure text...", "Please wait...");
-        var task = new Task<string>(() => GetText(cancellationToken).Result);
-        cancelableOperationForm.Start(task, TimeSpan.FromSeconds(1));
-        task.Wait(cancellationToken);
-        var text = task.Result;
+        var cancelableOperationForm = queryForm.CreateCancelableOperationForm(cancellationTokenSource, TimeSpan.FromMilliseconds(100),
+            "Getting stored procedure text...", "Please wait...");
+        var text = cancelableOperationForm.Execute(new Task<string?>(() => GetText(cancellationToken).Result));
         if (text != null)
         {
             queryForm.SetClipboardText(text);
@@ -72,7 +68,7 @@ internal sealed class StoredProcedureNode : ITreeNode
         }
     }
 
-    private async Task<string> GetText(CancellationToken cancellationToken)
+    private async Task<string?> GetText(CancellationToken cancellationToken)
     {
         var connectionString = _database.Databases.Server.ConnectionString;
         using (var connection = new SqlConnection(connectionString))

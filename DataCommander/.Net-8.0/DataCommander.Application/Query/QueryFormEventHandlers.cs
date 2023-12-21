@@ -109,18 +109,13 @@ public sealed partial class QueryForm
                     {
                         var cancellationTokenSource = new CancellationTokenSource();
                         var cancellationToken = cancellationTokenSource.Token;
-                        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, "Getting tree node children...",
-                            "Please wait...", _colorTheme);
-                        IEnumerable<ITreeNode> children = null;
+                        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromMilliseconds(100),
+                            "Getting tree node children...", "Please wait...", _colorTheme);
                         treeNode2 = (ITreeNode)treeNode.Tag;
-                        var task = new Task(() => children = treeNode2.GetChildren(false, cancellationToken).Result);
-                        cancelableOperationForm.Start(task, TimeSpan.FromSeconds(1));
-                        task.Wait(cancellationToken);
-                        if (children != null)
-                        {
-                            treeNode.Nodes.Clear();                            
-                            AddNodes(treeNode.Nodes, children, treeNode2.Sortable);
-                        }
+                        var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() =>
+                            treeNode2.GetChildren(false, cancellationToken).Result));
+                        treeNode.Nodes.Clear();
+                        AddNodes(treeNode.Nodes, children, treeNode2.Sortable);
                     }
                     catch (Exception ex)
                     {
@@ -174,19 +169,10 @@ public sealed partial class QueryForm
 
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
-            var cancelableOperationForm =
-                new CancelableOperationForm(this, cancellationTokenSource, "Getting tree node children...", "Please wait...", _colorTheme);
-            ITreeNode[]? children = null;
-            var task = new Task(() =>
-            {
-                var x = treeNode.GetChildren(true, cancellationToken);
-                x.Wait(cancellationToken);
-                children = x.Result.ToArray();
-            });
-            cancelableOperationForm.Start(task, TimeSpan.FromSeconds(1));
-            task.Wait(cancellationToken);
-            if (children != null)
-                AddNodes(treeNodeV.Nodes, children, treeNode.Sortable);
+            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromMilliseconds(100),
+                "Getting tree node children...", "Please wait...", _colorTheme);
+            var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => treeNode.GetChildren(true, cancellationToken).Result));
+            AddNodes(treeNodeV.Nodes, children, treeNode.Sortable);
         }
     }
 

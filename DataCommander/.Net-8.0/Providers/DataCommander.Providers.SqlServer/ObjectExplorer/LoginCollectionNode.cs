@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Data;
-using Foundation.Data.SqlClient;
 using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;

@@ -7,7 +7,6 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
@@ -351,10 +350,9 @@ internal partial class ConnectionStringBuilderForm : Form
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
             var connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
-            var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken));
-            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, "Opening connection...", string.Empty, _colorTheme);
-            cancelableOperationForm.Start(openConnectionTask, TimeSpan.FromSeconds(1));
-            openConnectionTask.Wait(cancellationToken);
+            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromMilliseconds(100), "Opening connection...",
+                string.Empty, _colorTheme);
+            cancelableOperationForm.Execute(connection.OpenAsync(cancellationToken));
             MessageBox.Show("The connection was tested successfully.", DataCommanderApplication.Instance.Name, MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
         }

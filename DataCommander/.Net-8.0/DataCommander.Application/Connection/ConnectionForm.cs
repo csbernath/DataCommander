@@ -522,12 +522,12 @@ Provider name: {provider.Name}
                 var connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
-                var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
-                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, "Opening connection...", text, _colorTheme);
-                cancelableOperationForm.Start(openConnectionTask, TimeSpan.FromMilliseconds(100));
-                openConnectionTask.Wait(cancellationToken);
+                var cancelableOperationForm =
+                    new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.Zero, "Opening connection...", text, _colorTheme);
+                var startTimestamp = Stopwatch.GetTimestamp();
+                cancelableOperationForm.Execute(new Task(() => connection.OpenAsync(cancellationToken)));
                 connectionProperties.Connection = connection;
-                ElapsedTicks = Stopwatch.GetTimestamp() - cancelableOperationForm.StartTimestamp;                
+                ElapsedTicks = Stopwatch.GetTimestamp() - startTimestamp;                
                 ConnectionProperties = connectionProperties;
                 DialogResult = DialogResult.OK;
             }

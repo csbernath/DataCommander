@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DataCommander.Api;
 using DataCommander.Application.Connection;
+using Foundation.Assertions;
 using Foundation.Core;
 
 namespace DataCommander.Application;
@@ -13,13 +14,14 @@ public sealed partial class CancelableOperationForm : Form, ICancelableOperation
 {
     private readonly Control _owner;
     private readonly CancellationTokenSource _cancellationTokenSource;
+    private readonly TimeSpan _showDialogDelay;
     private System.Threading.Timer? _elapsedTimeTimer;
     private long _startTimestamp;
-    private bool _operationCanceled;
 
     public CancelableOperationForm(
         Control owner,
         CancellationTokenSource cancellationTokenSource,
+        TimeSpan showDialogDelay,
         string formText,
         string textBoxText,
         ColorTheme? colorTheme)
@@ -27,35 +29,39 @@ public sealed partial class CancelableOperationForm : Form, ICancelableOperation
         ArgumentNullException.ThrowIfNull(owner);
         _owner = owner;
         _cancellationTokenSource = cancellationTokenSource;
+        _showDialogDelay = showDialogDelay;
         InitializeComponent();
         colorTheme?.Apply(this);
         Text = formText;
         textBox.AppendText(textBoxText);
         ActiveControl = cancelButton;
     }
-
-    public void Start(Task task, TimeSpan showDialogDelay)
+    
+    public T Execute<T>(Task<T> cancelableOperation)
     {
-        _startTimestamp = Stopwatch.GetTimestamp();
+        Execute((Task)cancelableOperation);
+        return cancelableOperation.Result;
+    }
+    
+    public void Execute(Task cancelableOperation)
+    {
         var cancellationToken = _cancellationTokenSource.Token;
-        task.ContinueWith(_ =>
+        cancelableOperation.ContinueWith(_ =>
         {
             if (IsHandleCreated)
                 Invoke(Close);
         }, cancellationToken);
-        task.Start();
-        var completed = task.Wait(showDialogDelay);
+        _startTimestamp = Stopwatch.GetTimestamp();
+        cancelableOperation.Start();
+        var completed = cancelableOperation.Wait(_showDialogDelay);
         if (!completed)
         {
-            var dueTime = TimeSpan.FromSeconds(1);
+            var dueTime = TimeSpan.Zero;
             var period = TimeSpan.FromSeconds(1);
             _elapsedTimeTimer = new System.Threading.Timer(ElapsedTimeTimerCallback, null, dueTime, period);
             ShowDialog(_owner);
         }
     }
-
-    public long StartTimestamp => _startTimestamp;
-    public bool OperationCanceled => _operationCanceled;
 
     protected override void OnFormClosing(FormClosingEventArgs e)
     {
@@ -76,7 +82,6 @@ public sealed partial class CancelableOperationForm : Form, ICancelableOperation
     private void CancelButton_Click(object sender, EventArgs e)
     {
         cancelButton.Enabled = false;
-        _operationCanceled = true;
         textBox.AppendText("\r\nCanceling operation...");
         _cancellationTokenSource.Cancel();
     }

@@ -117,13 +117,11 @@ public sealed partial class QueryForm : Form, IQueryForm
         {
             objectExplorer.SetConnection(connectionString, connection.Connection);
             var cancellationTokenSource = new CancellationTokenSource();
-            var cancelableOperationForm =
-                new CancelableOperationForm(mainForm, cancellationTokenSource, "Getting children...", "Please wait...", colorTheme);
+            var cancelableOperationForm = new CancelableOperationForm(mainForm, cancellationTokenSource, TimeSpan.FromMilliseconds(100), "Getting children...",
+                "Please wait...", colorTheme);
             var cancellationToken = cancellationTokenSource.Token;
-            var getChildrenTask = new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result);
-            cancelableOperationForm.Start(getChildrenTask, TimeSpan.FromSeconds(1));
-            getChildrenTask.Wait(cancellationToken);
-            AddNodes(_tvObjectExplorer.Nodes, getChildrenTask.Result, objectExplorer.Sortable);
+            var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result));
+            AddNodes(_tvObjectExplorer.Nodes, children, objectExplorer.Sortable);
         }
         else
         {
@@ -1849,10 +1847,9 @@ public sealed partial class QueryForm : Form, IQueryForm
                         var connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
                         var cancellationTokenSource = new CancellationTokenSource();
                         var cancellationToken = cancellationTokenSource.Token;
-                        var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
-                        var cancelableOperationForm =
-                            new CancelableOperationForm(this, cancellationTokenSource, "Opening connection...", string.Empty, _colorTheme);
-                        cancelableOperationForm.Start(openConnectionTask, TimeSpan.Zero);
+                        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromMilliseconds(100),
+                            "Opening connection...", string.Empty, _colorTheme);
+                        cancelableOperationForm.Execute(connection.OpenAsync(cancellationToken));
                         Connection.Connection.Dispose();
                         Connection = connectionProperties.Connection;
                         AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Opening connection succeeded."));
@@ -2131,8 +2128,10 @@ public sealed partial class QueryForm : Form, IQueryForm
         _sbPanelText.ForeColor = color;
     }
 
-    public ICancelableOperationForm CreateCancelableOperationForm(CancellationTokenSource cancellationTokenSource, string formText, string textBoxText)
-    {
-        return new CancelableOperationForm(this, cancellationTokenSource, formText, textBoxText, _colorTheme);
-    }
+    public ICancelableOperationForm CreateCancelableOperationForm(
+        CancellationTokenSource cancellationTokenSource,
+        TimeSpan showDialogDelay,
+        string formText,
+        string textBoxText) =>
+        new CancelableOperationForm(this, cancellationTokenSource, showDialogDelay, formText, textBoxText, _colorTheme);
 }

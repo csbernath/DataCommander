@@ -129,11 +129,9 @@ public sealed partial class QueryForm
             {
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
-                var getTransactionCountTask = new Task<int>(() => Connection.GetTransactionCountAsync(cancellationToken).Result);
-                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, "Getting transaction count...",
-                    string.Empty, _colorTheme);
-                cancelableOperationForm.Start(getTransactionCountTask, TimeSpan.FromSeconds(1));
-                var transactionCount = getTransactionCountTask.Result;
+                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromMilliseconds(100),
+                    "Getting transaction count...", string.Empty, _colorTheme);
+                var transactionCount = cancelableOperationForm.Execute(new Task<int>(() => Connection.GetTransactionCountAsync(cancellationToken).Result));
                 var hasTransactions = transactionCount > 0;
                 if (hasTransactions)
                     cancel = AskUserToCommitTransactions();

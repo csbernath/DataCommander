@@ -12,5 +12,10 @@ public interface IQueryForm
     void ShowText(string text);
     void SetClipboardText(string text);
     void EditRows(string query);
-    ICancelableOperationForm CreateCancelableOperationForm(CancellationTokenSource cancellationTokenSource, string formText, string textBoxText);
+
+    ICancelableOperationForm CreateCancelableOperationForm(
+        CancellationTokenSource cancellationTokenSource,
+        TimeSpan showDialogDelay,
+        string formText,
+        string textBoxText);
 }
