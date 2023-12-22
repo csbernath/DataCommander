@@ -60,7 +60,7 @@ internal sealed class StoredProcedureNode : ITreeNode
         var cancelableOperationForm = queryForm.CreateCancelableOperationForm(cancellationTokenSource, TimeSpan.FromSeconds(2),
             "Getting stored procedure text...", "Please wait...");
         var text = cancelableOperationForm.Execute(new Task<string?>(() => GetText(cancellationToken).Result));
-        if (string.IsNullOrEmpty(text))
+        if (!string.IsNullOrEmpty(text))
         {
             queryForm.SetClipboardText(text);
             queryForm.SetStatusbarPanelText(
