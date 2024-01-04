@@ -36,7 +36,7 @@ public static class AppDomainMonitor
         var tickCount = Environment.TickCount;
         var totalDays = (double)tickCount / DateTimeConstants.MillisecondsPerDay;
         var workingSet = Environment.WorkingSet;
-        var windowsVersionInfo = WindowsVersionInfo.Get();
+        var windowsVersionInfo = WindowsCurrentVersionRepository.Get();
         var stopwatchFrequency = GetStopwatchFrequency();
         var zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
         var tickCountString = $"{tickCount} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";

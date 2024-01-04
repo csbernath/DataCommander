@@ -18,8 +18,10 @@ public partial class AboutForm : Form
         var assembly = Assembly.GetEntryAssembly();
         var path = assembly.Location;
         var lastWriteTime = File.GetLastWriteTime(path);
-        var windowsVersionInfo = WindowsVersionInfo.Get();
-        var windowsName = GetWindowsNameFromCurrentBuildAndEditionId(windowsVersionInfo.CurrentBuild, windowsVersionInfo.EditionId);
+        var windowsCurrentVersion = WindowsCurrentVersionRepository.Get();
+        var buildNumber = int.Parse(windowsCurrentVersion.CurrentBuild);
+        var windowsName =
+            WindowsNameCalculator.GetWindowsNameFromBuildNumber(buildNumber, windowsCurrentVersion.EditionId, windowsCurrentVersion.DisplayVersion);
 
         var brightness = colorTheme?.BackColor.GetBrightness();
 
@@ -52,7 +54,7 @@ Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Found
 <br/><br/>
 <table style=""font-family:verdana;font-size:9pt"">
 <tr><td>Windows Name:</td><td>{windowsName}</td></tr>
-<tr><td>Windows CurrentBuild:</td><td>{windowsVersionInfo.CurrentBuild}</td></tr>
+<tr><td>Windows CurrentBuild:</td><td>{windowsCurrentVersion.CurrentBuild}</td></tr>
 <tr><td>.NET CLR version:</td><td>{Environment.Version}</td></tr>
 </table>
 <br/>
@@ -71,31 +73,6 @@ Credits:
         InitializeComponent();
 
         webBrowser1.DocumentText = text;
-    }
-
-    private static string GetWindowsNameFromCurrentBuildAndEditionId(string currentBuild, string editionId)
-    {
-        string windowsName = null;
-        switch (currentBuild)
-        {
-            case "19044":
-                windowsName = $"Windows 10 {editionId} version 21H2";
-                break;
-            case "19045":
-                windowsName = $"Windows 10 {editionId} version 22H2";
-                break;
-            case "22000":
-                windowsName = $"Windows 11 {editionId} version 21H2";
-                break;
-            case "22621":
-                windowsName = $"Windows 11 {editionId} version 22H2";
-                break;
-            case "22631":
-                windowsName = $"Windows 11 {editionId} version 23H2";
-                break;
-        }
-
-        return windowsName;
     }
 
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
