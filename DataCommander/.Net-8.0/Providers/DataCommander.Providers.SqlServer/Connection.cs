@@ -63,7 +63,9 @@ internal sealed class Connection : ConnectionBase
             var serverVersion = _sqlConnection.ServerVersion;
             var contains = SqlServerVersionInfoRepository.TryGetByVersion(serverVersion, out var sqlServerVersionInfo);
             var description = contains ? sqlServerVersionInfo.Name : null;
-            return $"{serverVersion}\r\n{description}\r\n@@version: {version}\r\n@@servername: {_serverName}";
+            return @$"{serverVersion} ({description})
+@@version: {version}
+@@servername: {_serverName}";
         }
     }
 

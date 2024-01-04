@@ -5,11 +5,11 @@ namespace DataCommander.Providers.SqlServer;
 
 internal static class SqlServerVersionInfoRepository
 {
-    private static Dictionary<string, SqlServerVersionInfo> _sqlServerVersionInfosByVersion = Init();
+    private static readonly Dictionary<string, SqlServerVersionInfo> SqlServerVersionInfosByVersion = Init();
 
     public static bool TryGetByVersion(string version, out SqlServerVersionInfo? sqlServerVersionInfo)
     {
-        return _sqlServerVersionInfosByVersion.TryGetValue(version, out sqlServerVersionInfo);
+        return SqlServerVersionInfosByVersion.TryGetValue(version, out sqlServerVersionInfo);
     }
 
     private static Dictionary<string, SqlServerVersionInfo> Init()
@@ -50,7 +50,9 @@ internal static class SqlServerVersionInfoRepository
             new("14.00.3048", "Microsoft SQL Server 2017 (RTM-CU13) (KB4466404)"),
             new("14.00.3162", "Microsoft SQL Server 2017 (RTM-CU15) (KB4498951)"),
             new("15.00.2070", "4517790 Servicing Update (GDR1) for SQL Server 2019 RTM"),
-            new("15.00.2080", "Microsoft SQL Server 2019 (RTM-GDR) (KB4583458)")
+            new("15.00.2080", "Microsoft SQL Server 2019 (RTM-GDR) (KB4583458)"),
+            new("16.00.1000", "Microsoft SQL Server 2022 RTM"),
+            new("16.00.1105", "5029379 Security update for SQL Server 2022 GDR: October 10, 2023")
         }.ToDictionary(i => i.Version);
     }
 }
