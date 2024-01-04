@@ -11,15 +11,13 @@ public static class WindowsNameCalculator
 
     private static string GetProductName(int buildNumber)
     {
-        string productName;
-        if (buildNumber < 9200)
-            productName = "7";
-        else if (buildNumber < 10240)
-            productName = "8";
-        else if (buildNumber < 22000)
-            productName = "10";
-        else
-            productName = "11";
+        var productName = buildNumber switch
+        {
+            < 9200 => "7",
+            < 10240 => "8",
+            < 22000 => "10",
+            _ => "11"
+        };
         return productName;
     }
 }
