@@ -14,22 +14,18 @@ namespace Foundation.Diagnostics;
 public static class AppDomainMonitor
 {
     private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(AppDomainMonitor));
-    private static readonly StringTableColumnInfo<AssemblyInfo>[] Columns;
 
-    static AppDomainMonitor()
-    {
-        Columns =
-        [
-            new StringTableColumnInfo<AssemblyInfo>("Name", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Name),
-            StringTableColumnInfo.Create<AssemblyInfo, Version>("FileVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.FileVersion),
-            StringTableColumnInfo.Create<AssemblyInfo, Version>("Version", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Version),
-            new StringTableColumnInfo<AssemblyInfo>("Date", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Date?.ToString("yyyy-MM-dd HH:mm:ss")),
-            new StringTableColumnInfo<AssemblyInfo>("PublicKeyToken", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.PublicKeyToken),
-            new StringTableColumnInfo<AssemblyInfo>("ImageRuntimeVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.ImageRuntimeVersion),
-            new StringTableColumnInfo<AssemblyInfo>("Location", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Location),
-            StringTableColumnInfo.CreateLeft<AssemblyInfo, bool>("IsDynamic", i => i.IsDynamic)
-        ];
-    }
+    private static readonly StringTableColumnInfo<AssemblyInfo>[] Columns =
+    [
+        new StringTableColumnInfo<AssemblyInfo>("Name", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Name),
+        StringTableColumnInfo.Create<AssemblyInfo, Version>("FileVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.FileVersion),
+        StringTableColumnInfo.Create<AssemblyInfo, Version>("Version", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Version),
+        new StringTableColumnInfo<AssemblyInfo>("Date", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Date?.ToString("yyyy-MM-dd HH:mm:ss")),
+        new StringTableColumnInfo<AssemblyInfo>("PublicKeyToken", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.PublicKeyToken),
+        new StringTableColumnInfo<AssemblyInfo>("ImageRuntimeVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.ImageRuntimeVersion),
+        new StringTableColumnInfo<AssemblyInfo>("Location", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Location),
+        StringTableColumnInfo.CreateLeft<AssemblyInfo, bool>("IsDynamic", i => i.IsDynamic)
+    ];
 
     public static string GetEnvironmentInfo()
     {
@@ -159,27 +155,23 @@ TempPath:               {Path.GetTempPath()}";
         return fileVersion;
     }
 
-    private sealed class AssemblyInfo
+    private sealed class AssemblyInfo(
+        string name,
+        Version fileVersion,
+        Version version,
+        DateTime? date,
+        string publicKeyToken,
+        string imageRuntimeVersion,
+        string location,
+        bool isDynamic)
     {
-        public readonly string Name;
-        public readonly Version FileVersion;
-        public readonly Version Version;
-        public readonly DateTime? Date;
-        public readonly string PublicKeyToken;
-        public readonly string ImageRuntimeVersion;
-        public readonly string Location;
-        public readonly bool IsDynamic;
-
-        public AssemblyInfo(string name, Version fileVersion, Version version, DateTime? date, string publicKeyToken, string imageRuntimeVersion, string location, bool isDynamic)
-        {
-            Name = name;
-            FileVersion = fileVersion;
-            Version = version;
-            Date = date;
-            PublicKeyToken = publicKeyToken;
-            ImageRuntimeVersion = imageRuntimeVersion;
-            Location = location;
-            IsDynamic = isDynamic;
-        }
+        public readonly string Name = name;
+        public readonly Version FileVersion = fileVersion;
+        public readonly Version Version = version;
+        public readonly DateTime? Date = date;
+        public readonly string PublicKeyToken = publicKeyToken;
+        public readonly string ImageRuntimeVersion = imageRuntimeVersion;
+        public readonly string Location = location;
+        public readonly bool IsDynamic = isDynamic;
     }
 }
