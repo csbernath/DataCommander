@@ -99,7 +99,7 @@ public class ConfigurationAttributeCollection : IList<ConfigurationAttribute>
     }
 
     public bool TryGetValue(string name, out ConfigurationAttribute attribute) => _nameIndex.TryGetValue(name, out attribute);
-    public bool TryGetAttributeValue<T>(string name, out T value) => TryGetAttributeValue(name, default(T), out value);
+    public bool TryGetAttributeValue<T>(string name, out T value) => TryGetAttributeValue(name, default, out value);
 
     public bool TryGetAttributeValue<T>(string name, T defaultValue, out T value)
     {

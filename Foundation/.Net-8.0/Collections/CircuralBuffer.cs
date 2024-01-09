@@ -103,7 +103,7 @@ public sealed class CircularBuffer<T> : IList<T>
         Assert.IsValidOperation(Count > 0);
 
         var item = _array[_head];
-        _array[_head] = default(T);
+        _array[_head] = default;
         _head = (_head + 1) % _array.Length;
         Count--;
 
@@ -122,7 +122,7 @@ public sealed class CircularBuffer<T> : IList<T>
         Assert.IsValidOperation(Count > 0);
 
         var item = _array[_tail];
-        _array[_tail] = default(T);
+        _array[_tail] = default;
         _tail = (_tail - 1) % _array.Length;
         Count--;
         return item;

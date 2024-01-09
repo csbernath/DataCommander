@@ -51,7 +51,7 @@ public sealed class ReadOnlySortedList<TKey, TValue> : IReadOnlyDictionary<TKey,
         }
         else
         {
-            value = default(TValue);
+            value = default;
             succeeded = false;
         }
 

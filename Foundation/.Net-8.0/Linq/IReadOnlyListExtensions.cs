@@ -20,6 +20,6 @@ public static class IReadOnlyListExtensions
     {
         return source != null && source.Count > 0
             ? source[0]
-            : default(TSource);
+            : default;
     }
 }

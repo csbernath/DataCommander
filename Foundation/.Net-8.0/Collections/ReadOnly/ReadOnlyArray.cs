@@ -7,7 +7,7 @@ namespace Foundation.Collections.ReadOnly;
 public class ReadOnlyArray<T> : IReadOnlyList<T>
 {
     private readonly T[] _items;
-    public static ReadOnlyArray<T> Empty = new();
+    public static readonly ReadOnlyArray<T> Empty = new();
 
     public ReadOnlyArray(T[] items)
     {
@@ -15,7 +15,7 @@ public class ReadOnlyArray<T> : IReadOnlyList<T>
         _items = items;
     }
 
-    internal ReadOnlyArray() => _items = Array.Empty<T>();
+    private ReadOnlyArray() => _items = Array.Empty<T>();
 
     public int Count => _items.Length;
     public T this[int index] => _items[index];

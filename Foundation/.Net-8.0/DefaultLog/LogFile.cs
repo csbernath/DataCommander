@@ -112,7 +112,7 @@ internal sealed class LogFile(
             var name = _fileStream.Name;
             _fileStream = null;
 
-            if (fileAttributes != default(FileAttributes))
+            if (fileAttributes != default)
             {
                 var attributes = File.GetAttributes(name);
                 attributes |= fileAttributes; // FileAttributes.ReadOnly | FileAttributes.Hidden;

@@ -51,7 +51,7 @@ public class SortedArray<TKey, TValue>(TValue[] values, Func<TValue, TKey> keySe
         }
         else
         {
-            value = default(TValue);
+            value = default;
             succeeded = false;
         }
 

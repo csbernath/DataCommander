@@ -247,7 +247,7 @@ public static partial class IEnumerableExtensions
     public static bool TryGetFirst<T>(this IEnumerable<T> source, Func<T, bool> predicate, out T first)
     {
         var succeeded = false;
-        first = default(T);
+        first = default;
 
         foreach (var item in source)
         {

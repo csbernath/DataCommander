@@ -15,7 +15,7 @@ public struct DataParameterValue<T> : IDataParameterValue<T>
     private DataParameterValue(DataParameterValueType type)
     {
         Type = type;
-        _value = default(T);
+        _value = default;
     }
 
     public static DataParameterValue<T> Default { get; } = new(DataParameterValueType.Default);

@@ -51,7 +51,7 @@ public class NameValueCollectionReader
             Assert.IsTrue(succeeded);
         }
         else
-            value = default(DateTime);
+            value = default;
 
         return contains;
     }
@@ -66,7 +66,7 @@ public class NameValueCollectionReader
             Assert.IsTrue(succeeded);
         }
         else
-            value = default(double);
+            value = default;
 
         return contains;
     }
@@ -81,7 +81,7 @@ public class NameValueCollectionReader
             Assert.IsTrue(succeeded);
         }
         else
-            value = default(double);
+            value = default;
 
         return contains;
     }
@@ -97,7 +97,7 @@ public class NameValueCollectionReader
             value = (T) valueObject;
         }
         else
-            value = default(T);
+            value = default;
 
         return contains;
     }
@@ -130,7 +130,7 @@ public class NameValueCollectionReader
             Assert.IsTrue(succeeded);
         }
         else
-            value = default(float);
+            value = default;
 
         return contains;
     }
@@ -152,7 +152,7 @@ public class NameValueCollectionReader
 
         value = contains
             ? TimeSpan.Parse(s)
-            : default(TimeSpan);
+            : default;
 
         return contains;
     }
@@ -169,7 +169,7 @@ public class NameValueCollectionReader
             Assert.IsTrue(succeeded);
         }
         else
-            value = default(T);
+            value = default;
 
         return contains;
     }

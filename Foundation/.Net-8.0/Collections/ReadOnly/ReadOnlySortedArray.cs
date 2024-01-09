@@ -35,7 +35,7 @@ public class ReadOnlySortedArray<TKey, TValue>(TValue[] values, Func<TValue, TKe
         }
         else
         {
-            value = default(TValue);
+            value = default;
             succeeded = false;
         }
 

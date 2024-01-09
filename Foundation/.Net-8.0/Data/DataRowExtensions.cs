@@ -42,7 +42,7 @@ public static class DataRowExtensions
         ArgumentNullException.ThrowIfNull(dataRow);
         var value = dataRow[name];
         return value == DBNull.Value
-            ? default(T)
+            ? default
             : (T)value;
     }
 
@@ -51,7 +51,7 @@ public static class DataRowExtensions
         ArgumentNullException.ThrowIfNull(dataRow, nameof(dataRow));
         var value = dataRow[columnIndex];
         return value == DBNull.Value
-            ? default(T)
+            ? default
             : (T)value;
     }
 

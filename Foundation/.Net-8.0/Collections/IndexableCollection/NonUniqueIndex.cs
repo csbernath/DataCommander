@@ -104,7 +104,7 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
         }
         else
         {
-            value = default(T);
+            value = default;
         }
 
         return contains;
