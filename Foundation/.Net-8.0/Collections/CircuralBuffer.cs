@@ -66,9 +66,9 @@ public sealed class CircularBuffer<T> : IList<T>
         Count++;
     }
 
-    public void AddTail(T item)
+    private void AddTail(T item)
     {
-        //Assert.IsTrue(this.Count < this.array.Length);
+        Assert.IsTrue(Count < _array.Length);
 
         if (_head == -1)
         {
@@ -88,7 +88,8 @@ public sealed class CircularBuffer<T> : IList<T>
     {
         ArgumentNullException.ThrowIfNull(items);
 
-        foreach (var item in items) AddTail(item);
+        foreach (var item in items)
+            AddTail(item);
     }
 
     public T PeekHead()

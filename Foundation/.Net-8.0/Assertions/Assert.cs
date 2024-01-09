@@ -8,7 +8,7 @@ public static class Assert
     public static void IsTrue(bool condition)
     {
         if (!condition)
-            throw new ArgumentException();
+            throw new ArgumentException("Assert.IsTrue failed.");
     }
 
     public static void ArgumentConditionIsTrue(bool condition, [CallerArgumentExpression("condition")] string? conditionString = null)

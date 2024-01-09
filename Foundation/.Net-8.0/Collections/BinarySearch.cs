@@ -40,9 +40,7 @@ public static class BinarySearch
         return result;
     }
 
-    public static void Search(int minIndex, int maxIndex,
-        Func<int, bool> lessThan,
-        Func<int, bool> equals)
+    public static void Search(int minIndex, int maxIndex, Func<int, bool> lessThan, Func<int, bool> equals)
     {
         var currentMinIndex = minIndex;
         var currentMaxIndex = maxIndex;

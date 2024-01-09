@@ -12,8 +12,6 @@ public static class ArrayExtensions
 
         if (arrays != null)
         {
-            //Contract.ForAll(arrays, a => a != null);
-
             var resultLength = arrays.Sum(a => a.Length);
             result = new T[resultLength];
             var index = 0;

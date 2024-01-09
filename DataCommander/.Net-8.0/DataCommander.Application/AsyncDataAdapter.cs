@@ -28,15 +28,14 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
 
     private AsyncDataAdapterCommand _command;
     private long _rowCount;
-    private Task? _task;
     private CancellationTokenSource _cancellationTokenSource;
     private int _tableCount;
 
     #endregion
 
     public AsyncDataAdapter(
-        IProvider provider, 
-        int maxRecords, 
+        IProvider provider,
+        int maxRecords,
         int rowBlockSize,
         IResultWriter resultWriter,
         Action<IAsyncDataAdapter, Exception> endFill,
@@ -62,8 +61,8 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
         {
             _cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = _cancellationTokenSource.Token;
-            _task = new Task(async () => await Fill(commands, cancellationToken), cancellationToken, TaskCreationOptions.LongRunning);
-            _task.Start();
+            var task = new Task(async () => await Fill(commands, cancellationToken), cancellationToken, TaskCreationOptions.LongRunning);
+            task.Start();
         }
         else
             _writeEnd(this);
@@ -218,7 +217,7 @@ internal sealed class AsyncDataAdapter : IAsyncDataAdapter
         DbDataReader? dataReader = null;
         try
         {
-            _command = asyncDataAdapterCommand;            
+            _command = asyncDataAdapterCommand;
             dataReader = await command.ExecuteReaderAsync(cancellationToken);
             var fieldCount = dataReader.FieldCount;
             _resultWriter.AfterExecuteReader();

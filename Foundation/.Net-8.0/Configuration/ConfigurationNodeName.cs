@@ -8,7 +8,7 @@ public static class ConfigurationNodeName
 {
     public static string FromType(Type type)
     {
-        ArgumentNullException.ThrowIfNull(type, nameof(type));
+        ArgumentNullException.ThrowIfNull(type);
 
         var name = type.FullName;
         var nodeName = FromTypeDelimitedName(name);
@@ -26,7 +26,7 @@ public static class ConfigurationNodeName
 
     internal static string FromMethod(MethodBase method)
     {
-        ArgumentNullException.ThrowIfNull(method, nameof(method));
+        ArgumentNullException.ThrowIfNull(method);
 
         var name = method.DeclaringType.FullName + Type.Delimiter + method.Name;
         var nodeName = FromTypeDelimitedName(name);
@@ -35,7 +35,7 @@ public static class ConfigurationNodeName
 
     internal static string FromMethod(StackTrace trace, int frameIndex)
     {
-        ArgumentNullException.ThrowIfNull(trace, nameof(trace));
+        ArgumentNullException.ThrowIfNull(trace);
 
         var method = GetMethod(trace, frameIndex);
         var nodeName = FromMethod(method);
@@ -54,7 +54,7 @@ public static class ConfigurationNodeName
 
     internal static string FromType(StackTrace trace, int frameIndex)
     {
-        ArgumentNullException.ThrowIfNull(trace, nameof(trace));
+        ArgumentNullException.ThrowIfNull(trace);
 
         var method = GetMethod(trace, frameIndex);
         var type = method.DeclaringType;
@@ -64,7 +64,7 @@ public static class ConfigurationNodeName
 
     private static string FromTypeDelimitedName(string name)
     {
-        ArgumentNullException.ThrowIfNull(name, nameof(name));
+        ArgumentNullException.ThrowIfNull(name);
 
         var nodeName = name.Replace(Type.Delimiter, ConfigurationNode.Delimiter);
         return nodeName;

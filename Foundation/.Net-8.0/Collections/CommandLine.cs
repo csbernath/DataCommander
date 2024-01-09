@@ -125,8 +125,6 @@ public sealed class CommandLine
             {
                 textReader.Read();
                 peek = textReader.Peek();
-                c = (char)peek;
-
                 value = peek == '"'
                     ? ReadString(textReader)
                     : ReadValue(textReader);

@@ -7,7 +7,6 @@ namespace Foundation.Collections.IndexableCollection;
 public class UniqueListIndex<TKey, T> : ICollectionIndex<T>
 {
     private readonly IList<T> _list;
-    private Func<T, TKey> _keySelector;
 
     public UniqueListIndex(string name, Func<T, TKey> keySelector, IList<T> list)
     {
@@ -16,7 +15,6 @@ public class UniqueListIndex<TKey, T> : ICollectionIndex<T>
         ArgumentNullException.ThrowIfNull(list);
 
         Name = name;
-        _keySelector = keySelector;
         _list = list;
     }
 
