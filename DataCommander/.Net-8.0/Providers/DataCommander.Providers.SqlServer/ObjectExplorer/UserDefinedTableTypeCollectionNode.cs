@@ -8,12 +8,8 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class UserDefinedTableTypeCollectionNode : ITreeNode
+internal sealed class UserDefinedTableTypeCollectionNode(DatabaseNode database) : ITreeNode
 {
-    private readonly DatabaseNode _database;
-
-    public UserDefinedTableTypeCollectionNode(DatabaseNode database) => _database = database;
-
     string ITreeNode.Name => "User-Defined Table Types";
     bool ITreeNode.IsLeaf => false;
 
@@ -21,7 +17,7 @@ internal sealed class UserDefinedTableTypeCollectionNode : ITreeNode
     {
         var commandText = CreateCommandText();
         return await SqlClientFactory.Instance.ExecuteReaderAsync(
-            _database.Databases.Server.ConnectionString,
+            database.Databases.Server.ConnectionString,
             new ExecuteReaderRequest(commandText),
             129,
             ReadRecord,
@@ -34,8 +30,8 @@ internal sealed class UserDefinedTableTypeCollectionNode : ITreeNode
     s.name,
     t.name,
     type_table_object_id
-from [{_database.Name}].sys.schemas s (nolock)
-join [{_database.Name}].sys.table_types t (nolock)
+from [{database.Name}].sys.schemas s (nolock)
+join [{database.Name}].sys.table_types t (nolock)
     on s.schema_id = t.schema_id
 order by 1,2";
         return commandText;
@@ -46,7 +42,7 @@ order by 1,2";
         var schema = dataRecord.GetString(0);
         var name = dataRecord.GetString(1);
         var id = dataRecord.GetInt32(2);
-        return new UserDefinedTableTypeNode(_database, id, schema, name);
+        return new UserDefinedTableTypeNode(database, id, schema, name);
     }
 
     bool ITreeNode.Sortable => false;

@@ -1,13 +1,7 @@
 ﻿namespace DataCommander.Api;
 
-public sealed class Statement
+public sealed class Statement(int lineIndex, string commandText)
 {
-    public readonly int LineIndex;
-    public readonly string CommandText;
-
-    public Statement(int lineIndex, string commandText)
-    {
-        LineIndex = lineIndex;
-        CommandText = commandText;
-    }
+    public readonly int LineIndex = lineIndex;
+    public readonly string CommandText = commandText;
 }

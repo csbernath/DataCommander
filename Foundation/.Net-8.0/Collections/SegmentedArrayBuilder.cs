@@ -47,22 +47,15 @@ public sealed class SegmentedArrayBuilder<T>
         return new ReadOnlySegmentedList(_segments);
     }
 
-    private sealed class ReadOnlySegmentedList : IReadOnlyList<T>
+    private sealed class ReadOnlySegmentedList(T[][] segments) : IReadOnlyList<T>
     {
-        private readonly T[][] _segments;
-
-        public ReadOnlySegmentedList(T[][] segments)
-        {
-            _segments = segments;
-        }
-
         T IReadOnlyList<T>.this[int index]
         {
             get
             {
-                var segmentLength = _segments[0].Length;
+                var segmentLength = segments[0].Length;
                 var segmentArrayIndex = index / segmentLength;
-                var segment = _segments[segmentArrayIndex];
+                var segment = segments[segmentArrayIndex];
                 var segmentIndex = index % segmentLength;
                 var value = segment[segmentIndex];
                 return value;
@@ -73,17 +66,17 @@ public sealed class SegmentedArrayBuilder<T>
         {
             get
             {
-                var lastSegmentArrayIndex = _segments.Length - 1;
-                var count = lastSegmentArrayIndex * _segments[0].Length + _segments[lastSegmentArrayIndex].Length;
+                var lastSegmentArrayIndex = segments.Length - 1;
+                var count = lastSegmentArrayIndex * segments[0].Length + segments[lastSegmentArrayIndex].Length;
                 return count;
             }
         }
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            for (var segmentArrayIndex = 0; segmentArrayIndex < _segments.Length; segmentArrayIndex++)
+            for (var segmentArrayIndex = 0; segmentArrayIndex < segments.Length; segmentArrayIndex++)
             {
-                var segment = _segments[segmentArrayIndex];
+                var segment = segments[segmentArrayIndex];
                 for (var segmentIndex = 0; segmentIndex < segment.Length; segmentIndex++) yield return segment[segmentIndex];
             }
         }

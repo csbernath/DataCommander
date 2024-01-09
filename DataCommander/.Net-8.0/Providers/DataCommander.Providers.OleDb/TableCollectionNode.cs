@@ -7,13 +7,8 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.OleDb;
 
-internal sealed class TableCollectionNode : ITreeNode
+internal sealed class TableCollectionNode(SchemaNode schema) : ITreeNode
 {
-    public TableCollectionNode(SchemaNode schema)
-    {
-        this.schema = schema;
-    }
-
     public string Name => "Tables";
 
     public bool IsLeaf => false;
@@ -56,6 +51,4 @@ internal sealed class TableCollectionNode : ITreeNode
     {
         throw new System.NotImplementedException();
     }
-
-    private readonly SchemaNode schema;
 }

@@ -31,21 +31,12 @@ public static class ThreadPoolMonitor
         return threadPoolRows.ToString(ThreadPoolColumns);
     }
 
-    private sealed class ThreadPoolRow
+    private sealed class ThreadPoolRow(string name, int min, int active, int available, int max)
     {
-        public readonly string Name;
-        public readonly int Min;
-        public readonly int Active;
-        public readonly int Available;
-        public readonly int Max;
-
-        public ThreadPoolRow(string name, int min, int active, int available, int max)
-        {
-            Name = name;
-            Min = min;
-            Active = active;
-            Available = available;
-            Max = max;
-        }
+        public readonly string Name = name;
+        public readonly int Min = min;
+        public readonly int Active = active;
+        public readonly int Available = available;
+        public readonly int Max = max;
     }
 }

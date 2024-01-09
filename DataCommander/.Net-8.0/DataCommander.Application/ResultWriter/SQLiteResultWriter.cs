@@ -10,19 +10,11 @@ using Foundation.Text;
 
 namespace DataCommander.Application.ResultWriter;
 
-internal sealed class SqLiteResultWriter : IResultWriter
+internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name) : IResultWriter
 {
-    private readonly TextWriter _messageWriter;
     private SQLiteConnection _connection;
     private SQLiteTransaction _transaction;
-    private string? _tableName;
     private SQLiteCommand _insertCommand;
-
-    public SqLiteResultWriter(TextWriter messageWriter, string? tableName)
-    {
-        _messageWriter = messageWriter;
-        _tableName = tableName;
-    }
 
     #region IResultWriter Members
 
@@ -37,7 +29,7 @@ internal sealed class SqLiteResultWriter : IResultWriter
     void IResultWriter.AfterExecuteReader()
     {
         var fileName = Path.GetTempFileName() + ".sqlite";
-        _messageWriter.WriteLine(fileName);
+        messageWriter.WriteLine(fileName);
         var sb = new SQLiteConnectionStringBuilder();
         sb.DataSource = fileName;
         sb.DateTimeFormat = SQLiteDateFormats.ISO8601;
@@ -71,15 +63,15 @@ internal sealed class SqLiteResultWriter : IResultWriter
 
                 if (tableName != null)
                 {
-                    _tableName = tableName;
+                    name = tableName;
                 }
 
-                _tableName = _tableName.Replace('.', '_');
-                _tableName = _tableName.Replace('[', '_');
-                _tableName = _tableName.Replace(']', '_');
+                name = name.Replace('.', '_');
+                name = name.Replace('[', '_');
+                name = name.Replace(']', '_');
 
-                sb.AppendFormat("CREATE TABLE {0}\r\n(\r\n", _tableName);
-                insertStatement = "INSERT INTO " + _tableName + '(';
+                sb.AppendFormat("CREATE TABLE {0}\r\n(\r\n", name);
+                insertStatement = "INSERT INTO " + name + '(';
                 insertValues.Append("VALUES(");
             }
             else

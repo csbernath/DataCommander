@@ -1,17 +1,9 @@
 ﻿namespace DataCommander.Api;
 
-public sealed class SqlObject
+public sealed class SqlObject(string? parentName, string? parentAlias, SqlObjectTypes type, string? name)
 {
-    public SqlObject(string? parentName, string? parentAlias, SqlObjectTypes type, string? name)
-    {
-        ParentName = parentName;
-        ParentAlias = parentAlias;
-        Type = type;
-        Name = name;
-    }
-
-    public string? ParentName { get; set; }
-    public string? ParentAlias { get; }
-    public SqlObjectTypes Type { get; }
-    public string? Name { get; set; }
+    public string? ParentName { get; set; } = parentName;
+    public string? ParentAlias { get; } = parentAlias;
+    public SqlObjectTypes Type { get; } = type;
+    public string? Name { get; set; } = name;
 }

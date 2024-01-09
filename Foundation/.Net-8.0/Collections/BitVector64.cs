@@ -2,13 +2,11 @@
 
 namespace Foundation.Collections;
 
-public struct BitVector64
+[method: CLSCompliant(false)]
+public struct BitVector64(ulong data)
 {
     [CLSCompliant(false)]
-    public BitVector64(ulong data) => Value = data;
-
-    [CLSCompliant(false)]
-    public ulong Value { get; private set; }
+    public ulong Value { get; private set; } = data;
 
     public bool this[int index]
     {

@@ -8,17 +8,9 @@ using DataCommander.Api;
 
 namespace DataCommander.Application;
 
-internal sealed class StandardOutput : IStandardOutput
+internal sealed class StandardOutput(TextWriter textWriter, QueryForm queryForm) : IStandardOutput
 {
-    private readonly QueryForm _queryForm;
-
-    public StandardOutput(TextWriter textWriter, QueryForm queryForm)
-    {
-        TextWriter = textWriter;
-        _queryForm = queryForm;
-    }
-
-    private TextWriter TextWriter { get; }
+    private TextWriter TextWriter { get; } = textWriter;
 
     public void WriteLine(params object[] args)
     {
@@ -66,7 +58,7 @@ internal sealed class StandardOutput : IStandardOutput
                 }
             }
 
-            _queryForm.Invoke(() => _queryForm.ShowDataSet(dataSet));
+            queryForm.Invoke(() => queryForm.ShowDataSet(dataSet));
         }
         else
         {

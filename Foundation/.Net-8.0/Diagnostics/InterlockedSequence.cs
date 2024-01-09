@@ -2,11 +2,9 @@
 
 namespace Foundation.Diagnostics;
 
-internal sealed class InterlockedSequence
+internal sealed class InterlockedSequence(int value)
 {
-    private long _value;
-
-    public InterlockedSequence(int value) => _value = value;
+    private long _value = value;
 
     public long Next()
     {

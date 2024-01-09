@@ -2,12 +2,7 @@
 
 namespace Foundation.Deployment.Events;
 
-public sealed class DownloadingNewVersionStarted : Event
+public sealed class DownloadingNewVersionStarted(Version version) : Event
 {
-    public readonly Version Version;
-
-    public DownloadingNewVersionStarted(Version version)
-    {
-        Version = version;
-    }
+    public readonly Version Version = version;
 }

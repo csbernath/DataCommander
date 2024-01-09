@@ -6,20 +6,11 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class ExtendedStoreProcedureNode : ITreeNode
+internal sealed class ExtendedStoreProcedureNode(DatabaseNode database, string schema, string name) : ITreeNode
 {
-    private readonly DatabaseNode _database;
-    private readonly string _schema;
-    private readonly string _name;
+    private readonly DatabaseNode _database = database;
 
-    public ExtendedStoreProcedureNode(DatabaseNode database, string schema, string name)
-    {
-        _database = database;
-        _schema = schema;
-        _name = name;
-    }
-
-    string ITreeNode.Name => $"{_schema}.{_name}";
+    string ITreeNode.Name => $"{schema}.{name}";
     bool ITreeNode.IsLeaf => true;
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;

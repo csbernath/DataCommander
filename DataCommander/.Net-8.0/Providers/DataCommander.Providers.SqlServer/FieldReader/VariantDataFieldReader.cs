@@ -5,19 +5,11 @@ using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.FieldReader;
 
-internal sealed class VariantDataFieldReader : IDataFieldReader
+internal sealed class VariantDataFieldReader(
+    IDataRecord dataRecord,
+    int columnOrdinal) : IDataFieldReader
 {
-    private readonly int _columnOrdinal;
-
-    private readonly SqlDataReader _sqlDataReader;
-
-    public VariantDataFieldReader(
-        IDataRecord dataRecord,
-        int columnOrdinal)
-    {
-        _sqlDataReader = (SqlDataReader) dataRecord;
-        _columnOrdinal = columnOrdinal;
-    }
+    private readonly SqlDataReader _sqlDataReader = (SqlDataReader) dataRecord;
 
     object IDataFieldReader.Value
     {
@@ -25,13 +17,13 @@ internal sealed class VariantDataFieldReader : IDataFieldReader
         {
             object value;
 
-            if (_sqlDataReader.IsDBNull(_columnOrdinal))
+            if (_sqlDataReader.IsDBNull(columnOrdinal))
             {
                 value = DBNull.Value;
             }
             else
             {
-                value = _sqlDataReader.GetValue(_columnOrdinal);
+                value = _sqlDataReader.GetValue(columnOrdinal);
                 var type = value.GetType();
 
                 if (type.IsArray)

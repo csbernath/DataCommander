@@ -7,15 +7,10 @@ using System.Xml;
 
 namespace Foundation.Xml;
 
-public sealed class SimpleXmlTextWriter : XmlWriter
+public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
 {
-    private readonly IndentedTextWriter _textWriter;
+    private readonly IndentedTextWriter _textWriter = new(textWriter, "    ");
     private readonly Stack<StackItem> _stack = new();
-
-    public SimpleXmlTextWriter(TextWriter textWriter)
-    {
-        _textWriter = new IndentedTextWriter(textWriter, "    ");
-    }
 
     public override void Close() => throw new NotImplementedException();
     public override void Flush() => _textWriter.Flush();
@@ -448,14 +443,9 @@ public sealed class SimpleXmlTextWriter : XmlWriter
     /// <value></value>
     public override XmlSpace XmlSpace => throw new NotImplementedException();
 
-    private sealed class StackItem
+    private sealed class StackItem(string localName)
     {
-        public StackItem(string localName)
-        {
-            LocalName = localName;
-        }
-
-        public string LocalName { get; }
+        public string LocalName { get; } = localName;
 
         public bool HasAttributes { get; set; }
 

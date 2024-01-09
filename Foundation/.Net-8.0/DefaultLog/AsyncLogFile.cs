@@ -8,36 +8,25 @@ using Foundation.Log;
 
 namespace Foundation.DefaultLog;
 
-internal sealed class AsyncLogFile : ILogFile
+internal sealed class AsyncLogFile(
+    string path,
+    Encoding encoding,
+    int bufferSize,
+    TimeSpan timerPeriod,
+    ILogFormatter formatter,
+    FileAttributes fileAttributes,
+    DateTimeKind dateTimeKind)
+    : ILogFile
 {
     #region Private Fields
 
-    private string _path;
-    private readonly int _bufferSize;
-    private readonly LogFile _logFile;
-    private readonly ILogFormatter _formatter;
-    private readonly ConcurrentQueue<LogEntry> _queue;
-    private readonly TimeSpan _timerPeriod;
+    private string _path = path;
+    private readonly int _bufferSize = bufferSize;
+    private readonly LogFile _logFile = new(path, encoding, 1024, true, formatter, fileAttributes, dateTimeKind);
+    private readonly ConcurrentQueue<LogEntry> _queue = new();
     private Timer _timer;
 
     #endregion
-
-    public AsyncLogFile(
-        string path,
-        Encoding encoding,
-        int bufferSize,
-        TimeSpan timerPeriod,
-        ILogFormatter formatter,
-        FileAttributes fileAttributes,
-        DateTimeKind dateTimeKind)
-    {
-        _path = path;
-        _bufferSize = bufferSize;
-        _timerPeriod = timerPeriod;
-        _queue = new ConcurrentQueue<LogEntry>();
-        _formatter = formatter;
-        _logFile = new LogFile(path, encoding, 1024, true, formatter, fileAttributes, dateTimeKind);
-    }
 
     #region ILogFile Members
 
@@ -47,7 +36,7 @@ internal sealed class AsyncLogFile : ILogFile
     {
         Assert.IsTrue(_timer == null);
 
-        _timer = new Timer(TimerCallback, null, _timerPeriod, _timerPeriod);
+        _timer = new Timer(TimerCallback, null, timerPeriod, timerPeriod);
     }
 
     public void Write(LogEntry entry)
@@ -59,7 +48,7 @@ internal sealed class AsyncLogFile : ILogFile
     {
         while (_queue.TryDequeue(out var logEntry))
         {
-            var text = _formatter.Format(logEntry);
+            var text = formatter.Format(logEntry);
             _logFile.Write(logEntry.CreationTime, text);
         }
     }

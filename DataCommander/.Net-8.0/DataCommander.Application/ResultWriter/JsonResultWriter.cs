@@ -12,16 +12,11 @@ using Newtonsoft.Json;
 
 namespace DataCommander.Application.ResultWriter;
 
-public class JsonResultWriter : IResultWriter
+public class JsonResultWriter(Action<InfoMessage> addInfoMessage) : IResultWriter
 {
-    private readonly IResultWriter _logResultWriter;
+    private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage);
     private List<FoundationDbColumn> _columns;
     private JsonTextWriter _jsonTextWriter;
-
-    public JsonResultWriter(Action<InfoMessage> addInfoMessage)
-    {
-        _logResultWriter = new LogResultWriter(addInfoMessage);
-    }
 
     void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);
     void IResultWriter.AfterExecuteReader() => _logResultWriter.AfterExecuteReader();

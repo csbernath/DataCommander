@@ -1,9 +1,7 @@
 ﻿
 namespace Foundation.Data.LoggedDbConnection;
 
-public sealed class AfterReadEventArgs : LoggedEventArgs
+public sealed class AfterReadEventArgs(int rowCount) : LoggedEventArgs
 {
-    public AfterReadEventArgs(int rowCount) => RowCount = rowCount;
-
-    public int RowCount { get; }
+    public int RowCount { get; } = rowCount;
 }

@@ -8,19 +8,15 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class UserCollectionNode : ITreeNode
+internal sealed class UserCollectionNode(DatabaseNode database) : ITreeNode
 {
-    private readonly DatabaseNode _database;
-
-    public UserCollectionNode(DatabaseNode database) => _database = database;
-
     public string Name => "Users";
     public bool IsLeaf => false;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var commandText = $"select name from {_database.Name}..sysusers where islogin = 1 order by name";
-        var connectionString = _database.Databases.Server.ConnectionString;
+        var commandText = $"select name from {database.Name}..sysusers where islogin = 1 order by name";
+        var connectionString = database.Databases.Server.ConnectionString;
         DataTable dataTable;
         using (var connection = new SqlConnection(connectionString))
         {
@@ -35,7 +31,7 @@ internal sealed class UserCollectionNode : ITreeNode
         for (var i = 0; i < count; ++i)
         {
             var name = (string) dataRows[i][0];
-            treeNodes[i] = new UserNode(_database, name);
+            treeNodes[i] = new UserNode(database, name);
         }
 
         return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);

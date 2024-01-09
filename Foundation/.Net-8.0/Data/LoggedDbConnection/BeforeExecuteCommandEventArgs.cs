@@ -1,9 +1,7 @@
 ﻿
 namespace Foundation.Data.LoggedDbConnection;
 
-public sealed class BeforeExecuteCommandEventArgs : LoggedEventArgs
+public sealed class BeforeExecuteCommandEventArgs(LoggedDbCommandInfo command) : LoggedEventArgs
 {
-    public BeforeExecuteCommandEventArgs(LoggedDbCommandInfo command) => Command = command;
-
-    public LoggedDbCommandInfo Command { get; }
+    public LoggedDbCommandInfo Command { get; } = command;
 }

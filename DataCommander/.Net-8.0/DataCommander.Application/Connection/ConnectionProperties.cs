@@ -4,20 +4,13 @@ using Foundation.Core;
 
 namespace DataCommander.Application.Connection;
 
-public sealed class ConnectionProperties
+public sealed class ConnectionProperties(string connectionName, string providerIdentifier, IProvider? provider)
 {
-    public readonly string ConnectionName;
-    public readonly string ProviderIdentifier;
+    public readonly string ConnectionName = connectionName;
+    public readonly string ProviderIdentifier = providerIdentifier;
 
     public Option<string> Password;
-    public IProvider? Provider;
+    public IProvider? Provider = provider;
     public string ConnectionString;
     public ConnectionBase Connection;
-
-    public ConnectionProperties(string connectionName, string providerIdentifier, IProvider? provider)
-    {
-        ConnectionName = connectionName;
-        ProviderIdentifier = providerIdentifier;
-        Provider = provider;
-    }
 }

@@ -2,9 +2,7 @@
 
 namespace Foundation.Data.LoggedDbConnection;
 
-public sealed class AfterOpenDbConnectionEventArgs : LoggedEventArgs
+public sealed class AfterOpenDbConnectionEventArgs(Exception exception) : LoggedEventArgs
 {
-    public AfterOpenDbConnectionEventArgs(Exception exception) => Exception = exception;
-
-    public Exception Exception { get; }
+    public Exception Exception { get; } = exception;
 }

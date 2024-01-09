@@ -3,32 +3,21 @@ using System.Threading;
 
 namespace Foundation.Threading;
 
-public class RetryPolicy
+public class RetryPolicy(int maxTryCount, TimeSpan beforeRetry, Func<Exception, bool> transient)
 {
-    private readonly int _maxTryCount;
-    private readonly TimeSpan _waitBeforeRetry;
-    private readonly Func<Exception, bool> _isTransient;
-
-    public RetryPolicy(int maxTryCount, TimeSpan waitBeforeRetry, Func<Exception, bool> isTransient)
-    {
-        _maxTryCount = maxTryCount;
-        _waitBeforeRetry = waitBeforeRetry;
-        _isTransient = isTransient;
-    }
-
     public void Execute(Action action, CancellationToken cancellationToken) =>
-        RetryEngine.Execute(action, _maxTryCount, HandleException, cancellationToken);
+        RetryEngine.Execute(action, maxTryCount, HandleException, cancellationToken);
 
     private RetryPolicyHandleExceptionResult HandleException(Exception exception)
     {
         bool anotherTryAllowed;
         TimeSpan? waitBeforeRetry;
 
-        var isTransient = _isTransient(exception);
+        var isTransient = transient(exception);
         if (isTransient)
         {
             anotherTryAllowed = true;
-            waitBeforeRetry = _waitBeforeRetry;
+            waitBeforeRetry = beforeRetry;
         }
         else
         {

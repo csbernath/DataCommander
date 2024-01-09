@@ -8,17 +8,8 @@ using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal class KeyCollectionNode : ITreeNode
+internal class KeyCollectionNode(DatabaseNode databaseNode, int id) : ITreeNode
 {
-    private readonly DatabaseNode _databaseNode;
-    private readonly int _id;
-    
-    public KeyCollectionNode(DatabaseNode databaseNode, int id)
-    {
-        _databaseNode = databaseNode;
-        _id = id;
-    }
-
     public string Name => "Keys";
     public bool IsLeaf => false;
 
@@ -26,7 +17,7 @@ internal class KeyCollectionNode : ITreeNode
     {
         var commandText = CreateCommandText();
         return await SqlClientFactory.Instance.ExecuteReaderAsync(
-            _databaseNode.Databases.Server.ConnectionString,
+            databaseNode.Databases.Server.ConnectionString,
             new ExecuteReaderRequest(commandText),
             128,
             ReadRecord,
@@ -37,10 +28,10 @@ internal class KeyCollectionNode : ITreeNode
     {
         var sqlCommandBuilder = new SqlCommandBuilder();
         var commandText = @$"select name
-from {sqlCommandBuilder.QuoteIdentifier(_databaseNode.Name)}.sys.objects o
+from {sqlCommandBuilder.QuoteIdentifier(databaseNode.Name)}.sys.objects o
 where
     o.type in('PK','F','UQ') and
-    o.parent_object_id = {_id}
+    o.parent_object_id = {id}
 order by
     case o.type
         when 'PK' then 0
@@ -53,7 +44,7 @@ order by
     private KeyNode ReadRecord(IDataRecord dataRecord)
     {
         var name = dataRecord.GetString(0);
-        return new KeyNode(_databaseNode, _id, name);
+        return new KeyNode(databaseNode, id, name);
     }
 
     public bool Sortable => false;

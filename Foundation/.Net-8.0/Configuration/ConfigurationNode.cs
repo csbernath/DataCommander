@@ -5,7 +5,7 @@ using Foundation.Assertions;
 
 namespace Foundation.Configuration;
 
-public sealed class ConfigurationNode
+public sealed class ConfigurationNode(string name)
 {
     /// <summary>
     /// The path delimiter in the nodeName. E.g.: Node1/Node2/Node3.
@@ -14,18 +14,12 @@ public sealed class ConfigurationNode
 
     private int _index;
 
-    public ConfigurationNode(string name)
-    {
-        Name = name;
-        HasName = name != null;
-    }
-
-    public bool HasName { get; }
+    public bool HasName { get; } = name != null;
 
     /// <summary>
     /// Gets the name of the node.
     /// </summary>
-    public string Name { get; private set; }
+    public string Name { get; private set; } = name;
 
     /// <summary>
     /// Gets/sets the description of the node.

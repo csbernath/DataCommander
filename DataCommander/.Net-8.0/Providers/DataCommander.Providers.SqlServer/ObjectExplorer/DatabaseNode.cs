@@ -13,30 +13,20 @@ using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class DatabaseNode : ITreeNode
+internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string? name, byte state) : ITreeNode
 {
-    private readonly string? _name;
-    private readonly byte _state;
+    public DatabaseCollectionNode Databases { get; } = databaseCollectionNode;
 
-    public DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string? name, byte state)
-    {
-        Databases = databaseCollectionNode;
-        _name = name;
-        _state = state;
-    }
-
-    public DatabaseCollectionNode Databases { get; }
-
-    public string? Name => _name;
+    public string? Name => name;
 
     string ITreeNode.Name
     {
         get
         {
             var sb = new StringBuilder();
-            sb.Append(_name);
+            sb.Append(name);
 
-            if (_state == 6)
+            if (state == 6)
                 sb.Append(" (Offline)");
 
             return sb.ToString();
@@ -92,7 +82,7 @@ select
 	convert(decimal(15),fileproperty(f.name, 'SpaceUsed') * 8096.0 / 1000000000)		as [Used (GB)],
 	convert(decimal(15,2),convert(float,fileproperty(name, 'SpaceUsed')) * 100.0 / size)	as [Used%],
 	convert(decimal(15,2),(f.size-fileproperty(name, 'SpaceUsed')) * 8096.0 / 1000000000)	as [Free (GB)]
-from	[{0}].sys.database_files f", _name);
+from	[{0}].sys.database_files f", name);
         var connectionString = Databases.Server.ConnectionString;
 
         var queryForm = (IQueryForm)sender;
@@ -116,7 +106,7 @@ from	[{0}].sys.database_files f", _name);
 
     private void CreateDatabaseSnapshotScriptToClipboardMenuItem_Click(object? sender, EventArgs e)
     {
-        var databaseName = _name;
+        var databaseName = name;
 
         var databaseSnapshotName = $"{databaseName}_Snapshot_{DateTime.Now.ToString("yyyyMMdd_HHmm")}";
         var logical_file_name = GetLogicalFileName(databaseName);

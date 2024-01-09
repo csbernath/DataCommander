@@ -10,12 +10,10 @@ using Foundation.Data;
 
 namespace DataCommander.Application.ResultWriter;
 
-public class HtmlResultWriter : IResultWriter
+public class HtmlResultWriter(Action<InfoMessage> addInfoMessage) : IResultWriter
 {
-    private readonly IResultWriter _logResultWriter;
+    private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage);
     private HtmlTextWriter _htmlTextWriter;
-
-    public HtmlResultWriter(Action<InfoMessage> addInfoMessage) => _logResultWriter = new LogResultWriter(addInfoMessage);
 
     void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);
     void IResultWriter.AfterExecuteReader() => _logResultWriter.AfterExecuteReader();

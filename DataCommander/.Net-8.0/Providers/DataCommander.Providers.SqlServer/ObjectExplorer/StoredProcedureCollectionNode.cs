@@ -7,18 +7,9 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class StoredProcedureCollectionNode : ITreeNode
+internal sealed class StoredProcedureCollectionNode(DatabaseNode database, bool isMsShipped) : ITreeNode
 {
-    private readonly DatabaseNode _database;
-    private readonly bool _isMsShipped;
-
-    public StoredProcedureCollectionNode(DatabaseNode database, bool isMsShipped)
-    {
-        _database = database;
-        _isMsShipped = isMsShipped;
-    }
-
-    public string Name => _isMsShipped
+    public string Name => isMsShipped
         ? "System Stored Procedures"
         : "Stored Procedures";
 
@@ -27,19 +18,19 @@ internal sealed class StoredProcedureCollectionNode : ITreeNode
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var treeNodes = new List<ITreeNode>();
-        if (!_isMsShipped)
-            treeNodes.Add(new StoredProcedureCollectionNode(_database, true));
+        if (!isMsShipped)
+            treeNodes.Add(new StoredProcedureCollectionNode(database, true));
 
         var commandText = GetCommandText();
         var rows = await SqlClientFactory.Instance.ExecuteReaderAsync(
-            _database.Databases.Server.ConnectionString,
+            database.Databases.Server.ConnectionString,
             new ExecuteReaderRequest(commandText),
             128,
             dataRecord =>
             {
                 var owner = dataRecord.GetString(0);
                 var name = dataRecord.GetString(1);
-                return new StoredProcedureNode(_database, owner, name);
+                return new StoredProcedureNode(database, owner, name);
             },
             cancellationToken);
         treeNodes.AddRange(rows);
@@ -61,7 +52,7 @@ where
     o.type = 'P'
     and o.is_ms_shipped = {1}
     and p.major_id is null
-order by s.name,o.name", _database.Name, _isMsShipped
+order by s.name,o.name", database.Name, isMsShipped
             ? 1
             : 0);
         return commandText;

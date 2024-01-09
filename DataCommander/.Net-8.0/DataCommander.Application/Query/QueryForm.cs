@@ -1395,21 +1395,16 @@ public sealed partial class QueryForm : Form, IQueryForm
         }
     }
 
-    private sealed class GetQueryConfigurationResult
+    private sealed class GetQueryConfigurationResult(
+        bool succeeded,
+        Api.QueryConfiguration.Query query,
+        ReadOnlyCollection<DbRequestParameter> parameters,
+        string commandText)
     {
-        public readonly bool Succeeded;
-        public readonly Api.QueryConfiguration.Query Query;
-        public readonly ReadOnlyCollection<DbRequestParameter> Parameters;
-        public readonly string CommandText;
-
-        public GetQueryConfigurationResult(bool succeeded, Api.QueryConfiguration.Query query, ReadOnlyCollection<DbRequestParameter> parameters,
-            string commandText)
-        {
-            Succeeded = succeeded;
-            Query = query;
-            Parameters = parameters;
-            CommandText = commandText;
-        }
+        public readonly bool Succeeded = succeeded;
+        public readonly Api.QueryConfiguration.Query Query = query;
+        public readonly ReadOnlyCollection<DbRequestParameter> Parameters = parameters;
+        public readonly string CommandText = commandText;
     }
 
     private static GetQueryConfigurationResult GetQueryConfiguration(string commandText)
@@ -2106,16 +2101,10 @@ public sealed partial class QueryForm : Form, IQueryForm
     private const int TcmHittest = 0x130D;
 
     [StructLayout(LayoutKind.Sequential)]
-    private struct Tchittestinfo
+    private struct Tchittestinfo(int x, int y)
     {
-        public readonly Point pt;
-        public readonly Tchittestflags flags;
-
-        public Tchittestinfo(int x, int y)
-        {
-            pt = new Point(x, y);
-            flags = Tchittestflags.TchtOnitem;
-        }
+        public readonly Point pt = new(x, y);
+        public readonly Tchittestflags flags = Tchittestflags.TchtOnitem;
     }
 
     [DllImport("user32.dll")]

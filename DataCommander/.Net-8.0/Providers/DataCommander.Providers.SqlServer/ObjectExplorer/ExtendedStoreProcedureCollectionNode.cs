@@ -7,12 +7,8 @@ using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class ExtendedStoreProcedureCollectionNode : ITreeNode
+internal sealed class ExtendedStoreProcedureCollectionNode(DatabaseNode database) : ITreeNode
 {
-    private readonly DatabaseNode _database;
-
-    public ExtendedStoreProcedureCollectionNode(DatabaseNode database) => _database = database;
-
     string ITreeNode.Name => "Extended Stored Procedures";
     bool ITreeNode.IsLeaf => false;
     bool ITreeNode.Sortable => false;
@@ -21,7 +17,7 @@ internal sealed class ExtendedStoreProcedureCollectionNode : ITreeNode
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var executor = new SqlCommandExecutor(_database.Databases.Server.ConnectionString);
+        var executor = new SqlCommandExecutor(database.Databases.Server.ConnectionString);
         var commandText = @"select
     s.name,
     o.name
@@ -35,7 +31,7 @@ order by 1,2";
         {
             var schema = dataRecord.GetString(0);
             var name = dataRecord.GetString(1);
-            return new ExtendedStoreProcedureNode(_database, schema, name);
+            return new ExtendedStoreProcedureNode(database, schema, name);
         });
         return Task.FromResult<IEnumerable<ITreeNode>>(childNodes);
     }

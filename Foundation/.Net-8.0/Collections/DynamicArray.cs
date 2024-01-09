@@ -9,16 +9,9 @@ namespace Foundation.Collections;
 /// <summary>
 ///     https://en.wikipedia.org/wiki/Dynamic_array
 /// </summary>
-public class DynamicArray<T> : IList<T>
+public class DynamicArray<T>(int initialSize, int maxSize) : IList<T>
 {
-    private readonly int _maxSize;
-    private T[] _array;
-
-    public DynamicArray(int initialSize, int maxSize)
-    {
-        _array = new T[initialSize];
-        _maxSize = maxSize;
-    }
+    private T[] _array = new T[initialSize];
 
     #region IEnumerable<T> Members
 
@@ -60,14 +53,14 @@ public class DynamicArray<T> : IList<T>
 
     public void Add(T item)
     {
-        Assert.IsValidOperation(Count < _maxSize);
+        Assert.IsValidOperation(Count < maxSize);
 
         if (Count == _array.Length)
         {
             var newSize = Count == 0 ? 1 : 2 * Count;
 
-            if (newSize > _maxSize)
-                newSize = _maxSize;
+            if (newSize > maxSize)
+                newSize = maxSize;
 
             if (newSize > Count)
             {

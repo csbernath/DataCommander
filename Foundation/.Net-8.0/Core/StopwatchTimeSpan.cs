@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Foundation.Core;
 
-public struct StopwatchTimeSpan
+public struct StopwatchTimeSpan(long ticks)
 {
     private static readonly long[] Power10 =
     [
@@ -26,12 +26,11 @@ public struct StopwatchTimeSpan
         1000000000000000
     ];
 
-    private readonly long _ticks;
+    public StopwatchTimeSpan(TimeSpan timeSpan) : this(ToTicks(timeSpan))
+    {
+    }
 
-    public StopwatchTimeSpan(long ticks) => _ticks = ticks;
-    public StopwatchTimeSpan(TimeSpan timeSpan) => _ticks = ToTicks(timeSpan);
-
-    public long Ticks => _ticks;
+    public long Ticks => ticks;
     public TimeSpan Elapsed => ToTimeSpan(Ticks);
     public double TotalHours => (double) Ticks / StopwatchConstants.TicksPerHour;
     public double TotalMinutes => (double) Ticks / StopwatchConstants.TicksPerMinute;

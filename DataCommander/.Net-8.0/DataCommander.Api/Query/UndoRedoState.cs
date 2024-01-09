@@ -2,14 +2,8 @@
 
 namespace DataCommander.Api.Query;
 
-public class UndoRedoState<T>
+public class UndoRedoState<T>(List<T> items, int processedItemCount)
 {
-    public List<T> Items;
-    public int ProcessedItemCount;
-
-    public UndoRedoState(List<T> items, int processedItemCount)
-    {
-        Items = items;
-        ProcessedItemCount = processedItemCount;
-    }
+    public List<T> Items = items;
+    public int ProcessedItemCount = processedItemCount;
 }

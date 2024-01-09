@@ -1,16 +1,10 @@
 ﻿namespace Foundation.Collections.IndexableCollection;
 
-public struct GetKeyResponse<T>
+public struct GetKeyResponse<T>(bool hasKey, T key)
 {
-    public GetKeyResponse(bool hasKey, T key)
-    {
-        HasKey = hasKey;
-        Key = key;
-    }
+    public bool HasKey { get; } = hasKey;
 
-    public bool HasKey { get; }
-
-    public T Key { get; }
+    public T Key { get; } = key;
 }
 
 public static class GetKeyResponse

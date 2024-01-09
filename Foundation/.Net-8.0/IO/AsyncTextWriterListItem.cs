@@ -2,19 +2,10 @@
 
 namespace Foundation.IO;
 
-internal sealed class AsyncTextWriterListItem
+internal sealed class AsyncTextWriterListItem(IFormatter formatter, params object[] args)
 {
-    private readonly IFormatter _formatter;
-    private readonly object[] _args;
-
-    public AsyncTextWriterListItem(IFormatter formatter, params object[] args)
-    {
-        _formatter = formatter;
-        _args = args;
-    }
-
     public void AppendTo(StringBuilder sb)
     {
-        _formatter.AppendTo(sb, _args);
+        formatter.AppendTo(sb, args);
     }
 }

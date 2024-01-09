@@ -10,29 +10,17 @@ using Microsoft.SqlServer.Management.Smo;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class UserDefinedTableTypeNode : ITreeNode
+internal sealed class UserDefinedTableTypeNode(DatabaseNode database, int id, string schema, string name)
+    : ITreeNode
 {
-    private readonly DatabaseNode _database;
-    private readonly int _id;
-    private readonly string _name;
-    private readonly string _schema;
-
-    public UserDefinedTableTypeNode(DatabaseNode database, int id, string schema, string name)
-    {
-        _database = database;
-        _id = id;
-        _schema = schema;
-        _name = name;
-    }
-
-    string ITreeNode.Name => $"{_schema}.{_name}";
+    string ITreeNode.Name => $"{schema}.{name}";
     bool ITreeNode.IsLeaf => false;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         return Task.FromResult<IEnumerable<ITreeNode>>(new ITreeNode[]
         {
-            new ColumnCollectionNode(_database, _id)
+            new ColumnCollectionNode(database, id)
         });
     }
 
@@ -53,12 +41,12 @@ internal sealed class UserDefinedTableTypeNode : ITreeNode
     private void Script_OnClick(object? sender, EventArgs e)
     {
         var queryForm = (IQueryForm)sender!;
-        var connectionInfo = SqlObjectScripter.CreateSqlConnectionInfo(_database.Databases.Server.ConnectionString);
+        var connectionInfo = SqlObjectScripter.CreateSqlConnectionInfo(database.Databases.Server.ConnectionString);
         var connection = new ServerConnection(connectionInfo);
         connection.Connect();
         var server = new Server(connection);
-        var database = server.Databases[_database.Name];
-        var userDefinedTableType = database.UserDefinedTableTypes[_name, _schema];
+        var database1 = server.Databases[database.Name];
+        var userDefinedTableType = database1.UserDefinedTableTypes[name, schema];
         var stringCollection = userDefinedTableType.Script();
 
         var sb = new StringBuilder();

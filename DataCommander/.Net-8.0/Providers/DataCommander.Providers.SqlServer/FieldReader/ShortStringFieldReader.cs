@@ -4,22 +4,11 @@ using DataCommander.Api.FieldReaders;
 
 namespace DataCommander.Providers.SqlServer.FieldReader;
 
-internal sealed class ShortStringFieldReader : IDataFieldReader
+internal sealed class ShortStringFieldReader(
+    IDataRecord dataRecord,
+    int columnOrdinal,
+    SqlDbType sqlDbType) : IDataFieldReader
 {
-    private readonly int _columnOrdinal;
-    private readonly IDataRecord _dataRecord;
-    private readonly SqlDbType _sqlDbType;
-
-    public ShortStringFieldReader(
-        IDataRecord dataRecord,
-        int columnOrdinal,
-        SqlDbType sqlDbType)
-    {
-        _dataRecord = dataRecord;
-        _columnOrdinal = columnOrdinal;
-        _sqlDbType = sqlDbType;
-    }
-
     #region IDataFieldReader Members
 
     object IDataFieldReader.Value
@@ -28,16 +17,16 @@ internal sealed class ShortStringFieldReader : IDataFieldReader
         {
             object value;
 
-            if (_dataRecord.IsDBNull(_columnOrdinal))
+            if (dataRecord.IsDBNull(columnOrdinal))
             {
                 value = DBNull.Value;
             }
             else
             {
-                var s = _dataRecord.GetString(_columnOrdinal);
+                var s = dataRecord.GetString(columnOrdinal);
 
-                if (_sqlDbType == SqlDbType.Char ||
-                    _sqlDbType == SqlDbType.NChar)
+                if (sqlDbType == SqlDbType.Char ||
+                    sqlDbType == SqlDbType.NChar)
                     s = s.TrimEnd();
 
                 value = s;

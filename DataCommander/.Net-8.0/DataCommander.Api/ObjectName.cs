@@ -1,15 +1,8 @@
 ﻿namespace DataCommander.Api;
 
-public sealed class ObjectName : IObjectName
+public sealed class ObjectName(string objectName) : IObjectName
 {
-    private readonly string _objectName;
+    string IObjectName.UnquotedName => objectName;
 
-    public ObjectName(string objectName)
-    {
-        _objectName = objectName;
-    }
-
-    string IObjectName.UnquotedName => _objectName;
-
-    string IObjectName.QuotedName => _objectName;
+    string IObjectName.QuotedName => objectName;
 }

@@ -2,9 +2,8 @@
 
 namespace DataCommander.Api.FieldReaders;
 
-public sealed class DoubleField
+public sealed class DoubleField(double value)
 {
-    public DoubleField(double value) => Value = value;
-    public double Value { get; }
+    public double Value { get; } = value;
     public override string ToString() => Value.ToString("N16", CultureInfo.InvariantCulture);
 }

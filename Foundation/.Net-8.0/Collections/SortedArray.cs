@@ -4,20 +4,9 @@ using Foundation.Assertions;
 
 namespace Foundation.Collections;
 
-public class SortedArray<TKey, TValue>
+public class SortedArray<TKey, TValue>(TValue[] values, Func<TValue, TKey> keySelector, Comparison<TKey> comparison)
 {
-    private readonly Comparison<TKey> _comparison;
-    private readonly Func<TValue, TKey> _keySelector;
-    private readonly TValue[] _values;
-
-    public SortedArray(TValue[] values, Func<TValue, TKey> keySelector, Comparison<TKey> comparison)
-    {
-        _values = values;
-        _keySelector = keySelector;
-        _comparison = comparison;
-    }
-
-    public int Length => _values.Length;
+    public int Length => values.Length;
 
     public TValue this[TKey key]
     {
@@ -28,7 +17,7 @@ public class SortedArray<TKey, TValue>
             if (index < 0)
                 throw new KeyNotFoundException();
 
-            return _values[index];
+            return values[index];
         }
 
         set
@@ -38,16 +27,16 @@ public class SortedArray<TKey, TValue>
             if (index < 0)
                 throw new KeyNotFoundException();
 
-            var originalValue = _values[index];
-            var originalKey = _keySelector(originalValue);
+            var originalValue = values[index];
+            var originalKey = keySelector(originalValue);
 
-            Assert.IsTrue(_comparison(originalKey, key) == 0);
+            Assert.IsTrue(comparison(originalKey, key) == 0);
 
-            _values[index] = value;
+            values[index] = value;
         }
     }
 
-    public IEnumerable<TValue> Values => _values;
+    public IEnumerable<TValue> Values => values;
     public bool ContainsKey(TKey key) => IndexOfKey(key) >= 0;
 
     public bool TryGetValue(TKey key, out TValue value)
@@ -57,7 +46,7 @@ public class SortedArray<TKey, TValue>
 
         if (index >= 0)
         {
-            value = _values[index];
+            value = values[index];
             succeeded = true;
         }
         else
@@ -73,12 +62,12 @@ public class SortedArray<TKey, TValue>
     {
         int indexOfKey;
 
-        if (_values.Length > 0)
-            indexOfKey = BinarySearch.IndexOf(0, _values.Length - 1, index =>
+        if (values.Length > 0)
+            indexOfKey = BinarySearch.IndexOf(0, values.Length - 1, index =>
             {
-                var otherValue = _values[index];
-                var otherKey = _keySelector(otherValue);
-                return _comparison(key, otherKey);
+                var otherValue = values[index];
+                var otherKey = keySelector(otherValue);
+                return comparison(key, otherKey);
             });
         else
             indexOfKey = -1;
@@ -88,12 +77,12 @@ public class SortedArray<TKey, TValue>
 
     public void SetValue(int index, TValue value)
     {
-        var key = _keySelector(value);
-        var originalValue = _values[index];
-        var originalKey = _keySelector(originalValue);
+        var key = keySelector(value);
+        var originalValue = values[index];
+        var originalKey = keySelector(originalValue);
 
-        Assert.IsTrue(_comparison(originalKey, key) == 0);
+        Assert.IsTrue(comparison(originalKey, key) == 0);
 
-        _values[index] = value;
+        values[index] = value;
     }
 }

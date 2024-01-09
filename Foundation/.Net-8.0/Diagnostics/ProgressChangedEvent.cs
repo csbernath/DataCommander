@@ -1,14 +1,8 @@
 ﻿
 namespace Foundation.Diagnostics;
 
-public class ProgressChangedEvent
+public class ProgressChangedEvent(int taskCount, int percent)
 {
-    public readonly int TaskCount;
-    public readonly int Percent;
-
-    public ProgressChangedEvent(int taskCount, int percent)
-    {
-        TaskCount = taskCount;
-        Percent = percent;
-    }
+    public readonly int TaskCount = taskCount;
+    public readonly int Percent = percent;
 }

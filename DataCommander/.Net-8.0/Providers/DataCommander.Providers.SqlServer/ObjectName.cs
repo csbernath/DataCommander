@@ -4,29 +4,20 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.SqlServer;
 
-internal sealed class ObjectName : IObjectName
+internal sealed class ObjectName(string schemaName, string objectName) : IObjectName
 {
-    private readonly string _objectName;
-    private readonly string _schemaName;
-
-    public ObjectName(string schemaName, string objectName)
-    {
-        _schemaName = schemaName;
-        _objectName = objectName;
-    }
-
     string IObjectName.UnquotedName
     {
         get
         {
             var sb = new StringBuilder();
-            if (_schemaName != null)
+            if (schemaName != null)
             {
-                sb.Append(_schemaName);
+                sb.Append(schemaName);
                 sb.Append('.');
             }
 
-            sb.Append(_objectName);
+            sb.Append(objectName);
 
             return sb.ToString();
         }
@@ -37,13 +28,13 @@ internal sealed class ObjectName : IObjectName
         get
         {
             var stringBuilder = new StringBuilder();
-            if (_schemaName != null)
+            if (schemaName != null)
             {
-                stringBuilder.Append(QuoteIdentifier(_schemaName));
+                stringBuilder.Append(QuoteIdentifier(schemaName));
                 stringBuilder.Append('.');
             }
 
-            stringBuilder.Append(QuoteIdentifier(_objectName));
+            stringBuilder.Append(QuoteIdentifier(objectName));
             return stringBuilder.ToString();
         }
     }

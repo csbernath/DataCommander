@@ -3,17 +3,8 @@ using System.Data;
 
 namespace DataCommander.Api.FieldReaders;
 
-public sealed class DefaultDataFieldReader : IDataFieldReader
+public sealed class DefaultDataFieldReader(IDataRecord dataRecord, int columnOrdinal) : IDataFieldReader
 {
-    private readonly IDataRecord _dataRecord;
-    private readonly int _columnOrdinal;
-
-    public DefaultDataFieldReader(IDataRecord dataRecord, int columnOrdinal)
-    {
-        _dataRecord = dataRecord;
-        _columnOrdinal = columnOrdinal;
-    }
-
     object IDataFieldReader.Value
     {
         get
@@ -22,12 +13,12 @@ public sealed class DefaultDataFieldReader : IDataFieldReader
 
             try
             {
-                value = _dataRecord.GetValue(_columnOrdinal);
+                value = dataRecord.GetValue(columnOrdinal);
             }
             catch (Exception e)
             {
-                var name = _dataRecord.GetName(_columnOrdinal);
-                var dataTypeName = _dataRecord.GetDataTypeName(_columnOrdinal);
+                var name = dataRecord.GetName(columnOrdinal);
+                var dataTypeName = dataRecord.GetDataTypeName(columnOrdinal);
                 var message = $"dataRecord.GetValue(columnordinal) failed. Column name: {name}, column dataTypeName: {dataTypeName}";
                 throw new Exception(message, e);
             }

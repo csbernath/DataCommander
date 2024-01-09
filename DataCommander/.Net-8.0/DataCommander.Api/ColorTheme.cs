@@ -2,20 +2,11 @@
 
 namespace DataCommander.Api;
 
-public sealed class ColorTheme
+public sealed class ColorTheme(Color foreColor, Color backColor, Color execKeyWordColor, Color sqlKeyWordColor, Color providerKeyWordColor)
 {
-    public readonly Color ForeColor;
-    public readonly Color BackColor;
-    public readonly Color ExecKeyWordColor;
-    public readonly Color SqlKeyWordColor;
-    public readonly Color ProviderKeyWordColor;
-
-    public ColorTheme(Color foreColor, Color backColor, Color execKeyWordColor, Color sqlKeyWordColor, Color providerKeyWordColor)
-    {
-        ForeColor = foreColor;
-        BackColor = backColor;
-        ExecKeyWordColor = execKeyWordColor;
-        SqlKeyWordColor = sqlKeyWordColor;
-        ProviderKeyWordColor = providerKeyWordColor;
-    }
+    public readonly Color ForeColor = foreColor;
+    public readonly Color BackColor = backColor;
+    public readonly Color ExecKeyWordColor = execKeyWordColor;
+    public readonly Color SqlKeyWordColor = sqlKeyWordColor;
+    public readonly Color ProviderKeyWordColor = providerKeyWordColor;
 }

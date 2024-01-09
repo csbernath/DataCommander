@@ -5,25 +5,18 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.OleDb;
 
-internal sealed class ProcedureNode : ITreeNode
+internal sealed class ProcedureNode(string name) : ITreeNode
 {
-    private readonly string name;
-
-    public ProcedureNode(string name)
-    {
-        this.name = name;
-    }
-
     public string Name
     {
         get
         {
-            var name = this.name;
+            var name1 = name;
 
-            if (name == null)
-                name = "[No procedures found]";
+            if (name1 == null)
+                name1 = "[No procedures found]";
 
-            return name;
+            return name1;
         }
     }
 

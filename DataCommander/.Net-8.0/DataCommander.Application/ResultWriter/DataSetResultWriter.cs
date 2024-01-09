@@ -7,19 +7,12 @@ using Foundation.Diagnostics;
 
 namespace DataCommander.Application.ResultWriter;
 
-internal sealed class DataSetResultWriter : IResultWriter
+internal sealed class DataSetResultWriter(Action<InfoMessage> addInfoMessage, bool showShemaTable) : IResultWriter
 {
-    private readonly IResultWriter _logResultWriter;
-    private readonly bool _showShemaTable;
+    private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage);
     private IProvider _provider;
     private DataTable _dataTable;
     private int _tableIndex = -1;
-
-    public DataSetResultWriter(Action<InfoMessage> addInfoMessage, bool showShemaTable)
-    {
-        _logResultWriter = new LogResultWriter(addInfoMessage);
-        _showShemaTable = showShemaTable;
-    }
 
     public DataSet DataSet { get; private set; }
 
@@ -82,7 +75,7 @@ internal sealed class DataSetResultWriter : IResultWriter
         var tableName = schemaTable.TableName;
         if (tableName == "SchemaTable")
             tableName = $"Table {_tableIndex}";
-        if (_showShemaTable)
+        if (showShemaTable)
         {
             schemaTable.TableName = $"Schema {_tableIndex}";
             DataSet.Tables.Add(schemaTable);

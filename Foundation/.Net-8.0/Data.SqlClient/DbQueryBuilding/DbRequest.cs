@@ -2,28 +2,22 @@
 
 namespace Foundation.Data.SqlClient.DbQueryBuilding;
 
-public class DbRequest
+public class DbRequest(
+    string directory,
+    string name,
+    string @using,
+    string @namespace,
+    string commandText,
+    int? commandTimeout,
+    ReadOnlyCollection<DbRequestParameter> parameters,
+    ReadOnlyCollection<DbQueryResult> results)
 {
-    public readonly string Directory;
-    public readonly string Name;
-    public readonly string Using;
-    public readonly string Namespace;
-    public readonly string CommandText;
-    public readonly int? CommandTimeout;
-    public readonly ReadOnlyCollection<DbRequestParameter> Parameters;
-    public readonly ReadOnlyCollection<DbQueryResult> Results;
-
-    public DbRequest(string directory, string name, string @using, string @namespace, string commandText, int? commandTimeout,
-        ReadOnlyCollection<DbRequestParameter> parameters,
-        ReadOnlyCollection<DbQueryResult> results)
-    {
-        Using = @using;
-        Namespace = @namespace;
-        Name = name;
-        CommandText = commandText;
-        CommandTimeout = commandTimeout;
-        Parameters = parameters;
-        Results = results;
-        Directory = directory;
-    }
+    public readonly string Directory = directory;
+    public readonly string Name = name;
+    public readonly string Using = @using;
+    public readonly string Namespace = @namespace;
+    public readonly string CommandText = commandText;
+    public readonly int? CommandTimeout = commandTimeout;
+    public readonly ReadOnlyCollection<DbRequestParameter> Parameters = parameters;
+    public readonly ReadOnlyCollection<DbQueryResult> Results = results;
 }

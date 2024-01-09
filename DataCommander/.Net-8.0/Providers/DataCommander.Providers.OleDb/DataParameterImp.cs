@@ -3,18 +3,10 @@ using System.Data.OleDb;
 
 namespace DataCommander.Providers.OleDb;
 
-internal sealed class DataParameterImp : DataParameterBase
+internal sealed class DataParameterImp(OleDbParameter parameter) : DataParameterBase(parameter, parameter.Size, parameter.Precision, parameter.Scale)
 {
-    public DataParameterImp(OleDbParameter parameter)
-        : base(parameter, parameter.Size, parameter.Precision, parameter.Scale)
-    {
-        this.parameter = parameter;
-    }
-
     protected override void SetSize(int size)
     {
         parameter.Size = size;
     }
-
-    private readonly OleDbParameter parameter;
 }

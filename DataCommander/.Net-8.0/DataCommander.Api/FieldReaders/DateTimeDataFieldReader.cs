@@ -3,32 +3,23 @@ using System.Data;
 
 namespace DataCommander.Api.FieldReaders;
 
-public sealed class DateTimeDataFieldReader : IDataFieldReader
+public sealed class DateTimeDataFieldReader(
+    IDataRecord dataRecord,
+    int columnOrdinal) : IDataFieldReader
 {
-    private readonly IDataRecord _dataRecord;
-    private readonly int _columnOrdinal;
-
-    public DateTimeDataFieldReader(
-        IDataRecord dataRecord,
-        int columnOrdinal)
-    {
-        _dataRecord = dataRecord;
-        _columnOrdinal = columnOrdinal;
-    }
-
     object IDataFieldReader.Value
     {
         get
         {
             object value;
 
-            if (_dataRecord.IsDBNull(_columnOrdinal))
+            if (dataRecord.IsDBNull(columnOrdinal))
             {
                 value = DBNull.Value;
             }
             else
             {
-                var dateTime = _dataRecord.GetDateTime(_columnOrdinal);
+                var dateTime = dataRecord.GetDateTime(columnOrdinal);
                 value = new DateTimeField(dateTime);
             }
 

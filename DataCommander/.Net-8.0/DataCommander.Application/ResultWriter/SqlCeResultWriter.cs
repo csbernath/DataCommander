@@ -10,19 +10,11 @@ using Foundation.Text;
 
 namespace DataCommander.Application.ResultWriter;
 
-internal sealed class SqlCeResultWriter : IResultWriter
+internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableName) : IResultWriter
 {
-    private readonly TextWriter _messageWriter;
-    private readonly string? _tableName;
     private IProvider _provider;
     private SqlCeConnection _connection;
     private SqlCeCommand _insertCommand;
-
-    public SqlCeResultWriter(TextWriter messageWriter, string? tableName)
-    {
-        _messageWriter = messageWriter;
-        _tableName = tableName;
-    }
 
     #region IResultWriter Members
 
@@ -38,7 +30,7 @@ internal sealed class SqlCeResultWriter : IResultWriter
     void IResultWriter.AfterExecuteReader()
     {
         var fileName = Path.GetTempFileName() + ".sdf";
-        _messageWriter.WriteLine(fileName);
+        messageWriter.WriteLine(fileName);
         var sb = new DbConnectionStringBuilder();
         sb.Add("Data Source", fileName);
         var connectionString = sb.ConnectionString;
@@ -55,9 +47,9 @@ internal sealed class SqlCeResultWriter : IResultWriter
     void IResultWriter.WriteTableBegin(DataTable schemaTable)
     {
         var createTable = new StringBuilder();
-        createTable.AppendFormat("create table [{0}]\r\n(\r\n", _tableName);
+        createTable.AppendFormat("create table [{0}]\r\n(\r\n", tableName);
         var insertInto = new StringBuilder();
-        insertInto.AppendFormat("insert into [{0}](", _tableName);
+        insertInto.AppendFormat("insert into [{0}](", tableName);
         var values = new StringBuilder();
         values.Append("values(");
         var stringTable = new StringTable(3);
@@ -216,14 +208,14 @@ internal sealed class SqlCeResultWriter : IResultWriter
         createTable.AppendLine(stringTable.ToString(4));
         createTable.Append(')');
         var commandText = createTable.ToString();
-        _messageWriter.WriteLine(commandText);
+        messageWriter.WriteLine(commandText);
         var executor = _connection.CreateCommandExecutor();
         executor.ExecuteNonQuery(new CreateCommandRequest(commandText));
         insertInto.Append(") ");
         values.Append(')');
         insertInto.Append(values);
         var insertCommandText = insertInto.ToString();
-        _messageWriter.WriteLine(insertCommandText);
+        messageWriter.WriteLine(insertCommandText);
         _insertCommand.CommandText = insertInto.ToString();
     }
 

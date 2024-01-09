@@ -4,25 +4,17 @@ using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.FieldReader;
 
-internal sealed class TimeStampDataFieldReader : IDataFieldReader
+internal sealed class TimeStampDataFieldReader(
+    IDataRecord dataRecord,
+    int columnOrdinal) : IDataFieldReader
 {
-    private readonly int _columnOrdinal;
-
-    private readonly SqlDataReader _sqlDataReader;
-
-    public TimeStampDataFieldReader(
-        IDataRecord dataRecord,
-        int columnOrdinal)
-    {
-        _sqlDataReader = (SqlDataReader) dataRecord;
-        _columnOrdinal = columnOrdinal;
-    }
+    private readonly SqlDataReader _sqlDataReader = (SqlDataReader) dataRecord;
 
     public object Value
     {
         get
         {
-            var o = _sqlDataReader.GetValue(_columnOrdinal);
+            var o = _sqlDataReader.GetValue(columnOrdinal);
             return o;
         }
     }

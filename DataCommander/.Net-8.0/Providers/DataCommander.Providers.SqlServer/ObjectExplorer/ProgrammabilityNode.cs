@@ -5,25 +5,21 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class ProgrammabilityNode : ITreeNode
+internal sealed class ProgrammabilityNode(DatabaseNode database) : ITreeNode
 {
-    private readonly DatabaseNode _database;
-
-    public ProgrammabilityNode(DatabaseNode database) => _database = database;
-
     string ITreeNode.Name => "Programmability";
     bool ITreeNode.IsLeaf => false;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var childNodes = new List<ITreeNode>();
-        childNodes.Add(new StoredProcedureCollectionNode(_database, false));
-        childNodes.Add(new FunctionCollectionNode(_database));
+        childNodes.Add(new StoredProcedureCollectionNode(database, false));
+        childNodes.Add(new FunctionCollectionNode(database));
 
-        if (_database.Name == "master")
-            childNodes.Add(new ExtendedStoreProcedureCollectionNode(_database));
+        if (database.Name == "master")
+            childNodes.Add(new ExtendedStoreProcedureCollectionNode(database));
 
-        childNodes.Add(new UserDefinedTableTypeCollectionNode(_database));
+        childNodes.Add(new UserDefinedTableTypeCollectionNode(database));
 
         return Task.FromResult<IEnumerable<ITreeNode>>(childNodes);
     }

@@ -3,32 +3,23 @@ using System.Data;
 
 namespace DataCommander.Api.FieldReaders;
 
-public sealed class DateTimeOffsetDataFieldReader : IDataFieldReader
+public sealed class DateTimeOffsetDataFieldReader(
+    IDataRecord dataRecord,
+    int columnOrdinal) : IDataFieldReader
 {
-    private readonly IDataRecord _dataRecord;
-    private readonly int _columnOrdinal;
-
-    public DateTimeOffsetDataFieldReader(
-        IDataRecord dataRecord,
-        int columnOrdinal)
-    {
-        _dataRecord = dataRecord;
-        _columnOrdinal = columnOrdinal;
-    }
-
     object IDataFieldReader.Value
     {
         get
         {
             object value;
 
-            if (_dataRecord.IsDBNull(_columnOrdinal))
+            if (dataRecord.IsDBNull(columnOrdinal))
             {
                 value = DBNull.Value;
             }
             else
             {
-                value = _dataRecord[_columnOrdinal];
+                value = dataRecord[columnOrdinal];
                 var dateTimeOffset = (DateTimeOffset)value;
                 value = new DateTimeOffsetField(dateTimeOffset);
             }

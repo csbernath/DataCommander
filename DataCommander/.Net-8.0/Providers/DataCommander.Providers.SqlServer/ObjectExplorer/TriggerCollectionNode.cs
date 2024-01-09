@@ -9,17 +9,8 @@ using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class TriggerCollectionNode : ITreeNode
+internal sealed class TriggerCollectionNode(DatabaseNode databaseNode, int id) : ITreeNode
 {
-    private readonly DatabaseNode _databaseNode;
-    private readonly int _id;
-
-    public TriggerCollectionNode(DatabaseNode databaseNode, int id)
-    {
-        _databaseNode = databaseNode;
-        _id = id;
-    }
-
     public string Name => "Triggers";
     public bool IsLeaf => false;
 
@@ -27,7 +18,7 @@ internal sealed class TriggerCollectionNode : ITreeNode
     {
         var commandText = CreateCommandText();
         return await SqlClientFactory.Instance.ExecuteReaderAsync(
-            _databaseNode.Databases.Server.ConnectionString,
+            databaseNode.Databases.Server.ConnectionString,
             new ExecuteReaderRequest(commandText),
             128,
             ReadRecord,
@@ -37,13 +28,13 @@ internal sealed class TriggerCollectionNode : ITreeNode
     private string CreateCommandText()
     {
         var cb = new SqlCommandBuilder();
-        var databaseName = cb.QuoteIdentifier(_databaseNode.Name);
+        var databaseName = cb.QuoteIdentifier(databaseNode.Name);
 
         var commandText = $@"select
     name,
     object_id
 from {databaseName}.sys.triggers
-where object_id = {_id.ToSqlConstant()}
+where object_id = {id.ToSqlConstant()}
 order by name";
         return commandText;
     }
@@ -52,7 +43,7 @@ order by name";
     {
         var name = dataRecord.GetString(0);
         var id = dataRecord.GetInt32(1);
-        return new TriggerNode(_databaseNode, id, name);
+        return new TriggerNode(databaseNode, id, name);
     }
 
     public bool Sortable => false;

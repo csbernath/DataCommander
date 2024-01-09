@@ -4,19 +4,11 @@ using System.Text;
 
 namespace Foundation.Data;
 
-public class DbCommandExecutionException : Exception
+public class DbCommandExecutionException(string message, Exception innerException, IDbCommand command) : Exception(message, innerException)
 {
-    private readonly string _database;
-    private readonly string _commandText;
-    private readonly int _commandTimeout;
-
-    public DbCommandExecutionException(string message, Exception innerException, IDbCommand command)
-        : base(message, innerException)
-    {
-        _commandText = command.ToLogString();
-        _commandTimeout = command.CommandTimeout;
-        _database = command.Connection.Database;
-    }
+    private readonly string _database = command.Connection.Database;
+    private readonly string _commandText = command.ToLogString();
+    private readonly int _commandTimeout = command.CommandTimeout;
 
     public override string ToString()
     {

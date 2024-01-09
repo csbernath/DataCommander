@@ -2,33 +2,22 @@
 
 namespace DataCommander.Api;
 
-public abstract class DataParameterBase
+public abstract class DataParameterBase(IDataParameter parameter, int size, byte precision, byte scale)
 {
-    private readonly IDataParameter _parameter;
-    private readonly int _size;
-
-    protected DataParameterBase(IDataParameter parameter, int size, byte precision, byte scale)
-    {
-        _parameter = parameter;
-        _size = size;
-        Precision = precision;
-        Scale = scale;
-    }
-
     public DbType DbType
     {
-        get => _parameter.DbType;
-        set => _parameter.DbType = value;
+        get => parameter.DbType;
+        set => parameter.DbType = value;
     }
 
     protected abstract void SetSize(int size);
 
     public int Size
     {
-        get => _size;
+        get => size;
         set => SetSize(value);
     }
 
-    public byte Precision { get; }
-    public byte Scale { get; }
+    public byte Precision { get; } = precision;
+    public byte Scale { get; } = scale;
 }

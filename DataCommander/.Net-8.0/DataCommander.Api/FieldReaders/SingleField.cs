@@ -1,13 +1,8 @@
 ﻿namespace DataCommander.Api.FieldReaders;
 
-public sealed class SingleField
+public sealed class SingleField(float value)
 {
-    public SingleField(float value)
-    {
-        Value = value;
-    }
-
-    public float Value { get; }
+    public float Value { get; } = value;
 
     public override string ToString()
     {

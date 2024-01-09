@@ -2,29 +2,24 @@
 
 namespace Foundation.Log;
 
-public sealed class LogEntry
+public sealed class LogEntry(
+    long id,
+    string logName,
+    DateTime creationTime,
+    int managedThreadId,
+    string threadName,
+    string userName,
+    string hostName,
+    string message,
+    LogLevel logLevel)
 {
-    public readonly long Id;
-    public readonly string LogName;
-    public readonly DateTime CreationTime;
-    public readonly int ManagedThreadId;
-    public readonly string ThreadName;
-    public readonly string HostName;
-    public readonly string UserName;
-    public readonly string Message;
-    public readonly LogLevel LogLevel;
-
-    public LogEntry(long id, string logName, DateTime creationTime, int managedThreadId, string threadName, string userName, string hostName,
-        string message, LogLevel logLevel)
-    {
-        Id = id;
-        LogName = logName;
-        CreationTime = creationTime;
-        ManagedThreadId = managedThreadId;
-        ThreadName = threadName;
-        UserName = userName;
-        HostName = hostName;
-        Message = message;
-        LogLevel = logLevel;
-    }
+    public readonly long Id = id;
+    public readonly string LogName = logName;
+    public readonly DateTime CreationTime = creationTime;
+    public readonly int ManagedThreadId = managedThreadId;
+    public readonly string ThreadName = threadName;
+    public readonly string HostName = hostName;
+    public readonly string UserName = userName;
+    public readonly string Message = message;
+    public readonly LogLevel LogLevel = logLevel;
 }

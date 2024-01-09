@@ -6,15 +6,8 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.OleDb;
 
-internal sealed class ProcedureCollectionNode : ITreeNode
+internal sealed class ProcedureCollectionNode(SchemaNode schema) : ITreeNode
 {
-    private readonly SchemaNode schema;
-
-    public ProcedureCollectionNode(SchemaNode schema)
-    {
-        this.schema = schema;
-    }
-
     public string Name => "Procedures";
 
     public bool IsLeaf => false;

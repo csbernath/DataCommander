@@ -7,40 +7,24 @@ using Foundation.Log;
 
 namespace Foundation.DefaultLog;
 
-internal sealed class LogFile : ILogFile
+internal sealed class LogFile(
+    string path,
+    Encoding encoding,
+    int bufferSize,
+    bool autoFlush,
+    ILogFormatter formatter,
+    FileAttributes fileAttributes,
+    DateTimeKind dateTimeKind)
+    : ILogFile
 {
     #region Private Fields
 
     private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(LogFile));
-    private string _path;
     private DateTime _date;
     private FileStream _fileStream;
-    private readonly Encoding _encoding;
-    private readonly int _bufferSize;
-    private readonly bool _autoFlush;
-    private readonly ILogFormatter _formatter;
-    private readonly FileAttributes _fileAttributes;
-    private readonly DateTimeKind _dateTimeKind;
+    private readonly DateTimeKind _dateTimeKind = dateTimeKind;
 
     #endregion
-
-    public LogFile(
-        string path,
-        Encoding encoding,
-        int bufferSize,
-        bool autoFlush,
-        ILogFormatter formatter,
-        FileAttributes fileAttributes,
-        DateTimeKind dateTimeKind)
-    {
-        _path = path;
-        _encoding = encoding;
-        _bufferSize = bufferSize;
-        _autoFlush = autoFlush;
-        _formatter = formatter;
-        _fileAttributes = fileAttributes;
-        _dateTimeKind = dateTimeKind;
-    }
 
     private FileStream Open(string fileName, DateTime dateTime)
     {
@@ -50,30 +34,30 @@ internal sealed class LogFile : ILogFile
         FileName = FileName.Replace("{time}", dateTime.ToString("HH.mm.ss.fff"));
         FileName = FileName.Replace("{guid}", Guid.NewGuid().ToString());
 
-        return new FileStream(FileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read, _bufferSize);
+        return new FileStream(FileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read, bufferSize);
     }
 
     private void Open(DateTime dateTime)
     {
         try
         {
-            _fileStream = Open(_path, dateTime);
+            _fileStream = Open(path, dateTime);
         }
         catch (Exception e)
         {
             Log.Write(LogLevel.Error, e.ToString());
 
             var directory = Path.GetTempPath();
-            var fileName = Path.GetFileName(_path);
-            _path = Path.Combine(directory, fileName);
-            _fileStream = Open(_path, dateTime);
+            var fileName = Path.GetFileName(path);
+            path = Path.Combine(directory, fileName);
+            _fileStream = Open(path, dateTime);
 
             Log.Write(LogLevel.Error, $"LogFile path: {FileName}");
         }
 
         if (_fileStream.Length == 0)
         {
-            var preamble = _encoding.GetPreamble();
+            var preamble = encoding.GetPreamble();
             _fileStream.Write(preamble, 0, preamble.Length);
         }
     }
@@ -88,10 +72,10 @@ internal sealed class LogFile : ILogFile
             Open(dateTime);
         }
 
-        var array = _encoding.GetBytes(text);
+        var array = encoding.GetBytes(text);
         _fileStream.Write(array, 0, array.Length);
 
-        if (_autoFlush)
+        if (autoFlush)
             _fileStream.Flush();
     }
 
@@ -101,7 +85,7 @@ internal sealed class LogFile : ILogFile
 
     void ILogFile.Open()
     {
-        var begin = _formatter.Begin();
+        var begin = formatter.Begin();
 
         if (begin != null)
             Write(LocalTime.Default.Now, begin);
@@ -109,7 +93,7 @@ internal sealed class LogFile : ILogFile
 
     void ILogFile.Write(LogEntry entry)
     {
-        var text = _formatter.Format(entry);
+        var text = formatter.Format(entry);
         Write(entry.CreationTime, text);
     }
 
@@ -119,7 +103,7 @@ internal sealed class LogFile : ILogFile
     {
         if (_fileStream != null)
         {
-            var end = _formatter.End();
+            var end = formatter.End();
 
             if (end != null)
                 Write(LocalTime.Default.Now, end);
@@ -128,10 +112,10 @@ internal sealed class LogFile : ILogFile
             var name = _fileStream.Name;
             _fileStream = null;
 
-            if (_fileAttributes != default(FileAttributes))
+            if (fileAttributes != default(FileAttributes))
             {
                 var attributes = File.GetAttributes(name);
-                attributes |= _fileAttributes; // FileAttributes.ReadOnly | FileAttributes.Hidden;
+                attributes |= fileAttributes; // FileAttributes.ReadOnly | FileAttributes.Hidden;
                 File.SetAttributes(name, attributes);
             }
         }

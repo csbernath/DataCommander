@@ -6,17 +6,11 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class SchemaNode : ITreeNode
+internal sealed class SchemaNode(DatabaseNode database, string name) : ITreeNode
 {
-    private readonly DatabaseNode _database;
+    private readonly DatabaseNode _database = database;
 
-    public SchemaNode(DatabaseNode database, string name)
-    {
-        _database = database;
-        Name = name;
-    }
-
-    public string Name { get; }
+    public string Name { get; } = name;
     public bool IsLeaf => true;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>

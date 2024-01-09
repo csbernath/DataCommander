@@ -1,13 +1,7 @@
 ﻿namespace Foundation.Data.SqlClient.DbQueryBuilding;
 
-public sealed class DataTransferObjectField
+public sealed class DataTransferObjectField(string name, string type)
 {
-    public readonly string Name;
-    public readonly string Type;
-
-    public DataTransferObjectField(string name, string type)
-    {
-        Name = name;
-        Type = type;
-    }
+    public readonly string Name = name;
+    public readonly string Type = type;
 }

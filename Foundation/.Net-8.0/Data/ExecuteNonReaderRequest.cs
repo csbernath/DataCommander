@@ -3,16 +3,10 @@ using System.Threading;
 
 namespace Foundation.Data;
 
-public sealed class ExecuteNonReaderRequest
+public sealed class ExecuteNonReaderRequest(CreateCommandRequest createCommandRequest, CancellationToken cancellationToken)
 {
-    public readonly CreateCommandRequest CreateCommandRequest;
-    public readonly CancellationToken CancellationToken;
-
-    public ExecuteNonReaderRequest(CreateCommandRequest createCommandRequest, CancellationToken cancellationToken)
-    {
-        CreateCommandRequest = createCommandRequest;
-        CancellationToken = cancellationToken;
-    }
+    public readonly CreateCommandRequest CreateCommandRequest = createCommandRequest;
+    public readonly CancellationToken CancellationToken = cancellationToken;
 
     public ExecuteNonReaderRequest(string commandText)
         : this(new CreateCommandRequest(commandText), CancellationToken.None)

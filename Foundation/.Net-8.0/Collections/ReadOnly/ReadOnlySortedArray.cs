@@ -3,20 +3,9 @@ using System.Collections.Generic;
 
 namespace Foundation.Collections.ReadOnly;
 
-public class ReadOnlySortedArray<TKey, TValue>
+public class ReadOnlySortedArray<TKey, TValue>(TValue[] values, Func<TValue, TKey> keySelector, Comparison<TKey> comparison)
 {
-    private readonly Comparison<TKey> _comparison;
-    private readonly Func<TValue, TKey> _keySelector;
-    private readonly TValue[] _values;
-
-    public ReadOnlySortedArray(TValue[] values, Func<TValue, TKey> keySelector, Comparison<TKey> comparison)
-    {
-        _values = values;
-        _keySelector = keySelector;
-        _comparison = comparison;
-    }
-
-    public int Length => _values.Length;
+    public int Length => values.Length;
 
     public TValue this[TKey key]
     {
@@ -27,11 +16,11 @@ public class ReadOnlySortedArray<TKey, TValue>
             if (index < 0)
                 throw new KeyNotFoundException();
 
-            return _values[index];
+            return values[index];
         }
     }
 
-    public IEnumerable<TValue> Values => _values;
+    public IEnumerable<TValue> Values => values;
     public bool ContainsKey(TKey key) => IndexOfKey(key) >= 0;
 
     public bool TryGetValue(TKey key, out TValue value)
@@ -41,7 +30,7 @@ public class ReadOnlySortedArray<TKey, TValue>
 
         if (index >= 0)
         {
-            value = _values[index];
+            value = values[index];
             succeeded = true;
         }
         else
@@ -57,12 +46,12 @@ public class ReadOnlySortedArray<TKey, TValue>
     {
         int indexOfKey;
 
-        if (_values.Length > 0)
-            indexOfKey = BinarySearch.IndexOf(0, _values.Length - 1, index =>
+        if (values.Length > 0)
+            indexOfKey = BinarySearch.IndexOf(0, values.Length - 1, index =>
             {
-                var otherValue = _values[index];
-                var otherKey = _keySelector(otherValue);
-                return _comparison(key, otherKey);
+                var otherValue = values[index];
+                var otherKey = keySelector(otherValue);
+                return comparison(key, otherKey);
             });
         else
             indexOfKey = -1;

@@ -9,27 +9,18 @@ using Foundation.Collections.ReadOnly;
 
 namespace DataCommander.Providers.OleDb;
 
-sealed class TableNode : ITreeNode
+sealed class TableNode(SchemaNode schema, string name) : ITreeNode
 {
-    private readonly SchemaNode schema;
-    private readonly string name;
-
-    public TableNode(SchemaNode schema, string name)
-    {
-        this.schema = schema;
-        this.name = name;
-    }
-
     string ITreeNode.Name
     {
         get
         {
-            var name = this.name;
+            var name1 = name;
 
-            if (name == null)
-                name = "[No tables found]";
+            if (name1 == null)
+                name1 = "[No tables found]";
 
-            return name;
+            return name1;
         }
     }
 

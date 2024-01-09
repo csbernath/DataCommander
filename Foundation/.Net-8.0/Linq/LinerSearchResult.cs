@@ -1,15 +1,8 @@
 ﻿namespace Foundation.Linq;
 
-public sealed class LinerSearchResult<TSource, TResult>
+public sealed class LinerSearchResult<TSource, TResult>(int index, TSource source, TResult result)
 {
-    public readonly int Index;
-    public readonly TSource Source;
-    public readonly TResult Result;
-
-    public LinerSearchResult(int index, TSource source, TResult result)
-    {
-        Index = index;
-        Source = source;
-        Result = result;
-    }
+    public readonly int Index = index;
+    public readonly TSource Source = source;
+    public readonly TResult Result = result;
 }

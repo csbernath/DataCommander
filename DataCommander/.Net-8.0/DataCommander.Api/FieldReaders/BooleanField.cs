@@ -1,19 +1,12 @@
 ﻿namespace DataCommander.Api.FieldReaders;
 
-public sealed class BooleanField
+public sealed class BooleanField(bool value)
 {
-    private readonly bool _value;
-
-    public BooleanField(bool value)
-    {
-        _value = value;
-    }
-
     public override string ToString()
     {
         int int32Value;
 
-        if (_value)
+        if (value)
         {
             int32Value = 1;
         }

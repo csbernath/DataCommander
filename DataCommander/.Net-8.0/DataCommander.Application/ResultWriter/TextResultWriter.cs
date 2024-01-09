@@ -12,21 +12,12 @@ using Foundation.Text;
 
 namespace DataCommander.Application.ResultWriter;
 
-internal sealed class TextResultWriter : IResultWriter
+internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextWriter textWriter, QueryForm queryForm) : IResultWriter
 {
-    private readonly IResultWriter _logResultWriter;
-    private readonly TextWriter _textWriter;
-    private readonly QueryForm _queryForm;
+    private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage);
     private int[] _columnSize;
     private int _rowIndex;
     private IProvider _provider;
-
-    public TextResultWriter(Action<InfoMessage> addInfoMessage, TextWriter textWriter, QueryForm queryForm)
-    {
-        _logResultWriter = new LogResultWriter(addInfoMessage);
-        _textWriter = textWriter;
-        _queryForm = queryForm;
-    }
 
     void IResultWriter.Begin(IProvider provider)
     {
@@ -147,7 +138,7 @@ internal sealed class TextResultWriter : IResultWriter
                 stringBuilder.Append(' ');
             }
 
-            _textWriter.WriteLine(stringBuilder.ToString());
+            textWriter.WriteLine(stringBuilder.ToString());
 
             if (fieldCount > 0)
             {
@@ -162,7 +153,7 @@ internal sealed class TextResultWriter : IResultWriter
 
                 stringBuilder.Append('-', _columnSize[last]);
 
-                _textWriter.WriteLine(stringBuilder.ToString());
+                textWriter.WriteLine(stringBuilder.ToString());
             }
         }
     }
@@ -261,7 +252,7 @@ internal sealed class TextResultWriter : IResultWriter
 
             _rowIndex += rowCount;
 
-            _textWriter.Write(sb.ToString());
+            textWriter.Write(sb.ToString());
         }
         finally
         {
@@ -399,6 +390,6 @@ internal sealed class TextResultWriter : IResultWriter
         }
     }
 
-    void IResultWriter.WriteParameters(IDataParameterCollection parameters) => WriteParameters(parameters, _textWriter, _queryForm);
+    void IResultWriter.WriteParameters(IDataParameterCollection parameters) => WriteParameters(parameters, textWriter, queryForm);
     void IResultWriter.End() => _logResultWriter.End();
 }

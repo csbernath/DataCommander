@@ -2,14 +2,8 @@
 
 namespace Foundation.Data.LoggedDbConnection;
 
-public sealed class AfterExecuteCommandEventArgs : LoggedEventArgs
+public sealed class AfterExecuteCommandEventArgs(LoggedDbCommandInfo command, Exception exception) : LoggedEventArgs
 {
-    public AfterExecuteCommandEventArgs(LoggedDbCommandInfo command, Exception exception)
-    {
-        Command = command;
-        Exception = exception;
-    }
-
-    public LoggedDbCommandInfo Command { get; }
-    public Exception Exception { get; }
+    public LoggedDbCommandInfo Command { get; } = command;
+    public Exception Exception { get; } = exception;
 }

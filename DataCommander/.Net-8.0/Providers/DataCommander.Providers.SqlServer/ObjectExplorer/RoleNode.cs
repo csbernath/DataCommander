@@ -5,17 +5,9 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class RoleNode : ITreeNode
+internal sealed class RoleNode(DatabaseNode database, string name) : ITreeNode
 {
-    private readonly DatabaseNode _database;
-
-    public RoleNode(DatabaseNode database, string name)
-    {
-        _database = database;
-        Name = name;
-    }
-
-    public string Name { get; }
+    public string Name { get; } = name;
     public bool IsLeaf => true;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => null;
@@ -32,7 +24,7 @@ select u.name from {0}..sysmembers m
 join {0}..sysusers u
 on m.memberuid = u.uid
 where m.groupuid = @uid
-order by u.name", _database.Name, Name);
+order by u.name", database.Name, Name);
 
             return query;
         }

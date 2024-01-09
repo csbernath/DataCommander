@@ -2,14 +2,8 @@
 
 namespace DataCommander.Api;
 
-public class GetTableSchemaResult
+public class GetTableSchemaResult(ReadOnlyCollection<Column> columns, ReadOnlyCollection<UniqueIndexColumn> uniqueIndexColumns)
 {
-    public readonly ReadOnlyCollection<Column> Columns;
-    public readonly ReadOnlyCollection<UniqueIndexColumn> UniqueIndexColumns;
-
-    public GetTableSchemaResult(ReadOnlyCollection<Column> columns, ReadOnlyCollection<UniqueIndexColumn> uniqueIndexColumns)
-    {
-        Columns = columns;
-        UniqueIndexColumns = uniqueIndexColumns;
-    }
+    public readonly ReadOnlyCollection<Column> Columns = columns;
+    public readonly ReadOnlyCollection<UniqueIndexColumn> UniqueIndexColumns = uniqueIndexColumns;
 }

@@ -2,12 +2,7 @@ using System.Collections.ObjectModel;
 
 namespace DataCommander.Api;
 
-public class ContextMenu
+public class ContextMenu(ReadOnlyCollection<MenuItem> menuItems)
 {
-    public readonly ReadOnlyCollection<MenuItem> MenuItems;
-
-    public ContextMenu(ReadOnlyCollection<MenuItem> menuItems)
-    {
-        MenuItems = menuItems;
-    }
+    public readonly ReadOnlyCollection<MenuItem> MenuItems = menuItems;
 }

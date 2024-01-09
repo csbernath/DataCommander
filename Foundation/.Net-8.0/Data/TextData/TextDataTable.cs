@@ -3,14 +3,9 @@
 namespace Foundation.Data.TextData;
 
 [DebuggerDisplay("Name = {" + nameof(Name) + "}")]
-public sealed class TextDataTable
+public sealed class TextDataTable(string name)
 {
-    public TextDataTable(string name)
-    {
-        Name = name;
-    }
-
-    public string Name { get; }
+    public string Name { get; } = name;
 
     public TextDataColumnCollection Columns { get; } = [];
 }

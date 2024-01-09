@@ -6,12 +6,6 @@ namespace Foundation.Data.LoggedDbConnection;
 
 public class LoggedEventArgs : EventArgs
 {
-    public LoggedEventArgs()
-    {
-        Timestamp = Stopwatch.GetTimestamp();
-        DateTime = LocalTime.Default.Now;
-    }
-
-    public long Timestamp { get; }
-    public DateTime DateTime { get; }
+    public long Timestamp { get; } = Stopwatch.GetTimestamp();
+    public DateTime DateTime { get; } = LocalTime.Default.Now;
 }

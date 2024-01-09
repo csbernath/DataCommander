@@ -10,17 +10,9 @@ using Foundation.Log;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class ColumnCollectionNode : ITreeNode
+internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : ITreeNode
 {
-    private readonly DatabaseNode _databaseNode;
-    private readonly int _id;
     private ILog _log = LogFactory.Instance.GetCurrentTypeLog();
-
-    public ColumnCollectionNode(DatabaseNode databaseNode, int id)
-    {
-        _databaseNode = databaseNode;
-        _id = id;
-    }
 
     #region Private Methods
 
@@ -51,7 +43,7 @@ internal sealed class ColumnCollectionNode : ITreeNode
         var commandText = CreateCommandText();
         SortedDictionary<int, ColumnNode> columnNodes = null; 
         await SqlClientFactory.Instance.ExecuteReaderAsync(
-            _databaseNode.Databases.Server.ConnectionString,
+            databaseNode.Databases.Server.ConnectionString,
             new ExecuteReaderRequest(commandText), async dataReader =>
             {
                 columnNodes = (await dataReader.ReadResultAsync(128, ToColumnNode, cancellationToken))
@@ -78,7 +70,7 @@ internal sealed class ColumnCollectionNode : ITreeNode
     private string CreateCommandText()
     {
         var cb = new SqlCommandBuilder();
-        var databaseName = cb.QuoteIdentifier(_databaseNode.Name);
+        var databaseName = cb.QuoteIdentifier(databaseNode.Name);
         var commandText = $@"select
      c.column_id
     ,c.name
@@ -91,24 +83,24 @@ internal sealed class ColumnCollectionNode : ITreeNode
 from    {databaseName}.sys.all_columns c
 join    {databaseName}.sys.types t
 on      c.user_type_id = t.user_type_id
-where   c.object_id = {_id}
+where   c.object_id = {id}
 order by c.column_id
 
 declare @index_id int
 
 select  @index_id = i.index_id
 from    {databaseName}.sys.indexes i
-where   i.object_id = {_id}
+where   i.object_id = {id}
         and i.is_primary_key = 1
 
 select  ic.column_id
 from    {databaseName}.sys.index_columns ic
-where   ic.object_id = {_id}
+where   ic.object_id = {id}
         and ic.index_id = @index_id
 
 select  fkc.parent_column_id
 from    {databaseName}.sys.foreign_key_columns fkc
-where   fkc.parent_object_id = {_id}
+where   fkc.parent_object_id = {id}
 order by fkc.parent_column_id";
         return commandText;
     }

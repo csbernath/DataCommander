@@ -7,16 +7,9 @@ using Foundation.Data;
 
 namespace DataCommander.Application.ResultWriter;
 
-internal sealed class MyDataObject : IDataObject
+internal sealed class MyDataObject(DataView dataView, int[] columnIndexes) : IDataObject
 {
-    private readonly DataView _dataView;
-    private readonly int[] _columnIndexes;
-
-    public MyDataObject(DataView dataView, int[] columnIndexes)
-    {
-        _dataView = dataView;
-        _columnIndexes = columnIndexes;
-    }
+    private readonly int[] _columnIndexes = columnIndexes;
 
     #region IDataObject Members
 
@@ -37,7 +30,7 @@ internal sealed class MyDataObject : IDataObject
         if (format == DataFormats.CommaSeparatedValue)
         {
             var stringWriter = new StringWriter();
-            Writer.Write(_dataView, ',', "\r\n", stringWriter);
+            Writer.Write(dataView, ',', "\r\n", stringWriter);
             var c = (char)0;
             stringWriter.Write(c);
             var s = stringWriter.ToString();
@@ -56,7 +49,7 @@ internal sealed class MyDataObject : IDataObject
         //}
         else if (format == DataFormats.Text || format == DataFormats.UnicodeText)
         {
-            data = _dataView.ToStringTableString();
+            data = dataView.ToStringTableString();
         }
         else if (format == "TabSeparatedValues")
         {

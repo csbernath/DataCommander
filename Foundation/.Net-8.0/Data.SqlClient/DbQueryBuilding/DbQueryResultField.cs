@@ -2,16 +2,9 @@
 
 namespace Foundation.Data.SqlClient.DbQueryBuilding;
 
-public sealed class DbQueryResultField
+public sealed class DbQueryResultField(string name, Type dataType, bool isNullable)
 {
-    public readonly string Name;
-    public readonly Type DataType;
-    public readonly bool IsNullable;
-
-    public DbQueryResultField(string name, Type dataType, bool isNullable)
-    {
-        Name = name;
-        DataType = dataType;
-        IsNullable = isNullable;
-    }
+    public readonly string Name = name;
+    public readonly Type DataType = dataType;
+    public readonly bool IsNullable = isNullable;
 }

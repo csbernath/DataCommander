@@ -160,16 +160,10 @@ internal sealed class LogFactory : ILogFactory
         return logWriter;
     }
 
-    private sealed class LogWriter
+    private sealed class LogWriter(ILogWriter logWriter, LogLevel logLevel)
     {
-        public readonly ILogWriter logWriter;
-        public readonly LogLevel LogLevel;
-
-        public LogWriter(ILogWriter logWriter, LogLevel logLevel)
-        {
-            this.logWriter = logWriter;
-            LogLevel = logLevel;
-        }
+        public readonly ILogWriter logWriter = logWriter;
+        public readonly LogLevel LogLevel = logLevel;
     }
 
     private sealed class MultipleLog : IDisposable

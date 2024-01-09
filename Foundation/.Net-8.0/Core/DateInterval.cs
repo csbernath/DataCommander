@@ -1,13 +1,7 @@
 ﻿namespace Foundation.Core;
 
-public struct DateInterval
+public struct DateInterval(Date start, Date end)
 {
-    public readonly Date Start;
-    public readonly Date End;
-
-    public DateInterval(Date start, Date end)
-    {
-        Start = start;
-        End = end;
-    }
+    public readonly Date Start = start;
+    public readonly Date End = end;
 }

@@ -3,17 +3,9 @@ using System.Xml;
 
 namespace Foundation.Xml.XmlSpreadsheet;
 
-public sealed class XmlSpreadsheetCell
+public sealed class XmlSpreadsheetCell(XmlSpreadsheetDataType dataType, string value)
 {
     private readonly XmlSpreadsheetAttributeCollection _attributes = [];
-    private readonly XmlSpreadsheetDataType _dataType;
-    private readonly string _value;
-
-    public XmlSpreadsheetCell(XmlSpreadsheetDataType dataType, string value)
-    {
-        _dataType = dataType;
-        _value = value;
-    }
 
     public string StyleId
     {
@@ -46,8 +38,8 @@ public sealed class XmlSpreadsheetCell
 
             using (xmlWriter.WriteElement("Data"))
             {
-                xmlWriter.WriteAttributeString("ss:Type", _dataType.ToString());
-                xmlWriter.WriteString(_value);
+                xmlWriter.WriteAttributeString("ss:Type", dataType.ToString());
+                xmlWriter.WriteString(value);
             }
         }
     }

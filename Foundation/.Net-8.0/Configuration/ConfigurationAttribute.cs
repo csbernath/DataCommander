@@ -10,18 +10,11 @@ using Foundation.Collections;
 namespace Foundation.Configuration;
 
 [DebuggerDisplay("Name = {Name}, Value = {Value}, Description = {Description}")]
-public sealed class ConfigurationAttribute
+public sealed class ConfigurationAttribute(string name, object value, string description)
 {
-    public ConfigurationAttribute(string name, object value, string description)
-    {
-        Name = name;
-        Value = value;
-        Description = description;
-    }
-
-    public string Name { get; }
-    public object Value { get; set; }
-    public string Description { get; }
+    public string Name { get; } = name;
+    public object Value { get; set; } = value;
+    public string Description { get; } = description;
 
     public T GetValue<T>()
     {

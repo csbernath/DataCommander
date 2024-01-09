@@ -3,12 +3,7 @@
 namespace Foundation.Deployment.Commands;
 
 [DataContract]
-public class DeleteUpdater : DeploymentCommand
+public class DeleteUpdater(string directory) : DeploymentCommand
 {
-    [DataMember] public string Directory;
-
-    public DeleteUpdater(string directory)
-    {
-        Directory = directory;
-    }
+    [DataMember] public string Directory = directory;
 }

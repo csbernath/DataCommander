@@ -7,15 +7,11 @@ using Microsoft.Data.SqlClient;
 
 namespace Foundation.Data.SqlClient;
 
-public sealed class SqlCommandExecutor : IDbCommandAsyncExecutor
+public sealed class SqlCommandExecutor(string connectionString) : IDbCommandAsyncExecutor
 {
-    private readonly string _connectionString;
-
-    public SqlCommandExecutor(string connectionString) => _connectionString = connectionString;
-
     public void Execute(Action<IDbConnection> execute)
     {
-        using (var connection = new SqlConnection(_connectionString))
+        using (var connection = new SqlConnection(connectionString))
         {
             connection.Open();
             execute(connection);
@@ -24,7 +20,7 @@ public sealed class SqlCommandExecutor : IDbCommandAsyncExecutor
 
     public async Task ExecuteAsync(Func<DbConnection, Task> execute, CancellationToken cancellationToken)
     {
-        using (var connection = new SqlConnection(_connectionString))
+        using (var connection = new SqlConnection(connectionString))
         {
             await connection.OpenAsync(cancellationToken);
             await execute(connection);

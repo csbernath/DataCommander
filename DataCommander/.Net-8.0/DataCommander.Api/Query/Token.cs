@@ -3,24 +3,14 @@
 namespace DataCommander.Api.Query;
 
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public sealed class Token
+public sealed class Token(int index, int startPosition, int endPosition, int lineIndex, TokenType type, string? value)
 {
-    public readonly int Index;
-    public readonly int StartPosition;
-    public readonly int EndPosition;
-    public readonly int LineIndex;
-    public readonly TokenType Type;
-    public readonly string? Value;
-
-    public Token(int index, int startPosition, int endPosition, int lineIndex, TokenType type, string? value)
-    {
-        Index = index;
-        StartPosition = startPosition;
-        EndPosition = endPosition;
-        LineIndex = lineIndex;
-        Type = type;
-        Value = value;
-    }
+    public readonly int Index = index;
+    public readonly int StartPosition = startPosition;
+    public readonly int EndPosition = endPosition;
+    public readonly int LineIndex = lineIndex;
+    public readonly TokenType Type = type;
+    public readonly string? Value = value;
 
     private string DebuggerDisplay => $"{Value} ({Type})";
 }

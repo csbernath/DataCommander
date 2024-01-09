@@ -4,19 +4,8 @@ using Foundation.Log;
 
 namespace Foundation.InternalLog;
 
-internal sealed class InternalLog : ILog
+internal sealed class InternalLog(ILogWriter logWriter, IDateTimeProvider dateTimeProvider, string name) : ILog
 {
-    private readonly ILogWriter _logWriter;
-    private readonly IDateTimeProvider _dateTimeProvider;
-    private readonly string _name;
-
-    public InternalLog(ILogWriter logWriter, IDateTimeProvider dateTimeProvider, string name)
-    {
-        _logWriter = logWriter;
-        _name = name;
-        _dateTimeProvider = dateTimeProvider;
-    }
-
     void IDisposable.Dispose()
     {
     }
@@ -28,8 +17,8 @@ internal sealed class InternalLog : ILog
 
     void ILog.Write(LogLevel logLevel, string message)
     {
-        var now = _dateTimeProvider.Now;
-        var logEntry = LogEntryFactory.Create(_name, now, message, logLevel);
-        _logWriter.Write(logEntry);
+        var now = dateTimeProvider.Now;
+        var logEntry = LogEntryFactory.Create(name, now, message, logLevel);
+        logWriter.Write(logEntry);
     }
 }

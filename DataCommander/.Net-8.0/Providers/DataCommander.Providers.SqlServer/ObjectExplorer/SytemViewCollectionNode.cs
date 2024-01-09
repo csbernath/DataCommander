@@ -8,15 +8,8 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class SystemViewCollectionNode : ITreeNode
+internal sealed class SystemViewCollectionNode(DatabaseNode databaseNode) : ITreeNode
 {
-    private readonly DatabaseNode _databaseNode;
-
-    public SystemViewCollectionNode(DatabaseNode databaseNode)
-    {
-        _databaseNode = databaseNode;
-    }
-
     public string Name => "System Views";
     public bool IsLeaf => false;
 
@@ -24,7 +17,7 @@ internal sealed class SystemViewCollectionNode : ITreeNode
     {
         var commandText = CreateCommandText();
         return await SqlClientFactory.Instance.ExecuteReaderAsync(
-            _databaseNode.Databases.Server.ConnectionString,
+            databaseNode.Databases.Server.ConnectionString,
             new ExecuteReaderRequest(commandText),
             128,
             ReadRecord,
@@ -34,7 +27,7 @@ internal sealed class SystemViewCollectionNode : ITreeNode
     private string CreateCommandText()
     {
         var cb = new SqlCommandBuilder();
-        var databaseName = cb.QuoteIdentifier(_databaseNode.Name);
+        var databaseName = cb.QuoteIdentifier(databaseNode.Name);
         var commandText = $@"select
     s.name,
     v.name,
@@ -43,7 +36,7 @@ from {databaseName}.sys.schemas s (nolock)
 join {databaseName}.sys.system_views v (nolock)
     on s.schema_id = v.schema_id
 order by 1,2";
-        commandText = string.Format(commandText, _databaseNode.Name);
+        commandText = string.Format(commandText, databaseNode.Name);
         return commandText;
     }
 
@@ -52,7 +45,7 @@ order by 1,2";
         var schema = dataRecord.GetString(0);
         var name = dataRecord.GetString(1);
         var id = dataRecord.GetInt32(2);
-        return new ViewNode(_databaseNode, id, schema, name);
+        return new ViewNode(databaseNode, id, schema, name);
     }
 
     public bool Sortable => false;

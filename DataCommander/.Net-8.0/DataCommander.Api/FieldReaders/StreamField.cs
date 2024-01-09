@@ -2,12 +2,7 @@
 
 namespace DataCommander.Api.FieldReaders;
 
-public sealed class StreamField
+public sealed class StreamField(Stream stream)
 {
-    public StreamField(Stream stream)
-    {
-        Stream = stream;
-    }
-
-    public Stream Stream { get; }
+    public Stream Stream { get; } = stream;
 }

@@ -1,8 +1,6 @@
 ﻿namespace DataCommander.Api;
 
-public class UniqueIndexColumn
+public class UniqueIndexColumn(int columnId)
 {
-    public readonly int ColumnId;
-
-    public UniqueIndexColumn(int columnId) => ColumnId = columnId;
+    public readonly int ColumnId = columnId;
 }

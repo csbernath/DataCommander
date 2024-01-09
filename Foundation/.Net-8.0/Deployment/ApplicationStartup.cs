@@ -12,24 +12,15 @@ using Foundation.Deployment.Events;
 
 namespace Foundation.Deployment;
 
-public sealed class ApplicationStartup
+public sealed class ApplicationStartup(
+    ISerializer serializer,
+    Uri remoteVersionUri,
+    string address,
+    Action<Event> eventHandler)
 {
-    private readonly ISerializer _serializer;
-    private readonly Uri _remoteVersionUri;
-    private readonly string _address;
-    private readonly Action<Event> _eventPublisher;
     private bool _updateStarted;
 
     public bool UpdateStarted => _updateStarted;
-
-    public ApplicationStartup(ISerializer serializer, Uri remoteVersionUri, string address,
-        Action<Event> eventHandler)
-    {
-        _eventPublisher = eventHandler;
-        _serializer = serializer;
-        _address = address;
-        _remoteVersionUri = remoteVersionUri;
-    }
 
     public Task Update()
     {
@@ -37,7 +28,7 @@ public sealed class ApplicationStartup
         var title = GetTitle(entryAssembly);
         var applicationName = title;
 
-        var repository = new DeploymentCommandRepository(_serializer);
+        var repository = new DeploymentCommandRepository(serializer);
 
         DeploymentCommand command;
         try
@@ -117,18 +108,18 @@ public sealed class ApplicationStartup
         {
             var entryAssembly = Assembly.GetEntryAssembly();
             var localVersion = entryAssembly.GetName().Version;
-            _eventPublisher(new CheckForUpdatesStarted());
-            var remoteVersion = await GetRemoteVersion(_remoteVersionUri);
+            eventHandler(new CheckForUpdatesStarted());
+            var remoteVersion = await GetRemoteVersion(remoteVersionUri);
             if (localVersion < remoteVersion)
             {
-                _eventPublisher(new DownloadingNewVersionStarted(remoteVersion));
-                var address = new Uri(string.Format(_address, (object)remoteVersion));
+                eventHandler(new DownloadingNewVersionStarted(remoteVersion));
+                var address1 = new Uri(string.Format(address, (object)remoteVersion));
                 var guid = Guid.NewGuid();
                 var updaterDirectory = Path.Combine(Path.GetTempPath(), guid.ToString());
                 var zipFileName = Path.Combine(updaterDirectory, "Updater.zip");
-                await DownloadUpdater(address, updaterDirectory, zipFileName,
-                    args => _eventPublisher(new DownloadProgressChanged(args)));
-                _eventPublisher(new NewVersionDownloaded());
+                await DownloadUpdater(address1, updaterDirectory, zipFileName,
+                    args => eventHandler(new DownloadProgressChanged(args)));
+                eventHandler(new NewVersionDownloaded());
                 ExtractZip(zipFileName, updaterDirectory);
 
                 var updaterExeFileName = Path.Combine(updaterDirectory, "DataCommander.Updater.exe");
@@ -158,7 +149,7 @@ public sealed class ApplicationStartup
         var now = UniversalTime.Default.Now;
         var tomorrow = now.AddDays(1);
 
-        var repository = new DeploymentCommandRepository(_serializer);
+        var repository = new DeploymentCommandRepository(serializer);
         repository.Save(applicationName, new CheckForUpdates(tomorrow));
     }
 

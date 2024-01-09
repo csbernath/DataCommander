@@ -189,15 +189,8 @@ public static class StringExtensions
         return stringBuilder.ToString();
     }
 
-    private sealed class StringAsList : IList<char>
+    private sealed class StringAsList(string source) : IList<char>
     {
-        private readonly string _source;
-
-        public StringAsList(string source)
-        {
-            _source = source;
-        }
-
         #region IList<Char> Members
 
         int IList<char>.IndexOf(char item)
@@ -217,7 +210,7 @@ public static class StringExtensions
 
         char IList<char>.this[int index]
         {
-            get => _source[index];
+            get => source[index];
             set => throw new NotImplementedException();
         }
 
@@ -245,7 +238,7 @@ public static class StringExtensions
             throw new NotImplementedException();
         }
 
-        int ICollection<char>.Count => _source.Length;
+        int ICollection<char>.Count => source.Length;
 
         bool ICollection<char>.IsReadOnly => true;
 

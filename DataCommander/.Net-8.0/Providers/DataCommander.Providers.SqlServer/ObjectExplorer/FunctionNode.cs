@@ -9,26 +9,14 @@ using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class FunctionNode : ITreeNode
+internal sealed class FunctionNode(
+    DatabaseNode database,
+    string owner,
+    string name,
+    string xtype)
+    : ITreeNode
 {
-    private readonly DatabaseNode _database;
-    private readonly string _name;
-    private readonly string _owner;
-    private readonly string _xtype;
-
-    public FunctionNode(
-        DatabaseNode database,
-        string owner,
-        string name,
-        string xtype)
-    {
-        _database = database;
-        _owner = owner;
-        _name = name;
-        _xtype = xtype;
-    }
-
-    public string Name => $"{_owner}.{_name}";
+    public string Name => $"{owner}.{name}";
 
     public bool IsLeaf => true;
 
@@ -46,16 +34,16 @@ internal sealed class FunctionNode : ITreeNode
             //string query = string.Format("select {0}.{1}.[{2}]()",database.Name,owner,name);
             string query;
 
-            switch (_xtype)
+            switch (xtype)
             {
                 case "FN": //Scalar function
-                    query = $"select {_database.Name}.{_owner}.[{_name}]()";
+                    query = $"select {database.Name}.{owner}.[{name}]()";
                     break;
 
                 case "TF": //Table function
                 case "IF": //Inlined table-function
                     query = $@"select	*
-from	{_database.Name}.{_owner}.[{_name}]()";
+from	{database.Name}.{owner}.[{name}]()";
                     break;
 
                 default:
@@ -77,12 +65,12 @@ from	{_database.Name}.{_owner}.[{_name}]()";
 
     private void menuItemScriptObject_Click(object sender, EventArgs e)
     {
-        var connectionString = _database.Databases.Server.ConnectionString;
+        var connectionString = database.Databases.Server.ConnectionString;
         string text;
         using (var connection = new SqlConnection(connectionString))
         {
             connection.Open();
-            text = SqlDatabase.GetSysComments(connection, _database.Name, _owner, _name, CancellationToken.None).Result;
+            text = SqlDatabase.GetSysComments(connection, database.Name, owner, name, CancellationToken.None).Result;
         }
 
         var queryForm = (IQueryForm)sender;

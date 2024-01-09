@@ -3,24 +3,13 @@ using System.Drawing;
 
 namespace DataCommander.Application.Connection;
 
-internal sealed class DataRowSelector
+internal sealed class DataRowSelector(DataColumn column, Graphics graphics, Font font)
 {
-    private readonly DataColumn _column;
-    private readonly Graphics _graphics;
-    private readonly Font _font;
-
-    public DataRowSelector(DataColumn column, Graphics graphics, Font font)
-    {
-        _column = column;
-        _graphics = graphics;
-        _font = font;
-    }
-
     public float GetWidth(DataRow row)
     {
-        var s = row[_column].ToString();
+        var s = row[column].ToString();
         var length = s.Length;
-        var width = length <= 256 ? _graphics.MeasureString(s, _font).Width : 100;
+        var width = length <= 256 ? graphics.MeasureString(s, font).Width : 100;
         return width;
     }
 }

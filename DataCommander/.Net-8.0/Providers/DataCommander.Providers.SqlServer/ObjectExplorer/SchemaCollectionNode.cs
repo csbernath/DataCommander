@@ -8,12 +8,8 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class SchemaCollectionNode : ITreeNode
+internal sealed class SchemaCollectionNode(DatabaseNode database) : ITreeNode
 {
-    private readonly DatabaseNode _database;
-
-    public SchemaCollectionNode(DatabaseNode database) => _database = database;
-
     public string Name => "Schemas";
     public bool IsLeaf => false;
 
@@ -21,7 +17,7 @@ internal sealed class SchemaCollectionNode : ITreeNode
     {
         var commandText = CreateCommandText();
         var treeNodes = await SqlClientFactory.Instance.ExecuteReaderAsync(
-            _database.Databases.Server.ConnectionString,
+            database.Databases.Server.ConnectionString,
             new ExecuteReaderRequest(commandText),
             128,
             ReadRecord,
@@ -36,14 +32,14 @@ from {0}.sys.schemas s (nolock)
 order by s.name";
 
         var sqlCommandBuilder = new SqlCommandBuilder();
-        commandText = string.Format(commandText, sqlCommandBuilder.QuoteIdentifier(_database.Name));
+        commandText = string.Format(commandText, sqlCommandBuilder.QuoteIdentifier(database.Name));
         return commandText;
     }
 
     private SchemaNode ReadRecord(IDataRecord dataRecord)
     {
         var name = dataRecord.GetString(0);
-        return new SchemaNode(_database, name);
+        return new SchemaNode(database, name);
     }
 
     public bool Sortable => false;

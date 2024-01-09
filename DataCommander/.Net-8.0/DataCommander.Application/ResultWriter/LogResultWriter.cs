@@ -214,9 +214,8 @@ internal sealed class LogResultWriter : IResultWriter
 
     #endregion
 
-    private class Result
+    private class Result(ReadOnlyCollection<DbQueryResultField> fields)
     {
-        public readonly ReadOnlyCollection<DbQueryResultField> Fields;
-        public Result(ReadOnlyCollection<DbQueryResultField> fields) => Fields = fields;
+        public readonly ReadOnlyCollection<DbQueryResultField> Fields = fields;
     }
 }

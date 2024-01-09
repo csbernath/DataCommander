@@ -8,15 +8,8 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class DatabaseSnapshotCollectionNode : ITreeNode
+internal sealed class DatabaseSnapshotCollectionNode(DatabaseCollectionNode databaseCollectionNode) : ITreeNode
 {
-    private readonly DatabaseCollectionNode _databaseCollectionNode;
-
-    public DatabaseSnapshotCollectionNode(DatabaseCollectionNode databaseCollectionNode)
-    {
-        _databaseCollectionNode = databaseCollectionNode;
-    }
-
     string ITreeNode.Name => "Database Snapshots";
     bool ITreeNode.IsLeaf => false;
 
@@ -28,7 +21,7 @@ where
 	d.source_database_id is not null
 order by 1";
         return await SqlClientFactory.Instance.ExecuteReaderAsync(
-            _databaseCollectionNode.Server.ConnectionString,
+            databaseCollectionNode.Server.ConnectionString,
             new ExecuteReaderRequest(commandText),
             128,
             ReadDatabaseNode,
@@ -38,7 +31,7 @@ order by 1";
     private DatabaseNode ReadDatabaseNode(IDataRecord dataRecord)
     {
         var name = dataRecord.GetString(0);
-        return new DatabaseNode(_databaseCollectionNode, name, 0);
+        return new DatabaseNode(databaseCollectionNode, name, 0);
     }
 
     bool ITreeNode.Sortable => false;

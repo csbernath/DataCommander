@@ -7,14 +7,9 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class SystemTableCollectionNode : ITreeNode
+internal sealed class SystemTableCollectionNode(DatabaseNode databaseNode) : ITreeNode
 {
-    public SystemTableCollectionNode(DatabaseNode databaseNode)
-    {
-        DatabaseNode = databaseNode;
-    }
-
-    public DatabaseNode DatabaseNode { get; }
+    public DatabaseNode DatabaseNode { get; } = databaseNode;
 
     string ITreeNode.Name => "System Tables";
 

@@ -2,17 +2,9 @@
 
 namespace DataCommander.Api.Query;
 
-public sealed class ListBoxItem<T>
+public sealed class ListBoxItem<T>(T item, Func<T, string> toString)
 {
-    private readonly Func<T, string> _toString;
+    public readonly T Item = item;
 
-    public readonly T Item;
-
-    public ListBoxItem(T item, Func<T, string> toString)
-    {
-        Item = item;
-        _toString = toString;
-    }
-
-    public override string ToString() => _toString(Item);
+    public override string ToString() => toString(Item);
 }

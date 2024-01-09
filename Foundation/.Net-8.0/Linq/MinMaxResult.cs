@@ -1,17 +1,9 @@
 ﻿namespace Foundation.Linq;
 
-public sealed class MinMaxResult<T>
+public sealed class MinMaxResult<T>(int count, int whereCount, IndexedItem<T> min, IndexedItem<T> max)
 {
-    public readonly int Count;
-    public readonly int WhereCount;
-    public readonly IndexedItem<T> Min;
-    public readonly IndexedItem<T> Max;
-
-    public MinMaxResult(int count, int whereCount, IndexedItem<T> min, IndexedItem<T> max)
-    {
-        Count = count;
-        WhereCount = whereCount;
-        Min = min;
-        Max = max;
-    }
+    public readonly int Count = count;
+    public readonly int WhereCount = whereCount;
+    public readonly IndexedItem<T> Min = min;
+    public readonly IndexedItem<T> Max = max;
 }

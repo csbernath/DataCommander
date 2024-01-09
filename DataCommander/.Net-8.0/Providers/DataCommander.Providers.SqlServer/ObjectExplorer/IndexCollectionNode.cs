@@ -8,17 +8,8 @@ using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class IndexCollectionNode : ITreeNode
+internal sealed class IndexCollectionNode(DatabaseNode databaseNode, int id) : ITreeNode
 {
-    private readonly DatabaseNode _databaseNode;
-    private readonly int _id;
-
-    public IndexCollectionNode(DatabaseNode databaseNode, int id)
-    {
-        _databaseNode = databaseNode;
-        _id = id;
-    }
-
     public string Name => "Indexes";
     public bool IsLeaf => false;
 
@@ -40,13 +31,13 @@ where
     o.object_id = @object_id and
     i.type > 0
 order by i.name",
-            cb.QuoteIdentifier(_databaseNode.Name));
+            cb.QuoteIdentifier(databaseNode.Name));
 
         var parameters = new SqlParameterCollectionBuilder();
-        parameters.Add("object_id", _id);
+        parameters.Add("object_id", id);
         var request = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
 
-        var connectionString = _databaseNode.Databases.Server.ConnectionString;
+        var connectionString = databaseNode.Databases.Server.ConnectionString;
         var executor = new SqlCommandExecutor(connectionString);
 
         return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(request, 128, dataRecord =>
@@ -55,7 +46,7 @@ order by i.name",
             var indexId = dataRecord.GetInt32(1);
             var type = dataRecord.GetByte(2);
             var isUnique = dataRecord.GetBoolean(3);
-            return new IndexNode(_databaseNode, _id, indexId, name, type, isUnique);
+            return new IndexNode(databaseNode, id, indexId, name, type, isUnique);
         }));
     }
 

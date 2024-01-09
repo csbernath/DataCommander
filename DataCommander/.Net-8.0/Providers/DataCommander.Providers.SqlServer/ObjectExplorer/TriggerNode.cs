@@ -9,19 +9,9 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class TriggerNode : ITreeNode
+internal sealed class TriggerNode(DatabaseNode databaseNode, int id, string name) : ITreeNode
 {
-    private readonly DatabaseNode _databaseNode;
-    private readonly int _id;
-
-    public TriggerNode(DatabaseNode databaseNode, int id, string name)
-    {
-        _databaseNode = databaseNode;
-        _id = id;
-        Name = name;
-    }
-
-    public string Name { get; }
+    public string Name { get; } = name;
     public bool IsLeaf => true;
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => null;
     public bool Sortable => false;
@@ -38,13 +28,13 @@ internal sealed class TriggerNode : ITreeNode
     private void menuItemScriptObject_Click(object sender, EventArgs e)
     {
         var cb = new SqlCommandBuilder();
-        var databaseName = cb.QuoteIdentifier(_databaseNode.Name);
+        var databaseName = cb.QuoteIdentifier(databaseNode.Name);
 
         var commandText = $@"select m.definition
 from {databaseName}.sys.sql_modules m (nolock)
-where m.object_id = {_id}";
+where m.object_id = {id}";
 
-        var connectionString = _databaseNode.Databases.Server.ConnectionString;
+        var connectionString = databaseNode.Databases.Server.ConnectionString;
 
         string definition;
         using (var connection = new SqlConnection(connectionString))

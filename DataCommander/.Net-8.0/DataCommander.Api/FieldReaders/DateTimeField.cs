@@ -3,11 +3,9 @@ using System.Globalization;
 
 namespace DataCommander.Api.FieldReaders;
 
-public sealed class DateTimeField : IComparable, IConvertible
+public sealed class DateTimeField(DateTime value) : IComparable, IConvertible
 {
-    public DateTimeField(DateTime value) => Value = value;
-
-    public DateTime Value { get; }
+    public DateTime Value { get; } = value;
 
     public static bool TryParse(string s, out DateTime dateTime)
     {

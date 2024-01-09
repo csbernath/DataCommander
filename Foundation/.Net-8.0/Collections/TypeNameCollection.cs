@@ -101,16 +101,10 @@ public static class TypeNameCollection
         return typeName;
     }
 
-    private sealed class TypeCollectionItem
+    private sealed class TypeCollectionItem(string name, Type type)
     {
-        public readonly string Name;
-        public readonly Type Type;
-
-        public TypeCollectionItem(string name, Type type)
-        {
-            Name = name;
-            Type = type;
-        }
+        public readonly string Name = name;
+        public readonly Type Type = type;
     }
 
     private static class TypeName

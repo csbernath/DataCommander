@@ -4,19 +4,15 @@ using System.Text;
 
 namespace DataCommander.Providers.SqlServer;
 
-internal sealed class IdentifierParser
+internal sealed class IdentifierParser(TextReader textReader)
 {
-    private readonly TextReader _textReader;
-
-    public IdentifierParser(TextReader textReader) => _textReader = textReader;
-
     public IEnumerable<string> Parse()
     {
         var peekChar = default(char);
 
         while (true)
         {
-            var peek = _textReader.Peek();
+            var peek = textReader.Peek();
 
             if (peek == -1)
                 break;
@@ -24,7 +20,7 @@ internal sealed class IdentifierParser
             peekChar = (char) peek;
 
             if (peekChar == '.')
-                _textReader.Read();
+                textReader.Read();
             else if (peekChar == '[')
                 yield return ReadQuotedIdentifier();
             else
@@ -38,12 +34,12 @@ internal sealed class IdentifierParser
 
     private string ReadQuotedIdentifier()
     {
-        _textReader.Read();
+        textReader.Read();
         var identifier = new StringBuilder();
 
         while (true)
         {
-            var peek = _textReader.Peek();
+            var peek = textReader.Peek();
 
             if (peek == -1)
                 break;
@@ -52,12 +48,12 @@ internal sealed class IdentifierParser
 
             if (peekChar == ']')
             {
-                _textReader.Read();
+                textReader.Read();
                 break;
             }
 
             identifier.Append(peekChar);
-            _textReader.Read();
+            textReader.Read();
         }
 
         return identifier.ToString();
@@ -69,7 +65,7 @@ internal sealed class IdentifierParser
 
         while (true)
         {
-            var peek = _textReader.Peek();
+            var peek = textReader.Peek();
 
             if (peek == -1)
                 break;
@@ -82,7 +78,7 @@ internal sealed class IdentifierParser
             }
 
             identifier.Append(peekChar);
-            _textReader.Read();
+            textReader.Read();
         }
 
         return identifier.ToString();

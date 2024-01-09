@@ -1,13 +1,7 @@
 ﻿namespace Foundation.Linq;
 
-public readonly struct IndexedItem<T>
+public readonly struct IndexedItem<T>(int index, T value)
 {
-    public readonly int Index;
-    public readonly T Value;
-
-    public IndexedItem(int index, T value)
-    {
-        Index = index;
-        Value = value;
-    }
+    public readonly int Index = index;
+    public readonly T Value = value;
 }

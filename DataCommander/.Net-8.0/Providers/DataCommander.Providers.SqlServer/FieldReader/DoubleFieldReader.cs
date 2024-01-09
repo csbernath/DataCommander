@@ -4,30 +4,21 @@ using DataCommander.Api.FieldReaders;
 
 namespace DataCommander.Providers.SqlServer.FieldReader;
 
-internal sealed class DoubleFieldReader : IDataFieldReader
+internal sealed class DoubleFieldReader(IDataRecord dataRecord, int columnOrdinal) : IDataFieldReader
 {
-    private readonly int _columnOrdinal;
-    private readonly IDataRecord _dataRecord;
-
-    public DoubleFieldReader(IDataRecord dataRecord, int columnOrdinal)
-    {
-        _dataRecord = dataRecord;
-        _columnOrdinal = columnOrdinal;
-    }
-
     object IDataFieldReader.Value
     {
         get
         {
             object value;
 
-            if (_dataRecord.IsDBNull(_columnOrdinal))
+            if (dataRecord.IsDBNull(columnOrdinal))
             {
                 value = DBNull.Value;
             }
             else
             {
-                var d = _dataRecord.GetDouble(_columnOrdinal);
+                var d = dataRecord.GetDouble(columnOrdinal);
                 value = new DoubleField(d);
             }
 

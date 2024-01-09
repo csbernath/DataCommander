@@ -8,14 +8,8 @@ namespace DataCommander.Providers.OleDb;
 /// <summary>
 /// Summary description for CatalogsNode.
 /// </summary>
-sealed class SchemaNode : ITreeNode
+sealed class SchemaNode(CatalogNode catalog, string name) : ITreeNode
 {
-    public SchemaNode(CatalogNode catalog, string name)
-    {
-        Catalog = catalog;
-        Name = name;
-    }
-
     string ITreeNode.Name
     {
         get
@@ -42,8 +36,8 @@ sealed class SchemaNode : ITreeNode
 
     public bool Sortable => false;
     public string Query => null;
-    public CatalogNode Catalog { get; }
-    public string Name { get; }
+    public CatalogNode Catalog { get; } = catalog;
+    public string Name { get; } = name;
 
     public ContextMenu? GetContextMenu()
     {

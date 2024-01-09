@@ -3,13 +3,11 @@ using System.Collections.Generic;
 
 namespace Foundation.Collections.IndexableCollection;
 
-public class LinkedListIndex<T> : ICollectionIndex<T>
+public class LinkedListIndex<T>(string name) : ICollectionIndex<T>
 {
     private readonly LinkedList<T> _linkedList = [];
 
-    public LinkedListIndex(string name) => Name = name;
-
-    public string Name { get; }
+    public string Name { get; } = name;
     public int Count => _linkedList.Count;
     public bool IsReadOnly => false;
     void ICollection<T>.Add(T item) => _linkedList.AddLast(item);

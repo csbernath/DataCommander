@@ -9,12 +9,11 @@ using Foundation.Text;
 
 namespace Foundation.Diagnostics;
 
-public sealed class GarbageMonitor
+public sealed class GarbageMonitor(string garbageMonitorName)
 {
     private static readonly StringTableColumnInfo<MonitoredObjectState>[] Columns;
     public static readonly GarbageMonitor Default = new("Default");
 
-    private readonly string _garbageMonitorName;
     private readonly LinkedList<MonitoredObject> _monitoredObjects = [];
     private readonly InterlockedSequence _interlockedSequence = new(0);
 
@@ -36,8 +35,6 @@ public sealed class GarbageMonitor
         ];
     }
 
-    public GarbageMonitor(string garbageMonitorName) => _garbageMonitorName = garbageMonitorName;
-
     #region Public Properties
 
     public int Count => _monitoredObjects.Count;
@@ -54,7 +51,7 @@ public sealed class GarbageMonitor
                 var listItemStates = _monitoredObjects.Select(i => new MonitoredObjectState(i, timestamp));
                 var stringTable = listItemStates.ToString(Columns);
                 var totalSize = _monitoredObjects.Sum(s => s.Size);
-                state = $"GarbageMonitor.State:\r\nid: {_garbageMonitorName}r\ntotalSize: {totalSize}\r\n{stringTable}";
+                state = $"GarbageMonitor.State:\r\nid: {garbageMonitorName}r\ntotalSize: {totalSize}\r\n{stringTable}";
             }
 
             MonitorExtensions.TryLock(_monitoredObjects, RemoveGarbageCollectedObjects);

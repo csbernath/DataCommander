@@ -365,9 +365,8 @@ internal partial class ConnectionStringBuilderForm : Form
         }
     }
 
-    private sealed class OleDbProviderInfo
+    private sealed class OleDbProviderInfo(string name)
     {
-        public readonly string Name;
-        public OleDbProviderInfo(string name) => Name = name;
+        public readonly string Name = name;
     }
 }

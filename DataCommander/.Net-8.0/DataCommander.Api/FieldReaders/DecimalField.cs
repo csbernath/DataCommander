@@ -6,27 +6,19 @@ namespace DataCommander.Api.FieldReaders;
 /// <summary>
 /// Summary description for DecimalField.
 /// </summary>
-public sealed class DecimalField : IComparable
+public sealed class DecimalField(
+    NumberFormatInfo numberFormatInfo,
+    decimal decimalValue,
+    string stringValue)
+    : IComparable
 {
-    private readonly NumberFormatInfo _numberFormatInfo;
+    public decimal DecimalValue { get; } = decimalValue;
 
-    public DecimalField(
-        NumberFormatInfo numberFormatInfo,
-        decimal decimalValue,
-        string stringValue)
-    {
-        _numberFormatInfo = numberFormatInfo;
-        DecimalValue = decimalValue;
-        StringValue = stringValue;
-    }
-
-    public decimal DecimalValue { get; }
-
-    public string StringValue { get; }
+    public string StringValue { get; } = stringValue;
 
     public override string ToString()
     {
-        return DecimalValue.ToString("N", _numberFormatInfo);
+        return DecimalValue.ToString("N", numberFormatInfo);
     }
 
     #region IComparable Members

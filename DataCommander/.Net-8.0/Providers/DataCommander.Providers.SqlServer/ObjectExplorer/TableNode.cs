@@ -24,33 +24,21 @@ using Sequence = Foundation.Core.Sequence;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class TableNode : ITreeNode
+internal sealed class TableNode(DatabaseNode databaseNode, string? owner, string? name, int id, TemporalType type)
+    : ITreeNode
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-    private readonly string? _name;
-    private readonly string? _owner;
-    private readonly TemporalType _temporalType;
-    private readonly int _id;
 
-    public TableNode(DatabaseNode databaseNode, string? owner, string? name, int id, TemporalType temporalType)
-    {
-        DatabaseNode = databaseNode;
-        _owner = owner;
-        _name = name;
-        _id = id;
-        _temporalType = temporalType;
-    }
+    public DatabaseNode DatabaseNode { get; } = databaseNode;
 
-    public DatabaseNode DatabaseNode { get; }
-
-    public int Id => _id;
+    public int Id => id;
 
     public string Name
     {
         get
         {
             string temporalType;
-            switch (_temporalType)
+            switch (type)
             {
                 case TemporalType.NonTemporalTable:
                     temporalType = null;
@@ -68,7 +56,7 @@ internal sealed class TableNode : ITreeNode
             if (temporalType != null)
                 temporalType = $" ({temporalType})";
 
-            return $"{_owner}.{_name}{temporalType}";
+            return $"{owner}.{name}{temporalType}";
         }
     }
 
@@ -78,7 +66,7 @@ internal sealed class TableNode : ITreeNode
     {
         var treeNodes = new List<ITreeNode>();
 
-        if (_temporalType == TemporalType.SystemVersionedTemporalTable)
+        if (type == TemporalType.SystemVersionedTemporalTable)
         {
             var commandText = @$"select t.name,t.object_id
 from [{DatabaseNode.Name}].sys.tables t
@@ -87,7 +75,7 @@ where
     (
         select t.history_table_id
         from [{DatabaseNode.Name}].sys.tables t
-        where object_id = {_id}
+        where object_id = {id}
     )";
             string? historyTableName = null;
             int historyTableId = 0;
@@ -98,7 +86,7 @@ where
                 historyTableName = dataReader.GetString(0);
                 historyTableId = dataReader.GetInt32(1);
             });
-            treeNodes.Add(new TableNode(DatabaseNode, _owner, historyTableName, historyTableId, TemporalType.HistoryTable));
+            treeNodes.Add(new TableNode(DatabaseNode, owner, historyTableName, historyTableId, TemporalType.HistoryTable));
         }
 
         treeNodes.AddRange(new ITreeNode[]
@@ -118,13 +106,13 @@ where
     {
         get
         {
-            var name = new DatabaseObjectMultipartName(null, DatabaseNode.Name, _owner, _name);
+            var name1 = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
             var connectionString = DatabaseNode.Databases.Server.ConnectionString;
             string text;
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                text = GetSelectStatement(connection, name);
+                text = GetSelectStatement(connection, name1);
             }
 
             return text;
@@ -203,8 +191,8 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
 
     private void EditRows(object sender, EventArgs e)
     {
-        var name = DatabaseNode.Name + "." + _owner + "." + _name;
-        var query = "select * from " + name;
+        var name1 = DatabaseNode.Name + "." + owner + "." + name;
+        var query = "select * from " + name1;
         var queryForm = (IQueryForm)sender;            
         queryForm.EditRows(query);
     }
@@ -215,7 +203,7 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
             @"use [{0}]
 exec sp_MShelpcolumns N'{1}.[{2}]', @orderby = 'id'
 exec sp_MStablekeys N'{1}.[{2}]', null, 14
-exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
+exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
 
         Log.Write(LogLevel.Trace, commandText);
         var connectionString = DatabaseNode.Databases.Server.ConnectionString;
@@ -346,7 +334,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
         connection.Connect();
         var server = new Server(connection);
         var database = server.Databases[DatabaseNode.Name];
-        var table = database.Tables[_name, _owner];
+        var table = database.Tables[name, owner];
 
         var options = new ScriptingOptions
         {
@@ -376,7 +364,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
 
     private void Indexes_Click(object sender, EventArgs e)
     {
-        var commandText = $"use [{DatabaseNode.Name}] exec sp_helpindex [{_owner}.{_name}]";
+        var commandText = $"use [{DatabaseNode.Name}] exec sp_helpindex [{owner}.{name}]";
         var connectionString = DatabaseNode.Databases.Server.ConnectionString;
         DataTable dataTable;
         using (var connection = new SqlConnection(connectionString))
@@ -385,7 +373,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
             dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
         }
 
-        dataTable.TableName = $"{_name} indexes";
+        dataTable.TableName = $"{name} indexes";
             
         var dataSet = new DataSet();
         dataSet.Tables.Add(dataTable);
@@ -396,12 +384,12 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
 
     private void SelectScript_Click(object? sender, EventArgs e)
     {
-        var name = new DatabaseObjectMultipartName(null, DatabaseNode.Name, _owner, _name);
+        var name1 = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
         var connectionString = DatabaseNode.Databases.Server.ConnectionString;
         string selectStatement;
         using (var connection = new SqlConnection(connectionString))
         {
-            selectStatement = GetSelectStatement(connection, name);
+            selectStatement = GetSelectStatement(connection, name1);
         }
 
         var queryForm = (IQueryForm)sender;
@@ -409,24 +397,14 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
 
-    private sealed class Column
+    private sealed class Column(string columnName, string typeName, short maxLength, byte precision, byte scale, bool? isNullable)
     {
-        public readonly string ColumnName;
-        public readonly string TypeName;
-        public readonly short MaxLength;
-        public readonly byte Precision;
-        public readonly byte Scale;
-        public readonly bool? IsNullable;
-
-        public Column(string columnName, string typeName, short maxLength, byte precision, byte scale, bool? isNullable)
-        {
-            ColumnName = columnName;
-            TypeName = typeName;
-            MaxLength = maxLength;
-            Precision = precision;
-            Scale = scale;
-            IsNullable = isNullable;
-        }
+        public readonly string ColumnName = columnName;
+        public readonly string TypeName = typeName;
+        public readonly short MaxLength = maxLength;
+        public readonly byte Precision = precision;
+        public readonly byte Scale = scale;
+        public readonly bool? IsNullable = isNullable;
     }
 
     private static Column ReadColumn(IDataRecord dataRecord)
@@ -460,7 +438,7 @@ join [{0}].sys.types t (nolock)
 where
 	s.name = '{1}'
 	and o.name = '{2}'
-order by c.column_id", DatabaseNode.Name, _owner, _name);
+order by c.column_id", DatabaseNode.Name, owner, name);
         Log.Write(LogLevel.Trace, commandText);
         var connectionString = DatabaseNode.Databases.Server.ConnectionString;
         var columns = SqlClientFactory.Instance.ExecuteReader(connectionString, new ExecuteReaderRequest(commandText), 128, ReadColumn);
@@ -516,7 +494,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                 stringBuilder.Append(" /*not null*/");
         }
 
-        stringBuilder.AppendFormat("\r\n\r\ninsert into {0}.{1}\r\n(\r\n    ", _owner, _name);
+        stringBuilder.AppendFormat("\r\n\r\ninsert into {0}.{1}\r\n(\r\n    ", owner, name);
         first = true;
 
         foreach (var column in columns)
@@ -563,7 +541,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
         using (var connection = new SqlConnection(connectionString))
         {
             connection.Open();
-            var tableName = $"{DatabaseNode.Name}.{_owner}.{_name}";
+            var tableName = $"{DatabaseNode.Name}.{owner}.{name}";
             getTableSchemaResult = TableSchema.GetTableSchema(connection, tableName);
         }
 
@@ -630,7 +608,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                 ? $"[{DatabaseNode.Name}]"
                 : DatabaseNode.Name;
 
-            var tableName = $"{databaseName}.{_owner}.{_name}";
+            var tableName = $"{databaseName}.{owner}.{name}";
             getTableSchemaResult = TableSchema.GetTableSchema(connection, tableName);
         }
 
@@ -648,12 +626,12 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                 return new DataTransferObjectField(name, csharpTypeName);
             })
             .ToReadOnlyCollection();
-        var dataTransferObject = DataTransferObjectFactory.CreateDataTransferObject(_name, dataTransferObjectFields).ToIndentedString("    ");
+        var dataTransferObject = DataTransferObjectFactory.CreateDataTransferObject(name, dataTransferObjectFields).ToIndentedString("    ");
 
         var columns = getTableSchemaResult.Columns
             .Select(i => new Foundation.Data.SqlClient.DbQueryBuilding.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
             .ToReadOnlyCollection();
-        var createInsertSqlSqlStatementMethod = CreateInsertSqlStatementMethodFactory.Create(_owner, _name, columns);
+        var createInsertSqlSqlStatementMethod = CreateInsertSqlStatementMethodFactory.Create(owner, name, columns);
 
         var identifierColumn = getTableSchemaResult.UniqueIndexColumns
             .Select(i => getTableSchemaResult.Columns.First(j => j.ColumnId == i.ColumnId))
@@ -670,9 +648,9 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                 .Where(i => i.ColumnName != identifierColumn.ColumnName)
                 .ToReadOnlyCollection();
 
-            createUpdateSqlStatementMethod = CreateUpdateSqlStatementMethodFactory.Create(_owner, _name, identifierColumn, versionColumn, columns);
+            createUpdateSqlStatementMethod = CreateUpdateSqlStatementMethodFactory.Create(owner, name, identifierColumn, versionColumn, columns);
 
-            createDeleteSqlStatementMethod = CreateDeleteSqlStatementMethodFactory.Create(_owner, _name, identifierColumn, versionColumn);
+            createDeleteSqlStatementMethod = CreateDeleteSqlStatementMethodFactory.Create(owner, name, identifierColumn, versionColumn);
         }
         else
         {
@@ -683,7 +661,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
         var textBuilder = new TextBuilder();
         textBuilder.Add(dataTransferObject);
         textBuilder.Add(Line.Empty);
-        textBuilder.Add($"public static class {_name}SqlStatementFactory");
+        textBuilder.Add($"public static class {name}SqlStatementFactory");
         using (textBuilder.AddCSharpBlock())
         {
             textBuilder.Add(createInsertSqlSqlStatementMethod);
@@ -718,7 +696,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                 ? $"[{DatabaseNode.Name}]"
                 : DatabaseNode.Name;
 
-            var tableName = $"{databaseName}.{_owner}.{_name}";
+            var tableName = $"{databaseName}.{owner}.{name}";
             getTableSchemaResult = TableSchema.GetTableSchema(connection, tableName);
         }
         
@@ -737,7 +715,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             })
             .ToReadOnlyCollection();
         
-        var classWithProperties = DataTransferObjectWithPropertiesFactory.Create(_name, dataTransferObjectFields).ToIndentedString("    ");
+        var classWithProperties = DataTransferObjectWithPropertiesFactory.Create(name, dataTransferObjectFields).ToIndentedString("    ");
 
         var queryForm = (IQueryForm)sender;
         queryForm.SetClipboardText(classWithProperties);

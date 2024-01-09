@@ -8,12 +8,8 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class ScalarValuedFunctionCollectionNode : ITreeNode
+internal sealed class ScalarValuedFunctionCollectionNode(DatabaseNode database) : ITreeNode
 {
-    private readonly DatabaseNode _database;
-
-    public ScalarValuedFunctionCollectionNode(DatabaseNode database) => _database = database;
-
     public string Name => "Scalar-valued Functions";
     public bool IsLeaf => false;
 
@@ -21,7 +17,7 @@ internal sealed class ScalarValuedFunctionCollectionNode : ITreeNode
     {
         var commandText = CreateCommandText();
         return await SqlClientFactory.Instance.ExecuteReaderAsync(
-            _database.Databases.Server.ConnectionString,
+            database.Databases.Server.ConnectionString,
             new ExecuteReaderRequest(commandText),
             128,
             ReadRecord,
@@ -39,7 +35,7 @@ join [{0}].sys.objects o (nolock)
 on	s.schema_id = o.schema_id
 where o.type = 'FN'
 order by 1,2";
-        commandText = string.Format(commandText, _database.Name);
+        commandText = string.Format(commandText, database.Name);
         return commandText;
     }
 
@@ -48,7 +44,7 @@ order by 1,2";
         var owner = dataRecord.GetString(0);
         var name = dataRecord.GetString(1);
         var xtype = dataRecord.GetString(2);
-        return new FunctionNode(_database, owner, name, xtype);
+        return new FunctionNode(database, owner, name, xtype);
     }
 
     public bool Sortable => false;

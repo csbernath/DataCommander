@@ -4,24 +4,15 @@ using System.IO;
 
 namespace DataCommander.Api.FieldReaders;
 
-public sealed class StreamFieldDataReader : IDataFieldReader
+public sealed class StreamFieldDataReader(IDataRecord dataRecord, int columnOrdinal) : IDataFieldReader
 {
-    private readonly IDataRecord _dataRecord;
-    private readonly int _columnOrdinal;
-
-    public StreamFieldDataReader(IDataRecord dataRecord, int columnOrdinal)
-    {
-        _dataRecord = dataRecord;
-        _columnOrdinal = columnOrdinal;
-    }
-
     #region IDataFieldReader Members
 
     object IDataFieldReader.Value
     {
         get
         {
-            var stream = (Stream) _dataRecord[_columnOrdinal];
+            var stream = (Stream) dataRecord[columnOrdinal];
             object value;
 
             if (stream != null)

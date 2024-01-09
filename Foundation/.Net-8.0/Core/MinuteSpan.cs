@@ -4,13 +4,11 @@ using System.Diagnostics;
 namespace Foundation.Core;
 
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public readonly struct MinuteSpan : IComparable<MinuteSpan>
+public readonly struct MinuteSpan(int value) : IComparable<MinuteSpan>
 {
-    private readonly int _value;
+    private readonly int _value = value;
 
     public static readonly MinuteSpan Zero = new(0);
-
-    public MinuteSpan(int value) => _value = value;
 
     public int TotalMinutes => _value;
 

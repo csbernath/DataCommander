@@ -2,16 +2,9 @@
 
 namespace Foundation.Diagnostics;
 
-internal sealed class MonitoredObjectState
+internal sealed class MonitoredObjectState(MonitoredObject monitoredObject, long timestamp)
 {
-    public readonly MonitoredObject MonitoredObject;
-    private readonly long _timestamp;
-
-    public MonitoredObjectState(MonitoredObject monitoredObject, long timestamp)
-    {
-        MonitoredObject = monitoredObject;
-        _timestamp = timestamp;
-    }
+    public readonly MonitoredObject MonitoredObject = monitoredObject;
 
     public int? GetGeneration()
     {
@@ -19,7 +12,7 @@ internal sealed class MonitoredObjectState
         return generation;
     }
 
-    public long GetAge() => _timestamp - MonitoredObject.Timestamp;
+    public long GetAge() => timestamp - MonitoredObject.Timestamp;
 
     private static int? GetGeneration(WeakReference weakReference)
     {

@@ -1,15 +1,8 @@
 ﻿namespace Foundation.Data.SqlClient.DbQueryBuilding;
 
-public sealed class Column
+public sealed class Column(string columnName, string sqlDataTypeName, bool isNullable)
 {
-    public readonly string ColumnName;
-    public readonly string SqlDataTypeName;
-    public readonly bool IsNullable;
-
-    public Column(string columnName, string sqlDataTypeName, bool isNullable)
-    {
-        ColumnName = columnName;
-        SqlDataTypeName = sqlDataTypeName;
-        IsNullable = isNullable;
-    }
+    public readonly string ColumnName = columnName;
+    public readonly string SqlDataTypeName = sqlDataTypeName;
+    public readonly bool IsNullable = isNullable;
 }

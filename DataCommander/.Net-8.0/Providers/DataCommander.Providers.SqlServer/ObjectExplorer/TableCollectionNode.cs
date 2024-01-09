@@ -10,11 +10,9 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class TableCollectionNode : ITreeNode
+internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
 {
-    public TableCollectionNode(DatabaseNode databaseNode) => DatabaseNode = databaseNode;
-
-    public DatabaseNode DatabaseNode { get; }
+    public DatabaseNode DatabaseNode { get; } = databaseNode;
     public string Name => "Tables";
     public bool IsLeaf => false;
 

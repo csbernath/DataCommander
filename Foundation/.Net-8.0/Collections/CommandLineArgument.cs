@@ -1,15 +1,8 @@
 ﻿namespace Foundation.Collections;
 
-public sealed class CommandLineArgument
+public sealed class CommandLineArgument(int index, string name, string value)
 {
-    public readonly int Index;
-    public readonly string Name;
-    public readonly string Value;
-
-    public CommandLineArgument(int index, string name, string value)
-    {
-        Index = index;
-        Name = name;
-        Value = value;
-    }
+    public readonly int Index = index;
+    public readonly string Name = name;
+    public readonly string Value = value;
 }

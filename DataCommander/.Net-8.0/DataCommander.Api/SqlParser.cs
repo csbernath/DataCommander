@@ -671,31 +671,18 @@ public sealed class SqlParser
 
     #region Private Classes
 
-    private sealed class Table
+    private sealed class Table(int index, string? name, string? alias)
     {
-        private string? _alias;
+        private string? _alias = alias;
 
-        public readonly int Index;
-        public readonly string? Name;
-
-        public Table(int index, string? name, string? alias)
-        {
-            Index = index;
-            Name = name;
-            _alias = alias;
-        }
+        public readonly int Index = index;
+        public readonly string? Name = name;
     }
 
-    private sealed class Parameter
+    private sealed class Parameter(string? name, object? value)
     {
-        public readonly string? Name;
-        public readonly object? Value;
-
-        public Parameter(string? name, object? value)
-        {
-            Name = name;
-            Value = value;
-        }
+        public readonly string? Name = name;
+        public readonly object? Value = value;
     }
 
     #endregion

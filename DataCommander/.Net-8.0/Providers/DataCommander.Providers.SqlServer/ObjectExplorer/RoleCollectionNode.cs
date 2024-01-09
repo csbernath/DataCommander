@@ -8,20 +8,16 @@ using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class RoleCollectionNode : ITreeNode
+internal sealed class RoleCollectionNode(DatabaseNode database) : ITreeNode
 {
-    private readonly DatabaseNode _database;
-
-    public RoleCollectionNode(DatabaseNode database) => _database = database;
-
     public string Name => "Roles";
     public bool IsLeaf => false;
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var commandText = $"select name from {_database.Name}..sysusers where issqlrole = 1 order by name";
+        var commandText = $"select name from {database.Name}..sysusers where issqlrole = 1 order by name";
         return await SqlClientFactory.Instance.ExecuteReaderAsync(
-            _database.Databases.Server.ConnectionString,
+            database.Databases.Server.ConnectionString,
             new ExecuteReaderRequest(commandText),
             128,
             ReadRecord,
@@ -31,7 +27,7 @@ internal sealed class RoleCollectionNode : ITreeNode
     private RoleNode ReadRecord(IDataRecord dataRecord)
     {
         var name = dataRecord.GetString(0);
-        return new RoleNode(_database, name);
+        return new RoleNode(database, name);
     }
 
     public bool Sortable => false;

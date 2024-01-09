@@ -154,23 +154,15 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
         stopper.Stop();
     }
 
-    private sealed class Stopper
+    private sealed class Stopper(IList<WorkerThread> threads, EventWaitHandle stopEvent)
     {
-        private readonly IList<WorkerThread> _threads;
         private int _count;
-        private readonly EventWaitHandle _stopEvent;
-
-        public Stopper(IList<WorkerThread> threads, EventWaitHandle stopEvent)
-        {
-            _threads = threads;
-            _stopEvent = stopEvent;
-        }
 
         public void Stop()
         {
-            lock (_threads)
+            lock (threads)
             {
-                foreach (var thread in _threads)
+                foreach (var thread in threads)
                 {
                     thread.Stopped += Thread_Stopped;
                     thread.Stop();
@@ -182,9 +174,9 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
         {
             Interlocked.Increment(ref _count);
 
-            if (_count == _threads.Count)
+            if (_count == threads.Count)
             {
-                _stopEvent.Set();
+                stopEvent.Set();
             }
         }
     }

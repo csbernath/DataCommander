@@ -51,27 +51,18 @@ public sealed class SegmentedListBuilder<T>
         return new ReadOnlySegmentedList(_segments, count);
     }
 
-    private sealed class ReadOnlySegmentedList : IReadOnlyList<T>
+    private sealed class ReadOnlySegmentedList(IList<T[]> segments, int count) : IReadOnlyList<T>
     {
-        private readonly int _count;
-        private readonly IList<T[]> _segments;
-
-        public ReadOnlySegmentedList(IList<T[]> segments, int count)
-        {
-            _segments = segments;
-            _count = count;
-        }
-
         #region IReadOnlyList<T> Members
 
         T IReadOnlyList<T>.this[int index]
         {
             get
             {
-                var segmentLength = _segments[0].Length;
+                var segmentLength = segments[0].Length;
 
                 var segmentIndex = index / segmentLength;
-                var segment = _segments[segmentIndex];
+                var segment = segments[segmentIndex];
 
                 var segmentItemIndex = index % segmentLength;
                 var value = segment[segmentItemIndex];
@@ -79,17 +70,17 @@ public sealed class SegmentedListBuilder<T>
             }
         }
 
-        int IReadOnlyCollection<T>.Count => _count;
+        int IReadOnlyCollection<T>.Count => count;
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             var segmentIndex = 0;
-            var lastSegmentIndex = _segments.Count - 1;
+            var lastSegmentIndex = segments.Count - 1;
 
-            foreach (var segment in _segments)
+            foreach (var segment in segments)
             {
                 var segmentLength = segment.Length;
-                var segmentItemCount = segmentIndex < lastSegmentIndex ? segmentLength : _count % segmentLength;
+                var segmentItemCount = segmentIndex < lastSegmentIndex ? segmentLength : count % segmentLength;
 
                 for (var i = 0; i < segmentItemCount; i++) yield return segment[i];
 

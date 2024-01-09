@@ -3,14 +3,9 @@ using System.Globalization;
 
 namespace DataCommander.Api.FieldReaders;
 
-public sealed class DateTimeOffsetField : IComparable, IConvertible
+public sealed class DateTimeOffsetField(DateTimeOffset value) : IComparable, IConvertible
 {
-    public DateTimeOffsetField(DateTimeOffset value)
-    {
-        Value = value;
-    }
-
-    public DateTimeOffset Value { get; }
+    public DateTimeOffset Value { get; } = value;
 
     private static string ToString(DateTimeOffset value)
     {

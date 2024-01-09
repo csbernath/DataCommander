@@ -9,13 +9,8 @@ namespace DataCommander.Providers.OleDb;
 /// <summary>
 /// Summary description for CatalogsNode.
 /// </summary>
-class CatalogsNode : ITreeNode
+class CatalogsNode(OleDbConnection connection) : ITreeNode
 {
-    public CatalogsNode(OleDbConnection connection)
-    {
-        this.connection = connection;
-    }
-
     public string Name => "Catalogs";
 
     public bool IsLeaf => false;
@@ -53,6 +48,4 @@ class CatalogsNode : ITreeNode
     {
         throw new System.NotImplementedException();
     }
-
-    private readonly OleDbConnection connection;
 }

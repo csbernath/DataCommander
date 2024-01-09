@@ -3,17 +3,8 @@ using System.Data;
 
 namespace DataCommander.Api.FieldReaders;
 
-public sealed class SingleFieldDataReader : IDataFieldReader
+public sealed class SingleFieldDataReader(IDataRecord dataRecord, int columnOrdinal) : IDataFieldReader
 {
-    private readonly IDataRecord _dataRecord;
-    private readonly int _columnOrdinal;
-
-    public SingleFieldDataReader(IDataRecord dataRecord, int columnOrdinal)
-    {
-        _dataRecord = dataRecord;
-        _columnOrdinal = columnOrdinal;
-    }
-
     #region IDataFieldReader Members
 
     object IDataFieldReader.Value
@@ -22,13 +13,13 @@ public sealed class SingleFieldDataReader : IDataFieldReader
         {
             object value;
 
-            if (_dataRecord.IsDBNull(_columnOrdinal))
+            if (dataRecord.IsDBNull(columnOrdinal))
             {
                 value = DBNull.Value;
             }
             else
             {
-                var singleValue = (float)_dataRecord[_columnOrdinal];
+                var singleValue = (float)dataRecord[columnOrdinal];
                 value = new SingleField(singleValue);
             }
 

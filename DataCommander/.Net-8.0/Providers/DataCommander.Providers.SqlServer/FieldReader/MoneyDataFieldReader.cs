@@ -5,11 +5,11 @@ using DataCommander.Api.FieldReaders;
 
 namespace DataCommander.Providers.SqlServer.FieldReader;
 
-internal sealed class MoneyDataFieldReader : IDataFieldReader
+internal sealed class MoneyDataFieldReader(
+    IDataRecord dataRecord,
+    int columnOrdinal) : IDataFieldReader
 {
     private static readonly NumberFormatInfo NumberFormatInfo;
-    private readonly int _columnOrdinal;
-    private readonly IDataRecord _dataRecord;
 
     static MoneyDataFieldReader()
     {
@@ -26,27 +26,19 @@ internal sealed class MoneyDataFieldReader : IDataFieldReader
         NumberFormatInfo.NumberDecimalDigits = 4;
     }
 
-    public MoneyDataFieldReader(
-        IDataRecord dataRecord,
-        int columnOrdinal)
-    {
-        _dataRecord = dataRecord;
-        _columnOrdinal = columnOrdinal;
-    }
-
     object IDataFieldReader.Value
     {
         get
         {
             object value;
 
-            if (_dataRecord.IsDBNull(_columnOrdinal))
+            if (dataRecord.IsDBNull(columnOrdinal))
             {
                 value = DBNull.Value;
             }
             else
             {
-                var d = _dataRecord.GetDecimal(_columnOrdinal);
+                var d = dataRecord.GetDecimal(columnOrdinal);
                 value = new DecimalField(NumberFormatInfo, d, null);
             }
 

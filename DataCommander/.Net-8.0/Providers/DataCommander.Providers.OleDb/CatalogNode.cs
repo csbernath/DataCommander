@@ -6,16 +6,10 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.OleDb;
 
-class CatalogNode : ITreeNode
+class CatalogNode(
+    OleDbConnection connection,
+    string name) : ITreeNode
 {
-    public CatalogNode(
-        OleDbConnection connection,
-        string name)
-    {
-        Connection = connection;
-        Name = name;
-    }
-
     string ITreeNode.Name
     {
         get
@@ -62,8 +56,8 @@ class CatalogNode : ITreeNode
 
     public bool Sortable => false;
     public string Query => null;
-    public OleDbConnection Connection { get; }
-    public string Name { get; }
+    public OleDbConnection Connection { get; } = connection;
+    public string Name { get; } = name;
 
     public ContextMenu? GetContextMenu() => null;
 }

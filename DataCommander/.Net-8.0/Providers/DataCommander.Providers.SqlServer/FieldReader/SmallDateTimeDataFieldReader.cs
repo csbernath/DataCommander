@@ -4,32 +4,23 @@ using DataCommander.Api.FieldReaders;
 
 namespace DataCommander.Providers.SqlServer.FieldReader;
 
-internal sealed class SmallDateTimeDataFieldReader : IDataFieldReader
+internal sealed class SmallDateTimeDataFieldReader(
+    IDataRecord dataRecord,
+    int columnOrdinal) : IDataFieldReader
 {
-    private readonly int _columnOrdinal;
-    private readonly IDataRecord _dataRecord;
-
-    public SmallDateTimeDataFieldReader(
-        IDataRecord dataRecord,
-        int columnOrdinal)
-    {
-        _dataRecord = dataRecord;
-        _columnOrdinal = columnOrdinal;
-    }
-
     object IDataFieldReader.Value
     {
         get
         {
             object value;
 
-            if (_dataRecord.IsDBNull(_columnOrdinal))
+            if (dataRecord.IsDBNull(columnOrdinal))
             {
                 value = DBNull.Value;
             }
             else
             {
-                var dateTime = _dataRecord.GetDateTime(_columnOrdinal);
+                var dateTime = dataRecord.GetDateTime(columnOrdinal);
                 string format;
 
                 if (dateTime.TimeOfDay.Ticks == 0)

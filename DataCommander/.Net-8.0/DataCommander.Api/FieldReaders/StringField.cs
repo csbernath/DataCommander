@@ -2,25 +2,17 @@
 
 namespace DataCommander.Api.FieldReaders;
 
-public sealed class StringField : IConvertible
+public sealed class StringField(string value, int length) : IConvertible
 {
-    private readonly int _length;
-
-    public StringField(string value, int length)
-    {
-        Value = value;
-        _length = length;
-    }
-
-    public string Value { get; }
+    public string Value { get; } = value;
 
     public override string ToString()
     {
         string s;
 
-        if (Value.Length > _length)
+        if (Value.Length > length)
         {
-            s = Value.Substring(0, _length);
+            s = Value.Substring(0, length);
         }
         else
         {

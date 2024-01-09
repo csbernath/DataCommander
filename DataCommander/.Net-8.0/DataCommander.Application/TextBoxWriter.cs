@@ -5,28 +5,24 @@ using System.Windows.Forms;
 
 namespace DataCommander.Application;
 
-public class TextBoxWriter : TextWriter
+public class TextBoxWriter(TextBoxBase textBox) : TextWriter
 {
-    private readonly TextBoxBase _textBox;
-
-    public TextBoxWriter(TextBoxBase textBox) => _textBox = textBox;
-
     public override Encoding Encoding => null;
 
     private void AppendText(string text)
     {
-        _textBox.AppendText(text);
-        _textBox.ScrollToCaret();
+        textBox.AppendText(text);
+        textBox.ScrollToCaret();
     }
 
     public override void Write(string? str)
     {
-        _textBox.Invoke(new AppendTextDelegate(AppendText), str);
+        textBox.Invoke(new AppendTextDelegate(AppendText), str);
     }
 
     public override void WriteLine(string? value)
     {
         var line = value + Environment.NewLine;
-        _textBox.Invoke(new AppendTextDelegate(AppendText), line);
+        textBox.Invoke(new AppendTextDelegate(AppendText), line);
     }
 }

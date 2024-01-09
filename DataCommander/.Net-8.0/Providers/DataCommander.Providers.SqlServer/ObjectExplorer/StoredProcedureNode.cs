@@ -11,20 +11,9 @@ using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class StoredProcedureNode : ITreeNode
+internal sealed class StoredProcedureNode(DatabaseNode database, string owner, string name) : ITreeNode
 {
-    private readonly DatabaseNode _database;
-    private readonly string _name;
-    private readonly string _owner;
-
-    public StoredProcedureNode(DatabaseNode database, string owner, string name)
-    {
-        _database = database;
-        _owner = owner;
-        _name = name;
-    }
-
-    public string Name => _owner + '.' + _name;
+    public string Name => owner + '.' + name;
     public bool IsLeaf => true;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
@@ -38,7 +27,7 @@ internal sealed class StoredProcedureNode : ITreeNode
     {
         get
         {
-            var query = $"exec {_owner}.{_name}";
+            var query = $"exec {owner}.{name}";
             return query;
         }
     }
@@ -71,11 +60,11 @@ internal sealed class StoredProcedureNode : ITreeNode
     private async Task<string?> GetText(CancellationToken cancellationToken)
     {
         Thread.Sleep(5000);
-        var connectionString = _database.Databases.Server.ConnectionString;
+        var connectionString = database.Databases.Server.ConnectionString;
         using (var connection = new SqlConnection(connectionString))
         {
             await connection.OpenAsync(cancellationToken);
-            var text = await SqlDatabase.GetSysComments(connection, _database.Name, _owner, _name, cancellationToken);
+            var text = await SqlDatabase.GetSysComments(connection, database.Name, owner, name, cancellationToken);
             return text;
         }
     }

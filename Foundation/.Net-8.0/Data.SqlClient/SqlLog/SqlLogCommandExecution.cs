@@ -1,15 +1,9 @@
 ﻿
 namespace Foundation.Data.SqlClient.SqlLog;
 
-internal sealed class SqLoglCommandExecution
+internal sealed class SqLoglCommandExecution(int commandNo)
 {
-    public SqLoglCommandExecution(int commandNo)
-    {
-        CommandNo = commandNo;
-        ExecutionNo = 1;
-    }
+    public int CommandNo { get; } = commandNo;
 
-    public int CommandNo { get; }
-
-    public int ExecutionNo { get; set; }
+    public int ExecutionNo { get; set; } = 1;
 }

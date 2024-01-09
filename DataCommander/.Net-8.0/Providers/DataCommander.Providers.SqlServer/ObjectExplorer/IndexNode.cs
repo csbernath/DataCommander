@@ -6,24 +6,12 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class IndexNode : ITreeNode
+internal sealed class IndexNode(DatabaseNode databaseNode, int parentId, int id, string name, byte type, bool isUnique)
+    : ITreeNode
 {
-    private readonly DatabaseNode _databaseNode;
-    private readonly int _id;
-    private readonly bool _isUnique;
-    private readonly string _name;
-    private readonly int _parentId;
-    private readonly byte _type;
-
-    public IndexNode(DatabaseNode databaseNode, int parentId, int id, string name, byte type, bool isUnique)
-    {
-        _databaseNode = databaseNode;
-        _parentId = parentId;
-        _id = id;
-        _name = name;
-        _type = type;
-        _isUnique = isUnique;
-    }
+    private readonly DatabaseNode _databaseNode = databaseNode;
+    private readonly int _id = id;
+    private readonly int _parentId = parentId;
 
     public string Name
     {
@@ -31,17 +19,17 @@ internal sealed class IndexNode : ITreeNode
         {
             var stringBuilder = new StringBuilder();
 
-            stringBuilder.Append(_name);
+            stringBuilder.Append(name);
             stringBuilder.Append(" (");
 
-            stringBuilder.Append(_isUnique
+            stringBuilder.Append(isUnique
                 ? "Unique"
                 : "Non-Unique");
 
             stringBuilder.Append(',');
 
             string typeString;
-            switch (_type)
+            switch (type)
             {
                 case 0:
                     typeString = "Heap";

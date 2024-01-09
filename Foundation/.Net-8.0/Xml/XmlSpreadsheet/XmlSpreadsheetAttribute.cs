@@ -3,17 +3,11 @@ using System.Xml;
 
 namespace Foundation.Xml.XmlSpreadsheet;
 
-public sealed class XmlSpreadsheetAttribute
+public sealed class XmlSpreadsheetAttribute(string localName, string value)
 {
-    public XmlSpreadsheetAttribute(string localName, string value)
-    {
-        LocalName = localName;
-        Value = value;
-    }
+    public string LocalName { get; } = localName;
 
-    public string LocalName { get; }
-
-    public string Value { get; }
+    public string Value { get; } = value;
 
     public void Write(XmlWriter xmlWriter)
     {

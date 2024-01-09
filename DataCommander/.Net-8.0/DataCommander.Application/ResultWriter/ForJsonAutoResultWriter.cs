@@ -12,20 +12,13 @@ using Newtonsoft.Json;
 
 namespace DataCommander.Application.ResultWriter;
 
-internal sealed class ForJsonAutoResultWriter : IResultWriter
+internal sealed class ForJsonAutoResultWriter(Action<InfoMessage> addInfoMessage) : IResultWriter
 {
-    private readonly Action<InfoMessage> _addInfoMessage;
-    private readonly IResultWriter _logResultWriter;
+    private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage);
     private bool _isJsonAuto;
     private string _path;
     private TextWriter _textWriter;
     private string _formattedPath;
-
-    public ForJsonAutoResultWriter(Action<InfoMessage> addInfoMessage)
-    {
-        _addInfoMessage = addInfoMessage;
-        _logResultWriter = new LogResultWriter(addInfoMessage);
-    }
 
     void IResultWriter.Begin(IProvider provider)
     {
@@ -60,10 +53,10 @@ internal sealed class ForJsonAutoResultWriter : IResultWriter
             _path = Path.Combine(tempPath, identifier + ".json");
             _textWriter = new StreamWriter(_path, false, Encoding.UTF8);
             _formattedPath = Path.Combine(tempPath, identifier + "formatted.json");
-            _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, $"Formatted JSON file: {_formattedPath}"));
+            addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, $"Formatted JSON file: {_formattedPath}"));
         }
         else
-            _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Error, null, "This is not FOR JSON AUTO"));
+            addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Error, null, "This is not FOR JSON AUTO"));
     }
 
     void IResultWriter.FirstRowReadBegin() => _logResultWriter.FirstRowReadBegin();

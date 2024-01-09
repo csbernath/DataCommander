@@ -16,16 +16,17 @@ using Foundation.Log;
 
 namespace DataCommander.Application.ResultWriter;
 
-internal sealed class CopyResultWriter : IResultWriter
+internal sealed class CopyResultWriter(
+    Action<InfoMessage> addInfoMessage,
+    IProvider destinationProvider,
+    ConnectionBase destinationConnection,
+    string? tableName,
+    Action<DbTransaction> setTransaction,
+    CancellationToken cancellationToken)
+    : IResultWriter
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-    private readonly IResultWriter _logResultWriter;
-    private readonly Action<InfoMessage> _addInfoMessage;
-    private readonly IProvider _destinationProvider;
-    private readonly ConnectionBase _destinationConnection;
-    private readonly string? _tableName;
-    private readonly Action<DbTransaction> _setTransaction;
-    private readonly CancellationToken _cancellationToken;
+    private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage);
     private DbTransaction _transaction;
     private IDbCommand _insertCommand;
     private Converter<object, object>[] _converters;
@@ -34,23 +35,10 @@ internal sealed class CopyResultWriter : IResultWriter
     private Task _task;
     private EventWaitHandle _enqueueEvent;
     private bool _writeEnded;
-    private readonly bool _canConvertCommandToString;
+    private readonly bool _canConvertCommandToString = destinationProvider.CanConvertCommandToString;
     private long _readRowCount;
     private long _insertedRowCount;
     private long _waitMilliseconds;
-
-    public CopyResultWriter(Action<InfoMessage> addInfoMessage, IProvider destinationProvider, ConnectionBase destinationConnection, string? tableName,
-        Action<DbTransaction> setTransaction, CancellationToken cancellationToken)
-    {
-        _logResultWriter = new LogResultWriter(addInfoMessage);
-        _addInfoMessage = addInfoMessage;
-        _destinationProvider = destinationProvider;
-        _canConvertCommandToString = destinationProvider.CanConvertCommandToString;
-        _destinationConnection = destinationConnection;
-        _tableName = tableName;
-        _setTransaction = setTransaction;
-        _cancellationToken = cancellationToken;
-    }
 
     #region IResultWriter Members
 
@@ -66,14 +54,14 @@ internal sealed class CopyResultWriter : IResultWriter
     void IResultWriter.WriteTableBegin(DataTable schemaTable)
     {
         _logResultWriter.WriteTableBegin(schemaTable);
-        _destinationProvider.CreateInsertCommand(schemaTable, null, _destinationConnection.Connection, _tableName, out _insertCommand,
+        destinationProvider.CreateInsertCommand(schemaTable, null, destinationConnection.Connection, tableName, out _insertCommand,
             out _converters);
         //  TODO this.messageWriter.WriteLine( this.insertCommand.CommandText );
         _parameters = _insertCommand.Parameters.Cast<IDbDataParameter>().ToArray();
         if (_transaction == null)
         {
-            _transaction = _destinationConnection.Connection.BeginTransaction();
-            _setTransaction(_transaction);
+            _transaction = destinationConnection.Connection.BeginTransaction();
+            setTransaction(_transaction);
         }
 
         _insertCommand.Transaction = _transaction;
@@ -113,7 +101,7 @@ internal sealed class CopyResultWriter : IResultWriter
                         sb.AppendLine();
                     }
 
-                    var commandText = _destinationProvider.CommandToString(_insertCommand);
+                    var commandText = destinationProvider.CommandToString(_insertCommand);
                     sb.Append(commandText);
                 }
                 else
@@ -131,7 +119,7 @@ internal sealed class CopyResultWriter : IResultWriter
             var commandText = sb.ToString();
             try
             {
-                var executor = _destinationConnection.Connection.CreateCommandExecutor();
+                var executor = destinationConnection.Connection.CreateCommandExecutor();
                 executor.ExecuteNonQuery(new CreateCommandRequest(commandText, null, CommandType.Text, 3600, _insertCommand.Transaction));
             }
             catch (Exception e)
@@ -144,7 +132,7 @@ internal sealed class CopyResultWriter : IResultWriter
         var message =
             $"{_readRowCount},{_insertedRowCount},{_readRowCount - _insertedRowCount},{_waitMilliseconds} (rows read,inserted,queued,wait).";
 
-        _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
+        addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
     }
 
     private void Dequeue()
@@ -222,7 +210,7 @@ internal sealed class CopyResultWriter : IResultWriter
 
         var message = $"{_readRowCount},{_insertedRowCount},{_readRowCount - _insertedRowCount} (rows read,inserted,queued).";
 
-        _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
+        addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
         var targetRows = new object[rowCount][];
         for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
         {
@@ -241,12 +229,12 @@ internal sealed class CopyResultWriter : IResultWriter
         _queue.Enqueue(queueItem);
         _enqueueEvent.Set();
 
-        while (!_cancellationToken.IsCancellationRequested && _queue.Count > 5)
+        while (!cancellationToken.IsCancellationRequested && _queue.Count > 5)
         {
             _waitMilliseconds += 500;
             Log.Write(LogLevel.Trace, "this.waitMilliseconds: {0}", _waitMilliseconds);
 
-            _cancellationToken.WaitHandle.WaitOne(500);
+            cancellationToken.WaitHandle.WaitOne(500);
         }
     }
 

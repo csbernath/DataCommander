@@ -5,23 +5,15 @@ using Foundation.Core;
 
 namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection;
 
-internal sealed class SqlLoggedSqlDataReader : IDataReader
+internal sealed class SqlLoggedSqlDataReader(
+    SqlLoggedSqlConnection connection,
+    IDbCommand command) : IDataReader
 {
-    private readonly SqlLoggedSqlConnection _connection;
-    private readonly IDbCommand _command;
     private bool _contains;
     private IDataReader _reader;
     private DateTime _startDate;
     private long _startTick;
     private bool _logged;
-
-    public SqlLoggedSqlDataReader(
-        SqlLoggedSqlConnection connection,
-        IDbCommand command)
-    {
-        _connection = connection;
-        _command = command;
-    }
 
     public IDataReader Execute()
     {
@@ -31,7 +23,7 @@ internal sealed class SqlLoggedSqlDataReader : IDataReader
 
         try
         {
-            _reader = _command.ExecuteReader();
+            _reader = command.ExecuteReader();
         }
         catch (Exception e)
         {
@@ -42,13 +34,13 @@ internal sealed class SqlLoggedSqlDataReader : IDataReader
         {
             var ticks = Stopwatch.GetTimestamp() - _startTick;
             var duration = StopwatchTimeSpan.ToInt32(ticks, 1000);
-            var filter = _connection.Filter;
+            var filter = connection.Filter;
             _contains = exception != null || filter == null ||
-                        filter.Contains(_connection.UserName, _connection.HostName, _command);
+                        filter.Contains(connection.UserName, connection.HostName, command);
 
             if (_contains)
             {
-                _connection.CommandExeucte(_command, _startDate, duration, exception);
+                connection.CommandExeucte(command, _startDate, duration, exception);
                 _logged = true;
             }
         }
@@ -64,7 +56,7 @@ internal sealed class SqlLoggedSqlDataReader : IDataReader
 
         try
         {
-            _reader = _command.ExecuteReader(behavior);
+            _reader = command.ExecuteReader(behavior);
         }
         catch (Exception e)
         {
@@ -75,13 +67,13 @@ internal sealed class SqlLoggedSqlDataReader : IDataReader
         {
             var ticks = Stopwatch.GetTimestamp() - _startTick;
             var duration = StopwatchTimeSpan.ToInt32(ticks, 1000);
-            var filter = _connection.Filter;
+            var filter = connection.Filter;
             _contains = exception != null || filter == null ||
-                        filter.Contains(_connection.UserName, _connection.HostName, _command);
+                        filter.Contains(connection.UserName, connection.HostName, command);
 
             if (_contains)
             {
-                _connection.CommandExeucte(_command, _startDate, duration, exception);
+                connection.CommandExeucte(command, _startDate, duration, exception);
                 _logged = true;
             }
         }
@@ -96,7 +88,7 @@ internal sealed class SqlLoggedSqlDataReader : IDataReader
         if (_contains && !_logged)
         {
             var duration = Stopwatch.GetTimestamp() - _startTick;
-            _connection.CommandExeucte(_command, _startDate, duration, null);
+            connection.CommandExeucte(command, _startDate, duration, null);
         }
     }
 
@@ -236,7 +228,7 @@ internal sealed class SqlLoggedSqlDataReader : IDataReader
 
             if (_contains && !_logged)
             {
-                _connection.CommandExeucte(_command, _startDate, duration, null);
+                connection.CommandExeucte(command, _startDate, duration, null);
                 _logged = true;
             }
         }
@@ -260,7 +252,7 @@ internal sealed class SqlLoggedSqlDataReader : IDataReader
             catch (Exception e)
             {
                 var duration = Stopwatch.GetTimestamp() - _startTick;
-                _connection.CommandExeucte(_command, _startDate, duration, e);
+                connection.CommandExeucte(command, _startDate, duration, e);
                 _logged = true;
                 throw;
             }
@@ -284,7 +276,7 @@ internal sealed class SqlLoggedSqlDataReader : IDataReader
         catch (Exception e)
         {
             var duration = Stopwatch.GetTimestamp() - _startTick;
-            _connection.CommandExeucte(_command, _startDate, duration, e);
+            connection.CommandExeucte(command, _startDate, duration, e);
             _logged = true;
             throw;
         }

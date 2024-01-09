@@ -2,12 +2,7 @@
 
 namespace Foundation.Deployment.Events;
 
-public sealed class DownloadProgressChanged : Event
+public sealed class DownloadProgressChanged(DownloadProgressChangedEventArgs downloadProgressChangedEventArgs) : Event
 {
-    public readonly DownloadProgressChangedEventArgs DownloadProgressChangedEventArgs;
-
-    public DownloadProgressChanged(DownloadProgressChangedEventArgs downloadProgressChangedEventArgs)
-    {
-        DownloadProgressChangedEventArgs = downloadProgressChangedEventArgs;
-    }
+    public readonly DownloadProgressChangedEventArgs DownloadProgressChangedEventArgs = downloadProgressChangedEventArgs;
 }
