@@ -30,13 +30,7 @@ public class ListIndex<T> : ICollectionIndex<T>, IList<T>
 
     #region IEnumerable<T> Members
 
-    /// <summary>
-    /// </summary>
-    /// <returns></returns>
-    public IEnumerator<T> GetEnumerator()
-    {
-        return _list.GetEnumerator();
-    }
+    public IEnumerator<T> GetEnumerator() => _list.GetEnumerator();
 
     #endregion
 
@@ -79,14 +73,7 @@ public class ListIndex<T> : ICollectionIndex<T>, IList<T>
 
     #region ICollectionIndex<T> Members
 
-    /// <summary>
-    /// </summary>
-    /// <param name="item"></param>
-    public void Add(T item)
-    {
-        _list.Add(item);
-    }
-
+    public void Add(T item) => _list.Add(item);
     public void Clear() => _list.Clear();
     public bool Contains(T item) => _list.Contains(item);
     public bool Remove(T item) => _list.Remove(item);

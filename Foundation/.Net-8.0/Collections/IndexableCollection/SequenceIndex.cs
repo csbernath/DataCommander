@@ -4,10 +4,6 @@ using System.Collections.Generic;
 
 namespace Foundation.Collections.IndexableCollection;
 
-/// <summary>
-/// </summary>
-/// <typeparam name="TKey"></typeparam>
-/// <typeparam name="T"></typeparam>
 public class SequenceIndex<TKey, T> : ICollectionIndex<T>
 {
     private readonly IDictionary<TKey, T> _dictionary;
@@ -15,12 +11,6 @@ public class SequenceIndex<TKey, T> : ICollectionIndex<T>
     private readonly Func<TKey> _getNextKey;
     private readonly string _name;
 
-    /// <summary>
-    /// </summary>
-    /// <param name="name"></param>
-    /// <param name="getNextKey"></param>
-    /// <param name="getKey"></param>
-    /// <param name="dictionary"></param>
     public SequenceIndex(
         string name,
         Func<TKey> getNextKey,

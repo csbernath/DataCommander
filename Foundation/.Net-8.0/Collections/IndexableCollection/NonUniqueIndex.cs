@@ -6,18 +6,8 @@ using Foundation.Assertions;
 
 namespace Foundation.Collections.IndexableCollection;
 
-/// <summary>
-/// </summary>
-/// <typeparam name="TKey"></typeparam>
-/// <typeparam name="T"></typeparam>
 public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, ICollection<T>>
 {
-    /// <summary>
-    /// </summary>
-    /// <param name="name"></param>
-    /// <param name="getKey"></param>
-    /// <param name="dictionary"></param>
-    /// <param name="createCollection"></param>
     public NonUniqueIndex(
         string name,
         Func<T, GetKeyResponse<TKey>> getKey,
@@ -31,11 +21,6 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
         Initialize(name, getKey, dictionary, createCollection);
     }
 
-    /// <summary>
-    /// </summary>
-    /// <param name="name"></param>
-    /// <param name="getKey"></param>
-    /// <param name="sortOrder"></param>
     public NonUniqueIndex(
         string name,
         Func<T, GetKeyResponse<TKey>> getKey,
@@ -80,14 +65,11 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
 
     #region IEnumerable<T> Members
 
-    /// <summary>
-    /// </summary>
-    /// <returns></returns>
     public IEnumerator<T> GetEnumerator()
     {
         foreach (var collection in _dictionary.Values)
         foreach (var item in collection)
-            yield return item;
+                yield return item;
     }
 
     #endregion
@@ -111,11 +93,6 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
 
     #endregion
 
-    /// <summary>
-    /// </summary>
-    /// <param name="key"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
     public bool TryGetFirstValue(TKey key, out T value)
     {
         var contains = _dictionary.TryGetValue(key, out var collection);

@@ -74,11 +74,7 @@ public static class ICollectionExtensions
     {
         #region Private Fields
 
-        /// <summary>
-        /// 
-        /// </summary>
         private readonly ICollection _source;
-
         private readonly IList _sourceAsList;
 
         #endregion
@@ -114,11 +110,6 @@ public static class ICollectionExtensions
             _sourceAsList.Clear();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
         bool ICollection<TResult>.Contains(TResult item)
         {
             bool contains;
@@ -136,44 +127,15 @@ public static class ICollectionExtensions
             return contains;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="array"></param>
-        /// <param name="arrayIndex"></param>
-        void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex)
-        {
-            _source.CopyTo(array, arrayIndex);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
+        void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex) => _source.CopyTo(array, arrayIndex);
         int ICollection<TResult>.Count => _source.Count;
-
-        /// <summary>
-        /// 
-        /// </summary>
         bool ICollection<TResult>.IsReadOnly => throw new NotSupportedException();
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        bool ICollection<TResult>.Remove(TResult item)
-        {
-            throw new NotImplementedException();
-        }
+        bool ICollection<TResult>.Remove(TResult item) => throw new NotImplementedException();
 
         #endregion
 
         #region IEnumerable<TResult> Members
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public IEnumerator<TResult> GetEnumerator()
         {
             foreach (TResult item in _source)
@@ -186,14 +148,7 @@ public static class ICollectionExtensions
 
         #region IEnumerable Members
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         #endregion
     }

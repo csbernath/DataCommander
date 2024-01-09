@@ -32,9 +32,6 @@ public class IndexCollection<T> : ICollection<ICollectionIndex<T>>
 
     #region IEnumerable<ICollectionIndex<T>> Members
 
-    /// <summary>
-    /// </summary>
-    /// <returns></returns>
     public IEnumerator<ICollectionIndex<T>> GetEnumerator()
     {
         return _dictionary.Values.GetEnumerator();
