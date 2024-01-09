@@ -19,6 +19,7 @@ using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.Query;
 using Foundation.Assertions;
+using Foundation.Collections;
 using Foundation.Collections.ReadOnly;
 using Foundation.Configuration;
 using Foundation.Core;
@@ -146,47 +147,29 @@ public sealed partial class QueryForm : Form, IQueryForm
 
         colorTheme?.Apply(this);
 
-        // if (colorTheme != null)
-        // {
-        //     foreach (var menuItem in _mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
-        //     {
-        //         foreach (ToolStripItem x in menuItem.DropDownItems)
-        //         {
-        //             x.ForeColor = colorTheme.ForeColor;
-        //             x.BackColor = colorTheme.BackColor;
-        //         }
-        //     }
-        //
-        //     _toolStrip.ForeColor = colorTheme.ForeColor;
-        //     _toolStrip.BackColor = colorTheme.BackColor;
-        //
-        //     _tvObjectExplorer.ForeColor = colorTheme.ForeColor;
-        //     _tvObjectExplorer.BackColor = colorTheme.BackColor;
-        //
-        //     _tabControl.ForeColor = colorTheme.ForeColor;
-        //     _tabControl.BackColor = colorTheme.BackColor;
-        //
-        //     foreach (Control control in _tabControl.Controls)
-        //     {
-        //         control.BackColor = colorTheme.BackColor;
-        //         control.ForeColor = colorTheme.ForeColor;
-        //     }
-        //
-        //     _resultSetsTabControl.ForeColor = colorTheme.ForeColor;
-        //     _resultSetsTabControl.BackColor = colorTheme.BackColor;
-        //
-        //     _messagesTextBox.ForeColor = colorTheme.ForeColor;
-        //     _messagesTextBox.BackColor = colorTheme.BackColor;
-        //
-        //     _statusBar.ForeColor = colorTheme.ForeColor;
-        //     _statusBar.BackColor = colorTheme.BackColor;
-        //
-        //     foreach (ToolStripItem item in _statusBar.Items)
-        //     {
-        //         item.ForeColor = colorTheme.ForeColor;
-        //         item.BackColor = colorTheme.BackColor;
-        //     }
-        // }
+        if (colorTheme != null)
+        {
+            PreOrderTreeTraversal.ForEach(
+                (object)_mainMenu,
+                @object =>
+                {
+                    if (@object == _mainMenu)
+                        return _mainMenu.Items.Cast<object>();
+                    else if (@object is ToolStripDropDownItem toolStripDropDownItem)
+                        return toolStripDropDownItem.DropDownItems.Cast<object>();
+                    else if (@object is ToolStripDropDown toolStripDropDown)
+                        return toolStripDropDown.Items.Cast<object>();
+                    else
+                        return Array.Empty<object>();
+                },
+                @object =>
+                {
+                    if (@object is MenuStrip menuStrip)
+                        _colorTheme.Apply(menuStrip);
+                    else if (@object is ToolStripItem toolStripItem)
+                        _colorTheme.Apply(toolStripItem);
+                });
+        }
 
         Log.Trace(CallerInformation.Create(), "Queryform.ctor finished.");
     }

@@ -128,28 +128,17 @@ public class MainForm : Form
             _mainMenu.BackColor = _colorTheme.BackColor;
 
             foreach (var menuItem in _mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
-            {
-                foreach (ToolStripItem x in menuItem.DropDownItems)
-                {
-                    x.ForeColor = _colorTheme.ForeColor;
-                    x.BackColor = _colorTheme.BackColor;
-                }
-            }
+            foreach (ToolStripItem x in menuItem.DropDownItems)
+                _colorTheme.Apply(x);
 
             _toolStrip.BackColor = _colorTheme.BackColor;
             _toolStrip.ForeColor = _colorTheme.ForeColor;
 
             foreach (ToolStripItem item in _toolStrip.Items)
-            {
-                item.ForeColor = _colorTheme.ForeColor;
-                item.BackColor = _colorTheme.BackColor;
-            }
+                _colorTheme.Apply(item);
 
             foreach (ToolStripItem item in _statusBar.Items)
-            {
-                item.ForeColor = _colorTheme.ForeColor;
-                item.BackColor = _colorTheme.BackColor;
-            }
+                _colorTheme.Apply(item);
         }
 
         UpdateTotalMemory();

@@ -28,4 +28,10 @@ internal static class ColorThemeApplier
         foreach (Control childControl in control.Controls)
             colorTheme.Apply(childControl);
     }
+
+    public static void Apply(this ColorTheme colorTheme, ToolStripItem toolStripItem)
+    {
+        toolStripItem.ForeColor = colorTheme.ForeColor;
+        toolStripItem.BackColor = colorTheme.BackColor;
+    }
 }
