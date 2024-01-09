@@ -50,7 +50,7 @@ internal sealed class ObjectName : IObjectName
 
     private static string QuoteIdentifier(string unquotedIdentifier)
     {
-        var quotedIdentifier = unquotedIdentifier.IndexOfAny(new[] {'.', '-'}) >= 0
+        var quotedIdentifier = unquotedIdentifier.IndexOfAny(['.', '-']) >= 0
             ? new SqlCommandBuilder().QuoteIdentifier(unquotedIdentifier)
             : unquotedIdentifier;
 

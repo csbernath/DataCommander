@@ -69,7 +69,7 @@ internal sealed class LogResultWriter : IResultWriter
             _fileName = asyncDataAdapterCommand.FileName;
             _parameters = asyncDataAdapterCommand.Parameters;
             _commandText = asyncDataAdapterCommand.CommandText;
-            _results = new List<Result>();
+            _results = [];
         }
     }
 

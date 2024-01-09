@@ -25,5 +25,5 @@ public sealed class TextDataSet
     /// <summary>
     /// 
     /// </summary>
-    public TextDataSetTableCollection Tables { get; } = new();
+    public TextDataSetTableCollection Tables { get; } = [];
 }

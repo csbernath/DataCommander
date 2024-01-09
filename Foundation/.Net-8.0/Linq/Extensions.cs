@@ -24,7 +24,7 @@ public static class Extensions
         return collection.Contains(item);
     }
 
-    public static T[] ItemToArray<T>(this T item) => new[] {item};
+    public static T[] ItemToArray<T>(this T item) => [item];
     public static IEnumerable<T> ItemAsEnumerable<T>(this T item) => item.ItemToArray();
 
     public static string ToLogXmlString(this object source)

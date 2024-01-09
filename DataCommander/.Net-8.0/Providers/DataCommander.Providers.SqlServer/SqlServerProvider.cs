@@ -493,9 +493,9 @@ internal sealed class SqlServerProvider : IProvider
                         string?[] owners;
 
                         if (name.Schema != null)
-                            owners = new[] { name.Schema };
+                            owners = [name.Schema];
                         else
-                            owners = new[] { "dbo", "sys" };
+                            owners = ["dbo", "sys"];
 
                         var sb = new StringBuilder();
                         for (i = 0; i < owners.Length; i++)
@@ -565,7 +565,7 @@ end", name.Database, ownersString, name.Name);
                                 {
                                     var token = tokens[tokenIndex];
                                     var tokenValue = token.Value;
-                                    var indexofAny = tokenValue.IndexOfAny(new[] { '\r', '\n' });
+                                    var indexofAny = tokenValue.IndexOfAny(['\r', '\n']);
                                     if (indexofAny >= 0) tokenValue = tokenValue.Substring(0, indexofAny);
 
                                     string? like;
@@ -875,10 +875,7 @@ from
         {
             var message = exception.ToLogString();
             var infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Error, null, message);
-            infoMessages = new List<InfoMessage>
-            {
-                infoMessage
-            };
+            infoMessages = [infoMessage];
         }
 
         return infoMessages;

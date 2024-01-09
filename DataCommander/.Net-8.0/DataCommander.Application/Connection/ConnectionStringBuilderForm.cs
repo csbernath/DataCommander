@@ -92,7 +92,7 @@ internal partial class ConnectionStringBuilderForm : Form
     {
         oleDbProviderLabel.Visible = true;
         oleDbProvidersComboBox.Visible = true;
-        _oleDbProviders = new List<OleDbProviderInfo>();
+        _oleDbProviders = [];
 
         using (IDataReader dataReader = OleDbEnumerator.GetRootEnumerator())
         {
@@ -251,7 +251,7 @@ internal partial class ConnectionStringBuilderForm : Form
                 {
                     connection.Open();
                     var schema = connection.GetSchema("Databases");
-                    _initialCatalogs = new List<string>();
+                    _initialCatalogs = [];
 
                     foreach (DataRow row in schema.Rows)
                     {

@@ -6,8 +6,7 @@ namespace Foundation.Data.SqlClient;
 
 public static class SqlDataTypeArray
 {
-    public static readonly ReadOnlyArray<SqlDataType> SqlDataTypes = new(new[]
-    {
+    public static readonly ReadOnlyArray<SqlDataType> SqlDataTypes = new([
         new SqlDataType(SqlDbType.BigInt, SqlDataTypeName.BigInt, CSharpTypeName.Int64),
         new SqlDataType(SqlDbType.Bit, SqlDataTypeName.Bit, CSharpTypeName.Boolean),
         new SqlDataType(SqlDbType.Char, SqlDataTypeName.Char, CSharpTypeName.String),
@@ -27,5 +26,5 @@ public static class SqlDataTypeArray
         new SqlDataType(SqlDbType.VarBinary, SqlDataTypeName.VarBinary, CSharpTypeName.ByteArray),
         new SqlDataType(SqlDbType.VarChar, SqlDataTypeName.VarChar, CSharpTypeName.String),
         new SqlDataType(SqlDbType.Xml, SqlDataTypeName.Xml, CSharpTypeName.String)
-    });
+    ]);
 }

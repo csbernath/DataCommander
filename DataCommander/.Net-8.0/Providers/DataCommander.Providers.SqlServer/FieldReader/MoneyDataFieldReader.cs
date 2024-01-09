@@ -22,7 +22,7 @@ internal sealed class MoneyDataFieldReader : IDataFieldReader
 
         NumberFormatInfo.NumberDecimalSeparator = ".";
         NumberFormatInfo.NumberGroupSeparator = ",";
-        NumberFormatInfo.NumberGroupSizes = new[] {3};
+        NumberFormatInfo.NumberGroupSizes = [3];
         NumberFormatInfo.NumberDecimalDigits = 4;
     }
 

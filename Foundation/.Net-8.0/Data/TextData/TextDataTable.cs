@@ -12,5 +12,5 @@ public sealed class TextDataTable
 
     public string Name { get; }
 
-    public TextDataColumnCollection Columns { get; } = new();
+    public TextDataColumnCollection Columns { get; } = [];
 }

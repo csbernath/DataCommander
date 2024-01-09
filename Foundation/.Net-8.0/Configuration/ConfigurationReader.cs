@@ -28,7 +28,7 @@ public sealed class ConfigurationReader
     private string _sectionName;
     private XmlReader _xmlReader;
     private IFormatProvider _formatProvider;
-    private readonly ErrorCollection _errors = new();
+    private readonly ErrorCollection _errors = [];
     private bool _enableFileSystemWatcher;
 
     private static Stream OpenStream(string configFileName)

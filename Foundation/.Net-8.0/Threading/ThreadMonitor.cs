@@ -16,7 +16,7 @@ public static class ThreadMonitor
     private static readonly SortedDictionary<int, WorkerThread> Threads = new();
 
     private static readonly StringTableColumnInfo<WorkerThread>[] ThreadColumns =
-    {
+    [
         new("ManagedThreadId", StringTableColumnAlign.Right, t => t.ManagedThreadId.ToString()),
         new("Name", StringTableColumnAlign.Left, t => t.Name),
         new("State", StringTableColumnAlign.Left, t => t.ThreadState.ToString()),
@@ -27,7 +27,7 @@ public static class ThreadMonitor
         new("Priority", StringTableColumnAlign.Left, t => GetPriority(t.Thread)),
         new("IsBackground", StringTableColumnAlign.Left, t => IsBackground(t.Thread)),
         new("IsThreadPoolThread", StringTableColumnAlign.Left, t => t.Thread.IsThreadPoolThread.ToString())
-    };
+    ];
 
     /// <summary>
     /// 

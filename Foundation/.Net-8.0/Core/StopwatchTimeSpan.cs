@@ -7,7 +7,7 @@ namespace Foundation.Core;
 public struct StopwatchTimeSpan
 {
     private static readonly long[] Power10 =
-    {
+    [
         1,
         10,
         100,
@@ -24,7 +24,7 @@ public struct StopwatchTimeSpan
         10000000000000,
         100000000000000,
         1000000000000000
-    };
+    ];
 
     private readonly long _ticks;
 

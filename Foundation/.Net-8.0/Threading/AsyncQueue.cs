@@ -160,7 +160,7 @@ public class AsyncQueue
     private void Dequeue(ConsumerThread consumerThread)
     {
         var thread = consumerThread.Thread;
-        WaitHandle[] waitHandles = { thread.StopRequest, _queueEvent };
+        WaitHandle[] waitHandles = [thread.StopRequest, _queueEvent];
 
         while (!thread.IsStopRequested)
         {
@@ -185,5 +185,5 @@ public class AsyncQueue
     /// <summary>
     /// Gets the consumer thread list.
     /// </summary>
-    public WorkerThreadCollection Consumers { get; } = new();
+    public WorkerThreadCollection Consumers { get; } = [];
 }

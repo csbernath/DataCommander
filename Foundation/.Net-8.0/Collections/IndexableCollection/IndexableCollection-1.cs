@@ -62,5 +62,5 @@ public partial class IndexableCollection<T>
         Indexes.Add(defaultIndex);
     }
 
-    public IndexCollection<T> Indexes { get; } = new();
+    public IndexCollection<T> Indexes { get; } = [];
 }

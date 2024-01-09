@@ -16,7 +16,7 @@ public sealed class AsyncDbConnection : IDbConnection
     private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(AsyncDbConnection));
     private readonly IDbConnection _cloneableConnection;
     private readonly ICloneable _cloneable;
-    private readonly List<string> _commands = new();
+    private readonly List<string> _commands = [];
     private readonly AutoResetEvent _queueEvent = new(false);
     private readonly WorkerThread _thread;
 
@@ -139,10 +139,10 @@ public sealed class AsyncDbConnection : IDbConnection
     private void Start()
     {
         WaitHandle[] waitHandles =
-        {
+        [
             _thread.StopRequest,
             _queueEvent
-        };
+        ];
 
         const int timeout = 10000; // 10 sec
 

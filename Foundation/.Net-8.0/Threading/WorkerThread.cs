@@ -148,7 +148,7 @@ public class WorkerThread
     {
         Log.Write(LogLevel.Error, $"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) is waiting for stop or continue request...");
         var ticks = Stopwatch.GetTimestamp();
-        WaitHandle[] waitHandles = { _stopRequest, _continueRequest };
+        WaitHandle[] waitHandles = [_stopRequest, _continueRequest];
         var index = WaitHandle.WaitAny(waitHandles);
         ticks = Stopwatch.GetTimestamp() - ticks;
         string request;

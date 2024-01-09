@@ -19,7 +19,7 @@ public sealed class TextDataCommand : DbCommand
     /// <summary>
     /// 
     /// </summary>
-    public new TextDataParameterCollection Parameters { get; } = new();
+    public new TextDataParameterCollection Parameters { get; } = [];
 
     /// <summary>
     /// 

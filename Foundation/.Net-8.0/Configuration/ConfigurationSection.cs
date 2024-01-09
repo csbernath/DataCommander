@@ -256,7 +256,7 @@ public sealed class ConfigurationSection
     private void Load(out ConfigurationNode rootNode, out StringCollection fileNames)
     {
         var reader = new ConfigurationReader();
-        fileNames = new StringCollection();
+        fileNames = [];
         rootNode = reader.Read(ConfigFileName, SectionName, fileNames);
     }
 }

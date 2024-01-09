@@ -13,10 +13,10 @@ public static class TaskMonitor
     #region Private Fields
 
     private static ILog _log = LogFactory.Instance.GetCurrentTypeLog();
-    private static readonly HashSet<TaskInfo> Tasks = new();
+    private static readonly HashSet<TaskInfo> Tasks = [];
 
     private static readonly StringTableColumnInfo<TaskInfo>[] Columns =
-    {
+    [
         StringTableColumnInfo.Create<TaskInfo, int>("Id", StringTableColumnAlign.Right, s => s.Id),
         new("Name", StringTableColumnAlign.Left, s => s.Name),
         StringTableColumnInfo.Create<TaskInfo, int?>("ManagedThreadId", StringTableColumnAlign.Right, s => s.ManagedThreadId),
@@ -27,7 +27,7 @@ public static class TaskMonitor
         StringTableColumnInfo.Create<TaskInfo, TimeSpan?>("CompletedTimeSpan", StringTableColumnAlign.Left, s => s.CompletedTimeSpan),
         StringTableColumnInfo.Create<TaskInfo, bool>("IsAlive", StringTableColumnAlign.Left, s => s.IsAlive),
         StringTableColumnInfo.Create<TaskInfo, bool>("IsCompleted", StringTableColumnAlign.Left, s => s.IsCompleted)
-    };
+    ];
 
     #endregion
 

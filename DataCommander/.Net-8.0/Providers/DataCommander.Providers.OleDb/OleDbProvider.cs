@@ -197,8 +197,7 @@ internal sealed class OleDbProvider : IProvider
             if (!allowDBNull)
                 sb.Append(" NOT NULL");
 
-            table.Rows.Add(new[]
-            {
+            table.Rows.Add([
                 columnOrdinal,
                 pk,
                 row[SchemaTableColumn.ColumnName],
@@ -206,7 +205,7 @@ internal sealed class OleDbProvider : IProvider
                 sb.ToString(),
                 row["DataType"],
                 row["ProviderType"]
-            });
+            ]);
         }
 
         return table;
@@ -310,10 +309,7 @@ internal sealed class OleDbProvider : IProvider
 
     List<Statement> IProvider.GetStatements(string commandText)
     {
-        return new List<Statement>
-        {
-            new(0, commandText)
-        };
+        return [new(0, commandText)];
     }
 
     IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder() => new ConnectionStringBuilder();

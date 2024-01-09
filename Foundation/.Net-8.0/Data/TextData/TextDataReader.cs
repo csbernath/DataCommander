@@ -195,11 +195,11 @@ public sealed class TextDataReader : DbDataReader
             foreach (var column in _columns)
             {
                 object[] values =
-                {
+                [
                     column.ColumnName,
                     column.DataType,
                     false
-                };
+                ];
 
                 _schemaTable.Rows.Add(values);
             }

@@ -12,7 +12,7 @@ namespace Foundation.Text;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public sealed class TextBuilder
 {
-    private readonly List<Line> _lines = new();
+    private readonly List<Line> _lines = [];
     private int _indentation;
 
     public void Add(string text)

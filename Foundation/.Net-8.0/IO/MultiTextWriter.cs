@@ -7,7 +7,7 @@ namespace Foundation.IO;
 
 public class MultiTextWriter : TextWriter
 {
-    private readonly List<TextWriter> _textWriters = new();
+    private readonly List<TextWriter> _textWriters = [];
 
     public IList<TextWriter> TextWriters => _textWriters;
 

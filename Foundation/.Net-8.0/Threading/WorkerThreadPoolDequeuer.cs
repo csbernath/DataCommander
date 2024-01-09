@@ -23,7 +23,7 @@ public class WorkerThreadPoolDequeuer
 
     private void Start()
     {
-        WaitHandle[] waitHandles = { Thread.StopRequest, _pool.EnqueueEvent };
+        WaitHandle[] waitHandles = [Thread.StopRequest, _pool.EnqueueEvent];
 
         while (!Thread.IsStopRequested)
         {

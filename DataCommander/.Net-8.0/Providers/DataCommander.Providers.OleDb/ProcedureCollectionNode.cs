@@ -40,7 +40,7 @@ internal sealed class ProcedureCollectionNode : ITreeNode
         }
         catch
         {
-            treeNodes = new ITreeNode[] { new ProcedureNode(null) };
+            treeNodes = [new ProcedureNode(null)];
         }
 
         return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);

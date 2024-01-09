@@ -22,7 +22,7 @@ internal sealed class SqlLogWriter : ILogWriter
     private readonly Func<LogEntry, string> _logEntryToCommandText;
     private readonly int _commandTimeout;
     private readonly SingleThreadPool _singleThreadPool;
-    private readonly List<LogEntry> _entryQueue = new();
+    private readonly List<LogEntry> _entryQueue = [];
     private readonly object _lockObject = new();
     private Timer _timer;
 

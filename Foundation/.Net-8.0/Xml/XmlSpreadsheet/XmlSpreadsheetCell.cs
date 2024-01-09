@@ -5,7 +5,7 @@ namespace Foundation.Xml.XmlSpreadsheet;
 
 public sealed class XmlSpreadsheetCell
 {
-    private readonly XmlSpreadsheetAttributeCollection _attributes = new();
+    private readonly XmlSpreadsheetAttributeCollection _attributes = [];
     private readonly XmlSpreadsheetDataType _dataType;
     private readonly string _value;
 

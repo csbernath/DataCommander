@@ -13,7 +13,7 @@ internal sealed class DataGridViewResultWriter : IResultWriter
     {
     }
 
-    public List<DoubleBufferedDataGridView> DataGridViews { get; } = new();
+    public List<DoubleBufferedDataGridView> DataGridViews { get; } = [];
 
     #region IResultWriter Members
 

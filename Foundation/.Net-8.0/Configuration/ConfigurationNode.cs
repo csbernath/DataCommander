@@ -179,12 +179,12 @@ public sealed class ConfigurationNode
     /// <summary>
     /// Gets the attributes stored in this node.
     /// </summary>
-    public ConfigurationAttributeCollection Attributes { get; } = new();
+    public ConfigurationAttributeCollection Attributes { get; } = [];
 
     /// <summary>
     /// Gets the child nodes of this node.
     /// </summary>
-    public ConfigurationNodeCollection ChildNodes { get; } = new();
+    public ConfigurationNodeCollection ChildNodes { get; } = [];
 
     /// <summary>
     /// Writes the content of this node (attributes and child nodes)

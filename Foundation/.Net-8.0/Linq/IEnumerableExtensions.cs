@@ -218,7 +218,7 @@ public static partial class IEnumerableExtensions
             if (isSeparator(item))
             {
                 yield return list.ToArray();
-                list = new List<TSource>();
+                list = [];
             }
             else
                 list.Add(item);

@@ -108,7 +108,7 @@ public sealed class SegmentedListBuilder<T>
     #region Private Fields
 
     private readonly int _segmentItemCapacity;
-    private readonly List<T[]> _segments = new();
+    private readonly List<T[]> _segments = [];
     private int _nextSegmentItemIndex;
 
     #endregion

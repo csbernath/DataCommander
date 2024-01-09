@@ -15,13 +15,13 @@ public sealed class GarbageMonitor
     public static readonly GarbageMonitor Default = new("Default");
 
     private readonly string _garbageMonitorName;
-    private readonly LinkedList<MonitoredObject> _monitoredObjects = new();
+    private readonly LinkedList<MonitoredObject> _monitoredObjects = [];
     private readonly InterlockedSequence _interlockedSequence = new(0);
 
     static GarbageMonitor()
     {
-        Columns = new[]
-        {
+        Columns =
+        [
             StringTableColumnInfo.CreateRight<MonitoredObjectState, long>("Id", i => i.MonitoredObject.Id),
             StringTableColumnInfo.CreateLeft<MonitoredObjectState>("Name", i => i.MonitoredObject.Name),
             StringTableColumnInfo.CreateLeft<MonitoredObjectState>("TypeName", i => i.MonitoredObject.TypeName),
@@ -33,7 +33,7 @@ public sealed class GarbageMonitor
             StringTableColumnInfo.CreateRight<MonitoredObjectState>("Age", i => StopwatchTimeSpan.ToString(i.GetAge(), 3)),
             StringTableColumnInfo.CreateLeft<MonitoredObjectState, bool>("IsAlive", i => i.MonitoredObject.WeakReference.IsAlive),
             StringTableColumnInfo.CreateRight<MonitoredObjectState, int?>("Generation", i => i.GetGeneration())
-        };
+        ];
     }
 
     public GarbageMonitor(string garbageMonitorName) => _garbageMonitorName = garbageMonitorName;

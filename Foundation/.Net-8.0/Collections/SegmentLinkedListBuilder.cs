@@ -6,7 +6,7 @@ namespace Foundation.Collections;
 
 public class SegmentLinkedListBuilder<T>
 {
-    private readonly LinkedList<T[]> _linkedList = new();
+    private readonly LinkedList<T[]> _linkedList = [];
     private readonly int _segmentLength;
     private int _count;
 

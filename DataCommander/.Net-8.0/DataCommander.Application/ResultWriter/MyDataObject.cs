@@ -107,15 +107,15 @@ internal sealed class MyDataObject : IDataObject
 
     string[] IDataObject.GetFormats(bool autoConvert)
     {
-        return new[]
-        {
+        return
+        [
             DataFormats.CommaSeparatedValue,
             DataFormats.Html,
             //DataFormats.StringFormat,
             DataFormats.Text,
             DataFormats.UnicodeText,
             "TabSeparatedValues" // TODO
-        };
+        ];
     }
 
     void IDataObject.SetData(object data)

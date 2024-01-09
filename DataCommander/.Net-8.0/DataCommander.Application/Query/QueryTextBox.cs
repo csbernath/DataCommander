@@ -19,7 +19,7 @@ namespace DataCommander.Application.Query;
 
 public sealed class QueryTextBox : UserControl
 {
-    private readonly List<KeyWordList> _keyWordLists = new();
+    private readonly List<KeyWordList> _keyWordLists = [];
     private int _selectionStart = 0;
     private int _selectionLength = 0;
     private int _prevSelectionStart;
@@ -28,7 +28,7 @@ public sealed class QueryTextBox : UserControl
     private ToolStripStatusLabel _sbPanel;
     private int _columnIndex;
     private ColorTheme _colorTheme;
-    private UndoRedoState<string> _undoRedoState = new(new List<string>(), 0);
+    private UndoRedoState<string> _undoRedoState = new([], 0);
 
     public RichTextBox RichTextBox { get; private set; }
 

@@ -31,7 +31,7 @@ namespace DataCommander.Application;
 public class MainForm : Form
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-    private readonly StringCollection _recentFileList = new();
+    private readonly StringCollection _recentFileList = [];
 
     private MenuStrip _mainMenu;
     private ToolStripMenuItem _menuItem1;
@@ -625,7 +625,7 @@ Server version: {connectionProperties.Connection.ServerVersion}";
         var index = _mnuRecentFileList.DropDownItems.IndexOf(menuItem);
         var count = _recentFileList.Count;
         var path = _recentFileList[count - index - 1];
-        LoadFiles(new[] { path });
+        LoadFiles([path]);
     }
 
     private void CreateRecentFileListMenu()

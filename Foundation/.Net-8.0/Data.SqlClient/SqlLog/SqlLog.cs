@@ -164,7 +164,7 @@ public sealed class SqlLog
 
     private void Start()
     {
-        WaitHandle[] waitHandles = { Thread.StopRequest, _queueEvent };
+        WaitHandle[] waitHandles = [Thread.StopRequest, _queueEvent];
 
         while (!Thread.IsStopRequested)
         {

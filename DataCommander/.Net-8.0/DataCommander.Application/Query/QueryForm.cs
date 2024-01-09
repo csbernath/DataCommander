@@ -83,7 +83,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         var providerKeyWords = provider.KeyWords;
 
         _queryTextBox.SetColorTheme(colorTheme);
-        _queryTextBox.AddKeyWords(new[] { "exec" }, colorTheme != null
+        _queryTextBox.AddKeyWords(["exec"], colorTheme != null
             ? colorTheme.ExecKeyWordColor
             : Color.Green);
         _queryTextBox.AddKeyWords(sqlKeyWords, colorTheme != null
@@ -1518,7 +1518,7 @@ public sealed partial class QueryForm : Form, IQueryForm
                 if (declaration != null)
                     declarations.Add(declaration);
 
-                declaration = new List<Token>();
+                declaration = [];
             }
 
             declaration.Add(token);
@@ -1584,14 +1584,13 @@ public sealed partial class QueryForm : Form, IQueryForm
                     break;
             }
 
-            schemaTable.Rows.Add(new object[]
-            {
+            schemaTable.Rows.Add([
                 column.ColumnName,
                 columnSize,
                 column.DataType,
                 numericPrecision,
                 numericScale
-            });
+            ]);
         }
 
         resultWriter.WriteTableBegin(schemaTable);
@@ -1608,7 +1607,7 @@ public sealed partial class QueryForm : Form, IQueryForm
                 values[j] = dataRow[j];
             }
 
-            resultWriter.WriteRows(new[] { values }, 1);
+            resultWriter.WriteRows([values], 1);
         }
 
         resultWriter.WriteTableEnd();

@@ -19,8 +19,8 @@ public class StringTable
             Columns.Add(new StringTableColumn());
     }
 
-    public StringTableColumnCollection Columns { get; } = new();
-    public StringTableRowCollection Rows { get; } = new();
+    public StringTableColumnCollection Columns { get; } = [];
+    public StringTableRowCollection Rows { get; } = [];
     public StringTableRow NewRow() => new(this);
 
     private int GetMaxColumnWidth(int columnIndex)

@@ -12,7 +12,7 @@ namespace DataCommander.Application.Connection;
 public static class ConnectionPropertiesRepository
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-    private static readonly byte[] Entropy = { 0x56, 0x4f, 0x3d, 0x78, 0xf1 };
+    private static readonly byte[] Entropy = [0x56, 0x4f, 0x3d, 0x78, 0xf1];
 
     public static ConnectionProperties GetFromConfiguration(ConfigurationNode configurationNode)
     {

@@ -28,7 +28,7 @@ internal sealed class TableCollectionNode : ITreeNode
             var catalog = schema.Catalog.Name;
 
             if (catalog != null)
-                restrictions = new object[] { catalog, schema.Name };
+                restrictions = [catalog, schema.Name];
 
             DataTable dataTable = dataTable = schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, restrictions);
             var count = dataTable.Rows.Count;
@@ -43,7 +43,7 @@ internal sealed class TableCollectionNode : ITreeNode
         }
         catch
         {
-            treeNodes = new ITreeNode[] { new TableNode(schema, null) };
+            treeNodes = [new TableNode(schema, null)];
         }
 
         return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);

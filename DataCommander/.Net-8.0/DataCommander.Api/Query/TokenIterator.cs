@@ -7,11 +7,11 @@ public sealed class TokenIterator
 {
     #region Private Fields
 
-    private static readonly char[] OperatorsOrPunctuators = new[]
-    {
+    private static readonly char[] OperatorsOrPunctuators =
+    [
         '{', '}', '[', ']', '(', ')', '.', ',', ':', ';', '+', '-', '*', '/', '%', '&', '|', '^', '!', '~', '=',
         '<', '>', '?'
-    };
+    ];
 
     private readonly string _text;
     private int _index = 0;
