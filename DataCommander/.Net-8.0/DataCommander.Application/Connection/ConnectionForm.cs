@@ -506,9 +506,9 @@ internal sealed class ConnectionForm : Form
                 var dbConnectionStringBuilder = new DbConnectionStringBuilder();
                 dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
                 dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
+                var dataSource = (string)dataSourceObject;                
                 var containsIntegratedSecurity = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
                 var containsUserId = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out var userId);
-                var dataSource = (string)dataSourceObject;
                 var provider = ProviderFactory.GetProviders().First(i => i.Identifier == connectionProperties.ProviderIdentifier);
                 var stringBuilder = new StringBuilder();
                 stringBuilder.Append($@"Connection name: {connectionProperties.ConnectionName}
@@ -525,7 +525,10 @@ Provider name: {provider.Name}
                 var cancelableOperationForm =
                     new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2), "Opening connection...", text, _colorTheme);
                 var startTimestamp = Stopwatch.GetTimestamp();
-                cancelableOperationForm.Execute(new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken)));
+                var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
+                cancelableOperationForm.Execute(openConnectionTask);
+                if (openConnectionTask.Exception != null)
+                    throw openConnectionTask.Exception;
                 connectionProperties.Connection = connection;
                 ElapsedTicks = Stopwatch.GetTimestamp() - startTimestamp;                
                 ConnectionProperties = connectionProperties;

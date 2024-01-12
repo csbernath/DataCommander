@@ -351,9 +351,28 @@ internal partial class ConnectionStringBuilderForm : Form
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
             var connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
-            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2), "Opening connection...",
-                string.Empty, _colorTheme);
-            cancelableOperationForm.Execute(new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken)));
+            var dbConnectionStringBuilder = new DbConnectionStringBuilder();
+            dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
+            dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);            
+            var dataSource = (string)dataSourceObject;            
+            var containsIntegratedSecurity = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
+            var containsUserId = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out var userId);
+            var provider = ProviderFactory.GetProviders().First(i => i.Identifier == connectionProperties.ProviderIdentifier);            
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append($@"Connection name: {connectionProperties.ConnectionName}
+Provider name: {provider.Name}
+{ConnectionStringKeyword.DataSource}: {dataSource}");
+            if (containsIntegratedSecurity)
+                stringBuilder.Append($"\r\n{ConnectionStringKeyword.IntegratedSecurity}: {integratedSecurity}");
+            if (containsUserId)
+                stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {userId}");
+            var text = stringBuilder.ToString();
+            
+            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2), "Opening connection...", text, _colorTheme);
+            var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
+            cancelableOperationForm.Execute(openConnectionTask);
+            if (openConnectionTask.Exception != null)
+                throw openConnectionTask.Exception;
             MessageBox.Show("The connection was tested successfully.", DataCommanderApplication.Instance.Name, MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
         }
