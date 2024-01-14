@@ -40,15 +40,16 @@ internal sealed class SystemTableCollectionNode(DatabaseNode databaseNode) : ITr
     s.name,
     tbl.name,
     tbl.object_id,
-    tlb.temporal_type
+    tbl.temporal_type
 from [{DatabaseNode.Name}].sys.tables tbl
 join [{DatabaseNode.Name}].sys.schemas s (nolock)
 on tbl.schema_id = s.schema_id
 where
-(CAST(
+(cast(
  case 
     when tbl.is_ms_shipped = 1 then 1
-    when (
+    when
+    (
         select 
             major_id 
         from 
@@ -57,11 +58,11 @@ where
             major_id = tbl.object_id and 
             minor_id = 0 and 
             class = 1 and 
-            name = N'microsoft_database_tools_support') 
-        is not null then 1
+            name = N'microsoft_database_tools_support'
+    ) is not null then 1
     else 0
 end          
-             AS bit)=1)
+    as bit)=1)
 order by 1,2";
         return commandText;
     }

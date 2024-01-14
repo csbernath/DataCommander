@@ -36,10 +36,10 @@ internal sealed class CompletionForm : Form
         remove => _itemSelectedEvent -= value;
     }
 
-    public void Initialize(QueryTextBox textBox, GetCompletionResponse response, ColorTheme colorTheme)
+    public void Initialize(QueryTextBox textBox, GetCompletionResult result, ColorTheme colorTheme)
     {
         var listBox = new MemberListBox(this, textBox, colorTheme);
-        listBox.Initialize(response);
+        listBox.Initialize(result);
         listBox.Dock = DockStyle.Fill;
 
         Controls.Add(listBox);

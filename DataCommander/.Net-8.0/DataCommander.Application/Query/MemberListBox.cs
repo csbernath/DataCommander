@@ -14,7 +14,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
 {
     private readonly CompletionForm _completionForm;
     private readonly QueryTextBox _textBox;
-    private GetCompletionResponse _response;
+    private GetCompletionResult _result;
     private string _prefix = string.Empty;
     private readonly Container _components = null;
 
@@ -43,27 +43,27 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
     {
         ListBox.Items.Clear();
 
-        foreach (var item in _response.Items)
+        foreach (var item in _result.Items)
         {
             var listBoxItem = new ListBoxItem<IObjectName>(item, ToString);
             ListBox.Items.Add(listBoxItem);
         }
     }
 
-    public void Initialize(GetCompletionResponse response)
+    public void Initialize(GetCompletionResult result)
     {
-        _response = response;
+        _result = result;
         LoadItems();
         _textBox.KeyboardHandler = this;
 
-        if (response.Items.Count > 0)
+        if (result.Items.Count > 0)
         {
-            _prefix = _textBox.Text.Substring(response.StartPosition, response.Length);
+            _prefix = _textBox.Text.Substring(result.StartPosition, result.Length);
             if (_prefix.Length > 0)
             {
                 var items = _prefix.Split('.');
 
-                var count = response.Items[0].UnquotedName.Count(c => c == '.') + 1;
+                var count = result.Items[0].UnquotedName.Count(c => c == '.') + 1;
                 var stringBuilder = new StringBuilder();
                 for (var i = Math.Max(items.Length - count, 0); i < items.Length; i++)
                 {
@@ -140,7 +140,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
         if (listBoxItem != null)
         {
             var selectedItem = listBoxItem.Item.UnquotedName;
-            var startIndex = _response.StartPosition;
+            var startIndex = _result.StartPosition;
             var tokenIterator = new TokenIterator(_textBox.Text.Substring(startIndex));
             var token = tokenIterator.Next();
             int length;

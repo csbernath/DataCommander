@@ -363,16 +363,15 @@ internal sealed class SqlServerProvider : IProvider
         return type;
     }
 
-    GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
+    GetCompletionResult IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
     {
-        var response = new GetCompletionResponse
-        {
-            FromCache = false
-        };
+        var fromCache = false;
         List<IObjectName> array = null;
         var sqlStatement = new SqlParser(text);
         var tokens = sqlStatement.Tokens;
         sqlStatement.FindToken(position, out var previousToken, out var currentToken);
+        int startPosition;
+        int length;
 
         if (currentToken != null)
         {
@@ -383,8 +382,8 @@ internal sealed class SqlServerProvider : IProvider
             var lastPartLength = lastPart != null
                 ? lastPart.Length
                 : 0;
-            response.StartPosition = currentToken.EndPosition - lastPartLength + 1;
-            response.Length = lastPartLength;
+            startPosition = currentToken.EndPosition - lastPartLength + 1;
+            length = lastPartLength;
             var value = currentToken.Value;
             if (value.Length > 0 && value[0] == '@')
             {
@@ -412,8 +411,8 @@ internal sealed class SqlServerProvider : IProvider
         }
         else
         {
-            response.StartPosition = position;
-            response.Length = 0;
+            startPosition = position;
+            length = 0;
         }
 
         if (array == null)
@@ -647,8 +646,7 @@ from
             }
         }
 
-        response.Items = array;
-        return response;
+        return new GetCompletionResult(startPosition, length, array, fromCache);
     }
 
     DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
@@ -659,14 +657,10 @@ from
 
     string IProvider.GetExceptionMessage(Exception exception)
     {
-        string message;
         var sqlException = exception as SqlException;
-
-        if (sqlException != null)
-            message = sqlException.Errors.ToLogString();
-        else
-            message = exception.ToString();
-
+        var message = sqlException != null
+            ? sqlException.Errors.ToLogString()
+            : exception.ToString();
         return message;
     }
 

@@ -30,15 +30,6 @@ internal sealed class Connection : ConnectionBase
 
     public override string DataSource => oledbConnection.DataSource;
     public override string ServerVersion => oledbConnection.ServerVersion;
-
     public override DbCommand CreateCommand() => oledbConnection.CreateCommand();
-
-    protected void SetDatabase(string database)
-    {
-    }
-
-    public override Task<int> GetTransactionCountAsync(CancellationToken cancellationToken)
-    {
-        return Task.FromResult(0);
-    }
+    public override Task<int> GetTransactionCountAsync(CancellationToken cancellationToken) => Task.FromResult(0);
 }

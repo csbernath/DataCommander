@@ -470,7 +470,7 @@ public sealed partial class QueryForm
         }
     }
 
-    private GetCompletionResponse GetCompletion()
+    private GetCompletionResult GetCompletion()
     {
         var textBox = QueryTextBox.RichTextBox;
         var text = textBox.Text;

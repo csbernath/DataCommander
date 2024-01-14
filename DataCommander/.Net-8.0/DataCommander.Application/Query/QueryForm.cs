@@ -155,9 +155,9 @@ public sealed partial class QueryForm : Form, IQueryForm
                 {
                     if (@object == _mainMenu)
                         return _mainMenu.Items.Cast<object>();
-                    else if (@object is ToolStripDropDownItem toolStripDropDownItem)
+                    if (@object is ToolStripDropDownItem toolStripDropDownItem)
                         return toolStripDropDownItem.DropDownItems.Cast<object>();
-                    else if (@object is ToolStripDropDown toolStripDropDown)
+                    if (@object is ToolStripDropDown toolStripDropDown)
                         return toolStripDropDown.Items.Cast<object>();
                     else
                         return Array.Empty<object>();
@@ -1089,6 +1089,7 @@ public sealed partial class QueryForm : Form, IQueryForm
 
     private void AddNodes(TreeNodeCollection parent, IEnumerable<ITreeNode> children, bool sortable)
     {
+        ArgumentNullException.ThrowIfNull(children);
         var ticks = Stopwatch.GetTimestamp();
         IEnumerable<ITreeNode> enumerableChildren;
 

@@ -152,12 +152,4 @@ set arithabort on";
         _createCommandTimestamp = Stopwatch.GetTimestamp();
         return _sqlConnection.CreateCommand();
     }
-
-    protected void SetDatabase(string database)
-    {
-        _sqlConnectionStringBuilder.InitialCatalog = database;
-        _sqlConnection.Dispose();
-        _sqlConnection = null;
-        CreateConnection();
-    }
 }

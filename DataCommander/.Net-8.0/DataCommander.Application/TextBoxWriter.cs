@@ -15,10 +15,7 @@ public class TextBoxWriter(TextBoxBase textBox) : TextWriter
         textBox.ScrollToCaret();
     }
 
-    public override void Write(string? str)
-    {
-        textBox.Invoke(new AppendTextDelegate(AppendText), str);
-    }
+    public override void Write(string? str) => textBox.Invoke(new AppendTextDelegate(AppendText), str);
 
     public override void WriteLine(string? value)
     {

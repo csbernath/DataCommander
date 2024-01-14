@@ -36,7 +36,7 @@ public interface IProvider
 
     Type GetColumnType(FoundationDbColumn column);
     string GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName);
-    GetCompletionResponse GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position);
+    GetCompletionResult GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position);
     DataParameterBase GetDataParameter(IDataParameter parameter);
 
     string GetExceptionMessage(Exception exception);

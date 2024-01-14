@@ -273,7 +273,7 @@ internal sealed class OleDbProvider : IProvider
 
     DataTable IProvider.GetSchemaTable(IDataReader dataReader) => throw new NotImplementedException();
 
-    GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position) =>
+    GetCompletionResult IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position) =>
         throw new NotImplementedException();
 
     void IProvider.ClearCompletionCache()
