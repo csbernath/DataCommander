@@ -528,7 +528,7 @@ public class MainForm : Form
                 Log.Trace(CallerInformation.Create(), "connectionForm.ShowDialog() finished.");
                 var connectionProperties = connectionForm.ConnectionProperties;
 
-                var queryForm = new QueryForm(this, connectionProperties.Provider, connectionProperties.ConnectionString,
+                var queryForm = new QueryForm(this, connectionProperties.Provider, connectionProperties.ConnectionString, connectionProperties.GetPasswordSecureString(),
                     connectionProperties.Connection, _statusBar, _colorTheme, connectionProperties.ConnectionName);
 
                 queryForm.MdiParent = this;
@@ -553,11 +553,16 @@ public class MainForm : Form
                 }
 
                 var provider = ProviderFactory.GetProviders().First(i => i.Identifier == connectionProperties.ProviderIdentifier);
+                var connectionStringBuilder = connectionProperties.Provider.DbProviderFactory.CreateConnectionStringBuilder();
+                connectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
+                var initialCatalog = connectionStringBuilder[ConnectionStringKeyword.InitialCatalog];
                 var message = $@"Connection opened in {StopwatchTimeSpan.ToString(connectionForm.ElapsedTicks, 3)} seconds.
 Connection name: {connectionProperties.ConnectionName}
 Provider name: {provider.Name}
 Data source: {connectionProperties.Connection.DataSource}
-Server version: {connectionProperties.Connection.ServerVersion}";
+Initial catalog: {initialCatalog}
+Server version: {connectionProperties.Connection.ServerVersion}
+{connectionProperties.Connection.ConnectionInformation}";
 
                 var infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message);
                 queryForm.AddInfoMessage(infoMessage);
@@ -733,18 +738,16 @@ Server version: {connectionProperties.Connection.ServerVersion}";
 
                 if (provider != null)
                 {
-                    var connection = provider.CreateConnection(connectionString);
+                    var connection = provider.CreateConnection(connectionString, null);
                     await connection.OpenAsync(CancellationToken.None);
-
-                    var connectionProperties = new ConnectionProperties(null, provider.Name, provider);
-                    connectionProperties.ConnectionString = connectionString;
-
+                    var connectionProperties = new ConnectionProperties(null, provider.Name, provider, connectionString, null);
                     var node = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
                     var subNode = new ConfigurationNode(null);
                     node.AddChildNode(subNode);
                     ConnectionPropertiesRepository.Save(connectionProperties, subNode);
 
-                    var queryForm = new QueryForm(this, provider, connectionString, connection, _statusBar, _colorTheme, connectionProperties.ConnectionName);
+                    var queryForm = new QueryForm(this, provider, connectionString, connectionProperties.GetPasswordSecureString(), connection, _statusBar, _colorTheme,
+                        connectionProperties.ConnectionName);
 
                     queryForm.MdiParent = this;
                     queryForm.Font = SelectedFont;
@@ -849,10 +852,10 @@ Server version: {connectionProperties.Connection.ServerVersion}";
             var provider = ProviderFactory.CreateProvider(providerName);
             Assert.IsTrue(provider != null);
 
-            var connection = provider.CreateConnection(connectionString);
+            var connection = provider.CreateConnection(connectionString, null);
             await connection.OpenAsync(CancellationToken.None);
 
-            var queryForm = new QueryForm(this, provider, connectionString, connection, _statusBar, _colorTheme, connection.ConnectionName);
+            var queryForm = new QueryForm(this, provider, connectionString, null, connection, _statusBar, _colorTheme, connection.ConnectionName);
             queryForm.MdiParent = this;
             queryForm.Font = SelectedFont;
             queryForm.Show();

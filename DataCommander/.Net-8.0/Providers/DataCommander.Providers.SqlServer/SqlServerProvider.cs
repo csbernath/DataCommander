@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading;
 using System.Xml;
@@ -71,12 +72,15 @@ internal sealed class SqlServerProvider : IProvider
     string IProvider.Name => "SqlServer";
     DbProviderFactory IProvider.DbProviderFactory => Microsoft.Data.SqlClient.SqlClientFactory.Instance;
 
-    public string GetConnectionName(string connectionString)
+    public string GetConnectionName(string connectionString, SecureString? password)
     {
-        return ConnectionNameProvider.GetConnectionName(connectionString);
+        return ConnectionNameProvider.GetConnectionName(connectionString, password);
     }
 
-    ConnectionBase IProvider.CreateConnection(string connectionString) => new Connection(connectionString);
+    ConnectionBase IProvider.CreateConnection(string connectionString, SecureString? password)
+    {
+        return new Connection(connectionString, password);
+    }
 
     string[] IProvider.KeyWords
     {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataCommander.Api.Connection;
 
-public abstract class ConnectionBase
+public abstract class ConnectionBase : IDisposable, IAsyncDisposable
 {
     public DbConnection Connection { get; protected set; }
     public abstract Task OpenAsync(CancellationToken cancellationToken);
@@ -34,6 +34,8 @@ public abstract class ConnectionBase
     }
 
     public abstract string ServerVersion { get; }
+    
+    public abstract string ConnectionInformation { get; }
 
     public ConnectionState State
     {
@@ -48,4 +50,14 @@ public abstract class ConnectionBase
     protected void InvokeInfoMessage(IReadOnlyCollection<InfoMessage> messages) => InfoMessage?.Invoke(messages);
     public event InfoMessageEventHandler InfoMessage;
     public event EventHandler<DatabaseChangedEventArgs> DatabaseChanged;
+
+    public void Dispose()
+    {
+        Connection.Dispose();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await Connection.DisposeAsync();
+    }
 }

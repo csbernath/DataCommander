@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -9,18 +10,20 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class ServerNode : ITreeNode
 {
-    public ServerNode(string connectionString)
+    public ServerNode(string connectionString, SecureString? password)
     {
         Assert.IsTrue(!connectionString.IsNullOrWhiteSpace());
 
         ConnectionString = connectionString;
+        Password = password;
     }
 
     public string ConnectionString { get; }
+    public SecureString? Password { get; }
 
     #region ITreeNode Members
 
-    string ITreeNode.Name => ConnectionNameProvider.GetConnectionName(ConnectionString);
+    string ITreeNode.Name => ConnectionNameProvider.GetConnectionName(ConnectionString, Password);
 
     bool ITreeNode.IsLeaf => false;
 

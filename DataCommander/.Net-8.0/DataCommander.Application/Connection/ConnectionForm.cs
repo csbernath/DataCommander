@@ -502,7 +502,6 @@ internal sealed class ConnectionForm : Form
             using (new CursorManager(Cursors.WaitCursor))
             {
                 var connectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(folder);
-                connectionProperties.Provider ??= ProviderFactory.CreateProvider(connectionProperties.ProviderIdentifier);
                 var dbConnectionStringBuilder = new DbConnectionStringBuilder();
                 dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
                 dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
@@ -519,7 +518,7 @@ Provider name: {provider.Name}
                 if (containsUserId)
                     stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {userId}");
                 var text = stringBuilder.ToString();
-                var connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
+                var connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString, connectionProperties.GetPasswordSecureString());
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
                 var cancelableOperationForm =

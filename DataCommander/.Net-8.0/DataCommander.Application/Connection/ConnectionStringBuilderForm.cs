@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,13 +16,15 @@ using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Linq;
+using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Application.Connection;
 
 internal partial class ConnectionStringBuilderForm : Form
 {
-    private ConnectionProperties _tempConnectionProperties;
+    private string _selectedProviderName;
     private ConnectionProperties _connectionProperties;
+    private bool _passwordChanged;
     private readonly ReadOnlyCollection<Provider> _providers;
     private DbProviderFactory _dbProviderFactory;
     private IDbConnectionStringBuilder _dbConnectionStringBuilder;
@@ -80,7 +83,7 @@ internal partial class ConnectionStringBuilderForm : Form
                 integratedSecurityCheckBox.Checked = (bool)valueObject;
 
             userIdTextBox.Text = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.UserId);
-            passwordTextBox.Text = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.Password);
+            passwordTextBox.Text = null;
 
             if (_dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.TrustServerCertificate) &&
                 _dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.TrustServerCertificate, out valueObject))
@@ -117,7 +120,7 @@ internal partial class ConnectionStringBuilderForm : Form
             var index = providersComboBox.SelectedIndex;
             var providerIdentifier = _providers[index].Identifier;
             var provider = ProviderFactory.CreateProvider(providerIdentifier);
-            _tempConnectionProperties = new ConnectionProperties(null, providerIdentifier, provider);
+            _selectedProviderName = provider.Name;
             _dbProviderFactory = provider.DbProviderFactory;
 
             if (_dbProviderFactory is OleDbFactory oleDbFactory)
@@ -150,7 +153,7 @@ internal partial class ConnectionStringBuilderForm : Form
     {
         var applicationData = DataCommanderApplication.Instance.ApplicationData;
         var folder = applicationData.CurrentType;
-        folder = folder.CreateNode(_tempConnectionProperties.Provider.Name);
+        folder = folder.CreateNode(_selectedProviderName);
         var contains = folder.Attributes.TryGetAttributeValue("Data Sources", out string[] dataSourceArray);
 
         if (!contains || refresh)
@@ -287,9 +290,7 @@ internal partial class ConnectionStringBuilderForm : Form
     private static void SetValue(IDbConnectionStringBuilder dbConnectionStringBuilder, string keyword, string? value)
     {
         if (!value.IsNullOrWhiteSpace())
-        {
             dbConnectionStringBuilder.SetValue(keyword, value);
-        }
     }
 
     private void SaveTo(IDbConnectionStringBuilder dbConnectionStringBuilder)
@@ -310,36 +311,31 @@ internal partial class ConnectionStringBuilderForm : Form
 
         SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.UserId, userIdTextBox.Text);
 
-        if (passwordTextBox.Text.Length > 0)
-            SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.Password, passwordTextBox.Text);
-        else
-            dbConnectionStringBuilder.Remove(ConnectionStringKeyword.Password);
-
         if (dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.TrustServerCertificate))
             dbConnectionStringBuilder.SetValue(ConnectionStringKeyword.TrustServerCertificate, trustServerCertificateCheckBox.Checked);
     }
 
     private ConnectionProperties CreateConnectionProperties()
     {
-        var connectionName = connectionNameTextBox.Text;
         var providerInfo = _providers[providersComboBox.SelectedIndex];
         var provider = ProviderFactory.CreateProvider(providerInfo.Identifier);
-        var connectionProperties = new ConnectionProperties(connectionName, providerInfo.Identifier, provider);
         _dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
         SaveTo(_dbConnectionStringBuilder);
-
-        if (_dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.Password, out var value))
+        var connectionName = connectionNameTextBox.Text;
+        byte[]? password;
+        if (_passwordChanged)
         {
-            var password = (string)value;
-            connectionProperties.Password = password.Length > 0
-                ? new Option<string>(password)
+            password = passwordTextBox.Text.Length > 0
+                ? ConnectionPropertiesRepository.ProtectPassword(passwordTextBox.Text)
                 : null;
         }
         else
-            connectionProperties.Password = null;
+        {
+            password = _connectionProperties.Password;
+        }
 
-        connectionProperties.ConnectionString = _dbConnectionStringBuilder.ConnectionString;
-
+        var connectionProperties =
+            new ConnectionProperties(connectionName, providerInfo.Identifier, provider, _dbConnectionStringBuilder.ConnectionString, password);
         return connectionProperties;
     }
 
@@ -350,14 +346,14 @@ internal partial class ConnectionStringBuilderForm : Form
             var connectionProperties = CreateConnectionProperties();
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
-            var connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
+            var connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString, connectionProperties.GetPasswordSecureString());
             var dbConnectionStringBuilder = new DbConnectionStringBuilder();
             dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
-            dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);            
-            var dataSource = (string)dataSourceObject;            
+            dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
+            var dataSource = (string)dataSourceObject;
             var containsIntegratedSecurity = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
             var containsUserId = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out var userId);
-            var provider = ProviderFactory.GetProviders().First(i => i.Identifier == connectionProperties.ProviderIdentifier);            
+            var provider = ProviderFactory.GetProviders().First(i => i.Identifier == connectionProperties.ProviderIdentifier);
             var stringBuilder = new StringBuilder();
             stringBuilder.Append($@"Connection name: {connectionProperties.ConnectionName}
 Provider name: {provider.Name}
@@ -367,7 +363,7 @@ Provider name: {provider.Name}
             if (containsUserId)
                 stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {userId}");
             var text = stringBuilder.ToString();
-            
+
             var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2), "Opening connection...", text, _colorTheme);
             var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
             cancelableOperationForm.Execute(openConnectionTask);
@@ -382,6 +378,18 @@ Provider name: {provider.Name}
             var caption = "Opening connection failed.";
             MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+    }
+
+    private void integratedSecurityCheckBox_CheckedChanged(object sender, EventArgs e)
+    {
+        var integratedSecurity = integratedSecurityCheckBox.Checked;
+        userIdTextBox.Enabled = !integratedSecurity;
+        passwordTextBox.Enabled = !integratedSecurity;
+    }
+
+    private void passwordTextBox_TextChanged(object sender, EventArgs e)
+    {
+        _passwordChanged = true;
     }
 
     private sealed class OleDbProviderInfo(string name)

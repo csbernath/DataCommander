@@ -54,7 +54,7 @@ public static class IDbCommandAsyncExecutorExtensions
             new ExecuteNonReaderRequest(request.CreateCommandRequest, request.CancellationToken),
             async command =>
             {
-                using (var dataReader = await command.ExecuteReaderAsync(request.CommandBehavior, request.CancellationToken))
+                await using (var dataReader = await command.ExecuteReaderAsync(request.CommandBehavior, request.CancellationToken))
                     await readResults(dataReader);
             });
     }

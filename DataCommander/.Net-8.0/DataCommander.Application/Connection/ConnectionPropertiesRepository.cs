@@ -4,7 +4,6 @@ using System.Security.Cryptography;
 using System.Text;
 using DataCommander.Api.Connection;
 using Foundation.Configuration;
-using Foundation.Core;
 using Foundation.Log;
 
 namespace DataCommander.Application.Connection;
@@ -21,11 +20,9 @@ public static class ConnectionPropertiesRepository
         var providerIdentifier = attributes["ProviderIdentifier"].GetValue<string>();
         var connectionString = attributes["ConnectionString"].GetValue<string>();
 
-        var connectionProperties = new ConnectionProperties(connectionName, providerIdentifier, null);
-        connectionProperties.ConnectionString = connectionString;
-
-        LoadProtectedPassword(configurationNode, connectionProperties);
-
+        var provider = ProviderFactory.CreateProvider(providerIdentifier);
+        var password = GetPassword(configurationNode);
+        var connectionProperties = new ConnectionProperties(connectionName, providerIdentifier, provider, connectionString, password);
         return connectionProperties;
     }
 
@@ -36,7 +33,10 @@ public static class ConnectionPropertiesRepository
         attributes.SetAttributeValue("ProviderIdentifier", connectionProperties.ProviderIdentifier);
 
         if (connectionProperties.Password != null)
-            attributes.SetAttributeValue(ConnectionStringKeyword.Password, ProtectPassword(connectionProperties.Password.Value));
+        {
+            var base64EncodedPassword = Convert.ToBase64String(connectionProperties.Password);
+            attributes.SetAttributeValue(ConnectionStringKeyword.Password, base64EncodedPassword);
+        }
         else
             attributes.Remove(ConnectionStringKeyword.Password);
 
@@ -46,47 +46,38 @@ public static class ConnectionPropertiesRepository
         attributes.SetAttributeValue("ConnectionString", connectionStringBuilder.ConnectionString);
     }
 
-    private static string ProtectPassword(string password)
+    private static byte[]? GetPassword(ConfigurationNode node)
     {
-        var bytes = !string.IsNullOrEmpty(password) ? Encoding.UTF8.GetBytes(password) : Array.Empty<byte>();
-        var protectedBytes = ProtectedData.Protect(bytes, Entropy, DataProtectionScope.CurrentUser);
-        var protectedPassword = Convert.ToBase64String(protectedBytes);
-        return protectedPassword;
-    }
-
-    private static string UnprotectPassword(string protectedPassword)
-    {
-        var protectedBytes = Convert.FromBase64String(protectedPassword);
-        var bytes = ProtectedData.Unprotect(protectedBytes, Entropy, DataProtectionScope.CurrentUser);
-        var password = Encoding.UTF8.GetString(bytes);
-        return password;
-    }
-
-    private static void LoadProtectedPassword(ConfigurationNode node, ConnectionProperties connectionProperties)
-    {
-        var contains = node.Attributes.TryGetAttributeValue(ConnectionStringKeyword.Password, out string password);
+        byte[]? password = null;        
+        var contains = node.Attributes.TryGetAttributeValue(ConnectionStringKeyword.Password, out string base64EncodedProtectedPassword);
         if (contains)
         {
-            var succeeded = false;
             try
             {
-                password = UnprotectPassword(password);
-                succeeded = true;
+                password = Convert.FromBase64String(base64EncodedProtectedPassword);
             }
             catch (Exception e)
             {
                 Log.Write(LogLevel.Error, e.ToString());
             }
-
-            if (succeeded)
-            {
-                connectionProperties.Password = new Option<string>(password);
-
-                var dbConnectionStringBuilder = new DbConnectionStringBuilder();
-                dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
-                dbConnectionStringBuilder[ConnectionStringKeyword.Password] = password;
-                connectionProperties.ConnectionString = dbConnectionStringBuilder.ConnectionString;
-            }
         }
+
+        return password;
+    }
+
+    public static byte[] ProtectPassword(string password)
+    {
+        var bytes = !string.IsNullOrEmpty(password)
+            ? Encoding.UTF8.GetBytes(password)
+            : Array.Empty<byte>();
+        var protectedBytes = ProtectedData.Protect(bytes, Entropy, DataProtectionScope.CurrentUser);
+        return protectedBytes;
+    }
+
+    public static string UnprotectPassword(byte[] protectedPassword)
+    {
+        var bytes = ProtectedData.Unprotect(protectedPassword, Entropy, DataProtectionScope.CurrentUser);
+        var password = Encoding.UTF8.GetString(bytes);
+        return password;
     }
 }

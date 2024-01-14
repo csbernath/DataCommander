@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
+using System.Security;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,19 +21,27 @@ internal sealed class Connection : ConnectionBase
     #region Private Fields
 
     private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder;
+    private readonly SqlCredential? _sqlCredential;
     private SqlConnection _sqlConnection;
     private string _serverName;
     private short _serverProcessId;
 
     #endregion
 
-    public Connection(string connectionString)
+    public Connection(string connectionString, SecureString? password)
     {
         _sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString)
         {
             ApplicationName = "Data Commander",
             Pooling = false
         };
+
+        if (password != null)
+        {
+            var userId = _sqlConnectionStringBuilder.UserID;
+            _sqlConnectionStringBuilder.Remove(ConnectionStringKeyword.UserId);
+            _sqlCredential = new SqlCredential(userId, password);
+        }
 
         CreateConnection();
     }
@@ -52,8 +61,9 @@ internal sealed class Connection : ConnectionBase
     }
 
     public override string DataSource => _sqlConnection.DataSource;
+    public override string ServerVersion => _sqlConnection.ServerVersion;
 
-    public override string ServerVersion
+    public override string ConnectionInformation
     {
         get
         {
@@ -63,9 +73,9 @@ internal sealed class Connection : ConnectionBase
             var serverVersion = _sqlConnection.ServerVersion;
             var contains = SqlServerVersionInfoRepository.TryGetByVersion(serverVersion, out var sqlServerVersionInfo);
             var description = contains ? sqlServerVersionInfo.Name : null;
-            return @$"{serverVersion} ({description})
-@@version: {version}
-@@servername: {_serverName}";
+            return @$"Server name: {_serverName}
+{version}
+{description}";
         }
     }
 
@@ -82,6 +92,9 @@ internal sealed class Connection : ConnectionBase
     private void CreateConnection()
     {
         _sqlConnection = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
+        if (_sqlCredential != null)
+            _sqlConnection.Credential = _sqlCredential;
+
         Connection = _sqlConnection;
         _sqlConnection.FireInfoMessageEventOnUserErrors = true;
         _sqlConnection.InfoMessage += OnInfoMessage;

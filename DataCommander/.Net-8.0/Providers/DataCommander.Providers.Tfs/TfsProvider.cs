@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Security;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
 using Foundation.Data;
@@ -41,12 +42,12 @@ public sealed class TfsProvider : IProvider
         throw new NotImplementedException();
     }
 
-    public string GetConnectionName(string connectionString)
+    public string GetConnectionName(string connectionString, SecureString? password)
     {
         throw new NotImplementedException();
     }
 
-    ConnectionBase IProvider.CreateConnection(string connectionString)
+    ConnectionBase IProvider.CreateConnection(string connectionString, SecureString? password)
     {
         throw new NotImplementedException();
     }

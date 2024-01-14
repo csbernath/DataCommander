@@ -1,4 +1,5 @@
 ﻿using DataCommander.Api;
+using DataCommander.Api.Connection;
 using Microsoft.Data.SqlClient;
 using Foundation.Linq;
 
@@ -20,8 +21,8 @@ internal sealed class SqlServerConnectionStringBuilder : IDbConnectionStringBuil
     {
         var supportedKeywords = new[]
         {
-            "Integrated Security",
-            "TrustServerCertificate"
+            ConnectionStringKeyword.IntegratedSecurity,
+            ConnectionStringKeyword.TrustServerCertificate
         };
         return supportedKeywords.Contains(keyword);
     }

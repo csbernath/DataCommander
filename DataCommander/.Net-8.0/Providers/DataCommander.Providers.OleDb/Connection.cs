@@ -1,6 +1,7 @@
 ﻿using DataCommander.Api.Connection;
 using System.Data.Common;
 using System.Data.OleDb;
+using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,7 +11,7 @@ internal sealed class Connection : ConnectionBase
 {
     private readonly OleDbConnection oledbConnection;
 
-    public Connection(string connectionString)
+    public Connection(string connectionString, SecureString? password)
     {
         oledbConnection = new OleDbConnection(connectionString);
         Connection = oledbConnection;
@@ -30,6 +31,7 @@ internal sealed class Connection : ConnectionBase
 
     public override string DataSource => oledbConnection.DataSource;
     public override string ServerVersion => oledbConnection.ServerVersion;
+    public override string ConnectionInformation { get; }
     public override DbCommand CreateCommand() => oledbConnection.CreateCommand();
     public override Task<int> GetTransactionCountAsync(CancellationToken cancellationToken) => Task.FromResult(0);
 }

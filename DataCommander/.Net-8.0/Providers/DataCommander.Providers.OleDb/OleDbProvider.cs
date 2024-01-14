@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
+using System.Security;
 using System.Text;
 using System.Xml;
 using DataCommander.Application;
@@ -14,31 +15,31 @@ namespace DataCommander.Providers.OleDb;
 
 internal sealed class OleDbProvider : IProvider
 {
-    private string connectionString;
-    private static string[] keyWords;
+    private string _connectionString;
+    private static string[] _keyWords;
 
     string IProvider.Name => ProviderName.OleDb;
     DbProviderFactory IProvider.DbProviderFactory => OleDbFactory.Instance;
 
-    public string GetConnectionName(string connectionString)
+    public string GetConnectionName(string connectionString, SecureString? password)
     {
         throw new NotImplementedException();
     }
 
     public ConnectionBase CreateConnection(string connectionString)
     {
-        this.connectionString = connectionString;
-        return new Connection(connectionString);
+        this._connectionString = connectionString;
+        return new Connection(connectionString, null);
     }
 
     public string[] KeyWords
     {
         get
         {
-            if (keyWords == null)
-                keyWords = ProviderFactory.GetKeyWords(connectionString);
+            if (_keyWords == null)
+                _keyWords = ProviderFactory.GetKeyWords(_connectionString);
 
-            return keyWords;
+            return _keyWords;
         }
     }
 
@@ -249,9 +250,9 @@ internal sealed class OleDbProvider : IProvider
 
     #region IProvider Members
 
-    ConnectionBase IProvider.CreateConnection(string connectionString)
+    ConnectionBase IProvider.CreateConnection(string connectionString, SecureString? password)
     {
-        return new Connection(connectionString);
+        return new Connection(connectionString, password);
     }
 
     string[] IProvider.KeyWords => null;

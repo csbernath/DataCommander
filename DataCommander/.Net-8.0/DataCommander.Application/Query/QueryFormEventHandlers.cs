@@ -637,7 +637,7 @@ public sealed partial class QueryForm
         var mainForm = DataCommanderApplication.Instance.MainForm;
         var index = mainForm.MdiChildren.Length;
 
-        var connection = Provider.CreateConnection(_connectionString);
+        var connection = Provider.CreateConnection(_connectionString, _password);
         connection.ConnectionName = Connection.ConnectionName;
         await connection.OpenAsync(CancellationToken.None);
         var database = Connection.Database;
@@ -645,7 +645,8 @@ public sealed partial class QueryForm
         if (connection.Database != Connection.Database)
             connection.Connection.ChangeDatabase(database);
 
-        var queryForm = new QueryForm(_mainForm, Provider, _connectionString, connection, mainForm.StatusBar, _colorTheme, connection.ConnectionName);
+        var queryForm = new QueryForm(_mainForm, Provider, _connectionString, _password, connection, mainForm.StatusBar, _colorTheme,
+            connection.ConnectionName);
 
         if (mainForm.SelectedFont != null)
             queryForm.Font = mainForm.SelectedFont;

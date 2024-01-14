@@ -52,7 +52,8 @@ internal static class SqlServerVersionInfoRepository
             new("15.00.2070", "4517790 Servicing Update (GDR1) for SQL Server 2019 RTM"),
             new("15.00.2080", "Microsoft SQL Server 2019 (RTM-GDR) (KB4583458)"),
             new("16.00.1000", "Microsoft SQL Server 2022 RTM"),
-            new("16.00.1105", "5029379 Security update for SQL Server 2022 GDR: October 10, 2023")
+            new("16.00.1105", "5029379 Security update for SQL Server 2022 GDR: October 10, 2023"),
+            new("16.00.1110", "5032968 Security update for SQL Server 2022 GDR: January 9, 2024")
         }.ToDictionary(i => i.Version);
     }
 }

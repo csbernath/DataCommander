@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -15,7 +16,7 @@ internal sealed class ObjectExplorer : IObjectExplorer
 
     #region IObjectExplorer Members
 
-    void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
+    void IObjectExplorer.SetConnection(string connectionString, SecureString? password, IDbConnection connection)
     {
         _connection = (OleDbConnection)connection;
     }

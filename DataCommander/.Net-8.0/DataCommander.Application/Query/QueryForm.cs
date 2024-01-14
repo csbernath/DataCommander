@@ -9,6 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,7 +42,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         NumberFormat = new NumberFormatInfo { NumberDecimalSeparator = "." };
     }
 
-    public QueryForm(MainForm mainForm, IProvider provider, string connectionString, ConnectionBase connection, StatusStrip parentStatusBar,
+    public QueryForm(MainForm mainForm, IProvider provider, string connectionString, SecureString? password, ConnectionBase connection, StatusStrip parentStatusBar,
         ColorTheme? colorTheme, string connectionName)
     {
         Log.Trace(CallerInformation.Create(), "Queryform.ctor...");
@@ -50,6 +51,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         _mainForm = mainForm;
         Provider = provider;
         _connectionString = connectionString;
+        _password = password;
         _connectionName = connectionName;
         Connection = connection;
         _parentStatusBar = parentStatusBar;
@@ -63,7 +65,7 @@ public sealed partial class QueryForm : Form, IQueryForm
 
         _messagesTextBox = new RichTextBox();
         components.Add(_messagesTextBox);
-        GarbageMonitor.Default.Add("QueryForm.messagesTextBox", _messagesTextBox);
+        GarbageMonitor.Default.Add("QueryForm._messagesTextBox", _messagesTextBox);
         _messagesTextBox.Multiline = true;
         _messagesTextBox.WordWrap = false;
         _messagesTextBox.Dock = DockStyle.Fill;
@@ -73,7 +75,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         _messagesTabPage.Controls.Add(_messagesTextBox);
 
         InitializeComponent();
-        GarbageMonitor.Default.Add("queryForm.toolStrip", _toolStrip);
+        GarbageMonitor.Default.Add("queryForm._toolStrip", _toolStrip);
         _mnuFind.Click += mnuFind_Click;
         _mnuFindNext.Click += mnuFindNext_Click;
         _mnuPaste.Click += mnuPaste_Click;
@@ -116,7 +118,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         var objectExplorer = provider.CreateObjectExplorer();
         if (objectExplorer != null)
         {
-            objectExplorer.SetConnection(connectionString, connection.Connection);
+            objectExplorer.SetConnection(connectionString, password, connection.Connection);
             var cancellationTokenSource = new CancellationTokenSource();
             var cancelableOperationForm = new CancelableOperationForm(mainForm, cancellationTokenSource, TimeSpan.FromSeconds(2), "Getting children...",
                 "Please wait...", colorTheme);
@@ -1190,7 +1192,7 @@ public sealed partial class QueryForm : Form, IQueryForm
 
     private void SetText()
     {
-        var text = $"{_connectionName} - {Provider.GetConnectionName(_connectionString)}";
+        var text = $"{_connectionName} - {Provider.GetConnectionName(_connectionString, _password)}";
         Text = text;
 
         var mainForm = DataCommanderApplication.Instance.MainForm;
@@ -1820,9 +1822,9 @@ public sealed partial class QueryForm : Form, IQueryForm
                         var connectionStringBuilder = Provider.CreateConnectionStringBuilder();
                         connectionStringBuilder.ConnectionString = _connectionString;
                         connectionStringBuilder.SetValue(ConnectionStringKeyword.InitialCatalog, _database);
-                        var connectionProperties = new ConnectionProperties(null, Provider.Name, Provider);
-                        connectionProperties.ConnectionString = connectionStringBuilder.ConnectionString;
-                        var connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
+                        var connectionProperties = new ConnectionProperties(null, Provider.Name, Provider, connectionStringBuilder.ConnectionString, null);
+                        var connection =
+                            connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString, connectionProperties.GetPasswordSecureString());
                         var cancellationTokenSource = new CancellationTokenSource();
                         var cancellationToken = cancellationTokenSource.Token;
                         var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2),

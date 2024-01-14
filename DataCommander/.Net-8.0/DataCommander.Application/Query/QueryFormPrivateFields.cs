@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Drawing;
+using System.Security;
 using System.Threading;
 using System.Windows.Forms;
 using DataCommander.Api;
@@ -72,6 +73,7 @@ public sealed partial class QueryForm
     private ToolStripMenuItem _mnuOpenTable;
     private readonly IContainer components = new Container();
     private readonly string _connectionString;
+    private readonly SecureString? _password;
     private readonly string _connectionName;
     private DbTransaction _transaction;
     private SqlParser _sqlStatement;
