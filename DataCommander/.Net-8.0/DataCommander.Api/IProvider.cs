@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Security;
 using DataCommander.Api.Connection;
 using Foundation.Data;
 
@@ -12,7 +11,7 @@ public interface IProvider
 {
     #region Properties
 
-    string Name { get; }
+    string Identifier { get; }
     DbProviderFactory DbProviderFactory { get; }
     string[] KeyWords { get; }
     bool CanConvertCommandToString { get; }
@@ -25,8 +24,8 @@ public interface IProvider
     IObjectExplorer CreateObjectExplorer();
     void ClearCompletionCache();
     string CommandToString(IDbCommand command);
-    string GetConnectionName(string connectionString, SecureString? password);    
-    ConnectionBase CreateConnection(string connectionString, SecureString? password);
+    string GetConnectionName(Func<IDbConnection> createConnection);    
+    ConnectionBase CreateConnection(ConnectionStringAndCredential connectionStringAndCredential);
     IDbConnectionStringBuilder CreateConnectionStringBuilder();
     IDataReaderHelper CreateDataReaderHelper(IDataReader dataReader);
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -59,9 +58,7 @@ internal sealed class StoredProcedureNode(DatabaseNode database, string owner, s
 
     private async Task<string?> GetText(CancellationToken cancellationToken)
     {
-        Thread.Sleep(5000);
-        var connectionString = database.Databases.Server.ConnectionString;
-        using (var connection = new SqlConnection(connectionString))
+        await using (var connection = database.Databases.Server.CreateConnection())
         {
             await connection.OpenAsync(cancellationToken);
             var text = await SqlDatabase.GetSysComments(connection, database.Name, owner, name, cancellationToken);

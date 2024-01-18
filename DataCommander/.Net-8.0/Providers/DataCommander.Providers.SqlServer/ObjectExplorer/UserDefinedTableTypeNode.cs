@@ -41,7 +41,7 @@ internal sealed class UserDefinedTableTypeNode(DatabaseNode database, int id, st
     private void Script_OnClick(object? sender, EventArgs e)
     {
         var queryForm = (IQueryForm)sender!;
-        var connectionInfo = SqlObjectScripter.CreateSqlConnectionInfo(database.Databases.Server.ConnectionString);
+        var connectionInfo = SqlObjectScripter.CreateSqlConnectionInfo(database.Databases.Server.ConnectionStringAndCredential);
         var connection = new ServerConnection(connectionInfo);
         connection.Connect();
         var server = new Server(connection);

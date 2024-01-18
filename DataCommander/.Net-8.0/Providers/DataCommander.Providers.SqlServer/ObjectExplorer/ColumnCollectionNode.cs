@@ -42,9 +42,10 @@ internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : 
     {
         var commandText = CreateCommandText();
         SortedDictionary<int, ColumnNode> columnNodes = null; 
-        await SqlClientFactory.Instance.ExecuteReaderAsync(
-            databaseNode.Databases.Server.ConnectionString,
-            new ExecuteReaderRequest(commandText), async dataReader =>
+        await Db.ExecuteReaderAsync(
+            databaseNode.Databases.Server.CreateConnection,
+            new ExecuteReaderRequest(commandText),
+            async dataReader =>
             {
                 columnNodes = (await dataReader.ReadResultAsync(128, ToColumnNode, cancellationToken))
                     .ToSortedDictionary(c => c.Id);

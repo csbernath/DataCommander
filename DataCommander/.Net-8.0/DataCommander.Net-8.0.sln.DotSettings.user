@@ -16,6 +16,7 @@
 	
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/Initialized/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=0381f665_002Dee66_002D4e83_002Da4fe_002D903bc9dab8fe_0023DataCommander_002EProviders_002ESQLite/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=7e353c6b_002D78b1_002D4cc9_002Daa86_002D90ef48ae7239_0023DataCommander_002EProviders_002ETfs/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=80bb6d36_002D97b2_002D4393_002D929d_002D0af5f7a05ffa_0023DataCommander_002EProviders_002ESqlServerCe40/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=8321db29_002D34c0_002D4a27_002Dae1d_002Dc3ce807a9353_0023DataCommander_002EProviders_002EMsi/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=c088fda9_002D7991_002D41df_002Da72d_002D6b7074ac555b_0023DataCommander_002EProviders_002EMySql/@EntryIndexedValue">True</s:Boolean>

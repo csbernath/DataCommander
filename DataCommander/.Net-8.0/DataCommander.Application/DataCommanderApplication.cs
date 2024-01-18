@@ -42,15 +42,6 @@ public sealed class DataCommanderApplication
 
     public MainForm MainForm { get; private set; }
 
-    public ConfigurationNode ConnectionsConfigurationNode
-    {
-        get
-        {
-            var folder = ApplicationData.CreateNode("DataCommander/Connections");
-            return folder;
-        }
-    }
-
     #endregion
 
     #region Public Methods

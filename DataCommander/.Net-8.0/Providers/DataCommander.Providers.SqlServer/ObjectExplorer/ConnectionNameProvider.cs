@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security;
 using Foundation.Data;
 using Microsoft.Data.SqlClient;
 
@@ -7,20 +6,19 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal static class ConnectionNameProvider
 {
-    public static string GetConnectionName(string connectionString, SecureString? password)
+    public static string GetConnectionName(Func<SqlConnection> createConnection)
     {
-        var connectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
-        
         string serverVersion;
         string userName = null;
-        using (var connection = new Connection(connectionString, password))
+        SqlConnectionStringBuilder sqlConnectionStringBuilder;
+        using (var connection = createConnection())
         {
-            connection.Connection.Open();
+            connection.Open();
             serverVersion = new Version(connection.ServerVersion).ToString();
-
-            if (connectionStringBuilder.IntegratedSecurity)
+            sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connection.ConnectionString);
+            if (sqlConnectionStringBuilder.IntegratedSecurity)
             {
-                var commanExecutor = connection.Connection.CreateCommandExecutor();
+                var commanExecutor = connection.CreateCommandExecutor();
                 const string commandText = "select suser_sname()";
                 var createCommandRequest = new CreateCommandRequest(commandText);
                 var scalar = commanExecutor.ExecuteScalar(createCommandRequest);
@@ -28,9 +26,9 @@ internal static class ConnectionNameProvider
             }
         }
 
-        if (!connectionStringBuilder.IntegratedSecurity)
-            userName = connectionStringBuilder.UserID;
+        if (!sqlConnectionStringBuilder.IntegratedSecurity)
+            userName = sqlConnectionStringBuilder.UserID;
 
-        return $"{connectionStringBuilder.DataSource}(SQL Server {serverVersion} - {userName})";
+        return $"{sqlConnectionStringBuilder.DataSource}(SQL Server {serverVersion} - {userName})";
     }
 }

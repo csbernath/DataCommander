@@ -1,13 +1,14 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using DataCommander.Api.Connection;
+using Microsoft.Data.SqlClient;
 using Microsoft.SqlServer.Management.Common;
 
 namespace DataCommander.Providers.SqlServer;
 
 public static class SqlObjectScripter
 {
-    public static SqlConnectionInfo CreateSqlConnectionInfo(string connectionString)
+    public static SqlConnectionInfo CreateSqlConnectionInfo(ConnectionStringAndCredential connectionStringAndCredential)
     {
-        var csb = new SqlConnectionStringBuilder(connectionString);
+        var csb = new SqlConnectionStringBuilder(connectionStringAndCredential.ConnectionString);
 
         var connectionInfo = new SqlConnectionInfo();
         connectionInfo.ApplicationName = csb.ApplicationName;
@@ -22,10 +23,12 @@ public static class SqlObjectScripter
         connectionInfo.UseIntegratedSecurity = csb.IntegratedSecurity;
         connectionInfo.WorkstationId = csb.WorkstationID;
         connectionInfo.TrustServerCertificate = csb.TrustServerCertificate;
-        if (!csb.IntegratedSecurity)
+
+        var credential = connectionStringAndCredential.Credential;
+        if (credential != null)
         {
-            connectionInfo.UserName = csb.UserID;
-            connectionInfo.Password = csb.Password;
+            connectionInfo.UserName = credential.UserId;
+            connectionInfo.SecurePassword = credential.Password.SecureString;
         }
 
         return connectionInfo;

@@ -709,7 +709,7 @@ public sealed partial class QueryForm
             _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
             var tableName = _command.CommandType == CommandType.StoredProcedure ? _command.CommandText : sqlStatement.FindTableName();
 
-            if (tableName[0] == '[' && destinationProvider.Name == "System.Data.OracleClient")
+            if (tableName[0] == '[' && destinationProvider.Identifier == "System.Data.OracleClient")
                 tableName = tableName.Substring(1, tableName.Length - 2);
 
             IResultWriter resultWriter = new CopyResultWriter(AddInfoMessage, destinationProvider, destinationConnection, tableName,

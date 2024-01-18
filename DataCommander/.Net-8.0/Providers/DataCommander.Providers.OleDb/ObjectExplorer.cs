@@ -5,20 +5,25 @@ using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
+using DataCommander.Api.Connection;
 
 namespace DataCommander.Providers.OleDb;
 
 internal sealed class ObjectExplorer : IObjectExplorer
 {
+    private readonly IProvider _provider;
+
+    public ObjectExplorer(IProvider provider) => _provider = provider;
+
     public bool Sortable => false;
 
     private OleDbConnection _connection;
 
     #region IObjectExplorer Members
 
-    void IObjectExplorer.SetConnection(string connectionString, SecureString? password, IDbConnection connection)
+    void IObjectExplorer.SetConnection(ConnectionStringAndCredential connectionStringAndCredential)
     {
-        _connection = (OleDbConnection)connection;
+        _connection = (OleDbConnection)_provider.CreateConnection(connectionStringAndCredential).Connection;
     }
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)

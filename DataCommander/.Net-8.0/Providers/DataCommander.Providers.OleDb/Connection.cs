@@ -11,11 +11,10 @@ internal sealed class Connection : ConnectionBase
 {
     private readonly OleDbConnection oledbConnection;
 
-    public Connection(string connectionString, SecureString? password)
+    public Connection(string connectionString)
     {
         oledbConnection = new OleDbConnection(connectionString);
         Connection = oledbConnection;
-
         oledbConnection.InfoMessage += OnInfoMessage;
     }
 

@@ -9,6 +9,7 @@ using System.Threading;
 using System.Windows.Forms;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
+using DataCommander.Application.Connection;
 using DataCommander.Application.ResultWriter;
 using Foundation.Log;
 using Foundation.Threading;
@@ -72,8 +73,7 @@ public sealed partial class QueryForm
     private ToolStripMenuItem _mnuCreateInsertSelect;
     private ToolStripMenuItem _mnuOpenTable;
     private readonly IContainer components = new Container();
-    private readonly string _connectionString;
-    private readonly SecureString? _password;
+    private readonly ConnectionInfo _connectionInfo;
     private readonly string _connectionName;
     private DbTransaction _transaction;
     private SqlParser _sqlStatement;

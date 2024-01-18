@@ -21,6 +21,8 @@ internal sealed class SqlServerConnectionStringBuilder : IDbConnectionStringBuil
     {
         var supportedKeywords = new[]
         {
+            ConnectionStringKeyword.DataSource,
+            ConnectionStringKeyword.InitialCatalog,
             ConnectionStringKeyword.IntegratedSecurity,
             ConnectionStringKeyword.TrustServerCertificate
         };

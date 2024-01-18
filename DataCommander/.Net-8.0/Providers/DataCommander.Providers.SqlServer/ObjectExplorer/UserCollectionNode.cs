@@ -3,7 +3,6 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Microsoft.Data.SqlClient;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
@@ -16,9 +15,8 @@ internal sealed class UserCollectionNode(DatabaseNode database) : ITreeNode
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var commandText = $"select name from {database.Name}..sysusers where islogin = 1 order by name";
-        var connectionString = database.Databases.Server.ConnectionString;
         DataTable dataTable;
-        using (var connection = new SqlConnection(connectionString))
+        using (var connection = database.Databases.Server.CreateConnection())
         {
             var executor = connection.CreateCommandExecutor();
             dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));

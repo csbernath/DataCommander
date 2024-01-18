@@ -3,7 +3,6 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Microsoft.Data.SqlClient;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
@@ -20,8 +19,8 @@ from sys.databases d
 where
 	d.source_database_id is not null
 order by 1";
-        return await SqlClientFactory.Instance.ExecuteReaderAsync(
-            databaseCollectionNode.Server.ConnectionString,
+        return await Db.ExecuteReaderAsync(
+            databaseCollectionNode.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
             ReadDatabaseNode,

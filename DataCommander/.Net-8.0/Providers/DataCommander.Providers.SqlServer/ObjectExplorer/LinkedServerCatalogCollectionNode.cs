@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Microsoft.Data.SqlClient;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 
@@ -58,7 +57,7 @@ end
 
 drop table #catalog";
 
-        using (var connection = new SqlConnection(_linkedServer.LinkedServers.Server.ConnectionString))
+        using (var connection = _linkedServer.LinkedServers.Server.CreateConnection())
         {
             connection.Open();
 

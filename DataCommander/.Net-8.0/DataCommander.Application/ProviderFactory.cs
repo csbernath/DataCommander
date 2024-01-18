@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using ADODB;
 using DataCommander.Api;
 using Foundation.Assertions;
@@ -9,31 +8,11 @@ namespace DataCommander.Application;
 
 public static class ProviderFactory
 {
-    public static IEnumerable<Provider> GetProviders()
+    public static IProvider CreateProvider(string providerIdentifier)
     {
-        var node = Settings.SelectNode("DataCommander/Providers", true);
-
-        foreach (var childNode in node.ChildNodes)
-        {
-            childNode.Attributes.TryGetAttributeValue("Enabled", out bool enabled);
-            if (enabled)
-            {
-                var identifier = childNode.Name;
-
-                if (!childNode.Attributes.TryGetAttributeValue("Name", out string name))
-                    name = identifier;
-
-                var provider = new Provider(identifier, name);
-                yield return provider;
-            }
-        }
-    }
-
-    public static IProvider CreateProvider(string name)
-    {
-        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(providerIdentifier);
         var folder = Settings.SelectNode("DataCommander/Providers", true);
-        folder = folder.ChildNodes[name];
+        folder = folder.ChildNodes[providerIdentifier];
         var attributes = folder.Attributes;
         var typeName = attributes["TypeName"].GetValue<string>();
         var type = Type.GetType(typeName, true);

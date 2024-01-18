@@ -18,7 +18,7 @@ internal sealed class OleDbProvider : IProvider
     private string _connectionString;
     private static string[] _keyWords;
 
-    string IProvider.Name => ProviderName.OleDb;
+    string IProvider.Identifier => ProviderIdentifier.OleDb;
     DbProviderFactory IProvider.DbProviderFactory => OleDbFactory.Instance;
 
     public string GetConnectionName(string connectionString, SecureString? password)
@@ -29,7 +29,7 @@ internal sealed class OleDbProvider : IProvider
     public ConnectionBase CreateConnection(string connectionString)
     {
         this._connectionString = connectionString;
-        return new Connection(connectionString, null);
+        return new Connection(connectionString);
     }
 
     public string[] KeyWords
@@ -238,7 +238,7 @@ internal sealed class OleDbProvider : IProvider
         return new OleDbDataReaderHelper(oleDbDataReader);
     }
 
-    public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer();
+    public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer(this);
 
     public void ClearCompletionCache()
     {
@@ -250,9 +250,14 @@ internal sealed class OleDbProvider : IProvider
 
     #region IProvider Members
 
-    ConnectionBase IProvider.CreateConnection(string connectionString, SecureString? password)
+    public string GetConnectionName(Func<IDbConnection> createConnection)
     {
-        return new Connection(connectionString, password);
+        return null;
+    }
+
+    ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential)
+    {
+        return new Connection(connectionStringAndCredential.ConnectionString);
     }
 
     string[] IProvider.KeyWords => null;

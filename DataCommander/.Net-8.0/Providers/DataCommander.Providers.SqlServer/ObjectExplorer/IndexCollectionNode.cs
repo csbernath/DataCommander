@@ -13,7 +13,7 @@ internal sealed class IndexCollectionNode(DatabaseNode databaseNode, int id) : I
     public string Name => "Indexes";
     public bool IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var cb = new SqlCommandBuilder();
 
@@ -36,18 +36,15 @@ order by i.name",
         var parameters = new SqlParameterCollectionBuilder();
         parameters.Add("object_id", id);
         var request = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
-
-        var connectionString = databaseNode.Databases.Server.ConnectionString;
-        var executor = new SqlCommandExecutor(connectionString);
-
-        return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(request, 128, dataRecord =>
+        var executor = new SqlCommandExecutor(databaseNode.Databases.Server.CreateConnection);
+        return await executor.ExecuteReaderAsync(request, 128, dataRecord =>
         {
             var name = dataRecord.GetStringOrDefault(0);
             var indexId = dataRecord.GetInt32(1);
             var type = dataRecord.GetByte(2);
             var isUnique = dataRecord.GetBoolean(3);
             return new IndexNode(databaseNode, id, indexId, name, type, isUnique);
-        }));
+        });
     }
 
     public bool Sortable => false;

@@ -29,15 +29,11 @@ internal sealed class TriggerNode(DatabaseNode databaseNode, int id, string name
     {
         var cb = new SqlCommandBuilder();
         var databaseName = cb.QuoteIdentifier(databaseNode.Name);
-
         var commandText = $@"select m.definition
 from {databaseName}.sys.sql_modules m (nolock)
 where m.object_id = {id}";
-
-        var connectionString = databaseNode.Databases.Server.ConnectionString;
-
         string definition;
-        using (var connection = new SqlConnection(connectionString))
+        using (var connection = databaseNode.Databases.Server.CreateConnection())
         {
             connection.Open();
             var executor = connection.CreateCommandExecutor();

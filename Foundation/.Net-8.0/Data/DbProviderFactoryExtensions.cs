@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.Common;
 using System.Globalization;
-using Foundation.Collections.ReadOnly;
 
 namespace Foundation.Data;
 
@@ -31,27 +30,6 @@ public static class DbProviderFactoryExtensions
         connection!.ConnectionString = connectionString;
         connection.Open();
         return ExecuteDataTable(dbProviderFactory, connection, commandText);
-    }
-
-    public static void ExecuteReader(
-        this DbProviderFactory dbProviderFactory,
-        string connectionString,
-        ExecuteReaderRequest request,
-        Action<IDataReader> readResults)
-    {
-        using var connection = dbProviderFactory.CreateConnection();
-        connection!.ConnectionString = connectionString;
-        connection.Open();
-        var executor = connection.CreateCommandExecutor();
-        executor.ExecuteReader(request, readResults);
-    }
-
-    public static ReadOnlySegmentLinkedList<T> ExecuteReader<T>(this DbProviderFactory dbProviderFactory, string connectionString,
-        ExecuteReaderRequest request, int segmentLength, Func<IDataRecord, T> readRecord)
-    {
-        ReadOnlySegmentLinkedList<T> rows = null;
-        dbProviderFactory.ExecuteReader(connectionString, request, dataReader => rows = dataReader.ReadResult(segmentLength, readRecord));
-        return rows;
     }
 
     public static object ExecuteScalar(this DbProviderFactory dbProviderFactory, string connectionString, CreateCommandRequest request)

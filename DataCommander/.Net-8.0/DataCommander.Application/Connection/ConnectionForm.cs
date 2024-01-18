@@ -4,27 +4,26 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
 using DataCommander.Application.ResultWriter;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
-using Foundation.Configuration;
-using Foundation.Core;
 using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace DataCommander.Application.Connection;
 
 internal sealed class ConnectionForm : Form
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private List<ConnectionInfo> _connectionInfos;
+    private ConnectionBase _connection;
     private Button _btnOk;
     private DoubleBufferedDataGridView _dataGrid;
     private Button _btnCancel;
@@ -55,12 +54,12 @@ internal sealed class ConnectionForm : Form
         _dataTable.Columns.Add("Extended Properties");
         _dataTable.Columns.Add("Naming");
 
-        var folder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
+        _connectionInfos = ConnectionInfoRepository.Get().ToList();
 
-        foreach (var subFolder in folder.ChildNodes)
+        foreach (var connectionProperties in _connectionInfos)
         {
             var dataRow = _dataTable.NewRow();
-            LoadConnection(subFolder, dataRow);
+            LoadConnection(connectionProperties, dataRow);
             _dataTable.Rows.Add(dataRow);
         }
 
@@ -104,7 +103,8 @@ internal sealed class ConnectionForm : Form
         }
     }
 
-    public ConnectionProperties ConnectionProperties { get; private set; }
+    public ConnectionInfo ConnectionInfo { get; private set; }
+    public ConnectionBase Connection => _connection;
 
     protected override void Dispose(bool disposing)
     {
@@ -205,16 +205,29 @@ internal sealed class ConnectionForm : Form
 
     public long ElapsedTicks { get; private set; }
 
-    private void LoadConnection(ConfigurationNode configurationNode, DataRow row)
+    protected override void OnClosing(CancelEventArgs e)
     {
-        var connectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(configurationNode);
-        row[ConnectionFormColumnName.ConnectionName] = connectionProperties.ConnectionName;
+        base.OnClosing(e);
 
-        var provider = ProviderFactory.GetProviders().First(i => i.Identifier == connectionProperties.ProviderIdentifier);
+        if (_isDirty)
+        {
+            const string text = "Do you want to save changes ?";
+            const string caption = "Data Commander";
+            var dialogResult = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialogResult == DialogResult.Yes)
+                ConnectionInfoRepository.Save(_connectionInfos);
+        }
+    }
+
+    private void LoadConnection(ConnectionInfo connectionInfo, DataRow row)
+    {
+        row[ConnectionFormColumnName.ConnectionName] = connectionInfo.ConnectionName;
+
+        var provider = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
         row[ConnectionFormColumnName.ProviderName] = provider.Name;
 
         var dbConnectionStringBuilder = new DbConnectionStringBuilder();
-        dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
+        dbConnectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
 
         row[ConnectionStringKeyword.DataSource] = (string)dbConnectionStringBuilder[ConnectionStringKeyword.DataSource];
 
@@ -230,33 +243,28 @@ internal sealed class ConnectionForm : Form
 
     private void btnOK_Click(object sender, EventArgs e)
     {
-        var folder = SelectedConfigurationNode;
-        Connect(folder);
+        var connectionInfo = SelectedConnectionInfo;
+        Connect(connectionInfo);
     }
 
     private void Connect_Click(object sender, EventArgs e)
     {
-        var folder = SelectedConfigurationNode;
-        Connect(folder);
+        var connectionInfo = SelectedConnectionInfo;
+        Connect(connectionInfo);
     }
 
     private void Copy_Click(object sender, EventArgs e)
     {
-        var stringWriter = new StringWriter();
-        var xmlTextWriter = new XmlTextWriter(stringWriter) { Formatting = Formatting.Indented };
-
-        foreach (var node in SelectedConfigurationNodes)
-            ConfigurationWriter.WriteNode(xmlTextWriter, node);
-
-        var s = stringWriter.ToString();
-        Clipboard.SetText(s);
+        var connectionPropertiesArray = SelectedIndexes
+            .Select(index => _connectionInfos[index].ToConnectionDto());
+        var json = JsonConvert.SerializeObject(connectionPropertiesArray);
+        Clipboard.SetText(json);
     }
 
     private void CopyConnectionString_Click(object sender, EventArgs e)
     {
-        var configurationNode = SelectedConfigurationNode;
-        var connectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(configurationNode);
-        var connectionString = connectionProperties.ConnectionString;
+        var connectionProperties = SelectedConnectionInfo;
+        var connectionString = connectionProperties.ConnectionStringAndCredential.ConnectionString;
         Clipboard.SetText(connectionString);
     }
 
@@ -265,21 +273,11 @@ internal sealed class ConnectionForm : Form
         try
         {
             var s = Clipboard.GetText();
-            var stringReader = new StringReader(s);
-            var xmlTextReader = new XmlTextReader(stringReader);
-            var configurationReader = new ConfigurationReader();
-            var propertyFolder = configurationReader.Read(xmlTextReader);
-            propertyFolder.Write(TraceWriter.Instance);
-
-            var configurationNodes = propertyFolder.ChildNodes.Count > 0
-                ? (IEnumerable<ConfigurationNode>)propertyFolder.ChildNodes
-                : new[] { propertyFolder };
-
-            foreach (var configurationNode in configurationNodes)
-            {
-                var connectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(configurationNode);
+            var connectionDtos = JsonConvert.DeserializeObject<ConnectionDto[]>(s);
+            var connectionPropertiesList = connectionDtos
+                .Select(connectionDto => connectionDto.ToConnectionProperties());
+            foreach (var connectionProperties in connectionPropertiesList)
                 Add(connectionProperties);
-            }
         }
         catch (Exception ex)
         {
@@ -292,10 +290,8 @@ internal sealed class ConnectionForm : Form
         if (MessageBox.Show(this, "Do you want to delete the selected item(s)?", DataCommanderApplication.Instance.Name, MessageBoxButtons.YesNoCancel,
                 MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
         {
-            var connectionsFolder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
             var index = SelectedIndex;
-            var selectedFolder = connectionsFolder.ChildNodes[index];
-            connectionsFolder.RemoveChildNode(selectedFolder);
+            _connectionInfos.RemoveAt(index);
             _dataTable.Rows.RemoveAt(index);
             _isDirty = true;
         }
@@ -308,32 +304,31 @@ internal sealed class ConnectionForm : Form
 
     private void Edit_Click(object sender, EventArgs e)
     {
-        var configurationNode = SelectedConfigurationNode;
         var form = new ConnectionStringBuilderForm(_colorTheme);
-        form.ConnectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(configurationNode);
+        var connectionInfo = SelectedConnectionInfo;
+        form.ConnectionInfo = connectionInfo;
         var dialogResult = form.ShowDialog();
         if (dialogResult == DialogResult.OK)
         {
-            ConnectionPropertiesRepository.Save(form.ConnectionProperties, configurationNode);
+            _connectionInfos[SelectedIndex] = form.ConnectionInfo;
+            _isDirty = true;
             var row = _dataTable.DefaultView[_dataGrid.CurrentCell.RowIndex].Row;
-            LoadConnection(configurationNode, row);
+            LoadConnection(connectionInfo, row);
         }
     }
 
     private void MoveDown()
     {
         var index = SelectedIndex;
-        var connectionsFolder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
-
-        if (index < connectionsFolder.ChildNodes.Count - 1)
+        if (index < _connectionInfos.Count - 1)
         {
-            var folder = connectionsFolder.ChildNodes[index];
-            connectionsFolder.RemoveChildNode(folder);
-            connectionsFolder.InsertChildNode(index + 1, folder);
+            var connectionInfo = _connectionInfos[index];
+            _connectionInfos.RemoveAt(index);
+            _connectionInfos.Insert(index + 1, connectionInfo);
 
             _dataTable.Rows.RemoveAt(index);
             var row = _dataTable.NewRow();
-            LoadConnection(folder, row);
+            LoadConnection(connectionInfo, row);
             _dataTable.Rows.InsertAt(row, index + 1);
             _dataGrid.CurrentCell = _dataGrid[0, index + 1];
         }
@@ -346,14 +341,13 @@ internal sealed class ConnectionForm : Form
         var index = SelectedIndex;
         if (index > 0)
         {
-            var connectionsConfigurationNode = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
-            var folder = connectionsConfigurationNode.ChildNodes[index];
-            connectionsConfigurationNode.RemoveChildNode(folder);
-            connectionsConfigurationNode.InsertChildNode(index - 1, folder);
+            var connectionInfo = _connectionInfos[index];
+            _connectionInfos.RemoveAt(index);
+            _connectionInfos.Insert(index-1, connectionInfo);
 
             _dataTable.Rows.RemoveAt(index);
             var row = _dataTable.NewRow();
-            LoadConnection(folder, row);
+            LoadConnection(connectionInfo, row);
             _dataTable.Rows.InsertAt(row, index - 1);
             _dataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             _dataGrid.CurrentCell = _dataGrid[0, index - 1];
@@ -446,79 +440,42 @@ internal sealed class ConnectionForm : Form
         }
     }
 
-    private ConfigurationNode SelectedConfigurationNode
+    private ConnectionInfo? SelectedConnectionInfo
     {
         get
         {
-            ConfigurationNode folder;
             var index = SelectedIndex;
-
-            if (index >= 0)
-            {
-                folder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
-                folder = folder.ChildNodes[index];
-            }
-            else
-            {
-                folder = null;
-            }
-
-            return folder;
+            var connectionProperties = index >= 0
+                ? _connectionInfos[index]
+                : null;
+            return connectionProperties;
         }
     }
 
-    private ConfigurationNode ToConfigurationNode(int index)
+    private void Connect(ConnectionInfo connectionInfo)
     {
-        var node = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
-        node = node.ChildNodes[index];
-        return node;
-    }
-
-    private IEnumerable<ConfigurationNode> SelectedConfigurationNodes
-    {
-        get
-        {
-            var configurationNodes =
-                from index in SelectedIndexes
-                select ToConfigurationNode(index);
-
-            return configurationNodes;
-        }
-    }
-
-    private void Connect(ConfigurationNode folder)
-    {
-        if (_isDirty)
-        {
-            const string text = "Do you want to save changes ?";
-            const string caption = "Data Commander";
-            var dialogResult = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dialogResult == DialogResult.Yes)
-                DataCommanderApplication.Instance.SaveApplicationData();
-        }
-
         try
         {
             using (new CursorManager(Cursors.WaitCursor))
             {
-                var connectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(folder);
                 var dbConnectionStringBuilder = new DbConnectionStringBuilder();
-                dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
+                dbConnectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
                 dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
-                var dataSource = (string)dataSourceObject;                
+                var dataSource = (string)dataSourceObject;
                 var containsIntegratedSecurity = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
-                var containsUserId = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out var userId);
-                var provider = ProviderFactory.GetProviders().First(i => i.Identifier == connectionProperties.ProviderIdentifier);
+                var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
+                var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);                
                 var stringBuilder = new StringBuilder();
-                stringBuilder.Append($@"Connection name: {connectionProperties.ConnectionName}
-Provider name: {provider.Name}
+                stringBuilder.Append($@"Connection name: {connectionInfo.ConnectionName}
+Provider name: {providerInfo.Name}
 {ConnectionStringKeyword.DataSource}: {dataSource}");
                 if (containsIntegratedSecurity)
                     stringBuilder.Append($"\r\n{ConnectionStringKeyword.IntegratedSecurity}: {integratedSecurity}");
-                if (containsUserId)
-                    stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {userId}");
+                var credential = connectionInfo.ConnectionStringAndCredential.Credential;
+                if (credential != null)
+                    stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {credential.UserId}");
                 var text = stringBuilder.ToString();
-                var connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString, connectionProperties.GetPasswordSecureString());
+                var connection = provider.CreateConnection(connectionInfo.ConnectionStringAndCredential);
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
                 var cancelableOperationForm =
@@ -528,9 +485,9 @@ Provider name: {provider.Name}
                 cancelableOperationForm.Execute(openConnectionTask);
                 if (openConnectionTask.Exception != null)
                     throw openConnectionTask.Exception;
-                connectionProperties.Connection = connection;
                 ElapsedTicks = Stopwatch.GetTimestamp() - startTimestamp;                
-                ConnectionProperties = connectionProperties;
+                ConnectionInfo = connectionInfo;
+                _connection = connection;
                 DialogResult = DialogResult.OK;
             }
         }
@@ -553,7 +510,7 @@ Provider name: {provider.Name}
                 break;
 
             default:
-                var folder = SelectedConfigurationNode;
+                var folder = SelectedConnectionInfo;
 
                 if (folder != null)
                 {
@@ -581,7 +538,7 @@ Provider name: {provider.Name}
         else if (e.KeyData == Keys.Enter)
         {
             e.Handled = true;
-            var node = SelectedConfigurationNode;
+            var node = SelectedConnectionInfo;
             Connect(node);
         }
 
@@ -604,15 +561,14 @@ Provider name: {provider.Name}
         //}
     }
 
-    private void Add(ConnectionProperties connectionProperties)
+    private void Add(ConnectionInfo connectionInfo)
     {
-        var node = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
-        var subFolder = new ConfigurationNode(null);
-        node.AddChildNode(subFolder);
-        ConnectionPropertiesRepository.Save(connectionProperties, subFolder);
+        _connectionInfos.Add(connectionInfo);
+
         var row = _dataTable.NewRow();
-        LoadConnection(subFolder, row);
+        LoadConnection(connectionInfo, row);
         _dataTable.Rows.Add(row);
+
         _isDirty = true;
     }
 
@@ -622,7 +578,7 @@ Provider name: {provider.Name}
 
         if (form.ShowDialog() == DialogResult.OK)
         {
-            var connectionProperties = form.ConnectionProperties;
+            var connectionProperties = form.ConnectionInfo;
             Add(connectionProperties);
         }
     }

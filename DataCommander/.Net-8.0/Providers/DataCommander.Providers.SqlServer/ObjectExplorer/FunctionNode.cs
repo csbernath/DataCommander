@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Microsoft.Data.SqlClient;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data.SqlClient;
 
@@ -65,9 +64,8 @@ from	{database.Name}.{owner}.[{name}]()";
 
     private void menuItemScriptObject_Click(object sender, EventArgs e)
     {
-        var connectionString = database.Databases.Server.ConnectionString;
         string text;
-        using (var connection = new SqlConnection(connectionString))
+        using (var connection = database.Databases.Server.CreateConnection())
         {
             connection.Open();
             text = SqlDatabase.GetSysComments(connection, database.Name, owner, name, CancellationToken.None).Result;

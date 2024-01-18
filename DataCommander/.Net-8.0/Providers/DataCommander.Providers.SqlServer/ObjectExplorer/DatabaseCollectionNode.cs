@@ -3,7 +3,6 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Microsoft.Data.SqlClient;
 using Foundation.Assertions;
 using Foundation.Data;
 
@@ -33,8 +32,8 @@ internal sealed class DatabaseCollectionNode : ITreeNode
         list.Add(new DatabaseSnapshotCollectionNode(this));
 
         var commandText = CreateCommandText();
-        var databaseNodes = await SqlClientFactory.Instance.ExecuteReaderAsync(
-            Server.ConnectionString,
+        var databaseNodes = await Db.ExecuteReaderAsync(
+            Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
             ReadRecord,

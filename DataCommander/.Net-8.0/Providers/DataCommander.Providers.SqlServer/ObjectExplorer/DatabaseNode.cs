@@ -83,11 +83,9 @@ select
 	convert(decimal(15,2),convert(float,fileproperty(name, 'SpaceUsed')) * 100.0 / size)	as [Used%],
 	convert(decimal(15,2),(f.size-fileproperty(name, 'SpaceUsed')) * 8096.0 / 1000000000)	as [Free (GB)]
 from	[{0}].sys.database_files f", name);
-        var connectionString = Databases.Server.ConnectionString;
-
         var queryForm = (IQueryForm)sender;
         DataSet dataSet = null;
-        using (var connection = new SqlConnection(connectionString))
+        using (var connection = Databases.Server.CreateConnection())
         {
             var executor = connection.CreateCommandExecutor();
             try
@@ -145,9 +143,7 @@ from	[{0}].sys.database_files f", name);
 from [{database}].sys.database_files f
 where
     f.type = 0";
-
-        var connectionString = Databases.Server.ConnectionString;
-        using (var connection = new SqlConnection(connectionString))
+        using (var connection = Databases.Server.CreateConnection())
         {
             connection.Open();
             var executor = connection.CreateCommandExecutor();

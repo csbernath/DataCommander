@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Microsoft.Data.SqlClient;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data.SqlClient;
 
@@ -32,9 +31,8 @@ internal sealed class ViewNode(DatabaseNode database, int id, string? schema, st
         get
         {
             var name1 = new DatabaseObjectMultipartName(null, database.Name, schema, name);
-            var connectionString = database.Databases.Server.ConnectionString;
             string text;
-            using (var connection = new SqlConnection(connectionString))
+            using (var connection = database.Databases.Server.CreateConnection())
                 text = TableNode.GetSelectStatement(connection, name1);
             return text;
         }
@@ -58,9 +56,8 @@ internal sealed class ViewNode(DatabaseNode database, int id, string? schema, st
 
     private async Task<string> menuItemScriptObject_ClickAsync(object sender)
     {
-        var connectionString = database.Databases.Server.ConnectionString;
         string text;
-        await using (var connection = new SqlConnection(connectionString))
+        await using (var connection = database.Databases.Server.CreateConnection())
         {
             await connection.OpenAsync();
             text = await SqlDatabase.GetSysComments(connection, database.Name, schema, name, CancellationToken.None);

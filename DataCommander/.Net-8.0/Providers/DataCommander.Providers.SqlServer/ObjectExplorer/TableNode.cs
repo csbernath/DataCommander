@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -62,7 +61,7 @@ internal sealed class TableNode(DatabaseNode databaseNode, string? owner, string
 
     public bool IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var treeNodes = new List<ITreeNode>();
 
@@ -80,12 +79,15 @@ where
             string? historyTableName = null;
             int historyTableId = 0;
             var request = new ExecuteReaderRequest(commandText);
-            SqlClientFactory.Instance.ExecuteReader(DatabaseNode.Databases.Server.ConnectionString, request, dataReader =>
-            {
-                dataReader.Read();
-                historyTableName = dataReader.GetString(0);
-                historyTableId = dataReader.GetInt32(1);
-            });
+            await Db.ExecuteReaderAsync(
+                DatabaseNode.Databases.Server.CreateConnection,
+                request,
+                async dataReader =>
+                {
+                    await dataReader.ReadAsync(cancellationToken);
+                    historyTableName = dataReader.GetString(0);
+                    historyTableId = dataReader.GetInt32(1);
+                });
             treeNodes.Add(new TableNode(DatabaseNode, owner, historyTableName, historyTableId, TemporalType.HistoryTable));
         }
 
@@ -97,7 +99,7 @@ where
             new IndexCollectionNode(DatabaseNode, Id)
         });
 
-        return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
+        return treeNodes;
     }
 
     public bool Sortable => false;
@@ -107,9 +109,8 @@ where
         get
         {
             var name1 = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
-            var connectionString = DatabaseNode.Databases.Server.ConnectionString;
             string text;
-            using (var connection = new SqlConnection(connectionString))
+            using (var connection = DatabaseNode.Databases.Server.CreateConnection())
             {
                 connection.Open();
                 text = GetSelectStatement(connection, name1);
@@ -206,9 +207,8 @@ exec sp_MStablekeys N'{1}.[{2}]', null, 14
 exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
 
         Log.Write(LogLevel.Trace, commandText);
-        var connectionString = DatabaseNode.Databases.Server.ConnectionString;
         DataSet dataSet;
-        using (var connection = new SqlConnection(connectionString))
+        using (var connection = DatabaseNode.Databases.Server.CreateConnection())
         {
             var executor = connection.CreateCommandExecutor();
             dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText));
@@ -327,9 +327,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
 
     private string GetCreateTableScript()
     {
-        var connectionString = DatabaseNode.Databases.Server.ConnectionString;
-        var connectionInfo = SqlObjectScripter.CreateSqlConnectionInfo(connectionString);
-
+        var connectionInfo = SqlObjectScripter.CreateSqlConnectionInfo(DatabaseNode.Databases.Server.ConnectionStringAndCredential);
         var connection = new ServerConnection(connectionInfo);
         connection.Connect();
         var server = new Server(connection);
@@ -365,9 +363,8 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
     private void Indexes_Click(object sender, EventArgs e)
     {
         var commandText = $"use [{DatabaseNode.Name}] exec sp_helpindex [{owner}.{name}]";
-        var connectionString = DatabaseNode.Databases.Server.ConnectionString;
         DataTable dataTable;
-        using (var connection = new SqlConnection(connectionString))
+        using (var connection = DatabaseNode.Databases.Server.CreateConnection())
         {
             var executor = connection.CreateCommandExecutor();
             dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
@@ -385,9 +382,8 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
     private void SelectScript_Click(object? sender, EventArgs e)
     {
         var name1 = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
-        var connectionString = DatabaseNode.Databases.Server.ConnectionString;
         string selectStatement;
-        using (var connection = new SqlConnection(connectionString))
+        using (var connection = DatabaseNode.Databases.Server.CreateConnection())
         {
             selectStatement = GetSelectStatement(connection, name1);
         }
@@ -440,8 +436,11 @@ where
 	and o.name = '{2}'
 order by c.column_id", DatabaseNode.Name, owner, name);
         Log.Write(LogLevel.Trace, commandText);
-        var connectionString = DatabaseNode.Databases.Server.ConnectionString;
-        var columns = SqlClientFactory.Instance.ExecuteReader(connectionString, new ExecuteReaderRequest(commandText), 128, ReadColumn);
+        var columns = Db.ExecuteReader(
+            DatabaseNode.Databases.Server.CreateConnection,
+            new ExecuteReaderRequest(commandText),
+            128,
+            ReadColumn);
 
         var stringBuilder = new StringBuilder();
         var first = true;
@@ -536,9 +535,8 @@ order by c.column_id", DatabaseNode.Name, owner, name);
 
     private string CreateUpdateScript()
     {
-        var connectionString = DatabaseNode.Databases.Server.ConnectionString;
         GetTableSchemaResult getTableSchemaResult;
-        using (var connection = new SqlConnection(connectionString))
+        using (var connection = DatabaseNode.Databases.Server.CreateConnection())
         {
             connection.Open();
             var tableName = $"{DatabaseNode.Name}.{owner}.{name}";
@@ -598,9 +596,8 @@ order by c.column_id", DatabaseNode.Name, owner, name);
 
     private void CsharpOrm_Click(object? sender, EventArgs e)
     {
-        var connectionString = DatabaseNode.Databases.Server.ConnectionString;
         GetTableSchemaResult getTableSchemaResult;
-        using (var connection = new SqlConnection(connectionString))
+        using (var connection = DatabaseNode.Databases.Server.CreateConnection())
         {
             connection.Open();
 
@@ -686,9 +683,8 @@ order by c.column_id", DatabaseNode.Name, owner, name);
 
     private void DataTransferObjectWithProperties_Click(object? sender, EventArgs e)
     {
-        var connectionString = DatabaseNode.Databases.Server.ConnectionString;
         GetTableSchemaResult getTableSchemaResult;
-        using (var connection = new SqlConnection(connectionString))
+        using (var connection = DatabaseNode.Databases.Server.CreateConnection())
         {
             connection.Open();
 

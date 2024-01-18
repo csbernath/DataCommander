@@ -16,8 +16,8 @@ internal sealed class SystemViewCollectionNode(DatabaseNode databaseNode) : ITre
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
-        return await SqlClientFactory.Instance.ExecuteReaderAsync(
-            databaseNode.Databases.Server.ConnectionString,
+        return await Db.ExecuteReaderAsync(
+            databaseNode.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
             ReadRecord,

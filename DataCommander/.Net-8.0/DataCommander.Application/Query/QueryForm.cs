@@ -9,7 +9,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,17 +41,15 @@ public sealed partial class QueryForm : Form, IQueryForm
         NumberFormat = new NumberFormatInfo { NumberDecimalSeparator = "." };
     }
 
-    public QueryForm(MainForm mainForm, IProvider provider, string connectionString, SecureString? password, ConnectionBase connection, StatusStrip parentStatusBar,
-        ColorTheme? colorTheme, string connectionName)
+    public QueryForm(MainForm mainForm, IProvider provider, ConnectionInfo connectionInfo, ConnectionBase connection,
+        StatusStrip parentStatusBar, ColorTheme? colorTheme)
     {
         Log.Trace(CallerInformation.Create(), "Queryform.ctor...");
         GarbageMonitor.Default.Add("QueryForm", this);
 
         _mainForm = mainForm;
         Provider = provider;
-        _connectionString = connectionString;
-        _password = password;
-        _connectionName = connectionName;
+        _connectionInfo = connectionInfo;
         Connection = connection;
         _parentStatusBar = parentStatusBar;
         _colorTheme = colorTheme;
@@ -118,7 +115,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         var objectExplorer = provider.CreateObjectExplorer();
         if (objectExplorer != null)
         {
-            objectExplorer.SetConnection(connectionString, password, connection.Connection);
+            objectExplorer.SetConnection(_connectionInfo.ConnectionStringAndCredential);
             var cancellationTokenSource = new CancellationTokenSource();
             var cancelableOperationForm = new CancelableOperationForm(mainForm, cancellationTokenSource, TimeSpan.FromSeconds(2), "Getting children...",
                 "Please wait...", colorTheme);
@@ -1192,7 +1189,8 @@ public sealed partial class QueryForm : Form, IQueryForm
 
     private void SetText()
     {
-        var text = $"{_connectionName} - {Provider.GetConnectionName(_connectionString, _password)}";
+        var text =
+            $"{_connectionName} - {Provider.GetConnectionName(() => Provider.CreateConnection(_connectionInfo.ConnectionStringAndCredential).Connection)}";
         Text = text;
 
         var mainForm = DataCommanderApplication.Instance.MainForm;
@@ -1819,19 +1817,14 @@ public sealed partial class QueryForm : Form, IQueryForm
                     try
                     {
                         AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Connection is closed. Opening connection..."));
-                        var connectionStringBuilder = Provider.CreateConnectionStringBuilder();
-                        connectionStringBuilder.ConnectionString = _connectionString;
-                        connectionStringBuilder.SetValue(ConnectionStringKeyword.InitialCatalog, _database);
-                        var connectionProperties = new ConnectionProperties(null, Provider.Name, Provider, connectionStringBuilder.ConnectionString, null);
-                        var connection =
-                            connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString, connectionProperties.GetPasswordSecureString());
+                        var connection = Provider.CreateConnection(_connectionInfo.ConnectionStringAndCredential);
                         var cancellationTokenSource = new CancellationTokenSource();
                         var cancellationToken = cancellationTokenSource.Token;
                         var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2),
                             "Opening connection...", string.Empty, _colorTheme);
                         cancelableOperationForm.Execute(new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken)));
                         Connection.Connection.Dispose();
-                        Connection = connectionProperties.Connection;
+                        Connection = connection;
                         AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Opening connection succeeded."));
                     }
                     catch (Exception exception)

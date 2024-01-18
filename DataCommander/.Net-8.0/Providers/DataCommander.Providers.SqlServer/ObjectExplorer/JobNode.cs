@@ -4,7 +4,6 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Microsoft.Data.SqlClient;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
@@ -51,7 +50,7 @@ internal sealed class JobNode : ITreeNode
         var commandText = $@"msdb..sp_help_job @job_name = {_name.ToNullableNVarChar()}";
         DataSet dataSet;
 
-        using (var connection = new SqlConnection(_jobs.Server.ConnectionString))
+        using (var connection = _jobs.Server.CreateConnection())
         {
             var executor = connection.CreateCommandExecutor();
             dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText));

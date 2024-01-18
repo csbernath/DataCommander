@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Data;
-using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
+using DataCommander.Api.Connection;
 
 namespace DataCommander.Api;
 
 public interface IObjectExplorer
 {
     bool Sortable { get; }
-    void SetConnection(string connectionString, SecureString? password, IDbConnection connection);
+    void SetConnection(ConnectionStringAndCredential connectionStringAndCredential);
     Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken);
 }

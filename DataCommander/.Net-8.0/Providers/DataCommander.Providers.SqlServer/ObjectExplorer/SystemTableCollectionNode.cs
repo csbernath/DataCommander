@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Microsoft.Data.SqlClient;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
@@ -18,8 +17,8 @@ internal sealed class SystemTableCollectionNode(DatabaseNode databaseNode) : ITr
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
-        var tableNodes = await SqlClientFactory.Instance.ExecuteReaderAsync(
-            DatabaseNode.Databases.Server.ConnectionString,
+        var tableNodes = await Db.ExecuteReaderAsync(
+            DatabaseNode.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
             dataRecord =>

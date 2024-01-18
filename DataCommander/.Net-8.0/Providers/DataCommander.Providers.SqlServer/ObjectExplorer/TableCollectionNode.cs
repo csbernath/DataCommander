@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Collections.ReadOnly;
-using Microsoft.Data.SqlClient;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
@@ -27,9 +26,8 @@ internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
     private async Task<ReadOnlySegmentLinkedList<TableNode>> GetTableNodes(CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
-        var connectionString = DatabaseNode.Databases.Server.ConnectionString;
-        var tableNodes = await SqlClientFactory.Instance.ExecuteReaderAsync(
-            connectionString,
+        var tableNodes = await Db.ExecuteReaderAsync(
+            DatabaseNode.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
             ReadRecord,

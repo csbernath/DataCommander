@@ -85,9 +85,6 @@ public class SafeDbConnection : IDbConnection
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public string ConnectionString
     {
         get => Connection.ConnectionString;

@@ -4,7 +4,6 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Microsoft.Data.SqlClient;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
@@ -28,8 +27,8 @@ internal sealed class SystemDatabaseCollectionNode : ITreeNode
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
-        return await SqlClientFactory.Instance.ExecuteReaderAsync(
-            _databaseCollectionNode.Server.ConnectionString,
+        return await Db.ExecuteReaderAsync(
+            _databaseCollectionNode.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
             ReadRecord,

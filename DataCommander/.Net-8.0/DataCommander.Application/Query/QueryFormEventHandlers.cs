@@ -637,7 +637,7 @@ public sealed partial class QueryForm
         var mainForm = DataCommanderApplication.Instance.MainForm;
         var index = mainForm.MdiChildren.Length;
 
-        var connection = Provider.CreateConnection(_connectionString, _password);
+        var connection = Provider.CreateConnection(_connectionInfo.ConnectionStringAndCredential);
         connection.ConnectionName = Connection.ConnectionName;
         await connection.OpenAsync(CancellationToken.None);
         var database = Connection.Database;
@@ -645,8 +645,7 @@ public sealed partial class QueryForm
         if (connection.Database != Connection.Database)
             connection.Connection.ChangeDatabase(database);
 
-        var queryForm = new QueryForm(_mainForm, Provider, _connectionString, _password, connection, mainForm.StatusBar, _colorTheme,
-            connection.ConnectionName);
+        var queryForm = new QueryForm(_mainForm, Provider, _connectionInfo, connection, mainForm.StatusBar, _colorTheme);
 
         if (mainForm.SelectedFont != null)
             queryForm.Font = mainForm.SelectedFont;
@@ -800,22 +799,21 @@ public sealed partial class QueryForm
         {
             Cursor = Cursors.WaitCursor;
 
-            var oldDbConnection = Connection.Connection as OleDbConnection;
-
-            if (oldDbConnection != null && string.IsNullOrEmpty(Query))
+            var oleDbConnection = Connection.Connection as OleDbConnection;
+            if (oleDbConnection != null && string.IsNullOrEmpty(Query))
             {
                 var dataSet = new DataSet();
-                AddTable(oldDbConnection, dataSet, OleDbSchemaGuid.Provider_Types, "Provider Types");
-                AddTable(oldDbConnection, dataSet, OleDbSchemaGuid.DbInfoLiterals, "DbInfoLiterals");
+                AddTable(oleDbConnection, dataSet, OleDbSchemaGuid.Provider_Types, "Provider Types");
+                AddTable(oleDbConnection, dataSet, OleDbSchemaGuid.DbInfoLiterals, "DbInfoLiterals");
 
-                var c2 = new ConnectionClass();
-                c2.Open(_connectionString, null, null, 0);
-                var rs = c2.OpenSchema(SchemaEnum.adSchemaDBInfoKeywords, Type.Missing, Type.Missing);
+                var adoDbConnection = new ConnectionClass();
+                adoDbConnection.Open(_connectionInfo.ConnectionStringAndCredential.ConnectionString, null, null, 0);
+                var rs = adoDbConnection.OpenSchema(SchemaEnum.adSchemaDBInfoKeywords, Type.Missing, Type.Missing);
                 var dataTable = OleDbHelper.Convert(rs);
-                c2.Close();
+                adoDbConnection.Close();
                 dataSet.Tables.Add(dataTable);
 
-                AddTable(oldDbConnection, dataSet, OleDbSchemaGuid.Sql_Languages, "Sql Languages");
+                AddTable(oleDbConnection, dataSet, OleDbSchemaGuid.Sql_Languages, "Sql Languages");
                 ShowDataSet(dataSet);
             }
             else

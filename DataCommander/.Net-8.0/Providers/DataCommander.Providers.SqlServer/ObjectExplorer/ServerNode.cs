@@ -1,29 +1,26 @@
 ﻿using System.Collections.Generic;
-using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Foundation.Assertions;
-using Foundation.Core;
+using DataCommander.Api.Connection;
+using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class ServerNode : ITreeNode
 {
-    public ServerNode(string connectionString, SecureString? password)
+    public readonly ConnectionStringAndCredential ConnectionStringAndCredential;
+    
+    public ServerNode(ConnectionStringAndCredential connectionStringAndCredential)
     {
-        Assert.IsTrue(!connectionString.IsNullOrWhiteSpace());
-
-        ConnectionString = connectionString;
-        Password = password;
+        ConnectionStringAndCredential = connectionStringAndCredential;
     }
 
-    public string ConnectionString { get; }
-    public SecureString? Password { get; }
+    public SqlConnection CreateConnection() => ConnectionFactory.CreateConnection(ConnectionStringAndCredential);
 
     #region ITreeNode Members
 
-    string ITreeNode.Name => ConnectionNameProvider.GetConnectionName(ConnectionString, Password);
+    string ITreeNode.Name => ConnectionNameProvider.GetConnectionName(CreateConnection);
 
     bool ITreeNode.IsLeaf => false;
 

@@ -526,11 +526,10 @@ public class MainForm : Form
             if (connectionForm.ShowDialog() == DialogResult.OK)
             {
                 Log.Trace(CallerInformation.Create(), "connectionForm.ShowDialog() finished.");
-                var connectionProperties = connectionForm.ConnectionProperties;
-
-                var queryForm = new QueryForm(this, connectionProperties.Provider, connectionProperties.ConnectionString, connectionProperties.GetPasswordSecureString(),
-                    connectionProperties.Connection, _statusBar, _colorTheme, connectionProperties.ConnectionName);
-
+                var connectionInfo = connectionForm.ConnectionInfo;
+                var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);                
+                var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
+                var queryForm = new QueryForm(this, provider, connectionInfo, connectionForm.Connection, _statusBar, _colorTheme);
                 queryForm.MdiParent = this;
 
                 if (SelectedFont != null)
@@ -552,21 +551,20 @@ public class MainForm : Form
                         break;
                 }
 
-                var provider = ProviderFactory.GetProviders().First(i => i.Identifier == connectionProperties.ProviderIdentifier);
-                var connectionStringBuilder = connectionProperties.Provider.DbProviderFactory.CreateConnectionStringBuilder();
-                connectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
-                var initialCatalog = connectionStringBuilder[ConnectionStringKeyword.InitialCatalog];
+                var connectionStringBuilder = provider.CreateConnectionStringBuilder();
+                connectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
+                connectionStringBuilder.TryGetValue(ConnectionStringKeyword.InitialCatalog, out var intialCatalogObject);
+                var connection = connectionForm.Connection;
                 var message = $@"Connection opened in {StopwatchTimeSpan.ToString(connectionForm.ElapsedTicks, 3)} seconds.
-Connection name: {connectionProperties.ConnectionName}
-Provider name: {provider.Name}
-Data source: {connectionProperties.Connection.DataSource}
-Initial catalog: {initialCatalog}
-Server version: {connectionProperties.Connection.ServerVersion}
-{connectionProperties.Connection.ConnectionInformation}";
+Connection name: {connectionInfo.ConnectionName}
+Provider name: {providerInfo.Name}
+Data source: {connection.DataSource}
+Database: {connection.Database}
+Server version: {connection.ServerVersion}
+{connection.ConnectionInformation}";
 
                 var infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message);
                 queryForm.AddInfoMessage(infoMessage);
-
                 queryForm.Show();
 
                 if (WindowState == FormWindowState.Maximized)
@@ -693,12 +691,12 @@ Server version: {connectionProperties.Connection.ServerVersion}
 
                     case 2:
                         connectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + fileName;
-                        provider = ProviderFactory.CreateProvider(ProviderName.OleDb);
+                        provider = ProviderFactory.CreateProvider(ProviderIdentifier.OleDb);
                         break;
 
                     case 3:
                         connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={fileName};Persist Security Info=False";
-                        provider = ProviderFactory.CreateProvider(ProviderName.OleDb);
+                        provider = ProviderFactory.CreateProvider(ProviderIdentifier.OleDb);
                         break;
 
                     case 4:
@@ -709,7 +707,7 @@ Server version: {connectionProperties.Connection.ServerVersion}
                         else
                             connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={fileName};Extended Properties=Excel 12.0";
 
-                        provider = ProviderFactory.CreateProvider(ProviderName.OleDb);
+                        provider = ProviderFactory.CreateProvider(ProviderIdentifier.OleDb);
                         break;
 
                     case 5:
@@ -719,7 +717,7 @@ Server version: {connectionProperties.Connection.ServerVersion}
 
                     case 6:
                         connectionString = $"{ConnectionStringKeyword.DataSource}={fileName}";
-                        provider = ProviderFactory.CreateProvider(ProviderName.SqLite);
+                        provider = ProviderFactory.CreateProvider(ProviderIdentifier.SqLite);
                         break;
 
                     case 7:
@@ -729,7 +727,7 @@ Server version: {connectionProperties.Connection.ServerVersion}
 
                     case 8:
                         connectionString = $"{ConnectionStringKeyword.DataSource}={fileName}";
-                        provider = ProviderFactory.CreateProvider(ProviderName.SqlServerCe40);
+                        provider = ProviderFactory.CreateProvider(ProviderIdentifier.SqlServerCe40);
                         break;
 
                     default:
@@ -738,16 +736,16 @@ Server version: {connectionProperties.Connection.ServerVersion}
 
                 if (provider != null)
                 {
-                    var connection = provider.CreateConnection(connectionString, null);
+                    var connectionStringAndCredential= new ConnectionStringAndCredential(connectionString, null);
+                    var connection = provider.CreateConnection(connectionStringAndCredential);
                     await connection.OpenAsync(CancellationToken.None);
-                    var connectionProperties = new ConnectionProperties(null, provider.Name, provider, connectionString, null);
-                    var node = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
-                    var subNode = new ConfigurationNode(null);
-                    node.AddChildNode(subNode);
-                    ConnectionPropertiesRepository.Save(connectionProperties, subNode);
+                    var connectionInfo = new ConnectionInfo(null, provider.Identifier, connectionStringAndCredential);
 
-                    var queryForm = new QueryForm(this, provider, connectionString, connectionProperties.GetPasswordSecureString(), connection, _statusBar, _colorTheme,
-                        connectionProperties.ConnectionName);
+                    var connectionInfos = ConnectionInfoRepository.Get().ToList();
+                    connectionInfos.Add(connectionInfo);
+                    ConnectionInfoRepository.Save(connectionInfos);
+
+                    var queryForm = new QueryForm(this, provider, connectionInfo, connection, _statusBar, _colorTheme);
 
                     queryForm.MdiParent = this;
                     queryForm.Font = SelectedFont;
@@ -829,19 +827,19 @@ Server version: {connectionProperties.Connection.ServerVersion}
             sb.Add(ConnectionStringKeyword.DataSource, dialog.FileName);
 
             string connectionString;
-            string providerName;
+            string providerIdentifier;
 
             switch (dialog.FilterIndex)
             {
                 case 1:
-                    providerName = ProviderName.SqlServerCe40;
+                    providerIdentifier = ProviderIdentifier.SqlServerCe40;
                     connectionString = sb.ConnectionString;
                     var engine = new SqlCeEngine(connectionString);
                     engine.CreateDatabase();
                     break;
 
                 case 2:
-                    providerName = ProviderName.SqLite;
+                    providerIdentifier = ProviderIdentifier.SqLite;
                     connectionString = sb.ConnectionString;
                     break;
 
@@ -849,13 +847,15 @@ Server version: {connectionProperties.Connection.ServerVersion}
                     throw new Exception();
             }
 
-            var provider = ProviderFactory.CreateProvider(providerName);
+            var provider = ProviderFactory.CreateProvider(providerIdentifier);
             Assert.IsTrue(provider != null);
 
-            var connection = provider.CreateConnection(connectionString, null);
+            var connectionStringAndCredential = new ConnectionStringAndCredential(connectionString, null);
+            var connectionInfo = new ConnectionInfo(null, providerIdentifier, connectionStringAndCredential);
+            var connection = provider.CreateConnection(connectionStringAndCredential);
             await connection.OpenAsync(CancellationToken.None);
 
-            var queryForm = new QueryForm(this, provider, connectionString, null, connection, _statusBar, _colorTheme, connection.ConnectionName);
+            var queryForm = new QueryForm(this, provider, connectionInfo, connection, _statusBar, _colorTheme);
             queryForm.MdiParent = this;
             queryForm.Font = SelectedFont;
             queryForm.Show();

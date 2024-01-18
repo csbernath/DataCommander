@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Data;
-using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
@@ -16,8 +15,8 @@ internal sealed class RoleCollectionNode(DatabaseNode database) : ITreeNode
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var commandText = $"select name from {database.Name}..sysusers where issqlrole = 1 order by name";
-        return await SqlClientFactory.Instance.ExecuteReaderAsync(
-            database.Databases.Server.ConnectionString,
+        return await Db.ExecuteReaderAsync(
+            database.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
             ReadRecord,

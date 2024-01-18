@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Microsoft.Data.SqlClient;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
@@ -22,8 +21,8 @@ internal sealed class StoredProcedureCollectionNode(DatabaseNode database, bool 
             treeNodes.Add(new StoredProcedureCollectionNode(database, true));
 
         var commandText = GetCommandText();
-        var rows = await SqlClientFactory.Instance.ExecuteReaderAsync(
-            database.Databases.Server.ConnectionString,
+        var rows = await Db.ExecuteReaderAsync(
+            database.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
             dataRecord =>

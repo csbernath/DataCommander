@@ -17,7 +17,7 @@ internal sealed class ExtendedStoreProcedureCollectionNode(DatabaseNode database
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var executor = new SqlCommandExecutor(database.Databases.Server.ConnectionString);
+        var executor = new SqlCommandExecutor(database.Databases.Server.CreateConnection);
         var commandText = @"select
     s.name,
     o.name
