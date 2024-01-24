@@ -1,22 +1,31 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Data;
 
 namespace Foundation.Data;
 
-public class CreateCommandRequest(
-    string commandText,
-    ReadOnlyCollection<object> parameters,
-    CommandType commandType,
-    int? commandTimeout,
-    IDbTransaction transaction)
+public class CreateCommandRequest
 {
-    public readonly string CommandText = commandText;
-    public readonly ReadOnlyCollection<object> Parameters = parameters;
-    public readonly CommandType CommandType = commandType;
-    public readonly int? CommandTimeout = commandTimeout;
-    public readonly IDbTransaction Transaction = transaction;
+    public readonly string CommandText;
+    public readonly IReadOnlyCollection<object> Parameters;
+    public readonly CommandType CommandType;
+    public readonly int? CommandTimeout;
+    public readonly IDbTransaction Transaction;
 
-    public CreateCommandRequest(string commandText, ReadOnlyCollection<object> parameters)
+    public CreateCommandRequest(
+        string commandText,
+        IReadOnlyCollection<object> parameters,
+        CommandType commandType,
+        int? commandTimeout,
+        IDbTransaction transaction)
+    {
+        CommandText = commandText;
+        Parameters = parameters;
+        CommandType = commandType;
+        CommandTimeout = commandTimeout;
+        Transaction = transaction;
+    }
+
+    public CreateCommandRequest(string commandText, IReadOnlyCollection<object> parameters)
         : this(commandText, parameters, CommandType.Text, null, null)
     {
     }

@@ -7,7 +7,7 @@ using Foundation.Assertions;
 
 namespace Foundation.Data;
 
-public static class DbCommandExtensions
+public static class IDbCommandExtensions
 {
     public static void AddParameterIfNotNull(this IDbCommand command, string parameterName, object value)
     {

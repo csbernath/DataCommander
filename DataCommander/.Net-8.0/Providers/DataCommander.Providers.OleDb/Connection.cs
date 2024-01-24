@@ -1,7 +1,6 @@
 ﻿using DataCommander.Api.Connection;
 using System.Data.Common;
 using System.Data.OleDb;
-using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 

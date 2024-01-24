@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Drawing;
-using System.Security;
 using System.Threading;
 using System.Windows.Forms;
 using DataCommander.Api;
