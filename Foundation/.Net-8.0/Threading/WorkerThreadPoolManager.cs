@@ -6,9 +6,6 @@ using Foundation.Core;
 
 namespace Foundation.Threading;
 
-/// <summary>
-/// 
-/// </summary>
 public sealed class WorkerThreadPoolManager
 {
     #region Private Fields
@@ -21,11 +18,6 @@ public sealed class WorkerThreadPoolManager
 
     #endregion
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="pool"></param>
-    /// <param name="waitCallbackFactory"></param>
     public WorkerThreadPoolManager(
         WorkerThreadPool pool,
         IWaitCallbackFactory waitCallbackFactory)
@@ -34,21 +26,9 @@ public sealed class WorkerThreadPoolManager
         _waitCallbackFactory = waitCallbackFactory;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public void Start()
-    {
-        _timer = new Timer(ManagePoolDequeuers, null, 10000, 10000);
-    }
+    public void Start() => _timer = new Timer(ManagePoolDequeuers, null, 10000, 10000);
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public void Stop()
-    {
-        _timer.Dispose();
-    }
+    public void Stop() => _timer.Dispose();
 
     private void ManagePoolDequeuers(object state)
     {

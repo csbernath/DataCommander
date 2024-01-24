@@ -5,9 +5,6 @@ using Foundation.Log;
 
 namespace Foundation.Threading;
 
-/// <summary>
-/// 
-/// </summary>
 public sealed class SingleThreadPool
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
@@ -15,29 +12,15 @@ public sealed class SingleThreadPool
     private readonly EventWaitHandle _enqueueEvent = new(false, EventResetMode.AutoReset);
     private int _queuedItemCount;
 
-    /// <summary>
-    /// 
-    /// </summary>
     public SingleThreadPool()
     {
         Thread = new WorkerThread(Start);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public WorkerThread Thread { get; }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public int QueuedItemCount => _queuedItemCount;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="callback"></param>
-    /// <param name="state"></param>
     public void QueueUserWorkItem(WaitCallback callback, object state)
     {
         ArgumentNullException.ThrowIfNull(callback);
@@ -104,9 +87,6 @@ public sealed class SingleThreadPool
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public void Stop()
     {
         Thread.Stop();

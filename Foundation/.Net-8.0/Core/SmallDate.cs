@@ -113,22 +113,10 @@ public struct SmallDate : IComparable<SmallDate>, IEquatable<SmallDate>
 
     public int CompareTo(SmallDate other) => _value.CompareTo(other._value);
 
-    [Pure]
-    private static DateTime ToDateTime(ushort value) => MinDateTime.AddDays(value);
-
-    private static ushort ToSmallDateValue(DateTime dateTime)
-    {
-        Assert.IsInRange(MinDateTime <= dateTime);
-        Assert.IsInRange(dateTime <= MaxDateTime);
-
-        var timeSpan = dateTime - MinDateTime;
-        var totalDays = timeSpan.TotalDays;
-        var value = (ushort) totalDays;
-        return value;
-    }
-
     bool IEquatable<SmallDate>.Equals(SmallDate other) => _value == other._value;
+
     public static bool operator ==(SmallDate x, SmallDate y) => x.Equals(y);
+
     public static bool operator !=(SmallDate x, SmallDate y) => !x.Equals(y);
 
     internal string DebuggerDisplay
@@ -146,5 +134,19 @@ public struct SmallDate : IComparable<SmallDate>, IEquatable<SmallDate>
 
             return debuggerDisplay;
         }
+    }
+
+    [Pure]
+    private static DateTime ToDateTime(ushort value) => MinDateTime.AddDays(value);
+
+    private static ushort ToSmallDateValue(DateTime dateTime)
+    {
+        Assert.IsInRange(MinDateTime <= dateTime);
+        Assert.IsInRange(dateTime <= MaxDateTime);
+
+        var timeSpan = dateTime - MinDateTime;
+        var totalDays = timeSpan.TotalDays;
+        var value = (ushort) totalDays;
+        return value;
     }
 }

@@ -6,8 +6,5 @@ internal sealed class DefaultFormatter : IFormatter
 {
     public static DefaultFormatter Instance { get; } = new();
 
-    void IFormatter.AppendTo(StringBuilder sb, object[] args)
-    {
-        sb.Append(args[0]);
-    }
+    void IFormatter.AppendTo(StringBuilder stringBuilder, object[] args) => stringBuilder.Append(args[0]);
 }

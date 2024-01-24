@@ -29,9 +29,6 @@ public static class ThreadMonitor
         new("IsThreadPoolThread", StringTableColumnAlign.Left, t => t.Thread.IsThreadPoolThread.ToString())
     ];
 
-    /// <summary>
-    /// 
-    /// </summary>
     public static int Count => Threads.Count;
 
     /// <summary>
