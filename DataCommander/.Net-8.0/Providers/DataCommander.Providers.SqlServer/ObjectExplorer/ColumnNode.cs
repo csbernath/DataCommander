@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -38,7 +39,7 @@ internal sealed class ColumnNode(
         get
         {
             string typeName;
-            var systemType = (SqlServerSystemType) systemTypeId;
+            var systemType = (SqlServerSystemType)systemTypeId;
             switch (systemType)
             {
                 case SqlServerSystemType.Char:
@@ -74,10 +75,8 @@ internal sealed class ColumnNode(
 
     bool ITreeNode.IsLeaf => true;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
-    {
-        return null;
-    }
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
+        Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
 
     bool ITreeNode.Sortable => false;
 

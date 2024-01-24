@@ -1,5 +1,4 @@
-﻿
-namespace Foundation.Threading.Tasks;
+﻿namespace Foundation.Threading.Tasks;
 
 internal class MonitoredTaskState
 {
