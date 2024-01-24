@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-#if FOUNDATION_2_0 || FOUNDATION_3_5
-    using Foundation.Diagnostics;
-#else
 using System.Diagnostics.Contracts;
-
-#endif
 
 namespace Foundation.Threading
 {
@@ -16,44 +11,18 @@ namespace Foundation.Threading
         private int _availableThreadCount;
         private readonly Queue<Tuple<Action<T>, T>> _queue = new();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="maxThreadCount"></param>
         public LimitedThreadPool(int maxThreadCount)
         {
-#if FOUNDATION_2_0 || FOUNDATION_3_5
-            Assert.Compare<Int32>( maxThreadCount, Comparers.GreaterThan, 0, "maxThreadCount", null );
-#else
-            Contract.Requires(maxThreadCount > 0);
-#endif
             _maxThreadCount = maxThreadCount;
             _availableThreadCount = maxThreadCount;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public int QueuedItemCount => _queue.Count;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public int AvailableThreadCount => _availableThreadCount;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="waitCallback"></param>
-        /// <param name="state"></param>
-        /// <returns></returns>
         public bool QueueUserWorkItem(Action<T> waitCallback, T state)
         {
-#if FOUNDATION_2_0 || FOUNDATION_3_5
-            ArgumentNullException.ThrowIfNull(waitCallback, "waitCallback");           
-#else
-            Contract.Requires(waitCallback != null);
-#endif
             var item = Tuple.Create(waitCallback, state);
             bool succeeded;
             if (_availableThreadCount > 0)

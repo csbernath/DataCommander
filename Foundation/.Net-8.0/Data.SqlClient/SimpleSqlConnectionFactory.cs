@@ -7,22 +7,11 @@ using Foundation.Data.SqlClient.SqlLoggedSqlConnection;
 using Microsoft.Data.SqlClient;
 
 namespace Foundation.Data.SqlClient;
-#if FOUNDATION_3_5
-    using System.Web;
-#endif
 
-/// <summary>
-/// 
-/// </summary>
 public sealed class SimpleSqlConnectionFactory
 {
     private readonly string _connectionString;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="section"></param>
-    /// <param name="nodeName"></param>
     public SimpleSqlConnectionFactory(ConfigurationSection section, string nodeName)
     {
         ArgumentNullException.ThrowIfNull(section);
@@ -88,21 +77,10 @@ public sealed class SimpleSqlConnectionFactory
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public int CommandTimeout { get; }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public IDbConnectionFactory Factory { get; }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
     public IDbConnection CreateConnection(string name)
     {
         string userName = null;

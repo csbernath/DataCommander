@@ -3,18 +3,15 @@ using System.Threading.Tasks;
 using Foundation.Core;
 
 namespace Foundation.Threading.Tasks;
-#if FOUNDATION_3_5
-#else
-#endif
 
 public sealed class TaskInfo
 {
-    private readonly WeakReference _weakReference;
+    private readonly WeakReference _taskWeakReference;
     private bool _isCompleted;
 
     internal TaskInfo(Task task, string name)
     {
-        _weakReference = new WeakReference(task);
+        _taskWeakReference = new WeakReference(task);
         Id = task.Id;
         Name = name;
     }
@@ -42,7 +39,7 @@ public sealed class TaskInfo
 
     public TimeSpan? CompletedTimeSpan => CompletedTime - StartTime;
 
-    public bool IsAlive => _weakReference.IsAlive;
+    public bool IsAlive => _taskWeakReference.IsAlive;
 
     public Task Task
     {
@@ -52,9 +49,9 @@ public sealed class TaskInfo
 
             try
             {
-                if (_weakReference.IsAlive)
+                if (_taskWeakReference.IsAlive)
                 {
-                    task = (Task)_weakReference.Target;
+                    task = (Task)_taskWeakReference.Target;
                 }
             }
             catch

@@ -7,20 +7,12 @@ using Foundation.Log;
 
 namespace Foundation.Threading;
 
-/// <summary>
-/// 
-/// </summary>
-/// <typeparam name="T"></typeparam>
 public sealed class PriorityMonitor<T>
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private readonly IndexableCollection<LockRequest> _lockRequests;
     private readonly NonUniqueIndex<int, LockRequest> _priorityIndex;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="monitoredObject"></param>
     public PriorityMonitor(T monitoredObject)
     {
         MonitoredObject = monitoredObject;
@@ -32,21 +24,10 @@ public sealed class PriorityMonitor<T>
         _lockRequests = new IndexableCollection<LockRequest>(_priorityIndex);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public T MonitoredObject { get; }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public LockRequest CurrentLockRequest { get; private set; }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="priority"></param>
-    /// <returns></returns>
     public LockRequest Enter(int priority)
     {
         var lockRequest = new LockRequest(this, priority);
@@ -72,11 +53,6 @@ public sealed class PriorityMonitor<T>
         return lockRequest;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="priority"></param>
-    /// <returns></returns>
     public LockRequest TryEnter(int priority)
     {
         LockRequest lockRequest;
@@ -122,9 +98,6 @@ public sealed class PriorityMonitor<T>
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class LockRequest : IDisposable
     {
         private EventWaitHandle _asyncWaitHandle;
@@ -137,24 +110,12 @@ public sealed class PriorityMonitor<T>
             Priority = priority;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public PriorityMonitor<T> Monitor { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public int Priority { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public WaitHandle AsyncWaitHandle => _asyncWaitHandle;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsCompleted { get; private set; }
 
         internal void Initialize(bool isCompleted)
