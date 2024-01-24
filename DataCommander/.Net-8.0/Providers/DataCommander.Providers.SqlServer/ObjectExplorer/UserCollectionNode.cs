@@ -19,7 +19,7 @@ internal sealed class UserCollectionNode(DatabaseNode database) : ITreeNode
         using (var connection = database.Databases.Server.CreateConnection())
         {
             var executor = connection.CreateCommandExecutor();
-            dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
+            dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText), CancellationToken.None);
         }
 
         var dataRows = dataTable.Rows;

@@ -115,10 +115,11 @@ internal sealed class Connection : ConnectionBase
 set arithabort on";
 
             var executor = DbCommandExecutorFactory.Create(_sqlConnection);
-            var items = await executor.ExecuteReaderAsync(new ExecuteReaderRequest(commandText), 1, dataRecord => new
-            {
-                ServerName = dataRecord.GetString(0)
-            });
+            var items = await executor.ExecuteReaderAsync(
+                new ExecuteReaderRequest(commandText),
+                1,
+                dataRecord => new { ServerName = dataRecord.GetString(0) },
+                cancellationToken);
             var item = items.First();
             _serverName = item.ServerName;
         }

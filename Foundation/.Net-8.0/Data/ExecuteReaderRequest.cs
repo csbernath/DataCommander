@@ -9,24 +9,22 @@ public sealed class ExecuteReaderRequest
 {
     public readonly CreateCommandRequest CreateCommandRequest;
     public readonly CommandBehavior CommandBehavior;
-    public readonly CancellationToken CancellationToken;
 
-    public ExecuteReaderRequest(CreateCommandRequest createCommandRequest, CommandBehavior commandBehavior, CancellationToken cancellationToken)
+    public ExecuteReaderRequest(CreateCommandRequest createCommandRequest, CommandBehavior commandBehavior)
     {
         ArgumentNullException.ThrowIfNull(createCommandRequest);
 
         CreateCommandRequest = createCommandRequest;
         CommandBehavior = commandBehavior;
-        CancellationToken = cancellationToken;
     }
 
     public ExecuteReaderRequest(CreateCommandRequest createCommandRequest)
-        : this(createCommandRequest, CommandBehavior.Default, CancellationToken.None)
+        : this(createCommandRequest, CommandBehavior.Default)
     {
     }
 
     public ExecuteReaderRequest(string commandText, ReadOnlyCollection<object> parameters, IDbTransaction transaction)
-        : this(new CreateCommandRequest(commandText, parameters, CommandType.Text, null, transaction), CommandBehavior.Default, CancellationToken.None)
+        : this(new CreateCommandRequest(commandText, parameters, CommandType.Text, null, transaction), CommandBehavior.Default)
     {
     }
 

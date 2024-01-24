@@ -37,14 +37,18 @@ order by i.name",
         parameters.Add("object_id", id);
         var request = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
         var executor = new SqlCommandExecutor(databaseNode.Databases.Server.CreateConnection);
-        return await executor.ExecuteReaderAsync(request, 128, dataRecord =>
-        {
-            var name = dataRecord.GetStringOrDefault(0);
-            var indexId = dataRecord.GetInt32(1);
-            var type = dataRecord.GetByte(2);
-            var isUnique = dataRecord.GetBoolean(3);
-            return new IndexNode(databaseNode, id, indexId, name, type, isUnique);
-        });
+        return await executor.ExecuteReaderAsync(
+            request,
+            128,
+            dataRecord =>
+            {
+                var name = dataRecord.GetStringOrDefault(0);
+                var indexId = dataRecord.GetInt32(1);
+                var type = dataRecord.GetByte(2);
+                var isUnique = dataRecord.GetBoolean(3);
+                return new IndexNode(databaseNode, id, indexId, name, type, isUnique);
+            },
+            cancellationToken);
     }
 
     public bool Sortable => false;

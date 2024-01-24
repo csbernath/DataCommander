@@ -53,7 +53,7 @@ internal sealed class JobNode : ITreeNode
         using (var connection = _jobs.Server.CreateConnection())
         {
             var executor = connection.CreateCommandExecutor();
-            dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText));
+            dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText), CancellationToken.None);
         }
 
         var queryForm = (IQueryForm)sender;

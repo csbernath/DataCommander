@@ -90,7 +90,7 @@ from	[{0}].sys.database_files f", name);
             var executor = connection.CreateCommandExecutor();
             try
             {
-                dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText));
+                dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText), CancellationToken.None);
             }
             catch (SqlException sqlException)
             {

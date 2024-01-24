@@ -68,7 +68,8 @@ end",
                     var s = dataReader.GetString(0);
                     stringBuilder.Append(s);
                 }
-            });
+            },
+            cancellationToken);
         return stringBuilder.ToString();
     }
 }

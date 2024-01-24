@@ -38,7 +38,8 @@ order by 1,2";
                     var id = dataReader.GetInt32(2);
                     treeNodes.Add(new ViewNode(database, id, schema, name));
                 }
-            });
+            },
+            cancellationToken);
         return treeNodes;
     }
 

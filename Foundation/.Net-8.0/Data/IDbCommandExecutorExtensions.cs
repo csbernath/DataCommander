@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading;
 using Foundation.Collections.ReadOnly;
 using Foundation.Linq;
 
@@ -66,20 +67,27 @@ public static class IDbCommandExecutorExtensions
         return rows;
     }
 
-    public static DataTable ExecuteDataTable(this IDbCommandExecutor executor, ExecuteReaderRequest request)
+    public static DataTable ExecuteDataTable(this IDbCommandExecutor executor, ExecuteReaderRequest request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(executor);
         DataTable dataTable = null;
-        executor.Execute(request.CreateCommandRequest, command => { dataTable = command.ExecuteDataTable(request.CancellationToken); });
+        executor.Execute(
+            request.CreateCommandRequest,
+            command => { dataTable = command.ExecuteDataTable(cancellationToken); });
         return dataTable;
     }
 
-    public static DataSet ExecuteDataSet(this IDbCommandExecutor executor, ExecuteReaderRequest request)
+    public static DataSet ExecuteDataSet(
+        this IDbCommandExecutor executor,
+        ExecuteReaderRequest request,
+        CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(executor);
         ArgumentNullException.ThrowIfNull(request);
         DataSet dataSet = null;
-        executor.Execute(request.CreateCommandRequest, command => { dataSet = command.ExecuteDataSet(request.CancellationToken); });
+        executor.Execute(
+            request.CreateCommandRequest,
+            command => { dataSet = command.ExecuteDataSet(cancellationToken); });
         return dataSet;
     }
 }

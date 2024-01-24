@@ -67,27 +67,35 @@ public static class IDbCommandAsyncExecutorExtensions
         return scalar;
     }
 
-    public static Task ExecuteReaderAsync(this IDbCommandAsyncExecutor executor, ExecuteReaderRequest request, Func<DbDataReader, Task> readResults)
+    public static Task ExecuteReaderAsync(
+        this IDbCommandAsyncExecutor executor,
+        ExecuteReaderRequest request, Func<DbDataReader, Task> readResults,
+        CancellationToken cancellationToken)
     {
         return executor.ExecuteAsync(
             async (connection, _) =>
             {
                 await using (var command = connection.CreateCommand(request.CreateCommandRequest))
                 {
-                    await using (var dataReader = await command.ExecuteReaderAsync(request.CommandBehavior, request.CancellationToken))
+                    await using (var dataReader = await command.ExecuteReaderAsync(request.CommandBehavior, cancellationToken))
                         await readResults(dataReader);
                 }
             }
-            ,request.CancellationToken);
+            , cancellationToken);
     }
 
-    public static async Task<ReadOnlySegmentLinkedList<T>> ExecuteReaderAsync<T>(this IDbCommandAsyncExecutor executor, ExecuteReaderRequest request,
-        int segmentLength, Func<IDataRecord, T> read)
+    public static async Task<ReadOnlySegmentLinkedList<T>> ExecuteReaderAsync<T>(
+        this IDbCommandAsyncExecutor executor,
+        ExecuteReaderRequest request,
+        int segmentLength,
+        Func<IDataRecord, T> read,
+        CancellationToken cancellationToken)
     {
         ReadOnlySegmentLinkedList<T> records = null;
         await executor.ExecuteReaderAsync(
             request,
-            async dataReader => records = await dataReader.ReadResultAsync(segmentLength, read, request.CancellationToken));
+            async dataReader => records = await dataReader.ReadResultAsync(segmentLength, read, cancellationToken),
+            cancellationToken);
         return records;
     }
 }

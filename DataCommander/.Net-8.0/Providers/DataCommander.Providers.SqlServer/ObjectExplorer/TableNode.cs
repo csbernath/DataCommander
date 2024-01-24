@@ -87,7 +87,8 @@ where
                     await dataReader.ReadAsync(cancellationToken);
                     historyTableName = dataReader.GetString(0);
                     historyTableId = dataReader.GetInt32(1);
-                });
+                },
+                cancellationToken);
             treeNodes.Add(new TableNode(DatabaseNode, owner, historyTableName, historyTableId, TemporalType.HistoryTable));
         }
 
@@ -211,7 +212,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
         using (var connection = DatabaseNode.Databases.Server.CreateConnection())
         {
             var executor = connection.CreateCommandExecutor();
-            dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText));
+            dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText), CancellationToken.None);
         }
 
         var columns = dataSet.Tables[0];
@@ -367,7 +368,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
         using (var connection = DatabaseNode.Databases.Server.CreateConnection())
         {
             var executor = connection.CreateCommandExecutor();
-            dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
+            dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText), CancellationToken.None);
         }
 
         dataTable.TableName = $"{name} indexes";
