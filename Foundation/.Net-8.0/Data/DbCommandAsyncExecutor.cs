@@ -9,5 +9,7 @@ namespace Foundation.Data;
 internal sealed class DbCommandAsyncExecutor(DbConnection connection) : IDbCommandAsyncExecutor
 {
     public void Execute(Action<IDbConnection> execute) => execute(connection);
-    public Task ExecuteAsync(Func<DbConnection, Task> execute, CancellationToken cancellationToken) => execute(connection);
+
+    public Task ExecuteAsync(Func<DbConnection, CancellationToken, Task> execute, CancellationToken cancellationToken) =>
+        execute(connection, cancellationToken);
 }

@@ -7,5 +7,5 @@ namespace Foundation.Data;
 
 public interface IDbCommandAsyncExecutor : IDbCommandExecutor
 {
-    Task ExecuteAsync(Func<DbConnection, Task> execute, CancellationToken cancellationToken);
+    Task ExecuteAsync(Func<DbConnection, CancellationToken, Task> execute, CancellationToken cancellationToken);
 }

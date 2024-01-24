@@ -61,7 +61,7 @@ public static class Db
 
     public static async Task<object> ExecuteScalarAsync(
         Func<DbConnection> createConnection,
-        ExecuteNonReaderRequest executeNonReaderRequest,
+        CreateCommandRequest createCommandRequest,
         CancellationToken cancellationToken)
     {
         object scalar;
@@ -69,7 +69,7 @@ public static class Db
         {
             await connection.OpenAsync(cancellationToken);
             var executor = connection.CreateCommandAsyncExecutor();
-            scalar = await executor.ExecuteScalarAsync(executeNonReaderRequest);
+            scalar = await executor.ExecuteScalarAsync(createCommandRequest, cancellationToken);
         }
 
         return scalar;
