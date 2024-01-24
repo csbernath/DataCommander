@@ -68,10 +68,8 @@ internal sealed class Connection : ConnectionBase
 
     public override async Task<int> GetTransactionCountAsync(CancellationToken cancellationToken)
     {
-        var executor = DbCommandExecutorFactory.Create(_sqlConnection);
-        var createCommandRequest = new CreateCommandRequest("select @@trancount");
-        var executeNonReaderRequest = new ExecuteNonReaderRequest(createCommandRequest, cancellationToken);
-        var scalar = await executor.ExecuteScalarAsync(executeNonReaderRequest);
+        var executor = _sqlConnection.CreateCommandAsyncExecutor();
+        var scalar = await executor.ExecuteScalarAsync(new ExecuteNonReaderRequest("select @@trancount"));
         var transactionCount = (int)scalar;
         return transactionCount;
     }

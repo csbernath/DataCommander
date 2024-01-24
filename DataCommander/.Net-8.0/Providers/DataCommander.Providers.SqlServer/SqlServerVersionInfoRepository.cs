@@ -7,10 +7,8 @@ internal static class SqlServerVersionInfoRepository
 {
     private static readonly Dictionary<string, SqlServerVersionInfo> SqlServerVersionInfosByVersion = Init();
 
-    public static bool TryGetByVersion(string version, out SqlServerVersionInfo? sqlServerVersionInfo)
-    {
-        return SqlServerVersionInfosByVersion.TryGetValue(version, out sqlServerVersionInfo);
-    }
+    public static bool TryGetByVersion(string version, out SqlServerVersionInfo? sqlServerVersionInfo) =>
+        SqlServerVersionInfosByVersion.TryGetValue(version, out sqlServerVersionInfo);
 
     private static Dictionary<string, SqlServerVersionInfo> Init()
     {
@@ -53,7 +51,8 @@ internal static class SqlServerVersionInfoRepository
             new("15.00.2080", "Microsoft SQL Server 2019 (RTM-GDR) (KB4583458)"),
             new("16.00.1000", "Microsoft SQL Server 2022 RTM"),
             new("16.00.1105", "5029379 Security update for SQL Server 2022 GDR: October 10, 2023"),
-            new("16.00.1110", "5032968 Security update for SQL Server 2022 GDR: January 9, 2024")
+            new("16.00.1110", "5032968 Security update for SQL Server 2022 GDR: January 9, 2024"),
+            new("16.00.4100", "5033592 Security update for SQL Server 2022 CU10: January 9, 2024")
         }.ToDictionary(i => i.Version);
     }
 }

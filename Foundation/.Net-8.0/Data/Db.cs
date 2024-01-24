@@ -30,7 +30,7 @@ public static class Db
         var executor = connection.CreateCommandExecutor();
         executor.ExecuteReader(request, readResults);
     }
-    
+
     public static async Task<ReadOnlySegmentLinkedList<T>> ExecuteReaderAsync<T>(
         Func<DbConnection> createConnection,
         ExecuteReaderRequest request,
@@ -45,7 +45,7 @@ public static class Db
             async dataReader => rows = await dataReader.ReadResultAsync(segmentLength, readRecord, cancellationToken));
         return rows;
     }
-    
+
     public static async Task ExecuteReaderAsync(
         Func<DbConnection> createConnection,
         ExecuteReaderRequest executeReaderRequest,
@@ -53,10 +53,25 @@ public static class Db
     {
         await using (var connection = createConnection())
         {
-            await connection.OpenAsync();
+            await connection.OpenAsync(executeReaderRequest.CancellationToken);
             var executor = connection.CreateCommandAsyncExecutor();
             await executor.ExecuteReaderAsync(executeReaderRequest, readResults);
         }
-    }    
-}
+    }
 
+    public static async Task<object> ExecuteScalarAsync(
+        Func<DbConnection> createConnection,
+        ExecuteNonReaderRequest executeNonReaderRequest,
+        CancellationToken cancellationToken)
+    {
+        object scalar;
+        await using (var connection = createConnection())
+        {
+            await connection.OpenAsync(cancellationToken);
+            var executor = connection.CreateCommandAsyncExecutor();
+            scalar = await executor.ExecuteScalarAsync(executeNonReaderRequest);
+        }
+
+        return scalar;
+    }
+}
