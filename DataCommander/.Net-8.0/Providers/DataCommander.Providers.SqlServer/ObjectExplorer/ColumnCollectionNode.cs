@@ -25,9 +25,10 @@ internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : 
         var precision = dataRecord.GetByte(4);
         var scale = dataRecord.GetByte(5);
         var isNullable = dataRecord.GetBoolean(6);
-        var userTypeName = dataRecord.GetString(7);
+        var isComputed = dataRecord.GetBoolean(7);
+        var userTypeName = dataRecord.GetString(8);
 
-        return new ColumnNode(id, columnName, systemTypeId, maxLength, precision, scale, isNullable, userTypeName);
+        return new ColumnNode(id, columnName, systemTypeId, maxLength, precision, scale, isNullable, isComputed, userTypeName);
     }
 
     #endregion
@@ -74,14 +75,15 @@ internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : 
         var cb = new SqlCommandBuilder();
         var databaseName = cb.QuoteIdentifier(databaseNode.Name);
         var commandText = $@"select
-     c.column_id
-    ,c.name
-    ,c.system_type_id
-    ,c.max_length
-    ,c.precision
-    ,c.scale
-    ,c.is_nullable
-    ,t.name as UserTypeName
+    c.column_id,
+    c.name,
+    c.system_type_id,
+    c.max_length,
+    c.precision,
+    c.scale,
+    c.is_nullable,
+    c.is_computed,
+    t.name as UserTypeName
 from    {databaseName}.sys.all_columns c
 join    {databaseName}.sys.types t
 on      c.user_type_id = t.user_type_id

@@ -14,6 +14,7 @@ internal sealed class ColumnNode(
     byte precision,
     byte scale,
     bool isNullable,
+    bool isComputed,
     string userTypeName)
     : ITreeNode
 {
@@ -69,7 +70,7 @@ internal sealed class ColumnNode(
             }
 
             return
-                $"{columnName} ({(_isPrimaryKey ? "PK, " : null)}{(_isForeignKey ? "FK, " : null)}{typeName}, {(isNullable ? "null" : "not null")})";
+                $"{columnName} ({(_isPrimaryKey ? "PK, " : null)}{(_isForeignKey ? "FK, " : null)}{(isComputed ? "Computed, " : null)}{typeName}, {(isNullable ? "null" : "not null")})";
         }
     }
 
