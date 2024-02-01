@@ -7,6 +7,7 @@ public static class CSharpTypeName
     public const string ByteArray = Byte + "[]";
     public const string Char = "char";
     public const string DateTime = nameof(DateTime);
+    public const string DateTimeOffset = nameof(DateTimeOffset);
     public const string Decimal = "decimal";
     public const string Double = "double";
     public const string Guid = nameof(Guid);
