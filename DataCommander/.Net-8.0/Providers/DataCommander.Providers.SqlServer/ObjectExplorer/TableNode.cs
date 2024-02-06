@@ -337,25 +337,32 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
 
         var options = new ScriptingOptions
         {
-            Indexes = true,
-            Permissions = true,
-            IncludeDatabaseContext = false,
-            Default = true,
             AnsiPadding = true,
+            Default = true,
             DriAll = true,
             ExtendedProperties = true,
-            ScriptBatchTerminator = true,
+            IncludeDatabaseContext = false,
+            Indexes = true,
+            Permissions = true,
             SchemaQualify = true,
             SchemaQualifyForeignKeysReferences = true,
-            TargetServerVersion = SqlServerVersion.Version100
+            ScriptBatchTerminator = true
         };
 
         var stringCollection = table.Script(options);
         var stringBuilder = new StringBuilder();
+        var first = true;
         foreach (var s in stringCollection)
         {
-            stringBuilder.AppendLine(s);
-            stringBuilder.AppendLine("GO");
+            if (first)
+                first = false;
+            else
+            {
+                stringBuilder.AppendLine();
+                stringBuilder.AppendLine("GO");
+            }
+
+            stringBuilder.Append(s);
         }
 
         return stringBuilder.ToString();
