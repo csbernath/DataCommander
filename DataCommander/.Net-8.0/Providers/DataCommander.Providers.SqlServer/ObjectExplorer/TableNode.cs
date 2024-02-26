@@ -352,7 +352,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
         var stringCollection = table.Script(options);
         var stringBuilder = new StringBuilder();
         var first = true;
-        foreach (var s in stringCollection)
+        foreach (var stringCollectionItem in stringCollection)
         {
             if (first)
                 first = false;
@@ -362,7 +362,8 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
                 stringBuilder.AppendLine("GO");
             }
 
-            stringBuilder.Append(s);
+            var reindented = stringCollectionItem.Replace("\t", "    ");
+            stringBuilder.Append(reindented);
         }
 
         return stringBuilder.ToString();
