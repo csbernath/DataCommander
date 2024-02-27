@@ -624,7 +624,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
                 var name = column.ColumnName;
                 var typeName = column.TypeName;
                 var isNullable = column.IsNullable;
-                var csharpTypeName = SqlDataTypeArray.SqlDataTypes.First(i => i.SqlDataTypeName == typeName).CSharpTypeName;
+                var csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == typeName).CSharpTypeName;
                 var csharpType = CSharpTypeArray.CSharpTypes.First(i => i.Name == csharpTypeName);
                 if (isNullable == true && csharpType.Type.IsValueType)
                     csharpTypeName += "?";
@@ -711,7 +711,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
                 var name = column.ColumnName;
                 var typeName = column.TypeName;
                 var isNullable = column.IsNullable;
-                var csharpTypeName = SqlDataTypeArray.SqlDataTypes.First(i => i.SqlDataTypeName == typeName).CSharpTypeName;
+                var csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == typeName).CSharpTypeName;
                 var csharpType = CSharpTypeArray.CSharpTypes.First(i => i.Name == csharpTypeName);
                 if (isNullable == true && csharpType.Type.IsValueType)
                     csharpTypeName += "?";

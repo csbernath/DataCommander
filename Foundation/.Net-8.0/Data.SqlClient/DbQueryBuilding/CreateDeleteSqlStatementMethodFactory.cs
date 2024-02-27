@@ -10,11 +10,11 @@ public static class CreateDeleteSqlStatementMethodFactory
     public static ReadOnlyCollection<Line> Create(string schema, string table, Column identifierColumn, Column versionColumn)
     {
         var arguments = new List<string>();
-        var csharpTypeName = SqlDataTypeArray.SqlDataTypes.First(i => i.SqlDataTypeName == identifierColumn.SqlDataTypeName).CSharpTypeName;
+        var csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == identifierColumn.SqlDataTypeName).CSharpTypeName;
         arguments.Add($"{csharpTypeName} {identifierColumn.ColumnName.ToCamelCase()}");
         if (versionColumn != null)
         {
-            csharpTypeName = SqlDataTypeArray.SqlDataTypes.First(i => i.SqlDataTypeName == versionColumn.SqlDataTypeName).CSharpTypeName;
+            csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == versionColumn.SqlDataTypeName).CSharpTypeName;
             arguments.Add($"{csharpTypeName} {versionColumn.ColumnName.ToCamelCase()}");
         }
 

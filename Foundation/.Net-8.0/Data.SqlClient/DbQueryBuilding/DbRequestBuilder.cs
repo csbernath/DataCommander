@@ -61,7 +61,7 @@ namespace {_request.Namespace}
         }
         else
         {
-            csharpTypeName = SqlDataTypeArray.SqlDataTypes.First(i => i.SqlDbType == sqlDbType).CSharpTypeName;
+            csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDbType == sqlDbType).CSharpTypeName;
             if (csharpTypeName != CSharpTypeName.String && isNullable)
                 csharpTypeName += "?";
         }

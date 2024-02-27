@@ -15,7 +15,7 @@ public static class CreateUpdateSqlStatementMethodFactory
         arguments.Add($"{table} record");
         if (versionColumn != null)
         {
-            var csharpTypeName = SqlDataTypeArray.SqlDataTypes.First(i => i.SqlDataTypeName == versionColumn.SqlDataTypeName).CSharpTypeName;
+            var csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == versionColumn.SqlDataTypeName).CSharpTypeName;
             arguments.Add($"{csharpTypeName} expected{versionColumn.ColumnName}");
         }
 

@@ -13,10 +13,12 @@ using Foundation.Collections;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
+using Foundation.Data.SqlClient;
 using Foundation.Data.SqlClient.DbQueryBuilding;
 using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
+using Microsoft.Extensions.Primitives;
 
 namespace DataCommander.Application.ResultWriter;
 
@@ -127,10 +129,12 @@ internal sealed class LogResultWriter : IResultWriter
 
         Log.Trace($"SchemaTable of table[{_tableCount - 1}], {schemaTable.TableName}:\r\n{schemaTable.ToStringTableString()}");
         
-        var dbColumns = schemaTable.Rows.Cast<DataRow>().Select(FoundationDbColumnFactory.Create).ToList();
+        var dbColumns = schemaTable.Rows.Cast<DataRow>().Select(FoundationDbColumnFactory.Create).ToArray();
+        var declareTableScript = ToDeclareTableScript(schemaTable.TableName, dbColumns);
+
         var dataTransferObjectFields = dbColumns.Select(ToDataTransferObjectField).ToList();
         var dataTransferObject = DataTransferObjectWithPropertiesFactory.Create(schemaTable.TableName, dataTransferObjectFields);
-        message = $"\r\n{dataTransferObject.ToIndentedString("    ")}";
+        message = $"\r\n{declareTableScript.ToLines().ToIndentedString("    ")}\r\n{dataTransferObject.ToIndentedString("    ")}";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, message));
         
         if (_query != null)
@@ -139,6 +143,71 @@ internal sealed class LogResultWriter : IResultWriter
             var result = new Result(fields);
             _results.Add(result);
         }
+    }
+
+    private static TextBuilder ToDeclareTableScript(string tableName, IReadOnlyList<FoundationDbColumn> dbColumns)
+    {
+        var sqlDataTypes = SqlDataTypeRepository.SqlDataTypes.ToDictionary(t => t.SqlDbType);
+        var textBuilder = new TextBuilder();
+        textBuilder.Add($"declare @{tableName} table");
+        using (textBuilder.AddBlock("(", ")"))
+        {
+            for (var columnIndex = 0; columnIndex < dbColumns.Count; ++columnIndex)
+            {
+                var dbColumn = dbColumns[columnIndex];
+                var columnScript = ToDeclareTableColumnScript(dbColumn, sqlDataTypes);
+
+                if (columnIndex < dbColumns.Count - 1)
+                    columnScript.Append(',');
+
+                textBuilder.Add(columnScript.ToString());
+            }
+        }
+
+        return textBuilder;
+    }
+
+    private static StringBuilder ToDeclareTableColumnScript(
+        FoundationDbColumn dbColumn,
+        IReadOnlyDictionary<SqlDbType, SqlDataType> sqlDataTypes)
+    {
+        var sqlDbType = (SqlDbType)dbColumn.ProviderType;
+        var sqlDataType = sqlDataTypes[sqlDbType];
+
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append(dbColumn.ColumnName);
+        stringBuilder.Append(' ');
+        stringBuilder.Append(sqlDataType.SqlDataTypeName);
+
+        switch (sqlDbType)
+        {
+            case SqlDbType.Char:
+            case SqlDbType.NChar:
+            case SqlDbType.NVarChar:
+            case SqlDbType.VarChar:
+                stringBuilder.Append('(');
+                stringBuilder.Append(dbColumn.ColumnSize);
+                stringBuilder.Append(')');
+                break;
+
+            case SqlDbType.Decimal:
+                stringBuilder.Append('(');
+                stringBuilder.Append(dbColumn.NumericPrecision.Value);
+
+                if (dbColumn.NumericScale > 0)
+                {
+                    stringBuilder.Append(',');
+                    stringBuilder.Append(dbColumn.NumericScale.Value);
+                }
+
+                stringBuilder.Append(')');
+                break;
+        }
+
+        if (dbColumn.AllowDbNull == false)
+            stringBuilder.Append(" not null");
+
+        return stringBuilder;
     }
 
     private DataTransferObjectField ToDataTransferObjectField(FoundationDbColumn dbColumn)

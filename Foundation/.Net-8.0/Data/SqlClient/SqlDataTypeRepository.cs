@@ -4,7 +4,7 @@ using Foundation.Collections.ReadOnly;
 
 namespace Foundation.Data.SqlClient;
 
-public static class SqlDataTypeArray
+public static class SqlDataTypeRepository
 {
     public static readonly ReadOnlyArray<SqlDataType> SqlDataTypes = new([
         new SqlDataType(SqlDbType.BigInt, SqlDataTypeName.BigInt, CSharpTypeName.Int64),

@@ -1444,7 +1444,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         bool isNullable;
         string csharpValue = null;
 
-        var sqlDataType = SqlDataTypeArray.SqlDataTypes.FirstOrDefault(i => i.SqlDataTypeName == dataTypeLower);
+        var sqlDataType = SqlDataTypeRepository.SqlDataTypes.FirstOrDefault(i => i.SqlDataTypeName == dataTypeLower);
         if (sqlDataType != null)
         {
             sqlDbType = sqlDataType.SqlDbType;
