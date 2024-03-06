@@ -18,6 +18,7 @@ public static class SqlDataTypeName
     public const string NVarChar = "nvarchar";
     public const string RowVersion = "rowversion";
     public const string SmallDateTime = "smalldatetime";
+    public const string SmallMoney = "smallmoney";
     public const string SmallInt = "smallint";
     public const string Timestamp = "timestamp";
     public const string TinyInt = "tinyint";
