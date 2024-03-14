@@ -79,7 +79,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         _mnuGoTo.Click += mnuGoTo_Click;
         _mnuClearCache.Click += mnuClearCache_Click;
 
-        var sqlKeyWords = Settings.CurrentType.Attributes["Sql92ReservedWords"].GetValue<string[]>();
+        var sqlKeyWords = Settings.CurrentType.Attributes["SqlReservedWords"].GetValue<string[]>();
         var providerKeyWords = provider.KeyWords;
 
         _queryTextBox.SetColorTheme(colorTheme);

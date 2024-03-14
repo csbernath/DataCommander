@@ -46,7 +46,7 @@ internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : 
         await Db.ExecuteReaderAsync(
             databaseNode.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
-            async dataReader =>
+            async (dataReader, _) =>
             {
                 columnNodes = (await dataReader.ReadResultAsync(128, ToColumnNode, cancellationToken))
                     .ToSortedDictionary(c => c.Id);

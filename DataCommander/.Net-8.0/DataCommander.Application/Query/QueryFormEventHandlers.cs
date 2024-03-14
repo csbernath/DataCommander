@@ -463,7 +463,7 @@ public sealed partial class QueryForm
     {
         try
         {
-            var sqlKeyWords = Settings.CurrentType.Attributes["Sql92ReservedWords"].GetValue<string[]>();
+            var sqlKeyWords = Settings.CurrentType.Attributes["SqlReservedWords"].GetValue<string[]>();
             var providerKeyWords = Provider.KeyWords;
             var keyWordHashSet = sqlKeyWords.Concat(providerKeyWords)
                 .Select(keyWord => keyWord.ToUpper())

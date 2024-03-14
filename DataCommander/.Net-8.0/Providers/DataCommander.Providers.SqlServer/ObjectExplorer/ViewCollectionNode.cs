@@ -29,7 +29,7 @@ order by 1,2";
         await Db.ExecuteReaderAsync(
             database.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
-            async dataReader =>
+            async (dataReader, _) =>
             {
                 while (await dataReader.ReadAsync(cancellationToken))
                 {

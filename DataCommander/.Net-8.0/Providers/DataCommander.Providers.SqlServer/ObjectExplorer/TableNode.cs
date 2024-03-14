@@ -82,7 +82,7 @@ where
             await Db.ExecuteReaderAsync(
                 DatabaseNode.Databases.Server.CreateConnection,
                 request,
-                async dataReader =>
+                async (dataReader, _) =>
                 {
                     await dataReader.ReadAsync(cancellationToken);
                     historyTableName = dataReader.GetString(0);
