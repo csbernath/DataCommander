@@ -42,7 +42,8 @@ public static class Db
         await ExecuteReaderAsync(
             createConnection,
             request,
-            async dataReader => rows = await dataReader.ReadResultAsync(segmentLength, readRecord, cancellationToken),
+            async (dataReader, _) =>
+                rows = await dataReader.ReadResultAsync(segmentLength, readRecord, cancellationToken),
             cancellationToken);
         return rows;
     }
@@ -50,7 +51,7 @@ public static class Db
     public static async Task ExecuteReaderAsync(
         Func<DbConnection> createConnection,
         ExecuteReaderRequest executeReaderRequest,
-        Func<DbDataReader, Task> readResults,
+        Func<DbDataReader, CancellationToken, Task> readResults,
         CancellationToken cancellationToken)
     {
         await using (var connection = createConnection())

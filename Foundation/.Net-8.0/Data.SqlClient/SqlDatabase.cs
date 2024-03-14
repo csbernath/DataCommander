@@ -11,7 +11,8 @@ public static class SqlDatabase
 {
     public static readonly SqlDateTime SqlDateTimeZero = new(1900, 1, 1);
 
-    public static async Task<string> GetSysComments(DbConnection connection, string database, string schema, string name, CancellationToken cancellationToken)
+    public static async Task<string> GetSysComments(DbConnection connection, string database, string schema,
+        string name, CancellationToken cancellationToken)
     {
         var commandText = string.Format(
             CultureInfo.InvariantCulture,
@@ -61,7 +62,7 @@ end",
         var executor = connection.CreateCommandAsyncExecutor();
         await executor.ExecuteReaderAsync(
             new ExecuteReaderRequest(commandText),
-            async dataReader =>
+            async (dataReader, _) =>
             {
                 while (await dataReader.ReadAsync(cancellationToken))
                 {

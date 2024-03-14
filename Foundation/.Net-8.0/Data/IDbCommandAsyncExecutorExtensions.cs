@@ -73,7 +73,7 @@ public static class IDbCommandAsyncExecutorExtensions
     public static Task ExecuteReaderAsync(
         this IDbCommandAsyncExecutor executor,
         ExecuteReaderRequest executeReaderRequest,
-        Func<DbDataReader, Task> readResults,
+        Func<DbDataReader, CancellationToken, Task> readResults,
         CancellationToken cancellationToken)
     {
         return executor.ExecuteAsync(
@@ -81,8 +81,10 @@ public static class IDbCommandAsyncExecutorExtensions
             {
                 await using (var command = connection.CreateCommand(executeReaderRequest.CreateCommandRequest))
                 {
-                    await using (var dataReader = await command.ExecuteReaderAsync(executeReaderRequest.CommandBehavior, cancellationToken))
-                        await readResults(dataReader);
+                    await using (var dataReader =
+                                 await command.ExecuteReaderAsync(executeReaderRequest.CommandBehavior,
+                                     cancellationToken))
+                        await readResults(dataReader, cancellationToken);
                 }
             },
             cancellationToken);
@@ -98,7 +100,8 @@ public static class IDbCommandAsyncExecutorExtensions
         ReadOnlySegmentLinkedList<T> records = null;
         await executor.ExecuteReaderAsync(
             executeReaderRequest,
-            async dataReader => records = await dataReader.ReadResultAsync(segmentLength, readDataRecord, cancellationToken),
+            async (dataReader, _) => records =
+                await dataReader.ReadResultAsync(segmentLength, readDataRecord, cancellationToken),
             cancellationToken);
         return records;
     }
