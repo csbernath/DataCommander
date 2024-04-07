@@ -62,8 +62,6 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
         _cancellationToken = cancellationToken;
     }
 
-    #region IResultWriter Members
-
     void IResultWriter.Begin(IProvider provider) => _logResultWriter.Begin(provider);
     void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command) => _logResultWriter.BeforeExecuteReader(command);
     void IResultWriter.AfterExecuteReader() => _logResultWriter.AfterExecuteReader();
@@ -257,8 +255,6 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
             }
         }
     }
-
-    #endregion
 
     private sealed class QueueItem
     {

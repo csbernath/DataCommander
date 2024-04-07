@@ -10,21 +10,13 @@ internal sealed class NullLog : ILog
     {
     }
 
-    #region ILog Members
-
     bool ILog.IsEnabled(LogLevel logLevel) => false;
 
     void ILog.Write(LogLevel logLevel, string message)
     {
     }
 
-    #endregion
-
-    #region IDisposable Members
-
     void IDisposable.Dispose()
     {
     }
-
-    #endregion
 }

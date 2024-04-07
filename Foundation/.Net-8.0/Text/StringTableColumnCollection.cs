@@ -8,8 +8,6 @@ public class StringTableColumnCollection : IList<StringTableColumn>
 {
     private readonly List<StringTableColumn> _columns = [];
 
-    #region IList<StringTableColumn> Members
-
     /// <summary>
     /// 
     /// </summary>
@@ -41,10 +39,6 @@ public class StringTableColumnCollection : IList<StringTableColumn>
 
         set => throw new Exception("The method or operation is not implemented.");
     }
-
-    #endregion
-
-    #region ICollection<StringTableColumn> Members
 
     internal void Add(StringTableColumn item)
     {
@@ -93,10 +87,6 @@ public class StringTableColumnCollection : IList<StringTableColumn>
         throw new Exception("The method or operation is not implemented.");
     }
 
-    #endregion
-
-    #region IEnumerable<StringTableColumn> Members
-
     /// <summary>
     /// 
     /// </summary>
@@ -106,14 +96,8 @@ public class StringTableColumnCollection : IList<StringTableColumn>
         return _columns.GetEnumerator();
     }
 
-    #endregion
-
-    #region IEnumerable Members
-
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
     }
-
-    #endregion
 }

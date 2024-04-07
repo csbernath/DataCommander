@@ -10,8 +10,6 @@ namespace DataCommander.Application;
 
 internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
 {
-    #region Private Fields
-
     private readonly Action<InfoMessage> _addInfoMessage;
     private readonly SqlBulkCopy _sqlBulkCopy;
     private long _rowCount;
@@ -24,8 +22,6 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
     private IResultWriter _resultWriter;
     private Action<IAsyncDataAdapter, Exception> _endFill;
     private Action<IAsyncDataAdapter> _writeEnd;
-
-    #endregion
 
     public SqlBulkCopyAsyncDataAdapter(SqlConnection destinationConnection, SqlTransaction destionationTransaction, string destinationTableName,
         Action<InfoMessage> addInfoMessage)
@@ -50,8 +46,6 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
         }
     }
 
-    #region IAsyncDataAdapter Members
-
     IResultWriter IAsyncDataAdapter.ResultWriter => throw new NotImplementedException();
     long IAsyncDataAdapter.RowCount => _rowCount;
     int IAsyncDataAdapter.TableCount => 1;
@@ -66,10 +60,6 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
         _cancelRequested = true;
         Task.Factory.StartNew(CancelCommand);
     }
-
-    #endregion
-
-    #region Private Methods
 
     private void Fill()
     {
@@ -103,6 +93,4 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
     {
         _command.Cancel();
     }
-
-    #endregion
 }

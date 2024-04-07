@@ -10,8 +10,6 @@ public sealed class NullLogFactory : ILogFactory
     {
     }
 
-    #region ILogFactory Members
-
     string ILogFactory.FileName => null;
 
     ILog ILogFactory.GetLog(string name)
@@ -19,13 +17,7 @@ public sealed class NullLogFactory : ILogFactory
         return NullLog.Instance;
     }
 
-    #endregion
-
-    #region IDisposable Members
-
     void IDisposable.Dispose()
     {
     }
-
-    #endregion
 }

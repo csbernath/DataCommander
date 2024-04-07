@@ -244,8 +244,6 @@ internal sealed class InsertScriptFileWriter : IResultWriter
         return s;
     }
 
-    #region IResultWriter Members
-
     void IResultWriter.Begin(IProvider provider)
     {
     }
@@ -361,6 +359,4 @@ internal sealed class InsertScriptFileWriter : IResultWriter
     void IResultWriter.End()
     {
     }
-
-    #endregion
 }

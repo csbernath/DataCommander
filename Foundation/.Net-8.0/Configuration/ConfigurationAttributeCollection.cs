@@ -120,8 +120,6 @@ public class ConfigurationAttributeCollection : IList<ConfigurationAttribute>
         }
     }
 
-    #region ICollection<Attribute> Members
-
     public void Add(ConfigurationAttribute item) => _collection.Add(item);
     public void Clear() => _collection.Clear();
     public bool Contains(ConfigurationAttribute item) => _collection.Contains(item);
@@ -130,17 +128,7 @@ public class ConfigurationAttributeCollection : IList<ConfigurationAttribute>
     public bool IsReadOnly => _collection.IsReadOnly;
     public bool Remove(ConfigurationAttribute item) => _collection.Remove(item);
 
-    #endregion
-
-    #region IEnumerable<Attribute> Members
-
     public IEnumerator<ConfigurationAttribute> GetEnumerator() => _collection.GetEnumerator();
 
-    #endregion
-
-    #region IEnumerable Members
-
     IEnumerator IEnumerable.GetEnumerator() => _collection.GetEnumerator();
-
-    #endregion
 }

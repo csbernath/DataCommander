@@ -46,8 +46,6 @@ internal sealed class LogResultWriter : IResultWriter
         _addInfoMessage = addInfoMessage;
     }
 
-    #region IResultWriter Members
-
     void IResultWriter.Begin(IProvider provider) => _beginTimestamp = Stopwatch.GetTimestamp();
 
     void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand)
@@ -266,10 +264,6 @@ internal sealed class LogResultWriter : IResultWriter
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
     }
 
-    #endregion
-
-    #region Private Methods
-
     private static DbQueryResult ToResult(string result, Result sql)
     {
         Parser.ParseResult(result, out var name, out var fieldName);
@@ -280,8 +274,6 @@ internal sealed class LogResultWriter : IResultWriter
     {
         return new DbQueryResultField(column.ColumnName, column.DataType, column.AllowDbNull == true);
     }
-
-    #endregion
 
     private class Result(ReadOnlyCollection<DbQueryResultField> fields)
     {

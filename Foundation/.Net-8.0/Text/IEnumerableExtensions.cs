@@ -18,8 +18,6 @@ public static class IEnumerableExtensions
 
         var table = new StringTable(columns.Count);
 
-        #region First row: column names
-
         var row = table.NewRow();
         var columnIndex = 0;
         foreach (var column in columns)
@@ -31,14 +29,8 @@ public static class IEnumerableExtensions
 
         table.Rows.Add(row);
 
-        #endregion
-
-        #region Second row: underline first row
-
         var secondRow = table.NewRow();
         table.Rows.Add(secondRow);
-
-        #endregion
 
         foreach (var item in source)
         {
@@ -53,8 +45,6 @@ public static class IEnumerableExtensions
             table.Rows.Add(row);
         }
 
-        #region Fill second row
-
         var columnWidths = new int[columns.Count];
         for (columnIndex = 0;columnIndex < columns.Count;++columnIndex)
         {
@@ -64,8 +54,6 @@ public static class IEnumerableExtensions
             secondRow[columnIndex] = new string('-', max);
             columnWidths[columnIndex] = max;
         }
-
-        #endregion
 
         return table.ToString(columnWidths, " ");
     }

@@ -11,8 +11,6 @@ internal sealed class MyDataObject(DataView dataView, int[] columnIndexes) : IDa
 {
     private readonly int[] _columnIndexes = columnIndexes;
 
-    #region IDataObject Members
-
     object IDataObject.GetData(Type format)
     {
         throw new NotImplementedException();
@@ -130,8 +128,6 @@ internal sealed class MyDataObject(DataView dataView, int[] columnIndexes) : IDa
     {
         throw new NotImplementedException();
     }
-
-    #endregion
 
     private static void WriteHtmlFragment(string htmlFragment, TextWriter textWriter)
     {

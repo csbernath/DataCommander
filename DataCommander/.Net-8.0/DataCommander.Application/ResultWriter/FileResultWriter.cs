@@ -22,8 +22,6 @@ internal sealed class FileResultWriter : IResultWriter
         _messageWriter = messageWriter;
     }
 
-    #region IResultWriter Members
-
     void IResultWriter.Begin(IProvider provider)
     {
     }
@@ -194,6 +192,4 @@ internal sealed class FileResultWriter : IResultWriter
     void IResultWriter.End()
     {
     }
-
-    #endregion
 }

@@ -30,8 +30,6 @@ namespace DataCommander.Application.ResultWriter;
 
 internal class DataTableEditor : UserControl
 {
-    #region Private Fields
-
     private readonly IQueryForm _queryForm;
     private readonly DbCommandBuilder _commandBuilder;
     private DoubleBufferedDataGridView _dataGrid;
@@ -48,10 +46,6 @@ internal class DataTableEditor : UserControl
     /// </summary>
     private readonly Container _components = new();
 
-    #endregion
-
-    #region Constructors
-
     public DataTableEditor(IQueryForm queryForm, DbCommandBuilder commandBuilder, ColorTheme colorTheme)
     {
         _queryForm = queryForm;
@@ -65,10 +59,6 @@ internal class DataTableEditor : UserControl
 
         colorTheme.Apply(_dataGrid);
     }
-
-    #endregion
-
-    #region Properties
 
     public DataGridView DataGrid => _dataGrid;
 
@@ -259,8 +249,6 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    #endregion
-
     /// <summary> 
     /// Clean up any resources being used.
     /// </summary>
@@ -280,8 +268,6 @@ internal class DataTableEditor : UserControl
 
         base.Dispose(disposing);
     }
-
-    #region Component Designer generated code
 
     /// <summary> 
     /// Required method for Designer support - do not modify 
@@ -317,10 +303,6 @@ internal class DataTableEditor : UserControl
         this.ResumeLayout(false);
 
     }
-
-    #endregion
-
-    #region Private Methods
 
     private void dataGrid_DataError(object sender, DataGridViewDataErrorEventArgs e)
     {
@@ -1304,6 +1286,4 @@ internal class DataTableEditor : UserControl
             menu.Show(_dataGrid, pos);
         }
     }
-
-    #endregion
 }

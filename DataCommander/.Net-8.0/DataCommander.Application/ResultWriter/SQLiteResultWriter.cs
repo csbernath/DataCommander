@@ -16,8 +16,6 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
     private SQLiteTransaction _transaction;
     private SQLiteCommand _insertCommand;
 
-    #region IResultWriter Members
-
     void IResultWriter.Begin(IProvider provider)
     {
     }
@@ -229,6 +227,4 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
             _connection = null;
         }
     }
-
-    #endregion
 }

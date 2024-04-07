@@ -22,8 +22,6 @@ public sealed class TextLogWriter : ILogWriter
         _textWriter.Write(s);
     }
 
-    #region ILogWriter Members
-
     void ILogWriter.Open()
     {
     }
@@ -31,11 +29,5 @@ public sealed class TextLogWriter : ILogWriter
     void ILogWriter.Flush() => _textWriter.Flush();
     void ILogWriter.Close() => _textWriter.Close();
 
-    #endregion
-
-    #region IDisposable Members
-
     void IDisposable.Dispose() => _textWriter.Dispose();
-
-    #endregion
 }

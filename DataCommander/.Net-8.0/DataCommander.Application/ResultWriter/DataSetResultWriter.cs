@@ -16,8 +16,6 @@ internal sealed class DataSetResultWriter(Action<InfoMessage> addInfoMessage, bo
 
     public DataSet DataSet { get; private set; }
 
-    #region IResultWriter Members
-
     void IResultWriter.Begin(IProvider provider)
     {
         _logResultWriter.Begin(provider);
@@ -65,10 +63,6 @@ internal sealed class DataSetResultWriter(Action<InfoMessage> addInfoMessage, bo
     }
 
     void IResultWriter.End() => _logResultWriter.End();
-
-    #endregion
-
-    #region Private Methods
 
     private void CreateTable(DataTable schemaTable)
     {
@@ -122,6 +116,4 @@ internal sealed class DataSetResultWriter(Action<InfoMessage> addInfoMessage, bo
             }
         }
     }
-
-    #endregion
 }

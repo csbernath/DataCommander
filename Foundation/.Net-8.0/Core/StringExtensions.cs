@@ -142,8 +142,6 @@ public static class StringExtensions
 
     private sealed class StringAsList(string source) : IList<char>
     {
-        #region IList<Char> Members
-
         int IList<char>.IndexOf(char item)
         {
             throw new NotImplementedException();
@@ -164,10 +162,6 @@ public static class StringExtensions
             get => source[index];
             set => throw new NotImplementedException();
         }
-
-        #endregion
-
-        #region ICollection<Char> Members
 
         void ICollection<char>.Add(char item)
         {
@@ -198,24 +192,14 @@ public static class StringExtensions
             throw new NotImplementedException();
         }
 
-        #endregion
-
-        #region IEnumerable<Char> Members
-
         IEnumerator<char> IEnumerable<char>.GetEnumerator()
         {
             throw new NotImplementedException();
         }
 
-        #endregion
-
-        #region IEnumerable Members
-
         IEnumerator IEnumerable.GetEnumerator()
         {
             throw new NotImplementedException();
         }
-
-        #endregion
     }
 }

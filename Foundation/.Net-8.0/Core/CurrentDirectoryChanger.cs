@@ -12,12 +12,8 @@ public sealed class CurrentDirectoryChanger : IDisposable
         Environment.CurrentDirectory = path;
     }
 
-    #region IDisposable Members
-
     void IDisposable.Dispose()
     {
         Environment.CurrentDirectory = _currentDirectory;
     }
-
-    #endregion
 }

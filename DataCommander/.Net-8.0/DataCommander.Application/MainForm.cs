@@ -187,8 +187,6 @@ public class MainForm : Form
         base.Dispose(disposing);
     }
 
-    #region Windows Form Designer generated code
-
     /// <summary>
     /// Required method for Designer support - do not modify
     /// the contents of this method with the code editor.
@@ -513,8 +511,6 @@ public class MainForm : Form
             attributes.SetAttributeValue("Font", Serialize(SelectedFont));
         }
     }
-
-    #endregion
 
     private void Connect()
     {

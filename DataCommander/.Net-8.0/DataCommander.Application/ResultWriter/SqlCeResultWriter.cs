@@ -16,8 +16,6 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
     private SqlCeConnection _connection;
     private SqlCeCommand _insertCommand;
 
-    #region IResultWriter Members
-
     void IResultWriter.Begin(IProvider provider)
     {
         _provider = provider;
@@ -257,6 +255,4 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
         _connection.Dispose();
         _connection = null;
     }
-
-    #endregion
 }

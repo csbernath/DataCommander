@@ -13,13 +13,9 @@ namespace DataCommander.Application.ResultWriter;
 /// </summary>
 internal sealed class HtmlTextBox : UserControl
 {
-    #region Private Fields
-
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private WebBrowser _webBrowser;
     private string _fileName;
-
-    #endregion
 
     /// <summary> 
     /// Required designer variable.
@@ -93,8 +89,6 @@ internal sealed class HtmlTextBox : UserControl
         base.Dispose(disposing);
     }
 
-    #region Component Designer generated code
-
     /// <summary> 
     /// Required method for Designer support - do not modify 
     /// the contents of this method with the code editor.
@@ -129,8 +123,6 @@ internal sealed class HtmlTextBox : UserControl
         this.ResumeLayout(false);
 
     }
-
-    #endregion
 
     private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
     {

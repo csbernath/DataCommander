@@ -30,8 +30,6 @@ public sealed class DataCommanderApplication
         SystemEvents.SessionEnding += SystemEvents_SessionEnding;
     }
 
-    #region Public Properties
-
     public static DataCommanderApplication Instance { get; } = new();
 
     public string Name { get; }
@@ -41,10 +39,6 @@ public sealed class DataCommanderApplication
     public string FileName { get; private set; }
 
     public MainForm MainForm { get; private set; }
-
-    #endregion
-
-    #region Public Methods
 
     public void Run()
     {
@@ -77,8 +71,6 @@ public sealed class DataCommanderApplication
         _sectionName = sectionName;
     }
 
-    #endregion
-    
     private static Assembly Default_Resolving(AssemblyLoadContext assemblyLoadContext, AssemblyName assemblyName)
     {
         var location = Assembly.GetEntryAssembly().Location;

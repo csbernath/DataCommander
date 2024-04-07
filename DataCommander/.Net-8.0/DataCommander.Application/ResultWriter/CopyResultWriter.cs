@@ -40,8 +40,6 @@ internal sealed class CopyResultWriter(
     private long _insertedRowCount;
     private long _waitMilliseconds;
 
-    #region IResultWriter Members
-
     void IResultWriter.Begin(IProvider provider)
     {
         _logResultWriter.Begin(provider);
@@ -260,8 +258,6 @@ internal sealed class CopyResultWriter(
             }
         }
     }
-
-    #endregion
 
     private sealed class QueueItem
     {

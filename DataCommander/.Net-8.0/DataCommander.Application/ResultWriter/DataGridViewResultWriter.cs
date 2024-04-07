@@ -15,8 +15,6 @@ internal sealed class DataGridViewResultWriter : IResultWriter
 
     public List<DoubleBufferedDataGridView> DataGridViews { get; } = [];
 
-    #region IResultWriter Members
-
     void IResultWriter.Begin(IProvider provider)
     {
     }
@@ -97,6 +95,4 @@ internal sealed class DataGridViewResultWriter : IResultWriter
     void IResultWriter.End()
     {
     }
-
-    #endregion
 }

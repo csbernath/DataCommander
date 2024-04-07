@@ -22,18 +22,12 @@ internal sealed class AsyncDataAdapter(
     Action<IAsyncDataAdapter> writeEnd)
     : IAsyncDataAdapter
 {
-    #region Private Fields
-
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
 
     private AsyncDataAdapterCommand _command;
     private long _rowCount;
     private CancellationTokenSource _cancellationTokenSource;
     private int _tableCount;
-
-    #endregion
-
-    #region IAsyncDataAdapter Members
 
     IResultWriter IAsyncDataAdapter.ResultWriter => resultWriter;
     long IAsyncDataAdapter.RowCount => _rowCount;
@@ -64,10 +58,6 @@ internal sealed class AsyncDataAdapter(
             }
         }
     }
-
-    #endregion
-
-    #region Private Methods
 
     private async Task ReadTable(DbDataReader dataReader, DataTable schemaTable, int tableIndex, CancellationToken cancellationToken)
     {
@@ -266,6 +256,4 @@ internal sealed class AsyncDataAdapter(
         using (LogFactory.Instance.GetCurrentMethodLog())
             _command.Command.Cancel();
     }
-
-    #endregion
 }

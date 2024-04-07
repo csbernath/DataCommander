@@ -28,8 +28,6 @@ internal sealed class ExcelResultWriter : IResultWriter
         _logResultWriter = new LogResultWriter(addInfoMessage);
     }
 
-    #region IResultWriter Members
-
     void IResultWriter.Begin(IProvider provider)
     {
         _logResultWriter.Begin(provider);
@@ -88,8 +86,6 @@ internal sealed class ExcelResultWriter : IResultWriter
         _excelPackage.Save();
         Process.Start(_excelPackage.File.FullName);
     }
-
-    #endregion
 
     private void CreateTable(DataTable schemaTable)
     {

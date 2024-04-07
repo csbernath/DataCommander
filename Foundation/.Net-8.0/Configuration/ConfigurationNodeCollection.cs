@@ -25,8 +25,6 @@ public sealed class ConfigurationNodeCollection : ICollection<ConfigurationNode>
     public ConfigurationNode this[int index] => _listIndex[index];
     public bool TryGetValue(string name, out ConfigurationNode item) => _nameIndex.TryGetValue(name, out item);
 
-    #region ICollection<ConfigurationNode> Members
-
     public void Add(ConfigurationNode item)
     {
         Assert.IsTrue(item != null);
@@ -40,19 +38,9 @@ public sealed class ConfigurationNodeCollection : ICollection<ConfigurationNode>
     public bool IsReadOnly => false;
     public bool Remove(ConfigurationNode item) => _collection.Remove(item);
 
-    #endregion
-
-    #region IEnumerable<ConfigurationNode> Members
-
     public IEnumerator<ConfigurationNode> GetEnumerator() => _collection.GetEnumerator();
 
-    #endregion
-
-    #region IEnumerable Members
-
     IEnumerator IEnumerable.GetEnumerator() => _collection.GetEnumerator();
-
-    #endregion
 
     internal void Insert(int index, ConfigurationNode item)
     {

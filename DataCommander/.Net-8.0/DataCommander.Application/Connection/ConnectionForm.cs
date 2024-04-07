@@ -115,8 +115,6 @@ internal sealed class ConnectionForm : Form
         base.Dispose(disposing);
     }
 
-    #region Windows Form Designer generated code
-
     /// <summary>
     /// Required method for Designer support - do not modify
     /// the contents of this method with the code editor.
@@ -200,8 +198,6 @@ internal sealed class ConnectionForm : Form
         this.ResumeLayout(false);
 
     }
-
-    #endregion
 
     public long ElapsedTicks { get; private set; }
 
