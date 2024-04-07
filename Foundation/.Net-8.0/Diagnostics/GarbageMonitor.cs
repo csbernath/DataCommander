@@ -35,8 +35,6 @@ public sealed class GarbageMonitor(string garbageMonitorName)
         ];
     }
 
-    #region Public Properties
-
     public int Count => _monitoredObjects.Count;
 
     public string State
@@ -59,10 +57,6 @@ public sealed class GarbageMonitor(string garbageMonitorName)
             return state;
         }
     }
-
-    #endregion
-
-    #region Public Methods
 
     public void Add(string name, object target)
     {
@@ -106,8 +100,6 @@ public sealed class GarbageMonitor(string garbageMonitorName)
             item.SetDisposeTime(disposeTime);
         }
     }
-
-    #endregion
 
     private void RemoveGarbageCollectedObjects()
     {

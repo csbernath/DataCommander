@@ -61,8 +61,6 @@ namespace Foundation.Data.SqlClient.SqlLog;
 /// </remarks>
 public sealed class SqlLog
 {
-    #region Private Fields
-
     private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(SqlLog));
     private static readonly IInternalConnectionHelper InternalConnectionHelper;
     private int _connectionCounter;
@@ -71,8 +69,6 @@ public sealed class SqlLog
     private readonly Dictionary<object, SqlLogConnection> _connections = new();
     private readonly Queue<ISqlLogItem> _queue = new();
     private readonly AutoResetEvent _queueEvent = new(false);
-
-    #endregion
 
     static SqlLog()
     {

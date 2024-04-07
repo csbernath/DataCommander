@@ -6,16 +6,12 @@ namespace Foundation.Data.LoggedDbConnection;
 
 internal sealed class LoggedDbCommand : IDbCommand
 {
-    #region Private Fields
-
     private static int _commandIdCounter;
     private readonly int _commandId;
     private readonly IDbCommand _command;
     private readonly EventHandler<BeforeExecuteCommandEventArgs> _beforeExecuteCommand;
     private readonly EventHandler<AfterExecuteCommandEventArgs> _afterExecuteCommand;
     private readonly EventHandler<AfterReadEventArgs> _afterRead;
-
-    #endregion
 
     public LoggedDbCommand(
         IDbCommand command,
@@ -34,8 +30,6 @@ internal sealed class LoggedDbCommand : IDbCommand
         _afterExecuteCommand = afterExecuteCommand;
         _afterRead = afterRead;
     }
-
-    #region IDbCommand Members
 
     void IDbCommand.Cancel()
     {
@@ -215,18 +209,10 @@ internal sealed class LoggedDbCommand : IDbCommand
         set => _command.UpdatedRowSource = value;
     }
 
-    #endregion
-
-    #region IDisposable Members
-
     void IDisposable.Dispose()
     {
         _command.Dispose();
     }
-
-    #endregion
-
-    #region Private Methods
 
     private LoggedDbCommandInfo CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType executionType)
     {
@@ -242,6 +228,4 @@ internal sealed class LoggedDbCommand : IDbCommand
             _command.CommandText,
             _command.Parameters.ToLogString());
     }
-
-    #endregion
 }

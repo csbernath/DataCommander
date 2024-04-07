@@ -9,8 +9,6 @@ namespace Foundation.Data.TextData;
 /// </summary>
 public sealed class TextDataTableList : IList<TextDataTable>
 {
-    #region IList<TextDataTable> Members
-
     int IList<TextDataTable>.IndexOf(TextDataTable item)
     {
         throw new NotImplementedException();
@@ -32,10 +30,6 @@ public sealed class TextDataTableList : IList<TextDataTable>
 
         set => throw new NotImplementedException();
     }
-
-    #endregion
-
-    #region ICollection<TextDataTable> Members
 
     void ICollection<TextDataTable>.Add(TextDataTable item)
     {
@@ -66,23 +60,13 @@ public sealed class TextDataTableList : IList<TextDataTable>
         throw new NotImplementedException();
     }
 
-    #endregion
-
-    #region IEnumerable<TextDataTable> Members
-
     IEnumerator<TextDataTable> IEnumerable<TextDataTable>.GetEnumerator()
     {
         throw new NotImplementedException();
     }
 
-    #endregion
-
-    #region IEnumerable Members
-
     IEnumerator IEnumerable.GetEnumerator()
     {
         throw new NotImplementedException();
     }
-
-    #endregion
 }

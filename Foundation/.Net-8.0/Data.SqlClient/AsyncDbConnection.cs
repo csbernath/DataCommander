@@ -11,16 +11,12 @@ namespace Foundation.Data.SqlClient;
 
 public sealed class AsyncDbConnection : IDbConnection
 {
-    #region Private Fields
-
     private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(AsyncDbConnection));
     private readonly IDbConnection _cloneableConnection;
     private readonly ICloneable _cloneable;
     private readonly List<string> _commands = [];
     private readonly AutoResetEvent _queueEvent = new(false);
     private readonly WorkerThread _thread;
-
-    #endregion
 
     public AsyncDbConnection(IDbConnection cloneableConnection, string threadName)
     {
@@ -30,8 +26,6 @@ public sealed class AsyncDbConnection : IDbConnection
         _thread.Name = threadName;
         _thread.Start();
     }
-
-    #region IDbConnection Members
 
     public void ChangeDatabase(string databaseName)
     {
@@ -78,15 +72,7 @@ public sealed class AsyncDbConnection : IDbConnection
     public string Database => _cloneableConnection.Database;
     public int ConnectionTimeout => _cloneableConnection.ConnectionTimeout;
 
-    #endregion
-
-    #region IDisposable Members
-
     public void Dispose() => Close();
-
-    #endregion
-
-    #region Internal Methods
 
     internal int ExecuteNonQuery(AsyncDbCommand command)
     {
@@ -99,10 +85,6 @@ public sealed class AsyncDbConnection : IDbConnection
 
         return 0;
     }
-
-    #endregion
-
-    #region Private Methods
 
     private static string ToString(IDbCommand command)
     {
@@ -212,6 +194,4 @@ public sealed class AsyncDbConnection : IDbConnection
             }
         }
     }
-
-    #endregion
 }

@@ -18,17 +18,11 @@ internal sealed class AsyncLogFile(
     DateTimeKind dateTimeKind)
     : ILogFile
 {
-    #region Private Fields
-
     private string _path = path;
     private readonly int _bufferSize = bufferSize;
     private readonly LogFile _logFile = new(path, encoding, 1024, true, formatter, fileAttributes, dateTimeKind);
     private readonly ConcurrentQueue<LogEntry> _queue = new();
     private Timer _timer;
-
-    #endregion
-
-    #region ILogFile Members
 
     string ILogFile.FileName => _logFile.FileName;
 
@@ -66,10 +60,6 @@ internal sealed class AsyncLogFile(
         _logFile.Close();
     }
 
-    #endregion
-
-    #region Private Methods
-
     private void TimerCallback(object state)
     {
         var thread = Thread.CurrentThread;
@@ -78,14 +68,8 @@ internal sealed class AsyncLogFile(
         Flush();
     }
 
-    #endregion
-
-    #region IDisposable Members
-
     void IDisposable.Dispose()
     {
         Close();
     }
-
-    #endregion
 }

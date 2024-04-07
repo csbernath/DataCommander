@@ -26,16 +26,12 @@ public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
 
     public SafeSqlConnection(IDbConnection connection) => Initialize(connection, this);
 
-    #region ICloneable Members
-
     object ICloneable.Clone()
     {
         var connectionString = ConnectionString;
         var connection = new SafeSqlConnection(connectionString);
         return connection;
     }
-
-    #endregion
 
     internal static short GetId(IDbConnection connection)
     {

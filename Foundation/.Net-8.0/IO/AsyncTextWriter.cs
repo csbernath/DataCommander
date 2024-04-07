@@ -8,15 +8,11 @@ namespace Foundation.IO;
 
 public class AsyncTextWriter
 {
-    #region Private Fields
-
     private readonly TextWriter _textWriter;
     private readonly List<AsyncTextWriterListItem> _list = [];
     private readonly object _syncObject = new();
     private readonly ManualResetEvent _waitHandle = new(false);
     private RegisteredWaitHandle _registeredWaitHandle;
-
-    #endregion
 
     public AsyncTextWriter(TextWriter textWriter)
     {

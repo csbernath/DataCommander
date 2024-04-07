@@ -55,8 +55,6 @@ internal sealed class LogFactory : ILogFactory
         _multipeLog = new MultipleLog(logWriter.ItemToArray());
     }
 
-    #region ILogFactory Members
-
     string ILogFactory.FileName
     {
         get
@@ -69,17 +67,11 @@ internal sealed class LogFactory : ILogFactory
 
     ILog ILogFactory.GetLog(string name) => new Log(this, name);
 
-    #endregion
-
-    #region IDisposable Members
-
     void IDisposable.Dispose()
     {
         if (_multipeLog != null)
             _multipeLog.Dispose();
     }
-
-    #endregion
 
     internal void Write(Log log, LogLevel logLevel, string message)
     {
@@ -176,8 +168,6 @@ internal sealed class LogFactory : ILogFactory
 
         public LogWriter[] LogWriters { get; }
 
-        #region IDisposable Members
-
         public void Dispose()
         {
             foreach (var logWriter in LogWriters)
@@ -185,8 +175,6 @@ internal sealed class LogFactory : ILogFactory
                 logWriter.logWriter.Dispose();
             }
         }
-
-        #endregion
 
         public void Write(LogEntry logEntry)
         {

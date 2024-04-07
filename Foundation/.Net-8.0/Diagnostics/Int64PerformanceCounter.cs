@@ -5,16 +5,12 @@ namespace Foundation.Diagnostics;
 
 public sealed class Int64PerformanceCounter
 {
-    #region Private Fields
-
     private readonly string _name;
     private readonly Func<long, string> _toString;
     private long _count;
     private long _sum;
     private long _min = long.MaxValue;
     private long _max = long.MinValue;
-
-    #endregion
 
     public Int64PerformanceCounter(string name, Func<long, string> toString)
     {

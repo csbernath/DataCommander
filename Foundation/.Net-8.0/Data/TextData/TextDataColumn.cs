@@ -14,10 +14,6 @@ public class TextDataColumn(
     string format,
     IFormatProvider formatProvider)
 {
-    #region Private Fields
-
-    #endregion
-
     public Type DataType { get; } = dataType;
     public string Format { get; } = format;
     public IFormatProvider FormatProvider { get; } = formatProvider;

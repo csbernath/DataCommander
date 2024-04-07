@@ -10,8 +10,6 @@ namespace Foundation.Threading.Tasks;
 
 public static class TaskMonitor
 {
-    #region Private Fields
-
     private static ILog _log = LogFactory.Instance.GetCurrentTypeLog();
     private static readonly HashSet<TaskInfo> Tasks = [];
 
@@ -29,15 +27,7 @@ public static class TaskMonitor
         StringTableColumnInfo.Create<TaskInfo, bool>("IsCompleted", StringTableColumnAlign.Left, s => s.IsCompleted)
     ];
 
-    #endregion
-
-    #region Public Properties
-
     public static int Count => Tasks.Count;
-
-    #endregion
-
-    #region Public Methods
 
     /// <summary>
     /// 
@@ -147,10 +137,6 @@ public static class TaskMonitor
         return count;
     }
 
-    #endregion
-
-    #region Private Methods
-
     private static void ExecuteAction(object state)
     {
         var monitoredTaskState = (MonitoredTaskActionState)state;
@@ -215,6 +201,4 @@ public static class TaskMonitor
 
         return s;
     }
-
-    #endregion
 }

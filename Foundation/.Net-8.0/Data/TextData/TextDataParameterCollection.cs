@@ -133,8 +133,6 @@ public sealed class TextDataParameterCollection : DbParameterCollection, IList<T
 
     public bool TryGetValue(string parameterName, out TextDataParameter parameter) => _nameIndex.TryGetValue(parameterName, out parameter);
 
-    #region IList<TextDataParameter> Members
-
     int IList<TextDataParameter>.IndexOf(TextDataParameter item)
     {
         Assert.IsTrue(item != null);
@@ -156,10 +154,6 @@ public sealed class TextDataParameterCollection : DbParameterCollection, IList<T
 
         set => throw new NotSupportedException();
     }
-
-    #endregion
-
-    #region ICollection<TextDataParameter> Members
 
     void ICollection<TextDataParameter>.Add(TextDataParameter item)
     {
@@ -195,23 +189,13 @@ public sealed class TextDataParameterCollection : DbParameterCollection, IList<T
         return _collection.Remove(item);
     }
 
-    #endregion
-
-    #region IEnumerable<TextDataParameter> Members
-
     IEnumerator<TextDataParameter> IEnumerable<TextDataParameter>.GetEnumerator()
     {
         return _collection.GetEnumerator();
     }
 
-    #endregion
-
-    #region IEnumerable Members
-
     IEnumerator IEnumerable.GetEnumerator()
     {
         return _collection.GetEnumerator();
     }
-
-    #endregion
 }

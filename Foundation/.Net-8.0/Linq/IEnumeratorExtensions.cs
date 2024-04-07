@@ -7,8 +7,6 @@ namespace Foundation.Linq;
 
 public static class IEnumeratorExtensions
 {
-    #region Public Methods
-
     public static IEnumerable<T> AsEnumerable<T>(this IEnumerator<T> enumerator)
     {
         ArgumentNullException.ThrowIfNull(enumerator);
@@ -36,10 +34,6 @@ public static class IEnumeratorExtensions
         return list;
     }
 
-    #endregion
-
-    #region Private Classes
-
     private sealed class Enumerable<T> : IEnumerable<T>
     {
         private readonly IEnumerator<T> _enumerator;
@@ -53,6 +47,4 @@ public static class IEnumeratorExtensions
         IEnumerator<T> IEnumerable<T>.GetEnumerator() => _enumerator;
         IEnumerator IEnumerable.GetEnumerator() => _enumerator;
     }
-
-    #endregion
 }

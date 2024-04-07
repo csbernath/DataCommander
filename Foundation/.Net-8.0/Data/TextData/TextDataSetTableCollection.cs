@@ -53,8 +53,6 @@ public sealed class TextDataSetTableCollection : IList<TextDataSetTable>
     /// <returns></returns>
     public TextDataSetTable this[string name] => _nameIndex[name];
 
-    #region IList<TextDataSetTable> Members
-
     int IList<TextDataSetTable>.IndexOf(TextDataSetTable item)
     {
         throw new NotImplementedException();
@@ -76,10 +74,6 @@ public sealed class TextDataSetTableCollection : IList<TextDataSetTable>
 
         set => throw new NotImplementedException();
     }
-
-    #endregion
-
-    #region ICollection<TextDataSetTable> Members
 
     /// <summary>
     /// 
@@ -119,23 +113,13 @@ public sealed class TextDataSetTableCollection : IList<TextDataSetTable>
         throw new NotImplementedException();
     }
 
-    #endregion
-
-    #region IEnumerable<TextDataSetTable> Members
-
     IEnumerator<TextDataSetTable> IEnumerable<TextDataSetTable>.GetEnumerator()
     {
         return _collection.GetEnumerator();
     }
 
-    #endregion
-
-    #region IEnumerable Members
-
     IEnumerator IEnumerable.GetEnumerator()
     {
         return _collection.GetEnumerator();
     }
-
-    #endregion
 }

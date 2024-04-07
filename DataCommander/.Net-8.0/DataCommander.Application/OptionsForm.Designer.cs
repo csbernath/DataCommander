@@ -21,8 +21,6 @@ namespace DataCommander.Application
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
@@ -112,7 +110,6 @@ namespace DataCommander.Application
 
         }
 
-        #endregion
         private System.Windows.Forms.Label colorThemeLabel;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;

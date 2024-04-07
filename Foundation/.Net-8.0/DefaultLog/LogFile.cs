@@ -17,14 +17,10 @@ internal sealed class LogFile(
     DateTimeKind dateTimeKind)
     : ILogFile
 {
-    #region Private Fields
-
     private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(LogFile));
     private DateTime _date;
     private FileStream _fileStream;
     private readonly DateTimeKind _dateTimeKind = dateTimeKind;
-
-    #endregion
 
     private FileStream Open(string fileName, DateTime dateTime)
     {
@@ -79,8 +75,6 @@ internal sealed class LogFile(
             _fileStream.Flush();
     }
 
-    #region ILogFile Members
-
     public string FileName { get; private set; }
 
     void ILogFile.Open()
@@ -121,14 +115,8 @@ internal sealed class LogFile(
         }
     }
 
-    #endregion
-
-    #region IDisposable Members
-
     void IDisposable.Dispose()
     {
         Close();
     }
-
-    #endregion
 }

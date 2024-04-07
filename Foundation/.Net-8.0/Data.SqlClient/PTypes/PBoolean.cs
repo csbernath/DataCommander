@@ -12,8 +12,6 @@ public struct PBoolean : INullable
     public static readonly PBoolean True = new(true);
     public static readonly PBoolean False = new(false);
 
-    #region Constructors
-
     public PBoolean(bool value)
     {
         _sql = value;
@@ -31,8 +29,6 @@ public struct PBoolean : INullable
         ValueType = type;
         _sql = SqlBoolean.Null;
     }
-
-    #endregion
 
     public static implicit operator PBoolean(bool value) => new(value);
 

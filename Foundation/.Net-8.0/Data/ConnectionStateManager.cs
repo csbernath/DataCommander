@@ -22,8 +22,6 @@ internal sealed class ConnectionStateManager : IDisposable
             _connection.Open();
     }
 
-    #region IDisposable Member
-
     public void Dispose()
     {
         if (_connection != null && _state == ConnectionState.Closed)
@@ -31,6 +29,4 @@ internal sealed class ConnectionStateManager : IDisposable
             _connection.Close();
         }
     }
-
-    #endregion
 }

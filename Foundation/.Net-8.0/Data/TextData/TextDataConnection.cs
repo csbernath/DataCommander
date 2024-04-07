@@ -9,8 +9,6 @@ namespace Foundation.Data.TextData;
 /// </summary>
 public sealed class TextDataConnection : DbConnection
 {
-    #region Public Methods
-
     /// <summary>
     /// 
     /// </summary>
@@ -20,8 +18,6 @@ public sealed class TextDataConnection : DbConnection
         var command = new TextDataCommand { Connection = this };
         return command;
     }
-
-    #endregion
 
     /// <summary>
     /// 

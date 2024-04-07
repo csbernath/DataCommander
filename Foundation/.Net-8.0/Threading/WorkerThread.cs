@@ -10,8 +10,6 @@ namespace Foundation.Threading;
 
 public class WorkerThread
 {
-    #region Private Fields
-
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private readonly Thread _thread;
     private ThreadStart _start;
@@ -22,10 +20,6 @@ public class WorkerThread
     private EventHandler _started;
     private EventHandler _stopped;
 
-    #endregion
-
-    #region Constructors
-
     public WorkerThread(ThreadStart start)
     {
         ArgumentNullException.ThrowIfNull(start);
@@ -34,10 +28,6 @@ public class WorkerThread
         _thread = new Thread(PrivateStart);
         ThreadMonitor.Add(this);
     }
-
-    #endregion
-
-    #region Public Events
 
     public event EventHandler Started
     {
@@ -50,10 +40,6 @@ public class WorkerThread
         add => _stopped += value;
         remove => _stopped -= value;
     }
-
-    #endregion
-
-    #region Public Properties
 
     public bool IsPauseRequested => _pauseRequest.State == WorkerEventState.Signaled;
 
@@ -105,17 +91,9 @@ public class WorkerThread
 
     public Thread Thread => _thread;
 
-    #endregion
-
-    #region Internal Properties
-
     internal DateTime StartTime { get; private set; }
 
     internal DateTime StopTime { get; private set; }
-
-    #endregion
-
-    #region Public Methods
 
     public void Start()
     {
@@ -186,10 +164,6 @@ public class WorkerThread
         return signaled;
     }
 
-    #endregion
-
-    #region Private Methods
-
     private void PrivateStart()
     {
         var now = LocalTime.Default.Now;
@@ -227,6 +201,4 @@ public class WorkerThread
 
         _start = null;
     }
-
-    #endregion
 }

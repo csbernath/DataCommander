@@ -7,14 +7,10 @@ namespace Foundation.Data.LoggedDbConnection;
 
 internal sealed class DbConnectionLogger
 {
-    #region Private Fields
-
     private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(DbConnectionLogger));
     private LoggedDbConnection _connection;
     private BeforeOpenDbConnectionEventArgs _beforeOpen;
     private BeforeExecuteCommandEventArgs _beforeExecuteReader;
-
-    #endregion
 
     public DbConnectionLogger(LoggedDbConnection connection)
     {

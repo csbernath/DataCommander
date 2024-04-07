@@ -18,8 +18,6 @@ internal sealed class LoggedDataReader : IDataReader
         _afterRead = afterRead;
     }
 
-    #region IDataReader Members
-
     void IDataReader.Close() => _dataReader.Close();
     int IDataReader.Depth => _dataReader.Depth;
     DataTable IDataReader.GetSchemaTable() => _dataReader.GetSchemaTable();
@@ -44,15 +42,7 @@ internal sealed class LoggedDataReader : IDataReader
 
     int IDataReader.RecordsAffected => _dataReader.RecordsAffected;
 
-    #endregion
-
-    #region IDisposable Members
-
     void IDisposable.Dispose() => _dataReader.Dispose();
-
-    #endregion
-
-    #region IDataRecord Members
 
     int IDataRecord.FieldCount => _dataReader.FieldCount;
     bool IDataRecord.GetBoolean(int i) => _dataReader.GetBoolean(i);
@@ -79,6 +69,4 @@ internal sealed class LoggedDataReader : IDataReader
     bool IDataRecord.IsDBNull(int i) => _dataReader.IsDBNull(i);
     object IDataRecord.this[string name] => _dataReader[name];
     object IDataRecord.this[int i] => _dataReader[i];
-
-    #endregion
 }

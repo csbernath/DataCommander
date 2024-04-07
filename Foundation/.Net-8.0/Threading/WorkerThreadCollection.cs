@@ -12,8 +12,6 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
 {
     private readonly List<WorkerThread> _threads = [];
 
-    #region IList<WorkerThread> Members
-
     int IList<WorkerThread>.IndexOf(WorkerThread item)
     {
         var index = _threads.IndexOf(item);
@@ -51,10 +49,6 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
 
         set => throw new Exception("The method or operation is not implemented.");
     }
-
-    #endregion
-
-    #region ICollection<WorkerThread> Members
 
     /// <summary>
     /// 
@@ -95,25 +89,15 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
         throw new Exception("The method or operation is not implemented.");
     }
 
-    #endregion
-
-    #region IEnumerable<WorkerThread> Members
-
     IEnumerator<WorkerThread> IEnumerable<WorkerThread>.GetEnumerator()
     {
         return _threads.GetEnumerator();
     }
 
-    #endregion
-
-    #region IEnumerable Members
-
     IEnumerator IEnumerable.GetEnumerator()
     {
         throw new Exception("The method or operation is not implemented.");
     }
-
-    #endregion
 
     /// <summary>
     /// 

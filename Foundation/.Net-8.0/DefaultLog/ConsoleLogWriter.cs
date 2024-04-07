@@ -18,8 +18,6 @@ public sealed class ConsoleLogWriter : ILogWriter
 
     public static ConsoleLogWriter Instance { get; }
 
-    #region ILogWriter Members
-
     void ILogWriter.Open()
     {
     }
@@ -61,13 +59,7 @@ public sealed class ConsoleLogWriter : ILogWriter
     {
     }
 
-    #endregion
-
-    #region IDisposable Members
-
     void IDisposable.Dispose()
     {
     }
-
-    #endregion
 }

@@ -10,8 +10,6 @@ public struct PBinary : INullable
     public static readonly PBinary Default = new(PValueType.Default);
     public static readonly PBinary Empty = new(PValueType.Empty);
 
-    #region Constructors
-
     public PBinary(byte[] value)
     {
         _sql = new SqlBinary(value);
@@ -23,8 +21,6 @@ public struct PBinary : INullable
         ValueType = type;
         _sql = SqlBinary.Null;
     }
-
-    #endregion
 
     public static implicit operator PBinary(byte[] value) => new(value);
     public static implicit operator byte[](PBinary value) => (byte[])value._sql;

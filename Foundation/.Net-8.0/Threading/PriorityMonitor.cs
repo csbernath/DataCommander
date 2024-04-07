@@ -142,8 +142,6 @@ public sealed class PriorityMonitor<T>
             }
         }
 
-        #region IDisposable Members
-
         void IDisposable.Dispose()
         {
             if (Monitor != null)
@@ -153,7 +151,5 @@ public sealed class PriorityMonitor<T>
                 Monitor = null;
             }
         }
-
-        #endregion
     }
 }

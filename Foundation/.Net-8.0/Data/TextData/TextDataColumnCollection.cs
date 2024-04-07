@@ -93,8 +93,6 @@ public sealed class TextDataColumnCollection : IList<TextDataColumn>
         set => throw new NotImplementedException();
     }
 
-    #region ICollection<TextDataColumn> Members
-
     /// <summary>
     /// 
     /// </summary>
@@ -131,27 +129,15 @@ public sealed class TextDataColumnCollection : IList<TextDataColumn>
         throw new NotImplementedException();
     }
 
-    #endregion
-
-    #region IEnumerable<TextDataColumn> Members
-
     IEnumerator<TextDataColumn> IEnumerable<TextDataColumn>.GetEnumerator()
     {
         return _collection.GetEnumerator();
     }
 
-    #endregion
-
-    #region IEnumerable Members
-
     IEnumerator IEnumerable.GetEnumerator()
     {
         return _collection.GetEnumerator();
     }
-
-    #endregion
-
-    #region IList<TextDataColumn> Members
 
     /// <summary>
     /// 
@@ -181,6 +167,4 @@ public sealed class TextDataColumnCollection : IList<TextDataColumn>
     {
         throw new NotImplementedException();
     }
-
-    #endregion
 }

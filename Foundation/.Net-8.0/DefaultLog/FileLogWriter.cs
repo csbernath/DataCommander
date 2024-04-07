@@ -30,8 +30,6 @@ public class FileLogWriter : ILogWriter
 
     public string FileName => _logFile.FileName;
 
-    #region ILogWriter Members
-
     void ILogWriter.Open()
     {
         try
@@ -90,14 +88,8 @@ public class FileLogWriter : ILogWriter
         }
     }
 
-    #endregion
-
-    #region IDisposable Members
-
     void IDisposable.Dispose()
     {
         _logFile.Dispose();
     }
-
-    #endregion
 }

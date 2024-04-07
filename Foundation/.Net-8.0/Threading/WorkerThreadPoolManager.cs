@@ -8,15 +8,11 @@ namespace Foundation.Threading;
 
 public sealed class WorkerThreadPoolManager
 {
-    #region Private Fields
-
     private readonly WorkerThreadPool _pool;
 
     private readonly IWaitCallbackFactory _waitCallbackFactory;
 
     private Timer _timer;
-
-    #endregion
 
     public WorkerThreadPoolManager(
         WorkerThreadPool pool,

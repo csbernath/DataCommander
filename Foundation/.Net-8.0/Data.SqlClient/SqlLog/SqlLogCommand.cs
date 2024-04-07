@@ -10,8 +10,6 @@ namespace Foundation.Data.SqlClient.SqlLog;
 
 internal sealed class SqlLogCommand : ISqlLogItem
 {
-    #region Private Fields
-
     private readonly int _applicationId;
     private readonly IDictionary<string, SqLoglCommandExecution> _commands;
     private readonly int _connectionNo;
@@ -22,8 +20,6 @@ internal sealed class SqlLogCommand : ISqlLogItem
     private readonly DateTime _startDate;
     private readonly long _duration;
     private readonly Exception _exception;
-
-    #endregion
 
     public SqlLogCommand(
         int applicationId,

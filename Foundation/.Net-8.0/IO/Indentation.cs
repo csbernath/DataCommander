@@ -15,14 +15,10 @@ public sealed class Indentation : IDisposable
         _indent = ++_textWriter.Indent;
     }
 
-    #region IDisposable Members
-
     void IDisposable.Dispose()
     {
         Assert.IsTrue(_textWriter.Indent == _indent);
 
         --_textWriter.Indent;
     }
-
-    #endregion
 }

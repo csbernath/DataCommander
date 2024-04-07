@@ -31,8 +31,6 @@ public sealed class TempFile : IDisposable
         File.Delete(_filename);
     }
 
-    #region IDisposable Members
-
     void IDisposable.Dispose()
     {
         if (_filename != null && !_deleted)
@@ -46,6 +44,4 @@ public sealed class TempFile : IDisposable
             }
         }
     }
-
-    #endregion
 }

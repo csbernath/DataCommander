@@ -45,8 +45,6 @@ public sealed class WorkerThreadPoolDequeuerCollection : IList<WorkerThreadPoolD
         _list.Remove(dequeuer);
     }
 
-    #region IList<WorkingThreadPoolDequeuer> Members
-
     /// <summary>
     /// 
     /// </summary>
@@ -87,10 +85,6 @@ public sealed class WorkerThreadPoolDequeuerCollection : IList<WorkerThreadPoolD
 
         set => throw new NotImplementedException();
     }
-
-    #endregion
-
-    #region ICollection<WorkingThreadPoolDequeuer> Members
 
     /// <summary>
     /// 
@@ -135,10 +129,6 @@ public sealed class WorkerThreadPoolDequeuerCollection : IList<WorkerThreadPoolD
         throw new NotImplementedException();
     }
 
-    #endregion
-
-    #region IEnumerable<WorkingThreadPoolDequeuer> Members
-
     /// <summary>
     /// 
     /// </summary>
@@ -148,10 +138,6 @@ public sealed class WorkerThreadPoolDequeuerCollection : IList<WorkerThreadPoolD
         throw new NotImplementedException();
     }
 
-    #endregion
-
-    #region IEnumerable Members
-
     /// <summary>
     /// 
     /// </summary>
@@ -160,6 +146,4 @@ public sealed class WorkerThreadPoolDequeuerCollection : IList<WorkerThreadPoolD
     {
         throw new NotImplementedException();
     }
-
-    #endregion
 }

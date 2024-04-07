@@ -14,8 +14,6 @@ namespace Foundation.Data.TextData;
 /// </summary>
 public sealed class TextDataReader : DbDataReader
 {
-    #region Private Fields
-
     private TextDataCommand _command;
     private readonly CommandBehavior _behavior;
     private readonly TextDataColumnCollection _columns;
@@ -24,8 +22,6 @@ public sealed class TextDataReader : DbDataReader
     private readonly TextDataStreamReader _textDataStreamReader;
     private object[] _values;
     private int _rowCount;
-
-    #endregion
 
     internal TextDataReader(TextDataCommand command, CommandBehavior behavior)
     {

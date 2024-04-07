@@ -7,13 +7,9 @@ namespace Foundation.IO;
 
 public sealed class StreamWriterTransaction : IDisposable
 {
-    #region Private Fields
-
     private readonly string _path;
     private readonly string _tempPath;
     private bool _commited;
-
-    #endregion
 
     public StreamWriterTransaction(string path, string tempPath)
     {

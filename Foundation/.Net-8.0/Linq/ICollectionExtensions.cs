@@ -72,12 +72,8 @@ public static class ICollectionExtensions
 
     private sealed class CastedCollection<TResult> : ICollection<TResult>
     {
-        #region Private Fields
-
         private readonly ICollection _source;
         private readonly IList _sourceAsList;
-
-        #endregion
 
         public CastedCollection(ICollection source)
         {
@@ -86,8 +82,6 @@ public static class ICollectionExtensions
             _source = source;
             _sourceAsList = source as IList;
         }
-
-        #region ICollection<TResult> Members
 
         /// <summary>
         /// 
@@ -132,10 +126,6 @@ public static class ICollectionExtensions
         bool ICollection<TResult>.IsReadOnly => throw new NotSupportedException();
         bool ICollection<TResult>.Remove(TResult item) => throw new NotImplementedException();
 
-        #endregion
-
-        #region IEnumerable<TResult> Members
-
         public IEnumerator<TResult> GetEnumerator()
         {
             foreach (TResult item in _source)
@@ -144,12 +134,6 @@ public static class ICollectionExtensions
             }
         }
 
-        #endregion
-
-        #region IEnumerable Members
-
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        #endregion
     }
 }

@@ -19,8 +19,6 @@ public sealed class LoggedDbConnection : IDbConnection
         _connection = connection;
     }
 
-    #region Public Events
-
     public event EventHandler<BeforeOpenDbConnectionEventArgs> BeforeOpen
     {
         add => _beforeOpen += value;
@@ -52,10 +50,6 @@ public sealed class LoggedDbConnection : IDbConnection
 
         remove => _afterRead -= value;
     }
-
-    #endregion
-
-    #region IDbConnection Members
 
     IDbTransaction IDbConnection.BeginTransaction(IsolationLevel il) => _connection.BeginTransaction(il);
     IDbTransaction IDbConnection.BeginTransaction() => _connection.BeginTransaction();
@@ -112,11 +106,5 @@ public sealed class LoggedDbConnection : IDbConnection
 
     ConnectionState IDbConnection.State => _connection.State;
 
-    #endregion
-
-    #region IDisposable Members
-
     void IDisposable.Dispose() => _connection.Dispose();
-
-    #endregion
 }

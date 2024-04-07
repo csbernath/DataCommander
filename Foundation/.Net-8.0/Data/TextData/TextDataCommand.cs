@@ -10,12 +10,6 @@ public sealed class TextDataCommand : DbCommand
 {
     private TextDataConnection _connection;
 
-    #region Constructors
-
-    #endregion
-
-    #region Public Properties
-
     /// <summary>
     /// 
     /// </summary>
@@ -35,10 +29,6 @@ public sealed class TextDataCommand : DbCommand
     /// 
     /// </summary>
     public override CommandType CommandType { get; set; }
-
-    #endregion
-
-    #region Public Methods
 
     /// <summary>
     /// 
@@ -170,6 +160,4 @@ public sealed class TextDataCommand : DbCommand
 
         set => throw new NotImplementedException();
     }
-
-    #endregion
 }

@@ -10,15 +10,11 @@ namespace Foundation.Data.TextData;
 /// </summary>
 public sealed class TextDataStreamReader
 {
-    #region Private Fields
-
     private readonly TextReader _textReader;
 
     private readonly IList<TextDataColumn> _columns;
 
     private readonly IList<ITextDataConverter> _converters;
-
-    #endregion
 
     /// <summary>
     /// 

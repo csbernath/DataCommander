@@ -14,8 +14,6 @@ namespace Foundation.DefaultLog;
 /// </summary>
 internal sealed class SqlLogWriter : ILogWriter
 {
-    #region Private Fields
-
     private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(SqlLogWriter));
     private const int Period = 10000;
     private readonly Func<IDbConnection> _createConnection;
@@ -25,8 +23,6 @@ internal sealed class SqlLogWriter : ILogWriter
     private readonly List<LogEntry> _entryQueue = [];
     private readonly object _lockObject = new();
     private Timer _timer;
-
-    #endregion
 
     /// <summary>
     /// 
@@ -50,8 +46,6 @@ internal sealed class SqlLogWriter : ILogWriter
         _singleThreadPool = singleThreadPool;
         _commandTimeout = commandTimeout;
     }
-
-    #region ILogWriter Members
 
     void ILogWriter.Open()
     {
@@ -87,16 +81,10 @@ internal sealed class SqlLogWriter : ILogWriter
         Flush();
     }
 
-    #endregion
-
-    #region IDisposable Members
-
     void IDisposable.Dispose()
     {
         // TODO
     }
-
-    #endregion
 
     private void TimerCallback(object state)
     {

@@ -6,12 +6,8 @@ namespace Foundation.Data.SqlClient;
 
 public class AsyncDbCommand : IDbCommand
 {
-    #region Private Fields
-
     private readonly AsyncDbConnection _connection;
     private readonly IDbCommand _command;
-
-    #endregion
 
     internal AsyncDbCommand(AsyncDbConnection connection, IDbCommand command)
     {
@@ -21,8 +17,6 @@ public class AsyncDbCommand : IDbCommand
         _connection = connection;
         _command = command;
     }
-
-    #region IDbCommand Members
 
     /// <summary>
     /// 
@@ -190,10 +184,6 @@ public class AsyncDbCommand : IDbCommand
         }
     }
 
-    #endregion
-
-    #region IDisposable Members
-
     /// <summary>
     /// 
     /// </summary>
@@ -201,6 +191,4 @@ public class AsyncDbCommand : IDbCommand
     {
         // TODO:  Add AsyncDbCommand.Dispose implementation
     }
-
-    #endregion
 }

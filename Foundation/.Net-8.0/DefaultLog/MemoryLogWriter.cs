@@ -10,8 +10,6 @@ internal sealed class MemoryLogWriter : ILogWriter
 
     public IEnumerable<LogEntry> LogEntries => _logEntries;
 
-    #region ILogWriter Members
-
     void ILogWriter.Open()
     {
     }
@@ -32,13 +30,7 @@ internal sealed class MemoryLogWriter : ILogWriter
     {
     }
 
-    #endregion
-
-    #region IDisposable Members
-
     void IDisposable.Dispose()
     {
     }
-
-    #endregion
 }
