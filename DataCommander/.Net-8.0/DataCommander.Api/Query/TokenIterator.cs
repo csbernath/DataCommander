@@ -5,8 +5,6 @@ namespace DataCommander.Api.Query;
 
 public sealed class TokenIterator
 {
-    #region Private Fields
-
     private static readonly char[] OperatorsOrPunctuators =
     [
         '{', '}', '[', ']', '(', ')', '.', ',', ':', ';', '+', '-', '*', '/', '%', '&', '|', '^', '!', '~', '=',
@@ -18,8 +16,6 @@ public sealed class TokenIterator
     private readonly int _length;
     private int _tokenIndex;
     private int _lineIndex;
-
-    #endregion
 
     public TokenIterator(string text)
     {
@@ -113,8 +109,6 @@ public sealed class TokenIterator
         return token;
     }
 
-    #region Private Methods
-
     private string? ReadKeyWord()
     {
         var sb = new StringBuilder();
@@ -186,6 +180,4 @@ public sealed class TokenIterator
 
         return sb.ToString();
     }
-
-    #endregion
 }

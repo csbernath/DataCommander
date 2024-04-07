@@ -30,8 +30,6 @@ internal sealed class IdentifierParser(TextReader textReader)
         if (peekChar == '.') yield return null;
     }
 
-    #region Private Methods
-
     private string ReadQuotedIdentifier()
     {
         textReader.Read();
@@ -83,6 +81,4 @@ internal sealed class IdentifierParser(TextReader textReader)
 
         return identifier.ToString();
     }
-
-    #endregion
 }

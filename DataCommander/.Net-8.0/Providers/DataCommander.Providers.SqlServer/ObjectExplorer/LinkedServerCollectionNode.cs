@@ -18,8 +18,6 @@ internal sealed class LinkedServerCollectionNode : ITreeNode
 
     public ServerNode Server { get; }
 
-    #region ITreeNode Members
-
     string ITreeNode.Name => "Linked Servers";
 
     bool ITreeNode.IsLeaf => false;
@@ -55,6 +53,4 @@ order by s.name";
     string ITreeNode.Query => null;
 
     public ContextMenu? GetContextMenu() => null;
-
-    #endregion
 }

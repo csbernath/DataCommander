@@ -22,8 +22,6 @@ public sealed class StringField(string value, int length) : IConvertible
         return s;
     }
 
-    #region IConvertible Members
-
     TypeCode IConvertible.GetTypeCode()
     {
         throw new NotImplementedException();
@@ -108,6 +106,4 @@ public sealed class StringField(string value, int length) : IConvertible
     {
         throw new NotImplementedException();
     }
-
-    #endregion
 }

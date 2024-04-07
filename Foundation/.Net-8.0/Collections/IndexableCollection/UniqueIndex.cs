@@ -43,13 +43,7 @@ public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey
 
     public string Name { get; private set; }
 
-    #region IEnumerable<T> Members
-
     IEnumerator<T> IEnumerable<T>.GetEnumerator() => _dictionary.Values.GetEnumerator();
-
-    #endregion
-
-    #region IEnumerable Members
 
     /// <summary>
     /// </summary>
@@ -58,8 +52,6 @@ public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey
     {
         return _dictionary.Values.GetEnumerator();
     }
-
-    #endregion
 
     public T this[TKey key]
     {
@@ -84,17 +76,11 @@ public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey
         _dictionary = dictionary;
     }
 
-    #region ICollectionIndex<TKey,T> Members
-
     public bool IsReadOnly => _dictionary.IsReadOnly;
     public int Count => _dictionary.Count;
     public void CopyTo(T[] array, int arrayIndex) => _dictionary.Values.CopyTo(array, arrayIndex);
     public bool TryGetValue(TKey key, out T item) => _dictionary.TryGetValue(key, out item);
     public IEnumerator<KeyValuePair<TKey, T>> GetEnumerator() => _dictionary.GetEnumerator();
-
-    #endregion
-
-    #region ICollectionIndex<T> Members
 
     void ICollection<T>.Add(T item)
     {
@@ -130,24 +116,14 @@ public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey
         return succeeded;
     }
 
-    #endregion
-
-    #region IDictionary<TKey,T> Members
-
     void IDictionary<TKey, T>.Add(TKey key, T value) => throw new NotSupportedException();
     public ICollection<TKey> Keys => _dictionary.Keys;
     bool IDictionary<TKey, T>.Remove(TKey key) => throw new NotSupportedException();
     public ICollection<T> Values => _dictionary.Values;
-
-    #endregion
-
-    #region ICollection<KeyValuePair<TKey,T>> Members
 
     void ICollection<KeyValuePair<TKey, T>>.Add(KeyValuePair<TKey, T> item) => throw new NotSupportedException();
     bool ICollection<KeyValuePair<TKey, T>>.Contains(KeyValuePair<TKey, T> item) => throw new NotSupportedException();
     void ICollection<KeyValuePair<TKey, T>>.Clear() => _dictionary.Clear();
     void ICollection<KeyValuePair<TKey, T>>.CopyTo(KeyValuePair<TKey, T>[] array, int arrayIndex) => throw new NotSupportedException();
     public bool Remove(KeyValuePair<TKey, T> item) => throw new NotSupportedException();
-
-    #endregion
 }

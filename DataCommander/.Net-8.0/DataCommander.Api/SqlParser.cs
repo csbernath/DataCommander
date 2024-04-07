@@ -14,13 +14,9 @@ namespace DataCommander.Api;
 
 public sealed class SqlParser
 {
-    #region Private Fields
-
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private readonly string _text;
     private readonly Table[] _allTables;
-
-    #endregion
 
     public SqlParser(string text)
     {
@@ -33,14 +29,8 @@ public sealed class SqlParser
             Log.Write(LogLevel.Trace, value);
     }
 
-    #region Public Properties
-
     public IDictionary<string, string?> Tables { get; }
     public List<Token> Tokens { get; }
-
-    #endregion
-
-    #region Public Methods
 
     public DbCommand CreateCommand(IProvider provider, ConnectionBase connection, CommandType commandType, int commandTimeout)
     {
@@ -441,10 +431,6 @@ public sealed class SqlParser
         }
     }
 
-    #endregion
-
-    #region Private Methods
-
     public static List<Token> Tokenize(string text)
     {
         var tokens = new List<Token>();
@@ -667,10 +653,6 @@ public sealed class SqlParser
         return sqlObject;
     }
 
-    #endregion
-
-    #region Private Classes
-
     private sealed class Table(int index, string? name, string? alias)
     {
         private string? _alias = alias;
@@ -684,6 +666,4 @@ public sealed class SqlParser
         public readonly string? Name = name;
         public readonly object? Value = value;
     }
-
-    #endregion
 }

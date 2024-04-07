@@ -9,17 +9,11 @@ namespace DataCommander.Api;
 
 public interface IProvider
 {
-    #region Properties
-
     string Identifier { get; }
     DbProviderFactory DbProviderFactory { get; }
     string[] KeyWords { get; }
     bool CanConvertCommandToString { get; }
     bool IsCommandCancelable { get; }
-
-    #endregion
-
-    #region Methods
 
     IObjectExplorer CreateObjectExplorer();
     void ClearCompletionCache();
@@ -45,6 +39,4 @@ public interface IProvider
     List<Statement> GetStatements(string commandText);
     GetTableSchemaResult GetTableSchema(IDbConnection connection, string? tableName);
     List<InfoMessage> ToInfoMessages(Exception e);
-
-    #endregion
 }

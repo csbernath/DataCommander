@@ -90,8 +90,6 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
         base.Dispose(disposing);
     }
 
-    #region Component Designer generated code
-
     /// <summary> 
     /// Required method for Designer support - do not modify 
     /// the contents of this method with the code editor.
@@ -122,8 +120,6 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
         ResumeLayout(false);
 
     }
-
-    #endregion
 
     private void Close()
     {

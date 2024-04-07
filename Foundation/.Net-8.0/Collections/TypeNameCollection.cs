@@ -121,8 +121,6 @@ public static class TypeNameCollection
 
         public static TypeEqualityComparer Instance { get; } = new();
 
-        #region IEqualityComparer<Type> Members
-
         public bool Equals(Type x, Type y)
         {
             return x == y;
@@ -132,7 +130,5 @@ public static class TypeNameCollection
         {
             return obj.GetHashCode();
         }
-
-        #endregion
     }
 }

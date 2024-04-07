@@ -18,28 +18,14 @@ public class UniqueListIndex<TKey, T> : ICollectionIndex<T>
         _list = list;
     }
 
-    #region ICollectionIndex<T> Members
-
     public string Name { get; }
 
-    #endregion
-
-    #region IEnumerable<T> Members
-
     public IEnumerator<T> GetEnumerator() => _list.GetEnumerator();
-
-    #endregion
-
-    #region IEnumerable Members
 
     IEnumerator IEnumerable.GetEnumerator()
     {
         return _list.GetEnumerator();
     }
-
-    #endregion
-
-    #region ICollection<T> Members
 
     public void Add(T item)
     {
@@ -54,6 +40,4 @@ public class UniqueListIndex<TKey, T> : ICollectionIndex<T>
     public int Count => _list.Count;
     public bool IsReadOnly => _list.IsReadOnly;
     public bool Remove(T item) => _list.Remove(item);
-
-    #endregion
 }

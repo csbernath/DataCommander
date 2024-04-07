@@ -16,8 +16,6 @@ internal sealed class LinkedServerCatalogNode : ITreeNode
         _name = name;
     }
 
-    #region ITreeNode Members
-
     string ITreeNode.Name => _name;
 
     bool ITreeNode.IsLeaf => true;
@@ -32,6 +30,4 @@ internal sealed class LinkedServerCatalogNode : ITreeNode
     string ITreeNode.Query => null;
 
     public ContextMenu? GetContextMenu() => null;
-
-    #endregion
 }

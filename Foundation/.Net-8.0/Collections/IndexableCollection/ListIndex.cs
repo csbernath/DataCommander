@@ -28,20 +28,12 @@ public class ListIndex<T> : ICollectionIndex<T>, IList<T>
     bool ICollection<T>.IsReadOnly => false;
     public void CopyTo(T[] array, int arrayIndex) => _list.CopyTo(array, arrayIndex);
 
-    #region IEnumerable<T> Members
-
     public IEnumerator<T> GetEnumerator() => _list.GetEnumerator();
-
-    #endregion
-
-    #region IEnumerable Members
 
     IEnumerator IEnumerable.GetEnumerator()
     {
         return _list.GetEnumerator();
     }
-
-    #endregion
 
     public T this[int index]
     {
@@ -71,12 +63,8 @@ public class ListIndex<T> : ICollectionIndex<T>, IList<T>
         _list = list;
     }
 
-    #region ICollectionIndex<T> Members
-
     public void Add(T item) => _list.Add(item);
     public void Clear() => _list.Clear();
     public bool Contains(T item) => _list.Contains(item);
     public bool Remove(T item) => _list.Remove(item);
-
-    #endregion
 }

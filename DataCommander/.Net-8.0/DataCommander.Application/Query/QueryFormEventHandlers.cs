@@ -726,8 +726,6 @@ public sealed partial class QueryForm
         SetResultWriterType(ResultWriterType.InsertScriptFile);
     }
 
-    #region Public Methods
-
     private void DataTableTabControl_MouseUp(object? sender, MouseEventArgs e)
     {
         if (sender != null && e.Button == MouseButtons.Middle)
@@ -748,10 +746,6 @@ public sealed partial class QueryForm
             }
         }
     }
-
-    #endregion
-
-    #region Private Methods
 
     private void Connection_InfoMessage(IReadOnlyCollection<InfoMessage> messages) => AddInfoMessages(messages);
 
@@ -981,8 +975,6 @@ public sealed partial class QueryForm
         if (on)
             executor.ExecuteNonQuery(new CreateCommandRequest("SET PARSEONLY OFF"));
     }
-
-    #endregion
 
     private void createCCommandQueryToolStripMenuItem_Click(object sender, EventArgs e)
     {

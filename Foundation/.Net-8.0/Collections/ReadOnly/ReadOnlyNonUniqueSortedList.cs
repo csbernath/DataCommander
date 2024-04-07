@@ -8,16 +8,10 @@ namespace Foundation.Collections.ReadOnly;
 
 public sealed class ReadOnlyNonUniqueSortedList<TKey, TValue>
 {
-    #region Private Fields
-
     private readonly IReadOnlyList<TValue> _values;
     private readonly Func<TValue, TKey> _keySelector;
     private readonly Comparison<TKey> _comparison;
     private IReadOnlyList<int> _groups;
-
-    #endregion
-
-    #region Constructors
 
     public ReadOnlyNonUniqueSortedList(IReadOnlyList<TValue> values, Func<TValue, TKey> keySelector, Comparison<TKey> comparison)
     {
@@ -39,8 +33,6 @@ public sealed class ReadOnlyNonUniqueSortedList<TKey, TValue>
         Comparer<TKey>.Default.Compare)
     {
     }
-
-    #endregion
 
     [Pure]
     public int Count => _groups?.Count ?? 0;
@@ -83,22 +75,14 @@ public sealed class ReadOnlyNonUniqueSortedList<TKey, TValue>
         }
     }
 
-    #region Private Methods
-
     private void InitializeGroups()
     {
         if (_values.Count > 0)
         {
-            #region Create
-
             var notEqualsCount = _values.SelectPreviousAndCurrentKey(_keySelector).Count(k => _comparison(k.Previous, k.Current) != 0);
             var smallArrayMaxLength = LargeObjectHeap.GetSmallArrayMaxLength(sizeof(int));
             var itemCount = notEqualsCount + 1;
             var segmentedArrayBuilder = new SegmentedArrayBuilder<int>(itemCount, smallArrayMaxLength);
-
-            #endregion
-
-            #region Fill
 
             segmentedArrayBuilder.Add(0);
             var index = 0;
@@ -111,8 +95,6 @@ public sealed class ReadOnlyNonUniqueSortedList<TKey, TValue>
             }
 
             _groups = segmentedArrayBuilder.ToReadOnlyCollection();
-
-            #endregion
         }
     }
 
@@ -134,6 +116,4 @@ public sealed class ReadOnlyNonUniqueSortedList<TKey, TValue>
 
         return index;
     }
-
-    #endregion
 }

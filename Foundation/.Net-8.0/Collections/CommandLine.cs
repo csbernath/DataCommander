@@ -32,8 +32,6 @@ public sealed class CommandLine
     public ListIndex<CommandLineArgument> ListIndex { get; } = new("listIndex");
     public NonUniqueIndex<string, CommandLineArgument> NameIndex { get; }
 
-    #region Private Methods
-
     private static string ReadString(TextReader textReader)
     {
         var read = textReader.Read();
@@ -177,6 +175,4 @@ public sealed class CommandLine
             }
         }
     }
-
-    #endregion
 }

@@ -248,8 +248,6 @@ internal sealed class OleDbProvider : IProvider
     List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
     public string GetExceptionMessage(Exception e) => e.ToString();
 
-    #region IProvider Members
-
     public string GetConnectionName(Func<IDbConnection> createConnection)
     {
         return null;
@@ -319,6 +317,4 @@ internal sealed class OleDbProvider : IProvider
     }
 
     IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder() => new ConnectionStringBuilder();
-
-    #endregion
 }

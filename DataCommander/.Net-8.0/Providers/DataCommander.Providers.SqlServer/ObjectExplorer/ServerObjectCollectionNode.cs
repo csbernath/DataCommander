@@ -17,8 +17,6 @@ internal sealed class ServerObjectCollectionNode : ITreeNode
         _server = serverNode;
     }
 
-    #region ITreeNode Members
-
     string ITreeNode.Name => "Server Objects";
 
     bool ITreeNode.IsLeaf => false;
@@ -33,6 +31,4 @@ internal sealed class ServerObjectCollectionNode : ITreeNode
     string ITreeNode.Query => null;
 
     public ContextMenu? GetContextMenu() => null;
-
-    #endregion
 }

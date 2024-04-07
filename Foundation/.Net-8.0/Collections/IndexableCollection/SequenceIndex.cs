@@ -27,31 +27,17 @@ public class SequenceIndex<TKey, T> : ICollectionIndex<T>
         _dictionary = dictionary;
     }
 
-    #region ICollectionIndex<T> Members
-
     string ICollectionIndex<T>.Name => _name;
-
-    #endregion
-
-    #region IEnumerable<T> Members
 
     IEnumerator<T> IEnumerable<T>.GetEnumerator()
     {
         return _dictionary.Values.GetEnumerator();
     }
 
-    #endregion
-
-    #region IEnumerable Members
-
     IEnumerator IEnumerable.GetEnumerator()
     {
         return _dictionary.Values.GetEnumerator();
     }
-
-    #endregion
-
-    #region ICollection<T> Members
 
     void ICollection<T>.Add(T item)
     {
@@ -71,6 +57,4 @@ public class SequenceIndex<TKey, T> : ICollectionIndex<T>
         var removed = _dictionary.Remove(key);
         return removed;
     }
-
-    #endregion
 }

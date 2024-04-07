@@ -30,23 +30,15 @@ public class IndexCollection<T> : ICollection<ICollectionIndex<T>>
         return succeeded;
     }
 
-    #region IEnumerable<ICollectionIndex<T>> Members
-
     public IEnumerator<ICollectionIndex<T>> GetEnumerator()
     {
         return _dictionary.Values.GetEnumerator();
     }
 
-    #endregion
-
-    #region IEnumerable Members
-
     IEnumerator IEnumerable.GetEnumerator()
     {
         return _dictionary.Values.GetEnumerator();
     }
-
-    #endregion
 
     public bool TryGetValue(string name, out ICollectionIndex<T> item) => _dictionary.TryGetValue(name, out item);
 }

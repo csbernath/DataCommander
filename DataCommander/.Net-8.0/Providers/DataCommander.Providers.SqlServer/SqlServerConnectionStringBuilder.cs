@@ -9,8 +9,6 @@ internal sealed class SqlServerConnectionStringBuilder : IDbConnectionStringBuil
 {
     private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder = new();
 
-    #region IDbConnectionStringBuilder Members
-
     string IDbConnectionStringBuilder.ConnectionString
     {
         get => _sqlConnectionStringBuilder.ConnectionString;
@@ -32,6 +30,4 @@ internal sealed class SqlServerConnectionStringBuilder : IDbConnectionStringBuil
     bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value) => _sqlConnectionStringBuilder.TryGetValue(keyword, out value);
     void IDbConnectionStringBuilder.SetValue(string keyword, object? value) => _sqlConnectionStringBuilder[keyword] = value;
     bool IDbConnectionStringBuilder.Remove(string keyword) => _sqlConnectionStringBuilder.Remove(keyword);
-
-    #endregion
 }

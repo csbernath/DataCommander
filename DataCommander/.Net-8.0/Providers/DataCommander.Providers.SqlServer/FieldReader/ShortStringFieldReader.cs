@@ -9,8 +9,6 @@ internal sealed class ShortStringFieldReader(
     int columnOrdinal,
     SqlDbType sqlDbType) : IDataFieldReader
 {
-    #region IDataFieldReader Members
-
     object IDataFieldReader.Value
     {
         get
@@ -35,6 +33,4 @@ internal sealed class ShortStringFieldReader(
             return value;
         }
     }
-
-    #endregion
 }

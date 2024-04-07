@@ -23,8 +23,6 @@ internal sealed class JobNode : ITreeNode
         _name = name;
     }
 
-    #region ITreeNode Members
-
     string ITreeNode.Name => _name;
     bool ITreeNode.IsLeaf => true;
 
@@ -59,6 +57,4 @@ internal sealed class JobNode : ITreeNode
         var queryForm = (IQueryForm)sender;
         queryForm.ShowDataSet(dataSet);
     }
-
-    #endregion
 }

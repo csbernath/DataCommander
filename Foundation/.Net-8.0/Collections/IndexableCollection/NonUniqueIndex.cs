@@ -63,8 +63,6 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
     /// </summary>
     public string Name { get; private set; }
 
-    #region IEnumerable<T> Members
-
     public IEnumerator<T> GetEnumerator()
     {
         foreach (var collection in _dictionary.Values)
@@ -72,26 +70,16 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
                 yield return item;
     }
 
-    #endregion
-
-    #region IEnumerable Members
-
     IEnumerator IEnumerable.GetEnumerator()
     {
         IEnumerable<T> enumerable = this;
         return enumerable.GetEnumerator();
     }
 
-    #endregion
-
-    #region IEnumerable<KeyValuePair<TKey,ICollection<T>>> Members
-
     IEnumerator<KeyValuePair<TKey, ICollection<T>>> IEnumerable<KeyValuePair<TKey, ICollection<T>>>.GetEnumerator()
     {
         return _dictionary.GetEnumerator();
     }
-
-    #endregion
 
     public bool TryGetFirstValue(TKey key, out T value)
     {
@@ -126,15 +114,9 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
         _createCollection = createCollection;
     }
 
-    #region Private Fields
-
     private IDictionary<TKey, ICollection<T>> _dictionary;
     private Func<T, GetKeyResponse<TKey>> _getKey;
     private Func<ICollection<T>> _createCollection;
-
-    #endregion
-
-    #region ICollectionIndex<T> Members
 
     public int Count => _dictionary.Count;
 
@@ -210,10 +192,6 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
         return removed;
     }
 
-    #endregion
-
-    #region IDictionary<TKey,ICollection<T>> Members
-
     void IDictionary<TKey, ICollection<T>>.Add(TKey key, ICollection<T> value) => throw new NotSupportedException();
     public bool ContainsKey(TKey key) => _dictionary.ContainsKey(key);
     ICollection<TKey> IDictionary<TKey, ICollection<T>>.Keys => _dictionary.Keys;
@@ -227,10 +205,6 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
         set => throw new NotSupportedException();
     }
 
-    #endregion
-
-    #region ICollection<KeyValuePair<TKey,ICollection<T>>> Members
-
     void ICollection<KeyValuePair<TKey, ICollection<T>>>.Add(KeyValuePair<TKey, ICollection<T>> item) => throw new NotSupportedException();
     void ICollection<KeyValuePair<TKey, ICollection<T>>>.Clear() => throw new NotSupportedException();
     bool ICollection<KeyValuePair<TKey, ICollection<T>>>.Contains(KeyValuePair<TKey, ICollection<T>> item) => throw new NotSupportedException();
@@ -241,6 +215,4 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
     int ICollection<KeyValuePair<TKey, ICollection<T>>>.Count => _dictionary.Count;
     bool ICollection<KeyValuePair<TKey, ICollection<T>>>.IsReadOnly => _dictionary.IsReadOnly;
     bool ICollection<KeyValuePair<TKey, ICollection<T>>>.Remove(KeyValuePair<TKey, ICollection<T>> item) => throw new NotSupportedException();
-
-    #endregion
 }

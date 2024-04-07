@@ -53,8 +53,6 @@ public sealed class SegmentedListBuilder<T>
 
     private sealed class ReadOnlySegmentedList(IList<T[]> segments, int count) : IReadOnlyList<T>
     {
-        #region IReadOnlyList<T> Members
-
         T IReadOnlyList<T>.this[int index]
         {
             get
@@ -92,15 +90,9 @@ public sealed class SegmentedListBuilder<T>
         {
             return ((IEnumerable<T>) this).GetEnumerator();
         }
-
-        #endregion
     }
-
-    #region Private Fields
 
     private readonly int _segmentItemCapacity;
     private readonly List<T[]> _segments = [];
     private int _nextSegmentItemIndex;
-
-    #endregion
 }

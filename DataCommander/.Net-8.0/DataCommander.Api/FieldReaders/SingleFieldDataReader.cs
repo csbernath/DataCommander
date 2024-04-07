@@ -5,8 +5,6 @@ namespace DataCommander.Api.FieldReaders;
 
 public sealed class SingleFieldDataReader(IDataRecord dataRecord, int columnOrdinal) : IDataFieldReader
 {
-    #region IDataFieldReader Members
-
     object IDataFieldReader.Value
     {
         get
@@ -26,6 +24,4 @@ public sealed class SingleFieldDataReader(IDataRecord dataRecord, int columnOrdi
             return value;
         }
     }
-
-    #endregion
 }

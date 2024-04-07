@@ -21,13 +21,9 @@ public sealed class DecimalField(
         return DecimalValue.ToString("N", numberFormatInfo);
     }
 
-    #region IComparable Members
-
     int IComparable.CompareTo(object? obj)
     {
         var other = (DecimalField) obj;
         return DecimalValue.CompareTo(other.DecimalValue);
     }
-
-    #endregion
 }

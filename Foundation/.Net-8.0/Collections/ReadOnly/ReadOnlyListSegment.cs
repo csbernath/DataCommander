@@ -37,10 +37,6 @@ internal sealed class ReadOnlyListSegment<T> : IReadOnlyList<T>
         return GetEnumerator();
     }
 
-    #region Private Fields
-
     private readonly IReadOnlyList<T> _list;
     private readonly int _offset;
-
-    #endregion
 }

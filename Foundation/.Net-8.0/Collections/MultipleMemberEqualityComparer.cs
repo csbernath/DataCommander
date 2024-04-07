@@ -7,11 +7,7 @@ namespace Foundation.Collections;
 
 public sealed class MultipleMemberEqualityComparer<T> : IEqualityComparer<T>
 {
-    #region Private Fields
-
     private readonly IEqualityComparer<T>[] _equalityComparers;
-
-    #endregion
 
     public MultipleMemberEqualityComparer(params IEqualityComparer<T>[] equalityComparers)
     {

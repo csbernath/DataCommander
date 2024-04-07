@@ -17,14 +17,10 @@ namespace DataCommander.Providers.SqlServer;
 
 internal sealed class Connection : ConnectionBase
 {
-    #region Private Fields
-
     private readonly ConnectionStringAndCredential _connectionStringAndCredential;
     private SqlConnection _sqlConnection;
     private string _serverName;
     private short _serverProcessId;
-
-    #endregion
 
     public Connection(ConnectionStringAndCredential connectionStringAndCredential)
     {

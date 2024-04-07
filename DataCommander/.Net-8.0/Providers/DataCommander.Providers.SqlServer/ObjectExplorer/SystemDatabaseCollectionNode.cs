@@ -18,8 +18,6 @@ internal sealed class SystemDatabaseCollectionNode : ITreeNode
         _databaseCollectionNode = databaseCollectionNode;
     }
 
-    #region ITreeNode Members
-
     string ITreeNode.Name => "System Databases";
 
     bool ITreeNode.IsLeaf => false;
@@ -54,6 +52,4 @@ order by d.name";
     string ITreeNode.Query => null;
 
     public ContextMenu? GetContextMenu() => null;
-
-    #endregion
 }

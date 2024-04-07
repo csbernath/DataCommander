@@ -40,8 +40,6 @@ public sealed class DateTimeField(DateTime value) : IComparable, IConvertible
         return ToString(Value);
     }
 
-    #region IComparable Members
-
     public int CompareTo(object? obj)
     {
         int result;
@@ -76,10 +74,6 @@ public sealed class DateTimeField(DateTime value) : IComparable, IConvertible
 
         return result;
     }
-
-    #endregion
-
-    #region IConvertible Members
 
     TypeCode IConvertible.GetTypeCode()
     {
@@ -131,6 +125,4 @@ public sealed class DateTimeField(DateTime value) : IComparable, IConvertible
     ushort IConvertible.ToUInt16(IFormatProvider? provider) => throw new NotImplementedException();
     uint IConvertible.ToUInt32(IFormatProvider? provider) => throw new NotImplementedException();
     ulong IConvertible.ToUInt64(IFormatProvider? provider) => throw new NotImplementedException();
-
-    #endregion
 }

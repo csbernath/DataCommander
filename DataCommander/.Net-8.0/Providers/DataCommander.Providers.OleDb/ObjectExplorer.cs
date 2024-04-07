@@ -17,8 +17,6 @@ internal sealed class ObjectExplorer : IObjectExplorer
 
     private OleDbConnection _connection;
 
-    #region IObjectExplorer Members
-
     void IObjectExplorer.SetConnection(ConnectionStringAndCredential connectionStringAndCredential)
     {
         _connection = (OleDbConnection)_provider.CreateConnection(connectionStringAndCredential).Connection;
@@ -32,6 +30,4 @@ internal sealed class ObjectExplorer : IObjectExplorer
         };
         return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
     }
-
-    #endregion
 }

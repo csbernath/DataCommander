@@ -18,8 +18,6 @@ internal sealed class LinkedServerCatalogCollectionNode : ITreeNode
         _linkedServer = linkedServer;
     }
 
-    #region ITreeNode Members
-
     string ITreeNode.Name => "Catalogs";
     bool ITreeNode.IsLeaf => false;
 
@@ -76,6 +74,4 @@ drop table #catalog";
     string ITreeNode.Query => null;
 
     public ContextMenu? GetContextMenu() => null;
-
-    #endregion
 }

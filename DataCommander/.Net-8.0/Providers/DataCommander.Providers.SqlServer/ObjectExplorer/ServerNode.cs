@@ -18,8 +18,6 @@ internal sealed class ServerNode : ITreeNode
 
     public SqlConnection CreateConnection() => ConnectionFactory.CreateConnection(ConnectionStringAndCredential);
 
-    #region ITreeNode Members
-
     string ITreeNode.Name => ConnectionNameProvider.GetConnectionName(CreateConnection);
 
     bool ITreeNode.IsLeaf => false;
@@ -37,6 +35,4 @@ internal sealed class ServerNode : ITreeNode
     string ITreeNode.Query => null;
 
     public ContextMenu? GetContextMenu() => null;
-
-    #endregion
 }

@@ -126,8 +126,6 @@ public sealed class QueryTextBox : UserControl
         base.Dispose(disposing);
     }
 
-    #region Component Designer generated code
-
     /// <summary> 
     /// Required method for Designer support - do not modify 
     /// the contents of this method with the code editor.
@@ -161,8 +159,6 @@ public sealed class QueryTextBox : UserControl
         this.Size = new System.Drawing.Size(408, 150);
         this.ResumeLayout(false);
     }
-
-    #endregion
 
     private void SetColor(int startWord, int length, Color color)
     {

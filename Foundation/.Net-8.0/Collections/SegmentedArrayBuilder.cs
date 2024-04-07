@@ -87,11 +87,7 @@ public sealed class SegmentedArrayBuilder<T>
         }
     }
 
-    #region Private Fields
-
     private readonly T[][] _segments;
     private int _currentSegmentArrayIndex;
     private int _currentSegmentIndex;
-
-    #endregion
 }

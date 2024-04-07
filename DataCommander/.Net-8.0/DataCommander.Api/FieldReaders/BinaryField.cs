@@ -32,8 +32,6 @@ public sealed class BinaryField : IConvertible
 
     public byte[] Value { get; }
 
-    #region IConvertible Members
-
     TypeCode IConvertible.GetTypeCode() => throw new NotImplementedException();
     bool IConvertible.ToBoolean(IFormatProvider? provider) => throw new NotImplementedException();
     byte IConvertible.ToByte(IFormatProvider? provider) => throw new NotImplementedException();
@@ -51,6 +49,4 @@ public sealed class BinaryField : IConvertible
     ushort IConvertible.ToUInt16(IFormatProvider? provider) => throw new NotImplementedException();
     uint IConvertible.ToUInt32(IFormatProvider? provider) => throw new NotImplementedException();
     ulong IConvertible.ToUInt64(IFormatProvider? provider) => throw new NotImplementedException();
-
-    #endregion
 }

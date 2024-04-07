@@ -25,15 +25,11 @@ namespace DataCommander.Providers.SqlServer;
 
 internal sealed class SqlServerProvider : IProvider
 {
-    #region Constructors
-
     static SqlServerProvider()
     {
         var configurationNode = Settings.CurrentType;
         ShortStringSize = configurationNode.Attributes["ShortStringSize"].GetValue<int>();
     }
-
-    #endregion
 
     public static int ShortStringSize { get; }
 
@@ -57,16 +53,8 @@ internal sealed class SqlServerProvider : IProvider
         return messages;
     }
 
-    #region Private Fields
-
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private static string[] _keyWords;
-
-    #endregion
-
-    #region IProvider Members
-
-    #region Properties
 
     string IProvider.Identifier => "SqlServer";
     DbProviderFactory IProvider.DbProviderFactory => SqlClientFactory.Instance;
@@ -102,10 +90,6 @@ internal sealed class SqlServerProvider : IProvider
     bool IProvider.CanConvertCommandToString => true;
 
     bool IProvider.IsCommandCancelable => true;
-
-    #endregion
-
-    #region Methods
 
     public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
 
@@ -882,12 +866,6 @@ from
         return infoMessages;
     }
 
-    #endregion
-
-    #endregion
-
-    #region Private Methods
-
     private static object ConvertToString(object? source)
     {
         object target;
@@ -937,6 +915,4 @@ from
 
         return isBatchSeparator;
     }
-
-    #endregion
 }

@@ -16,8 +16,6 @@ internal sealed class DatabaseSecurityNode : ITreeNode
         _databaseNode = databaseNode;
     }
 
-    #region ITreeNode Members
-
     string ITreeNode.Name => "Security";
 
     bool ITreeNode.IsLeaf => false;
@@ -37,6 +35,4 @@ internal sealed class DatabaseSecurityNode : ITreeNode
     string ITreeNode.Query => null;
 
     public ContextMenu? GetContextMenu() => null;
-
-    #endregion
 }

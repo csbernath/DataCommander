@@ -85,7 +85,6 @@ public class FindTextForm : Form
         base.Dispose(disposing);
     }
 
-    #region Windows Form Designer generated code
     /// <summary>
     /// Required method for Designer support - do not modify
     /// the contents of this method with the code editor.
@@ -171,7 +170,6 @@ public class FindTextForm : Form
         this.ResumeLayout(false);
 
     }
-    #endregion
 
     private void btnOK_Click(object sender, EventArgs e)
     {

@@ -14,8 +14,6 @@ internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : 
 {
     private ILog _log = LogFactory.Instance.GetCurrentTypeLog();
 
-    #region Private Methods
-
     private static ColumnNode ToColumnNode(IDataRecord dataRecord)
     {
         var id = dataRecord.GetInt32(0);
@@ -30,10 +28,6 @@ internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : 
 
         return new ColumnNode(id, columnName, systemTypeId, maxLength, precision, scale, isNullable, isComputed, userTypeName);
     }
-
-    #endregion
-
-    #region ITreeNode Members
 
     string ITreeNode.Name => "Columns";
 
@@ -112,6 +106,4 @@ order by fkc.parent_column_id";
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;
     public ContextMenu? GetContextMenu() => null;
-
-    #endregion
 }

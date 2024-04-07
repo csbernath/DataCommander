@@ -64,7 +64,6 @@ public class GotoLineForm : Form
         base.Dispose(disposing);
     }
 
-    #region Windows Form Designer generated code
     /// <summary>
     /// Required method for Designer support - do not modify
     /// the contents of this method with the code editor.
@@ -129,7 +128,6 @@ public class GotoLineForm : Form
         this.ResumeLayout(false);
 
     }
-    #endregion
 
     private void okButton_Click(object sender, EventArgs e)
     {

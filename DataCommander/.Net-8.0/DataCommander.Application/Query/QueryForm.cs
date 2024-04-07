@@ -232,8 +232,6 @@ public sealed partial class QueryForm : Form, IQueryForm
 
     internal ToolStrip ToolStrip => _toolStrip;
 
-    #region Windows Form Designer generated code
-
     /// <summary>
     /// Required method for Designer support - do not modify
     /// the contents of this method with the code editor.
@@ -1083,8 +1081,6 @@ public sealed partial class QueryForm : Form, IQueryForm
         this.PerformLayout();
 
     }
-
-    #endregion
 
     private void AddNodes(TreeNodeCollection parent, IEnumerable<ITreeNode> children, bool sortable)
     {

@@ -18,8 +18,6 @@ public sealed class CircularBuffer<T> : IList<T>
 
     public int Capacity => _array.Length;
 
-    #region IEnumerable<T> Members
-
     IEnumerator<T> IEnumerable<T>.GetEnumerator()
     {
         if (Count > 0)
@@ -36,17 +34,11 @@ public sealed class CircularBuffer<T> : IList<T>
         }
     }
 
-    #endregion
-
-    #region IEnumerable Members
-
     IEnumerator IEnumerable.GetEnumerator()
     {
         var enumerable = (IEnumerable<T>) this;
         return enumerable.GetEnumerator();
     }
-
-    #endregion
 
     public void AddHead(T item)
     {
@@ -158,15 +150,9 @@ public sealed class CircularBuffer<T> : IList<T>
         _array = target;
     }
 
-    #region Private Fields
-
     private T[] _array;
     private int _head;
     private int _tail;
-
-    #endregion
-
-    #region IList<T> Members
 
     int IList<T>.IndexOf(T item)
     {
@@ -198,10 +184,6 @@ public sealed class CircularBuffer<T> : IList<T>
         }
     }
 
-    #endregion
-
-    #region ICollection<T> Members
-
     void ICollection<T>.Add(T item) => throw new NotImplementedException();
     void ICollection<T>.Clear() => throw new NotImplementedException();
     bool ICollection<T>.Contains(T item) => throw new NotImplementedException();
@@ -212,6 +194,4 @@ public sealed class CircularBuffer<T> : IList<T>
     bool ICollection<T>.IsReadOnly => false;
 
     bool ICollection<T>.Remove(T item) => throw new NotImplementedException();
-
-    #endregion
 }

@@ -35,8 +35,6 @@ public sealed class DateTimeOffsetField(DateTimeOffset value) : IComparable, ICo
         return ToString(Value);
     }
 
-    #region IComparable Members
-
     public int CompareTo(object? obj)
     {
         // TODO
@@ -74,10 +72,6 @@ public sealed class DateTimeOffsetField(DateTimeOffset value) : IComparable, ICo
 
         //return result;
     }
-
-    #endregion
-
-    #region IConvertible Members
 
     TypeCode IConvertible.GetTypeCode()
     {
@@ -128,6 +122,4 @@ public sealed class DateTimeOffsetField(DateTimeOffset value) : IComparable, ICo
     ushort IConvertible.ToUInt16(IFormatProvider? provider) => throw new NotImplementedException();
     uint IConvertible.ToUInt32(IFormatProvider? provider) => throw new NotImplementedException();
     ulong IConvertible.ToUInt64(IFormatProvider? provider) => throw new NotImplementedException();
-
-    #endregion
 }

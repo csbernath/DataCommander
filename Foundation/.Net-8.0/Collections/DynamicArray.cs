@@ -13,8 +13,6 @@ public class DynamicArray<T>(int initialSize, int maxSize) : IList<T>
 {
     private T[] _array = new T[initialSize];
 
-    #region IEnumerable<T> Members
-
     /// <summary>
     /// </summary>
     /// <returns></returns>
@@ -24,18 +22,10 @@ public class DynamicArray<T>(int initialSize, int maxSize) : IList<T>
             yield return _array[i];
     }
 
-    #endregion
-
-    #region IEnumerable Members
-
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
     }
-
-    #endregion
-
-    #region IList<T> Members
 
     public int IndexOf(T item) => _array.IndexOf(item);
     void IList<T>.Insert(int index, T item) => throw new NotSupportedException();
@@ -46,10 +36,6 @@ public class DynamicArray<T>(int initialSize, int maxSize) : IList<T>
         get => _array[index];
         set => _array[index] = value;
     }
-
-    #endregion
-
-    #region ICollection<T> Members
 
     public void Add(T item)
     {
@@ -87,6 +73,4 @@ public class DynamicArray<T>(int initialSize, int maxSize) : IList<T>
     public int Count { get; private set; }
     public bool IsReadOnly => _array.IsReadOnly;
     bool ICollection<T>.Remove(T item) => throw new NotSupportedException();
-
-    #endregion
 }

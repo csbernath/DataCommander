@@ -13,8 +13,6 @@ public class SegmentedCollection<T> : ICollection<T>
         _segmentLength = segmentLength;
     }
 
-    #region IEnumerable<T> Members
-
     IEnumerator<T> IEnumerable<T>.GetEnumerator()
     {
         var segment = _first;
@@ -33,19 +31,11 @@ public class SegmentedCollection<T> : ICollection<T>
         }
     }
 
-    #endregion
-
-    #region IEnumerable Members
-
     IEnumerator IEnumerable.GetEnumerator()
     {
         var enumerable = (IEnumerable<T>) this;
         return enumerable.GetEnumerator();
     }
-
-    #endregion
-
-    #region Private Classes
 
     private sealed class Segment
     {
@@ -53,17 +43,9 @@ public class SegmentedCollection<T> : ICollection<T>
         public Segment Next;
     }
 
-    #endregion
-
-    #region Private Fields
-
     private readonly int _segmentLength;
     private Segment _first;
     private Segment _last;
-
-    #endregion
-
-    #region ICollection<T> Members
 
     public void Add(T item)
     {
@@ -117,6 +99,4 @@ public class SegmentedCollection<T> : ICollection<T>
     {
         throw new NotSupportedException();
     }
-
-    #endregion
 }

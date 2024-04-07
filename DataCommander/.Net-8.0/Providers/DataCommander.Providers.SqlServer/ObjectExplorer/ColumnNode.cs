@@ -33,8 +33,6 @@ internal sealed class ColumnNode(
         set => _isForeignKey = value;
     }
 
-    #region ITreeNode Members
-
     string ITreeNode.Name
     {
         get
@@ -84,6 +82,4 @@ internal sealed class ColumnNode(
     string ITreeNode.Query => null;
 
     public ContextMenu? GetContextMenu() => null;
-
-    #endregion
 }

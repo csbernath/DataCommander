@@ -19,8 +19,6 @@ internal sealed class DatabaseCollectionNode : ITreeNode
 
     public ServerNode Server { get; }
 
-    #region ITreeNode Members
-
     string ITreeNode.Name => "Databases";
 
     bool ITreeNode.IsLeaf => false;
@@ -66,6 +64,4 @@ order by d.name";
     string ITreeNode.Query => null;
 
     public ContextMenu? GetContextMenu() => null;
-
-    #endregion
 }
