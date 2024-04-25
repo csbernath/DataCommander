@@ -90,7 +90,7 @@ internal sealed class LogResultWriter : IResultWriter
         var stringBuilder = new StringBuilder();
         stringBuilder.Append($"Reader closed.");
         if (affectedRows >= 0)
-            stringBuilder.Append($" {SingularOrPlural(affectedRows, "row", "rows")} affected.");
+            stringBuilder.Append($" {StringExtensions.SingularOrPlural(affectedRows, "row", "rows")} affected.");
         var message = stringBuilder.ToString();
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
 
@@ -122,7 +122,7 @@ internal sealed class LogResultWriter : IResultWriter
         var duration = _writeTableBeginTimestamp - _beforeExecuteReaderTimestamp;
         var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount-1}]";
         var message =
-            $"Result[{_tableCount - 1}] has {SingularOrPlural(schemaTable.Rows.Count, "column", "columns")}.";
+            $"Result[{_tableCount - 1}] has {StringExtensions.SingularOrPlural(schemaTable.Rows.Count, "column", "columns")}.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
 
         Log.Trace($"SchemaTable of table[{_tableCount - 1}], {schemaTable.TableName}:\r\n{schemaTable.ToStringTableString()}");
@@ -241,7 +241,7 @@ internal sealed class LogResultWriter : IResultWriter
         var duration = Stopwatch.GetTimestamp() - _writeTableBeginTimestamp;
         var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount - 1}]";
         var message =
-            $"Result[{_tableCount - 1}] has {SingularOrPlural(_rowCount, "row", "rows")}.";
+            $"Result[{_tableCount - 1}] has {StringExtensions.SingularOrPlural(_rowCount, "row", "rows")}.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
     }
 
@@ -249,18 +249,11 @@ internal sealed class LogResultWriter : IResultWriter
     {
     }
 
-    private static string SingularOrPlural(int count, string singular, string plural)
-    {
-        return count == 1
-            ? $"{count} {singular}"
-            : $"{count} {plural}";
-    }
-
     void IResultWriter.End()
     {
         var duration = Stopwatch.GetTimestamp() - _beginTimestamp;
         var header = StopwatchTimeSpan.ToString(duration, 3);
-        var message = $"Query completed {SingularOrPlural(_commandCount, "command", "commands")}.";
+        var message = $"Query completed {StringExtensions.SingularOrPlural(_commandCount, "command", "commands")}.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
     }
 

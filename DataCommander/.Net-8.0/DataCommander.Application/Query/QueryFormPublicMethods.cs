@@ -166,7 +166,8 @@ public sealed partial class QueryForm
                         var control = QueryFormStaticMethods.CreateControlFromDataTable(this, commandBuilder, dataTable, getTableSchemaResult, TableStyle,
                             !_openTableMode, _colorTheme);
                         control.Dock = DockStyle.Fill;
-                        text = dataTable.TableName;
+                        var rowCount = StringExtensions.SingularOrPlural(dataTable.Rows.Count, "row", "rows");
+                        text = $"{dataTable.TableName} ({rowCount})";
                         var tabPage = new TabPage(text);
                         tabPage.ToolTipText = null; // TODO
                         tabPage.Controls.Add(control);
