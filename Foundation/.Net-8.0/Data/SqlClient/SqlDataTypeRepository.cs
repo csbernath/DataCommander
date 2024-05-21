@@ -13,6 +13,7 @@ public static class SqlDataTypeRepository
         new SqlDataType(SqlDbType.Date, SqlDataTypeName.Date, CSharpTypeName.DateTime),
         new SqlDataType(SqlDbType.DateTime, SqlDataTypeName.DateTime, CSharpTypeName.DateTime),
         new SqlDataType(SqlDbType.DateTime2, SqlDataTypeName.DateTime2, CSharpTypeName.DateTime),
+        new SqlDataType(SqlDbType.DateTimeOffset, SqlDataTypeName.DateTimeOffset, CSharpTypeName.DateTimeOffset),
         new SqlDataType(SqlDbType.Decimal, SqlDataTypeName.Decimal, CSharpTypeName.Decimal),
         new SqlDataType(SqlDbType.Float, SqlDataTypeName.Float, CSharpTypeName.Double),
         new SqlDataType(SqlDbType.Int, SqlDataTypeName.Int, CSharpTypeName.Int32),
