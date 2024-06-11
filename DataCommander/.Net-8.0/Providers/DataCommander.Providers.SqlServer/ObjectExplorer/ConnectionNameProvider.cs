@@ -8,27 +8,33 @@ internal static class ConnectionNameProvider
 {
     public static string GetConnectionName(Func<SqlConnection> createConnection)
     {
-        string serverVersion;
-        string userName = null;
-        SqlConnectionStringBuilder sqlConnectionStringBuilder;
+        string dataSource;
+        string? serverVersion;
+        string? userId = null;
         using (var connection = createConnection())
         {
+            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connection.ConnectionString);
+            dataSource = sqlConnectionStringBuilder.DataSource;
+            var integratedSecurity = sqlConnectionStringBuilder.IntegratedSecurity;
+            if (!integratedSecurity)
+            {
+                userId = connection.Credential != null
+                    ? connection.Credential.UserId
+                    : sqlConnectionStringBuilder.UserID;
+            }
+
             connection.Open();
-            serverVersion = new Version(connection.ServerVersion).ToString();
-            sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connection.ConnectionString);
-            if (sqlConnectionStringBuilder.IntegratedSecurity)
+            serverVersion = connection.ServerVersion;
+            if (integratedSecurity)
             {
                 var commanExecutor = connection.CreateCommandExecutor();
                 const string commandText = "select suser_sname()";
                 var createCommandRequest = new CreateCommandRequest(commandText);
                 var scalar = commanExecutor.ExecuteScalar(createCommandRequest);
-                userName = (string)scalar;
+                userId = (string)scalar;
             }
         }
 
-        if (!sqlConnectionStringBuilder.IntegratedSecurity)
-            userName = sqlConnectionStringBuilder.UserID;
-
-        return $"{sqlConnectionStringBuilder.DataSource}(SQL Server {serverVersion} - {userName})";
+        return $"{dataSource}(SQL Server {serverVersion} - {userId})";
     }
 }
