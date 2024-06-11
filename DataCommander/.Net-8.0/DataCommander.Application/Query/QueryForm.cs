@@ -115,13 +115,14 @@ public sealed partial class QueryForm : Form, IQueryForm
         var objectExplorer = provider.CreateObjectExplorer();
         if (objectExplorer != null)
         {
+            var startTimestamp = Stopwatch.GetTimestamp();            
             objectExplorer.SetConnection(_connectionInfo.ConnectionStringAndCredential);
             var cancellationTokenSource = new CancellationTokenSource();
             var cancelableOperationForm = new CancelableOperationForm(mainForm, cancellationTokenSource, TimeSpan.FromSeconds(2), "Getting children...",
                 "Please wait...", colorTheme);
             var cancellationToken = cancellationTokenSource.Token;
             var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result));
-            AddNodes(_tvObjectExplorer.Nodes, children, objectExplorer.Sortable);
+            AddNodes(_tvObjectExplorer.Nodes, children, objectExplorer.Sortable, startTimestamp);
         }
         else
         {
@@ -1082,10 +1083,9 @@ public sealed partial class QueryForm : Form, IQueryForm
 
     }
 
-    private void AddNodes(TreeNodeCollection parent, IEnumerable<ITreeNode> children, bool sortable)
+    private void AddNodes(TreeNodeCollection parent, IEnumerable<ITreeNode> children, bool sortable, long startTimestamp)
     {
         ArgumentNullException.ThrowIfNull(children);
-        var ticks = Stopwatch.GetTimestamp();
         IEnumerable<ITreeNode> enumerableChildren;
 
         if (sortable)
@@ -1117,7 +1117,7 @@ public sealed partial class QueryForm : Form, IQueryForm
             }
         }
 
-        ticks = Stopwatch.GetTimestamp() - ticks;
+        var ticks = Stopwatch.GetTimestamp() - startTimestamp;
         SetStatusbarPanelText($"{count} item(s) added to Object Explorer in {StopwatchTimeSpan.ToString(ticks, 3)}.");
     }
 

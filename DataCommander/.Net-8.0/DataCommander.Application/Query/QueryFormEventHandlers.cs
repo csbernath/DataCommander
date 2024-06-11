@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -107,6 +108,7 @@ public sealed partial class QueryForm
                 {
                     try
                     {
+                        var startTimestamp = Stopwatch.GetTimestamp();                        
                         var cancellationTokenSource = new CancellationTokenSource();
                         var cancellationToken = cancellationTokenSource.Token;
                         var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2),
@@ -115,7 +117,7 @@ public sealed partial class QueryForm
                         var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() =>
                             treeNode2.GetChildren(false, cancellationToken).Result));
                         treeNode.Nodes.Clear();
-                        AddNodes(treeNode.Nodes, children, treeNode2.Sortable);
+                        AddNodes(treeNode.Nodes, children, treeNode2.Sortable, startTimestamp);
                     }
                     catch (Exception ex)
                     {
@@ -167,12 +169,13 @@ public sealed partial class QueryForm
             var treeNode = (ITreeNode)treeNodeV.Tag;
             treeNodeV.Nodes.Clear();
 
+            var startTimestamp = Stopwatch.GetTimestamp();
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
             var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2),
                 "Getting tree node children...", "Please wait...", _colorTheme);
             var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => treeNode.GetChildren(true, cancellationToken).Result));
-            AddNodes(treeNodeV.Nodes, children, treeNode.Sortable);
+            AddNodes(treeNodeV.Nodes, children, treeNode.Sortable, startTimestamp);
         }
     }
 
@@ -185,8 +188,9 @@ public sealed partial class QueryForm
             {
                 var rootNodes = _tvObjectExplorer.Nodes;
                 rootNodes.Clear();
+                var startTimestamp = Stopwatch.GetTimestamp();                
                 var treeNodes = objectExplorer.GetChildren(true, CancellationToken.None).Result;
-                AddNodes(rootNodes, treeNodes, objectExplorer.Sortable);
+                AddNodes(rootNodes, treeNodes, objectExplorer.Sortable, startTimestamp);
             }
         }
     }
