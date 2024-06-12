@@ -854,8 +854,12 @@ from
     {
         var now = LocalTime.Default.Now;
         List<InfoMessage> infoMessages;
+
+        if (exception is AggregateException aggregateException)
+            exception = UnAggregateException(aggregateException);
+        
         if (exception is SqlException sqlException)
-            infoMessages = ToInfoMessages(sqlException.Errors, LocalTime.Default.Now);
+            infoMessages = ToInfoMessages(sqlException.Errors, now);
         else
         {
             var message = exception.ToLogString();
@@ -864,6 +868,23 @@ from
         }
 
         return infoMessages;
+    }
+
+    private static Exception UnAggregateException(AggregateException aggregateException)
+    {
+        Exception unaggregatedException;
+        if (aggregateException.InnerExceptions.Count == 1)
+        {
+            var innerException = aggregateException.InnerExceptions[0];
+            if (innerException is AggregateException aggregateException2)
+                unaggregatedException = UnAggregateException(aggregateException2);
+            else
+                unaggregatedException = innerException;
+        }
+        else
+            unaggregatedException = aggregateException;
+
+        return unaggregatedException;
     }
 
     private static object ConvertToString(object? source)
