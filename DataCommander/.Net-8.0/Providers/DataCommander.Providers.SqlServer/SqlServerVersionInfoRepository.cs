@@ -41,6 +41,7 @@ internal static class SqlServerVersionInfoRepository
             new("12.00.2430", "2999197 Cumulative update package 4 (CU4) for SQL Server 2014: October 21, 2014"),
             new("13.00.4001", "Microsoft SQL Server 2016 Service Pack 1 (SP1)"),
             new("13.00.5026", "Microsoft SQL Server 2016 Service Pack 2 (SP2)"),
+            new("13.00.5108", "5014365 Security update for SQL Server 2016 SP2 GDR: June 14, 2022"),
             new("13.00.6300", "Microsoft SQL Server 2016 Service Pack 3 (SP3)"),
             new("13.00.6435", "5029186 Security update for SQL Server 2016 SP3 GDR: October 10, 2023"),
             new("14.00.1000", "Microsoft SQL Server 2017 (RTM)"),
