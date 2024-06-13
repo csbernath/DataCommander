@@ -21,4 +21,4 @@
 	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=8321db29_002D34c0_002D4a27_002Dae1d_002Dc3ce807a9353_0023DataCommander_002EProviders_002EMsi/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=c088fda9_002D7991_002D41df_002Da72d_002D6b7074ac555b_0023DataCommander_002EProviders_002EMySql/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=e6e924fd_002D41d2_002D4a5e_002D909b_002Dad4be7ab4084_0023DataCommander_002EProviders_002EOdp/@EntryIndexedValue">True</s:Boolean>
-	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=f4553dd9_002Df793_002D4dd1_002D9d34_002D98449264018b_0023DataCommander_002EProviders_002EPostgreSql/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
+	</wpf:ResourceDictionary>

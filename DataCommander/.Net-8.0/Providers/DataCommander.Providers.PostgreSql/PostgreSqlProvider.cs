@@ -18,7 +18,7 @@ namespace DataCommander.Providers.PostgreSql
     {
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
 
-        string IProvider.Name => "PostgreSql";
+        string IProvider.Identifier => "PostgreSql";
         DbProviderFactory IProvider.DbProviderFactory => NpgsqlFactory.Instance;
         string[] IProvider.KeyWords => null;
         bool IProvider.CanConvertCommandToString => throw new NotImplementedException();
@@ -26,12 +26,16 @@ namespace DataCommander.Providers.PostgreSql
         public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
         void IProvider.ClearCompletionCache() => throw new NotImplementedException();
         string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
-        public string GetConnectionName(string connectionString)
+        
+        public string GetConnectionName(Func<IDbConnection> createConnection)
         {
             throw new NotImplementedException();
         }
 
-        ConnectionBase IProvider.CreateConnection(string connectionString) => new Connection(connectionString);
+        ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(ConnectionStringAndCredential);
+
+        public string GetConnectionName(string connectionString) => throw new NotImplementedException();
+
         IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader) => new PostgreSqlDataReaderHelper((NpgsqlDataReader) dataReader);
 
         void IProvider.CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationconnection,
@@ -47,6 +51,10 @@ namespace DataCommander.Providers.PostgreSql
         }
 
         string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName) => throw new NotImplementedException();
+        public GetCompletionResult GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
+        {
+            throw new NotImplementedException();
+        }
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {

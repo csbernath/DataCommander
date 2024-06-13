@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
@@ -17,15 +19,13 @@ internal sealed class SchemaNode : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
-    {
-        return new ITreeNode[]
+    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) =>
+        Task.FromResult<IEnumerable<ITreeNode>>(new ITreeNode[]
         {
-            new SequenceCollectionNode(this), 
+            new SequenceCollectionNode(this),
             new TableCollectionNode(this),
             new ViewCollectionNode(this),
-        };
-    }
+        });
 
     bool ITreeNode.Sortable => false;
 
