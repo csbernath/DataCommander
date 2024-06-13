@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Data;
 using Npgsql;
@@ -18,9 +20,9 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 
         bool ITreeNode.IsLeaf => false;
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+        public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
         {
-            using (var connection = new NpgsqlConnection(SchemaNode.SchemaCollectionNode.ObjectExplorer.ConnectionString))
+            using (var connection = SchemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection())
             {
                 connection.Open();
                 var executor = connection.CreateCommandExecutor();
@@ -30,11 +32,11 @@ where
     table_schema = '{SchemaNode.Name}'
     and table_type = 'BASE TABLE'
 order by table_name";
-                return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataReader =>
+                return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataReader =>
                 {
                     var name = dataReader.GetString(0);
                     return new TableNode(this, name);
-                });
+                }));
             }
         }
 

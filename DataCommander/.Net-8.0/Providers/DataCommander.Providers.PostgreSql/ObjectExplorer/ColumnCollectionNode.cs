@@ -25,7 +25,7 @@ internal sealed class ColumnCollectionNode : ITreeNode
         var nodes = new List<ITreeNode>();
         var schemaNode = _tableNode.TableCollectionNode.SchemaNode;
 
-        using (var connection = new NpgsqlConnection(schemaNode.SchemaCollectionNode.ObjectExplorer.ConnectionString))
+        using (var connection = schemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection())
         {
             connection.Open();
             var executor = connection.CreateCommandExecutor();
@@ -49,7 +49,7 @@ order by c.ordinal_position"), dataRecord =>
             });
         }
 
-        return nodes;
+        return Task.FromResult<IEnumerable<ITreeNode>>(nodes);
     }
 
     bool ITreeNode.Sortable => false;

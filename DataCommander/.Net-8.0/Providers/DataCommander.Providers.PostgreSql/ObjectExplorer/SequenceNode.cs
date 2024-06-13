@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer
@@ -18,7 +20,7 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 
         bool ITreeNode.IsLeaf => true;
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+        public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
         {
             return null;
         }

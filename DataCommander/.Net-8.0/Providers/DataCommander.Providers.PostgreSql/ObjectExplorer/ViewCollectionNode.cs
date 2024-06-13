@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Data;
 using Npgsql;
@@ -18,20 +20,20 @@ internal sealed class ViewCollectionNode : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        using (var connection = new NpgsqlConnection(_schemaNode.SchemaCollectionNode.ObjectExplorer.ConnectionString))
+        using (var connection = _schemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection())
         {
             connection.Open();
             var executor = connection.CreateCommandExecutor();
-            return executor.ExecuteReader(new ExecuteReaderRequest($@"select table_name
+            return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(new ExecuteReaderRequest($@"select table_name
 from information_schema.views
 where table_schema = '{_schemaNode.Name}'
 order by table_name"), 128, dataReader =>
             {
                 var name = dataReader.GetString(0);
                 return new ViewNode(this, name);
-            });
+            }));
         }
     }
 

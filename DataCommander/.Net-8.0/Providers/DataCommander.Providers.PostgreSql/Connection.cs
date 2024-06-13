@@ -34,7 +34,7 @@ internal sealed class Connection : ConnectionBase
     {
         return Task.FromResult(0);
     }
-    
+
     private void CreateConnection()
     {
         var sqlConnectionStringBuilder = new NpgsqlConnectionStringBuilder(_connectionStringAndCredential.ConnectionString)
@@ -44,18 +44,19 @@ internal sealed class Connection : ConnectionBase
         };
 
         var credential = _connectionStringAndCredential.Credential;
-        if (credential != null)
-        {
-            sqlConnectionStringBuilder.Username = credential.UserId;
-            sqlConnectionStringBuilder.Password = credential.Password.SecureString
-
-        }
-            sqlCredential = new SqlCredential(credential.UserId, credential.Password.SecureString);
-
-        _npgsqlConnection = new NpgsqlConnection(sqlConnectionStringBuilder.ConnectionString);
-        Connection = _sqlConnection;
-        _sqlConnection.FireInfoMessageEventOnUserErrors = true;
-        _sqlConnection.InfoMessage += OnInfoMessage;
-        _sqlConnection.StateChange += OnStateChange;
+        // if (credential != null)
+        // {
+        //     sqlConnectionStringBuilder.Username = credential.UserId;
+        //     sqlConnectionStringBuilder.Password = DataCommander.Api. 
+        //         credential.Password
+        //
+        // }
+        //     sqlCredential = new SqlCredential(credential.UserId, credential.Password.SecureString);
+        //
+        // _npgsqlConnection = new NpgsqlConnection(sqlConnectionStringBuilder.ConnectionString);
+        // Connection = _sqlConnection;
+        // _sqlConnection.FireInfoMessageEventOnUserErrors = true;
+        // _sqlConnection.InfoMessage += OnInfoMessage;
+        // _sqlConnection.StateChange += OnStateChange;
     }
 }

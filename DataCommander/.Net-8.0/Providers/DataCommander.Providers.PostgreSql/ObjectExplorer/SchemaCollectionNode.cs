@@ -21,17 +21,17 @@ internal sealed class SchemaCollectionNode : ITreeNode
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        using (var connection = new NpgsqlConnection(ObjectExplorer.ConnectionString))
+        using (var connection = ObjectExplorer.CreateConnection())
         {
             connection.Open();
             var executor = connection.CreateCommandExecutor();
-            return executor.ExecuteReader(new ExecuteReaderRequest(@"select schema_name
+            return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(new ExecuteReaderRequest(@"select schema_name
 from information_schema.schemata
 order by schema_name"), 128, dataReader =>
             {
                 var name = dataReader.GetString(0);
                 return new SchemaNode(this, name);
-            });
+            }));
         }
     }
 }

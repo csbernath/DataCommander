@@ -32,7 +32,7 @@ namespace DataCommander.Providers.PostgreSql
             throw new NotImplementedException();
         }
 
-        ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(ConnectionStringAndCredential);
+        ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(connectionStringAndCredential);
 
         public string GetConnectionName(string connectionString) => throw new NotImplementedException();
 
@@ -51,29 +51,23 @@ namespace DataCommander.Providers.PostgreSql
         }
 
         string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName) => throw new NotImplementedException();
+
         public GetCompletionResult GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {
-            throw new NotImplementedException();
-        }
-
-        GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
-        {
-            var response = new GetCompletionResponse
-            {
-                FromCache = false
-            };
             List<IObjectName> array = null;
             var sqlStatement = new SqlParser(text);
             var tokens = sqlStatement.Tokens;
             sqlStatement.FindToken(position, out var previousToken, out var currentToken);
 
+            int startPosition;
+            int length;
             if (currentToken != null)
             {
                 var parts = new IdentifierParser(new StringReader(currentToken.Value)).Parse().ToList();
                 var lastPart = parts.Count > 0 ? parts.Last() : null;
                 var lastPartLength = lastPart != null ? lastPart.Length : 0;
-                response.StartPosition = currentToken.EndPosition - lastPartLength + 1;
-                response.Length = lastPartLength;
+                startPosition = currentToken.EndPosition - lastPartLength + 1;
+                length = lastPartLength;
                 var value = currentToken.Value;
                 if (value.Length > 0 && value[0] == '@')
                 {
@@ -95,14 +89,14 @@ namespace DataCommander.Providers.PostgreSql
                                     list.Add(token.Value, null);
                         }
 
-                        array = list.Keys.Select(keyWord => (IObjectName) new NonSqlObjectName(keyWord)).ToList();
+                        array = list.Keys.Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
                     }
                 }
             }
             else
             {
-                response.StartPosition = position;
-                response.Length = 0;
+                startPosition = position;
+                length = 0;
             }
 
             if (array == null)
@@ -179,11 +173,11 @@ namespace DataCommander.Providers.PostgreSql
 
                             if (name.Schema != null)
                             {
-                                owners = new[] {name.Schema};
+                                owners = new[] { name.Schema };
                             }
                             else
                             {
-                                owners = new[] {"dbo", "sys"};
+                                owners = new[] { "dbo", "sys" };
                             }
 
                             var sb = new StringBuilder();
@@ -247,7 +241,7 @@ order by 1", name.Database);
                                     {
                                         var token = tokens[tokenIndex];
                                         var tokenValue = token.Value;
-                                        var indexofAny = tokenValue.IndexOfAny(new[] {'\r', '\n'});
+                                        var indexofAny = tokenValue.IndexOfAny(new[] { '\r', '\n' });
                                         if (indexofAny >= 0)
                                         {
                                             tokenValue = tokenValue.Substring(0, indexofAny);
@@ -335,8 +329,7 @@ order by 1", name.Database);
                 }
             }
 
-            response.Items = array;
-            return response;
+            return new GetCompletionResult(startPosition, length, array, false);
         }
 
         DataParameterBase IProvider.GetDataParameter(IDataParameter parameter) => throw new NotImplementedException();

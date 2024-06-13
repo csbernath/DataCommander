@@ -23,6 +23,13 @@ public static class PasswordFactory
         return new Password(@protected, secureString);
     }
 
+    public static string Unprotect(byte[] @protected)
+    {
+        var bytes = ProtectedData.Unprotect(@protected, Entropy, DataProtectionScope.CurrentUser);
+        var password = Encoding.UTF8.GetString(bytes);
+        return password;
+    }
+
     private static byte[] Protect(string password)
     {
         var bytes = !string.IsNullOrEmpty(password)
@@ -30,12 +37,5 @@ public static class PasswordFactory
             : Array.Empty<byte>();
         var protectedBytes = ProtectedData.Protect(bytes, Entropy, DataProtectionScope.CurrentUser);
         return protectedBytes;
-    }
-
-    private static string Unprotect(byte[] @protected)
-    {
-        var bytes = ProtectedData.Unprotect(@protected, Entropy, DataProtectionScope.CurrentUser);
-        var password = Encoding.UTF8.GetString(bytes);
-        return password;
     }
 }
