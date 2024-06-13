@@ -111,9 +111,13 @@ public sealed partial class QueryForm
                         var startTimestamp = Stopwatch.GetTimestamp();                        
                         var cancellationTokenSource = new CancellationTokenSource();
                         var cancellationToken = cancellationTokenSource.Token;
-                        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2),
-                            "Getting tree node children...", "Please wait...", _colorTheme);
                         treeNode2 = (ITreeNode)treeNode.Tag;
+                        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2),
+                            "Getting tree node children...",
+                            $@"Parent node type: {treeNode2.GetType().Name}
+Parent node name: {treeNode2.Name}
+Please wait...",
+                            _colorTheme);
                         var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() =>
                             treeNode2.GetChildren(false, cancellationToken).Result));
                         treeNode.Nodes.Clear();
