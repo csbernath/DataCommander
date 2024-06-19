@@ -1,5 +1,4 @@
-﻿using System;
-using DataCommander.Api.Connection;
+﻿using DataCommander.Api.Connection;
 using Npgsql;
 
 namespace DataCommander.Providers.PostgreSql;
@@ -8,15 +7,19 @@ public static class ConnectionFactory
 {
     public static NpgsqlConnection CreateConnection(ConnectionStringAndCredential connectionStringAndCredential)
     {
-        throw new NotImplementedException();
-        // SqlCredential? sqlCredential = null;
-        // var credential = connectionStringAndCredential.Credential;
-        // if (credential != null)
-        // {
-        //     var password = credential.Password.SecureString;
-        //     sqlCredential = new SqlCredential(credential.UserId, password);
-        // }
-        //
-        // return new NpgsqlConnection(connectionStringAndCredential.ConnectionString, sqlCredential);
+        var npgsqlConnectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionStringAndCredential.ConnectionString)
+        {
+            ApplicationName = "Data Commander",
+            Pooling = false
+        };
+
+        var credential = connectionStringAndCredential.Credential;
+        if (credential != null)
+        {
+            npgsqlConnectionStringBuilder.Username = credential.UserId;
+            npgsqlConnectionStringBuilder.Password = PasswordFactory.Unprotect(credential.Password.Protected);
+        }
+
+        return new NpgsqlConnection(npgsqlConnectionStringBuilder.ConnectionString);
     }
 }

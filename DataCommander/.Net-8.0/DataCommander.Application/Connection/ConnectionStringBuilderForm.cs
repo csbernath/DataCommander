@@ -321,8 +321,10 @@ internal partial class ConnectionStringBuilderForm : Form
                 var password = PasswordFactory.CreateFromPlainText(passwordTextBox.Text);
                 credential = new Credential(userIdTextBox.Text, password);
             }
-            else
+            else if (_connectionInfo != null)
                 credential = _connectionInfo.ConnectionStringAndCredential.Credential;
+            else
+                credential = null;
         }
         else
             credential = null;

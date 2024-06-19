@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
-using DataCommander.Api.Connection;
 
-namespace DataCommander.Application.Connection;
+namespace DataCommander.Api.Connection;
 
 public static class PasswordFactory
 {

@@ -1,8 +1,8 @@
 ﻿using System.Security;
 
-namespace DataCommander.Application.Connection;
+namespace DataCommander.Api.Connection;
 
-public static class SecureStringFactory
+internal static class SecureStringFactory
 {
     public static SecureString CreateFromPlainText(string password)
     {

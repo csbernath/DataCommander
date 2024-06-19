@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -20,16 +21,13 @@ internal sealed class ColumnCollectionNode : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var nodes = new List<ITreeNode>();
         var schemaNode = _tableNode.TableCollectionNode.SchemaNode;
 
-        using (var connection = schemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection())
-        {
-            connection.Open();
-            var executor = connection.CreateCommandExecutor();
-            executor.ExecuteReader(new ExecuteReaderRequest($@"select
+        return await Db.ExecuteReaderAsync(
+            schemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection,
+            new ExecuteReaderRequest($@"select
      c.column_name
     ,c.is_nullable
     ,c.data_type
@@ -40,16 +38,17 @@ from information_schema.columns c
 where
     c.table_schema = '{_tableNode.TableCollectionNode.SchemaNode.Name}'
     and c.table_name = '{_tableNode.Name}'
-order by c.ordinal_position"), dataRecord =>
-            {
-                var columnName = dataRecord.GetString(0);
-                var dataType = dataRecord.GetString(2);
-                var columnNode = new ColumnNode(this, columnName, dataType);
-                nodes.Add(columnNode);
-            });
-        }
+order by c.ordinal_position"),
+            128,
+            ReadRecord,
+            cancellationToken);
+    }
 
-        return Task.FromResult<IEnumerable<ITreeNode>>(nodes);
+    private ColumnNode ReadRecord(IDataRecord dataRecord)
+    {
+        var columnName = dataRecord.GetString(0);
+        var dataType = dataRecord.GetString(2);
+        return new ColumnNode(this, columnName, dataType);
     }
 
     bool ITreeNode.Sortable => false;

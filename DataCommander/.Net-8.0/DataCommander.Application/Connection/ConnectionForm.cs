@@ -219,23 +219,39 @@ internal sealed class ConnectionForm : Form
     {
         row[ConnectionFormColumnName.ConnectionName] = connectionInfo.ConnectionName;
 
-        var provider = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
-        row[ConnectionFormColumnName.ProviderName] = provider.Name;
+        var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
+        var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
+        var connectionStringBuilder = provider.CreateConnectionStringBuilder();
+        
+        row[ConnectionFormColumnName.ProviderName] = providerInfo.Name;
+ 
+        connectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
 
-        var dbConnectionStringBuilder = new DbConnectionStringBuilder();
-        dbConnectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
+        if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var value))
+            row[ConnectionStringKeyword.DataSource] = (string)value;
 
-        row[ConnectionStringKeyword.DataSource] = (string)dbConnectionStringBuilder[ConnectionStringKeyword.DataSource];
-
-        if (dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.InitialCatalog, out var value))
+        if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.InitialCatalog, out value))
             row[ConnectionStringKeyword.InitialCatalog] = (string)value;
 
-        if (dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out value))
-            row[ConnectionStringKeyword.IntegratedSecurity] = bool.Parse((string)value);
+        if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out value))
+        {
+            bool integratedSecurity;
+            switch (value)
+            {
+                case bool boolValue:
+                    integratedSecurity = boolValue;
+                    break;
+                default:
+                    integratedSecurity = bool.Parse((string)value);
+                    break;
+            }
+
+            row[ConnectionStringKeyword.IntegratedSecurity] = integratedSecurity;
+        }
 
         if (connectionInfo.ConnectionStringAndCredential.Credential != null)
             row[ConnectionStringKeyword.UserId] = connectionInfo.ConnectionStringAndCredential.Credential.UserId;
-        else if (dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out value))
+        else if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out value))
             row[ConnectionStringKeyword.UserId] = (string)value;
     }
 

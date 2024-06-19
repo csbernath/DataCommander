@@ -11,7 +11,7 @@ internal sealed class Connection : ConnectionBase
     #region Private Fields
 
     private readonly ConnectionStringAndCredential _connectionStringAndCredential;
-    private readonly NpgsqlConnection _npgsqlConnection;
+    private NpgsqlConnection _npgsqlConnection;
 
     #endregion
 
@@ -28,7 +28,7 @@ internal sealed class Connection : ConnectionBase
     public override string DataSource => _npgsqlConnection.DataSource;
     public override string ServerVersion => _npgsqlConnection.ServerVersion;
 
-    public override string ConnectionInformation => throw new System.NotImplementedException();
+    public override string ConnectionInformation => null;
 
     public override Task<int> GetTransactionCountAsync(CancellationToken cancellationToken)
     {
@@ -37,24 +37,23 @@ internal sealed class Connection : ConnectionBase
 
     private void CreateConnection()
     {
-        var sqlConnectionStringBuilder = new NpgsqlConnectionStringBuilder(_connectionStringAndCredential.ConnectionString)
+        var npgsqlConnectionStringBuilder = new NpgsqlConnectionStringBuilder(_connectionStringAndCredential.ConnectionString)
         {
             ApplicationName = "Data Commander",
             Pooling = false
         };
 
         var credential = _connectionStringAndCredential.Credential;
-        // if (credential != null)
-        // {
-        //     sqlConnectionStringBuilder.Username = credential.UserId;
-        //     sqlConnectionStringBuilder.Password = DataCommander.Api. 
-        //         credential.Password
-        //
-        // }
-        //     sqlCredential = new SqlCredential(credential.UserId, credential.Password.SecureString);
-        //
-        // _npgsqlConnection = new NpgsqlConnection(sqlConnectionStringBuilder.ConnectionString);
-        // Connection = _sqlConnection;
+        if (credential != null)
+        {
+            npgsqlConnectionStringBuilder.Username = credential.UserId;
+            npgsqlConnectionStringBuilder.Password = PasswordFactory.Unprotect(credential.Password.Protected);
+        }
+
+        //sqlCredential = new SqlCredential(credential.UserId, credential.Password.SecureString);
+        
+        _npgsqlConnection = new NpgsqlConnection(npgsqlConnectionStringBuilder.ConnectionString);
+        Connection = _npgsqlConnection;
         // _sqlConnection.FireInfoMessageEventOnUserErrors = true;
         // _sqlConnection.InfoMessage += OnInfoMessage;
         // _sqlConnection.StateChange += OnStateChange;

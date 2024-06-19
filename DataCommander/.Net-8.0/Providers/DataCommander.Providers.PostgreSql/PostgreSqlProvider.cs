@@ -29,7 +29,7 @@ namespace DataCommander.Providers.PostgreSql
         
         public string GetConnectionName(Func<IDbConnection> createConnection)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(connectionStringAndCredential);

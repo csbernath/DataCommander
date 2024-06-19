@@ -19,12 +19,13 @@ namespace DataCommander.Providers.PostgreSql
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
         {
-            var supportedKeywords = new[]
-            {
-                "Integrated Security"
-            };
-
-            return supportedKeywords.Contains(keyword);
+            return false;
+            // var supportedKeywords = new[]
+            // {
+            //     "Integrated Security"
+            // };
+            //
+            // return supportedKeywords.Contains(keyword);
         }
 
         bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value)
