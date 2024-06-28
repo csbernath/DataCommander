@@ -35,7 +35,7 @@ namespace DataCommander.Application.Connection
             providersComboBox = new ComboBox();
             label1 = new Label();
             dataSourcesComboBox = new ComboBox();
-            label2 = new Label();
+            dataSourceLabel = new Label();
             userIdTextBox = new TextBox();
             label3 = new Label();
             passwordTextBox = new TextBox();
@@ -86,15 +86,15 @@ namespace DataCommander.Application.Connection
             dataSourcesComboBox.DropDown += dataSourcesComboBox_DropDown;
             dataSourcesComboBox.SelectedIndexChanged += dataSourcesComboBox_SelectedIndexChanged;
             // 
-            // label2
+            // dataSourceLabel
             // 
-            label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(2, 111);
-            label2.Margin = new Padding(4, 0, 4, 0);
-            label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(81, 17);
-            label2.TabIndex = 3;
-            label2.Text = "Data source:";
+            dataSourceLabel.AutoSize = true;
+            dataSourceLabel.Location = new System.Drawing.Point(2, 111);
+            dataSourceLabel.Margin = new Padding(4, 0, 4, 0);
+            dataSourceLabel.Name = "dataSourceLabel";
+            dataSourceLabel.Size = new System.Drawing.Size(81, 17);
+            dataSourceLabel.TabIndex = 3;
+            dataSourceLabel.Text = "Data source:";
             // 
             // userIdTextBox
             // 
@@ -286,7 +286,7 @@ namespace DataCommander.Application.Connection
             Controls.Add(passwordTextBox);
             Controls.Add(label3);
             Controls.Add(userIdTextBox);
-            Controls.Add(label2);
+            Controls.Add(dataSourceLabel);
             Controls.Add(dataSourcesComboBox);
             Controls.Add(label1);
             Controls.Add(providersComboBox);
@@ -306,7 +306,7 @@ namespace DataCommander.Application.Connection
         private ComboBox providersComboBox;
         private Label label1;
         private ComboBox dataSourcesComboBox;
-        private Label label2;
+        private Label dataSourceLabel;
         private TextBox userIdTextBox;
         private Label label3;
         private TextBox passwordTextBox;

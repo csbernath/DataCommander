@@ -516,7 +516,7 @@ public class MainForm : Form
     {
         try
         {
-            var connectionForm = new ConnectionForm(_statusBar, _colorTheme);
+            var connectionForm = new ConnectionListForm(_statusBar, _colorTheme);
 
             if (connectionForm.ShowDialog() == DialogResult.OK)
             {

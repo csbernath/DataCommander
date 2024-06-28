@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -19,7 +18,7 @@ using Newtonsoft.Json;
 
 namespace DataCommander.Application.Connection;
 
-internal sealed class ConnectionForm : Form
+internal sealed class ConnectionListForm : Form
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private List<ConnectionInfo> _connectionInfos;
@@ -33,7 +32,7 @@ internal sealed class ConnectionForm : Form
     private readonly Container _components = new();
     private readonly ColorTheme _colorTheme;
 
-    public ConnectionForm(StatusStrip statusBar, ColorTheme colorTheme)
+    public ConnectionListForm(StatusStrip statusBar, ColorTheme colorTheme)
     {
         _colorTheme = colorTheme;
 
@@ -177,7 +176,7 @@ internal sealed class ConnectionForm : Form
         this._dataGrid.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGrid_KeyDown);
         this._dataGrid.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGrid_MouseClick);
         // 
-        // ConnectionForm
+        // ConnectionListForm
         // 
         this.AcceptButton = this._btnOk;
         this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -190,7 +189,7 @@ internal sealed class ConnectionForm : Form
         this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
         this.MaximizeBox = false;
         this.MinimizeBox = false;
-        this.Name = "ConnectionForm";
+        this.Name = "ConnectionListForm";
         this.ShowInTaskbar = false;
         this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
         this.Text = "Connect to database";
@@ -229,6 +228,8 @@ internal sealed class ConnectionForm : Form
 
         if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var value))
             row[ConnectionStringKeyword.DataSource] = (string)value;
+        else if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.Host, out value))
+            row[ConnectionStringKeyword.DataSource] = (string)value;        
 
         if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.InitialCatalog, out value))
             row[ConnectionStringKeyword.InitialCatalog] = (string)value;
@@ -472,17 +473,26 @@ internal sealed class ConnectionForm : Form
         {
             using (new CursorManager(Cursors.WaitCursor))
             {
-                var dbConnectionStringBuilder = new DbConnectionStringBuilder();
-                dbConnectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
-                dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
-                var dataSource = (string)dataSourceObject;
-                var containsIntegratedSecurity = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
                 var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
-                var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);                
+                var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
+                var connectionStringBuilder = provider.CreateConnectionStringBuilder();
+                connectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
+
+                var dataSource = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject)
+                    ? (string)dataSourceObject
+                    : null;
+                var host = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.Host, out var hostObject)
+                    ? (string)hostObject
+                    : null;
+                
+                var containsIntegratedSecurity = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
                 var stringBuilder = new StringBuilder();
                 stringBuilder.Append($@"Connection name: {connectionInfo.ConnectionName}
-Provider name: {providerInfo.Name}
-{ConnectionStringKeyword.DataSource}: {dataSource}");
+Provider name: {providerInfo.Name}");
+                if (dataSource != null)
+                    stringBuilder.Append($"{ConnectionStringKeyword.DataSource}: {dataSource}");
+                else if (host != null)
+                    stringBuilder.Append($"{ConnectionStringKeyword.Host}: {host}");
                 if (containsIntegratedSecurity)
                     stringBuilder.Append($"\r\n{ConnectionStringKeyword.IntegratedSecurity}: {integratedSecurity}");
                 var credential = connectionInfo.ConnectionStringAndCredential.Credential;
