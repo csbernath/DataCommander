@@ -490,9 +490,9 @@ internal sealed class ConnectionListForm : Form
                 stringBuilder.Append($@"Connection name: {connectionInfo.ConnectionName}
 Provider name: {providerInfo.Name}");
                 if (dataSource != null)
-                    stringBuilder.Append($"{ConnectionStringKeyword.DataSource}: {dataSource}");
+                    stringBuilder.Append($"\r\n{ConnectionStringKeyword.DataSource}: {dataSource}");
                 else if (host != null)
-                    stringBuilder.Append($"{ConnectionStringKeyword.Host}: {host}");
+                    stringBuilder.Append($"\r\n{ConnectionStringKeyword.Host}: {host}");
                 if (containsIntegratedSecurity)
                     stringBuilder.Append($"\r\n{ConnectionStringKeyword.IntegratedSecurity}: {integratedSecurity}");
                 var credential = connectionInfo.ConnectionStringAndCredential.Credential;

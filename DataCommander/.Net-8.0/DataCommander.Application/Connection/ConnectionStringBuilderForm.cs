@@ -125,7 +125,7 @@ internal partial class ConnectionStringBuilderForm : Form
             var connectionStringBuilder = provider.CreateConnectionStringBuilder();
 
             if (connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.Host))
-                dataSourceLabel.Text = ConnectionStringKeyword.Host;
+                dataSourceLabel.Text = $"{ConnectionStringKeyword.Host}:";
             
             integratedSecurityCheckBox.Enabled = connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity);
             trustServerCertificateCheckBox.Enabled = connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.TrustServerCertificate);
@@ -141,12 +141,8 @@ internal partial class ConnectionStringBuilderForm : Form
         dataSourcesComboBox.Items.Clear();
 
         if (dataSourceArray != null)
-        {
             for (var i = 0; i < dataSourceArray.Length; i++)
-            {
                 dataSourcesComboBox.Items.Add(dataSourceArray[i]);
-            }
-        }
     }
 
     private void GetDataSources(bool refresh)
@@ -170,20 +166,18 @@ internal partial class ConnectionStringBuilderForm : Form
                 {
                     var serverName = row.GetValueOrDefault<string>("ServerName");
                     var instanceName = row.GetValueOrDefault<string>("InstanceName");
-                    var sb = new StringBuilder();
+                    var stringBuilder = new StringBuilder();
 
                     if (serverName != null)
-                    {
-                        sb.Append(serverName);
-                    }
+                        stringBuilder.Append(serverName);
 
                     if (instanceName != null)
                     {
-                        sb.Append('\\');
-                        sb.Append(instanceName);
+                        stringBuilder.Append('\\');
+                        stringBuilder.Append(instanceName);
                     }
 
-                    var dataSource = sb.ToString();
+                    var dataSource = stringBuilder.ToString();
                     dataSourceList.Add(dataSource);
                 }
 
@@ -215,9 +209,7 @@ internal partial class ConnectionStringBuilderForm : Form
         var provider = providersComboBox.Text;
 
         if (provider.Length > 0)
-        {
             GetDataSources(true);
-        }
     }
 
     private void dataSourcesComboBox_DropDown(object sender, EventArgs e)
@@ -227,9 +219,7 @@ internal partial class ConnectionStringBuilderForm : Form
             var provider = providersComboBox.Text;
 
             if (provider.Length > 0)
-            {
                 GetDataSources(false);
-            }
         }
     }
 
@@ -263,10 +253,8 @@ internal partial class ConnectionStringBuilderForm : Form
 
                     _initialCatalogs.Sort();
 
-                    foreach (var database in _initialCatalogs)
-                    {
+                    foreach (var database in _initialCatalogs) 
                         initialCatalogComboBox.Items.Add(database);
-                    }
                 }
             }
             catch (Exception ex)
@@ -297,14 +285,13 @@ internal partial class ConnectionStringBuilderForm : Form
         var providerInfo = _providers[providersComboBox.SelectedIndex];
         var provider = ProviderFactory.CreateProvider(providerInfo.Identifier);
         var connectionStringBuilder = provider.CreateConnectionStringBuilder();
-        SaveDialogToConnectionString(connectionStringBuilder, out var credential);
+        var connectionStringAndCredential = SaveDialogToConnectionStringAndCredential(connectionStringBuilder);
         var connectionName = connectionNameTextBox.Text;
-        var connectionInfo = new ConnectionInfo(connectionName, providerInfo.Identifier,
-            new ConnectionStringAndCredential(connectionStringBuilder.ConnectionString, credential));
+        var connectionInfo = new ConnectionInfo(connectionName, providerInfo.Identifier, connectionStringAndCredential);
         return connectionInfo;
     }
 
-    private void SaveDialogToConnectionString(IDbConnectionStringBuilder dbConnectionStringBuilder, out Credential? credential)
+    private ConnectionStringAndCredential SaveDialogToConnectionStringAndCredential(IDbConnectionStringBuilder dbConnectionStringBuilder)
     {
         if (dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.DataSource))
             SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.DataSource, dataSourcesComboBox.Text);
@@ -324,6 +311,8 @@ internal partial class ConnectionStringBuilderForm : Form
         if (dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity))
             dbConnectionStringBuilder.SetValue(ConnectionStringKeyword.IntegratedSecurity, integratedSecurityCheckBox.Checked);
 
+        Credential? credential;
+
         if (!integratedSecurityCheckBox.Checked)
         {
             if (_passwordChanged)
@@ -341,6 +330,8 @@ internal partial class ConnectionStringBuilderForm : Form
 
         if (dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.TrustServerCertificate))
             dbConnectionStringBuilder.SetValue(ConnectionStringKeyword.TrustServerCertificate, trustServerCertificateCheckBox.Checked);
+
+        return new ConnectionStringAndCredential(dbConnectionStringBuilder.ConnectionString, credential);
     }
 
     private void testButton_Click(object sender, EventArgs e)
@@ -353,7 +344,7 @@ internal partial class ConnectionStringBuilderForm : Form
             var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
             var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
             var connectionStringBuilder = provider.CreateConnectionStringBuilder();
-            SaveDialogToConnectionString(connectionStringBuilder, out var credential);
+            var connectionStringAndCredential = SaveDialogToConnectionStringAndCredential(connectionStringBuilder);
 
             connectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
             var dataSource = (string)dataSourceObject;
@@ -364,13 +355,13 @@ Provider name: {providerInfo.Name}
 {ConnectionStringKeyword.DataSource}: {dataSource}");
             if (containsIntegratedSecurity)
                 stringBuilder.Append($"\r\n{ConnectionStringKeyword.IntegratedSecurity}: {integratedSecurity}");
-            if (credential != null)
-                stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {credential.UserId}");
+            if (connectionStringAndCredential.Credential != null)
+                stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {connectionStringAndCredential.Credential.UserId}");
             var text = stringBuilder.ToString();
 
             var cancelableOperationForm =
                 new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2), "Opening connection...", text, _colorTheme);
-            using (var connection = provider.CreateConnection(new ConnectionStringAndCredential(connectionStringBuilder.ConnectionString, credential)))
+            using (var connection = provider.CreateConnection(connectionStringAndCredential))
             {
                 var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
                 cancelableOperationForm.Execute(openConnectionTask);
