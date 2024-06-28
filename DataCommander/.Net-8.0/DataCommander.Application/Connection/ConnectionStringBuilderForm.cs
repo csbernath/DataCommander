@@ -341,27 +341,26 @@ internal partial class ConnectionStringBuilderForm : Form
             var connectionInfo = SaveDialogToConnectionInfo();
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
-            var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
-            var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
-            var connectionStringBuilder = provider.CreateConnectionStringBuilder();
-            var connectionStringAndCredential = SaveDialogToConnectionStringAndCredential(connectionStringBuilder);
-
-            connectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
+            var dbConnectionStringBuilder = new DbConnectionStringBuilder();
+            dbConnectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
+            dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
             var dataSource = (string)dataSourceObject;
-            var containsIntegratedSecurity = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
+            var containsIntegratedSecurity = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
             var stringBuilder = new StringBuilder();
+            var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);            
             stringBuilder.Append($@"Connection name: {connectionInfo.ConnectionName}
 Provider name: {providerInfo.Name}
 {ConnectionStringKeyword.DataSource}: {dataSource}");
             if (containsIntegratedSecurity)
                 stringBuilder.Append($"\r\n{ConnectionStringKeyword.IntegratedSecurity}: {integratedSecurity}");
-            if (connectionStringAndCredential.Credential != null)
-                stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {connectionStringAndCredential.Credential.UserId}");
+            if (connectionInfo.ConnectionStringAndCredential.Credential != null)
+                stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {connectionInfo.ConnectionStringAndCredential.Credential.UserId}");
             var text = stringBuilder.ToString();
 
             var cancelableOperationForm =
                 new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2), "Opening connection...", text, _colorTheme);
-            using (var connection = provider.CreateConnection(connectionStringAndCredential))
+            var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);            
+            using (var connection = provider.CreateConnection(connectionInfo.ConnectionStringAndCredential))
             {
                 var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
                 cancelableOperationForm.Execute(openConnectionTask);
