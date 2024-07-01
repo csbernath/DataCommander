@@ -475,13 +475,18 @@ public sealed partial class QueryForm
         var textBox = QueryTextBox.RichTextBox;
         var text = textBox.Text;
         var position = textBox.SelectionStart;
-
-        var ticks = Stopwatch.GetTimestamp();
-        var response = Provider.GetCompletion(Connection, _transaction, text, position);
+        var cancellationTokenSource = new CancellationTokenSource();
+        var showDialogDelay = TimeSpan.FromSeconds(2);
+        const string formText = "Getting completion result...";
+        const string textBoxText = "Please wait...";
+        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, showDialogDelay, formText, textBoxText, _colorTheme);
+        var startTimestamp = Stopwatch.GetTimestamp();
+        var response = cancelableOperationForm.Execute(new Task<GetCompletionResult?>(() =>
+            Provider.GetCompletion(Connection, _transaction, text, position, cancellationTokenSource.Token).Result));
+        var elapsed = Stopwatch.GetTimestamp() - startTimestamp;
         var from = response.FromCache ? "cache" : "data source";
-        ticks = Stopwatch.GetTimestamp() - ticks;
-        var length = response.Items != null ? response.Items.Count : 0;
-        SetStatusbarPanelText($"GetCompletion returned {length} items from {from} in {StopwatchTimeSpan.ToString(ticks, 3)} seconds.");
+        var count = response.Items != null ? response.Items.Count : 0;
+        SetStatusbarPanelText($"GetCompletion returned {count} items from {from} in {StopwatchTimeSpan.ToString(elapsed, 3)} seconds.");
         return response;
     }
 

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
 using Foundation.Data;
@@ -26,7 +27,7 @@ namespace DataCommander.Providers.PostgreSql
         public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
         void IProvider.ClearCompletionCache() => throw new NotImplementedException();
         string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
-        
+
         public string GetConnectionName(Func<IDbConnection> createConnection)
         {
             return null;
@@ -36,7 +37,7 @@ namespace DataCommander.Providers.PostgreSql
 
         public string GetConnectionName(string connectionString) => throw new NotImplementedException();
 
-        IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader) => new PostgreSqlDataReaderHelper((NpgsqlDataReader) dataReader);
+        IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader) => new PostgreSqlDataReaderHelper((NpgsqlDataReader)dataReader);
 
         void IProvider.CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationconnection,
             string destinationTableName, out IDbCommand insertCommand, out Converter<object, object>[] converters) => throw new NotImplementedException();
@@ -52,7 +53,8 @@ namespace DataCommander.Providers.PostgreSql
 
         string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName) => throw new NotImplementedException();
 
-        public GetCompletionResult GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
+        public async Task<GetCompletionResult> GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position,
+            CancellationToken cancellationToken)
         {
             List<IObjectName> array = null;
             var sqlStatement = new SqlParser(text);

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api.Connection;
 using Foundation.Data;
 
@@ -30,7 +32,10 @@ public interface IProvider
 
     Type GetColumnType(FoundationDbColumn column);
     string GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName);
-    GetCompletionResult GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position);
+
+    Task<GetCompletionResult> GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position,
+        CancellationToken cancellationToken);
+    
     DataParameterBase GetDataParameter(IDataParameter parameter);
 
     string GetExceptionMessage(Exception exception);

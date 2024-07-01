@@ -77,12 +77,10 @@ internal sealed class Connection : ConnectionBase
             ApplicationName = "Data Commander",
             Pooling = false
         };
-
         var credential = _connectionStringAndCredential.Credential;
-        SqlCredential? sqlCredential = null;
-        if (credential != null)
-            sqlCredential = new SqlCredential(credential.UserId, credential.Password.SecureString);
-
+        var sqlCredential = credential != null
+            ? new SqlCredential(credential.UserId, credential.Password.SecureString)
+            : null;
         _sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString, sqlCredential);
         Connection = _sqlConnection;
         _sqlConnection.FireInfoMessageEventOnUserErrors = true;

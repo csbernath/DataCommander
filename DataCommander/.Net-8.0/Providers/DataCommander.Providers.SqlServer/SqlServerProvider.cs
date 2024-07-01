@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using DataCommander.Providers.SqlServer.FieldReader;
 using DataCommander.Api;
@@ -354,7 +355,8 @@ internal sealed class SqlServerProvider : IProvider
         return type;
     }
 
-    GetCompletionResult IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
+    async Task<GetCompletionResult> IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position,
+        CancellationToken cancellationToken)
     {
         var fromCache = false;
         List<IObjectName> array = null;
@@ -599,13 +601,13 @@ from
                     if (connection.State != ConnectionState.Open)
                         connection.OpenAsync(CancellationToken.None).Wait();
 
-                    var executor = connection.Connection.CreateCommandExecutor();
-                    executor.ExecuteReader(new ExecuteReaderRequest(commandText, null, transaction), dataReader =>
+                    var executor = connection.Connection.CreateCommandAsyncExecutor();
+                    await executor.ExecuteReaderAsync(new ExecuteReaderRequest(commandText, null, transaction), async (dataReader, cancellationToken2) =>
                     {
                         while (true)
                         {
                             var fieldCount = dataReader.FieldCount;
-                            while (dataReader.Read())
+                            while (await dataReader.ReadAsync(cancellationToken2))
                             {
                                 string schemaName;
                                 string objectName;
@@ -624,10 +626,10 @@ from
                                 list.Add(new ObjectName(schemaName, objectName));
                             }
 
-                            if (!dataReader.NextResult())
+                            if (!await dataReader.NextResultAsync(cancellationToken2))
                                 break;
                         }
-                    });
+                    }, cancellationToken);
                 }
                 catch
                 {
@@ -835,7 +837,7 @@ from
         var statements = new List<Statement>();
 
         var statementTokenArrays = tokens.Split(token => IsBatchSeparator(commandText, token)).Where(statementTokens => statementTokens.Length > 0);
-        
+
         foreach (var statementTokens in statementTokenArrays)
         {
             var startIndex = statementTokens[0].StartPosition;
@@ -857,7 +859,7 @@ from
 
         if (exception is AggregateException aggregateException)
             exception = UnAggregateException(aggregateException);
-        
+
         if (exception is SqlException sqlException)
             infoMessages = ToInfoMessages(sqlException.Errors, now);
         else

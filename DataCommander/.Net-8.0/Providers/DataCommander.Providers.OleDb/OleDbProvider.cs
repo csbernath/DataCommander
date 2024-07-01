@@ -8,6 +8,8 @@ using System.Data.Common;
 using System.Data.OleDb;
 using System.Security;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using DataCommander.Application;
 
@@ -277,8 +279,8 @@ internal sealed class OleDbProvider : IProvider
 
     DataTable IProvider.GetSchemaTable(IDataReader dataReader) => throw new NotImplementedException();
 
-    GetCompletionResult IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position) =>
-        throw new NotImplementedException();
+    Task<GetCompletionResult> IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position,
+        CancellationToken cancellationToken) => throw new NotImplementedException();
 
     void IProvider.ClearCompletionCache()
     {
