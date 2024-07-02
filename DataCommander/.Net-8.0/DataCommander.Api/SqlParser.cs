@@ -465,18 +465,43 @@ public sealed class SqlParser
             {
                 switch (dataParameter.DbType)
                 {
+                    case DbType.AnsiString:
+                    case DbType.AnsiStringFixedLength:
+                    case DbType.String:
+                    case DbType.StringFixedLength:
+                        var valueStr = Convert.ToString(value);
+
+                        if (dataParameter.Size > 0 && valueStr.Length > dataParameter.Size)
+                            throw new Exception("Length exceeds size of parameter");
+                        else
+                            value2 = valueStr;
+
+                        break;
+                    
                     case DbType.Boolean:
-                        var valueStr = (string)value;
+                        valueStr = (string)value;
                         var ok = double.TryParse(valueStr, NumberStyles.Any, null, out var valueDbl);
                         value2 = ok ? Convert.ToBoolean(valueDbl) : Convert.ToBoolean(value);
                         break;
+                    
+                    case DbType.DateTime:
+                        try
+                        {
+                            value2 = Convert.ToDateTime(value);
+                        }
+                        catch
+                        {
+                            var formats = new[]
+                            {
+                                "yyyyMMdd",
+                                "yyyyMMdd HH:mm:ss"
+                            };
 
-                    case DbType.Int16:
-                        value2 = Convert.ToInt32(value);
-                        break;
+                            IFormatProvider formatProvider = CultureInfo.InvariantCulture;
+                            value2 = DateTime.ParseExact(value.ToString(), formats, formatProvider,
+                                DateTimeStyles.None);
+                        }
 
-                    case DbType.Int32:
-                        value2 = Convert.ToInt32(value);
                         break;
 
                     case DbType.Decimal:
@@ -499,38 +524,18 @@ public sealed class SqlParser
                     case DbType.Double:
                         value2 = Convert.ToDouble(value);
                         break;
-
-                    case DbType.String:
-                    case DbType.StringFixedLength:
-                    case DbType.AnsiString:
-                    case DbType.AnsiStringFixedLength:
-                        valueStr = Convert.ToString(value);
-
-                        if (dataParameter.Size > 0 && valueStr.Length > dataParameter.Size)
-                            throw new Exception("Length exceeds size of parameter");
-                        else
-                            value2 = valueStr;
-
+                    
+                    case DbType.Guid:
+                        var valueString = (string)value; 
+                        value2 = new Guid(valueString);
+                        break;
+                    
+                    case DbType.Int16:
+                        value2 = Convert.ToInt32(value);
                         break;
 
-                    case DbType.DateTime:
-                        try
-                        {
-                            value2 = Convert.ToDateTime(value);
-                        }
-                        catch
-                        {
-                            var formats = new[]
-                            {
-                                "yyyyMMdd",
-                                "yyyyMMdd HH:mm:ss"
-                            };
-
-                            IFormatProvider formatProvider = CultureInfo.InvariantCulture;
-                            value2 = DateTime.ParseExact(value.ToString(), formats, formatProvider,
-                                DateTimeStyles.None);
-                        }
-
+                    case DbType.Int32:
+                        value2 = Convert.ToInt32(value);
                         break;
 
                     default:
