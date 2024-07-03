@@ -19,6 +19,7 @@ public static class CSharpTypeArray
         new CSharpType(CSharpTypeName.Int16, typeof(short)),
         new CSharpType(CSharpTypeName.Int32, typeof(int)),
         new CSharpType(CSharpTypeName.Int64, typeof(long)),
+        new CSharpType(CSharpTypeName.Object, typeof(object)),
         new CSharpType(CSharpTypeName.Single, typeof(float)),
         new CSharpType(CSharpTypeName.String, typeof(string))
     ]);

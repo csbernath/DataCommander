@@ -28,6 +28,7 @@ public static class SqlDataTypeRepository
         new SqlDataType(SqlDbType.UniqueIdentifier, SqlDataTypeName.UniqueIdentifier, CSharpTypeName.Guid),
         new SqlDataType(SqlDbType.VarBinary, SqlDataTypeName.VarBinary, CSharpTypeName.ByteArray),
         new SqlDataType(SqlDbType.VarChar, SqlDataTypeName.VarChar, CSharpTypeName.String),
+        new SqlDataType(SqlDbType.Variant, SqlDataTypeName.SqlVariant, CSharpTypeName.Object),
         new SqlDataType(SqlDbType.Xml, SqlDataTypeName.Xml, CSharpTypeName.String)
     ]);
 }
