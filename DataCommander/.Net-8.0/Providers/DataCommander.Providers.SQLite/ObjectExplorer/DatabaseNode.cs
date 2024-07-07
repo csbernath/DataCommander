@@ -1,31 +1,32 @@
 ﻿using System.Collections.Generic;
-using System.Data.SQLite;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 
 namespace DataCommander.Providers.SQLite.ObjectExplorer;
 
 sealed class DatabaseNode : ITreeNode
 {
-    public DatabaseNode(SQLiteConnection connection, string name)
+    private readonly DatabaseCollectionNode _databaseCollectionNode;
+
+    public DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string name)
     {
-        Connection = connection;
+        _databaseCollectionNode = databaseCollectionNode;
         Name = name;
     }
 
-    public SQLiteConnection Connection { get; }
+    public DatabaseCollectionNode DatabaseCollectionNode => _databaseCollectionNode;
 
     #region ITreeNode Members
     public string Name { get; }
 
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
-    {
-        return new ITreeNode[]
+    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) =>
+        Task.FromResult<IEnumerable<ITreeNode>>(new ITreeNode[]
         {
             new TableCollectionNode(this)
-        };
-    }
+        });
 
     bool ITreeNode.Sortable => false;
 

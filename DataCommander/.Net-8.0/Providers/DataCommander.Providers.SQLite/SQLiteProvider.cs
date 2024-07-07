@@ -5,6 +5,8 @@ using System.Data.Common;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.FieldReaders;
@@ -18,17 +20,15 @@ public sealed class SQLiteProvider : IProvider
 {
     #region IProvider Members
 
-    string IProvider.Name => ProviderName.SqLite;
-
-    public string GetConnectionName(string connectionString)
+    public string Identifier => ProviderIdentifier.SqLite;
+    
+    public string GetConnectionName(Func<IDbConnection> createConnection)
     {
-        throw new NotImplementedException();
+        using var connection = createConnection();
+        return connection.Database;
     }
 
-    ConnectionBase IProvider.CreateConnection(string connectionString)
-    {
-        return new Connection(connectionString);
-    }
+    public ConnectionBase CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(connectionStringAndCredential);
 
     string[] IProvider.KeyWords
     {
@@ -42,6 +42,7 @@ public sealed class SQLiteProvider : IProvider
 
     bool IProvider.CanConvertCommandToString => false;
     bool IProvider.IsCommandCancelable => true;
+
     void IProvider.DeriveParameters(IDbCommand command)
     {
         throw new Exception("The method or operation is not implemented.");
@@ -66,13 +67,13 @@ public sealed class SQLiteProvider : IProvider
         {
             table = new DataTable("SchemaTable");
             var columns = table.Columns;
-            columns.Add(" ", typeof (int));
-            columns.Add("  ", typeof (string));
-            columns.Add("Name", typeof (string));
-            columns.Add("Size", typeof (int));
-            columns.Add("DbType", typeof (string));
-            columns.Add("ProviderType", typeof (DbType));
-            columns.Add("DataType", typeof (Type));
+            columns.Add(" ", typeof(int));
+            columns.Add("  ", typeof(string));
+            columns.Add("Name", typeof(string));
+            columns.Add("Size", typeof(int));
+            columns.Add("DbType", typeof(string));
+            columns.Add("ProviderType", typeof(DbType));
+            columns.Add("DataType", typeof(Type));
 
             for (var i = 0; i < schemaTable.Rows.Count; i++)
             {
@@ -100,16 +101,16 @@ public sealed class SQLiteProvider : IProvider
                     sb.Append(" NOT NULL");
                 }
 
-                table.Rows.Add(new[]
-                {
+                table.Rows.Add(
+                [
                     columnOrdinal,
                     pk,
                     row[SchemaTableColumn.ColumnName],
                     columnSize,
                     sb.ToString(),
                     dbType,
-                    row["DataType"],
-                });
+                    row["DataType"]
+                ]);
             }
         }
 
@@ -121,7 +122,7 @@ public sealed class SQLiteProvider : IProvider
         // 11   INT     int
         // 12	BIGINT	long
         // 16	TEXT	string
-        return typeof (object);
+        return typeof(object);
     }
 
     IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
@@ -131,30 +132,34 @@ public sealed class SQLiteProvider : IProvider
 
     public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
 
-    GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
+    public Task<GetCompletionResult> GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position,
+        CancellationToken cancellationToken)
     {
-        var response = new GetCompletionResponse();
         var sqlStatement = new SqlParser(text);
         var tokens = sqlStatement.Tokens;
         sqlStatement.FindToken(position, out var previousToken, out var currentToken);
+        int startPosition;
+        int length;
+        List<IObjectName> items = null;
+        var fromCache = false;
 
         if (currentToken != null)
         {
-            response.StartPosition = currentToken.StartPosition;
-            response.Length = currentToken.EndPosition - currentToken.StartPosition + 1;
+            startPosition = currentToken.StartPosition;
+            length = currentToken.EndPosition - currentToken.StartPosition + 1;
             var value = currentToken.Value;
         }
         else
         {
-            response.StartPosition = position;
-            response.Length = 0;
+            startPosition = position;
+            length = 0;
         }
 
         var sqlObject = sqlStatement.FindSqlObject(previousToken, currentToken);
         if (sqlObject != null)
         {
             string commandText = null;
-            response.FromCache = false;
+            fromCache = false;
 
             switch (sqlObject.Type)
             {
@@ -190,15 +195,15 @@ order by name collate nocase";
             if (commandText != null)
             {
                 var executor = DbCommandExecutorFactory.Create(connection.Connection);
-                response.Items = executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
+                items = executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
                 {
                     var name = dataRecord.GetStringOrDefault(0);
-                    return (IObjectName) new ObjectName(name);
+                    return (IObjectName)new ObjectName(name);
                 }).ToList();
             }
         }
 
-        return response;
+        return Task.FromResult(new GetCompletionResult(startPosition, length, items, fromCache));
     }
 
     void IProvider.ClearCompletionCache()
@@ -225,6 +230,7 @@ order by name collate nocase";
 
     GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string? tableName) => throw new NotImplementedException();
     List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
+
     DbProviderFactory IProvider.DbProviderFactory => SQLiteFactory.Instance;
 
     string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
@@ -254,6 +260,7 @@ order by name collate nocase";
                 {
                     typeName = $"decimal({precision},{scale})";
                 }
+
                 break;
 
             case SqlDataTypeName.Xml:
@@ -280,6 +287,7 @@ order by name collate nocase";
             var convertible = (IConvertible)source;
             target = convertible.ToString(null);
         }
+
         return target;
     }
 
@@ -302,6 +310,7 @@ order by name collate nocase";
                 target = source;
             }
         }
+
         return target;
     }
 
@@ -336,6 +345,7 @@ order by name collate nocase";
                     {
                         dataTypeName = dataTypeName.Substring(0, index);
                     }
+
                     dataTypeNames[i] = dataTypeName;
                 }
             }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Data;
 
@@ -18,15 +20,20 @@ internal sealed class IndexCollectionNode : ITreeNode
     string ITreeNode.Name => "Indexes";
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var commandText = $"PRAGMA index_list({_tableNode.Name});";
-        var executor = DbCommandExecutorFactory.Create(_tableNode.Database.Connection);
-        return executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
-        {
-            var name = dataRecord.GetString(0);
-            return new IndexNode(_tableNode, name);
-        });
+        var list = await Db.ExecuteReaderAsync(
+            () => ConnectionFactory.CreateConnection(_tableNode.DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
+            new ExecuteReaderRequest(commandText),
+            128,
+            dataRecord =>
+            {
+                var name = dataRecord.GetString(0);
+                return new IndexNode(_tableNode, name);
+            },
+            cancellationToken);
+        return list;
     }
 
     bool ITreeNode.Sortable => false;

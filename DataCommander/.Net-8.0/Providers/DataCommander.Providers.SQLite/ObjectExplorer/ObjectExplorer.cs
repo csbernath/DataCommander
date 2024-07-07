@@ -1,30 +1,22 @@
 ﻿using System.Collections.Generic;
-using System.Data;
-using System.Data.SQLite;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
+using DataCommander.Api.Connection;
 
 namespace DataCommander.Providers.SQLite.ObjectExplorer;
 
 internal sealed class ObjectExplorer : IObjectExplorer
 {
-    private SQLiteConnection _connection;
+    private ConnectionStringAndCredential _connectionStringAndCredential;
 
-    #region IObjectExplorer Members
+    public void SetConnection(ConnectionStringAndCredential connectionStringAndCredential) => _connectionStringAndCredential = connectionStringAndCredential;
 
-    void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
-    {
-        _connection = (SQLiteConnection)connection;
-    }
-
-    IEnumerable<ITreeNode> IObjectExplorer.GetChildren(bool refresh)
-    {
-        return new ITreeNode[]
+    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) =>
+        Task.FromResult<IEnumerable<ITreeNode>>(new ITreeNode[]
         {
-            new DatabaseCollectionNode(_connection)
-        };
-    }
+            new DatabaseCollectionNode(_connectionStringAndCredential)
+        });
 
     bool IObjectExplorer.Sortable => false;
-
-    #endregion
 }

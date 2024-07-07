@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Data;
 
@@ -21,7 +23,7 @@ internal sealed class IndexNode : ITreeNode
 
     bool ITreeNode.IsLeaf => true;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         return null;
     }
@@ -37,8 +39,10 @@ from main.sqlite_master
 where
     type = 'index'
     and name = '{_name}'";
-            var executor = DbCommandExecutorFactory.Create(_tableNode.Database.Connection);
-            var sql = (string) executor.ExecuteScalar(new CreateCommandRequest(commandText));
+            var scalar = Db.ExecuteScalar(
+                () => ConnectionFactory.CreateConnection(_tableNode.DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
+                new CreateCommandRequest(commandText));
+            var sql = (string)scalar;
             return sql;
         }
     }

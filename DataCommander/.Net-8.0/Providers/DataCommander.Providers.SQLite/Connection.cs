@@ -13,9 +13,9 @@ internal sealed class Connection : ConnectionBase
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private readonly SQLiteConnection _sqliteConnection;
 
-    public Connection(string connectionString)
+    public Connection(ConnectionStringAndCredential connectionStringAndCredential)
     {
-        _sqliteConnection = new SQLiteConnection(connectionString);
+        _sqliteConnection = new SQLiteConnection(connectionStringAndCredential.ConnectionString);
         // this.sqliteConnection.Flags = SQLiteConnectionFlags.LogAll;
         // this.sqliteConnection.Trace += this.sqliteConnection_Trace;
         Connection = _sqliteConnection;
@@ -52,6 +52,8 @@ internal sealed class Connection : ConnectionBase
     }
 
     public override string ServerVersion => _sqliteConnection.ServerVersion;
+
+    public override string ConnectionInformation => null;
 
     public override Task<int> GetTransactionCountAsync(CancellationToken cancellationToken)
     {

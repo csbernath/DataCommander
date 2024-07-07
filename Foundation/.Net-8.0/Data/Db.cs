@@ -62,6 +62,14 @@ public static class Db
         }
     }
 
+    public static object ExecuteScalar(Func<DbConnection> createConnection, CreateCommandRequest createCommandRequest)
+    {
+        using var connection = createConnection();
+        var executor = connection.CreateCommandExecutor();
+        var scalar = executor.ExecuteScalar(createCommandRequest);
+        return scalar;
+    }
+
     public static async Task<object> ExecuteScalarAsync(
         Func<DbConnection> createConnection,
         CreateCommandRequest createCommandRequest,

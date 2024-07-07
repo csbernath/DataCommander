@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
@@ -11,11 +13,11 @@ internal sealed class TableNode : ITreeNode
 {
     public TableNode(DatabaseNode databaseNode, string name)
     {
-        Database = databaseNode;
+        DatabaseNode = databaseNode;
         Name = name;
     }
 
-    public DatabaseNode Database { get; }
+    public DatabaseNode DatabaseNode { get; }
 
     #region ITreeNode Members
 
@@ -23,16 +25,16 @@ internal sealed class TableNode : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var treeNodes = new ITreeNode[1];
         treeNodes[0] = new IndexCollectionNode(this);
-        return treeNodes;
+        return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
     }
-
+    
     bool ITreeNode.Sortable => false;
 
-    string ITreeNode.Query => $"select\t*\r\nfrom\t{Database.Name}.{Name}";
+    string ITreeNode.Query => $"select\t*\r\nfrom\t{DatabaseNode.Name}.{Name}";
 
     private static string GetScript(
         SQLiteConnection connection,
@@ -51,7 +53,13 @@ where	name	= '{name}'";
 
     private void Script_Click(object sender, EventArgs e)
     {
-        var script = GetScript(Database.Connection, Database.Name, Name);
+        string script;
+        using (var connection = ConnectionFactory.CreateConnection(DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential))
+        {
+            connection.Open();
+            script = GetScript(connection, DatabaseNode.Name, Name);
+        }
+
         var queryForm = (IQueryForm)sender;
         queryForm.ShowText(script);
     }

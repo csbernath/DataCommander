@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Data;
 
@@ -19,7 +21,7 @@ internal sealed class TableCollectionNode : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+    public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var commandText = $@"select	name
 from
@@ -31,20 +33,18 @@ from
 	select	'sqlite_master'
 ) t
 order by name collate nocase";
-        var executor = _databaseNode.Connection.CreateCommandExecutor();
-        var table = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
-        var rows = table.Rows;
-        var count = rows.Count;
-        var nodes = new ITreeNode[count];
 
-        for (var i = 0; i < count; i++)
-        {
-            var row = rows[i];
-            var name = (string) row["name"];
-            nodes[i] = new TableNode(_databaseNode, name);
-        }
-
-        return nodes;
+        var list = await Db.ExecuteReaderAsync(
+            () => ConnectionFactory.CreateConnection(_databaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
+            new ExecuteReaderRequest(commandText),
+            128,
+            dataRecord =>
+            {
+                var name = dataRecord.GetString(0);
+                return (ITreeNode)new TableNode(_databaseNode, name);
+            },
+            cancellationToken);
+        return list;
     }
 
     bool ITreeNode.Sortable => false;
