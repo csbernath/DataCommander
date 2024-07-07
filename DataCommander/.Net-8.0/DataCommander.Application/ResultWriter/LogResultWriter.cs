@@ -26,6 +26,7 @@ internal sealed class LogResultWriter : IResultWriter
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private readonly Action<InfoMessage> _addInfoMessage;
+    private IProvider _provider;
     private int _commandCount;
     private int _tableCount;
     private int _rowCount;
@@ -46,7 +47,11 @@ internal sealed class LogResultWriter : IResultWriter
         _addInfoMessage = addInfoMessage;
     }
 
-    void IResultWriter.Begin(IProvider provider) => _beginTimestamp = Stopwatch.GetTimestamp();
+    void IResultWriter.Begin(IProvider provider)
+    {
+        _provider = provider;
+        _beginTimestamp = Stopwatch.GetTimestamp();
+    }
 
     void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand)
     {
@@ -128,11 +133,17 @@ internal sealed class LogResultWriter : IResultWriter
         Log.Trace($"SchemaTable of table[{_tableCount - 1}], {schemaTable.TableName}:\r\n{schemaTable.ToStringTableString()}");
         
         var dbColumns = schemaTable.Rows.Cast<DataRow>().Select(FoundationDbColumnFactory.Create).ToArray();
-        var declareTableScript = ToDeclareTableScript(schemaTable.TableName, dbColumns);
+
+        if (_provider.Identifier == ProviderIdentifier.SqlServer)
+        {
+            var declareTableScript = ToDeclareTableScript(schemaTable.TableName, dbColumns);
+            message = $"\r\n{declareTableScript.ToLines().ToIndentedString("    ")}";
+            _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, message));
+        }
 
         var dataTransferObjectFields = dbColumns.Select(ToDataTransferObjectField).ToList();
         var dataTransferObject = DataTransferObjectWithPropertiesFactory.Create(schemaTable.TableName, dataTransferObjectFields);
-        message = $"\r\n{declareTableScript.ToLines().ToIndentedString("    ")}\r\n{dataTransferObject.ToIndentedString("    ")}";
+        message = $"\r\n{dataTransferObject.ToIndentedString("    ")}";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, message));
         
         if (_query != null)

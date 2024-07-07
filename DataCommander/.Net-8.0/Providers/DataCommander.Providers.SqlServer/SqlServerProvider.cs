@@ -57,7 +57,7 @@ internal sealed class SqlServerProvider : IProvider
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private static string[] _keyWords;
 
-    string IProvider.Identifier => "SqlServer";
+    string IProvider.Identifier => ProviderIdentifier.SqlServer;
     DbProviderFactory IProvider.DbProviderFactory => SqlClientFactory.Instance;
 
     public string GetConnectionName(Func<IDbConnection> createConnection)
