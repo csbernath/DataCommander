@@ -29,8 +29,10 @@ public sealed class DateTimeField(DateTime value) : IComparable, IConvertible
             format = "yyyy-MM-dd";
         else if (dateTime.Date.Ticks == 0)
             format = "HH:mm:ss.fff";
-        else
+        else if (dateTime.Microsecond == 0)
             format = "yyyy-MM-dd HH:mm:ss.fff";
+        else
+            format = "yyyy-MM-dd HH:mm:ss.ffffff";            
 
         return dateTime.ToString(format);
     }
