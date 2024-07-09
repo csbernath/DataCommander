@@ -32,7 +32,7 @@ public sealed class DateTimeField(DateTime value) : IComparable, IConvertible
         else if (dateTime.Microsecond == 0)
             format = "yyyy-MM-dd HH:mm:ss.fff";
         else
-            format = "yyyy-MM-dd HH:mm:ss.ffffff";            
+            format = "yyyy-MM-dd HH:mm:ss.fffffff";            
 
         return dateTime.ToString(format);
     }
