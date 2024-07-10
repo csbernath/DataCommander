@@ -49,13 +49,16 @@ internal sealed class SqlDataReaderHelper : IDataReaderHelper
             case SqlDbType.Int:
             case SqlDbType.SmallInt:
             case SqlDbType.TinyInt:
-            case SqlDbType.UniqueIdentifier:
-            case SqlDbType.Real: //
+            case SqlDbType.Real:
                 dataFieldReader = new DefaultDataFieldReader(dataRecord, columnOrdinal);
                 break;
 
-            case SqlDbType.Float: //
+            case SqlDbType.Float:
                 dataFieldReader = new DoubleFieldReader(dataRecord, columnOrdinal);
+                break;
+            
+            case SqlDbType.UniqueIdentifier:
+                dataFieldReader = new GuidFieldReader(dataRecord, columnOrdinal);
                 break;
 
             case SqlDbType.Char:
@@ -70,7 +73,6 @@ internal sealed class SqlDataReaderHelper : IDataReaderHelper
                     dataFieldReader = new ShortStringFieldReader(dataRecord, columnOrdinal, providerType);
                 else
                     dataFieldReader = new LongStringFieldReader(dataRecord, columnOrdinal);
-
                 break;
 
             case SqlDbType.Binary:
@@ -97,7 +99,6 @@ internal sealed class SqlDataReaderHelper : IDataReaderHelper
             case SqlDbType.DateTimeOffset:
                 dataFieldReader = new DateTimeOffsetDataFieldReader(dataRecord, columnOrdinal);
                 break;
-
 
             case SqlDbType.Time:
                 dataFieldReader = new DefaultDataFieldReader(dataRecord, columnOrdinal);
