@@ -54,6 +54,8 @@ internal class DataTableEditor : UserControl
         // This call is required by the Windows.Forms Form Designer.
         InitializeComponent();
 
+        _dataGrid.Font = new Font("Microsoft Sans Serif", 7);
+
         // TODO: Add any initialization after the InitForm call
         GarbageMonitor.Default.Add("DataTableEditor", this);
 
