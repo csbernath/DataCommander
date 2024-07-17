@@ -10,7 +10,7 @@ internal class DoubleBufferedDataGridView : DataGridView
         RowHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
 
         // AccessViolationException on ToolTip that faults COMCTL32.dll - .NET 4.0
-        ShowCellToolTips = false;
+        //ShowCellToolTips = false;
     }
 
     public bool PublicDoubleBuffered
