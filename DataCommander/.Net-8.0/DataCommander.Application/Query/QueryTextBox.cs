@@ -366,6 +366,7 @@ public sealed class QueryTextBox : UserControl
                                 break;
                             }
                         }
+
                         break;
 
                     case TokenType.String:
@@ -670,9 +671,9 @@ public sealed class QueryTextBox : UserControl
                 if (uri.Scheme == "file")
                 {
                     path = uri.LocalPath;
-                    DataCommanderApplication.Instance.MainForm.LoadFiles(path.ItemToArray());    
+                    DataCommanderApplication.Instance.MainForm.LoadFiles(path.ItemToArray());
                 }
-            }                    
+            }
             else
             {
                 var startIndex = RichTextBox.SelectionStart;
