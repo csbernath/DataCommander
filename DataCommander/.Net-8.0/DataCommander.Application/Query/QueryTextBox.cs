@@ -381,50 +381,6 @@ public sealed class QueryTextBox : UserControl
                 }
             }
 
-            //MethodProfiler.BeginMethodFraction("NextWordStart");
-
-            //try
-            //{
-            //    int startWord = NextWordStart(text, startIndex);
-
-            //    while (startWord <= endIndex)
-            //    {
-            //        if (stopwatch.ElapsedTicks > maxTicks)
-            //        {
-            //            break;
-            //        }
-
-            //        int endWord = WordEnd(text, startWord);
-            //        int length = endWord - startWord + 1;
-
-            //        if (length == 0)
-            //        {
-            //            break;
-            //        }
-
-            //        string word = text.Substring(startWord, length);
-            //        word = word.ToUpper();
-            //        Color color = Color.Black;
-
-            //        foreach (KeyWordList keyWordList in this.keyWordLists)
-            //        {
-            //            if (Array.BinarySearch(keyWordList.KeyWords, word) >= 0)
-            //            {
-            //                color = keyWordList.Color;
-            //                break;
-            //            }
-            //        }
-
-            //        this.SetColor(startWord, length, color);
-
-            //        startWord = NextWordStart(text, endWord + 1);
-            //    }
-            //}
-            //finally
-            //{
-            //    MethodProfiler.EndMethodFraction();
-            //}
-
             MethodProfiler.BeginMethodFraction("Selection");
 
             try
