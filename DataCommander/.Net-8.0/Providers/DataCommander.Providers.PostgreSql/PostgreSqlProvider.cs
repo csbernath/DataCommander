@@ -348,7 +348,17 @@ order by 1", name.Database);
         }
 
         GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
-        List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
+
+        List<InfoMessage> IProvider.ToInfoMessages(Exception e)
+        {
+            var message = e.ToString();
+
+            return new List<InfoMessage>
+            {
+                InfoMessageFactory.Create(InfoMessageSeverity.Error, null, message)
+            };
+        }
+
         IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder() => new PostgreSqlConnectionStringBuilder();
     }
 }
