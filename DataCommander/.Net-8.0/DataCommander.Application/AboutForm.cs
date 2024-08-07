@@ -46,7 +46,7 @@ This program is freeware and released under the <a href=""https://www.gnu.org/li
 <br/><br/>
 <a href=""https://github.com/csbernath/DataCommander"">GitHub repository</a>
 <br/><br/>
-Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.Net-8.0/README.md"">Foundation (.NET 8.0) Class Library</a>
+Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.Net-8.0/README.md"">Foundation Class Library</a>
 <br/><br/>
 <a href=""applicationdatafile://"">Application Data file</a>
 <br/>

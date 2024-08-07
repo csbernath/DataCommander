@@ -87,7 +87,7 @@ public class MainForm : Form
         //
         InitializeComponent();
 
-        Text = $"Data Commander (.NET {Environment.Version.Major} version)";
+        Text = "Data Commander";
 
         _helpButton.Click += helpButton_Click;
         _mnuAbout.Click += mnuAbout_Click;

@@ -349,6 +349,9 @@ public sealed class QueryTextBox : UserControl
 
             foreach (var token in tokens)
             {
+                if (maxTicks < stopwatch.ElapsedTicks)
+                    break;
+                
                 Color? color = null;
 
                 switch (token.Type)
