@@ -31,6 +31,7 @@ using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Threading;
 using Newtonsoft.Json;
+using StringExtensions = Foundation.Core.StringExtensions;
 
 namespace DataCommander.Application.Query;
 
@@ -1118,7 +1119,8 @@ public sealed partial class QueryForm : Form, IQueryForm
         }
 
         var ticks = Stopwatch.GetTimestamp() - startTimestamp;
-        SetStatusbarPanelText($"{count} item(s) added to Object Explorer in {StopwatchTimeSpan.ToString(ticks, 3)}.");
+        var items = DataCommander.Application.ResultWriter.StringExtensions.SingularOrPlural(count, "item", "items");
+        SetStatusbarPanelText($"{items} added to Object Explorer in {StopwatchTimeSpan.ToString(ticks, 3)}.");
     }
 
     private void AddInfoMessages(IReadOnlyCollection<InfoMessage> infoMessages)
