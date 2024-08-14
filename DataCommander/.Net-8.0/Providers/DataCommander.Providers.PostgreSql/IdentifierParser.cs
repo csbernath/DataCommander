@@ -2,110 +2,109 @@
 using System.IO;
 using System.Text;
 
-namespace DataCommander.Providers.PostgreSql
+namespace DataCommander.Providers.PostgreSql;
+
+internal sealed class IdentifierParser
 {
-    internal sealed class IdentifierParser
+    private readonly TextReader _textReader;
+
+    public IdentifierParser(TextReader textReader)
     {
-        private readonly TextReader _textReader;
+        _textReader = textReader;
+    }
 
-        public IdentifierParser(TextReader textReader)
+    public IEnumerable<string> Parse()
+    {
+        var peekChar = default(char);
+
+        while (true)
         {
-            _textReader = textReader;
-        }
+            var peek = _textReader.Peek();
 
-        public IEnumerable<string> Parse()
-        {
-            var peekChar = default(char);
-
-            while (true)
+            if (peek == -1)
             {
-                var peek = _textReader.Peek();
-
-                if (peek == -1)
-                {
-                    break;
-                }
-
-                peekChar = (char)peek;
-
-                if (peekChar == '.')
-                {
-                    _textReader.Read();
-                }
-                else if (peekChar == '[')
-                {
-                    yield return ReadQuotedIdentifier();
-                }
-                else
-                {
-                    yield return ReadUnquotedIdentifier();
-                }
+                break;
             }
+
+            peekChar = (char)peek;
 
             if (peekChar == '.')
             {
-                yield return null;
+                _textReader.Read();
             }
-        }
-
-        #region Private Methods
-
-        private string ReadQuotedIdentifier()
-        {
-            _textReader.Read();
-            var identifier = new StringBuilder();
-
-            while (true)
+            else if (peekChar == '[')
             {
-                var peek = _textReader.Peek();
-
-                if (peek == -1)
-                    break;
-
-                var peekChar = (char)peek;
-
-                if (peekChar == ']')
-                {
-                    _textReader.Read();
-                    break;
-                }
-                else
-                {
-                    identifier.Append(peekChar);
-                    _textReader.Read();
-                }
+                yield return ReadQuotedIdentifier();
             }
-
-            return identifier.ToString();
-        }
-
-        private string ReadUnquotedIdentifier()
-        {
-            var identifier = new StringBuilder();
-
-            while (true)
+            else
             {
-                var peek = _textReader.Peek();
-
-                if (peek == -1)
-                    break;
-
-                var peekChar = (char)peek;
-
-                if (peekChar == '.')
-                {
-                    break;
-                }
-                else
-                {
-                    identifier.Append(peekChar);
-                    _textReader.Read();
-                }
+                yield return ReadUnquotedIdentifier();
             }
-
-            return identifier.ToString();
         }
 
-        #endregion
+        if (peekChar == '.')
+        {
+            yield return null;
+        }
     }
+
+    #region Private Methods
+
+    private string ReadQuotedIdentifier()
+    {
+        _textReader.Read();
+        var identifier = new StringBuilder();
+
+        while (true)
+        {
+            var peek = _textReader.Peek();
+
+            if (peek == -1)
+                break;
+
+            var peekChar = (char)peek;
+
+            if (peekChar == ']')
+            {
+                _textReader.Read();
+                break;
+            }
+            else
+            {
+                identifier.Append(peekChar);
+                _textReader.Read();
+            }
+        }
+
+        return identifier.ToString();
+    }
+
+    private string ReadUnquotedIdentifier()
+    {
+        var identifier = new StringBuilder();
+
+        while (true)
+        {
+            var peek = _textReader.Peek();
+
+            if (peek == -1)
+                break;
+
+            var peekChar = (char)peek;
+
+            if (peekChar == '.')
+            {
+                break;
+            }
+            else
+            {
+                identifier.Append(peekChar);
+                _textReader.Read();
+            }
+        }
+
+        return identifier.ToString();
+    }
+
+    #endregion
 }

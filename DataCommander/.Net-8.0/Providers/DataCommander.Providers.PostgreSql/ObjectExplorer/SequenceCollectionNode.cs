@@ -3,25 +3,24 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Data;
-using Npgsql;
 
-namespace DataCommander.Providers.PostgreSql.ObjectExplorer
+namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
+
+internal sealed class SequenceCollectionNode : ITreeNode
 {
-    internal sealed class SequenceCollectionNode : ITreeNode
-    {
-        private readonly SchemaNode _schemaNode;
+    private readonly SchemaNode _schemaNode;
 
-        public SequenceCollectionNode(SchemaNode schemaNode)
-        {
+    public SequenceCollectionNode(SchemaNode schemaNode)
+    {
             _schemaNode = schemaNode;
         }
 
-        string ITreeNode.Name => "Sequences";
+    string ITreeNode.Name => "Sequences";
 
-        bool ITreeNode.IsLeaf => false;
+    bool ITreeNode.IsLeaf => false;
 
-        public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
-        {
+    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
+    {
             using (var connection = _schemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection())
             {
                 connection.Open();
@@ -38,8 +37,7 @@ order by sequence_name";
             }
         }
 
-        bool ITreeNode.Sortable => false;
-        string ITreeNode.Query => null;
-        public ContextMenu? GetContextMenu() => null;
-    }
+    bool ITreeNode.Sortable => false;
+    string ITreeNode.Query => null;
+    public ContextMenu? GetContextMenu() => null;
 }

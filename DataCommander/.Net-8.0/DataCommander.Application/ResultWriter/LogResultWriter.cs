@@ -18,7 +18,6 @@ using Foundation.Data.SqlClient.DbQueryBuilding;
 using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
-using Microsoft.Extensions.Primitives;
 
 namespace DataCommander.Application.ResultWriter;
 

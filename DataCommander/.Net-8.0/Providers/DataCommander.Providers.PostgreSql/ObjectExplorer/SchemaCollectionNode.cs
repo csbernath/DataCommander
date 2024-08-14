@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Data;
-using Npgsql;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 

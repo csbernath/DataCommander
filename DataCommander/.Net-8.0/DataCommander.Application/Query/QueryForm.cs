@@ -31,7 +31,6 @@ using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Threading;
 using Newtonsoft.Json;
-using StringExtensions = Foundation.Core.StringExtensions;
 
 namespace DataCommander.Application.Query;
 

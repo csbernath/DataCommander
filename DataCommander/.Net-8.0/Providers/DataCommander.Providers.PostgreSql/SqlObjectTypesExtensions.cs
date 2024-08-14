@@ -1,57 +1,56 @@
 ﻿using System.Collections.Generic;
 using DataCommander.Api;
 
-namespace DataCommander.Providers.PostgreSql
+namespace DataCommander.Providers.PostgreSql;
+
+internal static class SqlObjectTypesExtensions
 {
-    internal static class SqlObjectTypesExtensions
+    public static List<string> ToTableTypes(this SqlObjectTypes sqlObjectTypes)
     {
-        public static List<string> ToTableTypes(this SqlObjectTypes sqlObjectTypes)
+        var list = new List<string>();
+
+        if (sqlObjectTypes.HasFlag(SqlObjectTypes.Table))
         {
-            var list = new List<string>();
-
-            if (sqlObjectTypes.HasFlag(SqlObjectTypes.Table))
-            {
-                list.Add(TableType.BaseTable);
-            }
-
-            if (sqlObjectTypes.HasFlag(SqlObjectTypes.View))
-            {
-                list.Add(TableType.View);
-            }
-
-            //if (sqlObjectTypes.HasFlag(SqlObjectTypes.Function))
-            //{
-            //    list.Add(SqlServerObjectType.ScalarFunction);
-            //    list.Add(SqlServerObjectType.InlineTableValuedFunction);
-            //    list.Add(SqlServerObjectType.TableValuedFunction);
-            //}
-
-            return list;
+            list.Add(TableType.BaseTable);
         }
 
-        public static List<string> ToObjectTypes(this SqlObjectTypes sqlObjectTypes)
+        if (sqlObjectTypes.HasFlag(SqlObjectTypes.View))
         {
-            var list = new List<string>();
-
-            if (sqlObjectTypes.HasFlag(SqlObjectTypes.Table))
-            {
-                list.Add(SqlServerObjectType.UserDefinedTable);
-                list.Add(SqlServerObjectType.SystemTable);
-            }
-
-            if (sqlObjectTypes.HasFlag(SqlObjectTypes.View))
-            {
-                list.Add(SqlServerObjectType.View);
-            }
-
-            if (sqlObjectTypes.HasFlag(SqlObjectTypes.Function))
-            {
-                list.Add(SqlServerObjectType.ScalarFunction);
-                list.Add(SqlServerObjectType.InlineTableValuedFunction);
-                list.Add(SqlServerObjectType.TableValuedFunction);
-            }
-
-            return list;
+            list.Add(TableType.View);
         }
+
+        //if (sqlObjectTypes.HasFlag(SqlObjectTypes.Function))
+        //{
+        //    list.Add(SqlServerObjectType.ScalarFunction);
+        //    list.Add(SqlServerObjectType.InlineTableValuedFunction);
+        //    list.Add(SqlServerObjectType.TableValuedFunction);
+        //}
+
+        return list;
+    }
+
+    public static List<string> ToObjectTypes(this SqlObjectTypes sqlObjectTypes)
+    {
+        var list = new List<string>();
+
+        if (sqlObjectTypes.HasFlag(SqlObjectTypes.Table))
+        {
+            list.Add(SqlServerObjectType.UserDefinedTable);
+            list.Add(SqlServerObjectType.SystemTable);
+        }
+
+        if (sqlObjectTypes.HasFlag(SqlObjectTypes.View))
+        {
+            list.Add(SqlServerObjectType.View);
+        }
+
+        if (sqlObjectTypes.HasFlag(SqlObjectTypes.Function))
+        {
+            list.Add(SqlServerObjectType.ScalarFunction);
+            list.Add(SqlServerObjectType.InlineTableValuedFunction);
+            list.Add(SqlServerObjectType.TableValuedFunction);
+        }
+
+        return list;
     }
 }
