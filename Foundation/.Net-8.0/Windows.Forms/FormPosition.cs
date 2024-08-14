@@ -5,14 +5,8 @@ using Foundation.Configuration;
 
 namespace Foundation.Windows.Forms;
 
-/// <exclude/>
 public static class FormPosition
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="form"></param>
-    /// <param name="applicationData"></param>
     public static void Save(
         Form form,
         ApplicationData applicationData)
@@ -22,10 +16,8 @@ public static class FormPosition
         var node = applicationData.CreateNode(nodeName);
         var attributes = node.Attributes;
 
-        if (form.WindowState == FormWindowState.Minimized)
-        {
+        if (form.WindowState == FormWindowState.Minimized) 
             form.WindowState = FormWindowState.Normal;
-        }
 
         attributes.SetAttributeValue("WindowState", form.WindowState);
         attributes.SetAttributeValue("Left", form.Left);
@@ -34,11 +26,6 @@ public static class FormPosition
         attributes.SetAttributeValue("Height", form.ClientSize.Height);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="applicationData"></param>
-    /// <param name="form"></param>
     public static void Load(ApplicationData applicationData, Form form)
     {
         Assert.IsTrue(applicationData != null);

@@ -3,26 +3,15 @@ using Microsoft.Data.SqlClient;
 
 namespace Foundation.Data.SqlClient;
 
-/// <summary>
-/// 
-/// </summary>
 public sealed class SqlSequence
 {
     private readonly int _id;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="id"></param>
     public SqlSequence(int id)
     {
         _id = id;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="connection"></param>
     public static void CreateSchema(IDbConnection connection)
     {
         var commandText = @"create table dbo.Sequence
@@ -72,11 +61,6 @@ end";
         executor.ExecuteNonQuery(new CreateCommandRequest(commandText));
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <returns></returns>
     public int GetNextSequenceValue(IDbConnection connection)
     {
         var command = connection.CreateCommand();

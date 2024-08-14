@@ -53,30 +53,16 @@ public class MappedDataReader : DbDataReader
         throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
     public override IEnumerator GetEnumerator()
     {
         throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="ordinal"></param>
-    /// <returns></returns>
     public override Type GetFieldType(int ordinal)
     {
         return _dataReader.GetFieldType(ordinal);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="ordinal"></param>
-    /// <returns></returns>
     public override float GetFloat(int ordinal)
     {
         throw new NotImplementedException();

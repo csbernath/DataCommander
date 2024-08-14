@@ -8,11 +8,6 @@ public class StringTableColumnCollection : IList<StringTableColumn>
 {
     private readonly List<StringTableColumn> _columns = [];
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="item"></param>
-    /// <returns></returns>
     public int IndexOf(StringTableColumn item)
     {
         return _columns.IndexOf(item);
@@ -28,11 +23,6 @@ public class StringTableColumnCollection : IList<StringTableColumn>
         throw new Exception("The method or operation is not implemented.");
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="index"></param>
-    /// <returns></returns>
     public StringTableColumn this[int index]
     {
         get => _columns[index];
@@ -57,11 +47,6 @@ public class StringTableColumnCollection : IList<StringTableColumn>
         throw new Exception("The method or operation is not implemented.");
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="item"></param>
-    /// <returns></returns>
     public bool Contains(StringTableColumn item)
     {
         return _columns.Contains(item);
