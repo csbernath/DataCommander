@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using DataCommander.Api.FieldReaders;
 
 namespace DataCommander.Providers.SqlServer.FieldReader;
@@ -14,5 +15,14 @@ public class GuidFieldReader : IDataFieldReader
         _columnOrdinal = columnOrdinal;
     }
 
-    public object Value => _dataRecord.GetGuid(_columnOrdinal).ToString().ToUpper();
+    public object Value
+    {
+        get
+        {
+            object value = !_dataRecord.IsDBNull(_columnOrdinal)
+                ? _dataRecord.GetGuid(_columnOrdinal).ToString().ToUpper()
+                : DBNull.Value;
+            return value;
+        }
+    }
 }
