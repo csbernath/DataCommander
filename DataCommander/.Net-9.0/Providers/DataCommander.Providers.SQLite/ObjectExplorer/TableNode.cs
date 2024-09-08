@@ -11,7 +11,7 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer;
 
 internal sealed class TableNode : ITreeNode
 {
-    public TableNode(DatabaseNode databaseNode, string name)
+    public TableNode(DatabaseNode databaseNode, string? name)
     {
         DatabaseNode = databaseNode;
         Name = name;
@@ -21,7 +21,7 @@ internal sealed class TableNode : ITreeNode
 
     #region ITreeNode Members
 
-    public string Name { get; }
+    public string? Name { get; }
 
     bool ITreeNode.IsLeaf => false;
 
@@ -38,8 +38,8 @@ internal sealed class TableNode : ITreeNode
 
     private static string GetScript(
         SQLiteConnection connection,
-        string databaseName,
-        string name)
+        string? databaseName,
+        string? name)
     {
         var commandText = $@"
 select  sql

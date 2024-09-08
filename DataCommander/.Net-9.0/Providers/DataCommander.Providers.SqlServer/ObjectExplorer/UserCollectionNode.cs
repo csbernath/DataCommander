@@ -9,7 +9,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class UserCollectionNode(DatabaseNode database) : ITreeNode
 {
-    public string Name => "Users";
+    public string? Name => "Users";
     public bool IsLeaf => false;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

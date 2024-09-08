@@ -7,7 +7,7 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
 internal sealed class SchemaNode : ITreeNode
 {
-    public SchemaNode(SchemaCollectionNode schemaCollectionNode, string name)
+    public SchemaNode(SchemaCollectionNode schemaCollectionNode, string? name)
     {
         SchemaCollectionNode = schemaCollectionNode;
         Name = name;
@@ -15,7 +15,7 @@ internal sealed class SchemaNode : ITreeNode
 
     public SchemaCollectionNode SchemaCollectionNode { get; }
 
-    public string Name { get; }
+    public string? Name { get; }
 
     bool ITreeNode.IsLeaf => false;
 

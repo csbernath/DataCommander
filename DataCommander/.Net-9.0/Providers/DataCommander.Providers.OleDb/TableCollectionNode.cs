@@ -9,7 +9,7 @@ namespace DataCommander.Providers.OleDb;
 
 internal sealed class TableCollectionNode(SchemaNode schema) : ITreeNode
 {
-    public string Name => "Tables";
+    public string? Name => "Tables";
 
     public bool IsLeaf => false;
 

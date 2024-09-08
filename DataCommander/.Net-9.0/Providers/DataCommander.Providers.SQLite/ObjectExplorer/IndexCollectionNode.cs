@@ -17,7 +17,7 @@ internal sealed class IndexCollectionNode : ITreeNode
         _tableNode = tableNode;
     }
 
-    string ITreeNode.Name => "Indexes";
+    string? ITreeNode.Name => "Indexes";
     bool ITreeNode.IsLeaf => false;
 
     public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)

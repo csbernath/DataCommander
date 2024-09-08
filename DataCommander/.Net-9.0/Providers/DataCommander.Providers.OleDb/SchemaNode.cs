@@ -10,7 +10,7 @@ namespace DataCommander.Providers.OleDb;
 /// </summary>
 sealed class SchemaNode(CatalogNode catalog, string name) : ITreeNode
 {
-    string ITreeNode.Name
+    string? ITreeNode.Name
     {
         get
         {

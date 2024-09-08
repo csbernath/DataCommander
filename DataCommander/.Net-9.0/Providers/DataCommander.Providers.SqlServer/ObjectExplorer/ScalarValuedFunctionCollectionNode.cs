@@ -9,7 +9,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class ScalarValuedFunctionCollectionNode(DatabaseNode database) : ITreeNode
 {
-    public string Name => "Scalar-valued Functions";
+    public string? Name => "Scalar-valued Functions";
     public bool IsLeaf => false;
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

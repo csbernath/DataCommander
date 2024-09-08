@@ -32,29 +32,19 @@ internal sealed class TableNode(DatabaseNode databaseNode, string? owner, string
 
     public int Id => id;
 
-    public string Name
+    public string? Name
     {
         get
         {
-            string temporalType;
-            switch (type)
+            var temporalType = type switch
             {
-                case TemporalType.NonTemporalTable:
-                    temporalType = null;
-                    break;
-                case TemporalType.HistoryTable:
-                    temporalType = "History";
-                    break;
-                case TemporalType.SystemVersionedTemporalTable:
-                    temporalType = "System-Versioned";
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
+                TemporalType.NonTemporalTable => null,
+                TemporalType.HistoryTable => "History",
+                TemporalType.SystemVersionedTemporalTable => "System-Versioned",
+                _ => throw new ArgumentOutOfRangeException(),
+            };
             if (temporalType != null)
                 temporalType = $" ({temporalType})";
-
             return $"{owner}.{name}{temporalType}";
         }
     }
@@ -77,7 +67,7 @@ where
         where object_id = {id}
     )";
             string? historyTableName = null;
-            int historyTableId = 0;
+            var historyTableId = 0;
             var request = new ExecuteReaderRequest(commandText);
             await Db.ExecuteReaderAsync(
                 DatabaseNode.Databases.Server.CreateConnection,
@@ -92,13 +82,12 @@ where
             treeNodes.Add(new TableNode(DatabaseNode, owner, historyTableName, historyTableId, TemporalType.HistoryTable));
         }
 
-        treeNodes.AddRange(new ITreeNode[]
-        {
+        treeNodes.AddRange([
             new ColumnCollectionNode(DatabaseNode, Id),
             new KeyCollectionNode(DatabaseNode, Id),
             new TriggerCollectionNode(DatabaseNode, Id),
             new IndexCollectionNode(DatabaseNode, Id)
-        });
+        ]);
 
         return treeNodes;
     }
@@ -110,13 +99,9 @@ where
         get
         {
             var name1 = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
-            string text;
-            using (var connection = DatabaseNode.Databases.Server.CreateConnection())
-            {
-                connection.Open();
-                text = GetSelectStatement(connection, name1);
-            }
-
+            using var connection = DatabaseNode.Databases.Server.CreateConnection();
+            connection.Open();
+            var text = GetSelectStatement(connection, name1);
             return text;
         }
     }
@@ -463,7 +448,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
             stringBuilder.Append("declare");
 
             var variableName = column.ColumnName;
-            variableName = char.ToLower(variableName[0]) + variableName.Substring(1);
+            variableName = char.ToLower(variableName[0]) + variableName[1..];
             var typeName = column.TypeName;
 
             switch (typeName)

@@ -9,9 +9,9 @@ using Foundation.Collections.ReadOnly;
 
 namespace DataCommander.Providers.OleDb;
 
-sealed class TableNode(SchemaNode schema, string name) : ITreeNode
+sealed class TableNode(SchemaNode schema, string? name) : ITreeNode
 {
-    string ITreeNode.Name
+    public string? Name
     {
         get
         {
@@ -41,17 +41,9 @@ sealed class TableNode(SchemaNode schema, string name) : ITreeNode
 
             if (name != null)
             {
-                string name2;
-
-                if (name.IndexOf(' ') >= 0)
-                {
-                    name2 = "[" + name + "]";
-                }
-                else
-                {
-                    name2 = name;
-                }
-
+                var name2 = name.IndexOf(' ') >= 0
+                    ? "[" + name + "]"
+                    : name;
                 query = "select * from " + name2;
             }
             else
@@ -61,7 +53,15 @@ sealed class TableNode(SchemaNode schema, string name) : ITreeNode
         }
     }
 
-    void Columns_Click(object sender, EventArgs e)
+    public ContextMenu? GetContextMenu()
+    {
+        var menuItem = new MenuItem("Columns", Columns_Click, ArraySegment<MenuItem>.Empty);
+        var items = new[] { menuItem }.ToReadOnlyCollection();
+        var contextMenu = new ContextMenu(items);
+        return contextMenu;
+    }
+
+    private void Columns_Click(object sender, EventArgs e)
     {
         var restrictions = new object[] { schema.Catalog.Name, schema.Name, name };
         var dataTable = schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, restrictions);
@@ -70,13 +70,5 @@ sealed class TableNode(SchemaNode schema, string name) : ITreeNode
 
         var queryForm = (IQueryForm)sender;
         queryForm.ShowDataSet(dataSet);
-    }
-
-    public ContextMenu? GetContextMenu()
-    {
-        var menuItem = new MenuItem("Columns", Columns_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        var items = new[] { menuItem }.ToReadOnlyCollection();
-        var contextMenu = new ContextMenu(items);
-        return contextMenu;
     }
 }

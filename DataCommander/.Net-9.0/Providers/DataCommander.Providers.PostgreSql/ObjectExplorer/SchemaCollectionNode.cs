@@ -12,7 +12,7 @@ internal sealed class SchemaCollectionNode : ITreeNode
 
     public ObjectExplorer ObjectExplorer { get; }
     bool ITreeNode.IsLeaf => false;
-    string ITreeNode.Name => "Schemas";
+    string? ITreeNode.Name => "Schemas";
     string ITreeNode.Query => null;
     public ContextMenu? GetContextMenu() => null;
 

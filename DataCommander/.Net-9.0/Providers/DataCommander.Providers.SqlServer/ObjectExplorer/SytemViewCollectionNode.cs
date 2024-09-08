@@ -10,7 +10,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class SystemViewCollectionNode(DatabaseNode databaseNode) : ITreeNode
 {
-    public string Name => "System Views";
+    public string? Name => "System Views";
     public bool IsLeaf => false;
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

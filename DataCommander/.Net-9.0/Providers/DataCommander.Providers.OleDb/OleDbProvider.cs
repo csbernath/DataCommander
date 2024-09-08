@@ -250,7 +250,7 @@ internal sealed class OleDbProvider : IProvider
     List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
     public string GetExceptionMessage(Exception e) => e.ToString();
 
-    public string GetConnectionName(Func<IDbConnection> createConnection)
+    public string? GetConnectionName(Func<IDbConnection> createConnection)
     {
         return null;
     }

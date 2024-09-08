@@ -17,7 +17,7 @@ internal sealed class TableCollectionNode : ITreeNode
 
     #region ITreeNode Members
 
-    string ITreeNode.Name => "Tables";
+    string? ITreeNode.Name => "Tables";
 
     bool ITreeNode.IsLeaf => false;
 

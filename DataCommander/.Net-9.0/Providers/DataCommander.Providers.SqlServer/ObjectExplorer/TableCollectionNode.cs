@@ -12,7 +12,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
 {
     public DatabaseNode DatabaseNode { get; } = databaseNode;
-    public string Name => "Tables";
+    public string? Name => "Tables";
     public bool IsLeaf => false;
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

@@ -6,12 +6,9 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.OleDb;
 
-/// <summary>
-/// Summary description for CatalogsNode.
-/// </summary>
-class CatalogsNode(OleDbConnection connection) : ITreeNode
+internal class CatalogsNode(OleDbConnection connection) : ITreeNode
 {
-    public string Name => "Catalogs";
+    public string? Name => "Catalogs";
 
     public bool IsLeaf => false;
 

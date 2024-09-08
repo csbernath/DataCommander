@@ -10,7 +10,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class IndexCollectionNode(DatabaseNode databaseNode, int id) : ITreeNode
 {
-    public string Name => "Indexes";
+    public string? Name => "Indexes";
     public bool IsLeaf => false;
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

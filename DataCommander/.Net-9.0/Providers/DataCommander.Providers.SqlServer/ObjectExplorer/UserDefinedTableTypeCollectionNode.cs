@@ -9,7 +9,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class UserDefinedTableTypeCollectionNode(DatabaseNode database) : ITreeNode
 {
-    string ITreeNode.Name => "User-Defined Table Types";
+    string? ITreeNode.Name => "User-Defined Table Types";
     bool ITreeNode.IsLeaf => false;
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

@@ -5,9 +5,9 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class RoleNode(DatabaseNode database, string name) : ITreeNode
+internal sealed class RoleNode(DatabaseNode database, string? name) : ITreeNode
 {
-    public string Name { get; } = name;
+    public string? Name { get; } = name;
     public bool IsLeaf => true;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => null;

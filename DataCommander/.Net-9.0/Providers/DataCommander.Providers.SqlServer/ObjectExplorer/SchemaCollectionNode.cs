@@ -10,7 +10,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class SchemaCollectionNode(DatabaseNode database) : ITreeNode
 {
-    public string Name => "Schemas";
+    public string? Name => "Schemas";
     public bool IsLeaf => false;
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

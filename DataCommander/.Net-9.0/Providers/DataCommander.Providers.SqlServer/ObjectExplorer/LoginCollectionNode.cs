@@ -18,7 +18,7 @@ internal sealed class LoginCollectionNode : ITreeNode
         _server = server;
     }
 
-    string ITreeNode.Name => "Logins";
+    string? ITreeNode.Name => "Logins";
     bool ITreeNode.IsLeaf => false;
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

@@ -6,7 +6,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal static class ConnectionNameProvider
 {
-    public static string GetConnectionName(Func<SqlConnection> createConnection)
+    public static string? GetConnectionName(Func<SqlConnection> createConnection)
     {
         string dataSource;
         string? serverVersion;

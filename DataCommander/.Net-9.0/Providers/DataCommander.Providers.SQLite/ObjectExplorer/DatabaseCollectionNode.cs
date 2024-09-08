@@ -20,7 +20,7 @@ internal sealed class DatabaseCollectionNode : ITreeNode
 
     #region ITreeNode Members
 
-    string ITreeNode.Name => "Databases";
+    string? ITreeNode.Name => "Databases";
 
     bool ITreeNode.IsLeaf => false;
 

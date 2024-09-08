@@ -22,7 +22,7 @@ internal sealed class ServerNode : ITreeNode
 
     public SqlConnection CreateConnection() => ConnectionFactory.CreateConnection(ConnectionStringAndCredential);
 
-    string ITreeNode.Name => ConnectionNameProvider.GetConnectionName(CreateConnection);
+    string? ITreeNode.Name => ConnectionNameProvider.GetConnectionName(CreateConnection);
 
     bool ITreeNode.IsLeaf => false;
 

@@ -9,7 +9,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class RoleCollectionNode(DatabaseNode database) : ITreeNode
 {
-    public string Name => "Roles";
+    public string? Name => "Roles";
     public bool IsLeaf => false;
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

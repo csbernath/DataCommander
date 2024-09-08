@@ -10,7 +10,7 @@ internal sealed class SystemTableCollectionNode(DatabaseNode databaseNode) : ITr
 {
     public DatabaseNode DatabaseNode { get; } = databaseNode;
 
-    string ITreeNode.Name => "System Tables";
+    string? ITreeNode.Name => "System Tables";
 
     bool ITreeNode.IsLeaf => false;
 

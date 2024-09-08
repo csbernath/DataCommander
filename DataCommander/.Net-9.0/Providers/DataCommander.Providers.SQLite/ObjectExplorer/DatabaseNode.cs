@@ -9,7 +9,7 @@ sealed class DatabaseNode : ITreeNode
 {
     private readonly DatabaseCollectionNode _databaseCollectionNode;
 
-    public DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string name)
+    public DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string? name)
     {
         _databaseCollectionNode = databaseCollectionNode;
         Name = name;
@@ -18,7 +18,7 @@ sealed class DatabaseNode : ITreeNode
     public DatabaseCollectionNode DatabaseCollectionNode => _databaseCollectionNode;
 
     #region ITreeNode Members
-    public string Name { get; }
+    public string? Name { get; }
 
     bool ITreeNode.IsLeaf => false;
 

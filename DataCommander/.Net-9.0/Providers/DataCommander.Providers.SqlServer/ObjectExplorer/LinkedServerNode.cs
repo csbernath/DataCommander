@@ -9,7 +9,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class LinkedServerNode : ITreeNode
 {
-    public LinkedServerNode(LinkedServerCollectionNode linkedServers, string name)
+    public LinkedServerNode(LinkedServerCollectionNode linkedServers, string? name)
     {
         ArgumentNullException.ThrowIfNull(linkedServers);
         LinkedServers = linkedServers;
@@ -17,8 +17,8 @@ internal sealed class LinkedServerNode : ITreeNode
     }
 
     public LinkedServerCollectionNode LinkedServers { get; }
-    public string Name { get; }
-    string ITreeNode.Name => Name;
+    public string? Name { get; }
+    string? ITreeNode.Name => Name;
     bool ITreeNode.IsLeaf => false;
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>(new LinkedServerCatalogCollectionNode(this).ItemAsEnumerable());
     bool ITreeNode.Sortable => false;

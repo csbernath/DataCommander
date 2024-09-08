@@ -29,7 +29,7 @@ internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : 
         return new ColumnNode(id, columnName, systemTypeId, maxLength, precision, scale, isNullable, isComputed, userTypeName);
     }
 
-    string ITreeNode.Name => "Columns";
+    string? ITreeNode.Name => "Columns";
 
     bool ITreeNode.IsLeaf => false;
 

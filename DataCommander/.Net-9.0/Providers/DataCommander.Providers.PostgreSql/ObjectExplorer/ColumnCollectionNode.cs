@@ -16,7 +16,7 @@ internal sealed class ColumnCollectionNode : ITreeNode
         _tableNode = tableNode;
     }
 
-    string ITreeNode.Name => "Columns";
+    string? ITreeNode.Name => "Columns";
 
     bool ITreeNode.IsLeaf => false;
 

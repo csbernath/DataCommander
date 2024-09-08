@@ -12,7 +12,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class StoredProcedureNode(DatabaseNode database, string owner, string name) : ITreeNode
 {
-    public string Name => owner + '.' + name;
+    public string? Name => owner + '.' + name;
     public bool IsLeaf => true;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

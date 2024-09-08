@@ -18,7 +18,7 @@ internal sealed class LinkedServerCollectionNode : ITreeNode
 
     public ServerNode Server { get; }
 
-    string ITreeNode.Name => "Linked Servers";
+    string? ITreeNode.Name => "Linked Servers";
 
     bool ITreeNode.IsLeaf => false;
 

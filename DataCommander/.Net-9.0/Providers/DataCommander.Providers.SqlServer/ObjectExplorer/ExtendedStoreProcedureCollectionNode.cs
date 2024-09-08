@@ -9,7 +9,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class ExtendedStoreProcedureCollectionNode(DatabaseNode database) : ITreeNode
 {
-    string ITreeNode.Name => "Extended Stored Procedures";
+    string? ITreeNode.Name => "Extended Stored Procedures";
     bool ITreeNode.IsLeaf => false;
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;

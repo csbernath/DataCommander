@@ -18,7 +18,7 @@ internal sealed class SystemDatabaseCollectionNode : ITreeNode
         _databaseCollectionNode = databaseCollectionNode;
     }
 
-    string ITreeNode.Name => "System Databases";
+    string? ITreeNode.Name => "System Databases";
 
     bool ITreeNode.IsLeaf => false;
 

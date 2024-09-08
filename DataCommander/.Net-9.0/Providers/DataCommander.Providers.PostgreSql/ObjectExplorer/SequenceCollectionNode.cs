@@ -15,7 +15,7 @@ internal sealed class SequenceCollectionNode : ITreeNode
             _schemaNode = schemaNode;
         }
 
-    string ITreeNode.Name => "Sequences";
+    string? ITreeNode.Name => "Sequences";
 
     bool ITreeNode.IsLeaf => false;
 

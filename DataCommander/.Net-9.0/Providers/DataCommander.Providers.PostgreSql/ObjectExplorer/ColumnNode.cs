@@ -18,7 +18,7 @@ internal sealed class ColumnNode : ITreeNode
         _dataType = dataType;
     }
 
-    string ITreeNode.Name => $"{_name} {_dataType}";
+    string? ITreeNode.Name => $"{_name} {_dataType}";
 
     bool ITreeNode.IsLeaf => true;
 

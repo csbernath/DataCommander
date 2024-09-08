@@ -8,15 +8,15 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class LinkedServerCatalogNode : ITreeNode
 {
-    private readonly string _name;
+    private readonly string? _name;
 
-    public LinkedServerCatalogNode(LinkedServerNode linkedServer, string name)
+    public LinkedServerCatalogNode(LinkedServerNode linkedServer, string? name)
     {
         ArgumentNullException.ThrowIfNull(linkedServer);
         _name = name;
     }
 
-    string ITreeNode.Name => _name;
+    string? ITreeNode.Name => _name;
 
     bool ITreeNode.IsLeaf => true;
 

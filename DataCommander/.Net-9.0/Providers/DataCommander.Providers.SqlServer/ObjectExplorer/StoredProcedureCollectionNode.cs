@@ -8,7 +8,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class StoredProcedureCollectionNode(DatabaseNode database, bool isMsShipped) : ITreeNode
 {
-    public string Name => isMsShipped
+    public string? Name => isMsShipped
         ? "System Stored Procedures"
         : "Stored Procedures";
 

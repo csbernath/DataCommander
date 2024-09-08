@@ -11,7 +11,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class TriggerCollectionNode(DatabaseNode databaseNode, int id) : ITreeNode
 {
-    public string Name => "Triggers";
+    public string? Name => "Triggers";
     public bool IsLeaf => false;
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

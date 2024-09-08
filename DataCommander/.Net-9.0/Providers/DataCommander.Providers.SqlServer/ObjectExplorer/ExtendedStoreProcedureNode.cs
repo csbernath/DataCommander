@@ -10,7 +10,7 @@ internal sealed class ExtendedStoreProcedureNode(DatabaseNode database, string s
 {
     private readonly DatabaseNode _database = database;
 
-    string ITreeNode.Name => $"{schema}.{name}";
+    string? ITreeNode.Name => $"{schema}.{name}";
     bool ITreeNode.IsLeaf => true;
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;

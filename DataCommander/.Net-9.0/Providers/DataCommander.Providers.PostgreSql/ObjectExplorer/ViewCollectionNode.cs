@@ -15,7 +15,7 @@ internal sealed class ViewCollectionNode : ITreeNode
         _schemaNode = schemaNode;
     }
 
-    string ITreeNode.Name => "Views";
+    string? ITreeNode.Name => "Views";
 
     bool ITreeNode.IsLeaf => false;
 

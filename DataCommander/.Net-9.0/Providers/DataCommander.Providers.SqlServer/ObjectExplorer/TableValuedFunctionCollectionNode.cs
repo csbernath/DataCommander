@@ -9,7 +9,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class TableValuedFunctionCollectionNode(DatabaseNode database) : ITreeNode
 {
-    public string Name => "Table-valued Functions";
+    public string? Name => "Table-valued Functions";
     public bool IsLeaf => false;
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

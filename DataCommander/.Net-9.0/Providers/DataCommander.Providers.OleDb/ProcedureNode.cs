@@ -7,7 +7,7 @@ namespace DataCommander.Providers.OleDb;
 
 internal sealed class ProcedureNode(string name) : ITreeNode
 {
-    public string Name
+    public string? Name
     {
         get
         {

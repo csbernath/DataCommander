@@ -33,7 +33,7 @@ internal sealed class ColumnNode(
         set => _isForeignKey = value;
     }
 
-    string ITreeNode.Name
+    string? ITreeNode.Name
     {
         get
         {

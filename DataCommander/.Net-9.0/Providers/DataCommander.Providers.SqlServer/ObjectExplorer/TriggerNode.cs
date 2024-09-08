@@ -9,9 +9,9 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class TriggerNode(DatabaseNode databaseNode, int id, string name) : ITreeNode
+internal sealed class TriggerNode(DatabaseNode databaseNode, int id, string? name) : ITreeNode
 {
-    public string Name { get; } = name;
+    public string? Name { get; } = name;
     public bool IsLeaf => true;
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => null;
     public bool Sortable => false;

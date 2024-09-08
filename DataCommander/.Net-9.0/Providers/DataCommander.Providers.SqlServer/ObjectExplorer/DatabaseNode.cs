@@ -19,7 +19,7 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
 
     public string? Name => name;
 
-    string ITreeNode.Name
+    string? ITreeNode.Name
     {
         get
         {

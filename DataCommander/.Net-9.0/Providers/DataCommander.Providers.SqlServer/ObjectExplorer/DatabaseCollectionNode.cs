@@ -19,7 +19,7 @@ internal sealed class DatabaseCollectionNode : ITreeNode
 
     public ServerNode Server { get; }
 
-    string ITreeNode.Name => "Databases";
+    string? ITreeNode.Name => "Databases";
 
     bool ITreeNode.IsLeaf => false;
 

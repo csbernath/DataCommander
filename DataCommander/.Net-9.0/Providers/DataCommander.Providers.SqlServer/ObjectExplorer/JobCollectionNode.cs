@@ -17,7 +17,7 @@ internal sealed class JobCollectionNode : ITreeNode
 
     public ServerNode Server { get; }
 
-    string ITreeNode.Name => "Jobs";
+    string? ITreeNode.Name => "Jobs";
     bool ITreeNode.IsLeaf => false;
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

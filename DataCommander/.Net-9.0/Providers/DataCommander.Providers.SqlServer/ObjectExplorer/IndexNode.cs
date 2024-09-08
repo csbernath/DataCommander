@@ -13,7 +13,7 @@ internal sealed class IndexNode(DatabaseNode databaseNode, int parentId, int id,
     private readonly int _id = id;
     private readonly int _parentId = parentId;
 
-    public string Name
+    public string? Name
     {
         get
         {

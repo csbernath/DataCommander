@@ -15,7 +15,7 @@ internal sealed class FunctionNode(
     string xtype)
     : ITreeNode
 {
-    public string Name => $"{owner}.{name}";
+    public string? Name => $"{owner}.{name}";
 
     public bool IsLeaf => true;
 

@@ -7,7 +7,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class ProgrammabilityNode(DatabaseNode database) : ITreeNode
 {
-    string ITreeNode.Name => "Programmability";
+    string? ITreeNode.Name => "Programmability";
     bool ITreeNode.IsLeaf => false;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

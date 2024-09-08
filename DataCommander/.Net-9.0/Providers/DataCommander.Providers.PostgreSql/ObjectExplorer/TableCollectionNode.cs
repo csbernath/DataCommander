@@ -15,7 +15,7 @@ internal sealed class TableCollectionNode : ITreeNode
 
     public SchemaNode SchemaNode { get; }
 
-    string ITreeNode.Name => "Tables";
+    string? ITreeNode.Name => "Tables";
 
     bool ITreeNode.IsLeaf => false;
 

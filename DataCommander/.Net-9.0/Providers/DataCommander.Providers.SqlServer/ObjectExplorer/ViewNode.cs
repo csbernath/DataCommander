@@ -11,7 +11,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 internal sealed class ViewNode(DatabaseNode database, int id, string? schema, string? name)
     : ITreeNode
 {
-    public string Name => $"{schema}.{name}";
+    public string? Name => $"{schema}.{name}";
     public bool IsLeaf => false;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

@@ -13,9 +13,9 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 internal sealed class JobNode : ITreeNode
 {
     private readonly JobCollectionNode _jobs;
-    private readonly string _name;
+    private readonly string? _name;
 
-    public JobNode(JobCollectionNode jobs, string name)
+    public JobNode(JobCollectionNode jobs, string? name)
     {
         ArgumentNullException.ThrowIfNull(jobs);
 
@@ -23,7 +23,7 @@ internal sealed class JobNode : ITreeNode
         _name = name;
     }
 
-    string ITreeNode.Name => _name;
+    string? ITreeNode.Name => _name;
     bool ITreeNode.IsLeaf => true;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => throw new NotSupportedException();

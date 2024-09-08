@@ -8,6 +8,9 @@
     <Compile Update="CancelableOperationForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Connection\ConnectionListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Connection\ConnectionStringBuilderForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -8,14 +8,14 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal class KeyNode : ITreeNode
 {
-    private readonly string _name;
+    private readonly string? _name;
 
-    public KeyNode(DatabaseNode databaseNode, int id, string name)
+    public KeyNode(DatabaseNode databaseNode, int id, string? name)
     {
         _name = name;
     }
 
-    public string Name => _name;
+    public string? Name => _name;
     public bool IsLeaf => true;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>

@@ -28,7 +28,7 @@ internal sealed class PostgreSqlProvider : IProvider
     void IProvider.ClearCompletionCache() => throw new NotImplementedException();
     string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
 
-    public string GetConnectionName(Func<IDbConnection> createConnection)
+    public string? GetConnectionName(Func<IDbConnection> createConnection)
     {
         return null;
     }

@@ -6,7 +6,7 @@ namespace DataCommander.Api;
 
 public interface ITreeNode
 {
-    string Name { get; }
+    string? Name { get; }
     bool IsLeaf { get; }
     Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken);
     bool Sortable { get; }

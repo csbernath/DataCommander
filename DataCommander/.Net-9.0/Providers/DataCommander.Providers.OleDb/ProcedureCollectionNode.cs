@@ -8,7 +8,7 @@ namespace DataCommander.Providers.OleDb;
 
 internal sealed class ProcedureCollectionNode(SchemaNode schema) : ITreeNode
 {
-    public string Name => "Procedures";
+    public string? Name => "Procedures";
 
     public bool IsLeaf => false;
 

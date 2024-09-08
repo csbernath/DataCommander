@@ -17,7 +17,7 @@ internal sealed class ServerObjectCollectionNode : ITreeNode
         _server = serverNode;
     }
 
-    string ITreeNode.Name => "Server Objects";
+    string? ITreeNode.Name => "Server Objects";
 
     bool ITreeNode.IsLeaf => false;
 

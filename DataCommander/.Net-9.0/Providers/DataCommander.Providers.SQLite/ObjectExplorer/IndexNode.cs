@@ -9,9 +9,9 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer;
 internal sealed class IndexNode : ITreeNode
 {
     private readonly TableNode _tableNode;
-    private readonly string _name;
+    private readonly string? _name;
 
-    public IndexNode(TableNode tableNode, string name)
+    public IndexNode(TableNode tableNode, string? name)
     {
         _tableNode = tableNode;
         _name = name;
@@ -19,7 +19,7 @@ internal sealed class IndexNode : ITreeNode
 
     #region ITreeNode Members
 
-    string ITreeNode.Name => _name;
+    string? ITreeNode.Name => _name;
 
     bool ITreeNode.IsLeaf => true;
 

@@ -13,7 +13,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 internal sealed class UserDefinedTableTypeNode(DatabaseNode database, int id, string schema, string name)
     : ITreeNode
 {
-    string ITreeNode.Name => $"{schema}.{name}";
+    string? ITreeNode.Name => $"{schema}.{name}";
     bool ITreeNode.IsLeaf => false;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

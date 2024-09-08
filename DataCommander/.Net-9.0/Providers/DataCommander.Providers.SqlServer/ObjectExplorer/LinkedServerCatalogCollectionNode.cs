@@ -18,7 +18,7 @@ internal sealed class LinkedServerCatalogCollectionNode : ITreeNode
         _linkedServer = linkedServer;
     }
 
-    string ITreeNode.Name => "Catalogs";
+    string? ITreeNode.Name => "Catalogs";
     bool ITreeNode.IsLeaf => false;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

@@ -10,7 +10,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal class KeyCollectionNode(DatabaseNode databaseNode, int id) : ITreeNode
 {
-    public string Name => "Keys";
+    public string? Name => "Keys";
     public bool IsLeaf => false;
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

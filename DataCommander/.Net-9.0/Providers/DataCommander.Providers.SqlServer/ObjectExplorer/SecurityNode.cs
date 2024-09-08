@@ -17,7 +17,7 @@ internal sealed class SecurityNode : ITreeNode
         _server = serverNode;
     }
 
-    string ITreeNode.Name => "Security";
+    string? ITreeNode.Name => "Security";
 
     bool ITreeNode.IsLeaf => false;
 
