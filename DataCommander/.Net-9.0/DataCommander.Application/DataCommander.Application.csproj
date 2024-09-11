@@ -6,6 +6,7 @@
     <Company>Csaba Bernáth</Company>
     <LangVersion>13</LangVersion>
     <Nullable>enable</Nullable>
+    <NoWarn>$(NoWarn);WFO1000</NoWarn>    
   </PropertyGroup>
 
   <ItemGroup>
