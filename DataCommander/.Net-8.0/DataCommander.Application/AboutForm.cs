@@ -22,7 +22,6 @@ public partial class AboutForm : Form
         var buildNumber = int.Parse(windowsCurrentVersion.CurrentBuild);
         var windowsName =
             WindowsNameCalculator.GetWindowsNameFromBuildNumber(buildNumber, windowsCurrentVersion.EditionId, windowsCurrentVersion.DisplayVersion);
-
         var brightness = colorTheme?.BackColor.GetBrightness();
 
         var bodyStyle = brightness < 0.12f
@@ -56,6 +55,8 @@ Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Found
 <tr><td>Windows Name:</td><td>{windowsName}</td></tr>
 <tr><td>Windows CurrentBuild:</td><td>{windowsCurrentVersion.CurrentBuild}</td></tr>
 <tr><td>.NET CLR version:</td><td>{Environment.Version}</td></tr>
+<tr><td>.NET Runtime:</td><td>{GetDotNetRuntimeVersion()}</td></tr>
+<tr><td>.NET Desktop Runtime:</td><td>{GetDotNetDesktopRuntimeVersion()}</td></tr>
 </table>
 <br/>
 Credits:
@@ -73,6 +74,27 @@ Credits:
         InitializeComponent();
 
         webBrowser1.DocumentText = text;
+    }
+
+    private static string GetDotNetRuntimeVersion()
+    {
+        var dotNetRuntimeVersion = GetVersion(typeof(int));
+        return dotNetRuntimeVersion!;
+    }
+
+    private static string GetDotNetDesktopRuntimeVersion()
+    {
+        var dotNetRuntimeVersion = GetVersion(typeof(System.Windows.Forms.Application));
+        return dotNetRuntimeVersion!;
+    }
+
+    private static string GetVersion(Type type)
+    {
+        var assembly = Assembly.GetAssembly(type);
+        var location = assembly!.Location;
+        var directoryName = Path.GetDirectoryName(location);
+        var dotNetRuntimeVersion = Path.GetFileName(directoryName);
+        return dotNetRuntimeVersion!;
     }
 
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
