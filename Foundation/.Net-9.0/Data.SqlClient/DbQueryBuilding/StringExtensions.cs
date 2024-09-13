@@ -7,14 +7,14 @@ public static class StringExtensions
     public static string ToCamelCase(this string pascalCase)
     {
         return !pascalCase.IsNullOrEmpty()
-            ? char.ToLower(pascalCase[0]) + pascalCase.Substring(1)
+            ? char.ToLower(pascalCase[0]) + pascalCase[1..]
             : pascalCase;
     }
 
     public static string ToPascalCase(this string camelCase)
     {
         return !camelCase.IsNullOrEmpty()
-            ? char.ToUpper(camelCase[0]) + camelCase.Substring(1)
+            ? char.ToUpper(camelCase[0]) + camelCase[1..]
             : camelCase;
     }
 }

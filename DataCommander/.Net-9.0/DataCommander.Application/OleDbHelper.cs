@@ -26,9 +26,11 @@ public static class OleDbHelper
 
         foreach (Field field in recordset.Fields)
         {
-            var param = new OleDbParameter();
-            param.SourceColumn = field.Name;
-            param.OleDbType = (OleDbType)field.Type;
+            var param = new OleDbParameter
+            {
+                SourceColumn = field.Name,
+                OleDbType = (OleDbType)field.Type
+            };
 
             var size = field.DefinedSize;
             var precision = field.Precision;
@@ -143,50 +145,18 @@ public static class OleDbHelper
 
         foreach (var column in columns)
         {
-            string sqlType;
-
-            switch (column.OleDbType)
+            var sqlType = column.OleDbType switch
             {
-                case OleDbType.Char:
-                    sqlType = "char(" + column.Size + ")";
-                    break;
-
-                case OleDbType.DBDate:
-                    sqlType = "datetime";
-                    break;
-
-                case OleDbType.DBTimeStamp:
-                    //sqlType = "timestamp";
-                    sqlType = "datetime";
-                    break;
-
-                case OleDbType.UnsignedTinyInt:
-                    sqlType = "tinyint";
-                    break;
-
-                case OleDbType.Integer:
-                    sqlType = "int";
-                    break;
-
-                case OleDbType.Numeric:
-                    //sqlType = "numeric(" + column.Precision + "," + column.Scale + ")";
-                    sqlType = "numeric";
-                    break;
-
-                case OleDbType.Decimal:
-                    //sqlType = "decimal(" + column.Precision + "," + column.Scale + ")";
-                    sqlType = "numeric";
-                    break;
-
-                case OleDbType.VarChar:
-                    sqlType = "varchar(" + column.Size + ")";
-                    break;
-
-                default:
-                    sqlType = "varchar(255)";
-                    break;
-            }
-
+                OleDbType.Char => "char(" + column.Size + ")",
+                OleDbType.DBDate => "datetime",
+                OleDbType.DBTimeStamp => "datetime",//sqlType = "timestamp";
+                OleDbType.UnsignedTinyInt => "tinyint",
+                OleDbType.Integer => "int",
+                OleDbType.Numeric => "numeric",
+                OleDbType.Decimal => "numeric",
+                OleDbType.VarChar => "varchar(" + column.Size + ")",
+                _ => "varchar(255)",
+            };
             cmdText += "[" + column.SourceColumn + "] " + sqlType;
 
             if (column.IsNullable)

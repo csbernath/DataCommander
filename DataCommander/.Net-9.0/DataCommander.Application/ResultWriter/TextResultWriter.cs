@@ -29,7 +29,7 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
     void IResultWriter.AfterExecuteReader() => _logResultWriter.AfterExecuteReader();
     void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);
 
-    private void Write(StringBuilder stringBuilder, string text, int width)
+    private static void Write(StringBuilder stringBuilder, string text, int width)
     {
         var length = width - text.Length;
 
@@ -41,7 +41,7 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
                 stringBuilder.Append(' ', length);
         }
         else
-            stringBuilder.Append(text.Substring(0, width));
+            stringBuilder.Append(text[..width]);
     }
 
     void IResultWriter.WriteTableBegin(DataTable schemaTable)

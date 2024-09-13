@@ -13,7 +13,7 @@ internal sealed class Lock
     {
         Monitor.Enter(_lockObject);
         Interlocked.Increment(ref _counter);
-        ThreadId = Thread.CurrentThread.ManagedThreadId;
+        ThreadId = Environment.CurrentManagedThreadId;
         return new Disposer(Exit);
     }
 
@@ -23,7 +23,7 @@ internal sealed class Lock
         if (entered)
         {
             Interlocked.Increment(ref _counter);
-            ThreadId = Thread.CurrentThread.ManagedThreadId;
+            ThreadId = Environment.CurrentManagedThreadId;
         }
 
         return entered;

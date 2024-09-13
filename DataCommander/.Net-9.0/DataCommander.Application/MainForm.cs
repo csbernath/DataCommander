@@ -89,7 +89,7 @@ public class MainForm : Form
 
         Text = "Data Commander";
 
-        _helpButton.Click += helpButton_Click;
+        _helpButton.Click += HelpButton_Click;
         _mnuAbout.Click += mnuAbout_Click;
 
         //
@@ -326,7 +326,7 @@ public class MainForm : Form
         _closeAllDocumentsMenuItem.Name = "_closeAllDocumentsMenuItem";
         _closeAllDocumentsMenuItem.Size = new Size(229, 26);
         _closeAllDocumentsMenuItem.Text = "Close All Documents";
-        _closeAllDocumentsMenuItem.Click += closeAllDocumentsMenuItem_Click;
+        _closeAllDocumentsMenuItem.Click += CloseAllDocumentsMenuItem_Click;
         // 
         // _mnuHelp
         // 
@@ -350,7 +350,7 @@ public class MainForm : Form
         _checkForToolStripMenuItem.ShortcutKeys = Keys.F12;
         _checkForToolStripMenuItem.Size = new Size(247, 26);
         _checkForToolStripMenuItem.Text = "Check for updates ";
-        _checkForToolStripMenuItem.Click += checkForToolStripMenuItem_Click;
+        _checkForToolStripMenuItem.Click += CheckForToolStripMenuItem_Click;
         // 
         // _mnuAbout
         // 
@@ -806,7 +806,7 @@ Server version: {connection.ServerVersion}
             queryForm.Save();
     }
 
-    private void helpButton_Click(object sender, EventArgs e) => ShowContents();
+    private void HelpButton_Click(object sender, EventArgs e) => ShowContents();
 
     private async void CreateMenuItem_Click(object sender, EventArgs e)
     {
@@ -901,7 +901,7 @@ Server version: {connection.ServerVersion}
             _mnuRecentFileList.DropDownItems.Clear();
     }
 
-    private void closeAllDocumentsMenuItem_Click(object sender, EventArgs e)
+    private void CloseAllDocumentsMenuItem_Click(object sender, EventArgs e)
     {
         while (true)
         {
@@ -951,7 +951,7 @@ Server version: {connection.ServerVersion}
     private ToolStripTextBox _activeMdiChildToolStripTextBox;
     public ToolStripTextBox ActiveMdiChildToolStripTextBox => _activeMdiChildToolStripTextBox;
 
-    private void checkForToolStripMenuItem_Click(object sender, EventArgs e)
+    private void CheckForToolStripMenuItem_Click(object sender, EventArgs e)
     {
         const string url = "https://github.com/csbernath/DataCommander/releases";
         var processStartInfo = new ProcessStartInfo

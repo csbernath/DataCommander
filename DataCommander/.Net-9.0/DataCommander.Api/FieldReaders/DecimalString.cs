@@ -12,8 +12,8 @@ public sealed class DecimalString
 
         if (index >= 0)
         {
-            intValue = str.Substring(0, index);
-            var fracValue = str.Substring(index + 1);
+            intValue = str[..index];
+            var fracValue = str[(index + 1)..];
             Scale = (byte) fracValue.Length;
         }
         else

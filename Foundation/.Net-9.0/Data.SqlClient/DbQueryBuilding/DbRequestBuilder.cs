@@ -250,7 +250,7 @@ namespace {_request.Namespace}
         stringBuilder.Append(");\r\n");
         stringBuilder.Append("    });\r\n\r\n");
         stringBuilder.Append("    return result;\r\n");
-        stringBuilder.Append("}");
+        stringBuilder.Append('}');
         return stringBuilder.ToString();
     }
 
@@ -361,7 +361,7 @@ namespace {_request.Namespace}
         foreach (var result in results)
             stringBuilder.Append($"    {result.FieldName} = {result.FieldName.ToCamelCase()};\r\n");
 
-        stringBuilder.Append("}");
+        stringBuilder.Append('}');
 
         return stringBuilder.ToString();
     }
@@ -427,7 +427,7 @@ namespace {_request.Namespace}
         foreach (var parameter in _request.Parameters)
             stringBuilder.Append($"    {parameter.Name.ToPascalCase()} = {parameter.Name};\r\n");
 
-        stringBuilder.Append("}");
+        stringBuilder.Append('}');
 
         return stringBuilder.ToString();
     }
@@ -459,7 +459,7 @@ namespace {_request.Namespace}
         }
 
         stringBuilder.Append(");\r\n");
-        stringBuilder.Append("}");
+        stringBuilder.Append('}');
 
         return stringBuilder.ToString();
     }
@@ -513,7 +513,7 @@ namespace {_request.Namespace}
         foreach (var field in result.Fields)
             stringBuilder.Append($"    {field.Name} = {field.Name.ToCamelCase()};\r\n");
 
-        stringBuilder.Append("}");
+        stringBuilder.Append('}');
 
         return stringBuilder.ToString();
     }
@@ -603,7 +603,7 @@ namespace {_request.Namespace}
         }
 
         stringBuilder.Append("    return parameters.ToReadOnlyCollection();\r\n");
-        stringBuilder.Append("}");
+        stringBuilder.Append('}');
 
         return stringBuilder.ToString();
     }

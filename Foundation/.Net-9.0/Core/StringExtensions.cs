@@ -53,7 +53,7 @@ public static class StringExtensions
         if (index > 0)
         {
             index = Math.Min(index, indentSize);
-            decreasedLine = line.Substring(index);
+            decreasedLine = line[index..];
         }
         else
             decreasedLine = line;
@@ -109,7 +109,7 @@ public static class StringExtensions
         Assert.IsInRange(value.Length >= length);
 
         var startIndex = value.Length - length;
-        return value.Substring(startIndex);
+        return value[startIndex..];
     }
 
     private static string Indent(this string source, string indentString, int indentCount)

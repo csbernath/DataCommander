@@ -134,7 +134,7 @@ set arithabort on";
             {
                 var elapsed = Stopwatch.GetTimestamp() - _createCommandTimestamp;
                 var index = error.Message.IndexOf(' ');
-                var percentString = error.Message.Substring(0, index);
+                var percentString = error.Message[..index];
                 var percent = int.Parse(percentString);
                 var remainingPercent = 100 - percent;
                 var estimated = (long)Math.Round(100.0 / percent * elapsed);

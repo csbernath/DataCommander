@@ -7,16 +7,14 @@ namespace Foundation.Windows.Forms;
 
 public static class FormPosition
 {
-    public static void Save(
-        Form form,
-        ApplicationData applicationData)
+    public static void Save(Form form, ApplicationData applicationData)
     {
         var type = form.GetType();
         var nodeName = ConfigurationNodeName.FromType(type);
         var node = applicationData.CreateNode(nodeName);
         var attributes = node.Attributes;
 
-        if (form.WindowState == FormWindowState.Minimized) 
+        if (form.WindowState == FormWindowState.Minimized)
             form.WindowState = FormWindowState.Normal;
 
         attributes.SetAttributeValue("WindowState", form.WindowState);

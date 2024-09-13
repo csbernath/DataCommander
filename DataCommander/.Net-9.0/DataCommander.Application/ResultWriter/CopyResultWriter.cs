@@ -142,7 +142,7 @@ internal sealed class CopyResultWriter(
                 while (true)
                 {
                     methodLog.Write(LogLevel.Trace, "this.queue.Count: {0}", _queue.Count);
-                    if (_queue.Count > 0)
+                    if (!_queue.IsEmpty)
                     {
                         var items = new List<QueueItem>(_queue.Count);
                         while (true)
@@ -161,7 +161,7 @@ internal sealed class CopyResultWriter(
                         InsertItems(items);
                     }
 
-                    if (_queue.Count == 0)
+                    if (_queue.IsEmpty)
                     {
                         methodLog.Write(LogLevel.Trace, "this.writeEnded: {0}", _writeEnded);
                         if (_writeEnded)

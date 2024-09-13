@@ -70,13 +70,13 @@ internal sealed class DatabaseObjectMultipartName
 
             if (length > 0 && Name[0] == '[')
             {
-                Name = Name.Substring(1);
+                Name = Name[1..];
                 length--;
             }
 
             if (length > 0 && Name[length - 1] == ']')
             {
-                Name = Name.Substring(0, length - 1);
+                Name = Name[..(length - 1)];
             }
         }
     }

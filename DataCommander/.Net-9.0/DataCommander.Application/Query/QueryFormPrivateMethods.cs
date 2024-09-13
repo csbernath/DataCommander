@@ -24,7 +24,7 @@ namespace DataCommander.Application.Query;
 
 public sealed partial class QueryForm
 {
-    private void CloseResultTabPage(TabPage tabPage)
+    private static void CloseResultTabPage(TabPage tabPage)
     {
         foreach (Control control in tabPage.Controls)
             control.Dispose();
@@ -276,7 +276,7 @@ public sealed partial class QueryForm
         return item;
     }
 
-    private TreeNode FindTreeNode(TreeNode parent, IStringMatcher matcher)
+    private static TreeNode FindTreeNode(TreeNode parent, IStringMatcher matcher)
     {
         TreeNode found = null;
 
@@ -305,30 +305,17 @@ public sealed partial class QueryForm
         {
             Cursor = Cursors.WaitCursor;
             SetStatusbarPanelText($"Finding {text}...");
-            StringComparison comparison;
             var options = _findTextForm.RichTextBoxFinds;
-            switch (options)
+            var comparison = options switch
             {
-                case RichTextBoxFinds.None:
-                    comparison = StringComparison.InvariantCultureIgnoreCase;
-                    break;
-
-                case RichTextBoxFinds.MatchCase:
-                    comparison = StringComparison.InvariantCulture;
-                    break;
-
-                case RichTextBoxFinds.WholeWord:
-                    // TODO
-                    throw new NotImplementedException();
-
-                default:
-                    throw new NotImplementedException();
-            }
-
+                RichTextBoxFinds.None => StringComparison.InvariantCultureIgnoreCase,
+                RichTextBoxFinds.MatchCase => StringComparison.InvariantCulture,
+                RichTextBoxFinds.WholeWord => throw new NotImplementedException(),// TODO
+                _ => throw new NotImplementedException(),
+            };
             IStringMatcher matcher = new StringMatcher(text, comparison);
-            var treeView = control as TreeView;
 
-            if (treeView != null)
+            if (control is TreeView treeView)
             {
                 var treeNode2 = treeView.SelectedNode.FirstNode;
 
@@ -366,7 +353,7 @@ public sealed partial class QueryForm
                     {
                         if (text.StartsWith("RowFilter="))
                         {
-                            var rowFilter = text.Substring(5);
+                            var rowFilter = text[5..];
                             var dataView = dataTable.DefaultView;
                             dataView.RowFilter = rowFilter;
                             var count = dataView.Count;
@@ -375,7 +362,7 @@ public sealed partial class QueryForm
                         }
                         else if (text.StartsWith("Sort="))
                         {
-                            var sort = text.Substring(5);
+                            var sort = text[5..];
                             var dataView = dataTable.DefaultView;
                             dataView.Sort = sort;
                             SetStatusbarPanelText($"Rows sorted by {sort}.");
@@ -715,7 +702,7 @@ public sealed partial class QueryForm
             var tableName = _command.CommandType == CommandType.StoredProcedure ? _command.CommandText : sqlStatement.FindTableName();
 
             if (tableName[0] == '[' && destinationProvider.Identifier == "System.Data.OracleClient")
-                tableName = tableName.Substring(1, tableName.Length - 2);
+                tableName = tableName[1..^1];
 
             IResultWriter resultWriter = new CopyResultWriter(AddInfoMessage, destinationProvider, destinationConnection, tableName,
                 nextQueryForm.InvokeSetTransaction, CancellationToken.None);

@@ -10,8 +10,7 @@ public struct NotNullable<T> where T : class
 
     private NotNullable(T value)
     {
-        if (value == null)
-            throw new ArgumentNullException();
+        ArgumentNullException.ThrowIfNull(value);
 
         _value = value;
     }

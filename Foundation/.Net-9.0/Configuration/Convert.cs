@@ -59,7 +59,7 @@ internal static class Convert
 
         if (source.StartsWith("0x"))
         {
-            source2 = source.Substring(2);
+            source2 = source[2..];
             style = NumberStyles.HexNumber;
         }
         else

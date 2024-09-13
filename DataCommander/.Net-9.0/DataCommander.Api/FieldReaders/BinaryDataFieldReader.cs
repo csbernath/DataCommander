@@ -17,7 +17,7 @@ public sealed class BinaryDataFieldReader(IDataRecord dataRecord, int columnOrdi
             {
                 var length = dataRecord.GetBytes(columnOrdinal, 0, null, 0, 0);
                 var buffer = new byte[length];
-                length = dataRecord.GetBytes(columnOrdinal, 0, buffer, 0, (int) length);
+                dataRecord.GetBytes(columnOrdinal, 0, buffer, 0, (int) length);
                 value = new BinaryField(buffer);
             }
 

@@ -21,7 +21,7 @@ namespace DataCommander.Application.Connection;
 internal sealed class ConnectionListForm : Form
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-    private List<ConnectionInfo> _connectionInfos;
+    private readonly List<ConnectionInfo> _connectionInfos;
     private ConnectionBase _connection;
     private Button _btnOk;
     private DoubleBufferedDataGridView _dataGrid;
@@ -135,7 +135,7 @@ internal sealed class ConnectionListForm : Form
         this._btnOk.Size = new System.Drawing.Size(75, 24);
         this._btnOk.TabIndex = 0;
         this._btnOk.Text = "&Connect";
-        this._btnOk.Click += new System.EventHandler(this.btnOK_Click);
+        this._btnOk.Click += new System.EventHandler(this.BtnOK_Click);
         // 
         // btnCancel
         // 
@@ -156,7 +156,7 @@ internal sealed class ConnectionListForm : Form
         this._newButton.Size = new System.Drawing.Size(75, 24);
         this._newButton.TabIndex = 8;
         this._newButton.Text = "&New";
-        this._newButton.Click += new System.EventHandler(this.newButton_Click);
+        this._newButton.Click += new System.EventHandler(this.NewButton_Click);
         // 
         // dataGrid
         // 
@@ -171,8 +171,8 @@ internal sealed class ConnectionListForm : Form
         this._dataGrid.ReadOnly = true;
         this._dataGrid.Size = new System.Drawing.Size(944, 621);
         this._dataGrid.TabIndex = 6;
-        this._dataGrid.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dataGrid_UserDeletingRow);
-        this._dataGrid.DoubleClick += new System.EventHandler(this.dataGrid_DoubleClick);
+        this._dataGrid.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.DataGrid_UserDeletingRow);
+        this._dataGrid.DoubleClick += new System.EventHandler(this.DataGrid_DoubleClick);
         this._dataGrid.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGrid_KeyDown);
         this._dataGrid.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGrid_MouseClick);
         // 
@@ -214,7 +214,7 @@ internal sealed class ConnectionListForm : Form
         }
     }
 
-    private void LoadConnection(ConnectionInfo connectionInfo, DataRow row)
+    private static void LoadConnection(ConnectionInfo connectionInfo, DataRow row)
     {
         row[ConnectionFormColumnName.ConnectionName] = connectionInfo.ConnectionName;
 
@@ -236,17 +236,11 @@ internal sealed class ConnectionListForm : Form
 
         if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out value))
         {
-            bool integratedSecurity;
-            switch (value)
+            var integratedSecurity = value switch
             {
-                case bool boolValue:
-                    integratedSecurity = boolValue;
-                    break;
-                default:
-                    integratedSecurity = bool.Parse((string)value);
-                    break;
-            }
-
+                bool boolValue => boolValue,
+                _ => bool.Parse((string)value),
+            };
             row[ConnectionStringKeyword.IntegratedSecurity] = integratedSecurity;
         }
 
@@ -256,7 +250,7 @@ internal sealed class ConnectionListForm : Form
             row[ConnectionStringKeyword.UserId] = (string)value;
     }
 
-    private void btnOK_Click(object sender, EventArgs e)
+    private void BtnOK_Click(object sender, EventArgs e)
     {
         var connectionInfo = SelectedConnectionInfo;
         Connect(connectionInfo);
@@ -523,7 +517,7 @@ Provider name: {providerInfo.Name}");
         }
     }
 
-    private void dataGrid_DoubleClick(object sender, EventArgs e)
+    private void DataGrid_DoubleClick(object sender, EventArgs e)
     {
         var position = _dataGrid.PointToClient(Cursor.Position);
         var hitTestInfo = _dataGrid.HitTest(position.X, position.Y);
@@ -596,7 +590,7 @@ Provider name: {providerInfo.Name}");
         _isDirty = true;
     }
 
-    private void newButton_Click(object sender, EventArgs e)
+    private void NewButton_Click(object sender, EventArgs e)
     {
         var form = new ConnectionStringBuilderForm(_colorTheme);
 
@@ -607,7 +601,7 @@ Provider name: {providerInfo.Name}");
         }
     }
 
-    private void dataGrid_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+    private void DataGrid_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
     {
         Delete();
         e.Cancel = true;

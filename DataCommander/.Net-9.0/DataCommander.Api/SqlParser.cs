@@ -96,7 +96,7 @@ public sealed class SqlParser
 
                     var tokens = Tokens.GetRange(startTokenIndex, Tokens.Count - startTokenIndex);
                     var parameterTokens = tokens.Split(t => t.Type == TokenType.OperatorOrPunctuator && t.Value == ",").ToList();
-                    var parameters = parameterTokens.Select(t => ToParameter(t.ToList())).ToList();
+                    var parameters = parameterTokens.Select(t => ToParameter([.. t])).ToList();
 
                     var defaultValues = new List<IDataParameter>();
                     foreach (IDataParameter parameter in command.Parameters)
@@ -327,16 +327,11 @@ public sealed class SqlParser
                 {
                     if (currentToken != null)
                     {
-                        switch (currentToken.Type)
+                        sqlObject = currentToken.Type switch
                         {
-                            case TokenType.KeyWord:
-                                sqlObject = GetSqlObject(currentToken.Value);
-                                break;
-
-                            default:
-                                sqlObject = GetValue(previousToken);
-                                break;
-                        }
+                            TokenType.KeyWord => GetSqlObject(currentToken.Value),
+                            _ => GetValue(previousToken),
+                        };
                     }
                     else
                         sqlObject = GetValue(previousToken);
@@ -449,9 +444,7 @@ public sealed class SqlParser
         return tokens;
     }
 
-    private object? GetParameterValue(
-        DataParameterBase dataParameter,
-        object? value)
+    private static object? GetParameterValue(DataParameterBase dataParameter, object? value)
     {
         object? value2;
 
@@ -477,13 +470,13 @@ public sealed class SqlParser
                             value2 = valueStr;
 
                         break;
-                    
+
                     case DbType.Boolean:
                         valueStr = (string)value;
                         var ok = double.TryParse(valueStr, NumberStyles.Any, null, out var valueDbl);
                         value2 = ok ? Convert.ToBoolean(valueDbl) : Convert.ToBoolean(value);
                         break;
-                    
+
                     case DbType.DateTime:
                         try
                         {
@@ -524,12 +517,12 @@ public sealed class SqlParser
                     case DbType.Double:
                         value2 = Convert.ToDouble(value);
                         break;
-                    
+
                     case DbType.Guid:
-                        var valueString = (string)value; 
+                        var valueString = (string)value;
                         value2 = new Guid(valueString);
                         break;
-                    
+
                     case DbType.Int16:
                         value2 = Convert.ToInt32(value);
                         break;
@@ -622,8 +615,7 @@ public sealed class SqlParser
                                 {
                                     var alias = token.Value;
                                     tableList.Add(new Table(i, tableName, alias));
-                                    if (!tables.ContainsKey(alias))
-                                        tables.Add(alias, tableName);
+                                    tables.TryAdd(alias, tableName);
                                 }
                             }
                         }
@@ -660,7 +652,7 @@ public sealed class SqlParser
 
     private sealed class Table(int index, string? name, string? alias)
     {
-        private string? _alias = alias;
+        private readonly string? _alias = alias;
 
         public readonly int Index = index;
         public readonly string? Name = name;

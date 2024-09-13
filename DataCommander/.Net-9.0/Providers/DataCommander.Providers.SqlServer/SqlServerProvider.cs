@@ -380,7 +380,7 @@ internal sealed class SqlServerProvider : IProvider
             var value = currentToken.Value;
             if (value.Length > 0 && value[0] == '@')
             {
-                if (value.IndexOf("@@") == 0)
+                if (value.StartsWith("@@"))
                 {
                     array = _keyWords.Where(k => k.StartsWith(value)).Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
                 }
@@ -393,7 +393,7 @@ internal sealed class SqlServerProvider : IProvider
                         var token = tokens[i];
                         var keyWord = token.Value;
 
-                        if (keyWord != null && keyWord.Length >= 2 && keyWord.IndexOf(value) == 0 && keyWord != value)
+                        if (keyWord != null && keyWord.Length >= 2 && keyWord.StartsWith(value) && keyWord != value)
                             if (!list.ContainsKey(token.Value))
                                 list.Add(token.Value, null);
                     }
@@ -558,7 +558,7 @@ end", name.Database, ownersString, name.Name);
                                     var token = tokens[tokenIndex];
                                     var tokenValue = token.Value;
                                     var indexofAny = tokenValue.IndexOfAny(['\r', '\n']);
-                                    if (indexofAny >= 0) tokenValue = tokenValue.Substring(0, indexofAny);
+                                    if (indexofAny >= 0) tokenValue = tokenValue[..indexofAny];
 
                                     string? like;
                                     if (tokenValue.Length > 0)

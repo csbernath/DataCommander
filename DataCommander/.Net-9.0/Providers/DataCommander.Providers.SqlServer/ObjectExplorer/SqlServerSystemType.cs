@@ -28,5 +28,7 @@ internal enum SqlServerSystemType
     NVarChar = 231,
     NChar = 239,
     Xml = 241,
+#pragma warning disable CA1069 // Enums values should not be duplicated
     Sysname = 231
+#pragma warning restore CA1069 // Enums values should not be duplicated
 }

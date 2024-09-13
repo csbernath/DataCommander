@@ -99,7 +99,7 @@ public sealed partial class QueryForm : Form, IQueryForm
 
         _resultSetsTabPage = new TabPage("Results");
         _resultSetsTabControl = new TabControl();
-        _resultSetsTabControl.MouseUp += resultSetsTabControl_MouseUp;
+        _resultSetsTabControl.MouseUp += ResultSetsTabControl_MouseUp;
         _resultSetsTabControl.Alignment = TabAlignment.Top;
         _resultSetsTabControl.Dock = DockStyle.Fill;
         _resultSetsTabPage.Controls.Add(_resultSetsTabControl);
@@ -174,7 +174,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         Log.Trace(CallerInformation.Create(), "Queryform.ctor finished.");
     }
 
-    private void resultSetsTabControl_MouseUp(object sender, MouseEventArgs e)
+    private void ResultSetsTabControl_MouseUp(object sender, MouseEventArgs e)
     {
         var hitTestInfo = new Tchittestinfo(e.X, e.Y);
         var index = SendMessage(_resultSetsTabControl.Handle, TcmHittest, IntPtr.Zero, ref hitTestInfo);
@@ -868,7 +868,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         this._mnuRefreshObjectExplorer.Name = "_mnuRefreshObjectExplorer";
         this._mnuRefreshObjectExplorer.Size = new System.Drawing.Size(229, 22);
         this._mnuRefreshObjectExplorer.Text = "Refresh Object Explorer\'s root";
-        this._mnuRefreshObjectExplorer.Click += new System.EventHandler(this.mnuRefreshObjectExplorer_Click);
+        this._mnuRefreshObjectExplorer.Click += new System.EventHandler(this.MnuRefreshObjectExplorer_Click);
         // 
         // _statusBar
         // 
@@ -940,7 +940,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         this._tvObjectExplorer.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.tvObjectBrowser_BeforeExpand);
         this._tvObjectExplorer.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.tvObjectBrowser_ItemDrag);
         this._tvObjectExplorer.DoubleClick += new System.EventHandler(this.tvObjectBrowser_DoubleClick);
-        this._tvObjectExplorer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tvObjectBrowser_MouseDown);
+        this._tvObjectExplorer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TvObjectBrowser_MouseDown);
         this._tvObjectExplorer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tvObjectExplorer_MouseUp);
         // 
         // _splitterObjectExplorer
@@ -1403,8 +1403,8 @@ public sealed partial class QueryForm : Form, IQueryForm
             var configurationEnd = commandText.IndexOf("*/", configurationStart);
             if (configurationEnd > 0)
             {
-                configurationStart = commandText.IndexOf("{", configurationStart);
-                configurationEnd = commandText.LastIndexOf("}", configurationEnd);
+                configurationStart = commandText.IndexOf('{', configurationStart);
+                configurationEnd = commandText.LastIndexOf('}', configurationEnd);
                 var configuration = commandText.Substring(configurationStart, configurationEnd - configurationStart + 1);
                 query = JsonConvert.DeserializeObject<Api.QueryConfiguration.Query>(configuration);
                 var commentEnd = commandText.IndexOf("*/", configurationEnd);
@@ -1421,7 +1421,7 @@ public sealed partial class QueryForm : Form, IQueryForm
                     else
                         parameters = EmptyReadOnlyCollection<DbRequestParameter>.Value;
 
-                    resultCommandText = commandText.Substring(parametersEnd + 16);
+                    resultCommandText = commandText[(parametersEnd + 16)..];
                     succeeded = true;
                 }
             }
@@ -1433,7 +1433,7 @@ public sealed partial class QueryForm : Form, IQueryForm
     private static DbRequestParameter ToDbRequestParameter(List<Token> declaration)
     {
         var name = declaration[1].Value;
-        name = name.Substring(1);
+        name = name[1..];
         var dataType = declaration[2].Value;
         var dataTypeLower = dataType.ToLower();
         SqlDbType sqlDbType;
@@ -1489,7 +1489,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         List<Token> declaration = null;
         foreach (var token in tokens)
         {
-            if (token.Type == TokenType.KeyWord && token.Value.ToLower() == "declare")
+            if (token.Type == TokenType.KeyWord && string.Equals(token.Value, "declare", StringComparison.InvariantCultureIgnoreCase))
             {
                 if (declaration != null)
                     declarations.Add(declaration);
@@ -1594,8 +1594,10 @@ public sealed partial class QueryForm : Form, IQueryForm
     private void ShowDataTableDataGrid(DataTable dataTable)
     {
         var commandBuilder = Provider.DbProviderFactory.CreateCommandBuilder();
-        var dataTableEditor = new DataTableEditor(this, commandBuilder, _colorTheme);
-        dataTableEditor.ReadOnly = !_openTableMode;
+        var dataTableEditor = new DataTableEditor(this, commandBuilder, _colorTheme)
+        {
+            ReadOnly = !_openTableMode
+        };
 
         if (_openTableMode)
         {
@@ -1667,7 +1669,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         }
     }
 
-    private void ShowDataTableExcel(DataTable dataTable)
+    private static void ShowDataTableExcel(DataTable dataTable)
     {
     }
 
@@ -1749,7 +1751,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         }
     }
 
-    private void FocusControl(Control control) => control.Focus();
+    private static void FocusControl(Control control) => control.Focus();
 
     private void ShowResultWriterDataSet()
     {
@@ -1785,8 +1787,10 @@ public sealed partial class QueryForm : Form, IQueryForm
                 case ResultWriterType.DataGridView:
                     var dataGridViewResultWriter = (DataGridViewResultWriter)dataAdapter.ResultWriter;
                     const string text = "TODO";
-                    var resultSetTabPage = new TabPage(text);
-                    resultSetTabPage.ToolTipText = null; // TODO
+                    var resultSetTabPage = new TabPage(text)
+                    {
+                        ToolTipText = null // TODO
+                    };
                     _resultSetsTabControl.TabPages.Add(resultSetTabPage);
                     _resultSetsTabControl.SelectedTab = resultSetTabPage;
                     var tabControl = new TabControl();
@@ -1796,8 +1800,10 @@ public sealed partial class QueryForm : Form, IQueryForm
                     {
                         dataGridView.Dock = DockStyle.Fill;
                         //text = dataTable.TableName;
-                        var tabPage = new TabPage(text);
-                        tabPage.ToolTipText = null; // TODO
+                        var tabPage = new TabPage(text)
+                        {
+                            ToolTipText = null // TODO
+                        };
                         tabPage.Controls.Add(dataGridView);
                         tabControl.TabPages.Add(tabPage);
                         index++;
@@ -1922,25 +1928,13 @@ public sealed partial class QueryForm : Form, IQueryForm
 
     private static void WriteInfoMessageToLog(InfoMessage infoMessage)
     {
-        LogLevel logLevel;
-        switch (infoMessage.Severity)
+        var logLevel = infoMessage.Severity switch
         {
-            case InfoMessageSeverity.Error:
-                logLevel = LogLevel.Error;
-                break;
-
-            case InfoMessageSeverity.Information:
-                logLevel = LogLevel.Information;
-                break;
-
-            case InfoMessageSeverity.Verbose:
-                logLevel = LogLevel.Trace;
-                break;
-
-            default:
-                throw new Exception();
-        }
-
+            InfoMessageSeverity.Error => LogLevel.Error,
+            InfoMessageSeverity.Information => LogLevel.Information,
+            InfoMessageSeverity.Verbose => LogLevel.Trace,
+            _ => throw new Exception(),
+        };
         Log.Write(logLevel, infoMessage.Message);
     }
 
@@ -1955,7 +1949,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         while (true)
         {
             var hasElements = false;
-            while (_infoMessages.Count > 0 && IsHandleCreated)
+            while (!_infoMessages.IsEmpty && IsHandleCreated)
             {
                 hasElements = true;
                 var infoMessages = new InfoMessage[_infoMessages.Count];
@@ -2012,7 +2006,7 @@ public sealed partial class QueryForm : Form, IQueryForm
                 }
             }
 
-            if (_infoMessages.Count == 0)
+            if (_infoMessages.IsEmpty)
             {
                 var w = WaitHandle.WaitAny(waitHandles, 1000);
                 if (w == 1)
@@ -2021,7 +2015,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         }
     }
 
-    internal void CopyTableWithSqlBulkCopy()
+    internal static void CopyTableWithSqlBulkCopy()
     {
         // var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
         // var index = Array.IndexOf(forms, this);

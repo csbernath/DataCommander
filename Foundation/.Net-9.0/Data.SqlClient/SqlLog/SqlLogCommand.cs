@@ -59,7 +59,7 @@ internal sealed class SqlLogCommand : ISqlLogItem
 
                     if (index >= 0)
                     {
-                        var word = _commandText.Substring(0, index);
+                        var word = _commandText[..index];
                         word = word.ToLower();
 
                         switch (word)
@@ -71,8 +71,8 @@ internal sealed class SqlLogCommand : ISqlLogItem
 
                                 if (endIndex >= 0)
                                 {
-                                    word = _commandText.Substring(0, endIndex);
-                                    _parameters = _commandText.Substring(endIndex + 1);
+                                    word = _commandText[..endIndex];
+                                    _parameters = _commandText[(endIndex + 1)..];
                                     _commandText = word;
                                 }
 

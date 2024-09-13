@@ -46,7 +46,7 @@ internal sealed class Connection : ConnectionBase
 
     public override string DataSource => _sqliteConnection.DataSource;
 
-    protected void SetDatabase(string database)
+    protected static void SetDatabase(string database)
     {
         throw new Exception("The method or operation is not implemented.");
     }

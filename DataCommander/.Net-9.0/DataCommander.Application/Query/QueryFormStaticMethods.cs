@@ -33,31 +33,25 @@ internal static class QueryFormStaticMethods
     public static Control CreateControlFromDataTable(IQueryForm queryForm, DbCommandBuilder commandBuilder, DataTable dataTable,
         GetTableSchemaResult getTableSchemaResult, ResultWriterType tableStyle, bool readOnly, ColorTheme colorTheme)
     {
-        Control control;
-
-        switch (tableStyle)
+        Control control = tableStyle switch
         {
-            case ResultWriterType.DataGrid:
-                control = CreateDataTableEditorFromDataTable(queryForm, commandBuilder, dataTable, getTableSchemaResult, readOnly, colorTheme);
-                break;
-
+            ResultWriterType.DataGrid => CreateDataTableEditorFromDataTable(queryForm, commandBuilder, dataTable, getTableSchemaResult, readOnly, colorTheme),
             //case ResultWriterType.Html:
             //    control = CreateHtmlTextBoxFromDataTable(dataTable);
             //    break;
-
-            case ResultWriterType.ListView:
-                control = CreateListViewFromDataTable(dataTable);
-                break;
-
-            default:
-                throw new NotImplementedException();
-        }
-
+            ResultWriterType.ListView => CreateListViewFromDataTable(dataTable),
+            _ => throw new NotImplementedException(),
+        };
         return control;
     }
 
-    private static DataTableEditor CreateDataTableEditorFromDataTable(IQueryForm queryForm, DbCommandBuilder commandBuilder, DataTable dataTable,
-        GetTableSchemaResult getTableSchemaResult, bool readOnly, ColorTheme colorTheme)
+    private static DataTableEditor CreateDataTableEditorFromDataTable(
+        IQueryForm queryForm,
+        DbCommandBuilder commandBuilder,
+        DataTable dataTable,
+        GetTableSchemaResult getTableSchemaResult,
+        bool readOnly,
+        ColorTheme colorTheme)
     {
         var editor = new DataTableEditor(queryForm, commandBuilder, colorTheme);
         editor.ReadOnly = readOnly;
@@ -156,7 +150,6 @@ internal static class QueryFormStaticMethods
     {
         var found = false;
         var dataTable = dataView.Table;
-        var dataRows = dataTable.Rows;
         var rowCount = dataView.Count;
         var columnCount = dataTable.Columns.Count;
         var currentValueObject = dataTable.DefaultView[rowIndex][columnIndex];

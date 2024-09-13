@@ -26,9 +26,11 @@ public class AsyncQueue
             ThreadPriority priority)
         {
             _queue = queue;
-            Thread = new WorkerThread(ThreadStart);
-            Thread.Name = $"Consumer({queue._name},{id})";
-            Thread.Priority = priority;
+            Thread = new WorkerThread(ThreadStart)
+            {
+                Name = $"Consumer({queue._name},{id})",
+                Priority = priority
+            };
             _consumer = _queue._asyncQueue.CreateConsumer(Thread, id);
         }
 
@@ -152,9 +154,7 @@ public class AsyncQueue
         eventHandler = _asyncQueue.AfterConsume;
 
         if (eventHandler != null)
-        {
             eventHandler(this, args);
-        }
     }
 
     private void Dequeue(ConsumerThread consumerThread)
@@ -167,13 +167,9 @@ public class AsyncQueue
             var item = Dequeue();
 
             if (item != null)
-            {
                 Consume(consumerThread, item);
-            }
             else
-            {
                 WaitHandle.WaitAny(waitHandles);
-            }
         }
     }
 

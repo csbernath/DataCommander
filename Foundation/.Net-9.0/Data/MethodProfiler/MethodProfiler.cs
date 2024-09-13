@@ -62,7 +62,7 @@ exec MethodProfilerApplication_Add {0},{1}",
     public static void BeginMethod()
     {
         var beginTime = Stopwatch.GetTimestamp();
-        var threadId = Thread.CurrentThread.ManagedThreadId;
+        var threadId = Environment.CurrentManagedThreadId;
         var trace = new StackTrace(1);
         var frame = trace.GetFrame(0);
         var method = frame.GetMethod();
@@ -90,7 +90,7 @@ exec MethodProfilerApplication_Add {0},{1}",
     public static void BeginMethodFraction(string name)
     {
         var beginTime = Stopwatch.GetTimestamp();
-        var threadId = Thread.CurrentThread.ManagedThreadId;
+        var threadId = Environment.CurrentManagedThreadId;
         var trace = new StackTrace(1);
         var frame = trace.GetFrame(0);
         var method = frame.GetMethod();
@@ -122,7 +122,7 @@ exec MethodProfilerApplication_Add {0},{1}",
     public static void EndMethod()
     {
         var endTime = Stopwatch.GetTimestamp();
-        var threadId = Thread.CurrentThread.ManagedThreadId;
+        var threadId = Environment.CurrentManagedThreadId;
         var trace = new StackTrace(1);
         var frame = trace.GetFrame(0);
         var method = frame.GetMethod();
@@ -140,7 +140,7 @@ exec MethodProfilerApplication_Add {0},{1}",
     public static void EndMethodFraction()
     {
         var endTime = Stopwatch.GetTimestamp();
-        var threadId = Thread.CurrentThread.ManagedThreadId;
+        var threadId = Environment.CurrentManagedThreadId;
         var item = Stacks.Pop(threadId);
         item.EndTime = endTime;
         TextWriter.Write(MethodProfilerMethodInvocationFormatter, item);

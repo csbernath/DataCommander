@@ -509,7 +509,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
         {
             var stringTableRow = stringTable.NewRow();
             var variableName = column.ColumnName;
-            variableName = char.ToLower(variableName[0]) + variableName.Substring(1);
+            variableName = char.ToLower(variableName[0]) + variableName[1..];
             stringTableRow[1] = $"@{variableName}";
 
             var text = $"as {column.ColumnName}";

@@ -29,15 +29,6 @@ public static class TaskMonitor
 
     public static int Count => Tasks.Count;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="action"></param>
-    /// <param name="state"></param>
-    /// <param name="cancellationToken"></param>
-    /// <param name="taskCreationOptions"></param>
-    /// <param name="name"></param>
-    /// <returns></returns>
     public static CreateTaskResponse CreateTask(
         Action<object> action,
         object state,
@@ -67,16 +58,6 @@ public static class TaskMonitor
         };
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="function"></param>
-    /// <param name="state"></param>
-    /// <param name="cancellationToken"></param>
-    /// <param name="taskCreationOptions"></param>
-    /// <param name="name"></param>
-    /// <returns></returns>
     public static CreateTaskResponse<TResult> CreateTask<TResult>(
         Func<object, TResult> function,
         object state,
@@ -106,10 +87,6 @@ public static class TaskMonitor
         };
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
     public static string ToStringTableString()
     {
         string stringTableString;
@@ -122,9 +99,6 @@ public static class TaskMonitor
         return stringTableString;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public static int RemoveGarbageCollectedTasks()
     {
         int count;

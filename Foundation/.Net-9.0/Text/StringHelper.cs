@@ -31,7 +31,7 @@ public static class StringHelper
         }
         else
         {
-            formatted = col!.Substring(0, colWidth);
+            formatted = col![..colWidth];
         }
 
         return formatted;

@@ -35,7 +35,7 @@ public static class StringExtensions
         {
             if (text.StartsWith(indentation))
             {
-                text = text.Substring(indentation.Length);
+                text = text[indentation.Length..];
                 ++indentationCount;
             }
             else

@@ -8,8 +8,7 @@ namespace Foundation.Core
 
         private Reference(ReferenceCounter referenceCounter)
         {
-            if (referenceCounter == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(referenceCounter);
 
             _referenceCounter = referenceCounter;
         }

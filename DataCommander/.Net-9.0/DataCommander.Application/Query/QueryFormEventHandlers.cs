@@ -141,7 +141,7 @@ Please wait...",
         }
     }
 
-    private void tvObjectBrowser_MouseDown(object sender, MouseEventArgs e)
+    private void TvObjectBrowser_MouseDown(object sender, MouseEventArgs e)
     {
         switch (e.Button)
         {
@@ -165,7 +165,7 @@ Please wait...",
         }
     }
 
-    private void mnuRefresh_Click(object sender, EventArgs e)
+    private void MnuRefresh_Click(object sender, EventArgs e)
     {
         var treeNodeV = _tvObjectExplorer.SelectedNode;
         if (treeNodeV != null)
@@ -183,7 +183,7 @@ Please wait...",
         }
     }
 
-    private void mnuRefreshObjectExplorer_Click(object sender, EventArgs e)
+    private void MnuRefreshObjectExplorer_Click(object sender, EventArgs e)
     {
         var objectExplorer = Provider.CreateObjectExplorer();
         if (objectExplorer != null)
@@ -216,7 +216,7 @@ Please wait...",
                         if (contextMenu == null)
                             contextMenu = new ContextMenuStrip(components);
 
-                        contextMenu.Items.Add(new ToolStripMenuItem("Refresh", null, mnuRefresh_Click));
+                        contextMenu.Items.Add(new ToolStripMenuItem("Refresh", null, MnuRefresh_Click));
                     }
 
                     if (contextMenu != null)
@@ -962,7 +962,7 @@ Please wait...",
             try
             {
                 executor.ExecuteNonQuery(new CreateCommandRequest(query));
-                succeeded = _infoMessages.Count == 0;
+                succeeded = _infoMessages.IsEmpty;
             }
             catch (Exception exception)
             {

@@ -62,7 +62,7 @@ public static class TypeNameCollection
     {
         var length = typeName.Length - 2;
         var isArray = typeName != null && typeName.IndexOf("[]") == length;
-        var typeName2 = isArray ? typeName.Substring(0, length) : typeName;
+        var typeName2 = isArray ? typeName[..length] : typeName;
         var contains = NameIndex.TryGetValue(typeName2, out var item);
         var type = contains ? item.Type : Type.GetType(typeName2);
         if (type != null && isArray)

@@ -11,13 +11,13 @@ public static class Assert
             throw new ArgumentException("Assert.IsTrue failed.");
     }
 
-    public static void ArgumentConditionIsTrue(bool condition, [CallerArgumentExpression("condition")] string? conditionString = null)
+    public static void ArgumentConditionIsTrue(bool condition, [CallerArgumentExpression(nameof(condition))] string? conditionString = null)
     {
         if (!condition)
             throw new ArgumentException(conditionString);
     }
 
-    public static void IsNull<T>(T argument, [CallerArgumentExpression("argument")] string? argumentString = null) where T : class
+    public static void IsNull<T>(T argument, [CallerArgumentExpression(nameof(argument))] string? argumentString = null) where T : class
     {
         if (argument != null)
         {
@@ -26,13 +26,13 @@ public static class Assert
         }
     }
 
-    public static void IsInRange(bool condition, [CallerArgumentExpression("condition")] string? conditionString = null)
+    public static void IsInRange(bool condition, [CallerArgumentExpression(nameof(condition))] string? conditionString = null)
     {
         if (!condition)
             throw new ArgumentOutOfRangeException(conditionString);
     }
 
-    public static void IsValidOperation(bool condition, [CallerArgumentExpression("condition")] string? conditionString = null)
+    public static void IsValidOperation(bool condition, [CallerArgumentExpression(nameof(condition))] string? conditionString = null)
     {
         if (!condition)
         {

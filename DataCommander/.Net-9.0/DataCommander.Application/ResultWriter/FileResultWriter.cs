@@ -43,8 +43,10 @@ internal sealed class FileResultWriter : IResultWriter
         var path = Path.GetTempFileName();
         _messageWriter.WriteLine("fileName: {0}", path);
         var encoding = Encoding.UTF8;
-        _streamWriter = new StreamWriter(path, false, encoding, 4096);
-        _streamWriter.AutoFlush = true;
+        _streamWriter = new StreamWriter(path, false, encoding, 4096)
+        {
+            AutoFlush = true
+        };
         var count = schemaTable.Rows.Count;
         _dataWriters = new DataWriterBase[count];
         var st = new StringTable(3);
@@ -184,7 +186,7 @@ internal sealed class FileResultWriter : IResultWriter
         // TODO:  Add FileResultWriter.WriteParameters implementation
     }
 
-    public void WriteEnd()
+    public static void WriteEnd()
     {
         // TODO:  Add FileResultWriter.WriteEnd implementation
     }

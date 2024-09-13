@@ -21,7 +21,7 @@ public sealed class SQLiteProvider : IProvider
     #region IProvider Members
 
     public string Identifier => ProviderIdentifier.SqLite;
-    
+
     public string? GetConnectionName(Func<IDbConnection> createConnection)
     {
         using var connection = createConnection();
@@ -213,18 +213,11 @@ order by name collate nocase";
 
     string IProvider.GetExceptionMessage(Exception e)
     {
-        string message;
-        var sqliteException = e as SQLiteException;
-
-        if (sqliteException != null)
+        var message = e switch
         {
-            message = $"ErrorCode: {sqliteException.ErrorCode}\r\nMessage: {sqliteException.Message}";
-        }
-        else
-        {
-            message = e.ToString();
-        }
-
+            SQLiteException sqliteException => $"ErrorCode: {sqliteException.ErrorCode}\r\nMessage: {sqliteException.Message}",
+            _ => e.ToString(),
+        };
         return message;
     }
 
@@ -343,7 +336,7 @@ order by name collate nocase";
                     var index = dataTypeName.IndexOf('(');
                     if (index >= 0)
                     {
-                        dataTypeName = dataTypeName.Substring(0, index);
+                        dataTypeName = dataTypeName[..index];
                     }
 
                     dataTypeNames[i] = dataTypeName;
@@ -410,18 +403,9 @@ order by name collate nocase";
         throw new NotImplementedException();
     }
 
-    List<Statement> IProvider.GetStatements(string commandText)
-    {
-        return new List<Statement>
-        {
-            new(0, commandText)
-        };
-    }
+    List<Statement> IProvider.GetStatements(string commandText) => [new(0, commandText)];
 
-    IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder()
-    {
-        return new ConnectionStringBuilder();
-    }
+    IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder() => new ConnectionStringBuilder();
 
     #endregion
 }

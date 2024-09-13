@@ -26,7 +26,7 @@ public static class IniReader
                 if (line[0] == '[')
                 {
                     var index = line.IndexOf(']');
-                    var name = line.Substring(1, index - 1);
+                    var name = line[1..index];
                     var childNode = new ConfigurationNode(name);
                     node.AddChildNode(childNode);
                     currentNode = childNode;
@@ -37,7 +37,7 @@ public static class IniReader
 
                     if (index >= 0)
                     {
-                        var name = line.Substring(0, index);
+                        var name = line[..index];
                         var length = line.Length - index - 1;
                         var value = line.Substring(index + 1, length);
                         currentNode.Attributes.Add(new ConfigurationAttribute(name, value, null));

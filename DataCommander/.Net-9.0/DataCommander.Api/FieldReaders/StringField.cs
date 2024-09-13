@@ -12,7 +12,7 @@ public sealed class StringField(string value, int length) : IConvertible
 
         if (Value.Length > length)
         {
-            s = Value.Substring(0, length);
+            s = Value[..length];
         }
         else
         {

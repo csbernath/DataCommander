@@ -60,7 +60,7 @@ internal sealed class OleDbProvider : IProvider
         return new DataParameterImp(oleDbParameter);
     }
 
-    public DataTable GetParameterTable(IDataParameterCollection parameters)
+    public static DataTable GetParameterTable(IDataParameterCollection parameters)
     {
         var dataTable = new DataTable();
         dataTable.Columns.Add("ParameterName");
@@ -214,7 +214,7 @@ internal sealed class OleDbProvider : IProvider
         return table;
     }
 
-    public XmlReader ExecuteXmlReader(IDbCommand command)
+    public static XmlReader ExecuteXmlReader(IDbCommand command)
     {
         return null;
     }
@@ -248,7 +248,7 @@ internal sealed class OleDbProvider : IProvider
 
     GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string? tableName) => throw new NotImplementedException();
     List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
-    public string GetExceptionMessage(Exception e) => e.ToString();
+    public static string GetExceptionMessage(Exception e) => e.ToString();
 
     public string? GetConnectionName(Func<IDbConnection> createConnection)
     {

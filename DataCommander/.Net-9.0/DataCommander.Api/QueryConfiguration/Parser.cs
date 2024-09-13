@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Api.QueryConfiguration;
+﻿using System;
+
+namespace DataCommander.Api.QueryConfiguration;
 
 public static class Parser
 {
@@ -13,8 +15,8 @@ public static class Parser
             var endIndex = result.IndexOf(')', startIndex + 1);
             if (endIndex >= 0)
             {
-                name = result.Substring(0, startIndex);
-                fieldName = name + result.Substring(startIndex + 1, endIndex - startIndex - 1);
+                name = result[..startIndex];
+                fieldName = string.Concat(name, result.AsSpan(startIndex + 1, endIndex - startIndex - 1));
             }
         }
     }

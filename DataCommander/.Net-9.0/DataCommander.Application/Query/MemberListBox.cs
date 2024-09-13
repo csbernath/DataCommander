@@ -107,7 +107,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
         ListBox.Name = "ListBox";
         ListBox.Size = new System.Drawing.Size(180, 134);
         ListBox.TabIndex = 0;
-        ListBox.DoubleClick += new System.EventHandler(listBox_DoubleClick);
+        ListBox.DoubleClick += new System.EventHandler(ListBox_DoubleClick);
         // 
         // MemberListBox
         // 
@@ -137,7 +137,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
         {
             var selectedItem = listBoxItem.Item.UnquotedName;
             var startIndex = _result.StartPosition;
-            var tokenIterator = new TokenIterator(_textBox.Text.Substring(startIndex));
+            var tokenIterator = new TokenIterator(_textBox.Text[startIndex..]);
             var token = tokenIterator.Next();
             int length;
             if (token != null && token.StartPosition == 0)
@@ -163,14 +163,11 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
                 sb.Append(newItems[i]);
             }
 
-            var newText = sb.ToString();
-
-            // TODO
             _completionForm.SelectItem(startIndex, length, listBoxItem.Item);
         }
     }
 
-    private void listBox_DoubleClick(object sender, EventArgs e)
+    private void ListBox_DoubleClick(object sender, EventArgs e)
     {
         SelectItem();
         Close();
@@ -331,7 +328,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
                 // Backspace
                 var length = _prefix.Length;
                 if (length > 0)
-                    _prefix = _prefix.Substring(0, length - 1);
+                    _prefix = _prefix[..(length - 1)];
             }
             else
                 _prefix += char.ToLower(e.KeyChar);
