@@ -129,7 +129,7 @@ public sealed partial class QueryForm
             {
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
-                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2),
+                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
                     "Getting transaction count...", string.Empty, _colorTheme);
                 var transactionCount = cancelableOperationForm.Execute(new Task<int>(() => Connection.GetTransactionCountAsync(cancellationToken).Result));
                 var hasTransactions = transactionCount > 0;
@@ -463,7 +463,7 @@ public sealed partial class QueryForm
         var text = textBox.Text;
         var position = textBox.SelectionStart;
         var cancellationTokenSource = new CancellationTokenSource();
-        var showDialogDelay = TimeSpan.FromSeconds(2);
+        var showDialogDelay = TimeSpan.FromSeconds(1);
         const string formText = "Getting completion result...";
         const string textBoxText = "Please wait...";
         var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, showDialogDelay, formText, textBoxText, _colorTheme);

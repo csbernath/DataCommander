@@ -5,8 +5,11 @@ using System.Drawing;
 using System.Windows.Forms;
 using DataCommander.Application.ResultWriter;
 using DataCommander.Api;
+using DataCommander.Api.Connection;
 using DataCommander.Api.FieldReaders;
 using DataCommander.Api.Query;
+using DataCommander.Application.Connection;
+using Foundation.Core;
 
 namespace DataCommander.Application.Query;
 
@@ -230,5 +233,20 @@ internal static class QueryFormStaticMethods
         }
 
         return found;
+    }
+
+    public static void AddInfoMessageToQueryForm(QueryForm queryForm, long elapsedTicks, string connectionName, string providerName,
+        ConnectionBase connection)
+    {
+        var message = $@"Connection opened in {StopwatchTimeSpan.ToString(elapsedTicks, 3)} seconds.
+Connection name: {connectionName}
+Provider name:   {providerName}
+Data source:     {connection.DataSource}
+Database:        {connection.Database}
+Server version:  {connection.ServerVersion}
+{connection.ConnectionInformation}";
+
+        var infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message);
+        queryForm.AddInfoMessage(infoMessage);
     }
 }

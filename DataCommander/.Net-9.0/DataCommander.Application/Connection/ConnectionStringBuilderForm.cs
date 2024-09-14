@@ -358,7 +358,7 @@ Provider name: {providerInfo.Name}
             var text = stringBuilder.ToString();
 
             var cancelableOperationForm =
-                new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2), "Opening connection...", text, _colorTheme);
+                new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), "Opening connection...", text, _colorTheme);
             var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);            
             using (var connection = provider.CreateConnection(connectionInfo.ConnectionStringAndCredential))
             {

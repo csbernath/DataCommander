@@ -17,6 +17,7 @@ using ADODB;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.Query;
+using DataCommander.Application.Connection;
 using DataCommander.Application.ResultWriter;
 using Foundation.Configuration;
 using Foundation.Core;
@@ -113,7 +114,7 @@ public sealed partial class QueryForm
                         var cancellationTokenSource = new CancellationTokenSource();
                         var cancellationToken = cancellationTokenSource.Token;
                         treeNode2 = (ITreeNode)treeNode.Tag;
-                        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2),
+                        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
                             "Getting tree node children...",
                             $@"Parent node type: {treeNode2.GetType().Name}
 Parent node name: {treeNode2.Name}
@@ -177,7 +178,7 @@ Please wait...",
             var startTimestamp = Stopwatch.GetTimestamp();
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
-            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(2),
+            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
                 "Getting tree node children...", "Please wait...", _colorTheme);
             var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => treeNode.GetChildren(true, cancellationToken).Result));
             AddNodes(treeNodeV.Nodes, children, treeNode.Sortable, startTimestamp);
@@ -647,11 +648,15 @@ Please wait...",
         var index = mainForm.MdiChildren.Length;
 
         var connection = Provider.CreateConnection(_connectionInfo.ConnectionStringAndCredential);
-        connection.ConnectionName = Connection.ConnectionName;
+        //connection.ConnectionName = Connection.ConnectionName;
+        var cancellationTokenSource = new CancellationTokenSource();
+        var cancellationToken = cancellationTokenSource.Token;
+        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
+            "Opening connection...", string.Empty, _colorTheme);
         var stopwatch = Stopwatch.StartNew();
-        await connection.OpenAsync(CancellationToken.None);
-        var elapsed = stopwatch.Elapsed;
-        Log.Trace(CallerInformation.Create(), $"Connection opened in {elapsed}.");        
+        cancelableOperationForm.Execute(new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken)));
+        var elapsedTicks = stopwatch.ElapsedTicks;
+        
         var database = Connection.Database;
 
         if (connection.Database != Connection.Database)
@@ -665,6 +670,9 @@ Please wait...",
         queryForm.MdiParent = mainForm;
         queryForm.WindowState = WindowState;
         queryForm.Show();
+        
+        var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == _connectionInfo.ProviderIdentifier);
+        QueryFormStaticMethods.AddInfoMessageToQueryForm(queryForm, elapsedTicks, _connectionInfo.ConnectionName, providerInfo.Name, connection);
     }
 
     private void sQLiteDatabaseToolStripMenuItem_Click(object sender, EventArgs e)

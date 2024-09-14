@@ -82,6 +82,7 @@ public sealed partial class CancelableOperationForm : Form, ICancelableOperation
     {
         if (!cancelableOperation.IsCompleted)
         {
+            elapsedTimeTextBox.Text = GetElapsedText();
             StartTimer();
             ShowDialog(_owner);
         }
@@ -104,10 +105,16 @@ public sealed partial class CancelableOperationForm : Form, ICancelableOperation
     {
         if (IsHandleCreated)
         {
-            var elapsed = Stopwatch.GetTimestamp() - _startTimestamp;
-            var text = StopwatchTimeSpan.ToString(elapsed, 0);
+            var text = GetElapsedText();
             Invoke(() => { elapsedTimeTextBox.Text = text; });
         }
+    }
+
+    private string GetElapsedText()
+    {
+        var elapsed = Stopwatch.GetTimestamp() - _startTimestamp;
+        var text = StopwatchTimeSpan.ToString(elapsed, 0);
+        return text;
     }
 
     private void CancelButton_Click(object sender, EventArgs e)

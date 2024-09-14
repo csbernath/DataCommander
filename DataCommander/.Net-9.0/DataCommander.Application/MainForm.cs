@@ -547,18 +547,8 @@ public class MainForm : Form
 
                 var connectionStringBuilder = provider.CreateConnectionStringBuilder();
                 connectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
-                connectionStringBuilder.TryGetValue(ConnectionStringKeyword.InitialCatalog, out var intialCatalogObject);
                 var connection = connectionForm.Connection;
-                var message = $@"Connection opened in {StopwatchTimeSpan.ToString(connectionForm.ElapsedTicks, 3)} seconds.
-Connection name: {connectionInfo.ConnectionName}
-Provider name: {providerInfo.Name}
-Data source: {connection.DataSource}
-Database: {connection.Database}
-Server version: {connection.ServerVersion}
-{connection.ConnectionInformation}";
-
-                var infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message);
-                queryForm.AddInfoMessage(infoMessage);
+                QueryFormStaticMethods.AddInfoMessageToQueryForm(queryForm, connectionForm.ElapsedTicks, connectionInfo.ConnectionName, providerInfo.Name, connection);
                 queryForm.Show();
 
                 if (WindowState == FormWindowState.Maximized)
