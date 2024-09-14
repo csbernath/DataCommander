@@ -17,13 +17,13 @@ public static class AppDomainMonitor
 
     private static readonly StringTableColumnInfo<AssemblyInfo>[] Columns =
     [
-        new StringTableColumnInfo<AssemblyInfo>("Name", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Name),
+        new("Name", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Name),
         StringTableColumnInfo.Create<AssemblyInfo, Version>("FileVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.FileVersion),
         StringTableColumnInfo.Create<AssemblyInfo, Version>("Version", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Version),
-        new StringTableColumnInfo<AssemblyInfo>("Date", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Date?.ToString("yyyy-MM-dd HH:mm:ss")),
-        new StringTableColumnInfo<AssemblyInfo>("PublicKeyToken", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.PublicKeyToken),
-        new StringTableColumnInfo<AssemblyInfo>("ImageRuntimeVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.ImageRuntimeVersion),
-        new StringTableColumnInfo<AssemblyInfo>("Location", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Location),
+        new("Date", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Date?.ToString("yyyy-MM-dd HH:mm:ss")),
+        new("PublicKeyToken", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.PublicKeyToken),
+        new("ImageRuntimeVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.ImageRuntimeVersion),
+        new("Location", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Location),
         StringTableColumnInfo.CreateLeft<AssemblyInfo, bool>("IsDynamic", i => i.IsDynamic)
     ];
 
@@ -49,11 +49,12 @@ Is64BitOperatingSystem: {Environment.Is64BitOperatingSystem}
 Is64BitProcess:         {Environment.Is64BitProcess}
 IntPtr.Size:            {IntPtr.Size} ({IntPtr.Size * 8} bit)
 CLR version:            {Environment.Version}
+.NET Runtime version:   {DotNetVersionGetter.GetDotNetRuntimeVersion()}
 UserDomainName:         {Environment.UserDomainName}
 UserName:               {Environment.UserName}
 UserInteractive:        {Environment.UserInteractive}
 CurrentDirectory:       {Environment.CurrentDirectory}
-CommandLine:            {Environment.CommandLine},
+CommandLine:            {Environment.CommandLine}
 GC IsServerGC:          {GCSettings.IsServerGC}
 GC LargeObjectHeapCompactionMode: {GCSettings.LargeObjectHeapCompactionMode}
 GC LatencyMode:         {GCSettings.LatencyMode}

@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Assertions\Foundation.Assertions.csproj" />
     <ProjectReference Include="..\Configuration\Foundation.Configuration.csproj" />
+    <ProjectReference Include="..\Diagnostics\Foundation.Diagnostics.csproj" />
   </ItemGroup>
 
 </Project>
