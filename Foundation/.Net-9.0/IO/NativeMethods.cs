@@ -51,9 +51,6 @@ public static class NativeMethods
     [DllImport("kernel32")]
     public static extern short FreeLibrary(int hModule);
 
-    [DllImport("kernel32")]
-    public static extern uint GetCurrentThreadId();
-
     [DllImport("kernel32", CharSet = CharSet.Auto)]
     public static extern uint GetShortPathName(
         string lpszLongPath,

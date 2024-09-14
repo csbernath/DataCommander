@@ -64,7 +64,6 @@ public class MainForm : Form
     private ToolStrip _queryFormToolStrip;
     private readonly System.Windows.Forms.Timer _timer;
     private ColorTheme _colorTheme;
-    private bool _first = true;
 
     private void SetColorTheme(bool darkColorTheme)
     {
