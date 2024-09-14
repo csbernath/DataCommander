@@ -1186,8 +1186,7 @@ public sealed partial class QueryForm : Form, IQueryForm
 
     private void SetText()
     {
-        var text =
-            $"{_connectionName} - {Provider.GetConnectionName(() => Provider.CreateConnection(_connectionInfo.ConnectionStringAndCredential).Connection)}";
+        var text = Provider.GetConnectionName(Connection!.Connection);
         Text = text;
 
         var mainForm = DataCommanderApplication.Instance.MainForm;

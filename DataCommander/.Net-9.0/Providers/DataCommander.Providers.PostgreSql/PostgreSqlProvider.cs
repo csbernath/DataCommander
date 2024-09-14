@@ -27,16 +27,9 @@ internal sealed class PostgreSqlProvider : IProvider
     public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
     void IProvider.ClearCompletionCache() => throw new NotImplementedException();
     string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
-
-    public string? GetConnectionName(Func<IDbConnection> createConnection)
-    {
-        return null;
-    }
-
+    public string? GetConnectionName(IDbConnection connection) => null;
     ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(connectionStringAndCredential);
-
     public string GetConnectionName(string connectionString) => throw new NotImplementedException();
-
     IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader) => new PostgreSqlDataReaderHelper((NpgsqlDataReader)dataReader);
 
     void IProvider.CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationconnection,

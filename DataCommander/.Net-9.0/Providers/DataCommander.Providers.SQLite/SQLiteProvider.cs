@@ -22,11 +22,7 @@ public sealed class SQLiteProvider : IProvider
 
     public string Identifier => ProviderIdentifier.SqLite;
 
-    public string? GetConnectionName(Func<IDbConnection> createConnection)
-    {
-        using var connection = createConnection();
-        return connection.Database;
-    }
+    public string? GetConnectionName(IDbConnection connection) => connection.Database;
 
     public ConnectionBase CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(connectionStringAndCredential);
 

@@ -23,6 +23,7 @@ using Foundation.Core;
 using Foundation.Data;
 using Foundation.Diagnostics;
 using Foundation.Linq;
+using Foundation.Log;
 using Foundation.Windows.Forms;
 using Microsoft.Data.SqlClient;
 
@@ -647,7 +648,10 @@ Please wait...",
 
         var connection = Provider.CreateConnection(_connectionInfo.ConnectionStringAndCredential);
         connection.ConnectionName = Connection.ConnectionName;
+        var stopwatch = Stopwatch.StartNew();
         await connection.OpenAsync(CancellationToken.None);
+        var elapsed = stopwatch.Elapsed;
+        Log.Trace(CallerInformation.Create(), $"Connection opened in {elapsed}.");        
         var database = Connection.Database;
 
         if (connection.Database != Connection.Database)

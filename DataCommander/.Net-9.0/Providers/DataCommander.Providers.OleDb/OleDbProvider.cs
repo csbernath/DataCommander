@@ -23,11 +23,6 @@ internal sealed class OleDbProvider : IProvider
     string IProvider.Identifier => ProviderIdentifier.OleDb;
     DbProviderFactory IProvider.DbProviderFactory => OleDbFactory.Instance;
 
-    public string GetConnectionName(string connectionString, SecureString? password)
-    {
-        throw new NotImplementedException();
-    }
-
     public ConnectionBase CreateConnection(string connectionString)
     {
         this._connectionString = connectionString;
@@ -254,6 +249,8 @@ internal sealed class OleDbProvider : IProvider
     {
         return null;
     }
+
+    public string? GetConnectionName(IDbConnection connection) => throw new NotImplementedException();
 
     ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential)
     {
