@@ -45,9 +45,9 @@ public sealed class QueryTextBox : UserControl
         InitializeComponent();
 
         // TODO: Add any initialization after the InitForm call
-        RichTextBox.SelectionChanged += richTextBox_SelectionChanged;
+        RichTextBox.SelectionChanged += RichTextBox_SelectionChanged;
         RichTextBox.DragEnter += richTextBox_DragEnter;
-        RichTextBox.DragDrop += richTextBox_DragDrop;
+        RichTextBox.DragDrop += RichTextBox_DragDrop;
     }
 
     public void SetColorTheme(ColorTheme colorTheme)
@@ -149,7 +149,7 @@ public sealed class QueryTextBox : UserControl
         this.RichTextBox.WordWrap = false;
         this.RichTextBox.TextChanged += new System.EventHandler(this.richTextBox_TextChanged);
         this.RichTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.richTextBox_KeyDown);
-        this.RichTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.richTextBox_KeyPress);
+        this.RichTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.RichTextBox_KeyPress);
         this.RichTextBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.richTextBox_MouseUp);
         // 
         // QueryTextBox
@@ -185,7 +185,7 @@ public sealed class QueryTextBox : UserControl
         return GetLineIndex(RichTextBox, i);
     }
 
-    private void richTextBox_SelectionChanged(object sender, EventArgs e)
+    private void RichTextBox_SelectionChanged(object sender, EventArgs e)
     {
         MethodProfiler.BeginMethod();
 
@@ -217,7 +217,7 @@ public sealed class QueryTextBox : UserControl
         }
     }
 
-    public int WordStart(string text, int index)
+    public static int WordStart(string text, int index)
     {
         var i = index;
         var wordFound = false;
@@ -412,7 +412,7 @@ public sealed class QueryTextBox : UserControl
         {
             if (_changeEventEnabled)
             {
-                RichTextBox.SelectionChanged -= richTextBox_SelectionChanged;
+                RichTextBox.SelectionChanged -= RichTextBox_SelectionChanged;
 
                 var text = RichTextBox.Text;
 
@@ -471,7 +471,7 @@ public sealed class QueryTextBox : UserControl
 
                 //_undoRedoState.Do(new[] {text});
 
-                RichTextBox.SelectionChanged += richTextBox_SelectionChanged;
+                RichTextBox.SelectionChanged += RichTextBox_SelectionChanged;
             }
         }
         catch (Exception ex)
@@ -590,7 +590,7 @@ public sealed class QueryTextBox : UserControl
         }
     }
 
-    private void richTextBox_KeyPress(object sender, KeyPressEventArgs e)
+    private void RichTextBox_KeyPress(object sender, KeyPressEventArgs e)
     {
         if (KeyboardHandler != null)
             e.Handled = KeyboardHandler.HandleKeyPress(e);
@@ -614,7 +614,7 @@ public sealed class QueryTextBox : UserControl
 
     private void richTextBox_DragEnter(object sender, DragEventArgs e) => e.Effect = DragDropEffects.All;
 
-    private void richTextBox_DragDrop(object sender, DragEventArgs e)
+    private void RichTextBox_DragDrop(object sender, DragEventArgs e)
     {
         var dataObject = e.Data;
 

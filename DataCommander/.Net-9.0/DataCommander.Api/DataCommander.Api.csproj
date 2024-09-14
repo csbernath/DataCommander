@@ -11,11 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Foundation\.Net-8.0\Assertions\Foundation.Assertions.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\.Net-8.0\Collections\Foundation.Collections.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\.Net-8.0\Core\Foundation.Core.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\.Net-8.0\Data\Foundation.Data.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\.Net-8.0\Text\Foundation.Text.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\.Net-9.0\Assertions\Foundation.Assertions.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\.Net-9.0\Collections\Foundation.Collections.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\.Net-9.0\Core\Foundation.Core.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\.Net-9.0\Data\Foundation.Data.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\.Net-9.0\Text\Foundation.Text.csproj" />
   </ItemGroup>
 
 </Project>

@@ -7,7 +7,7 @@ namespace Foundation.Data.SqlEngine;
 
 public class ColumnCollection : IReadOnlyList<Column>
 {
-    private readonly IReadOnlyList<Column> _columns;
+    private readonly Column[] _columns;
     private readonly ILookup<string, Column> _columnsByColumnName;
 
     public ColumnCollection(IEnumerable<ColumnSchema> columnSchemas)
@@ -19,10 +19,16 @@ public class ColumnCollection : IReadOnlyList<Column>
             .ToLookup(c => c.ColumnSchema.ColumnName);
     }
 
-    public int Count => _columns.Count;
+    public int Count => _columns.Length;
     public Column this[int columnIndex] => _columns[columnIndex];
     public Column this[string columnName] => GetColumn(columnName);
-    public IEnumerator<Column> GetEnumerator() => _columns.GetEnumerator();
+    
+    public IEnumerator<Column> GetEnumerator()
+    {
+        var enumerable = (IEnumerable<Column>)_columns;
+        return enumerable.GetEnumerator();
+    }
+
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     private Column GetColumn(string columnName)

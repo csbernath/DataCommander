@@ -78,7 +78,7 @@ internal class DataTableEditor : UserControl
                 {
                     _dataTable.RowDeleting += dataTable_RowDeleting;
                     _dataTable.RowChanging += dataTable_RowChanging;
-                    _dataGrid.DataError += dataGrid_DataError;
+                    _dataGrid.DataError += DataGrid_DataError;
                 }
 
                 //var ts = new DataGridTableStyle();
@@ -294,7 +294,7 @@ internal class DataTableEditor : UserControl
         this._dataGrid.RowsDefaultCellStyle = dataGridViewCellStyle1;
         this._dataGrid.Size = new System.Drawing.Size(424, 208);
         this._dataGrid.TabIndex = 0;
-        this._dataGrid.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGrid_MouseDown);
+        this._dataGrid.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DataGrid_MouseDown);
         // 
         // DataTableViewer
         // 
@@ -306,14 +306,14 @@ internal class DataTableEditor : UserControl
 
     }
 
-    private void dataGrid_DataError(object sender, DataGridViewDataErrorEventArgs e)
+    private void DataGrid_DataError(object sender, DataGridViewDataErrorEventArgs e)
     {
         MessageBox.Show(e.Exception.ToString());
         e.ThrowException = false;
         e.Cancel = true;
     }
 
-    private string ToString(DataColumn column, object value)
+    private static string ToString(DataColumn column, object value)
     {
         string valueString;
 
@@ -1073,7 +1073,7 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void dataGrid_MouseDown(object sender, MouseEventArgs e)
+    private void DataGrid_MouseDown(object sender, MouseEventArgs e)
     {
         if (e.Button == MouseButtons.Right)
         {

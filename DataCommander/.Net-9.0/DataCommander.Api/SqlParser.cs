@@ -585,7 +585,7 @@ public sealed class SqlParser
         return new Parameter(name, value);
     }
 
-    private static IDictionary<string, string?> FindTables(List<Token> tokens, out Table[] allTables)
+    private static Dictionary<string, string?> FindTables(List<Token> tokens, out Table[] allTables)
     {
         var tables = new Dictionary<string, string?>(StringComparer.InvariantCultureIgnoreCase);
         var tableList = new List<Table>();
