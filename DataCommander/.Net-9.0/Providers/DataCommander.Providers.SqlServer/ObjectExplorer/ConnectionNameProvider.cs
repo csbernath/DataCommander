@@ -1,5 +1,4 @@
-﻿using System;
-using Foundation.Data;
+﻿using Foundation.Data;
 using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;

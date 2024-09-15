@@ -25,7 +25,7 @@ public readonly struct MinuteSpan(int value) : IComparable<MinuteSpan>
 
     public static MinuteSpan FromHours(double hours)
     {
-        var minutes = (int) (DateTimeConstants.MinutesPerHour * hours);
+        var minutes = (int) (TimeSpan.MinutesPerHour * hours);
         return new MinuteSpan(minutes);
     }
 
@@ -35,8 +35,8 @@ public readonly struct MinuteSpan(int value) : IComparable<MinuteSpan>
     {
         get
         {
-            var hours = _value / DateTimeConstants.MinutesPerHour;
-            var minutes = _value - DateTimeConstants.MinutesPerHour * hours;
+            var hours = _value / TimeSpan.MinutesPerHour;
+            var minutes = _value - TimeSpan.MinutesPerHour * hours;
 
             var debuggerDisplay = $"{hours}:{minutes:D2}";
 

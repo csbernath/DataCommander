@@ -76,7 +76,7 @@ public struct StopwatchTimeSpan(long ticks)
 
         if (days != 0)
         {
-            totalSeconds -= DateTimeConstants.SecondsPerDay * days;
+            totalSeconds -= TimeSpan.SecondsPerDay * days;
 
             stringBuilder.Append(days);
             stringBuilder.Append('.');

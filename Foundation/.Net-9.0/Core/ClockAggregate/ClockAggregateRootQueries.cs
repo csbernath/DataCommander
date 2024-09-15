@@ -4,12 +4,12 @@ namespace Foundation.Core.ClockAggregate;
 
 public static class ClockAggregateRootQueries
 {
-    public static void Get(this ClockAggregateRoot clock, out long stopwatchTimestamp, out int environmentTickCount, out DateTime universalTime,
+    public static void Get(this ClockAggregateRoot clock, out long stopwatchTimestamp, out long environmentTickCount, out DateTime universalTime,
         out DateTime localTime)
     {
         var clockState = clock.GetAggregateState();
         stopwatchTimestamp = clockState.StopwatchTimestamp;
-        environmentTickCount = clockState.EnvironmentTickCount;
+        environmentTickCount = clockState.EnvironmentTickCount64;
         universalTime = clockState.UniversalTime;
         localTime = clockState.LocalTime;
     }
@@ -22,7 +22,7 @@ public static class ClockAggregateRootQueries
     }
 
     public static DateTime GetUniversalTimeFromCurrentEnvironmentTickCount(this ClockAggregateRoot clock) =>
-        clock.GetUniversalTimeFromEnvironmentTickCount(Environment.TickCount);
+        clock.GetUniversalTimeFromEnvironmentTickCount64(Environment.TickCount64);
 
     public static DateTime GetUniversalTimeFromStopwatchTimestamp(this ClockAggregateRoot clock, long stopwatchTimestamp)
     {
@@ -35,27 +35,30 @@ public static class ClockAggregateRootQueries
         return universalTime;
     }
 
-    public static void GetFromStopwatchTimestamp(this ClockAggregateRoot clock, long stopwatchTimestamp, out int environmentTickCount,
-        out DateTime universalTime)
+    public static (long environmentTickCount64, DateTime universalTime) GetFromStopwatchTimestamp(
+        this ClockAggregateRoot clock,
+        long stopwatchTimestamp)
     {
         ArgumentNullException.ThrowIfNull(clock);
         var clockState = clock.GetAggregateState();
         var stopwatchTicks = stopwatchTimestamp - clockState.StopwatchTimestamp;
 
         var environmentTicksDouble = stopwatchTicks * StopwatchConstants.MillisecondsPerTick;
-        var environmentTicks = (int) Math.Round(environmentTicksDouble);
-        environmentTickCount = clockState.EnvironmentTickCount + environmentTicks;
+        var environmentTicks = (long)Math.Round(environmentTicksDouble);
+        var environmentTickCount64 = clockState.EnvironmentTickCount64 + environmentTicks;
 
         var timeSpanTicksDouble = stopwatchTicks * StopwatchConstants.TimeSpanTicksPerStopwatchTick;
-        var timeSpanTicks = (long) Math.Round(timeSpanTicksDouble);
-        universalTime = clockState.UniversalTime.AddTicks(timeSpanTicks);
+        var timeSpanTicks = (long)Math.Round(timeSpanTicksDouble);
+        var universalTime = clockState.UniversalTime.AddTicks(timeSpanTicks);
+
+        return (environmentTickCount64, universalTime);
     }
 
-    private static DateTime GetUniversalTimeFromEnvironmentTickCount(this ClockAggregateRoot clock, int environmentTickCount)
+    private static DateTime GetUniversalTimeFromEnvironmentTickCount64(this ClockAggregateRoot clock, long environmentTickCount64)
     {
         ArgumentNullException.ThrowIfNull(clock);
         var clockState = clock.GetAggregateState();
-        var milliseconds = environmentTickCount - clockState.EnvironmentTickCount;
+        var milliseconds = environmentTickCount64 - clockState.EnvironmentTickCount64;
         var universalTime = clockState.UniversalTime.AddMilliseconds(milliseconds);
         return universalTime;
     }

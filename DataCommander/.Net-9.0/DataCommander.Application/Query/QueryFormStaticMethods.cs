@@ -8,7 +8,6 @@ using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.FieldReaders;
 using DataCommander.Api.Query;
-using DataCommander.Application.Connection;
 using Foundation.Core;
 
 namespace DataCommander.Application.Query;
