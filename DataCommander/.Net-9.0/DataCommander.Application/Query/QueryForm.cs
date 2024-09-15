@@ -1341,7 +1341,7 @@ public sealed partial class QueryForm : Form, IQueryForm
                 default:
                     maxRecords = int.MaxValue;
                     var textBox = new RichTextBox();
-                    GarbageMonitor.Default.Add("ExecuteQuery.textBox", textBox);
+                    GarbageMonitor.Default.Add("ExecuteQuery.textBox", textBox);                    
                     textBox.MaxLength = int.MaxValue;
                     textBox.Multiline = true;
                     textBox.WordWrap = false;
@@ -1354,6 +1354,9 @@ public sealed partial class QueryForm : Form, IQueryForm
                     resultSetTabPage.Controls.Add(textBox);
                     _resultSetsTabControl.TabPages.Add(resultSetTabPage);
                     _resultSetsTabControl.SelectedTab = resultSetTabPage;
+
+                    if (_colorTheme != null)
+                        _colorTheme.Apply(resultSetTabPage);
 
                     var textWriter = new TextBoxWriter(textBox);
                     resultWriter = new TextResultWriter(AddInfoMessage, textWriter, this);
