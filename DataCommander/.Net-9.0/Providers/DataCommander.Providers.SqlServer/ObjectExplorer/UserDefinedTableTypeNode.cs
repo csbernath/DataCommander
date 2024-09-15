@@ -18,10 +18,10 @@ internal sealed class UserDefinedTableTypeNode(DatabaseNode database, int id, st
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        return Task.FromResult<IEnumerable<ITreeNode>>(new ITreeNode[]
-        {
+        return Task.FromResult<IEnumerable<ITreeNode>>(
+        [
             new ColumnCollectionNode(database, id)
-        });
+        ]);
     }
 
     bool ITreeNode.Sortable => false;

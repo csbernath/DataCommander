@@ -66,7 +66,7 @@ public struct PBoolean : INullable
 
     public static PBoolean Parse(string s, PValueType type) => string.IsNullOrEmpty(s) ? new PBoolean(type) : SqlBoolean.Parse(s);
 
-    public override bool Equals(object y)
+    public override readonly bool Equals(object y)
     {
         var equals = y is PBoolean;
         if (equals)
@@ -74,32 +74,23 @@ public struct PBoolean : INullable
         return equals;
     }
 
-    public override int GetHashCode() => _sql.GetHashCode();
+    public override readonly int GetHashCode() => _sql.GetHashCode();
 
     public PValueType ValueType { get; private set; }
 
-    public bool IsNull => ValueType == PValueType.Null;
-    public bool IsValue => ValueType == PValueType.Value;
-    public bool IsEmpty => ValueType == PValueType.Empty;
+    public readonly bool IsNull => ValueType == PValueType.Null;
+    public readonly bool IsValue => ValueType == PValueType.Value;
+    public readonly bool IsEmpty => ValueType == PValueType.Empty;
 
-    public object Value
+    public readonly object Value
     {
         get
         {
-            object value;
-
-            switch (ValueType)
+            object value = ValueType switch
             {
-                case PValueType.Value:
-                case PValueType.Null:
-                    value = _sql;
-                    break;
-
-                default:
-                    value = null;
-                    break;
-            }
-
+                PValueType.Value or PValueType.Null => _sql,
+                _ => null,
+            };
             return value;
         }
 
@@ -123,7 +114,7 @@ public struct PBoolean : INullable
         //}
     }
 
-    public bool IsTrue => _sql.IsTrue;
-    public bool IsFalse => _sql.IsFalse;
-    public override string ToString() => _sql.ToString();
+    public readonly bool IsTrue => _sql.IsTrue;
+    public readonly bool IsFalse => _sql.IsFalse;
+    public override readonly string ToString() => _sql.ToString();
 }

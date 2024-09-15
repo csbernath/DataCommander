@@ -65,8 +65,8 @@ public sealed class SqlLog
     private static readonly IInternalConnectionHelper InternalConnectionHelper;
     private int _connectionCounter;
     private readonly SafeSqlConnection _connection;
-    private readonly Dictionary<int, Dictionary<string, SqLoglCommandExecution>> _applications = new();
-    private readonly Dictionary<object, SqlLogConnection> _connections = new();
+    private readonly Dictionary<int, Dictionary<string, SqLoglCommandExecution>> _applications = [];
+    private readonly Dictionary<object, SqlLogConnection> _connections = [];
     private readonly Queue<ISqlLogItem> _queue = new();
     private readonly AutoResetEvent _queueEvent = new(false);
 

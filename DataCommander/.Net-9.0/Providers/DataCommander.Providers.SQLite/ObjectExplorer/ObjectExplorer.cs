@@ -13,10 +13,10 @@ internal sealed class ObjectExplorer : IObjectExplorer
     public void SetConnection(ConnectionStringAndCredential connectionStringAndCredential) => _connectionStringAndCredential = connectionStringAndCredential;
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>(new ITreeNode[]
-        {
+        Task.FromResult<IEnumerable<ITreeNode>>(
+        [
             new DatabaseCollectionNode(_connectionStringAndCredential)
-        });
+        ]);
 
     bool IObjectExplorer.Sortable => false;
 }

@@ -4,16 +4,10 @@ using System.Data.Common;
 
 namespace Foundation.Data.TextData;
 
-public sealed class TextDataParameter : DbParameter
+public sealed class TextDataParameter(string name, object value) : DbParameter
 {
-    private string _name;
-    private object _value;
-
-    public TextDataParameter(string name, object value)
-    {
-        _name = name;
-        _value = value;
-    }
+    private string _name = name;
+    private object _value = value;
 
     /// <summary>
     /// 

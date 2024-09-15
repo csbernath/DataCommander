@@ -8,7 +8,7 @@ namespace DataCommander.Providers.SQLite;
 
 internal sealed class SQLiteDataReaderHelper : IDataReaderHelper
 {
-    private SQLiteDataReader _sqLiteDataReader;
+    private readonly SQLiteDataReader _sqLiteDataReader;
     private readonly IDataFieldReader[] _dataFieldReaders;
 
     public SQLiteDataReaderHelper( IDataReader dataReader )
@@ -36,36 +36,12 @@ internal sealed class SQLiteDataReaderHelper : IDataReaderHelper
         var sqLiteDataReader = (SQLiteDataReader) dataRecord;
         var columnOrdinal = (int) schemaRow[ "ColumnOrdinal" ];
         var dbType = (DbType) schemaRow[ SchemaTableColumn.ProviderType ];
-        IDataFieldReader dataFieldReader;
-
-        switch (dbType)
+        IDataFieldReader dataFieldReader = dbType switch
         {
-            case DbType.Decimal:
-                dataFieldReader = new DecimalDataFieldReader( sqLiteDataReader, columnOrdinal );
-                break;
-
-            case DbType.Binary:
-                dataFieldReader = new BinaryDataFieldReader( sqLiteDataReader, columnOrdinal );
-                break;
-
-            default:
-                dataFieldReader = new DefaultDataFieldReader( sqLiteDataReader, columnOrdinal );
-                break;
-
-            //    case DbType.
-            //case "BLOB":
-            //    dataFieldReader = new BinaryDataFieldReader( dataRecord, columnOrdinal );
-            //    break;
-
-            //case "DECIMAL":
-            //    dataFieldReader = new DecimalDataFieldReader( sqLiteDataReader, columnOrdinal );
-            //    break;
-
-            //default:
-            //    dataFieldReader = new DefaultDataFieldReader( dataRecord, columnOrdinal );
-            //    break;
-        }
-
+            DbType.Decimal => new DecimalDataFieldReader(sqLiteDataReader, columnOrdinal),
+            DbType.Binary => new BinaryDataFieldReader(sqLiteDataReader, columnOrdinal),
+            _ => new DefaultDataFieldReader(sqLiteDataReader, columnOrdinal),
+        };
         return dataFieldReader;
     }
 

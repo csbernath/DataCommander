@@ -3,7 +3,7 @@
 /// <summary>
 ///     Discrete union
 /// </summary>
-public struct Variant<T1, T2, T3>
+public readonly struct Variant<T1, T2, T3>
 {
     private Variant(object value, byte type)
     {

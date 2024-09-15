@@ -5,28 +5,22 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.SQLite.ObjectExplorer;
 
-sealed class DatabaseNode : ITreeNode
+sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string? name) : ITreeNode
 {
-    private readonly DatabaseCollectionNode _databaseCollectionNode;
-
-    public DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string? name)
-    {
-        _databaseCollectionNode = databaseCollectionNode;
-        Name = name;
-    }
+    private readonly DatabaseCollectionNode _databaseCollectionNode = databaseCollectionNode;
 
     public DatabaseCollectionNode DatabaseCollectionNode => _databaseCollectionNode;
 
     #region ITreeNode Members
-    public string? Name { get; }
+    public string? Name { get; } = name;
 
     bool ITreeNode.IsLeaf => false;
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>(new ITreeNode[]
-        {
+        Task.FromResult<IEnumerable<ITreeNode>>(
+        [
             new TableCollectionNode(this)
-        });
+        ]);
 
     bool ITreeNode.Sortable => false;
 

@@ -129,23 +129,12 @@ public class WorkerThread
         WaitHandle[] waitHandles = [_stopRequest, _continueRequest];
         var index = WaitHandle.WaitAny(waitHandles);
         ticks = Stopwatch.GetTimestamp() - ticks;
-        string request;
-
-        switch (index)
+        string request = index switch
         {
-            case 0:
-                request = "stop";
-                break;
-
-            case 1:
-                request = "continue";
-                break;
-
-            default:
-                request = "unknown";
-                break;
-        }
-
+            0 => "stop",
+            1 => "continue",
+            _ => "unknown",
+        };
         Log.Trace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) accepted {request} request in {StopwatchTimeSpan.ToString(ticks, 6)} seconds.");
     }
 

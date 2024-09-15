@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace Foundation.Core;
 
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public struct SmallTime : IEquatable<SmallTime>, IComparable<SmallTime>
+public readonly struct SmallTime : IEquatable<SmallTime>, IComparable<SmallTime>
 {
     private readonly short _value;
     public static readonly SmallTime MinValue = new(short.MinValue);
@@ -20,9 +20,9 @@ public struct SmallTime : IEquatable<SmallTime>, IComparable<SmallTime>
         _value = (short) (60 * hours + minutes);
     }
 
-    public short Value => _value;
+    public readonly short Value => _value;
 
-    public override string ToString()
+    public override readonly string ToString()
     {
         var timeSpan = ToTimeSpan(_value);
         return timeSpan.ToString();
@@ -33,7 +33,7 @@ public struct SmallTime : IEquatable<SmallTime>, IComparable<SmallTime>
         return TimeSpan.FromSeconds(value);
     }
 
-    internal string DebuggerDisplay
+    internal readonly string DebuggerDisplay
     {
         get
         {
@@ -43,7 +43,7 @@ public struct SmallTime : IEquatable<SmallTime>, IComparable<SmallTime>
         }
     }
 
-    public bool Equals(SmallTime other)
+    public readonly bool Equals(SmallTime other)
     {
         return _value == other._value;
     }
@@ -54,12 +54,12 @@ public struct SmallTime : IEquatable<SmallTime>, IComparable<SmallTime>
         return obj is SmallTime && Equals((SmallTime) obj);
     }
 
-    public override int GetHashCode()
+    public override readonly int GetHashCode()
     {
         return _value.GetHashCode();
     }
 
-    public int CompareTo(SmallTime other)
+    public readonly int CompareTo(SmallTime other)
     {
         return _value.CompareTo(other._value);
     }

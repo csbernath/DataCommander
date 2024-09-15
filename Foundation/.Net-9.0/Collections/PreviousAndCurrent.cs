@@ -1,6 +1,6 @@
 ﻿namespace Foundation.Collections;
 
-public struct PreviousAndCurrent<T>
+public readonly struct PreviousAndCurrent<T>
 {
     public readonly T Previous;
     public readonly T Current;

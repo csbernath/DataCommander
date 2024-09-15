@@ -2,7 +2,7 @@
 
 namespace Foundation.Data;
 
-public struct DataParameterValue<T> : IDataParameterValue<T>
+public readonly struct DataParameterValue<T> : IDataParameterValue<T>
 {
     private readonly T _value;
 
@@ -25,7 +25,7 @@ public struct DataParameterValue<T> : IDataParameterValue<T>
     public static explicit operator T(DataParameterValue<T> value) => value.Value;
     public DataParameterValueType Type { get; }
 
-    public T Value
+    public readonly T Value
     {
         get
         {

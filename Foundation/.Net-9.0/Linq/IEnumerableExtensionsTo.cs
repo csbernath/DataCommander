@@ -47,8 +47,10 @@ public static class IEnumerableExtensionsTo
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(keySelector);
 
-        var dictionary = new SortedDictionary<TKey, TValue>();
-        dictionary.Add(source, keySelector);
+        var dictionary = new SortedDictionary<TKey, TValue>
+        {
+            { source, keySelector }
+        };
         return dictionary;
     }
 

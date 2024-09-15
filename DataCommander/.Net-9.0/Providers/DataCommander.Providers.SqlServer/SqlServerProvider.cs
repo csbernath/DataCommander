@@ -273,32 +273,14 @@ internal sealed class SqlServerProvider : IProvider
         var allowDbNull = schemaRow.AllowDbNull;
         var dataType = schemaRow.DataType;
         var typeCode = Type.GetTypeCode(dataType);
-        string typeName;
-
-        switch (typeCode)
+        string typeName = typeCode switch
         {
-            case TypeCode.Int32:
-                typeName = SqlDataTypeName.Int;
-                break;
-
-            case TypeCode.DateTime:
-                typeName = SqlDataTypeName.DateTime;
-                break;
-
-            case TypeCode.Double:
-                typeName = SqlDataTypeName.Float;
-                break;
-
-            case TypeCode.String:
-                typeName = $"{SqlDataTypeName.NVarChar}({columnSize})";
-                break;
-
-            default:
-                // TODO
-                typeName = $"'{typeCode}'";
-                break;
-        }
-
+            TypeCode.Int32 => SqlDataTypeName.Int,
+            TypeCode.DateTime => SqlDataTypeName.DateTime,
+            TypeCode.Double => SqlDataTypeName.Float,
+            TypeCode.String => $"{SqlDataTypeName.NVarChar}({columnSize})",
+            _ => $"'{typeCode}'",// TODO
+        };
         return typeName;
     }
 
@@ -525,7 +507,7 @@ end", name.Database, ownersString, name.Name);
                         if (name.Schema == null)
                             name.Schema = "dbo";
 
-                        commandText = SqlServerObject.GetObjectsByDatabase(name.Database, new[] { "P", "X" });
+                        commandText = SqlServerObject.GetObjectsByDatabase(name.Database, ["P", "X"]);
                         break;
 
                     case SqlObjectTypes.Trigger:

@@ -6,14 +6,9 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.SQLite.ObjectExplorer;
 
-internal sealed class TableCollectionNode : ITreeNode
+internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
 {
-    private readonly DatabaseNode _databaseNode;
-
-    public TableCollectionNode(DatabaseNode databaseNode)
-    {
-        _databaseNode = databaseNode;
-    }
+    private readonly DatabaseNode _databaseNode = databaseNode;
 
     #region ITreeNode Members
 

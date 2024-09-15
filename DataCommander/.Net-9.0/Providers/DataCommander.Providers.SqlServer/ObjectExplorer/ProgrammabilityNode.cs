@@ -12,9 +12,11 @@ internal sealed class ProgrammabilityNode(DatabaseNode database) : ITreeNode
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var childNodes = new List<ITreeNode>();
-        childNodes.Add(new StoredProcedureCollectionNode(database, false));
-        childNodes.Add(new FunctionCollectionNode(database));
+        var childNodes = new List<ITreeNode>
+        {
+            new StoredProcedureCollectionNode(database, false),
+            new FunctionCollectionNode(database)
+        };
 
         if (database.Name == "master")
             childNodes.Add(new ExtendedStoreProcedureCollectionNode(database));

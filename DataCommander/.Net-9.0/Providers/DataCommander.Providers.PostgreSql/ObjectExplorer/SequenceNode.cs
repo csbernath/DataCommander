@@ -5,16 +5,10 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class SequenceNode : ITreeNode
+internal sealed class SequenceNode(SequenceCollectionNode sequenceCollectionNode, string? name) : ITreeNode
 {
-    private readonly SequenceCollectionNode _sequenceCollectionNode;
-    private readonly string? _name;
-
-    public SequenceNode(SequenceCollectionNode sequenceCollectionNode, string? name)
-    {
-        _sequenceCollectionNode = sequenceCollectionNode;
-        _name = name;
-    }
+    private readonly SequenceCollectionNode _sequenceCollectionNode = sequenceCollectionNode;
+    private readonly string? _name = name;
 
     string? ITreeNode.Name => _name;
 

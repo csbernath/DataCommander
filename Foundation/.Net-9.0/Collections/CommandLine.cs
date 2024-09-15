@@ -22,7 +22,7 @@ public sealed class CommandLine
             "nameIndex",
             argument => GetKeyResponse.Create(argument.Name != null, argument.Name),
             dictionary,
-            () => new List<CommandLineArgument>());
+            () => []);
         _arguments.Indexes.Add(NameIndex);
         var stringReader = new StringReader(commandLine);
         var arguments = Parse(stringReader);

@@ -27,27 +27,13 @@ internal sealed class IndexNode(DatabaseNode databaseNode, int parentId, int id,
                 : "Non-Unique");
 
             stringBuilder.Append(',');
-
-            string typeString;
-            switch (type)
+            string typeString = type switch
             {
-                case 0:
-                    typeString = "Heap";
-                    break;
-
-                case 1:
-                    typeString = "Clustered";
-                    break;
-
-                case 2:
-                    typeString = "Non-Clustered";
-                    break;
-
-                default:
-                    typeString = "???";
-                    break;
-            }
-
+                0 => "Heap",
+                1 => "Clustered",
+                2 => "Non-Clustered",
+                _ => "???",
+            };
             stringBuilder.Append(typeString);
             stringBuilder.Append(')');
 

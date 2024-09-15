@@ -11,11 +11,11 @@ internal sealed class FunctionCollectionNode(DatabaseNode database) : ITreeNode
     public bool IsLeaf => false;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>(new ITreeNode[]
-        {
+        Task.FromResult<IEnumerable<ITreeNode>>(
+        [
             new TableValuedFunctionCollectionNode(database),
             new ScalarValuedFunctionCollectionNode(database)
-        });
+        ]);
 
     public bool Sortable => false;
     public string Query => null;

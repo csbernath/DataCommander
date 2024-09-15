@@ -10,5 +10,5 @@ public sealed class XmlSpreadsheetColumn
     public string NumberFormat;
     public string Width;
     public Converter<object, string> Convert;
-    public Dictionary<string, object> ExtendedProperties = new();
+    public Dictionary<string, object> ExtendedProperties = [];
 }

@@ -7,14 +7,9 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.SQLite.ObjectExplorer;
 
-internal sealed class DatabaseCollectionNode : ITreeNode
+internal sealed class DatabaseCollectionNode(ConnectionStringAndCredential connectionStringAndCredential) : ITreeNode
 {
-    private readonly ConnectionStringAndCredential _connectionStringAndCredential;
-
-    public DatabaseCollectionNode(ConnectionStringAndCredential connectionStringAndCredential)
-    {
-        _connectionStringAndCredential = connectionStringAndCredential;
-    }
+    private readonly ConnectionStringAndCredential _connectionStringAndCredential = connectionStringAndCredential;
 
     public ConnectionStringAndCredential ConnectionStringAndCredential => _connectionStringAndCredential;
 

@@ -122,29 +122,12 @@ internal static class QueryFormStaticMethods
 
     public static HorizontalAlignment GetHorizontalAlignment(Type type)
     {
-        HorizontalAlignment align;
-
         var typeCode = Type.GetTypeCode(type);
-
-        switch (typeCode)
+        var align = typeCode switch
         {
-            case TypeCode.SByte:
-            case TypeCode.Int16:
-            case TypeCode.Int32:
-            case TypeCode.Int64:
-            case TypeCode.Byte:
-            case TypeCode.UInt16:
-            case TypeCode.UInt32:
-            case TypeCode.UInt64:
-            case TypeCode.Decimal:
-                align = HorizontalAlignment.Right;
-                break;
-
-            default:
-                align = HorizontalAlignment.Left;
-                break;
-        }
-
+            TypeCode.SByte or TypeCode.Int16 or TypeCode.Int32 or TypeCode.Int64 or TypeCode.Byte or TypeCode.UInt16 or TypeCode.UInt32 or TypeCode.UInt64 or TypeCode.Decimal => HorizontalAlignment.Right,
+            _ => HorizontalAlignment.Left,
+        };
         return align;
     }
 

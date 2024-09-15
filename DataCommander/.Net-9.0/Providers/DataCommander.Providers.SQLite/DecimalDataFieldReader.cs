@@ -4,16 +4,10 @@ using DataCommander.Api.FieldReaders;
 
 namespace DataCommander.Providers.SQLite;
 
-internal sealed class DecimalDataFieldReader : IDataFieldReader
+internal sealed class DecimalDataFieldReader(SQLiteDataReader dataReader, int columnOrdinal) : IDataFieldReader
 {
-    readonly SQLiteDataReader _dataReader;
-    readonly int _columnOrdinal;
-
-    public DecimalDataFieldReader( SQLiteDataReader dataReader, int columnOrdinal )
-    {
-        _dataReader = dataReader;
-        _columnOrdinal = columnOrdinal;
-    }
+    readonly SQLiteDataReader _dataReader = dataReader;
+    readonly int _columnOrdinal = columnOrdinal;
 
     #region IDataFieldReader Members
 

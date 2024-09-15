@@ -106,7 +106,7 @@ from	[{0}].sys.database_files f", name);
     {
         var databaseName = name;
 
-        var databaseSnapshotName = $"{databaseName}_Snapshot_{DateTime.Now.ToString("yyyyMMdd_HHmm")}";
+        var databaseSnapshotName = $"{databaseName}_Snapshot_{DateTime.Now:yyyyMMdd_HHmm}";
         var logical_file_name = GetLogicalFileName(databaseName);
         var osFileName = $"D:\\Backup\\{databaseSnapshotName}.ss";
 
@@ -134,7 +134,7 @@ from	[{0}].sys.database_files f", name);
         queryForm.SetClipboardText(text);
     }
 
-    private object GetLogicalFileName(string? database)
+    private string GetLogicalFileName(string? database)
     {
         string logicalFileName;
             

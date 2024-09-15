@@ -168,11 +168,11 @@ internal sealed class PostgreSqlProvider : IProvider
 
                         if (name.Schema != null)
                         {
-                            owners = new[] { name.Schema };
+                            owners = [name.Schema];
                         }
                         else
                         {
-                            owners = new[] { "dbo", "sys" };
+                            owners = ["dbo", "sys"];
                         }
 
                         var sb = new StringBuilder();
@@ -236,7 +236,7 @@ order by 1", name.Database);
                                 {
                                     var token = tokens[tokenIndex];
                                     var tokenValue = token.Value;
-                                    var indexofAny = tokenValue.IndexOfAny(new[] { '\r', '\n' });
+                                    var indexofAny = tokenValue.IndexOfAny(['\r', '\n']);
                                     if (indexofAny >= 0)
                                     {
                                         tokenValue = tokenValue[..indexofAny];
@@ -334,10 +334,10 @@ order by 1", name.Database);
 
     List<Statement> IProvider.GetStatements(string commandText)
     {
-        return new List<Statement>
-        {
+        return
+        [
             new(0, commandText)
-        };
+        ];
     }
 
     GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
@@ -346,10 +346,10 @@ order by 1", name.Database);
     {
         var message = e.ToString();
 
-        return new List<InfoMessage>
-        {
+        return
+        [
             InfoMessageFactory.Create(InfoMessageSeverity.Error, null, message)
-        };
+        ];
     }
 
     IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder() => new PostgreSqlConnectionStringBuilder();

@@ -9,7 +9,7 @@ namespace Foundation.Core;
 /// 16 bit date type: 1900-01-01 - 2079-06-06
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public struct SmallDate : IComparable<SmallDate>, IEquatable<SmallDate>
+public readonly struct SmallDate : IComparable<SmallDate>, IEquatable<SmallDate>
 {
     private readonly ushort _value;
 
@@ -34,9 +34,9 @@ public struct SmallDate : IComparable<SmallDate>, IEquatable<SmallDate>
     }
 
     //public ushort Value => _value;
-    public int Year => ToDateTime(_value).Year;
-    public int Month => ToDateTime(_value).Month;
-    public int Day => ToDateTime(_value).Day;
+    public readonly int Year => ToDateTime(_value).Year;
+    public readonly int Month => ToDateTime(_value).Month;
+    public readonly int Day => ToDateTime(_value).Day;
 
     public static explicit operator SmallDate(DateTime dateTime)
     {
@@ -59,13 +59,13 @@ public struct SmallDate : IComparable<SmallDate>, IEquatable<SmallDate>
     public static bool operator >(SmallDate smallDate1, SmallDate smallDate2) => smallDate1._value > smallDate2._value;
 
     [Pure]
-    public bool In(SmallDateInterval interval) => interval.Start._value <= _value && _value <= interval.End._value;
+    public readonly bool In(SmallDateInterval interval) => interval.Start._value <= _value && _value <= interval.End._value;
 
     [Pure]
-    public DateTime ToDateTime() => ToDateTime(_value);
+    public readonly DateTime ToDateTime() => ToDateTime(_value);
 
     [Pure]
-    public SmallDate AddDays(short value)
+    public readonly SmallDate AddDays(short value)
     {
         var valueInt32 = _value + value;
         ushort valueUInt16;
@@ -95,25 +95,25 @@ public struct SmallDate : IComparable<SmallDate>, IEquatable<SmallDate>
         return new SmallDate(result);
     }
 
-    public override bool Equals(object value) => value is SmallDate smallDate && smallDate._value == _value; 
+    public override readonly bool Equals(object value) => value is SmallDate smallDate && smallDate._value == _value; 
 
-    public override int GetHashCode() => _value;
+    public override readonly int GetHashCode() => _value;
 
-    public override string ToString()
+    public override readonly string ToString()
     {
         var dateTime = ToDateTime(_value);
         return dateTime.ToShortDateString();
     }
 
-    public string ToString(string format)
+    public readonly string ToString(string format)
     {
         var dateTime = ToDateTime(_value);
         return dateTime.ToString(format);
     }
 
-    public int CompareTo(SmallDate other) => _value.CompareTo(other._value);
+    public readonly int CompareTo(SmallDate other) => _value.CompareTo(other._value);
 
-    bool IEquatable<SmallDate>.Equals(SmallDate other) => _value == other._value;
+    readonly bool IEquatable<SmallDate>.Equals(SmallDate other) => _value == other._value;
 
     public static bool operator ==(SmallDate x, SmallDate y) => x.Equals(y);
 

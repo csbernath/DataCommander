@@ -14,7 +14,7 @@ namespace Foundation.Data.TextData;
 /// </summary>
 public sealed class TextDataReader : DbDataReader
 {
-    private TextDataCommand _command;
+    private readonly TextDataCommand _command;
     private readonly CommandBehavior _behavior;
     private readonly TextDataColumnCollection _columns;
     private DataTable _schemaTable;

@@ -3,21 +3,14 @@ using System.Linq;
 
 namespace Foundation.Data.SqlEngine;
 
-public class Table
+public class Table(
+    string tableName,
+    ColumnCollection columns,
+    IEnumerable<object[]> rows)
 {
-    private readonly string _tableName;
-    private readonly ColumnCollection _columns;
-    private readonly IEnumerable<object[]> _rows;
-
-    public Table(
-        string tableName,
-        ColumnCollection columns,
-        IEnumerable<object[]> rows)
-    {
-        _tableName = tableName;
-        _columns = columns;
-        _rows = rows;
-    }
+    private readonly string _tableName = tableName;
+    private readonly ColumnCollection _columns = columns;
+    private readonly IEnumerable<object[]> _rows = rows;
 
     public string TableName => _tableName;
     public ColumnCollection Columns => _columns;

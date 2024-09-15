@@ -8,7 +8,7 @@ namespace DataCommander.Providers.PostgreSql;
 
 internal sealed class PostgreSqlConnectionStringBuilder : IDbConnectionStringBuilder
 {
-    private readonly NpgsqlConnectionStringBuilder _npgsqlConnectionStringBuilder = new();
+    private readonly NpgsqlConnectionStringBuilder _npgsqlConnectionStringBuilder = [];
 
     string IDbConnectionStringBuilder.ConnectionString
     {

@@ -18,7 +18,7 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private readonly IResultWriter _logResultWriter;
     private readonly Action<InfoMessage> _addInfoMessage;
-    private IProvider _destinationProvider;
+    private readonly IProvider _destinationProvider;
     private readonly ConnectionBase _destinationConnection;
     private readonly SqlConnection _destinationSqlConnection;
     private readonly string _tableName;
@@ -35,7 +35,7 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
     private Task _task;
     private EventWaitHandle _enqueueEvent;
     private bool _writeEnded;
-    private bool _canConvertCommandToString;
+    private readonly bool _canConvertCommandToString;
     private long _readRowCount;
     private long _insertedRowCount;
     private SqlBulkCopy _sqlBulkCopy;

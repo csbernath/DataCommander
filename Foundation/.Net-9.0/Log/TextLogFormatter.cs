@@ -16,34 +16,15 @@ public sealed class TextLogFormatter : ILogFormatter
 
     private static char GetLogLevelChar(LogEntry entry)
     {
-        char logLevelChar;
-        switch (entry.LogLevel)
+        var logLevelChar = entry.LogLevel switch
         {
-            case LogLevel.Debug:
-                logLevelChar = 'D';
-                break;
-
-            case LogLevel.Error:
-                logLevelChar = 'E';
-                break;
-
-            case LogLevel.Information:
-                logLevelChar = 'I';
-                break;
-
-            case LogLevel.Trace:
-                logLevelChar = 'T';
-                break;
-
-            case LogLevel.Warning:
-                logLevelChar = 'W';
-                break;
-
-            default:
-                logLevelChar = '?';
-                break;
-        }
-
+            LogLevel.Debug => 'D',
+            LogLevel.Error => 'E',
+            LogLevel.Information => 'I',
+            LogLevel.Trace => 'T',
+            LogLevel.Warning => 'W',
+            _ => '?',
+        };
         return logLevelChar;
     }
 }

@@ -13,27 +13,13 @@ public static class DataParameterExtensions
         ArgumentNullException.ThrowIfNull(parameter, nameof(parameter));
         Assert.IsInRange(value.Type == DataParameterValueType.Value || value.Type == DataParameterValueType.Null ||
                          value.Type == DataParameterValueType.Default);
-
-        object valueObject;
-
-        switch (value.Type)
+        object valueObject = value.Type switch
         {
-            case DataParameterValueType.Value:
-                valueObject = value.Value;
-                break;
-
-            case DataParameterValueType.Null:
-                valueObject = DBNull.Value;
-                break;
-
-            case DataParameterValueType.Default:
-                valueObject = null;
-                break;
-
-            default:
-                throw new ArgumentException();
-        }
-
+            DataParameterValueType.Value => value.Value,
+            DataParameterValueType.Null => DBNull.Value,
+            DataParameterValueType.Default => null,
+            _ => throw new ArgumentException(),
+        };
         parameter.Value = valueObject;
     }
 }

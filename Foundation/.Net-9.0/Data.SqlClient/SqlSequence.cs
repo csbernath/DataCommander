@@ -3,14 +3,9 @@ using Microsoft.Data.SqlClient;
 
 namespace Foundation.Data.SqlClient;
 
-public sealed class SqlSequence
+public sealed class SqlSequence(int id)
 {
-    private readonly int _id;
-
-    public SqlSequence(int id)
-    {
-        _id = id;
-    }
+    private readonly int _id = id;
 
     public static void CreateSchema(IDbConnection connection)
     {

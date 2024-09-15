@@ -8,7 +8,7 @@ using Foundation.Assertions;
 namespace Foundation.Core;
 
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public struct SmallTimeInterval : IEquatable<SmallTimeInterval>, IComparable<SmallTimeInterval>
+public readonly struct SmallTimeInterval : IEquatable<SmallTimeInterval>, IComparable<SmallTimeInterval>
 {
     public readonly SmallTime Start;
     public readonly SmallTime End;
@@ -22,7 +22,7 @@ public struct SmallTimeInterval : IEquatable<SmallTimeInterval>, IComparable<Sma
     }
 
     [Pure]
-    public bool Intersects(SmallTimeInterval other)
+    public readonly bool Intersects(SmallTimeInterval other)
     {
         var start = Math.Max(Start.Value, other.Start.Value);
         var end = Math.Min(End.Value, other.End.Value);
@@ -48,12 +48,12 @@ public struct SmallTimeInterval : IEquatable<SmallTimeInterval>, IComparable<Sma
         return intersects;
     }
 
-    public bool Equals(SmallTimeInterval other)
+    public readonly bool Equals(SmallTimeInterval other)
     {
         return Start.Equals(other.Start) && End.Equals(other.End);
     }
 
-    public int CompareTo(SmallTimeInterval other)
+    public readonly int CompareTo(SmallTimeInterval other)
     {
         var result = Start.Value.CompareTo(other.Start.Value);
         if (result == 0)
@@ -67,7 +67,7 @@ public struct SmallTimeInterval : IEquatable<SmallTimeInterval>, IComparable<Sma
         return obj is SmallTimeInterval && Equals((SmallTimeInterval) obj);
     }
 
-    public override int GetHashCode()
+    public override readonly int GetHashCode()
     {
         unchecked
         {
@@ -75,5 +75,5 @@ public struct SmallTimeInterval : IEquatable<SmallTimeInterval>, IComparable<Sma
         }
     }
 
-    private string DebuggerDisplay => $"{Start.DebuggerDisplay}-{End.DebuggerDisplay}";
+    private readonly string DebuggerDisplay => $"{Start.DebuggerDisplay}-{End.DebuggerDisplay}";
 }

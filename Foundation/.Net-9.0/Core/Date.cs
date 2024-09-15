@@ -6,7 +6,7 @@ using System.Diagnostics.Contracts;
 namespace Foundation.Core;
 
 [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
-public struct Date : IComparable<Date>, IEquatable<Date>
+public readonly struct Date : IComparable<Date>, IEquatable<Date>
 {
     private readonly ulong _value;
 
@@ -31,15 +31,15 @@ public struct Date : IComparable<Date>, IEquatable<Date>
     public static bool operator >(Date date1, Date date2) => date1._value > date2._value;
 
     [Pure]
-    public bool In(DateInterval interval) => interval.Start._value <= _value && _value <= interval.End._value;
+    public readonly bool In(DateInterval interval) => interval.Start._value <= _value && _value <= interval.End._value;
 
-    public int CompareTo(Date other) => _value.CompareTo(other._value);
-
-    [Pure]
-    public DateTime ToDateTime() => ToDateTime(_value);
+    public readonly int CompareTo(Date other) => _value.CompareTo(other._value);
 
     [Pure]
-    public Date AddDays(long value)
+    public readonly DateTime ToDateTime() => ToDateTime(_value);
+
+    [Pure]
+    public readonly Date AddDays(long value)
     {
         var valueInt64 = (long) _value + value;
         ulong valueUInt64;
@@ -71,7 +71,7 @@ public struct Date : IComparable<Date>, IEquatable<Date>
         return value;
     }
 
-    bool IEquatable<Date>.Equals(Date other) => _value == other._value;
+    readonly bool IEquatable<Date>.Equals(Date other) => _value == other._value;
     public static bool operator ==(Date x, Date y) => x.Equals(y);
     public static bool operator !=(Date x, Date y) => !x.Equals(y);
 

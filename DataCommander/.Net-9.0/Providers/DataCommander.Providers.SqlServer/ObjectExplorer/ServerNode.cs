@@ -11,14 +11,9 @@ using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class ServerNode : ITreeNode
+internal sealed class ServerNode(ConnectionStringAndCredential connectionStringAndCredential) : ITreeNode
 {
-    public readonly ConnectionStringAndCredential ConnectionStringAndCredential;
-    
-    public ServerNode(ConnectionStringAndCredential connectionStringAndCredential)
-    {
-        ConnectionStringAndCredential = connectionStringAndCredential;
-    }
+    public readonly ConnectionStringAndCredential ConnectionStringAndCredential = connectionStringAndCredential;
 
     public SqlConnection CreateConnection() => ConnectionFactory.CreateConnection(ConnectionStringAndCredential);
 
@@ -40,7 +35,7 @@ internal sealed class ServerNode : ITreeNode
         var securityNode = new SecurityNode(this);
         var serverObjectCollectionNode = new ServerObjectCollectionNode(this);
         var jobCollectionNode = new JobCollectionNode(this);
-        return Task.FromResult<IEnumerable<ITreeNode>>(new ITreeNode[] { node, securityNode, serverObjectCollectionNode, jobCollectionNode });
+        return Task.FromResult<IEnumerable<ITreeNode>>([node, securityNode, serverObjectCollectionNode, jobCollectionNode]);
     }
 
     bool ITreeNode.Sortable => false;

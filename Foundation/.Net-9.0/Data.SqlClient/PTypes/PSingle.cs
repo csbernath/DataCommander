@@ -52,7 +52,7 @@ public struct PSingle : INullable
         return sp;
     }
 
-    public override bool Equals(object y)
+    public override readonly bool Equals(object y)
     {
         var equals = y is PSingle;
 
@@ -70,28 +70,19 @@ public struct PSingle : INullable
 
     public PValueType ValueType { get; private set; }
 
-    public bool IsNull => ValueType == PValueType.Null;
-    public bool IsValue => ValueType == PValueType.Value;
-    public bool IsEmpty => ValueType == PValueType.Empty;
+    public readonly bool IsNull => ValueType == PValueType.Null;
+    public readonly bool IsValue => ValueType == PValueType.Value;
+    public readonly bool IsEmpty => ValueType == PValueType.Empty;
 
     public object Value
     {
-        get
+        readonly get
         {
-            object value;
-
-            switch (ValueType)
+            object value = ValueType switch
             {
-                case PValueType.Value:
-                case PValueType.Null:
-                    value = _sql;
-                    break;
-
-                default:
-                    value = null;
-                    break;
-            }
-
+                PValueType.Value or PValueType.Null => _sql,
+                _ => null,
+            };
             return value;
         }
 

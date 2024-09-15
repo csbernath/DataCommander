@@ -2,28 +2,20 @@
 
 namespace Foundation.Data.MethodProfiler;
 
-internal sealed class MethodInvocation
+internal sealed class MethodInvocation(
+    MethodInvocation parent,
+    int methodId,
+    long beginTime)
 {
     private static int _idSequence;
 
-    public MethodInvocation(
-        MethodInvocation parent,
-        int methodId,
-        long beginTime)
-    {
-        Parent = parent;
-        Id = Interlocked.Increment(ref _idSequence);
-        MethodId = methodId;
-        BeginTime = beginTime;
-    }
+    public MethodInvocation Parent { get; } = parent;
 
-    public MethodInvocation Parent { get; }
+    public int Id { get; } = Interlocked.Increment(ref _idSequence);
 
-    public int Id { get; }
+    public int MethodId { get; } = methodId;
 
-    public int MethodId { get; }
-
-    public long BeginTime { get; }
+    public long BeginTime { get; } = beginTime;
 
     public long EndTime { get; set; }
 }

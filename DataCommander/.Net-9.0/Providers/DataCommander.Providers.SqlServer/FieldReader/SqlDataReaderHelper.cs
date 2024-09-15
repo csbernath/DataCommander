@@ -10,7 +10,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader;
 internal sealed class SqlDataReaderHelper : IDataReaderHelper
 {
     private readonly IDataFieldReader[] _dataFieldReaders;
-    private SqlDataReader _sqlDataReader;
+    private readonly SqlDataReader _sqlDataReader;
 
     public SqlDataReaderHelper(IDataReader dataReader)
     {

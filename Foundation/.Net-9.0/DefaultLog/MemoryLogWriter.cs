@@ -6,7 +6,7 @@ namespace Foundation.DefaultLog;
 
 internal sealed class MemoryLogWriter : ILogWriter
 {
-    private readonly ICollection<LogEntry> _logEntries = new List<LogEntry>();
+    private readonly ICollection<LogEntry> _logEntries = [];
 
     public IEnumerable<LogEntry> LogEntries => _logEntries;
 

@@ -73,7 +73,7 @@ public struct PDateTime : INullable
         return sp;
     }
 
-    public override bool Equals(object y)
+    public override readonly bool Equals(object y)
     {
         var equals = y is PDateTime;
         if (equals)
@@ -82,32 +82,23 @@ public struct PDateTime : INullable
         return equals;
     }
 
-    public override int GetHashCode() => _sql.GetHashCode();
+    public override readonly int GetHashCode() => _sql.GetHashCode();
 
     public PValueType ValueType { get; private set; }
 
-    public bool IsNull => ValueType == PValueType.Null;
-    public bool IsValue => ValueType == PValueType.Value;
-    public bool IsEmpty => ValueType == PValueType.Empty;
+    public readonly bool IsNull => ValueType == PValueType.Null;
+    public readonly bool IsValue => ValueType == PValueType.Value;
+    public readonly bool IsEmpty => ValueType == PValueType.Empty;
 
-    public object Value
+    public readonly object Value
     {
         get
         {
-            object value;
-
-            switch (ValueType)
+            object value = ValueType switch
             {
-                case PValueType.Value:
-                case PValueType.Null:
-                    value = _sql;
-                    break;
-
-                default:
-                    value = null;
-                    break;
-            }
-
+                PValueType.Value or PValueType.Null => _sql,
+                _ => null,
+            };
             return value;
         }
 
@@ -131,7 +122,7 @@ public struct PDateTime : INullable
         //}
     }
 
-    public override string ToString() => _sql.ToString();
+    public override readonly string ToString() => _sql.ToString();
 
     private static SqlDateTime ToSqlDateTime(DateTime? value) => value ?? SqlDateTime.Null;
 }

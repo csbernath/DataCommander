@@ -69,7 +69,7 @@ public struct PString : INullable
         return sp;
     }
 
-    public override bool Equals(object obj)
+    public override readonly bool Equals(object obj)
     {
         var equals = obj is PString;
         if (equals)
@@ -84,28 +84,19 @@ public struct PString : INullable
     }
 
     public PValueType ValueType { get; }
-    public bool IsNull => ValueType == PValueType.Null;
-    public bool IsValue => ValueType == PValueType.Value;
-    public bool IsEmpty => ValueType == PValueType.Empty;
+    public readonly bool IsNull => ValueType == PValueType.Null;
+    public readonly bool IsValue => ValueType == PValueType.Value;
+    public readonly bool IsEmpty => ValueType == PValueType.Empty;
 
-    public object Value
+    public readonly object Value
     {
         get
         {
-            object value;
-
-            switch (ValueType)
+            object value = ValueType switch
             {
-                case PValueType.Value:
-                case PValueType.Null:
-                    value = _sql;
-                    break;
-
-                default:
-                    value = null;
-                    break;
-            }
-
+                PValueType.Value or PValueType.Null => (object)_sql,
+                _ => null,
+            };
             return value;
         }
 

@@ -28,7 +28,7 @@ public sealed class QueryTextBox : UserControl
     private ToolStripStatusLabel _sbPanel;
     private int _columnIndex;
     private ColorTheme _colorTheme;
-    private UndoRedoState<string> _undoRedoState = new([], 0);
+    private readonly UndoRedoState<string> _undoRedoState = new([], 0);
 
     public RichTextBox RichTextBox { get; private set; }
 

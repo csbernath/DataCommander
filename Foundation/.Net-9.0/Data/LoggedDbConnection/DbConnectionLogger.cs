@@ -8,7 +8,7 @@ namespace Foundation.Data.LoggedDbConnection;
 internal sealed class DbConnectionLogger
 {
     private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(DbConnectionLogger));
-    private LoggedDbConnection _connection;
+    private readonly LoggedDbConnection _connection;
     private BeforeOpenDbConnectionEventArgs _beforeOpen;
     private BeforeExecuteCommandEventArgs _beforeExecuteReader;
 

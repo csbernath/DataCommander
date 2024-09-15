@@ -160,7 +160,7 @@ public sealed partial class QueryForm : Form, IQueryForm
                     if (@object is ToolStripDropDown toolStripDropDown)
                         return toolStripDropDown.Items.Cast<object>();
                     else
-                        return Array.Empty<object>();
+                        return [];
                 },
                 @object =>
                 {
@@ -323,13 +323,13 @@ public sealed partial class QueryForm : Form, IQueryForm
         // 
         // _mainMenu
         // 
-        this._mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
-        {
+        this._mainMenu.Items.AddRange(
+        [
             this._menuItem9,
             this._menuItem8,
             this._menuItem1,
             this._menuItem3
-        });
+        ]);
         this._mainMenu.Location = new System.Drawing.Point(0, 0);
         this._mainMenu.Name = "_mainMenu";
         this._mainMenu.Size = new System.Drawing.Size(1016, 24);
@@ -338,12 +338,12 @@ public sealed partial class QueryForm : Form, IQueryForm
         // 
         // _menuItem9
         // 
-        this._menuItem9.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
-        {
+        this._menuItem9.DropDownItems.AddRange(
+        [
             this._mnuSave,
             this._mnuSaveAs,
             this._mnuDuplicateConnection
-        });
+        ]);
         this._menuItem9.MergeAction = System.Windows.Forms.MergeAction.MatchOnly;
         this._menuItem9.MergeIndex = 0;
         this._menuItem9.Name = "_menuItem9";
@@ -381,8 +381,8 @@ public sealed partial class QueryForm : Form, IQueryForm
         // 
         // _menuItem8
         // 
-        this._menuItem8.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
-        {
+        this._menuItem8.DropDownItems.AddRange(
+        [
             this._mnuPaste,
             this._mnuFind,
             this._mnuFindNext,
@@ -390,7 +390,7 @@ public sealed partial class QueryForm : Form, IQueryForm
             this._mnuGoTo,
             this.undoToolStripMenuItem,
             this.redoToolStripMenuItem
-        });
+        ]);
         this._menuItem8.MergeAction = System.Windows.Forms.MergeAction.Insert;
         this._menuItem8.MergeIndex = 2;
         this._menuItem8.Name = "_menuItem8";
@@ -425,11 +425,11 @@ public sealed partial class QueryForm : Form, IQueryForm
         // 
         // _mnuCodeCompletion
         // 
-        this._mnuCodeCompletion.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
-        {
+        this._mnuCodeCompletion.DropDownItems.AddRange(
+        [
             this._mnuListMembers,
             this._mnuClearCache
-        });
+        ]);
         this._mnuCodeCompletion.MergeIndex = 3;
         this._mnuCodeCompletion.Name = "_mnuCodeCompletion";
         this._mnuCodeCompletion.Size = new System.Drawing.Size(166, 22);
@@ -479,8 +479,8 @@ public sealed partial class QueryForm : Form, IQueryForm
         // 
         // _menuItem1
         // 
-        this._menuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
-        {
+        this._menuItem1.DropDownItems.AddRange(
+        [
             this._menuItem7,
             this._mnuDescribeParameters,
             this._toolStripSeparator2,
@@ -508,7 +508,7 @@ public sealed partial class QueryForm : Form, IQueryForm
             this._commitTransactionToolStripMenuItem,
             this._rollbackTransactionToolStripMenuItem,
             this.createCCommandQueryToolStripMenuItem
-        });
+        ]);
         this._menuItem1.MergeAction = System.Windows.Forms.MergeAction.Insert;
         this._menuItem1.MergeIndex = 3;
         this._menuItem1.Name = "_menuItem1";
@@ -517,11 +517,11 @@ public sealed partial class QueryForm : Form, IQueryForm
         // 
         // _menuItem7
         // 
-        this._menuItem7.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
-        {
+        this._menuItem7.DropDownItems.AddRange(
+        [
             this._mnuCommandTypeText,
             this._mnuCommandTypeStoredProcedure
-        });
+        ]);
         this._menuItem7.MergeIndex = 0;
         this._menuItem7.Name = "_menuItem7";
         this._menuItem7.Size = new System.Drawing.Size(298, 22);
@@ -647,8 +647,8 @@ public sealed partial class QueryForm : Form, IQueryForm
         // 
         // _menuItem2
         // 
-        this._menuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
-        {
+        this._menuItem2.DropDownItems.AddRange(
+        [
             this._mnuText,
             this._mnuDataGrid,
             this._mnuHtml,
@@ -658,7 +658,7 @@ public sealed partial class QueryForm : Form, IQueryForm
             this._menuResultModeFile,
             this._sQLiteDatabaseToolStripMenuItem,
             this._insertScriptFileToolStripMenuItem
-        });
+        ]);
         this._menuItem2.MergeIndex = 13;
         this._menuItem2.Name = "_menuItem2";
         this._menuItem2.Size = new System.Drawing.Size(298, 22);
@@ -842,11 +842,11 @@ public sealed partial class QueryForm : Form, IQueryForm
         // 
         // _menuItem3
         // 
-        this._menuItem3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
-        {
+        this._menuItem3.DropDownItems.AddRange(
+        [
             this._mnuObjectExplorer,
             this._mnuRefreshObjectExplorer
-        });
+        ]);
         this._menuItem3.MergeAction = System.Windows.Forms.MergeAction.Insert;
         this._menuItem3.MergeIndex = 4;
         this._menuItem3.Name = "_menuItem3";
@@ -872,14 +872,14 @@ public sealed partial class QueryForm : Form, IQueryForm
         // 
         // _statusBar
         // 
-        this._statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
-        {
+        this._statusBar.Items.AddRange(
+        [
             this._sbPanelText,
             this._sbPanelTableStyle,
             this._sbPanelTimer,
             this._sbPanelRows,
             this._sbPanelCaretPosition
-        });
+        ]);
         this._statusBar.Location = new System.Drawing.Point(300, 543);
         this._statusBar.Name = "_statusBar";
         this._statusBar.Size = new System.Drawing.Size(716, 22);
@@ -973,12 +973,12 @@ public sealed partial class QueryForm : Form, IQueryForm
         // _toolStrip
         // 
         this._toolStrip.Dock = System.Windows.Forms.DockStyle.None;
-        this._toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
-        {
+        this._toolStrip.Items.AddRange(
+        [
             this._toolStripSeparator4,
             this._executeQuerySplitButton,
             this._cancelQueryButton
-        });
+        ]);
         this._toolStrip.Location = new System.Drawing.Point(303, 281);
         this._toolStrip.Name = "_toolStrip";
         this._toolStrip.Size = new System.Drawing.Size(73, 25);
@@ -993,13 +993,13 @@ public sealed partial class QueryForm : Form, IQueryForm
         // _executeQuerySplitButton
         // 
         this._executeQuerySplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-        this._executeQuerySplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
-        {
+        this._executeQuerySplitButton.DropDownItems.AddRange(
+        [
             this._executeQueryMenuItem,
             this._executeQuerySingleRowToolStripMenuItem,
             this._cToolStripMenuItem,
             this._openTableToolStripMenuItem
-        });
+        ]);
         this._executeQuerySplitButton.Image = ((System.Drawing.Image)(resources.GetObject("_executeQuerySplitButton.Image")));
         this._executeQuerySplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
         this._executeQuerySplitButton.Name = "_executeQuerySplitButton";
@@ -2070,7 +2070,7 @@ public sealed partial class QueryForm : Form, IQueryForm
     private const int TcmHittest = 0x130D;
 
     [StructLayout(LayoutKind.Sequential)]
-    private struct Tchittestinfo(int x, int y)
+    private readonly struct Tchittestinfo(int x, int y)
     {
         public readonly Point pt = new(x, y);
         public readonly Tchittestflags flags = Tchittestflags.TchtOnitem;

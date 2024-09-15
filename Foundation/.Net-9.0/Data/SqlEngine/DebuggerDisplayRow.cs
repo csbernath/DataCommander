@@ -5,16 +5,10 @@ using System.Linq;
 namespace Foundation.Data.SqlEngine;
 
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class DebuggerDisplayRow
+public class DebuggerDisplayRow(ColumnCollection columns, object[] values)
 {
-    private readonly ColumnCollection _columns;
-    private readonly object[] _values;
-
-    public DebuggerDisplayRow(ColumnCollection columns, object[] values)
-    {
-        _columns = columns;
-        _values = values;
-    }
+    private readonly ColumnCollection _columns = columns;
+    private readonly object[] _values = values;
 
     public ColumnCollection Columns => _columns;
     public object[] Values => _values;

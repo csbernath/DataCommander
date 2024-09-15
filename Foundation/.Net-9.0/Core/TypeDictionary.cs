@@ -5,7 +5,7 @@ namespace Foundation.Core;
 
 public sealed class TypeDictionary<TValue>
 {
-    private readonly Dictionary<Type, TValue> _selections = new();
+    private readonly Dictionary<Type, TValue> _selections = [];
 
     public void Add<T>(TValue value)
     {

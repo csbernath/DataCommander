@@ -6,7 +6,7 @@ namespace Foundation.DefaultLog;
 internal sealed class Log : ILog
 {
     private readonly LogFactory _applicationLog;
-    private string _name;
+    private readonly string _name;
 
     public Log(LogFactory applicationLog, string name)
     {

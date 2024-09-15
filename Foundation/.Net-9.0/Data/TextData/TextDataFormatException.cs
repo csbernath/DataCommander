@@ -5,41 +5,33 @@ namespace Foundation.Data.TextData;
 /// <summary>
 /// 
 /// </summary>
-public class TextDataFormatException : FormatException
+/// <remarks>
+/// 
+/// </remarks>
+/// <param name="column"></param>
+/// <param name="converter"></param>
+/// <param name="fieldValue"></param>
+/// <param name="innerException"></param>
+public class TextDataFormatException(TextDataColumn column, ITextDataConverter converter, string fieldValue, Exception innerException) : FormatException(null, innerException)
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="column"></param>
-    /// <param name="converter"></param>
-    /// <param name="fieldValue"></param>
-    /// <param name="innerException"></param>
-    public TextDataFormatException(TextDataColumn column, ITextDataConverter converter, string fieldValue, Exception innerException)
-        : base(null, innerException)
-    {
-        Column = column;
-        Converter = converter;
-        Fieldvalue = fieldValue;
-        Message = $"Conversion ({converter}) of string value '{fieldValue}' to type {column.DataType} failed. ";
-    }
 
     /// <summary>
     /// 
     /// </summary>
-    public override string Message { get; }
+    public override string Message { get; } = $"Conversion ({converter}) of string value '{fieldValue}' to type {column.DataType} failed. ";
 
     /// <summary>
     /// 
     /// </summary>
-    public TextDataColumn Column { get; }
+    public TextDataColumn Column { get; } = column;
 
     /// <summary>
     /// 
     /// </summary>
-    public ITextDataConverter Converter { get; }
+    public ITextDataConverter Converter { get; } = converter;
 
     /// <summary>
     /// 
     /// </summary>
-    public string Fieldvalue { get; }
+    public string Fieldvalue { get; } = fieldValue;
 }

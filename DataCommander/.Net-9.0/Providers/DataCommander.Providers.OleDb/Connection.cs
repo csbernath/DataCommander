@@ -24,7 +24,7 @@ internal sealed class Connection : ConnectionBase
     void OnInfoMessage(object sender, OleDbInfoMessageEventArgs e)
     {
         var text = e.Message;
-        InvokeInfoMessage(new[] { InfoMessageFactory.Create(InfoMessageSeverity.Information, null, text) });
+        InvokeInfoMessage([InfoMessageFactory.Create(InfoMessageSeverity.Information, null, text)]);
     }
 
     public override string DataSource => oledbConnection.DataSource;

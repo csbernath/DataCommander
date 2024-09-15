@@ -3,7 +3,7 @@ using System.Data.SqlTypes;
 
 namespace Foundation.Data.SqlClient.PTypes;
 
-public struct PDecimal : INullable
+public readonly struct PDecimal : INullable
 {
     private readonly SqlDecimal _sql;
 
@@ -59,7 +59,7 @@ public struct PDecimal : INullable
             ? new PDecimal(type)
             : SqlDecimal.Parse(s);
 
-    public override bool Equals(object y)
+    public override readonly bool Equals(object y)
     {
         var equals = y is PDecimal;
 
@@ -71,35 +71,24 @@ public struct PDecimal : INullable
         return equals;
     }
 
-    public override int GetHashCode() => _sql.GetHashCode();
+    public override readonly int GetHashCode() => _sql.GetHashCode();
 
     public PValueType ValueType { get; }
 
-    public bool IsNull => ValueType == PValueType.Null;
-    public bool IsValue => ValueType == PValueType.Value;
-    public bool IsEmpty => ValueType == PValueType.Empty;
+    public readonly bool IsNull => ValueType == PValueType.Null;
+    public readonly bool IsValue => ValueType == PValueType.Value;
+    public readonly bool IsEmpty => ValueType == PValueType.Empty;
 
-    public object Value
+    public readonly object Value
     {
         get
         {
-            object value;
-
-            switch (ValueType)
+            object value = ValueType switch
             {
-                case PValueType.Null:
-                    value = DBNull.Value;
-                    break;
-
-                case PValueType.Value:
-                    value = _sql;
-                    break;
-
-                default:
-                    value = null;
-                    break;
-            }
-
+                PValueType.Null => DBNull.Value,
+                PValueType.Value => _sql,
+                _ => null,
+            };
             return value;
         }
 
@@ -123,5 +112,5 @@ public struct PDecimal : INullable
         //}
     }
 
-    public override string ToString() => _sql.ToString();
+    public override readonly string ToString() => _sql.ToString();
 }

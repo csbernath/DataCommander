@@ -9,19 +9,13 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.SQLite.ObjectExplorer;
 
-internal sealed class TableNode : ITreeNode
+internal sealed class TableNode(DatabaseNode databaseNode, string? name) : ITreeNode
 {
-    public TableNode(DatabaseNode databaseNode, string? name)
-    {
-        DatabaseNode = databaseNode;
-        Name = name;
-    }
-
-    public DatabaseNode DatabaseNode { get; }
+    public DatabaseNode DatabaseNode { get; } = databaseNode;
 
     #region ITreeNode Members
 
-    public string? Name { get; }
+    public string? Name { get; } = name;
 
     bool ITreeNode.IsLeaf => false;
 

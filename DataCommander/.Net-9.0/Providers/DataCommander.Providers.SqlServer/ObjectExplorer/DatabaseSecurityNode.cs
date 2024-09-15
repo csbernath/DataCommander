@@ -22,12 +22,12 @@ internal sealed class DatabaseSecurityNode : ITreeNode
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        return Task.FromResult<IEnumerable<ITreeNode>>(new ITreeNode[]
-        {
+        return Task.FromResult<IEnumerable<ITreeNode>>(
+        [
             new UserCollectionNode(_databaseNode),
             new RoleCollectionNode(_databaseNode),
             new SchemaCollectionNode(_databaseNode)
-        });
+        ]);
     }
 
     bool ITreeNode.Sortable => false;

@@ -17,7 +17,7 @@ internal sealed class StoredProcedureNode(DatabaseNode database, string owner, s
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        return Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
+        return Task.FromResult<IEnumerable<ITreeNode>>([]);
     }
 
     public bool Sortable => false;
@@ -58,11 +58,9 @@ internal sealed class StoredProcedureNode(DatabaseNode database, string owner, s
 
     private async Task<string?> GetText(CancellationToken cancellationToken)
     {
-        await using (var connection = database.Databases.Server.CreateConnection())
-        {
-            await connection.OpenAsync(cancellationToken);
-            var text = await SqlDatabase.GetSysComments(connection, database.Name, owner, name, cancellationToken);
-            return text;
-        }
+        await using var connection = database.Databases.Server.CreateConnection();
+        await connection.OpenAsync(cancellationToken);
+        var text = await SqlDatabase.GetSysComments(connection, database.Name, owner, name, cancellationToken);
+        return text;
     }
 }

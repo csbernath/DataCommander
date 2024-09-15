@@ -12,7 +12,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : ITreeNode
 {
-    private ILog _log = LogFactory.Instance.GetCurrentTypeLog();
+    private readonly ILog _log = LogFactory.Instance.GetCurrentTypeLog();
 
     private static ColumnNode ToColumnNode(IDataRecord dataRecord)
     {

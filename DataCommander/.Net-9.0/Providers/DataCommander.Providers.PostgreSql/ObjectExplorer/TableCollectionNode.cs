@@ -6,14 +6,9 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class TableCollectionNode : ITreeNode
+internal sealed class TableCollectionNode(SchemaNode schemaNode) : ITreeNode
 {
-    public TableCollectionNode(SchemaNode schemaNode)
-    {
-            SchemaNode = schemaNode;
-        }
-
-    public SchemaNode SchemaNode { get; }
+    public SchemaNode SchemaNode { get; } = schemaNode;
 
     string? ITreeNode.Name => "Tables";
 

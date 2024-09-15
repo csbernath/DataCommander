@@ -91,10 +91,10 @@ internal sealed class Connection : ConnectionBase
     private void OnStateChange(object sender, StateChangeEventArgs e)
     {
         var text = $"Connection.State changed. OriginalState: {e.OriginalState}, CurrentState: {e.CurrentState}";
-        InvokeInfoMessage(new[]
-        {
+        InvokeInfoMessage(
+        [
             InfoMessageFactory.Create(InfoMessageSeverity.Information, null, text)
-        });
+        ]);
     }
 
     public override async Task OpenAsync(CancellationToken cancellationToken)

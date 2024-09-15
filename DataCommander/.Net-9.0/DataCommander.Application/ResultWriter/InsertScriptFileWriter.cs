@@ -32,48 +32,19 @@ internal sealed class InsertScriptFileWriter : IResultWriter
 
     public static string GetDataTypeName(Type dataType)
     {
-        string dataTypeName;
         var typeCode = Type.GetTypeCode(dataType);
-
-        switch (typeCode)
+        string dataTypeName = typeCode switch
         {
-            case TypeCode.Boolean:
-                dataTypeName = SqlDataTypeName.Bit;
-                break;
-
-            case TypeCode.DateTime:
-                dataTypeName = SqlDataTypeName.DateTime;
-                break;
-
-            case TypeCode.Int16:
-                dataTypeName = SqlDataTypeName.SmallInt;
-                break;
-
-            case TypeCode.Int32:
-                dataTypeName = SqlDataTypeName.Int;
-                break;
-
-            case TypeCode.Int64:
-                dataTypeName = SqlDataTypeName.BigInt;
-                break;
-
-            case TypeCode.String:
-                dataTypeName = SqlDataTypeName.VarChar;
-                break;
-
-            case TypeCode.Decimal:
-                dataTypeName = SqlDataTypeName.Decimal;
-                break;
-
-            case TypeCode.Double:
-                dataTypeName = SqlDataTypeName.Float;
-                break;
-
-            default:
-                dataTypeName = dataType.ToString();
-                break;
-        }
-
+            TypeCode.Boolean => SqlDataTypeName.Bit,
+            TypeCode.DateTime => SqlDataTypeName.DateTime,
+            TypeCode.Int16 => SqlDataTypeName.SmallInt,
+            TypeCode.Int32 => SqlDataTypeName.Int,
+            TypeCode.Int64 => SqlDataTypeName.BigInt,
+            TypeCode.String => SqlDataTypeName.VarChar,
+            TypeCode.Decimal => SqlDataTypeName.Decimal,
+            TypeCode.Double => SqlDataTypeName.Float,
+            _ => dataType.ToString(),
+        };
         return dataTypeName;
     }
 

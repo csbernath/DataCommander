@@ -16,12 +16,12 @@ internal sealed class ViewNode(DatabaseNode database, int id, string? schema, st
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        return Task.FromResult<IEnumerable<ITreeNode>>(new ITreeNode[]
-        {
+        return Task.FromResult<IEnumerable<ITreeNode>>(
+        [
             new ColumnCollectionNode(database, id),
             new TriggerCollectionNode(database, id),
             new IndexCollectionNode(database, id)
-        });
+        ]);
     }
 
     public bool Sortable => false;

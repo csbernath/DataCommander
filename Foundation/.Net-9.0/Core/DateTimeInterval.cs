@@ -6,7 +6,7 @@ using Foundation.Assertions;
 namespace Foundation.Core;
 
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public struct DateTimeInterval
+public readonly struct DateTimeInterval
 {
     public readonly DateTime Start;
     public readonly DateTime End;
@@ -19,10 +19,10 @@ public struct DateTimeInterval
     }
 
     [Pure]
-    public bool Contains(DateTimeInterval other) => Start <= other.Start && other.End <= End;
+    public readonly bool Contains(DateTimeInterval other) => Start <= other.Start && other.End <= End;
 
     [Pure]
-    public DateTimeInterval? Intersect(DateTimeInterval other)
+    public readonly DateTimeInterval? Intersect(DateTimeInterval other)
     {
         var start = ElementPair.Max(Start, other.Start);
         var end = ElementPair.Min(End, other.End);
@@ -33,7 +33,7 @@ public struct DateTimeInterval
     }
 
     [Pure]
-    public bool Intersects(DateTimeInterval other)
+    public readonly bool Intersects(DateTimeInterval other)
     {
         var start = ElementPair.Max(Start, other.Start);
         var end = ElementPair.Min(End, other.End);
@@ -42,7 +42,7 @@ public struct DateTimeInterval
     }
 
     [Pure]
-    public TimeSpan GetLength()
+    public readonly TimeSpan GetLength()
     {
         var length = End - Start;
         return length;
@@ -50,5 +50,5 @@ public struct DateTimeInterval
 
     private static string ToString(DateTime dateTime) => dateTime.ToString("yyyy.MM.dd. HH:mm:ss");
 
-    private string DebuggerDisplay => $"{ToString(Start)}-{ToString(End)}";
+    private readonly string DebuggerDisplay => $"{ToString(Start)}-{ToString(End)}";
 }

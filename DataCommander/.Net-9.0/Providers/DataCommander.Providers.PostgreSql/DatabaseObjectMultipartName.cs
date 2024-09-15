@@ -10,7 +10,7 @@ namespace DataCommander.Providers.PostgreSql;
 /// </summary>
 internal sealed class DatabaseObjectMultipartName
 {
-    private string _server;
+    private readonly string _server;
 
     public DatabaseObjectMultipartName(string server, string database, string schema, string name)
     {

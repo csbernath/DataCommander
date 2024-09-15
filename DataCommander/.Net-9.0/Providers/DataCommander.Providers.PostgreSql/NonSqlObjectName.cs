@@ -2,14 +2,9 @@
 
 namespace DataCommander.Providers.PostgreSql;
 
-internal sealed class NonSqlObjectName : IObjectName
+internal sealed class NonSqlObjectName(string objectName) : IObjectName
 {
-    private readonly string _objectName;
-
-    public NonSqlObjectName(string objectName)
-    {
-        _objectName = objectName;
-    }
+    private readonly string _objectName = objectName;
 
     string IObjectName.UnquotedName => _objectName;
 

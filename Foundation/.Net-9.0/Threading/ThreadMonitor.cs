@@ -13,7 +13,7 @@ namespace Foundation.Threading;
 /// </summary>
 public static class ThreadMonitor
 {
-    private static readonly SortedDictionary<int, WorkerThread> Threads = new();
+    private static readonly SortedDictionary<int, WorkerThread> Threads = [];
 
     private static readonly StringTableColumnInfo<WorkerThread>[] ThreadColumns =
     [

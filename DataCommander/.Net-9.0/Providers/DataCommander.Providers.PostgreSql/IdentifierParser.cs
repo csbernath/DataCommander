@@ -4,14 +4,9 @@ using System.Text;
 
 namespace DataCommander.Providers.PostgreSql;
 
-internal sealed class IdentifierParser
+internal sealed class IdentifierParser(TextReader textReader)
 {
-    private readonly TextReader _textReader;
-
-    public IdentifierParser(TextReader textReader)
-    {
-        _textReader = textReader;
-    }
+    private readonly TextReader _textReader = textReader;
 
     public IEnumerable<string> Parse()
     {

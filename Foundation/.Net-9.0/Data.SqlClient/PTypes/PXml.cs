@@ -6,7 +6,7 @@ namespace Foundation.Data.SqlClient.PTypes;
 public struct PXml
 {
     private readonly SqlXml _sqlXml;
-    private PValueType _type;
+    private readonly PValueType _type;
 
     public static readonly PXml Null = new(PValueType.Null);
     public static readonly PXml Default = new(PValueType.Default);
@@ -25,7 +25,7 @@ public struct PXml
         _type = value != null ? PValueType.Value : PValueType.Null;
     }
 
-    public object Value => _sqlXml;
+    public readonly object Value => _sqlXml;
 
     [DebuggerStepThrough]
     public static implicit operator PXml(SqlXml value) => new(value);

@@ -4,18 +4,11 @@ using System.Linq;
 
 namespace Foundation.Data.SqlEngine;
 
-public class GroupJoinResultSelector : IGroupJoinResultSelector
+public class GroupJoinResultSelector(string tableName, IRowSelector outerRowSelector, IRowSelector innerRowSelector) : IGroupJoinResultSelector
 {
-    private readonly string _tableName;
-    private readonly IRowSelector _outerRowSelector;
-    private readonly IRowSelector _innerRowSelector;
-
-    public GroupJoinResultSelector(string tableName, IRowSelector outerRowSelector, IRowSelector innerRowSelector)
-    {
-        _tableName = tableName;
-        _outerRowSelector = outerRowSelector;
-        _innerRowSelector = innerRowSelector;
-    }
+    private readonly string _tableName = tableName;
+    private readonly IRowSelector _outerRowSelector = outerRowSelector;
+    private readonly IRowSelector _innerRowSelector = innerRowSelector;
 
     public string ResultTableName => _tableName;
 

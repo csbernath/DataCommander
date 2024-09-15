@@ -15,7 +15,7 @@ public class ReadOnlyArray<T> : IReadOnlyList<T>
         _items = items;
     }
 
-    private ReadOnlyArray() => _items = Array.Empty<T>();
+    private ReadOnlyArray() => _items = [];
 
     public int Count => _items.Length;
     public T this[int index] => _items[index];

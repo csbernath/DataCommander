@@ -10,7 +10,7 @@ public struct BitVector64(ulong data)
 
     public bool this[int index]
     {
-        get
+        readonly get
         {
             var bit = 1UL << index;
             return (Value & bit) == bit;
@@ -27,7 +27,7 @@ public struct BitVector64(ulong data)
         }
     }
 
-    public override string ToString()
+    public override readonly string ToString()
     {
         var value = Value.ToString("X");
         value = value.PadLeft(16, '0');

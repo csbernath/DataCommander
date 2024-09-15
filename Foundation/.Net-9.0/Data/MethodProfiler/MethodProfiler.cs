@@ -15,7 +15,7 @@ public static class MethodProfiler
     private const string ConditionString = "FOUNDATION_METHODPROFILER";
 
     private static readonly MethodCollection Methods = [];
-    private static readonly Dictionary<string, MethodFraction> MethodFractions = new();
+    private static readonly Dictionary<string, MethodFraction> MethodFractions = [];
     private static readonly MethodInvocationStackCollection Stacks = new();
     private static readonly AsyncTextWriter TextWriter;
     private static readonly MethodFormatter MethodFormatter = new();

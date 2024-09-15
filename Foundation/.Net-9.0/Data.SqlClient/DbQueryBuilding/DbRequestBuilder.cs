@@ -562,42 +562,17 @@ namespace {_request.Namespace}
                     $"    parameters.AddVarChar(\"{parameter.Name}\", {parameter.Size}, {GetRequestType().ToCamelCase()}.{parameter.Name.ToPascalCase()});\r\n");
             else
             {
-                string method;
-                switch (parameter.SqlDbType)
+                string method = parameter.SqlDbType switch
                 {
-                    case SqlDbType.Bit:
-                        method = !parameter.IsNullable ? "Add" : "AddNullableBit";
-                        break;
-
-                    case SqlDbType.Date:
-                        method = !parameter.IsNullable ? "AddDate" : "AddNullableDate";
-                        break;
-
-                    case SqlDbType.DateTime:
-                        method = !parameter.IsNullable ? "Add" : "AddNullableDateTime";
-                        break;
-
-                    case SqlDbType.Int:
-                        method = !parameter.IsNullable ? "Add" : "AddNullableInt";
-                        break;
-
-                    case SqlDbType.UniqueIdentifier:
-                        method = !parameter.IsNullable ? "Add" : "AddNullableGuid";
-                        break;
-
-                    case SqlDbType.VarChar:
-                        method = "AddString";
-                        break;
-
-                    case SqlDbType.Xml:
-                        method = "AddXml";
-                        break;
-
-                    default:
-                        method = "Add";
-                        break;
-                }
-
+                    SqlDbType.Bit => !parameter.IsNullable ? "Add" : "AddNullableBit",
+                    SqlDbType.Date => !parameter.IsNullable ? "AddDate" : "AddNullableDate",
+                    SqlDbType.DateTime => !parameter.IsNullable ? "Add" : "AddNullableDateTime",
+                    SqlDbType.Int => !parameter.IsNullable ? "Add" : "AddNullableInt",
+                    SqlDbType.UniqueIdentifier => !parameter.IsNullable ? "Add" : "AddNullableGuid",
+                    SqlDbType.VarChar => "AddString",
+                    SqlDbType.Xml => "AddXml",
+                    _ => "Add",
+                };
                 stringBuilder.Append($"    parameters.{method}(\"{parameter.Name}\", {GetRequestType().ToCamelCase()}.{parameter.Name.ToPascalCase()});\r\n");
             }
         }

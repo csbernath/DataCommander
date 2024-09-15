@@ -11,8 +11,10 @@ public static class CreateUpdateSqlStatementMethodFactory
     public static ReadOnlyCollection<Line> Create(string schema, string table, Column identifierColumn, Column versionColumn,
         IReadOnlyCollection<Column> columns)
     {
-        var arguments = new List<string>();
-        arguments.Add($"{table} record");
+        var arguments = new List<string>
+        {
+            $"{table} record"
+        };
         if (versionColumn != null)
         {
             var csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == versionColumn.SqlDataTypeName).CSharpTypeName;

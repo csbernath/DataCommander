@@ -216,15 +216,10 @@ internal sealed class OleDbProvider : IProvider
     Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
     {
         var dbType = (OleDbType)dataColumnSchema.ProviderType;
-        Type type;
-
-        switch (dbType)
+        Type type = dbType switch
         {
-            default:
-                type = typeof(object);
-                break;
-        }
-
+            _ => typeof(object),
+        };
         return type;
     }
 

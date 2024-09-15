@@ -7,14 +7,9 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class ColumnCollectionNode : ITreeNode
+internal sealed class ColumnCollectionNode(TableNode tableNode) : ITreeNode
 {
-    private readonly TableNode _tableNode;
-
-    public ColumnCollectionNode(TableNode tableNode)
-    {
-        _tableNode = tableNode;
-    }
+    private readonly TableNode _tableNode = tableNode;
 
     string? ITreeNode.Name => "Columns";
 

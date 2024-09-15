@@ -17,7 +17,7 @@ internal sealed class ObjectExplorer : IObjectExplorer
         _connectionStringAndCredential = connectionStringAndCredential;
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>(new[] { new SchemaCollectionNode(this) });
+        Task.FromResult<IEnumerable<ITreeNode>>([new SchemaCollectionNode(this)]);
 
     bool IObjectExplorer.Sortable => false;
 }

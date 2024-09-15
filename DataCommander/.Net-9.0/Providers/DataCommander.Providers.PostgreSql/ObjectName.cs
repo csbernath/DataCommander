@@ -4,18 +4,11 @@ using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.PostgreSql;
 
-internal sealed class ObjectName : IObjectName
+internal sealed class ObjectName(SqlObject sqlObject, string schemaName, string objectName) : IObjectName
 {
-    private SqlObject _sqlObject;
-    private readonly string _schemaName;
-    private readonly string _objectName;
-
-    public ObjectName(SqlObject sqlObject, string schemaName, string objectName)
-    {
-        _sqlObject = sqlObject;
-        _schemaName = schemaName;
-        _objectName = objectName;
-    }
+    private readonly SqlObject _sqlObject = sqlObject;
+    private readonly string _schemaName = schemaName;
+    private readonly string _objectName = objectName;
 
     string IObjectName.UnquotedName
     {
@@ -62,7 +55,7 @@ internal sealed class ObjectName : IObjectName
     {
         string quotedIdentifier;
 
-        if (unquotedIdentifier.IndexOfAny(new[] {'.', '-'}) >= 0)
+        if (unquotedIdentifier.IndexOfAny(['.', '-']) >= 0)
         {
             quotedIdentifier = new SqlCommandBuilder().QuoteIdentifier(unquotedIdentifier);
         }

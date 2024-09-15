@@ -10,7 +10,7 @@ namespace Foundation.Threading.Tasks;
 
 public static class TaskMonitor
 {
-    private static ILog _log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILog _log = LogFactory.Instance.GetCurrentTypeLog();
     private static readonly HashSet<TaskInfo> Tasks = [];
 
     private static readonly StringTableColumnInfo<TaskInfo>[] Columns =

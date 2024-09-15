@@ -15,7 +15,7 @@ public sealed class XmlAttributeReader
 
     public static bool TryGetValue(XmlAttributeCollection attributes, string name, out string value)
     {
-        ArgumentNullException.ThrowIfNull(attributes, nameof(attributes));
+        ArgumentNullException.ThrowIfNull(attributes);
         var attribute = attributes[name];
         var contains = attribute != null;
         value = contains ? attribute.Value : null;

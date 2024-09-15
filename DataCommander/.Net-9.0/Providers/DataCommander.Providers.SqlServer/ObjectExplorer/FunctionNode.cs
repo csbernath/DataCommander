@@ -31,25 +31,15 @@ internal sealed class FunctionNode(
         get
         {
             //string query = string.Format("select {0}.{1}.[{2}]()",database.Name,owner,name);
-            string query;
-
-            switch (xtype)
+            string query = xtype switch
             {
-                case "FN": //Scalar function
-                    query = $"select {database.Name}.{owner}.[{name}]()";
-                    break;
-
-                case "TF": //Table function
-                case "IF": //Inlined table-function
-                    query = $@"select	*
-from	{database.Name}.{owner}.[{name}]()";
-                    break;
-
-                default:
-                    query = null;
-                    break;
-            }
-
+                //Scalar function
+                "FN" => $"select {database.Name}.{owner}.[{name}]()",
+                //Table function
+                "TF" or "IF" => $@"select	*
+from	{database.Name}.{owner}.[{name}]()",
+                _ => null,
+            };
             return query;
         }
     }

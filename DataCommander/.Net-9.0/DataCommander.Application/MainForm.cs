@@ -233,7 +233,7 @@ public class MainForm : Form
         // 
         _mainMenu.Dock = DockStyle.None;
         _mainMenu.ImageScalingSize = new Size(20, 20);
-        _mainMenu.Items.AddRange(new ToolStripItem[] { _menuItem1, optionsMenuItem, _mnuWindow, _mnuHelp });
+        _mainMenu.Items.AddRange([_menuItem1, optionsMenuItem, _mnuWindow, _mnuHelp]);
         _mainMenu.Location = new Point(0, 27);
         _mainMenu.MdiWindowListItem = _mnuWindow;
         _mainMenu.Name = "_mainMenu";
@@ -242,7 +242,7 @@ public class MainForm : Form
         // 
         // _menuItem1
         // 
-        _menuItem1.DropDownItems.AddRange(new ToolStripItem[] { _newToolStripMenuItem, _mnuConnect, _mnuOpen, _recentConnectionsToolStripMenuItem, _saveAllToolStripMenuItem, _mnuRecentFileList, _mnuExit });
+        _menuItem1.DropDownItems.AddRange([_newToolStripMenuItem, _mnuConnect, _mnuOpen, _recentConnectionsToolStripMenuItem, _saveAllToolStripMenuItem, _mnuRecentFileList, _mnuExit]);
         _menuItem1.MergeIndex = 1;
         _menuItem1.Name = "_menuItem1";
         _menuItem1.Size = new Size(86, 24);
@@ -314,7 +314,7 @@ public class MainForm : Form
         // 
         // _mnuWindow
         // 
-        _mnuWindow.DropDownItems.AddRange(new ToolStripItem[] { _closeAllDocumentsMenuItem });
+        _mnuWindow.DropDownItems.AddRange([_closeAllDocumentsMenuItem]);
         _mnuWindow.MergeIndex = 6;
         _mnuWindow.Name = "_mnuWindow";
         _mnuWindow.Size = new Size(78, 24);
@@ -329,7 +329,7 @@ public class MainForm : Form
         // 
         // _mnuHelp
         // 
-        _mnuHelp.DropDownItems.AddRange(new ToolStripItem[] { _contentsToolStripMenuItem, _checkForToolStripMenuItem, _mnuAbout });
+        _mnuHelp.DropDownItems.AddRange([_contentsToolStripMenuItem, _checkForToolStripMenuItem, _mnuAbout]);
         _mnuHelp.MergeIndex = 7;
         _mnuHelp.Name = "_mnuHelp";
         _mnuHelp.Size = new Size(55, 24);
@@ -363,7 +363,7 @@ public class MainForm : Form
         _toolStrip.Dock = DockStyle.None;
         _toolStrip.ImageList = _imageList;
         _toolStrip.ImageScalingSize = new Size(20, 20);
-        _toolStrip.Items.AddRange(new ToolStripItem[] { _btnConnect, _openButton, _saveButton, _toolStripSeparator1, _helpButton, _toolStripSeparator2, _activeMdiChildToolStripTextBox });
+        _toolStrip.Items.AddRange([_btnConnect, _openButton, _saveButton, _toolStripSeparator1, _helpButton, _toolStripSeparator2, _activeMdiChildToolStripTextBox]);
         _toolStrip.Location = new Point(4, 0);
         _toolStrip.Name = "_toolStrip";
         _toolStrip.Size = new Size(792, 27);
@@ -437,7 +437,7 @@ public class MainForm : Form
         // _statusBar
         // 
         _statusBar.ImageScalingSize = new Size(20, 20);
-        _statusBar.Items.AddRange(new ToolStripItem[] { _toolStripStatusLabel, _managedMemoryToolStripStatusLabel });
+        _statusBar.Items.AddRange([_toolStripStatusLabel, _managedMemoryToolStripStatusLabel]);
         _statusBar.Location = new Point(0, 727);
         _statusBar.Name = "_statusBar";
         _statusBar.ShowItemToolTips = true;

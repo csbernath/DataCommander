@@ -50,7 +50,7 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
             name,
             getKey,
             dictionary,
-            () => new List<T>());
+            () => []);
     }
 
     /// <summary>

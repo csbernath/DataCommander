@@ -12,7 +12,7 @@ public class ListIndex<T> : ICollectionIndex<T>, IList<T>
     public ListIndex(string name)
     {
         ArgumentNullException.ThrowIfNull(name);
-        Initialize(name, new List<T>());
+        Initialize(name, []);
     }
 
     public ListIndex(string name, IList<T> list)

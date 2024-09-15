@@ -83,15 +83,19 @@ public static class IEnumerableExtensions
 
     public static DynamicArray<TSource> ToDynamicArray<TSource>(this IEnumerable<TSource> source, int initialSize, int maxSize)
     {
-        var dynamicArray = new DynamicArray<TSource>(initialSize, maxSize);
-        dynamicArray.Add(source);
+        var dynamicArray = new DynamicArray<TSource>(initialSize, maxSize)
+        {
+            source
+        };
         return dynamicArray;
     }
 
     public static SegmentedCollection<TSource> ToSegmentedCollection<TSource>(this IEnumerable<TSource> source, int segmentSize)
     {
-        var collection = new SegmentedCollection<TSource>(segmentSize);
-        collection.Add(source);
+        var collection = new SegmentedCollection<TSource>(segmentSize)
+        {
+            source
+        };
         return collection;
     }
 }

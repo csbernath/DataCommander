@@ -18,7 +18,7 @@ internal sealed class AsyncLogFile(
     DateTimeKind dateTimeKind)
     : ILogFile
 {
-    private string _path = path;
+    private readonly string _path = path;
     private readonly int _bufferSize = bufferSize;
     private readonly LogFile _logFile = new(path, encoding, 1024, true, formatter, fileAttributes, dateTimeKind);
     private readonly ConcurrentQueue<LogEntry> _queue = new();

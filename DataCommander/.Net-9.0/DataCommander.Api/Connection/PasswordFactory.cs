@@ -33,7 +33,7 @@ public static class PasswordFactory
     {
         var bytes = !string.IsNullOrEmpty(password)
             ? Encoding.UTF8.GetBytes(password)
-            : Array.Empty<byte>();
+            : [];
         var protectedBytes = ProtectedData.Protect(bytes, Entropy, DataProtectionScope.CurrentUser);
         return protectedBytes;
     }

@@ -3,14 +3,9 @@ using System.Linq;
 
 namespace Foundation.Data.SqlEngine;
 
-public class RowSelector : IRowSelector
+public class RowSelector(IReadOnlyCollection<IValueSelector> valueSelectors) : IRowSelector
 {
-    private readonly IReadOnlyCollection<IValueSelector> _valueSelectors;
-
-    public RowSelector(IReadOnlyCollection<IValueSelector> valueSelectors)
-    {
-        _valueSelectors = valueSelectors;
-    }
+    private readonly IReadOnlyCollection<IValueSelector> _valueSelectors = valueSelectors;
 
     public ColumnCollection ResultColumns
     {

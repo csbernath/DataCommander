@@ -113,10 +113,10 @@ internal sealed class HtmlTextBox : UserControl
         // 
         // HtmlTextBox
         // 
-        this.Controls.AddRange(new System.Windows.Forms.Control[]
-        {
+        this.Controls.AddRange(
+        [
             this._webBrowser
-        });
+        ]);
         this.Name = "HtmlTextBox";
         this.Size = new System.Drawing.Size(464, 184);
         // ((System.ComponentModel.ISupportInitialize)(this.webBrowser)).EndInit();

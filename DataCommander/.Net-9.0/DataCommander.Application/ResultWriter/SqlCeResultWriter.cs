@@ -29,8 +29,10 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
     {
         var fileName = Path.GetTempFileName() + ".sdf";
         messageWriter.WriteLine(fileName);
-        var sb = new DbConnectionStringBuilder();
-        sb.Add("Data Source", fileName);
+        var sb = new DbConnectionStringBuilder
+        {
+            { "Data Source", fileName }
+        };
         var connectionString = sb.ConnectionString;
         var sqlCeEngine = new SqlCeEngine(connectionString);
         sqlCeEngine.CreateDatabase();
@@ -136,24 +138,12 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
                     break;
 
                 case TypeCode.String:
-                    bool isFixedLength;
                     var dataTypeNameUpper = dataTypeName.ToUpper();
-
-                    switch (dataTypeName)
+                    var isFixedLength = dataTypeName switch
                     {
-                        case "CHAR":
-                        case "NCHAR":
-                            isFixedLength = true;
-                            break;
-
-                        case "VARCHAR":
-                        case "NVARCHAR":
-                        case "VARCHAR2":
-                        default:
-                            isFixedLength = false;
-                            break;
-                    }
-
+                        "CHAR" or "NCHAR" => true,
+                        _ => false,
+                    };
                     if (columnSize <= 4000)
                     {
                         if (isFixedLength)

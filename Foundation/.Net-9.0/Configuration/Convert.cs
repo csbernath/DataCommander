@@ -8,47 +8,19 @@ internal static class Convert
 {
     public static object ParseNumber(string source, NumberStyles style, Type conversionType)
     {
-        object value;
         var typeCode = Type.GetTypeCode(conversionType);
-
-        switch (typeCode)
+        object value = typeCode switch
         {
-            case TypeCode.SByte:
-                value = sbyte.Parse(source, style);
-                break;
-
-            case TypeCode.Int16:
-                value = short.Parse(source, style);
-                break;
-
-            case TypeCode.Int32:
-                value = int.Parse(source, style, CultureInfo.InvariantCulture);
-                break;
-
-            case TypeCode.Int64:
-                value = long.Parse(source, style, CultureInfo.InvariantCulture);
-                break;
-
-            case TypeCode.Byte:
-                value = byte.Parse(source, style, CultureInfo.InvariantCulture);
-                break;
-
-            case TypeCode.UInt16:
-                value = ushort.Parse(source, style, CultureInfo.InvariantCulture);
-                break;
-
-            case TypeCode.UInt32:
-                value = uint.Parse(source, style, CultureInfo.InvariantCulture);
-                break;
-
-            case TypeCode.UInt64:
-                value = ulong.Parse(source, style);
-                break;
-
-            default:
-                throw new ArgumentException(null, nameof(conversionType));
-        }
-
+            TypeCode.SByte => sbyte.Parse(source, style),
+            TypeCode.Int16 => short.Parse(source, style),
+            TypeCode.Int32 => int.Parse(source, style, CultureInfo.InvariantCulture),
+            TypeCode.Int64 => long.Parse(source, style, CultureInfo.InvariantCulture),
+            TypeCode.Byte => byte.Parse(source, style, CultureInfo.InvariantCulture),
+            TypeCode.UInt16 => ushort.Parse(source, style, CultureInfo.InvariantCulture),
+            TypeCode.UInt32 => uint.Parse(source, style, CultureInfo.InvariantCulture),
+            TypeCode.UInt64 => ulong.Parse(source, style),
+            _ => throw new ArgumentException(null, nameof(conversionType)),
+        };
         return value;
     }
 

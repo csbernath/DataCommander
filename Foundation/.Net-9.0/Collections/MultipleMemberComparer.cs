@@ -2,14 +2,9 @@
 
 namespace Foundation.Collections;
 
-public sealed class MultipleMemberComparer<T> : IComparer<T>
+public sealed class MultipleMemberComparer<T>(params IComparer<T>[] comparers) : IComparer<T>
 {
-    private readonly IComparer<T>[] _comparers;
-
-    public MultipleMemberComparer(params IComparer<T>[] comparers)
-    {
-        _comparers = comparers;
-    }
+    private readonly IComparer<T>[] _comparers = comparers;
 
     int IComparer<T>.Compare(T x, T y)
     {

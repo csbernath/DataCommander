@@ -6,8 +6,8 @@ namespace Foundation.Threading.Tasks;
 
 public class WorkerTask
 {
-    private Task _task;
-    private TaskInfo _taskInfo;
+    private readonly Task _task;
+    private readonly TaskInfo _taskInfo;
 
     public WorkerTask(Action<object> action, object state, CancellationToken cancellationToken, TaskCreationOptions taskCreationOptions, string name)
     {

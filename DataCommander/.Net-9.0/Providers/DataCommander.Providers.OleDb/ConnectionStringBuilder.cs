@@ -6,7 +6,7 @@ namespace DataCommander.Providers.OleDb;
 
 internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
 {
-    private readonly OleDbConnectionStringBuilder oleDbConnectionStringBuilder = new();
+    private readonly OleDbConnectionStringBuilder oleDbConnectionStringBuilder = [];
 
     string IDbConnectionStringBuilder.ConnectionString
     {

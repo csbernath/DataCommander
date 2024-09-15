@@ -111,10 +111,10 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
         // 
         // MemberListBox
         // 
-        Controls.AddRange(new System.Windows.Forms.Control[]
-        {
+        Controls.AddRange(
+        [
             ListBox
-        });
+        ]);
         Name = "MemberListBox";
         Size = new System.Drawing.Size(180, 142);
         ResumeLayout(false);

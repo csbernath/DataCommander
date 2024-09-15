@@ -6,11 +6,9 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class SchemaCollectionNode : ITreeNode
+internal sealed class SchemaCollectionNode(ObjectExplorer objectExplorer) : ITreeNode
 {
-    public SchemaCollectionNode(ObjectExplorer objectExplorer) => ObjectExplorer = objectExplorer;
-
-    public ObjectExplorer ObjectExplorer { get; }
+    public ObjectExplorer ObjectExplorer { get; } = objectExplorer;
     bool ITreeNode.IsLeaf => false;
     string? ITreeNode.Name => "Schemas";
     string ITreeNode.Query => null;

@@ -6,14 +6,9 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class ViewCollectionNode : ITreeNode
+internal sealed class ViewCollectionNode(SchemaNode schemaNode) : ITreeNode
 {
-    private readonly SchemaNode _schemaNode;
-
-    public ViewCollectionNode(SchemaNode schemaNode)
-    {
-        _schemaNode = schemaNode;
-    }
+    private readonly SchemaNode _schemaNode = schemaNode;
 
     string? ITreeNode.Name => "Views";
 

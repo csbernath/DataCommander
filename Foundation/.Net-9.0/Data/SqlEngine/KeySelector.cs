@@ -2,14 +2,9 @@
 
 namespace Foundation.Data.SqlEngine;
 
-public class KeySelector
+public class KeySelector(RowSelector rowSelector)
 {
-    private readonly RowSelector _rowSelector;
-
-    public KeySelector(RowSelector rowSelector)
-    {
-        _rowSelector = rowSelector;
-    }
+    private readonly RowSelector _rowSelector = rowSelector;
 
     public Key Select(object[] row)
     {

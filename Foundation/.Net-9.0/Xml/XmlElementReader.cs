@@ -8,19 +8,14 @@ namespace Foundation.Xml;
 /// <summary>
 /// 
 /// </summary>
-public class XmlElementReader
+/// <remarks>
+/// 
+/// </remarks>
+/// <param name="xmlReader"></param>
+public class XmlElementReader(XmlReader xmlReader)
 {
-    private readonly XmlReader _xmlReader;
+    private readonly XmlReader _xmlReader = xmlReader;
     private readonly XmlDocument _xmlDocument = new();
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="xmlReader"></param>
-    public XmlElementReader( XmlReader xmlReader )
-    {
-        _xmlReader = xmlReader;
-    }
 
     private static void ReadAttributes(
         XmlReader xmlReader,

@@ -7,11 +7,9 @@ using DataCommander.Api.Connection;
 
 namespace DataCommander.Providers.OleDb;
 
-internal sealed class ObjectExplorer : IObjectExplorer
+internal sealed class ObjectExplorer(IProvider provider) : IObjectExplorer
 {
-    private readonly IProvider _provider;
-
-    public ObjectExplorer(IProvider provider) => _provider = provider;
+    private readonly IProvider _provider = provider;
 
     public bool Sortable => false;
 

@@ -29,7 +29,7 @@ public static class ConnectionInfoRepository
             connectionInfos = connectionDtos.Select(connectionDto => connectionDto.ToConnectionProperties());
         }
         else
-            connectionInfos = System.Array.Empty<ConnectionInfo>();
+            connectionInfos = [];
 
         return connectionInfos;
     }

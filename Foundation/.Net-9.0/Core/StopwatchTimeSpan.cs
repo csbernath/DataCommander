@@ -30,7 +30,7 @@ public struct StopwatchTimeSpan(long ticks)
     {
     }
 
-    public long Ticks => ticks;
+    public readonly long Ticks => ticks;
     public TimeSpan Elapsed => ToTimeSpan(Ticks);
     public double TotalHours => (double) Ticks / StopwatchConstants.TicksPerHour;
     public double TotalMinutes => (double) Ticks / StopwatchConstants.TicksPerMinute;

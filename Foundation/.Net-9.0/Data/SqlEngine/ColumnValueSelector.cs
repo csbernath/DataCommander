@@ -1,13 +1,8 @@
 ﻿namespace Foundation.Data.SqlEngine;
 
-public class ColumnValueSelector : IValueSelector
+public class ColumnValueSelector(Column sourceColumn) : IValueSelector
 {
-    private readonly Column _sourceColumn;
-
-    public ColumnValueSelector(Column sourceColumn)
-    {
-        _sourceColumn = sourceColumn;
-    }
+    private readonly Column _sourceColumn = sourceColumn;
 
     public ColumnSchema ResultColumnSchema => _sourceColumn.ColumnSchema;
 

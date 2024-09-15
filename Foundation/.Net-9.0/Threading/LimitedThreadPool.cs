@@ -4,17 +4,11 @@ using System.Threading;
 
 namespace Foundation.Threading;
 
-public sealed class LimitedThreadPool<T>
+public sealed class LimitedThreadPool<T>(int maxThreadCount)
 {
-    private int _maxThreadCount;
-    private int _availableThreadCount;
+    private readonly int _maxThreadCount = maxThreadCount;
+    private int _availableThreadCount = maxThreadCount;
     private readonly Queue<Tuple<Action<T>, T>> _queue = new();
-
-    public LimitedThreadPool(int maxThreadCount)
-    {
-        _maxThreadCount = maxThreadCount;
-        _availableThreadCount = maxThreadCount;
-    }
 
     public int QueuedItemCount => _queue.Count;
 

@@ -5,18 +5,11 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class ColumnNode : ITreeNode
+internal sealed class ColumnNode(ColumnCollectionNode columnCollectionNode, string name, string dataType) : ITreeNode
 {
-    private readonly ColumnCollectionNode _columnCollectionNode;
-    private readonly string _name;
-    private readonly string _dataType;
-
-    public ColumnNode(ColumnCollectionNode columnCollectionNode, string name, string dataType)
-    {
-        _columnCollectionNode = columnCollectionNode;
-        _name = name;
-        _dataType = dataType;
-    }
+    private readonly ColumnCollectionNode _columnCollectionNode = columnCollectionNode;
+    private readonly string _name = name;
+    private readonly string _dataType = dataType;
 
     string? ITreeNode.Name => $"{_name} {_dataType}";
 

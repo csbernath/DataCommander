@@ -14,8 +14,10 @@ internal sealed class ViewCollectionNode(DatabaseNode database) : ITreeNode
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var treeNodes = new List<ITreeNode>();
-        treeNodes.Add(new SystemViewCollectionNode(database));
+        var treeNodes = new List<ITreeNode>
+        {
+            new SystemViewCollectionNode(database)
+        };
 
         var databaseName = new SqlCommandBuilder().QuoteIdentifier(database.Name);
         var commandText = $@"select

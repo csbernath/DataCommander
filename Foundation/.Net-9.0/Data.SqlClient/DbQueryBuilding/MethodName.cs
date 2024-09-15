@@ -4,20 +4,12 @@ internal static class MethodName
 {
     public static string GetToSqlConstantMethodName(string sqlDataTypeName, bool isNullable)
     {
-        string methodName;
-        switch (sqlDataTypeName)
+        string methodName = sqlDataTypeName switch
         {
-            case SqlDataTypeName.NVarChar:
-                methodName = isNullable ? "ToNullableNVarChar" : "ToNVarChar";
-                break;
-            case SqlDataTypeName.VarChar:
-                methodName = isNullable ? "ToNullableVarChar" : "ToVarChar";
-                break;
-            default:
-                methodName = "ToSqlConstant";
-                break;
-        }
-
+            SqlDataTypeName.NVarChar => isNullable ? "ToNullableNVarChar" : "ToNVarChar",
+            SqlDataTypeName.VarChar => isNullable ? "ToNullableVarChar" : "ToVarChar",
+            _ => "ToSqlConstant",
+        };
         return methodName;
     }
 }

@@ -6,14 +6,9 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class SequenceCollectionNode : ITreeNode
+internal sealed class SequenceCollectionNode(SchemaNode schemaNode) : ITreeNode
 {
-    private readonly SchemaNode _schemaNode;
-
-    public SequenceCollectionNode(SchemaNode schemaNode)
-    {
-            _schemaNode = schemaNode;
-        }
+    private readonly SchemaNode _schemaNode = schemaNode;
 
     string? ITreeNode.Name => "Sequences";
 

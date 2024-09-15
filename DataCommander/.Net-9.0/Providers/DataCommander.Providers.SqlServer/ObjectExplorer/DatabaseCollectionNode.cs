@@ -25,9 +25,11 @@ internal sealed class DatabaseCollectionNode : ITreeNode
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var list = new List<ITreeNode>();
-        list.Add(new SystemDatabaseCollectionNode(this));
-        list.Add(new DatabaseSnapshotCollectionNode(this));
+        var list = new List<ITreeNode>
+        {
+            new SystemDatabaseCollectionNode(this),
+            new DatabaseSnapshotCollectionNode(this)
+        };
 
         var commandText = CreateCommandText();
         var databaseNodes = await Db.ExecuteReaderAsync(

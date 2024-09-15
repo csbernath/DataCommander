@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace Foundation.Core;
 
 [DebuggerDisplay("{" + nameof(_value) + "}")]
-public struct NotNullable<T> where T : class
+public readonly struct NotNullable<T> where T : class
 {
     private readonly T _value;
 
@@ -15,9 +15,9 @@ public struct NotNullable<T> where T : class
         _value = value;
     }
 
-    public bool HasValue => _value != null;
+    public readonly bool HasValue => _value != null;
 
-    public T Value
+    public readonly T Value
     {
         get
         {

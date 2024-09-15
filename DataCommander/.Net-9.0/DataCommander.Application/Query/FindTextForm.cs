@@ -153,13 +153,13 @@ public class FindTextForm : Form
         this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
         this.CancelButton = this._btnCancel;
         this.ClientSize = new System.Drawing.Size(292, 114);
-        this.Controls.AddRange(new System.Windows.Forms.Control[] {
+        this.Controls.AddRange([
             this._cbMatchWholeWord,
             this._cbMatchCase,
             this._label1,
             this._btnCancel,
             this._btnOk,
-            this._cbText});
+            this._cbText]);
         this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(238)));
         this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
         this.Name = "FindTextForm";

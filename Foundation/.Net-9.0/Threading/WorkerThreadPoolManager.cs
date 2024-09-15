@@ -6,21 +6,15 @@ using Foundation.Core;
 
 namespace Foundation.Threading;
 
-public sealed class WorkerThreadPoolManager
+public sealed class WorkerThreadPoolManager(
+    WorkerThreadPool pool,
+    IWaitCallbackFactory waitCallbackFactory)
 {
-    private readonly WorkerThreadPool _pool;
+    private readonly WorkerThreadPool _pool = pool;
 
-    private readonly IWaitCallbackFactory _waitCallbackFactory;
+    private readonly IWaitCallbackFactory _waitCallbackFactory = waitCallbackFactory;
 
     private Timer _timer;
-
-    public WorkerThreadPoolManager(
-        WorkerThreadPool pool,
-        IWaitCallbackFactory waitCallbackFactory)
-    {
-        _pool = pool;
-        _waitCallbackFactory = waitCallbackFactory;
-    }
 
     public void Start() => _timer = new Timer(ManagePoolDequeuers, null, 10000, 10000);
 

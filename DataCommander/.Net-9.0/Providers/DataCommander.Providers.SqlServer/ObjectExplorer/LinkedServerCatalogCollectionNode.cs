@@ -55,19 +55,17 @@ end
 
 drop table #catalog";
 
-        using (var connection = _linkedServer.LinkedServers.Server.CreateConnection())
-        {
-            connection.Open();
+        using var connection = _linkedServer.LinkedServers.Server.CreateConnection();
+        connection.Open();
 
-            var parameters = new SqlParameterCollectionBuilder();
-            parameters.Add("@name", _linkedServer.Name);
-            parameters.Add("@getSystemCatalogs", false);
+        var parameters = new SqlParameterCollectionBuilder();
+        parameters.Add("@name", _linkedServer.Name);
+        parameters.Add("@getSystemCatalogs", false);
 
-            var executor = connection.CreateCommandExecutor();
-            var executeReaderRequest = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
-            return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(executeReaderRequest, 128,
-                dataRecord => new LinkedServerCatalogNode(_linkedServer, dataRecord.GetString(0))));
-        }
+        var executor = connection.CreateCommandExecutor();
+        var executeReaderRequest = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
+        return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(executeReaderRequest, 128,
+            dataRecord => new LinkedServerCatalogNode(_linkedServer, dataRecord.GetString(0))));
     }
 
     bool ITreeNode.Sortable => false;
