@@ -64,7 +64,7 @@ public readonly struct SmallTimeInterval : IEquatable<SmallTimeInterval>, ICompa
     public override bool Equals(object obj)
     {
         if (ReferenceEquals(null, obj)) return false;
-        return obj is SmallTimeInterval && Equals((SmallTimeInterval) obj);
+        return obj is SmallTimeInterval smallTimeInterval && Equals(smallTimeInterval);
     }
 
     public override readonly int GetHashCode()

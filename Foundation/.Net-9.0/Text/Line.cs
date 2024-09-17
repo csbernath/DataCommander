@@ -21,5 +21,5 @@ public sealed class Line
             ? this
             : new Line(Indentation + indentation, Text);
 
-    public static Line Empty = new(0, string.Empty);
+    public static readonly Line Empty = new(0, string.Empty);
 }

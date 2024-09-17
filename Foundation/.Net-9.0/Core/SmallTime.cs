@@ -51,7 +51,7 @@ public readonly struct SmallTime : IEquatable<SmallTime>, IComparable<SmallTime>
     public override bool Equals(object obj)
     {
         if (ReferenceEquals(null, obj)) return false;
-        return obj is SmallTime && Equals((SmallTime) obj);
+        return obj is SmallTime smallTime && Equals(smallTime);
     }
 
     public override readonly int GetHashCode()

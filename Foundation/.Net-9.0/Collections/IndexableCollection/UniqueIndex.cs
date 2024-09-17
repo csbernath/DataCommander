@@ -45,9 +45,6 @@ public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey
 
     IEnumerator<T> IEnumerable<T>.GetEnumerator() => _dictionary.Values.GetEnumerator();
 
-    /// <summary>
-    /// </summary>
-    /// <returns></returns>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return _dictionary.Values.GetEnumerator();

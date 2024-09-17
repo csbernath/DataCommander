@@ -226,7 +226,6 @@ order by name collate nocase";
     {
         var schemaRow = FoundationDbColumnFactory.Create(sourceSchemaRow);
         var columnSize = schemaRow.ColumnSize;
-        var allowDbNull = schemaRow.AllowDbNull;
         string typeName;
 
         switch (sourceDataTypeName.ToLower())
