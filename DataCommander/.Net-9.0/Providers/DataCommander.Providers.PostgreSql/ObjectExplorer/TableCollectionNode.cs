@@ -16,11 +16,11 @@ internal sealed class TableCollectionNode(SchemaNode schemaNode) : ITreeNode
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-            using (Npgsql.NpgsqlConnection connection = SchemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection())
+            using (var connection = SchemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection())
             {
                 connection.Open();
-            IDbCommandExecutor executor = connection.CreateCommandExecutor();
-            string commandText = $@"select table_name
+            var executor = connection.CreateCommandExecutor();
+            var commandText = $@"select table_name
 from information_schema.tables
 where
     table_schema = '{SchemaNode.Name}'
@@ -28,7 +28,7 @@ where
 order by table_name";
                 return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataReader =>
                 {
-                    string name = dataReader.GetString(0);
+                    var name = dataReader.GetString(0);
                     return new TableNode(this, name);
                 }));
             }

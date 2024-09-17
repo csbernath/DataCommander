@@ -18,17 +18,17 @@ public sealed class DeploymentCommandRepository
 
     public DeploymentCommand Get(string applicationName)
     {
-        string fileName = GetFileName(applicationName);
+        var fileName = GetFileName(applicationName);
         DeploymentCommand deploymentCommand;
 
         if (File.Exists(fileName))
         {
-            string text = File.ReadAllText(fileName, Encoding.UTF8);
+            var text = File.ReadAllText(fileName, Encoding.UTF8);
             deploymentCommand = _serializer.Deserialize<DeploymentCommand>(text);
         }
         else
         {
-            DateTime now = UniversalTime.Default.Now;
+            var now = UniversalTime.Default.Now;
             deploymentCommand = new CheckForUpdates(now);
         }
 
@@ -37,15 +37,15 @@ public sealed class DeploymentCommandRepository
 
     public void Save(string applicationName, DeploymentCommand command)
     {
-        string text = _serializer.Serialize(command);
-        string fileName = GetFileName(applicationName);
+        var text = _serializer.Serialize(command);
+        var fileName = GetFileName(applicationName);
         File.WriteAllText(fileName, text, Encoding.UTF8);
     }
 
     private static string GetFileName(string applicationName)
     {
-        string localApplicationDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        string directory = Path.Combine(localApplicationDataDirectory, applicationName);
+        var localApplicationDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        var directory = Path.Combine(localApplicationDataDirectory, applicationName);
         if (!Directory.Exists(directory))
             Directory.CreateDirectory(directory);
 

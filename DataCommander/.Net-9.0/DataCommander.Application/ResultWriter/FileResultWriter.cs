@@ -40,24 +40,24 @@ internal sealed class FileResultWriter : IResultWriter
 
     void IResultWriter.WriteTableBegin(DataTable schemaTable)
     {
-        string path = Path.GetTempFileName();
+        var path = Path.GetTempFileName();
         _messageWriter.WriteLine("fileName: {0}", path);
-        Encoding encoding = Encoding.UTF8;
+        var encoding = Encoding.UTF8;
         _streamWriter = new StreamWriter(path, false, encoding, 4096)
         {
             AutoFlush = true
         };
-        int count = schemaTable.Rows.Count;
+        var count = schemaTable.Rows.Count;
         _dataWriters = new DataWriterBase[count];
-        StringTable st = new StringTable(3);
+        var st = new StringTable(3);
         st.Columns[2].Align = StringTableColumnAlign.Right;
 
-        for (int i = 0; i < count; i++)
+        for (var i = 0; i < count; i++)
         {
             DataWriterBase dataWriter = null;
-            DataRow column = schemaTable.Rows[i];
-            Type dataType = (Type)column["DataType"];
-            TypeCode typeCode = Type.GetTypeCode(dataType);
+            var column = schemaTable.Rows[i];
+            var dataType = (Type)column["DataType"];
+            var typeCode = Type.GetTypeCode(dataType);
             string dataTypeName;
             int length;
 
@@ -78,8 +78,8 @@ internal sealed class FileResultWriter : IResultWriter
                     break;
 
                 case TypeCode.Decimal:
-                    short precision = (short)column["NumericPrecision"];
-                    short scale = (short)column["NumericScale"];
+                    var precision = (short)column["NumericPrecision"];
+                    var scale = (short)column["NumericScale"];
                     length = precision + 1; // +/- sign
 
                     // decimal separator
@@ -138,7 +138,7 @@ internal sealed class FileResultWriter : IResultWriter
 
             _dataWriters[i] = dataWriter;
 
-            StringTableRow row = st.NewRow();
+            var row = st.NewRow();
             row[0] = (string)column[SchemaTableColumn.ColumnName];
             row[1] = dataTypeName;
             row[2] = length.ToString();
@@ -158,13 +158,13 @@ internal sealed class FileResultWriter : IResultWriter
 
     public void WriteRows(object[][] rows, int rowCount)
     {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < rowCount; i++)
+        var stringBuilder = new StringBuilder();
+        for (var i = 0; i < rowCount; i++)
         {
             object[] row = rows[i];
-            for (int j = 0; j < row.Length; j++)
+            for (var j = 0; j < row.Length; j++)
             {
-                string s = _dataWriters[j].ToString(row[j]);
+                var s = _dataWriters[j].ToString(row[j]);
                 stringBuilder.Append(s);
             }
 

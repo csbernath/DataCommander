@@ -15,20 +15,20 @@ public sealed class SegmentedArrayBuilder<T>
 
         if (length > 0)
         {
-            int segmentArrayLength = (length + segmentLength - 1) / segmentLength;
+            var segmentArrayLength = (length + segmentLength - 1) / segmentLength;
             _segments = new T[segmentArrayLength][];
-            int lastSegmentArrayIndex = segmentArrayLength - 1;
+            var lastSegmentArrayIndex = segmentArrayLength - 1;
 
-            for (int i = 0; i < lastSegmentArrayIndex; i++) _segments[i] = new T[segmentLength];
+            for (var i = 0; i < lastSegmentArrayIndex; i++) _segments[i] = new T[segmentLength];
 
-            int lastSegmentLength = length - lastSegmentArrayIndex * segmentLength;
+            var lastSegmentLength = length - lastSegmentArrayIndex * segmentLength;
             _segments[lastSegmentArrayIndex] = new T[lastSegmentLength];
         }
     }
 
     public void Add(T item)
     {
-        T[] currentSegment = _segments[_currentSegmentArrayIndex];
+        var currentSegment = _segments[_currentSegmentArrayIndex];
         currentSegment[_currentSegmentIndex] = item;
 
         if (_currentSegmentIndex < currentSegment.Length - 1)
@@ -53,11 +53,11 @@ public sealed class SegmentedArrayBuilder<T>
         {
             get
             {
-                int segmentLength = segments[0].Length;
-                int segmentArrayIndex = index / segmentLength;
-                T[] segment = segments[segmentArrayIndex];
-                int segmentIndex = index % segmentLength;
-                T value = segment[segmentIndex];
+                var segmentLength = segments[0].Length;
+                var segmentArrayIndex = index / segmentLength;
+                var segment = segments[segmentArrayIndex];
+                var segmentIndex = index % segmentLength;
+                var value = segment[segmentIndex];
                 return value;
             }
         }
@@ -66,18 +66,18 @@ public sealed class SegmentedArrayBuilder<T>
         {
             get
             {
-                int lastSegmentArrayIndex = segments.Length - 1;
-                int count = lastSegmentArrayIndex * segments[0].Length + segments[lastSegmentArrayIndex].Length;
+                var lastSegmentArrayIndex = segments.Length - 1;
+                var count = lastSegmentArrayIndex * segments[0].Length + segments[lastSegmentArrayIndex].Length;
                 return count;
             }
         }
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            for (int segmentArrayIndex = 0; segmentArrayIndex < segments.Length; segmentArrayIndex++)
+            for (var segmentArrayIndex = 0; segmentArrayIndex < segments.Length; segmentArrayIndex++)
             {
-                T[] segment = segments[segmentArrayIndex];
-                for (int segmentIndex = 0; segmentIndex < segment.Length; segmentIndex++) yield return segment[segmentIndex];
+                var segment = segments[segmentArrayIndex];
+                for (var segmentIndex = 0; segmentIndex < segment.Length; segmentIndex++) yield return segment[segmentIndex];
             }
         }
 

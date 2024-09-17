@@ -15,10 +15,10 @@ public static class ColumnNameValueExtensions
     {
         Assert.IsTrue(columns.All(column => !column.Value.IsNullOrEmpty()));
 
-        int last = columns.Count - 1;
-        ReadOnlyCollection<Line> items = columns.Select((column, index) =>
+        var last = columns.Count - 1;
+        var items = columns.Select((column, index) =>
             {
-                StringBuilder stringBuilder = new StringBuilder();
+                var stringBuilder = new StringBuilder();
                 stringBuilder.Append($"{column.Name} = {column.Value}");
 
                 if (index < last)

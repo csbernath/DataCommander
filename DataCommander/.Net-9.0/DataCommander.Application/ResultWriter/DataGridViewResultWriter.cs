@@ -33,8 +33,8 @@ internal sealed class DataGridViewResultWriter : IResultWriter
 
     private static DataGridViewColumn ToDataGridViewColumn(DataRow schemaDataRow)
     {
-        FoundationDbColumn schema = FoundationDbColumnFactory.Create(schemaDataRow);
-        DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn()
+        var schema = FoundationDbColumnFactory.Create(schemaDataRow);
+        var column = new DataGridViewTextBoxColumn()
         {
             AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
             Name = schema.ColumnName
@@ -44,7 +44,7 @@ internal sealed class DataGridViewResultWriter : IResultWriter
 
     void IResultWriter.WriteTableBegin(DataTable schemaTable)
     {
-        DoubleBufferedDataGridView dataGridView = new DoubleBufferedDataGridView
+        var dataGridView = new DoubleBufferedDataGridView
         {
             AllowUserToAddRows = false,
             AllowUserToDeleteRows = false,
@@ -68,16 +68,16 @@ internal sealed class DataGridViewResultWriter : IResultWriter
 
     void IResultWriter.WriteRows(object[][] rows, int rowCount)
     {
-        DoubleBufferedDataGridView dataGridView = DataGridViews[^1];
-        DataGridViewRowCollection targetRows = dataGridView.Rows;
-        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+        var dataGridView = DataGridViews[^1];
+        var targetRows = dataGridView.Rows;
+        for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
         {
             object[] sourceRow = rows[rowIndex];
-            DataGridViewRow targetRow = new DataGridViewRow();
-            DataGridViewCellCollection cells = targetRow.Cells;
-            foreach (object sourceValue in sourceRow)
+            var targetRow = new DataGridViewRow();
+            var cells = targetRow.Cells;
+            foreach (var sourceValue in sourceRow)
             {
-                DataGridViewTextBoxCell cell = new DataGridViewTextBoxCell
+                var cell = new DataGridViewTextBoxCell
                 {
                     Value = sourceValue
                 };

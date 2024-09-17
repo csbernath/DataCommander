@@ -24,15 +24,15 @@ public sealed class MemberEqualityComparer<T, T1> : IEqualityComparer<T>
 
     bool IEqualityComparer<T>.Equals(T x, T y)
     {
-        T1 x1 = _get(x);
-        T1 y1 = _get(y);
-        bool equals = _equalityComparer.Equals(x1, y1);
+        var x1 = _get(x);
+        var y1 = _get(y);
+        var equals = _equalityComparer.Equals(x1, y1);
         return equals;
     }
 
     int IEqualityComparer<T>.GetHashCode(T obj)
     {
-        T1 obj1 = _get(obj);
+        var obj1 = _get(obj);
         return _equalityComparer.GetHashCode(obj1);
     }
 }

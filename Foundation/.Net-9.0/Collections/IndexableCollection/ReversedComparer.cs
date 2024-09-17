@@ -17,7 +17,7 @@ public sealed class ReverseComparer<T> : IComparer<T>
 
     private static ReverseComparer<T> CreateReversedComparer()
     {
-        Comparer<T> comparer = Comparer<T>.Default;
+        var comparer = Comparer<T>.Default;
         return new ReverseComparer<T>(comparer);
     }
 }

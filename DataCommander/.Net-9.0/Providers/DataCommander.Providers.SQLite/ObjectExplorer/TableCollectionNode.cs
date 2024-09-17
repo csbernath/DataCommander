@@ -18,7 +18,7 @@ internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
 
     public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        string commandText = $@"select	name
+        var commandText = $@"select	name
 from
 (
 	select	name
@@ -35,7 +35,7 @@ order by name collate nocase";
             128,
             dataRecord =>
             {
-                string name = dataRecord.GetString(0);
+                var name = dataRecord.GetString(0);
                 return (ITreeNode)new TableNode(_databaseNode, name);
             },
             cancellationToken);

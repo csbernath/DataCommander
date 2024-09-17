@@ -9,10 +9,10 @@ public static class FormPosition
 {
     public static void Save(Form form, ApplicationData applicationData)
     {
-        System.Type type = form.GetType();
-        string nodeName = ConfigurationNodeName.FromType(type);
-        ConfigurationNode node = applicationData.CreateNode(nodeName);
-        ConfigurationAttributeCollection attributes = node.Attributes;
+        var type = form.GetType();
+        var nodeName = ConfigurationNodeName.FromType(type);
+        var node = applicationData.CreateNode(nodeName);
+        var attributes = node.Attributes;
 
         if (form.WindowState == FormWindowState.Minimized)
             form.WindowState = FormWindowState.Normal;
@@ -29,10 +29,10 @@ public static class FormPosition
         Assert.IsTrue(applicationData != null);
         Assert.IsTrue(form != null);
 
-        System.Type type = form.GetType();
-        string nodeName = ConfigurationNodeName.FromType(type);
-        ConfigurationNode node = applicationData.CreateNode(nodeName);
-        node.Attributes.TryGetAttributeValue("WindowState", FormWindowState.Normal, out FormWindowState windowState);
+        var type = form.GetType();
+        var nodeName = ConfigurationNodeName.FromType(type);
+        var node = applicationData.CreateNode(nodeName);
+        node.Attributes.TryGetAttributeValue("WindowState", FormWindowState.Normal, out var windowState);
         form.WindowState = windowState;
 
         if (windowState == FormWindowState.Normal)
@@ -40,11 +40,11 @@ public static class FormPosition
             if (node.Attributes.ContainsKey("Left"))
             {
                 form.StartPosition = FormStartPosition.Manual;
-                ConfigurationAttributeCollection attributes = node.Attributes;
+                var attributes = node.Attributes;
                 form.Left = attributes["Left"].GetValue<int>();
                 form.Top = attributes["Top"].GetValue<int>();
-                int width = attributes["Width"].GetValue<int>();
-                int height = attributes["Height"].GetValue<int>();
+                var width = attributes["Width"].GetValue<int>();
+                var height = attributes["Height"].GetValue<int>();
                 form.ClientSize = new Size(width, height);
             }
         }

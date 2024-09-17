@@ -8,7 +8,7 @@ public static class DbConnectionExtensions
     public static DbCommand CreateCommand(this DbConnection connection, CreateCommandRequest request)
     {
         ArgumentNullException.ThrowIfNull(connection);
-        DbCommand command = connection.CreateCommand();
+        var command = connection.CreateCommand();
         command.Initialize(request);
         return command;
     }

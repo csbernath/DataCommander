@@ -8,8 +8,8 @@ public static class StringTableColumnInfo
     {
         return new StringTableColumnInfo<TSource>(columnName, align, source =>
         {
-            TResult? value = getValue(source);
-            string? valueString = value?.ToString();
+            var value = getValue(source);
+            var valueString = value?.ToString();
             return valueString;
         });
     }

@@ -23,7 +23,7 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
     {
         get
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append(name);
 
             if (state == 6)
@@ -53,17 +53,17 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
 
     public ContextMenu? GetContextMenu()
     {
-        MenuItem getInformationMenuItem = new MenuItem("Get information", GetInformationMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        MenuItem createDatabaseSnapshotMenuItem =
+        var getInformationMenuItem = new MenuItem("Get information", GetInformationMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+        var createDatabaseSnapshotMenuItem =
             new MenuItem("Create database snapshot script to clipboard", CreateDatabaseSnapshotScriptToClipboardMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
         System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> menuItems = new[] { getInformationMenuItem, createDatabaseSnapshotMenuItem }.ToReadOnlyCollection();
-        ContextMenu contextMenu = new ContextMenu(menuItems);
+        var contextMenu = new ContextMenu(menuItems);
         return contextMenu;
     }
 
     private void GetInformationMenuItem_Click(object sender, EventArgs e)
     {
-        string commandText = string.Format(@"select
+        var commandText = string.Format(@"select
     d.dbid,
     d.filename,
     DATABASEPROPERTYEX('{0}','Collation')         as [Collation],
@@ -83,11 +83,11 @@ select
 	convert(decimal(15,2),convert(float,fileproperty(name, 'SpaceUsed')) * 100.0 / size)	as [Used%],
 	convert(decimal(15,2),(f.size-fileproperty(name, 'SpaceUsed')) * 8096.0 / 1000000000)	as [Free (GB)]
 from	[{0}].sys.database_files f", name);
-        IQueryForm queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender;
         DataSet dataSet = null;
-        using (SqlConnection connection = Databases.Server.CreateConnection())
+        using (var connection = Databases.Server.CreateConnection())
         {
-            IDbCommandExecutor executor = connection.CreateCommandExecutor();
+            var executor = connection.CreateCommandExecutor();
             try
             {
                 dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText), CancellationToken.None);
@@ -104,13 +104,13 @@ from	[{0}].sys.database_files f", name);
 
     private void CreateDatabaseSnapshotScriptToClipboardMenuItem_Click(object? sender, EventArgs e)
     {
-        string? databaseName = name;
+        var databaseName = name;
 
-        string databaseSnapshotName = $"{databaseName}_Snapshot_{DateTime.Now:yyyyMMdd_HHmm}";
-        string logical_file_name = GetLogicalFileName(databaseName);
-        string osFileName = $"D:\\Backup\\{databaseSnapshotName}.ss";
+        var databaseSnapshotName = $"{databaseName}_Snapshot_{DateTime.Now:yyyyMMdd_HHmm}";
+        var logical_file_name = GetLogicalFileName(databaseName);
+        var osFileName = $"D:\\Backup\\{databaseSnapshotName}.ss";
 
-        TextBuilder textBuilder = new TextBuilder();
+        var textBuilder = new TextBuilder();
 
         textBuilder.Add($"CREATE DATABASE [{databaseSnapshotName}]");
         textBuilder.Add("ON");
@@ -129,8 +129,8 @@ from	[{0}].sys.database_files f", name);
         textBuilder.Add($"DATABASE_SNAPSHOT = {databaseSnapshotName.ToVarChar()}");
         textBuilder.Add($"ALTER DATABASE [{databaseName}] SET MULTI_USER WITH NO_WAIT");
 
-        string text = textBuilder.ToLines().ToIndentedString("  ");
-        IQueryForm? queryForm = (IQueryForm)sender;
+        var text = textBuilder.ToLines().ToIndentedString("  ");
+        var queryForm = (IQueryForm)sender;
         queryForm.SetClipboardText(text);
     }
 
@@ -138,17 +138,17 @@ from	[{0}].sys.database_files f", name);
     {
         string logicalFileName;
 
-        string commandText = @$"select
+        var commandText = @$"select
     f.name
 from [{database}].sys.database_files f
 where
     f.type = 0";
-        using (SqlConnection connection = Databases.Server.CreateConnection())
+        using (var connection = Databases.Server.CreateConnection())
         {
             connection.Open();
-            IDbCommandExecutor executor = connection.CreateCommandExecutor();
-            CreateCommandRequest createCommandRequest = new CreateCommandRequest(commandText);
-            object scalar = executor.ExecuteScalar(createCommandRequest);
+            var executor = connection.CreateCommandExecutor();
+            var createCommandRequest = new CreateCommandRequest(commandText);
+            var scalar = executor.ExecuteScalar(createCommandRequest);
             logicalFileName = (string)scalar;
         }
 

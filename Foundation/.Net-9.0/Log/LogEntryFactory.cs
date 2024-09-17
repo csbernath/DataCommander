@@ -9,10 +9,10 @@ public static class LogEntryFactory
 
     public static LogEntry Create(string logName, DateTime creationTime, string message, LogLevel logLevel)
     {
-        long id = Interlocked.Increment(ref _id);
-        Thread thread = Thread.CurrentThread;
-        int threadId = thread.ManagedThreadId;
-        string threadName = thread.Name;
+        var id = Interlocked.Increment(ref _id);
+        var thread = Thread.CurrentThread;
+        var threadId = thread.ManagedThreadId;
+        var threadName = thread.Name;
         string userName = null;
         string hostName = null;
 

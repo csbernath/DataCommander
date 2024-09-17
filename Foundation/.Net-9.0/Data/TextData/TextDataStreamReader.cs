@@ -40,13 +40,13 @@ public sealed class TextDataStreamReader
     public object[] ReadRow()
     {
         object[] values = null;
-        int index = 0;
+        var index = 0;
 
-        foreach (TextDataColumn column in _columns)
+        foreach (var column in _columns)
         {
-            int maxLength = column.MaxLength;
-            char[] buffer = new char[maxLength];
-            int count = _textReader.Read(buffer, 0, maxLength);
+            var maxLength = column.MaxLength;
+            var buffer = new char[maxLength];
+            var count = _textReader.Read(buffer, 0, maxLength);
 
             if (count == 0)
             {
@@ -58,8 +58,8 @@ public sealed class TextDataStreamReader
             if (index == 0)
                 values = new object[_columns.Count];
 
-            string source = new string(buffer);
-            ITextDataConverter converter = _converters[index];
+            var source = new string(buffer);
+            var converter = _converters[index];
 
             Assert.IsTrue(converter != null);
 

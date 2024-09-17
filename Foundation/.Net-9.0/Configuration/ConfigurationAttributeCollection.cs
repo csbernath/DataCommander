@@ -38,7 +38,7 @@ public class ConfigurationAttributeCollection : IList<ConfigurationAttribute>
 
         set
         {
-            ConfigurationAttribute originalItem = _listIndex[index];
+            var originalItem = _listIndex[index];
             ICollection<ConfigurationAttribute> collection = _nameIndex;
             collection.Remove(originalItem);
             _listIndex[index] = value;
@@ -61,7 +61,7 @@ public class ConfigurationAttributeCollection : IList<ConfigurationAttribute>
     {
         Assert.IsValidOperation(!ContainsKey(name));
 
-        ConfigurationAttribute attribute = new ConfigurationAttribute(name, value, description);
+        var attribute = new ConfigurationAttribute(name, value, description);
         _collection.Add(attribute);
     }
 
@@ -79,7 +79,7 @@ public class ConfigurationAttributeCollection : IList<ConfigurationAttribute>
 
     public bool Remove(string name)
     {
-        bool contains = _nameIndex.TryGetValue(name, out ConfigurationAttribute attribute);
+        var contains = _nameIndex.TryGetValue(name, out var attribute);
         bool succeeded;
 
         if (contains)
@@ -92,7 +92,7 @@ public class ConfigurationAttributeCollection : IList<ConfigurationAttribute>
 
     public void RemoveAt(int index)
     {
-        ConfigurationAttribute item = _listIndex[index];
+        var item = _listIndex[index];
         _listIndex.RemoveAt(index);
         ICollection<ConfigurationAttribute> collection = _nameIndex;
         collection.Remove(item);
@@ -103,14 +103,14 @@ public class ConfigurationAttributeCollection : IList<ConfigurationAttribute>
 
     public bool TryGetAttributeValue<T>(string name, T defaultValue, out T value)
     {
-        bool contains = _nameIndex.TryGetValue(name, out ConfigurationAttribute attribute);
+        var contains = _nameIndex.TryGetValue(name, out var attribute);
         value = contains ? attribute.GetValue<T>() : defaultValue;
         return contains;
     }
 
     public void SetAttributeValue(string name, object value)
     {
-        bool contains = _nameIndex.TryGetValue(name, out ConfigurationAttribute attribute);
+        var contains = _nameIndex.TryGetValue(name, out var attribute);
         if (contains)
             attribute.Value = value;
         else

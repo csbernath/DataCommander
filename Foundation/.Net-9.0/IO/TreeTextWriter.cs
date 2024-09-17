@@ -33,9 +33,9 @@ public sealed class TreeTextWriter
     {
         if (level > 0)
         {
-            string prefix = '|' + new string(' ', _indentation - 1);
+            var prefix = '|' + new string(' ', _indentation - 1);
 
-            for (int i = 0; i < level; ++i)
+            for (var i = 0; i < level; ++i)
                 _textWriter.Write(prefix);
         }
     }
@@ -53,7 +53,7 @@ public sealed class TreeTextWriter
 
     public void WriteStartElement(string format, params object[] arguments)
     {
-        string value = string.Format(CultureInfo.InvariantCulture, format, arguments);
+        var value = string.Format(CultureInfo.InvariantCulture, format, arguments);
         WriteStartElement(value);
     }
 
@@ -75,7 +75,7 @@ public sealed class TreeTextWriter
 
     public void WriteEndElement(string format, params object[] arguments)
     {
-        string value = string.Format(CultureInfo.InvariantCulture, format, arguments);
+        var value = string.Format(CultureInfo.InvariantCulture, format, arguments);
         WriteEndElement(value);
     }
 
@@ -99,13 +99,13 @@ public sealed class TreeTextWriter
 
     public void WriteElement(string format, params object[] arguments)
     {
-        string value = string.Format(CultureInfo.InvariantCulture, format, arguments);
+        var value = string.Format(CultureInfo.InvariantCulture, format, arguments);
         WriteElement(value);
     }
 
     public void WriteElement(object value)
     {
-        string s = value != null ? value.ToString() : null;
+        var s = value != null ? value.ToString() : null;
         WriteElement(s);
     }
 }

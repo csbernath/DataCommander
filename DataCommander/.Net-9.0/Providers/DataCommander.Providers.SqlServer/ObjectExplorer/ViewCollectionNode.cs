@@ -19,8 +19,8 @@ internal sealed class ViewCollectionNode(DatabaseNode database) : ITreeNode
             new SystemViewCollectionNode(database)
         ];
 
-        string databaseName = new SqlCommandBuilder().QuoteIdentifier(database.Name);
-        string commandText = $@"select
+        var databaseName = new SqlCommandBuilder().QuoteIdentifier(database.Name);
+        var commandText = $@"select
     s.name,
     v.name,
     v.object_id
@@ -35,9 +35,9 @@ order by 1,2";
             {
                 while (await dataReader.ReadAsync(cancellationToken))
                 {
-                    string schema = dataReader.GetString(0);
-                    string name = dataReader.GetString(1);
-                    int id = dataReader.GetInt32(2);
+                    var schema = dataReader.GetString(0);
+                    var name = dataReader.GetString(1);
+                    var id = dataReader.GetInt32(2);
                     treeNodes.Add(new ViewNode(database, id, schema, name));
                 }
             },

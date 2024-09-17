@@ -29,13 +29,13 @@ public sealed class TextDataReader : DbDataReader
 
         _command = command;
         _behavior = behavior;
-        TextDataParameterCollection parameters = command.Parameters;
+        var parameters = command.Parameters;
 
         Assert.IsTrue(parameters != null);
 
         _columns = parameters.GetParameterValue<TextDataColumnCollection>("columns");
-        IList<ITextDataConverter> converters = parameters.GetParameterValue<IList<ITextDataConverter>>("converters");
-        IConverter<TextDataCommand, TextReader> getTextReader = parameters.GetParameterValue<IConverter<TextDataCommand, TextReader>>("getTextReader");
+        var converters = parameters.GetParameterValue<IList<ITextDataConverter>>("converters");
+        var getTextReader = parameters.GetParameterValue<IConverter<TextDataCommand, TextReader>>("getTextReader");
         _textReader = getTextReader.Convert(command);
         _textDataStreamReader = new TextDataStreamReader(_textReader, _columns, converters);
     }
@@ -160,7 +160,7 @@ public sealed class TextDataReader : DbDataReader
     /// <returns></returns>
     public override string GetName(int ordinal)
     {
-        TextDataColumn column = _columns[ordinal];
+        var column = _columns[ordinal];
         return column.ColumnName;
     }
 
@@ -190,7 +190,7 @@ public sealed class TextDataReader : DbDataReader
             _schemaTable.Columns.Add("DataType", typeof(Type));
             _schemaTable.Columns.Add("IsKey", typeof(bool));
 
-            foreach (TextDataColumn column in _columns)
+            foreach (var column in _columns)
             {
                 object[] values =
                 [
@@ -306,7 +306,7 @@ public sealed class TextDataReader : DbDataReader
     {
         get
         {
-            int index = _columns.IndexOf(name, true);
+            var index = _columns.IndexOf(name, true);
             return _values[index];
         }
     }

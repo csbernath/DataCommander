@@ -18,7 +18,7 @@ public class DebuggerDisplayRow(ColumnCollection columns, object[] values)
     {
         get
         {
-            Column indexedColumn = _columns[columnName];
+            var indexedColumn = _columns[columnName];
             return _values[indexedColumn.ColumnIndex];
         }
     }
@@ -27,9 +27,9 @@ public class DebuggerDisplayRow(ColumnCollection columns, object[] values)
     {
         get
         {
-            System.Collections.Generic.IEnumerable<string> stringValues = _columns.Select(column =>
+            var stringValues = _columns.Select(column =>
             {
-                object value = _values[column.ColumnIndex];
+                var value = _values[column.ColumnIndex];
 
                 string stringValue;
                 if (value != null)
@@ -46,7 +46,7 @@ public class DebuggerDisplayRow(ColumnCollection columns, object[] values)
 
                 return $"{column.ColumnSchema.ColumnName}:{stringValue}";
             });
-            string debuggerDisplay = string.Join("|", stringValues);
+            var debuggerDisplay = string.Join("|", stringValues);
             return debuggerDisplay;
         }
     }

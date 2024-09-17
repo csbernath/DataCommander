@@ -8,10 +8,10 @@ public static class ConnectionFactory
     public static SqlConnection CreateConnection(ConnectionStringAndCredential connectionStringAndCredential)
     {
         SqlCredential? sqlCredential = null;
-        Credential? credential = connectionStringAndCredential.Credential;
+        var credential = connectionStringAndCredential.Credential;
         if (credential != null)
         {
-            System.Security.SecureString password = credential.Password.SecureString;
+            var password = credential.Password.SecureString;
             sqlCredential = new SqlCredential(credential.UserId, password);
         }
 

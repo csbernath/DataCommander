@@ -20,7 +20,7 @@ public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
 
     public SafeSqlConnection(string connectionString)
     {
-        SqlConnection connection = new SqlConnection(connectionString);
+        var connection = new SqlConnection(connectionString);
         Initialize(connection, this);
     }
 
@@ -28,14 +28,14 @@ public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
 
     object ICloneable.Clone()
     {
-        string connectionString = ConnectionString;
-        SafeSqlConnection connection = new SafeSqlConnection(connectionString);
+        var connectionString = ConnectionString;
+        var connection = new SafeSqlConnection(connectionString);
         return connection;
     }
 
     internal static short GetId(IDbConnection connection)
     {
-        DbCommandExecutor executor = new DbCommandExecutor((DbConnection)connection);
+        var executor = new DbCommandExecutor((DbConnection)connection);
         short id = 0;
 
         try
@@ -65,11 +65,11 @@ public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
 
     internal static void HandleException(IDbConnection connection, Exception exception, TimeSpan elapsed, CancellationToken cancellationToken)
     {
-        string separator = new string('-', 80);
-        StringBuilder stringBuilder = new StringBuilder();
+        var separator = new string('-', 80);
+        var stringBuilder = new StringBuilder();
         stringBuilder.AppendFormat("SafeSqlConnection.HandleException(connection), elapsed: {0}, exception:\r\n{1}", elapsed, exception.ToLogString());
-        bool handled = false;
-        int timeout = 1 * 60 * 1000; // 1 minutes
+        var handled = false;
+        var timeout = 1 * 60 * 1000; // 1 minutes
 
         if (exception is SqlException sqlException)
         {
@@ -127,17 +127,17 @@ public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
     {
         ArgumentNullException.ThrowIfNull(command);
 
-        string separator = new string('-', 80);
-        StringBuilder sb = new StringBuilder();
+        var separator = new string('-', 80);
+        var sb = new StringBuilder();
         sb.AppendLine("SafeSqlConnection.HandleException(command):\r\n");
-        SqlParameterCollection parameters = (SqlParameterCollection)command.Parameters;
-        string p = parameters.ToLogString();
-        string database = command.Connection.Database;
+        var parameters = (SqlParameterCollection)command.Parameters;
+        var p = parameters.ToLogString();
+        var database = command.Connection.Database;
 
         sb.AppendFormat("Database: {0}\r\n", database);
         sb.AppendFormat("Command: {0}\r\n{1}\r\n{2}\r\n", command.CommandText, p, separator);
         sb.AppendFormat("Exception:{0}\r\n{1}\r\n", exception, separator);
-        bool handled = false;
+        var handled = false;
 
         if (exception is SqlException sqlEx)
         {

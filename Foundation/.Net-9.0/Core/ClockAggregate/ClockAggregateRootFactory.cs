@@ -7,11 +7,11 @@ public static class ClockAggregateRootFactory
 {
     public static ClockAggregateRoot Now()
     {
-        long stopwatchTimestamp = Stopwatch.GetTimestamp();
-        long environmentTickCount = Environment.TickCount64;
-        DateTime universalTime = DateTime.UtcNow;
-        DateTime localTime = universalTime.ToLocalTime();
-        ClockAggregateState clockAggregateState = new ClockAggregateState(stopwatchTimestamp, environmentTickCount, universalTime, localTime);
+        var stopwatchTimestamp = Stopwatch.GetTimestamp();
+        var environmentTickCount = Environment.TickCount64;
+        var universalTime = DateTime.UtcNow;
+        var localTime = universalTime.ToLocalTime();
+        var clockAggregateState = new ClockAggregateState(stopwatchTimestamp, environmentTickCount, universalTime, localTime);
         return new ClockAggregateRoot(clockAggregateState);
     }
 }

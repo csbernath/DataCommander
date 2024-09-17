@@ -12,16 +12,16 @@ public static class IndentedLineCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(lines);
 
-        StringBuilder stringBuilder = new StringBuilder();
-        bool first = true;
-        foreach (Line indentedLine in lines)
+        var stringBuilder = new StringBuilder();
+        var first = true;
+        foreach (var indentedLine in lines)
         {
             if (first)
                 first = false;
             else
                 stringBuilder.Append("\r\n");
 
-            for (int i = 0; i < indentedLine.Indentation; ++i)
+            for (var i = 0; i < indentedLine.Indentation; ++i)
                 stringBuilder.Append(indentation);
 
             stringBuilder.Append(indentedLine.Text);
@@ -36,13 +36,13 @@ public static class IndentedLineCollectionExtensions
         ArgumentNullException.ThrowIfNull(lineGroups);
         ArgumentNullException.ThrowIfNull(separator);
 
-        bool first = true;
+        var first = true;
         foreach (IEnumerable<Line> lineGroup in lineGroups)
         {
             if (!first)
                 yield return separator;
 
-            foreach (Line line in lineGroup)
+            foreach (var line in lineGroup)
             {
                 if (first)
                     first = false;

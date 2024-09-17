@@ -52,7 +52,7 @@ public struct PInt32 : INullable
 
     public static bool operator ==(PInt32 x, PInt32 y)
     {
-        bool isEqual = x.ValueType == y.ValueType;
+        var isEqual = x.ValueType == y.ValueType;
 
         if (isEqual)
         {
@@ -67,7 +67,7 @@ public struct PInt32 : INullable
 
     public static PInt32 Parse(string s, PValueType type)
     {
-        PInt32 sp = string.IsNullOrEmpty(s)
+        var sp = string.IsNullOrEmpty(s)
             ? new PInt32(type)
             : SqlInt32.Parse(s);
         return sp;
@@ -75,7 +75,7 @@ public struct PInt32 : INullable
 
     public override readonly bool Equals(object obj)
     {
-        bool equals = obj is PInt32;
+        var equals = obj is PInt32;
         if (equals)
             equals = this == (PInt32)obj;
         return equals;
@@ -83,7 +83,7 @@ public struct PInt32 : INullable
 
     public override int GetHashCode()
     {
-        int hashCode = _sql.GetHashCode();
+        var hashCode = _sql.GetHashCode();
         return hashCode;
     }
 

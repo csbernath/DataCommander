@@ -23,7 +23,7 @@ public class DebugWriter : TextWriter
 
     public override void Write(char[] buffer, int index, int count)
     {
-        string message = new string(buffer, index, count);
+        var message = new string(buffer, index, count);
         Debug.Write(message);
     }
 }

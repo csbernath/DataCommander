@@ -7,9 +7,9 @@ internal sealed class ErrorCollection : Collection<Error>
 {
     public override string ToString()
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
-        foreach (Error error in this)
+        foreach (var error in this)
             stringBuilder.AppendLine(error.ToString());
 
         return stringBuilder.ToString();

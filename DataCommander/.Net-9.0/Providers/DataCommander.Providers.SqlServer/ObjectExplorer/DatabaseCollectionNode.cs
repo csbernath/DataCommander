@@ -31,7 +31,7 @@ internal sealed class DatabaseCollectionNode : ITreeNode
             new DatabaseSnapshotCollectionNode(this)
         ];
 
-        string commandText = CreateCommandText();
+        var commandText = CreateCommandText();
         Foundation.Collections.ReadOnly.ReadOnlySegmentLinkedList<DatabaseNode> databaseNodes = await Db.ExecuteReaderAsync(
             Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
@@ -57,8 +57,8 @@ order by d.name";
 
     private DatabaseNode ReadRecord(IDataRecord dataRecord)
     {
-        string name = dataRecord.GetString(0);
-        byte state = dataRecord.GetByte(1);
+        var name = dataRecord.GetString(0);
+        var state = dataRecord.GetByte(1);
         return new DatabaseNode(this, name, state);
     }
 

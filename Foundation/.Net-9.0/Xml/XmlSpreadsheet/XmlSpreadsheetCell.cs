@@ -11,7 +11,7 @@ public sealed class XmlSpreadsheetCell(XmlSpreadsheetDataType dataType, string v
     {
         set
         {
-            XmlSpreadsheetAttribute attribute = new XmlSpreadsheetAttribute("ss:StyleID", value);
+            var attribute = new XmlSpreadsheetAttribute("ss:StyleID", value);
             _attributes.Add(attribute);
         }
     }
@@ -20,7 +20,7 @@ public sealed class XmlSpreadsheetCell(XmlSpreadsheetDataType dataType, string v
     {
         set
         {
-            XmlSpreadsheetAttribute attribute = new XmlSpreadsheetAttribute("ss:MergeAcross", value.ToString());
+            var attribute = new XmlSpreadsheetAttribute("ss:MergeAcross", value.ToString());
             _attributes.Add(attribute);
         }
     }
@@ -31,7 +31,7 @@ public sealed class XmlSpreadsheetCell(XmlSpreadsheetDataType dataType, string v
 
         using (xmlWriter.WriteElement("Cell"))
         {
-            foreach (XmlSpreadsheetAttribute attribute in _attributes)
+            foreach (var attribute in _attributes)
             {
                 attribute.Write(xmlWriter);
             }

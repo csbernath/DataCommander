@@ -18,11 +18,11 @@ public static class Writer
         ArgumentNullException.ThrowIfNull(dataTable);
         ArgumentNullException.ThrowIfNull(textWriter);
 
-        DataColumnCollection columns = dataTable.Columns;
+        var columns = dataTable.Columns;
 
         if (columns.Count > 0)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             foreach (DataColumn column in columns)
             {
@@ -35,10 +35,10 @@ public static class Writer
             foreach (DataRow row in dataTable.Rows)
             {
                 sb.Length = 0;
-                object[] itemArray = row.ItemArray;
-                int last = itemArray.Length - 1;
+                var itemArray = row.ItemArray;
+                var last = itemArray.Length - 1;
 
-                for (int i = 0; i < last; i++)
+                for (var i = 0; i < last; i++)
                 {
                     sb.Append(itemArray[i]);
                     sb.Append('\t');
@@ -57,13 +57,13 @@ public static class Writer
 
         if (dataView != null)
         {
-            int rowCount = dataView.Count;
-            DataTable dataTable = dataView.Table;
-            int last = dataTable.Columns.Count - 1;
+            var rowCount = dataView.Count;
+            var dataTable = dataView.Table;
+            var last = dataTable.Columns.Count - 1;
 
-            for (int i = 0; i <= last; i++)
+            for (var i = 0; i <= last; i++)
             {
-                DataColumn dataColumn = dataTable.Columns[i];
+                var dataColumn = dataTable.Columns[i];
                 textWriter.Write(dataColumn.ColumnName);
 
                 if (i < last)
@@ -72,12 +72,12 @@ public static class Writer
                     textWriter.Write(lineSeparator);
             }
 
-            for (int i = 0; i < rowCount; i++)
+            for (var i = 0; i < rowCount; i++)
             {
-                DataRow dataRow = dataView[i].Row;
-                object[] itemArray = dataRow.ItemArray;
+                var dataRow = dataView[i].Row;
+                var itemArray = dataRow.ItemArray;
 
-                for (int j = 0; j <= last; j++)
+                for (var j = 0; j <= last; j++)
                 {
                     textWriter.Write(itemArray[j]);
 

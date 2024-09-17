@@ -17,22 +17,22 @@ public static class CreateUpdateSqlStatementMethodFactory
         ];
         if (versionColumn != null)
         {
-            string csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == versionColumn.SqlDataTypeName).CSharpTypeName;
+            var csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == versionColumn.SqlDataTypeName).CSharpTypeName;
             arguments.Add($"{csharpTypeName} expected{versionColumn.ColumnName}");
         }
 
-        TextBuilder textBuilder = new TextBuilder();
+        var textBuilder = new TextBuilder();
         textBuilder.Add($"public static ReadOnlyCollection<Line> CreateUpdateSqlStatement({arguments.Join(", ")})");
         using (textBuilder.AddCSharpBlock())
         {
             textBuilder.Add("var setColumns = new []");
             using (textBuilder.AddCSharpBlock())
-                foreach (IndexedItem<Column> item in columns.SelectIndexed())
+                foreach (var item in columns.SelectIndexed())
                 {
                     if (item.Index > 0)
                         textBuilder.AddToLastLine(",");
-                    Column column = item.Value;
-                    string method = MethodName.GetToSqlConstantMethodName(column.SqlDataTypeName, column.IsNullable);
+                    var column = item.Value;
+                    var method = MethodName.GetToSqlConstantMethodName(column.SqlDataTypeName, column.IsNullable);
                     textBuilder.Add($"new ColumnNameValue(\"{column.ColumnName}\", record.{column.ColumnName}.{method}())");
                 }
 
@@ -41,7 +41,7 @@ public static class CreateUpdateSqlStatementMethodFactory
             textBuilder.Add("var whereColumns = new[]");
             using (textBuilder.AddCSharpBlock())
             {
-                string method = MethodName.GetToSqlConstantMethodName(identifierColumn.SqlDataTypeName, identifierColumn.IsNullable);
+                var method = MethodName.GetToSqlConstantMethodName(identifierColumn.SqlDataTypeName, identifierColumn.IsNullable);
                 textBuilder.Add($"new ColumnNameValue(\"{identifierColumn.ColumnName}\", record.{identifierColumn.ColumnName}.{method}())");
                 if (versionColumn != null)
                 {

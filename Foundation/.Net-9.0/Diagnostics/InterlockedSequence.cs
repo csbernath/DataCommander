@@ -8,7 +8,7 @@ internal sealed class InterlockedSequence(int value)
 
     public long Next()
     {
-        long next = Interlocked.Increment(ref _value);
+        var next = Interlocked.Increment(ref _value);
         return next;
     }
 }

@@ -15,7 +15,7 @@ internal class KeyCollectionNode(DatabaseNode databaseNode, int id) : ITreeNode
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        string commandText = CreateCommandText();
+        var commandText = CreateCommandText();
         return await Db.ExecuteReaderAsync(
             databaseNode.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
@@ -26,8 +26,8 @@ internal class KeyCollectionNode(DatabaseNode databaseNode, int id) : ITreeNode
 
     private string CreateCommandText()
     {
-        SqlCommandBuilder sqlCommandBuilder = new SqlCommandBuilder();
-        string commandText = @$"select name
+        var sqlCommandBuilder = new SqlCommandBuilder();
+        var commandText = @$"select name
 from {sqlCommandBuilder.QuoteIdentifier(databaseNode.Name)}.sys.objects o
 where
     o.type in('PK','F','UQ') and
@@ -43,7 +43,7 @@ order by
 
     private KeyNode ReadRecord(IDataRecord dataRecord)
     {
-        string name = dataRecord.GetString(0);
+        var name = dataRecord.GetString(0);
         return new KeyNode(databaseNode, id, name);
     }
 

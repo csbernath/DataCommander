@@ -10,7 +10,7 @@ internal sealed class ObjectName(string schemaName, string objectName) : IObject
     {
         get
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             if (schemaName != null)
             {
                 sb.Append(schemaName);
@@ -27,7 +27,7 @@ internal sealed class ObjectName(string schemaName, string objectName) : IObject
     {
         get
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             if (schemaName != null)
             {
                 stringBuilder.Append(QuoteIdentifier(schemaName));
@@ -41,7 +41,7 @@ internal sealed class ObjectName(string schemaName, string objectName) : IObject
 
     private static string QuoteIdentifier(string unquotedIdentifier)
     {
-        string quotedIdentifier = unquotedIdentifier.IndexOfAny(['.', '-']) >= 0
+        var quotedIdentifier = unquotedIdentifier.IndexOfAny(['.', '-']) >= 0
             ? new SqlCommandBuilder().QuoteIdentifier(unquotedIdentifier)
             : unquotedIdentifier;
 

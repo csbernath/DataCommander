@@ -45,7 +45,7 @@ public sealed class FileSystemMonitor : LoopThread, ILoopable
         _period = period;
 
         Initialize(this);
-        string name = string.Format(CultureInfo.InvariantCulture, "FileSystemMonitor({0},{1})", path, searchPattern);
+        var name = string.Format(CultureInfo.InvariantCulture, "FileSystemMonitor({0},{1})", path, searchPattern);
         Thread.Name = name;
     }
 
@@ -62,33 +62,33 @@ public sealed class FileSystemMonitor : LoopThread, ILoopable
     {
         try
         {
-            string[] current = Directory.GetFiles(_path, _searchPattern);
+            var current = Directory.GetFiles(_path, _searchPattern);
             Array.Sort(current);
 
             if (_last != null)
             {
-                for (int i = 0; i < current.Length; i++)
+                for (var i = 0; i < current.Length; i++)
                 {
-                    string file = current[i];
-                    int index = Array.BinarySearch(_last, file);
+                    var file = current[i];
+                    var index = Array.BinarySearch(_last, file);
 
                     if (index < 0 && Created != null)
                     {
-                        string message = string.Format(CultureInfo.InvariantCulture,
+                        var message = string.Format(CultureInfo.InvariantCulture,
                             "FileSystemMonitor({0}).Created: {1}", Thread.ManagedThreadId, file);
                         Log.Trace(message);
 
-                        string fileName = Path.GetFileName(file);
-                        FileSystemEventArgs e = new FileSystemEventArgs(WatcherChangeTypes.Created, _path,
+                        var fileName = Path.GetFileName(file);
+                        var e = new FileSystemEventArgs(WatcherChangeTypes.Created, _path,
                             fileName);
                         Created(this, e);
                     }
                 }
 
-                for (int i = 0; i < _last.Length; i++)
+                for (var i = 0; i < _last.Length; i++)
                 {
-                    string file = _last[i];
-                    int index = Array.BinarySearch(current, file);
+                    var file = _last[i];
+                    var index = Array.BinarySearch(current, file);
 
                     if (index < 0)
                     {
@@ -98,7 +98,7 @@ public sealed class FileSystemMonitor : LoopThread, ILoopable
             }
             else
             {
-                for (int i = 0; i < current.Length; i++)
+                for (var i = 0; i < current.Length; i++)
                 {
                     Log.Trace("FileSystemMonitor.current[{0}]: {1}", i, current[i]);
                 }

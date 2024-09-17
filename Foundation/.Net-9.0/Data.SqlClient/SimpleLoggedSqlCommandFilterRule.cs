@@ -17,9 +17,9 @@ internal sealed class SimpleLoggedSqlCommandFilterRule(
         string hostName1,
         IDbCommand command)
     {
-        string database1 = command.Connection.Database;
-        string commandText = command.CommandText;
-        bool match =
+        var database1 = command.Connection.Database;
+        var commandText = command.CommandText;
+        var match =
             (name == null || name == userName) &&
             (hostName == null || hostName == hostName1) &&
             (database == null || database == database1) &&

@@ -18,7 +18,7 @@ public class DynamicArray<T>(int initialSize, int maxSize) : IList<T>
     /// <returns></returns>
     public IEnumerator<T> GetEnumerator()
     {
-        for (int i = 0; i < Count; i++)
+        for (var i = 0; i < Count; i++)
             yield return _array[i];
     }
 
@@ -43,14 +43,14 @@ public class DynamicArray<T>(int initialSize, int maxSize) : IList<T>
 
         if (Count == _array.Length)
         {
-            int newSize = Count == 0 ? 1 : 2 * Count;
+            var newSize = Count == 0 ? 1 : 2 * Count;
 
             if (newSize > maxSize)
                 newSize = maxSize;
 
             if (newSize > Count)
             {
-                T[] newArray = new T[newSize];
+                var newArray = new T[newSize];
                 Array.Copy(_array, newArray, _array.Length);
                 _array = newArray;
             }

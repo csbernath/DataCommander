@@ -8,8 +8,8 @@ public class SqlCommandHelper : IDbCommandHelper
 {
     public XmlDocument ExecuteXmlDocument(IDbCommand command)
     {
-        SqlCommand sqlCommand = (SqlCommand)command;
-        XmlDocument xmlDocument = new XmlDocument();
+        var sqlCommand = (SqlCommand)command;
+        var xmlDocument = new XmlDocument();
         XmlReader xmlReader = null;
 
         try

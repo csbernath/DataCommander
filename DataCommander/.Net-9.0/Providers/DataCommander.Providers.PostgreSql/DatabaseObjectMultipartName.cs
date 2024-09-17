@@ -24,11 +24,11 @@ internal sealed class DatabaseObjectMultipartName
     {
         if (name != null)
         {
-            IdentifierParser parser = new IdentifierParser(new StringReader(name));
+            var parser = new IdentifierParser(new StringReader(name));
             string[] parts = parser.Parse().ToArray();
 
-            int i = parts.Length - 1;
-            SqlCommandBuilder commandBuilder = new SqlCommandBuilder();
+            var i = parts.Length - 1;
+            var commandBuilder = new SqlCommandBuilder();
 
             if (i >= 0)
             {
@@ -66,7 +66,7 @@ internal sealed class DatabaseObjectMultipartName
 
         if (Name != null)
         {
-            int length = Name.Length;
+            var length = Name.Length;
 
             if (length > 0 && Name[0] == '[')
             {
@@ -89,7 +89,7 @@ internal sealed class DatabaseObjectMultipartName
 
     public override string ToString()
     {
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
         if (Database != null)
         {
             sb.Append(Database);

@@ -44,10 +44,10 @@ public sealed class ConfigurationNodeCollection : ICollection<ConfigurationNode>
 
     internal void Insert(int index, ConfigurationNode item)
     {
-        IEnumerable<ICollectionIndex<ConfigurationNode>> where = _collection.Indexes.Where(current => current != _listIndex);
+        var where = _collection.Indexes.Where(current => current != _listIndex);
         _listIndex.Insert(index, item);
 
-        foreach (ICollectionIndex<ConfigurationNode> current in where)
+        foreach (var current in where)
             current.Add(item);
     }
 }

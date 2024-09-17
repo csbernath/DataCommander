@@ -22,20 +22,20 @@ public class AsyncTextWriter
 
     private void Flush()
     {
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 
         while (_list.Count > 0)
         {
             AsyncTextWriterListItem[] items;
             lock (_list)
             {
-                int count = _list.Count;
+                var count = _list.Count;
                 items = new AsyncTextWriterListItem[count];
                 _list.CopyTo(items);
                 _list.Clear();
             }
 
-            for (int i = 0; i < items.Length; ++i)
+            for (var i = 0; i < items.Length; ++i)
                 items[i].AppendTo(sb);
         }
 
@@ -50,7 +50,7 @@ public class AsyncTextWriter
             if (_registeredWaitHandle != null)
             {
                 ////log.Write(LogLevel.Trace,"Unregister...");
-                bool succeeded = _registeredWaitHandle.Unregister(null);
+                var succeeded = _registeredWaitHandle.Unregister(null);
                 _registeredWaitHandle = null;
                 ////log.Write(LogLevel.Trace,"Unregister succeeded.");
             }
@@ -85,13 +85,13 @@ public class AsyncTextWriter
 
     public void Write(string value)
     {
-        AsyncTextWriterListItem item = new AsyncTextWriterListItem(DefaultFormatter.Instance, value);
+        var item = new AsyncTextWriterListItem(DefaultFormatter.Instance, value);
         Write(item);
     }
 
     public void Write(IFormatter formatter, params object[] args)
     {
-        AsyncTextWriterListItem item = new AsyncTextWriterListItem(formatter, args);
+        var item = new AsyncTextWriterListItem(formatter, args);
         Write(item);
     }
 

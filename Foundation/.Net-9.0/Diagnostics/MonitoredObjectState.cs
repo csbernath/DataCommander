@@ -8,7 +8,7 @@ internal sealed class MonitoredObjectState(MonitoredObject monitoredObject, long
 
     public int? GetGeneration()
     {
-        int? generation = GetGeneration(MonitoredObject.WeakReference);
+        var generation = GetGeneration(MonitoredObject.WeakReference);
         return generation;
     }
 

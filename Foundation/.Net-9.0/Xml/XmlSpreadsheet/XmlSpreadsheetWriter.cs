@@ -54,15 +54,15 @@ public sealed class XmlSpreadsheetWriter
                 }
             }
 
-            int tableIndex = 0;
-            foreach (XmlSpreadsheetTable tableSchema in tables)
+            var tableIndex = 0;
+            foreach (var tableSchema in tables)
             {
-                int columnIndex = 0;
-                foreach (XmlSpreadsheetColumn column in tableSchema.Columns)
+                var columnIndex = 0;
+                foreach (var column in tableSchema.Columns)
                 {
                     using (XmlWriter.WriteElement("Style"))
                     {
-                        string id = $"{tableIndex},{columnIndex}";
+                        var id = $"{tableIndex},{columnIndex}";
                         XmlWriter.WriteAttributeString("ss:ID", id);
 
                         if (column.NumberFormat != null)
@@ -93,8 +93,8 @@ public sealed class XmlSpreadsheetWriter
 
         XmlWriter.WriteStartElement("Table");
 
-        int columnIndex = 1;
-        foreach (XmlSpreadsheetColumn column in _table.Columns)
+        var columnIndex = 1;
+        foreach (var column in _table.Columns)
         {
             using (XmlWriter.WriteElement("Column"))
             {
@@ -111,9 +111,9 @@ public sealed class XmlSpreadsheetWriter
 
         using (XmlWriter.WriteElement("Row"))
         {
-            foreach (XmlSpreadsheetColumn column in _table.Columns)
+            foreach (var column in _table.Columns)
             {
-                XmlSpreadsheetCell cell =
+                var cell =
                     new XmlSpreadsheetCell(XmlSpreadsheetDataType.String, column.ColumnName)
                     {
                         StyleId = "ColumnHeader"
@@ -154,9 +154,9 @@ public sealed class XmlSpreadsheetWriter
 
         WriteStartRow();
 
-        for (int columnIndex = 0; columnIndex < values.Length; columnIndex++)
+        for (var columnIndex = 0; columnIndex < values.Length; columnIndex++)
         {
-            object value = values[columnIndex];
+            var value = values[columnIndex];
             XmlSpreadsheetDataType type;
             string xmlValue;
 
@@ -167,12 +167,12 @@ public sealed class XmlSpreadsheetWriter
             }
             else
             {
-                XmlSpreadsheetColumn column = _table.Columns[columnIndex];
+                var column = _table.Columns[columnIndex];
                 type = column.DataType;
                 xmlValue = column.Convert(value);
             }
 
-            XmlSpreadsheetCell cell = new XmlSpreadsheetCell(type, xmlValue)
+            var cell = new XmlSpreadsheetCell(type, xmlValue)
             {
                 StyleId = $"{_tableIndex},{columnIndex}"
             };

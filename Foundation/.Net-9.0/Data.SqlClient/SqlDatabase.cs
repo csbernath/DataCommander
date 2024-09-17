@@ -14,7 +14,7 @@ public static class SqlDatabase
     public static async Task<string> GetSysComments(DbConnection connection, string database, string schema,
         string name, CancellationToken cancellationToken)
     {
-        string commandText = string.Format(
+        var commandText = string.Format(
             CultureInfo.InvariantCulture,
             @"declare
     @schema     sysname,
@@ -58,15 +58,15 @@ end",
             schema.ToNullableNVarChar(),
             name.ToNullableNVarChar());
 
-        StringBuilder stringBuilder = new StringBuilder();
-        IDbCommandAsyncExecutor executor = connection.CreateCommandAsyncExecutor();
+        var stringBuilder = new StringBuilder();
+        var executor = connection.CreateCommandAsyncExecutor();
         await executor.ExecuteReaderAsync(
             new ExecuteReaderRequest(commandText),
             async (dataReader, _) =>
             {
                 while (await dataReader.ReadAsync(cancellationToken))
                 {
-                    string s = dataReader.GetString(0);
+                    var s = dataReader.GetString(0);
                     stringBuilder.Append(s);
                 }
             },

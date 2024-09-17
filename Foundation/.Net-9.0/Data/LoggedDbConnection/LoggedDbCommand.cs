@@ -71,11 +71,11 @@ internal sealed class LoggedDbCommand : IDbCommand
 
     int IDbCommand.ExecuteNonQuery()
     {
-        Lazy<LoggedDbCommandInfo> commandInfo = new Lazy<LoggedDbCommandInfo>(() => CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.NonQuery));
+        var commandInfo = new Lazy<LoggedDbCommandInfo>(() => CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.NonQuery));
 
         if (_beforeExecuteCommand != null)
         {
-            BeforeExecuteCommandEventArgs eventArgs = new BeforeExecuteCommandEventArgs(commandInfo.Value);
+            var eventArgs = new BeforeExecuteCommandEventArgs(commandInfo.Value);
             _beforeExecuteCommand(this, eventArgs);
         }
 
@@ -95,7 +95,7 @@ internal sealed class LoggedDbCommand : IDbCommand
             }
             finally
             {
-                AfterExecuteCommandEventArgs eventArgs = new AfterExecuteCommandEventArgs(commandInfo.Value, exception);
+                var eventArgs = new AfterExecuteCommandEventArgs(commandInfo.Value, exception);
                 _afterExecuteCommand(this, eventArgs);
             }
         }
@@ -109,11 +109,11 @@ internal sealed class LoggedDbCommand : IDbCommand
 
     IDataReader IDbCommand.ExecuteReader(CommandBehavior behavior)
     {
-        Lazy<LoggedDbCommandInfo> commandInfo = new Lazy<LoggedDbCommandInfo>(() => CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.Reader));
+        var commandInfo = new Lazy<LoggedDbCommandInfo>(() => CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.Reader));
 
         if (_beforeExecuteCommand != null)
         {
-            BeforeExecuteCommandEventArgs eventArgs = new BeforeExecuteCommandEventArgs(commandInfo.Value);
+            var eventArgs = new BeforeExecuteCommandEventArgs(commandInfo.Value);
             _beforeExecuteCommand(this, eventArgs);
         }
 
@@ -133,7 +133,7 @@ internal sealed class LoggedDbCommand : IDbCommand
             }
             finally
             {
-                AfterExecuteCommandEventArgs eventArgs = new AfterExecuteCommandEventArgs(commandInfo.Value, exception);
+                var eventArgs = new AfterExecuteCommandEventArgs(commandInfo.Value, exception);
                 _afterExecuteCommand(this, eventArgs);
             }
         }
@@ -147,16 +147,16 @@ internal sealed class LoggedDbCommand : IDbCommand
 
     IDataReader IDbCommand.ExecuteReader()
     {
-        IDbCommand dbCommand = (IDbCommand)this;
+        var dbCommand = (IDbCommand)this;
         return dbCommand.ExecuteReader(CommandBehavior.Default);
     }
 
     object IDbCommand.ExecuteScalar()
     {
-        Lazy<LoggedDbCommandInfo> commandInfo = new Lazy<LoggedDbCommandInfo>(() => CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.Scalar));
+        var commandInfo = new Lazy<LoggedDbCommandInfo>(() => CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.Scalar));
         if (_beforeExecuteCommand != null)
         {
-            BeforeExecuteCommandEventArgs eventArgs = new BeforeExecuteCommandEventArgs(commandInfo.Value);
+            var eventArgs = new BeforeExecuteCommandEventArgs(commandInfo.Value);
             _beforeExecuteCommand(this, eventArgs);
         }
 
@@ -176,7 +176,7 @@ internal sealed class LoggedDbCommand : IDbCommand
             }
             finally
             {
-                AfterExecuteCommandEventArgs args = new AfterExecuteCommandEventArgs(commandInfo.Value, exception);
+                var args = new AfterExecuteCommandEventArgs(commandInfo.Value, exception);
                 _afterExecuteCommand(this, args);
             }
         }
@@ -216,7 +216,7 @@ internal sealed class LoggedDbCommand : IDbCommand
 
     private LoggedDbCommandInfo CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType executionType)
     {
-        IDbConnection connection = _command.Connection;
+        var connection = _command.Connection;
 
         return new LoggedDbCommandInfo(
             _commandId,

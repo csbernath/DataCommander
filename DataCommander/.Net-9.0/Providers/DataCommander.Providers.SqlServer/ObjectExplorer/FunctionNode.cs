@@ -31,7 +31,7 @@ internal sealed class FunctionNode(
         get
         {
             //string query = string.Format("select {0}.{1}.[{2}]()",database.Name,owner,name);
-            string query = xtype switch
+            var query = xtype switch
             {
                 //Scalar function
                 "FN" => $"select {database.Name}.{owner}.[{name}]()",
@@ -46,22 +46,22 @@ from	{database.Name}.{owner}.[{name}]()",
 
     public ContextMenu? GetContextMenu()
     {
-        MenuItem scriptObjectMenuItem = new MenuItem("Script Object", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+        var scriptObjectMenuItem = new MenuItem("Script Object", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
         System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> menuItems = new[] { scriptObjectMenuItem }.ToReadOnlyCollection();
-        ContextMenu contextMenu = new ContextMenu(menuItems);
+        var contextMenu = new ContextMenu(menuItems);
         return contextMenu;
     }
 
     private void menuItemScriptObject_Click(object sender, EventArgs e)
     {
         string text;
-        using (Microsoft.Data.SqlClient.SqlConnection connection = database.Databases.Server.CreateConnection())
+        using (var connection = database.Databases.Server.CreateConnection())
         {
             connection.Open();
             text = SqlDatabase.GetSysComments(connection, database.Name, owner, name, CancellationToken.None).Result;
         }
 
-        IQueryForm queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender;
         queryForm.ShowText(text);
     }
 }

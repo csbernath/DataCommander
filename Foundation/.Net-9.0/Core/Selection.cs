@@ -14,12 +14,12 @@ public sealed class MultipleDispatchSelection<TArgument>
 
     public int Select(TArgument argument)
     {
-        int selectedIndex = -1;
+        var selectedIndex = -1;
 
-        for (int i = 0; i < _selections.Length; ++i)
+        for (var i = 0; i < _selections.Length; ++i)
         {
-            Func<TArgument, bool> selection = _selections[i];
-            bool selected = selection(argument);
+            var selection = _selections[i];
+            var selected = selection(argument);
             if (selected)
             {
                 selectedIndex = i;

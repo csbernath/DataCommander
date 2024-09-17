@@ -52,7 +52,7 @@ public sealed partial class CancelableOperationForm : Form, ICancelableOperation
     private void StartAndWaitBeforeShowDialog(Task cancelableOperation)
     {
         _startTimestamp = Stopwatch.GetTimestamp();
-        CancellationToken cancellationToken = _cancellationTokenSource.Token;
+        var cancellationToken = _cancellationTokenSource.Token;
         cancelableOperation.ContinueWith(_ =>
         {
             if (IsHandleCreated)
@@ -60,7 +60,7 @@ public sealed partial class CancelableOperationForm : Form, ICancelableOperation
         }, cancellationToken);
         cancelableOperation.Start();
 
-        TimeSpan timeSpan = TimeSpan.FromMilliseconds(300);
+        var timeSpan = TimeSpan.FromMilliseconds(300);
         if (_showDialogDelay <= timeSpan)
         {
             cancelableOperation.Wait(_showDialogDelay);
@@ -90,8 +90,8 @@ public sealed partial class CancelableOperationForm : Form, ICancelableOperation
 
     private void StartTimer()
     {
-        TimeSpan dueTime = TimeSpan.Zero;
-        TimeSpan period = TimeSpan.FromSeconds(1);
+        var dueTime = TimeSpan.Zero;
+        var period = TimeSpan.FromSeconds(1);
         _elapsedTimeTimer = new System.Threading.Timer(ElapsedTimeTimerCallback, null, dueTime, period);
     }
 
@@ -105,15 +105,15 @@ public sealed partial class CancelableOperationForm : Form, ICancelableOperation
     {
         if (IsHandleCreated)
         {
-            string text = GetElapsedText();
+            var text = GetElapsedText();
             Invoke(() => { elapsedTimeTextBox.Text = text; });
         }
     }
 
     private string GetElapsedText()
     {
-        long elapsed = Stopwatch.GetTimestamp() - _startTimestamp;
-        string text = StopwatchTimeSpan.ToString(elapsed, 0);
+        var elapsed = Stopwatch.GetTimestamp() - _startTimestamp;
+        var text = StopwatchTimeSpan.ToString(elapsed, 0);
         return text;
     }
 

@@ -17,7 +17,7 @@ internal sealed class IndexNode(DatabaseNode databaseNode, int parentId, int id,
     {
         get
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
             stringBuilder.Append(name);
             stringBuilder.Append(" (");
@@ -27,7 +27,7 @@ internal sealed class IndexNode(DatabaseNode databaseNode, int parentId, int id,
                 : "Non-Unique");
 
             stringBuilder.Append(',');
-            string typeString = type switch
+            var typeString = type switch
             {
                 0 => "Heap",
                 1 => "Clustered",

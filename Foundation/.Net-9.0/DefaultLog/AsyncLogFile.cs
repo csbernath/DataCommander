@@ -40,9 +40,9 @@ internal sealed class AsyncLogFile(
 
     public void Flush()
     {
-        while (_queue.TryDequeue(out LogEntry logEntry))
+        while (_queue.TryDequeue(out var logEntry))
         {
-            string text = formatter.Format(logEntry);
+            var text = formatter.Format(logEntry);
             _logFile.Write(logEntry.CreationTime, text);
         }
     }
@@ -62,7 +62,7 @@ internal sealed class AsyncLogFile(
 
     private void TimerCallback(object state)
     {
-        Thread thread = Thread.CurrentThread;
+        var thread = Thread.CurrentThread;
         thread.Priority = ThreadPriority.Lowest;
 
         Flush();

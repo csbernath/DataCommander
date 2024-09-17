@@ -9,15 +9,15 @@ internal sealed class MethodInvocationStackCollection
 
     public void Push(int threadId, int methodId, long beginTime)
     {
-        Stack<MethodInvocation> stack = _stacks.GetOrAdd(threadId, key => new Stack<MethodInvocation>());
-        MethodInvocation parent = stack.Count > 0 ? stack.Peek() : null;
-        MethodInvocation item = new MethodInvocation(parent, methodId, beginTime);
+        var stack = _stacks.GetOrAdd(threadId, key => new Stack<MethodInvocation>());
+        var parent = stack.Count > 0 ? stack.Peek() : null;
+        var item = new MethodInvocation(parent, methodId, beginTime);
         stack.Push(item);
     }
 
     public MethodInvocation Pop(int threadId)
     {
-        Stack<MethodInvocation> stack = _stacks[threadId];
+        var stack = _stacks[threadId];
         return stack.Pop();
     }
 }

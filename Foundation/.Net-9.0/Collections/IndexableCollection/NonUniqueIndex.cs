@@ -34,7 +34,7 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
                 break;
 
             case SortOrder.Descending:
-                IComparer<TKey> comparer = ReverseComparer<TKey>.Default;
+                var comparer = ReverseComparer<TKey>.Default;
                 dictionary = new SortedDictionary<TKey, ICollection<T>>(comparer);
                 break;
 
@@ -65,8 +65,8 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
 
     public IEnumerator<T> GetEnumerator()
     {
-        foreach (ICollection<T> collection in _dictionary.Values)
-        foreach (T item in collection)
+        foreach (var collection in _dictionary.Values)
+        foreach (var item in collection)
                 yield return item;
     }
 
@@ -83,7 +83,7 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
 
     public bool TryGetFirstValue(TKey key, out T value)
     {
-        bool contains = _dictionary.TryGetValue(key, out ICollection<T> collection);
+        var contains = _dictionary.TryGetValue(key, out var collection);
 
         if (contains)
         {
@@ -124,12 +124,12 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
 
     public void Add(T item)
     {
-        GetKeyResponse<TKey> response = _getKey(item);
+        var response = _getKey(item);
 
         if (response.HasKey)
         {
-            TKey key = response.Key;
-            bool contains = _dictionary.TryGetValue(key, out ICollection<T> collection);
+            var key = response.Key;
+            var contains = _dictionary.TryGetValue(key, out var collection);
 
             if (!contains)
             {
@@ -145,13 +145,13 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
 
     public bool Contains(T item)
     {
-        GetKeyResponse<TKey> response = _getKey(item);
+        var response = _getKey(item);
         bool contains;
 
         if (response.HasKey)
         {
-            TKey key = response.Key;
-            contains = _dictionary.TryGetValue(key, out ICollection<T> collection);
+            var key = response.Key;
+            contains = _dictionary.TryGetValue(key, out var collection);
 
             if (contains)
                 contains = collection.Contains(item);
@@ -166,17 +166,17 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
 
     public bool Remove(T item)
     {
-        GetKeyResponse<TKey> response = _getKey(item);
-        bool removed = false;
+        var response = _getKey(item);
+        var removed = false;
 
         if (response.HasKey)
         {
-            TKey key = response.Key;
-            bool contains = _dictionary.TryGetValue(key, out ICollection<T> collection);
+            var key = response.Key;
+            var contains = _dictionary.TryGetValue(key, out var collection);
 
             if (contains)
             {
-                bool succeeded = collection.Remove(item);
+                var succeeded = collection.Remove(item);
                 Assert.IsTrue(succeeded);
 
                 if (collection.Count == 0)

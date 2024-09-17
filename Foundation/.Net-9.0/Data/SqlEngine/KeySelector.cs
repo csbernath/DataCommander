@@ -8,7 +8,7 @@ public class KeySelector(RowSelector rowSelector)
 
     public Key Select(object[] row)
     {
-        object[] values = _rowSelector.Select(row).ToArray();
+        var values = _rowSelector.Select(row).ToArray();
         return new Key(values);
     }
 }

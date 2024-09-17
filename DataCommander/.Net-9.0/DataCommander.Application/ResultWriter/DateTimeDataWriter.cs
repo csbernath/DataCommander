@@ -12,7 +12,7 @@ internal sealed class DateTimeDataWriter : DataWriterBase
             result = new string(' ', Width);
         else
         {
-            DateTimeField field = (DateTimeField)value;
+            var field = (DateTimeField)value;
             result = field.ToString().PadLeft(Width, ' ');
         }
 

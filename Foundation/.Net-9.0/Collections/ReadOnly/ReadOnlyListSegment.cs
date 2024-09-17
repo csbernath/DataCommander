@@ -26,9 +26,9 @@ internal sealed class ReadOnlyListSegment<T> : IReadOnlyList<T>
 
     public IEnumerator<T> GetEnumerator()
     {
-        int end = _offset + Count;
+        var end = _offset + Count;
 
-        for (int i = _offset; i < end; i++)
+        for (var i = _offset; i < end; i++)
             yield return _list[i];
     }
 

@@ -22,10 +22,10 @@ public sealed class SqlParser
     {
         _text = text;
         Tokens = Tokenize(text);
-        Tables = FindTables(Tokens, out Table[]? allTables);
+        Tables = FindTables(Tokens, out var allTables);
         _allTables = allTables;
 
-        foreach (string? value in Tables.Values)
+        foreach (var value in Tables.Values)
             Log.Write(LogLevel.Trace, value);
     }
 
@@ -34,20 +34,20 @@ public sealed class SqlParser
 
     public DbCommand CreateCommand(IProvider provider, ConnectionBase connection, CommandType commandType, int commandTimeout)
     {
-        DbCommand command = connection.CreateCommand();
+        var command = connection.CreateCommand();
         command.CommandType = commandType;
         command.CommandTimeout = commandTimeout;
-        CommandType commandType2 = commandType;
+        var commandType2 = commandType;
 
         if (Tokens.Count > 0)
         {
-            Token firstToken = Tokens[0];
-            int startTokenIndex = 0;
-            bool isVbScript = false;
+            var firstToken = Tokens[0];
+            var startTokenIndex = 0;
+            var isVbScript = false;
 
             if (firstToken.Type == TokenType.KeyWord)
             {
-                string keyWord = firstToken.Value.ToLower();
+                var keyWord = firstToken.Value.ToLower();
 
                 switch (keyWord)
                 {
@@ -105,8 +105,8 @@ public sealed class SqlParser
                         {
                             case ParameterDirection.Input:
                             case ParameterDirection.InputOutput:
-                                DataParameterBase dataParameter = provider.GetDataParameter(parameter);
-                                Parameter? first = parameters.FirstOrDefault(
+                                var dataParameter = provider.GetDataParameter(parameter);
+                                var first = parameters.FirstOrDefault(
                                     p => string.Compare(p.Name, parameter.ParameterName,
                                         StringComparison.InvariantCultureIgnoreCase) == 0);
                                 if (first == null)
@@ -118,7 +118,7 @@ public sealed class SqlParser
 
                                 if (first != null)
                                 {
-                                    object? value = GetParameterValue(dataParameter, first.Value);
+                                    var value = GetParameterValue(dataParameter, first.Value);
                                     if (value != null)
                                         parameter.Value = value;
                                     else
@@ -129,7 +129,7 @@ public sealed class SqlParser
                         }
                     }
 
-                    foreach (IDataParameter parameter in defaultValues)
+                    foreach (var parameter in defaultValues)
                         command.Parameters.Remove(parameter);
                     break;
             }
@@ -145,16 +145,16 @@ public sealed class SqlParser
         SqlObject? sqlObject = null;
         if (index >= 1)
         {
-            Token prev = Tokens[index - 1];
+            var prev = Tokens[index - 1];
 
             if (prev.Type == TokenType.KeyWord)
             {
-                string value = prev.Value.ToLower();
+                var value = prev.Value.ToLower();
                 string? name = null;
 
                 if (index < Tokens.Count)
                 {
-                    Token token = Tokens[index];
+                    var token = Tokens[index];
                     name = token.Value;
                 }
 
@@ -206,7 +206,7 @@ public sealed class SqlParser
                         index = _allTables.LastIndexOf(t => t.Index < index - 1);
                         if (index >= 0)
                         {
-                            Table table = _allTables[index];
+                            var table = _allTables[index];
                             sqlObject = new SqlObject(table.Name, null, SqlObjectTypes.Column, name);
                         }
 
@@ -218,20 +218,20 @@ public sealed class SqlParser
 
                 if (sqlObject == null && index >= 0 && index < Tokens.Count)
                 {
-                    Token token = Tokens[index];
+                    var token = Tokens[index];
                     sqlObject = GetSqlObject(token.Value);
                 }
             }
             else if (prev.Type == TokenType.OperatorOrPunctuator)
             {
-                Token? tokenAfterOperator = index < Tokens.Count
+                var tokenAfterOperator = index < Tokens.Count
                     ? Tokens[index]
                     : null;
                 if (tokenAfterOperator != null && tokenAfterOperator.Value.Contains('.'))
                     sqlObject = GetSqlObject(tokenAfterOperator.Value);
                 else if (prev.Value == "=" && index >= 2)
                 {
-                    Token tokenBeforeOperator = Tokens[index - 2];
+                    var tokenBeforeOperator = Tokens[index - 2];
                     sqlObject = new SqlObject(tokenBeforeOperator.Value, null, SqlObjectTypes.Value, null);
                 }
             }
@@ -247,8 +247,8 @@ public sealed class SqlParser
         {
             if (previousToken.Type == TokenType.KeyWord)
             {
-                string value = previousToken.Value.ToLower();
-                string? name = currentToken != null
+                var value = previousToken.Value.ToLower();
+                var name = currentToken != null
                     ? currentToken.Value
                     : null;
 
@@ -304,10 +304,10 @@ public sealed class SqlParser
 
                         if (sqlObject == null)
                         {
-                            int index = _allTables.LastIndexOf(t => t.Index < previousToken.Index - 1);
+                            var index = _allTables.LastIndexOf(t => t.Index < previousToken.Index - 1);
                             if (index >= 0)
                             {
-                                Table table = _allTables[index];
+                                var table = _allTables[index];
                                 sqlObject = new SqlObject(table.Name, null, SqlObjectTypes.Column, name);
                             }
                         }
@@ -347,7 +347,7 @@ public sealed class SqlParser
 
     private SqlObject? GetValue(Token previousToken)
     {
-        Token tokenBeforeOperator = Tokens[previousToken.Index - 1];
+        var tokenBeforeOperator = Tokens[previousToken.Index - 1];
         return new SqlObject(tokenBeforeOperator.Value, null, SqlObjectTypes.Value, null);
     }
 
@@ -358,7 +358,7 @@ public sealed class SqlParser
 
         for (i = 0; i < Tokens.Count; i++)
         {
-            Token token = Tokens[i];
+            var token = Tokens[i];
             if (token.Type == TokenType.KeyWord)
                 if (string.Compare(token.Value, "from", true) == 0)
                     break;
@@ -368,7 +368,7 @@ public sealed class SqlParser
 
         if (i < Tokens.Count)
         {
-            Token token = Tokens[i];
+            var token = Tokens[i];
             if (token.Type == TokenType.KeyWord)
                 tableName = token.Value;
         }
@@ -378,11 +378,11 @@ public sealed class SqlParser
 
     public int FindToken(int position)
     {
-        int index = -1;
-        int last = Tokens.Count - 1;
-        for (int i = 0; i <= last; i++)
+        var index = -1;
+        var last = Tokens.Count - 1;
+        for (var i = 0; i <= last; i++)
         {
-            Token token = Tokens[i];
+            var token = Tokens[i];
 
             if (position < token.StartPosition)
             {
@@ -398,7 +398,7 @@ public sealed class SqlParser
 
         if (index == -1)
         {
-            Token lastToken = Tokens[last];
+            var lastToken = Tokens[last];
             if (lastToken.EndPosition < position)
                 index = last + 1;
         }
@@ -411,9 +411,9 @@ public sealed class SqlParser
         previousToken = null;
         currentToken = null;
 
-        for (int i = 0; i < Tokens.Count; i++)
+        for (var i = 0; i < Tokens.Count; i++)
         {
-            Token token = Tokens[i];
+            var token = Tokens[i];
             if (token.EndPosition + 1 < position)
                 previousToken = token;
             else if (token.StartPosition <= position && position <= token.EndPosition + 1)
@@ -429,11 +429,11 @@ public sealed class SqlParser
     public static List<Token> Tokenize(string text)
     {
         List<Token> tokens = [];
-        TokenIterator iterator = new TokenIterator(text);
+        var iterator = new TokenIterator(text);
 
         while (true)
         {
-            Token token = iterator.Next();
+            var token = iterator.Next();
 
             if (token == null)
                 break;
@@ -462,7 +462,7 @@ public sealed class SqlParser
                     case DbType.AnsiStringFixedLength:
                     case DbType.String:
                     case DbType.StringFixedLength:
-                        string? valueStr = Convert.ToString(value);
+                        var valueStr = Convert.ToString(value);
 
                         if (dataParameter.Size > 0 && valueStr.Length > dataParameter.Size)
                             throw new Exception("Length exceeds size of parameter");
@@ -473,7 +473,7 @@ public sealed class SqlParser
 
                     case DbType.Boolean:
                         valueStr = (string)value;
-                        bool ok = double.TryParse(valueStr, NumberStyles.Any, null, out double valueDbl);
+                        var ok = double.TryParse(valueStr, NumberStyles.Any, null, out var valueDbl);
                         value2 = ok ? Convert.ToBoolean(valueDbl) : Convert.ToBoolean(value);
                         break;
 
@@ -500,7 +500,7 @@ public sealed class SqlParser
                     case DbType.Decimal:
                     case DbType.VarNumeric:
                         valueStr = value.ToString();
-                        DecimalString decimalString = new DecimalString(value.ToString());
+                        var decimalString = new DecimalString(value.ToString());
 
                         if (dataParameter.Precision != 0 && decimalString.Precision > dataParameter.Precision)
                             throw new Exception("Invalid precision");
@@ -519,7 +519,7 @@ public sealed class SqlParser
                         break;
 
                     case DbType.Guid:
-                        string valueString = (string)value;
+                        var valueString = (string)value;
                         value2 = new Guid(valueString);
                         break;
 
@@ -545,7 +545,7 @@ public sealed class SqlParser
 
     private static object? ToParameterValue(Token token)
     {
-        string? tokenValue = token.Value;
+        var tokenValue = token.Value;
         object? value;
         if (token.Type == TokenType.KeyWord &&
             string.Compare(tokenValue, "null", StringComparison.InvariantCultureIgnoreCase) == 0)
@@ -563,7 +563,7 @@ public sealed class SqlParser
     {
         string? name;
         object? value;
-        int count = tokens.Count;
+        var count = tokens.Count;
         if (count == 0)
         {
             name = null;
@@ -590,10 +590,10 @@ public sealed class SqlParser
         Dictionary<string, string?> tables = new Dictionary<string, string?>(StringComparer.InvariantCultureIgnoreCase);
         List<Table> tableList = [];
 
-        for (int i = 0; i < tokens.Count; i++)
+        for (var i = 0; i < tokens.Count; i++)
         {
-            Token token = tokens[i];
-            string? value = token.Value;
+            var token = tokens[i];
+            var value = token.Value;
 
             if (token.Type == TokenType.KeyWord && value != null && i < tokens.Count - 1)
             {
@@ -605,7 +605,7 @@ public sealed class SqlParser
 
                         if (token.Type == TokenType.KeyWord)
                         {
-                            string? tableName = token.Value;
+                            var tableName = token.Value;
 
                             if (i < tokens.Count - 2)
                             {
@@ -613,7 +613,7 @@ public sealed class SqlParser
 
                                 if (token.Type == TokenType.KeyWord)
                                 {
-                                    string? alias = token.Value;
+                                    var alias = token.Value;
                                     tableList.Add(new Table(i, tableName, alias));
                                     tables.TryAdd(alias, tableName);
                                 }
@@ -635,12 +635,12 @@ public sealed class SqlParser
         string?[] items = value.Split('.');
         if (items.Length > 1)
         {
-            string? alias = items[0];
-            bool contains = Tables.TryGetValue(alias, out string? tableName);
+            var alias = items[0];
+            var contains = Tables.TryGetValue(alias, out var tableName);
 
             if (contains)
             {
-                string? name = items[1];
+                var name = items[1];
                 sqlObject = new SqlObject(tableName, alias, SqlObjectTypes.Column, name);
             }
             else

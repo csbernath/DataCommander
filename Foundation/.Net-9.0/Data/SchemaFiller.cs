@@ -8,7 +8,7 @@ public static class SchemaFiller
 {
     public static DataTable FillSchema(IDataReader dataReader, DataTable dataTable)
     {
-        DataTable schemaTable = dataReader.GetSchemaTable();
+        var schemaTable = dataReader.GetSchemaTable();
         FillSchema(schemaTable, dataTable);
         return schemaTable;
     }
@@ -16,16 +16,16 @@ public static class SchemaFiller
     internal static void FillSchema(DataTable schemaTable, DataTable dataTable)
     {
         List<DataColumn> primaryKey = [];
-        DataColumnCollection columns = dataTable.Columns;
-        DataColumn isKeyColumn = columns["IsKey"];
+        var columns = dataTable.Columns;
+        var isKeyColumn = columns["IsKey"];
 
         foreach (DataRow row in schemaTable.Rows)
         {
-            string columnName = (string)row["ColumnName"];
-            Type dataType = (Type)row["DataType"];
-            bool isKey = isKeyColumn != null && row.GetNullableValueField<bool>(isKeyColumn) == true;
-            string columnNameAdd = columnName;
-            int index = 2;
+            var columnName = (string)row["ColumnName"];
+            var dataType = (Type)row["DataType"];
+            var isKey = isKeyColumn != null && row.GetNullableValueField<bool>(isKeyColumn) == true;
+            var columnNameAdd = columnName;
+            var index = 2;
 
             while (true)
             {
@@ -38,14 +38,14 @@ public static class SchemaFiller
                     break;
             }
 
-            DataColumn column = new DataColumn(columnNameAdd, dataType);
+            var column = new DataColumn(columnNameAdd, dataType);
             columns.Add(column);
 
             if (isKey)
                 primaryKey.Add(column);
         }
 
-        DataColumn[] array = primaryKey.ToArray();
+        var array = primaryKey.ToArray();
         dataTable.PrimaryKey = array;
     }
 }

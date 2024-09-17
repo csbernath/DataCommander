@@ -38,13 +38,13 @@ internal sealed class ColumnNode(
         get
         {
             string typeName;
-            SqlServerSystemType systemType = (SqlServerSystemType)systemTypeId;
+            var systemType = (SqlServerSystemType)systemTypeId;
             switch (systemType)
             {
                 case SqlServerSystemType.Char:
                 case SqlServerSystemType.VarBinary:
                 case SqlServerSystemType.VarChar:
-                    string maxLengthString = maxLength >= 0 ? maxLength.ToString() : "max";
+                    var maxLengthString = maxLength >= 0 ? maxLength.ToString() : "max";
                     typeName = $"{userTypeName}({maxLengthString})";
                     break;
 

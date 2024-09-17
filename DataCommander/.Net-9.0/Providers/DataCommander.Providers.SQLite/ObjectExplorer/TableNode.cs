@@ -35,26 +35,26 @@ internal sealed class TableNode(DatabaseNode databaseNode, string? name) : ITree
         string? databaseName,
         string? name)
     {
-        string commandText = $@"
+        var commandText = $@"
 select  sql
 from	{databaseName}.sqlite_master
 where	name	= '{name}'";
-        IDbCommandAsyncExecutor executor = DbCommandExecutorFactory.Create(connection);
-        object scalar = executor.ExecuteScalar(new CreateCommandRequest(commandText));
-        string script = (string) scalar;
+        var executor = DbCommandExecutorFactory.Create(connection);
+        var scalar = executor.ExecuteScalar(new CreateCommandRequest(commandText));
+        var script = (string) scalar;
         return script;
     }
 
     private void Script_Click(object sender, EventArgs e)
     {
         string script;
-        using (SQLiteConnection connection = ConnectionFactory.CreateConnection(DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential))
+        using (var connection = ConnectionFactory.CreateConnection(DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential))
         {
             connection.Open();
             script = GetScript(connection, DatabaseNode.Name, Name);
         }
 
-        IQueryForm queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender;
         queryForm.ShowText(script);
     }
 
@@ -64,7 +64,7 @@ where	name	= '{name}'";
 
         if (Name != "sqlite_master")
         {
-            MenuItem item = new MenuItem("Script", Script_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+            var item = new MenuItem("Script", Script_Click, EmptyReadOnlyCollection<MenuItem>.Value);
             System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> items = new[] { item }.ToReadOnlyCollection();
             contextMenu = new ContextMenu(items);
         }

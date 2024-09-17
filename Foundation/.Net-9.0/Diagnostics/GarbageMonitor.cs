@@ -45,10 +45,10 @@ public sealed class GarbageMonitor(string garbageMonitorName)
 
             lock (_monitoredObjects)
             {
-                long timestamp = Stopwatch.GetTimestamp();
-                IEnumerable<MonitoredObjectState> listItemStates = _monitoredObjects.Select(i => new MonitoredObjectState(i, timestamp));
-                string stringTable = listItemStates.ToString(Columns);
-                int totalSize = _monitoredObjects.Sum(s => s.Size);
+                var timestamp = Stopwatch.GetTimestamp();
+                var listItemStates = _monitoredObjects.Select(i => new MonitoredObjectState(i, timestamp));
+                var stringTable = listItemStates.ToString(Columns);
+                var totalSize = _monitoredObjects.Sum(s => s.Size);
                 state = $"GarbageMonitor.State:\r\nid: {garbageMonitorName}r\ntotalSize: {totalSize}\r\n{stringTable}";
             }
 
@@ -61,14 +61,14 @@ public sealed class GarbageMonitor(string garbageMonitorName)
     public void Add(string name, object target)
     {
         ArgumentNullException.ThrowIfNull(target);
-        int size = 0;
+        var size = 0;
 
-        Type type = target.GetType();
-        string typeName = TypeNameCollection.GetTypeName(type);
+        var type = target.GetType();
+        var typeName = TypeNameCollection.GetTypeName(type);
 
         if (target is string targetString)
         {
-            int length = targetString.Length;
+            var length = targetString.Length;
             size = length << 1;
         }
 
@@ -79,12 +79,12 @@ public sealed class GarbageMonitor(string garbageMonitorName)
     {
         ArgumentNullException.ThrowIfNull(target);
 
-        long id = _interlockedSequence.Next();
+        var id = _interlockedSequence.Next();
 
-        DateTime time = LocalTime.Default.Now;
-        long timestamp = Stopwatch.GetTimestamp();
-        WeakReference weakReference = new WeakReference(target);
-        MonitoredObject monitoredObject = new MonitoredObject(id, name, typeName, size, time, timestamp, weakReference);
+        var time = LocalTime.Default.Now;
+        var timestamp = Stopwatch.GetTimestamp();
+        var weakReference = new WeakReference(target);
+        var monitoredObject = new MonitoredObject(id, name, typeName, size, time, timestamp, weakReference);
 
         lock (_monitoredObjects)
             _monitoredObjects.AddLast(monitoredObject);
@@ -96,19 +96,19 @@ public sealed class GarbageMonitor(string garbageMonitorName)
 
         lock (_monitoredObjects)
         {
-            MonitoredObject item = _monitoredObjects.First(i => i.WeakReference.Target == target);
+            var item = _monitoredObjects.First(i => i.WeakReference.Target == target);
             item.SetDisposeTime(disposeTime);
         }
     }
 
     private void RemoveGarbageCollectedObjects()
     {
-        LinkedListNode<MonitoredObject> node = _monitoredObjects.First;
+        var node = _monitoredObjects.First;
 
         while (node != null)
         {
-            MonitoredObject item = node.Value;
-            LinkedListNode<MonitoredObject> nextNode = node.Next;
+            var item = node.Value;
+            var nextNode = node.Next;
 
             if (!item.WeakReference.IsAlive)
                 _monitoredObjects.Remove(node);

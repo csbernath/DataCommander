@@ -12,11 +12,11 @@ public static class DbProviderFactoryExtensions
         ArgumentNullException.ThrowIfNull(factory);
         ArgumentNullException.ThrowIfNull(connection);
 
-        DbCommand command = connection.CreateCommand();
+        var command = connection.CreateCommand();
         command.CommandText = commandText;
-        DbDataAdapter adapter = factory.CreateDataAdapter();
+        var adapter = factory.CreateDataAdapter();
         adapter!.SelectCommand = command;
-        DataTable table = new DataTable
+        var table = new DataTable
         {
             Locale = CultureInfo.InvariantCulture
         };
@@ -26,7 +26,7 @@ public static class DbProviderFactoryExtensions
 
     public static DataTable ExecuteDataTable(this DbProviderFactory dbProviderFactory, string connectionString, string commandText)
     {
-        using DbConnection connection = dbProviderFactory.CreateConnection();
+        using var connection = dbProviderFactory.CreateConnection();
         connection!.ConnectionString = connectionString;
         connection.Open();
         return ExecuteDataTable(dbProviderFactory, connection, commandText);
@@ -34,20 +34,20 @@ public static class DbProviderFactoryExtensions
 
     public static object ExecuteScalar(this DbProviderFactory dbProviderFactory, string connectionString, CreateCommandRequest request)
     {
-        using DbConnection connection = dbProviderFactory.CreateConnection();
+        using var connection = dbProviderFactory.CreateConnection();
         connection!.ConnectionString = connectionString;
         connection.Open();
-        IDbCommandExecutor executor = connection.CreateCommandExecutor();
+        var executor = connection.CreateCommandExecutor();
         return executor.ExecuteScalar(request);
     }
 
     public static void ExecuteTransaction(this DbProviderFactory dbProviderFactory, string connectionString, Action<IDbTransaction> action)
     {
-        using (DbConnection connection = dbProviderFactory.CreateConnection())
+        using (var connection = dbProviderFactory.CreateConnection())
         {
             connection.ConnectionString = connectionString;
             connection.Open();
-            using (DbTransaction transaction = connection.BeginTransaction())
+            using (var transaction = connection.BeginTransaction())
             {
                 action(transaction);
                 transaction.Commit();

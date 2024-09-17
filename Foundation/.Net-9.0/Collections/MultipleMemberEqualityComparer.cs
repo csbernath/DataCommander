@@ -25,8 +25,8 @@ public sealed class MultipleMemberEqualityComparer<T> : IEqualityComparer<T>
 
     public int GetHashCode(T obj)
     {
-        IEnumerable<int> hashCodes = _equalityComparers.Select(c => c.GetHashCode(obj));
-        int hashCode = hashCodes.Aggregate(CombineHashCodes);
+        var hashCodes = _equalityComparers.Select(c => c.GetHashCode(obj));
+        var hashCode = hashCodes.Aggregate(CombineHashCodes);
         return hashCode;
     }
 

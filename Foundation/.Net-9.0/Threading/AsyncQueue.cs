@@ -36,7 +36,7 @@ public class AsyncQueue
 
         private void ThreadStart()
         {
-            object state = _consumer.Enter();
+            var state = _consumer.Enter();
 
             try
             {
@@ -84,9 +84,9 @@ public class AsyncQueue
         _name = name;
         _asyncQueue = asyncQueue;
 
-        for (int id = 0; id < consumerCount; id++)
+        for (var id = 0; id < consumerCount; id++)
         {
-            ConsumerThread consumerThread = new ConsumerThread(this, id, priority);
+            var consumerThread = new ConsumerThread(this, id, priority);
             Consumers.Add(consumerThread.Thread);
         }
     }
@@ -143,8 +143,8 @@ public class AsyncQueue
     {
         ArgumentNullException.ThrowIfNull(consumerThread);
 
-        AsyncQueueConsumeEventArgs args = new AsyncQueueConsumeEventArgs(item);
-        EventHandler<AsyncQueueConsumeEventArgs> eventHandler = _asyncQueue.BeforeConsume;
+        var args = new AsyncQueueConsumeEventArgs(item);
+        var eventHandler = _asyncQueue.BeforeConsume;
 
         if (eventHandler != null)
             eventHandler(this, args);
@@ -159,12 +159,12 @@ public class AsyncQueue
 
     private void Dequeue(ConsumerThread consumerThread)
     {
-        WorkerThread thread = consumerThread.Thread;
+        var thread = consumerThread.Thread;
         WaitHandle[] waitHandles = [thread.StopRequest, _queueEvent];
 
         while (!thread.IsStopRequested)
         {
-            object item = Dequeue();
+            var item = Dequeue();
 
             if (item != null)
                 Consume(consumerThread, item);

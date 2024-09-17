@@ -55,19 +55,19 @@ internal sealed class ConnectionListForm : Form
 
         _connectionInfos = ConnectionInfoRepository.Get().ToList();
 
-        foreach (ConnectionInfo connectionProperties in _connectionInfos)
+        foreach (var connectionProperties in _connectionInfos)
         {
-            DataRow dataRow = _dataTable.NewRow();
+            var dataRow = _dataTable.NewRow();
             LoadConnection(connectionProperties, dataRow);
             _dataTable.Rows.Add(dataRow);
         }
 
-        System.Drawing.Graphics graphics = CreateGraphics();
+        var graphics = CreateGraphics();
 
         foreach (DataColumn column in _dataTable.Columns)
         {
-            DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            string columnName = column.ColumnName;
+            var dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            var columnName = column.ColumnName;
             dataGridViewTextBoxColumn.DataPropertyName = columnName;
             dataGridViewTextBoxColumn.HeaderText = columnName;
 
@@ -81,8 +81,8 @@ internal sealed class ConnectionListForm : Form
                 if (_dataTable.Rows.Count > 0)
                 {
                     IEnumerable<DataRow> enumerableDataRow = _dataTable.Rows.Cast<DataRow>();
-                    DataRowSelector dataRowSelector = new DataRowSelector(column, graphics, Font);
-                    IEnumerable<float> enumerableDataRowWidth = enumerableDataRow.Select(dataRowSelector.GetWidth);
+                    var dataRowSelector = new DataRowSelector(column, graphics, Font);
+                    var enumerableDataRowWidth = enumerableDataRow.Select(dataRowSelector.GetWidth);
                     dataRowMaxWidth = enumerableDataRowWidth.Max();
                 }
                 else
@@ -208,7 +208,7 @@ internal sealed class ConnectionListForm : Form
         {
             const string text = "Do you want to save changes ?";
             const string caption = "Data Commander";
-            DialogResult dialogResult = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var dialogResult = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
                 ConnectionInfoRepository.Save(_connectionInfos);
         }
@@ -218,15 +218,15 @@ internal sealed class ConnectionListForm : Form
     {
         row[ConnectionFormColumnName.ConnectionName] = connectionInfo.ConnectionName;
 
-        ProviderInfo providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
-        IProvider provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
-        IDbConnectionStringBuilder connectionStringBuilder = provider.CreateConnectionStringBuilder();
+        var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
+        var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
+        var connectionStringBuilder = provider.CreateConnectionStringBuilder();
         
         row[ConnectionFormColumnName.ProviderName] = providerInfo.Name;
  
         connectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
 
-        if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out object? value))
+        if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var value))
             row[ConnectionStringKeyword.DataSource] = (string)value;
         else if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.Host, out value))
             row[ConnectionStringKeyword.DataSource] = (string)value;        
@@ -236,7 +236,7 @@ internal sealed class ConnectionListForm : Form
 
         if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out value))
         {
-            bool integratedSecurity = value switch
+            var integratedSecurity = value switch
             {
                 bool boolValue => boolValue,
                 _ => bool.Parse((string)value),
@@ -252,13 +252,13 @@ internal sealed class ConnectionListForm : Form
 
     private void BtnOK_Click(object sender, EventArgs e)
     {
-        ConnectionInfo? connectionInfo = SelectedConnectionInfo;
+        var connectionInfo = SelectedConnectionInfo;
         Connect(connectionInfo);
     }
 
     private void Connect_Click(object sender, EventArgs e)
     {
-        ConnectionInfo? connectionInfo = SelectedConnectionInfo;
+        var connectionInfo = SelectedConnectionInfo;
         Connect(connectionInfo);
     }
 
@@ -266,14 +266,14 @@ internal sealed class ConnectionListForm : Form
     {
         IEnumerable<ConnectionDto> connectionPropertiesArray = SelectedIndexes
             .Select(index => _connectionInfos[index].ToConnectionDto());
-        string json = JsonConvert.SerializeObject(connectionPropertiesArray);
+        var json = JsonConvert.SerializeObject(connectionPropertiesArray);
         Clipboard.SetText(json);
     }
 
     private void CopyConnectionString_Click(object sender, EventArgs e)
     {
-        ConnectionInfo? connectionProperties = SelectedConnectionInfo;
-        string connectionString = connectionProperties.ConnectionStringAndCredential.ConnectionString;
+        var connectionProperties = SelectedConnectionInfo;
+        var connectionString = connectionProperties.ConnectionStringAndCredential.ConnectionString;
         Clipboard.SetText(connectionString);
     }
 
@@ -281,11 +281,11 @@ internal sealed class ConnectionListForm : Form
     {
         try
         {
-            string s = Clipboard.GetText();
+            var s = Clipboard.GetText();
             ConnectionDto[]? connectionDtos = JsonConvert.DeserializeObject<ConnectionDto[]>(s);
             IEnumerable<ConnectionInfo> connectionPropertiesList = connectionDtos
                 .Select(connectionDto => connectionDto.ToConnectionProperties());
-            foreach (ConnectionInfo? connectionProperties in connectionPropertiesList)
+            foreach (var connectionProperties in connectionPropertiesList)
                 Add(connectionProperties);
         }
         catch (Exception ex)
@@ -299,7 +299,7 @@ internal sealed class ConnectionListForm : Form
         if (MessageBox.Show(this, "Do you want to delete the selected item(s)?", DataCommanderApplication.Instance.Name, MessageBoxButtons.YesNoCancel,
                 MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
         {
-            int index = SelectedIndex;
+            var index = SelectedIndex;
             _connectionInfos.RemoveAt(index);
             _dataTable.Rows.RemoveAt(index);
             _isDirty = true;
@@ -313,30 +313,30 @@ internal sealed class ConnectionListForm : Form
 
     private void Edit_Click(object sender, EventArgs e)
     {
-        ConnectionStringBuilderForm form = new ConnectionStringBuilderForm(_colorTheme);
-        ConnectionInfo? connectionInfo = SelectedConnectionInfo;
+        var form = new ConnectionStringBuilderForm(_colorTheme);
+        var connectionInfo = SelectedConnectionInfo;
         form.ConnectionInfo = connectionInfo;
-        DialogResult dialogResult = form.ShowDialog();
+        var dialogResult = form.ShowDialog();
         if (dialogResult == DialogResult.OK)
         {
             _connectionInfos[SelectedIndex] = form.ConnectionInfo;
             _isDirty = true;
-            DataRow row = _dataTable.DefaultView[_dataGrid.CurrentCell.RowIndex].Row;
+            var row = _dataTable.DefaultView[_dataGrid.CurrentCell.RowIndex].Row;
             LoadConnection(connectionInfo, row);
         }
     }
 
     private void MoveDown()
     {
-        int index = SelectedIndex;
+        var index = SelectedIndex;
         if (index < _connectionInfos.Count - 1)
         {
-            ConnectionInfo connectionInfo = _connectionInfos[index];
+            var connectionInfo = _connectionInfos[index];
             _connectionInfos.RemoveAt(index);
             _connectionInfos.Insert(index + 1, connectionInfo);
 
             _dataTable.Rows.RemoveAt(index);
-            DataRow row = _dataTable.NewRow();
+            var row = _dataTable.NewRow();
             LoadConnection(connectionInfo, row);
             _dataTable.Rows.InsertAt(row, index + 1);
             _dataGrid.CurrentCell = _dataGrid[0, index + 1];
@@ -347,15 +347,15 @@ internal sealed class ConnectionListForm : Form
 
     private void MoveUp()
     {
-        int index = SelectedIndex;
+        var index = SelectedIndex;
         if (index > 0)
         {
-            ConnectionInfo connectionInfo = _connectionInfos[index];
+            var connectionInfo = _connectionInfos[index];
             _connectionInfos.RemoveAt(index);
             _connectionInfos.Insert(index-1, connectionInfo);
 
             _dataTable.Rows.RemoveAt(index);
-            DataRow row = _dataTable.NewRow();
+            var row = _dataTable.NewRow();
             LoadConnection(connectionInfo, row);
             _dataTable.Rows.InsertAt(row, index - 1);
             _dataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -369,9 +369,9 @@ internal sealed class ConnectionListForm : Form
     {
         if (e.Button == MouseButtons.Right)
         {
-            DataGridView.HitTestInfo hitTestInfo = _dataGrid.HitTest(e.X, e.Y);
-            int rowIndex = hitTestInfo.RowIndex;
-            ContextMenuStrip contextMenu = new ContextMenuStrip(_components);
+            var hitTestInfo = _dataGrid.HitTest(e.X, e.Y);
+            var rowIndex = hitTestInfo.RowIndex;
+            var contextMenu = new ContextMenuStrip(_components);
             ToolStripMenuItem menuItem;
 
             if (rowIndex >= 0)
@@ -411,13 +411,13 @@ internal sealed class ConnectionListForm : Form
     {
         get
         {
-            int index = _dataGrid.CurrentCell.RowIndex;
+            var index = _dataGrid.CurrentCell.RowIndex;
 
             if (index >= 0)
             {
-                DataView dataView = _dataTable.DefaultView;
-                DataRowView rowView = dataView[index];
-                DataRow row = rowView.Row;
+                var dataView = _dataTable.DefaultView;
+                var rowView = dataView[index];
+                var row = rowView.Row;
                 index = _dataTable.Rows.IndexOf(row);
             }
 
@@ -429,15 +429,15 @@ internal sealed class ConnectionListForm : Form
     {
         get
         {
-            int count = _dataTable.Rows.Count;
-            DataView dataView = _dataTable.DefaultView;
-            int selectedCount = 0;
+            var count = _dataTable.Rows.Count;
+            var dataView = _dataTable.DefaultView;
+            var selectedCount = 0;
 
             foreach (DataGridViewRow dataGridViewRow in _dataGrid.SelectedRows)
             {
-                DataRowView? dataRowView = (DataRowView)dataGridViewRow.DataBoundItem;
-                DataRow row = dataRowView.Row;
-                int index = _dataTable.Rows.IndexOf(row);
+                var dataRowView = (DataRowView)dataGridViewRow.DataBoundItem;
+                var row = dataRowView.Row;
+                var index = _dataTable.Rows.IndexOf(row);
                 selectedCount++;
                 yield return index;
             }
@@ -453,8 +453,8 @@ internal sealed class ConnectionListForm : Form
     {
         get
         {
-            int index = SelectedIndex;
-            ConnectionInfo? connectionProperties = index >= 0
+            var index = SelectedIndex;
+            var connectionProperties = index >= 0
                 ? _connectionInfos[index]
                 : null;
             return connectionProperties;
@@ -467,20 +467,20 @@ internal sealed class ConnectionListForm : Form
         {
             using (new CursorManager(Cursors.WaitCursor))
             {
-                ProviderInfo providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
-                IProvider provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
-                IDbConnectionStringBuilder connectionStringBuilder = provider.CreateConnectionStringBuilder();
+                var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
+                var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
+                var connectionStringBuilder = provider.CreateConnectionStringBuilder();
                 connectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
 
-                string? dataSource = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out object? dataSourceObject)
+                var dataSource = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject)
                     ? (string)dataSourceObject
                     : null;
-                string? host = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.Host, out object? hostObject)
+                var host = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.Host, out var hostObject)
                     ? (string)hostObject
                     : null;
 
-                bool containsIntegratedSecurity = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out object? integratedSecurity);
-                StringBuilder stringBuilder = new StringBuilder();
+                var containsIntegratedSecurity = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
+                var stringBuilder = new StringBuilder();
                 stringBuilder.Append($@"Connection name: {connectionInfo.ConnectionName}
 Provider name: {providerInfo.Name}");
                 if (dataSource != null)
@@ -489,17 +489,17 @@ Provider name: {providerInfo.Name}");
                     stringBuilder.Append($"\r\n{ConnectionStringKeyword.Host}: {host}");
                 if (containsIntegratedSecurity)
                     stringBuilder.Append($"\r\n{ConnectionStringKeyword.IntegratedSecurity}: {integratedSecurity}");
-                Credential? credential = connectionInfo.ConnectionStringAndCredential.Credential;
+                var credential = connectionInfo.ConnectionStringAndCredential.Credential;
                 if (credential != null)
                     stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {credential.UserId}");
-                string text = stringBuilder.ToString();
-                ConnectionBase connection = provider.CreateConnection(connectionInfo.ConnectionStringAndCredential);
-                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                CancellationToken cancellationToken = cancellationTokenSource.Token;
-                CancelableOperationForm cancelableOperationForm =
+                var text = stringBuilder.ToString();
+                var connection = provider.CreateConnection(connectionInfo.ConnectionStringAndCredential);
+                var cancellationTokenSource = new CancellationTokenSource();
+                var cancellationToken = cancellationTokenSource.Token;
+                var cancelableOperationForm =
                     new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), "Opening connection...", text, _colorTheme);
-                long startTimestamp = Stopwatch.GetTimestamp();
-                Task openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
+                var startTimestamp = Stopwatch.GetTimestamp();
+                var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
                 cancelableOperationForm.Execute(openConnectionTask);
                 if (openConnectionTask.Exception != null)
                     throw openConnectionTask.Exception;
@@ -511,16 +511,16 @@ Provider name: {providerInfo.Name}");
         }
         catch (Exception exception)
         {
-            string text = exception.Message;
-            string caption = "Opening connection failed.";
+            var text = exception.Message;
+            var caption = "Opening connection failed.";
             MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
     private void DataGrid_DoubleClick(object sender, EventArgs e)
     {
-        System.Drawing.Point position = _dataGrid.PointToClient(Cursor.Position);
-        DataGridView.HitTestInfo hitTestInfo = _dataGrid.HitTest(position.X, position.Y);
+        var position = _dataGrid.PointToClient(Cursor.Position);
+        var hitTestInfo = _dataGrid.HitTest(position.X, position.Y);
 
         switch (hitTestInfo.Type)
         {
@@ -528,7 +528,7 @@ Provider name: {providerInfo.Name}");
                 break;
 
             default:
-                ConnectionInfo? folder = SelectedConnectionInfo;
+                var folder = SelectedConnectionInfo;
 
                 if (folder != null)
                 {
@@ -556,7 +556,7 @@ Provider name: {providerInfo.Name}");
         else if (e.KeyData == Keys.Enter)
         {
             e.Handled = true;
-            ConnectionInfo? node = SelectedConnectionInfo;
+            var node = SelectedConnectionInfo;
             Connect(node);
         }
 
@@ -583,7 +583,7 @@ Provider name: {providerInfo.Name}");
     {
         _connectionInfos.Add(connectionInfo);
 
-        DataRow row = _dataTable.NewRow();
+        var row = _dataTable.NewRow();
         LoadConnection(connectionInfo, row);
         _dataTable.Rows.Add(row);
 
@@ -592,11 +592,11 @@ Provider name: {providerInfo.Name}");
 
     private void NewButton_Click(object sender, EventArgs e)
     {
-        ConnectionStringBuilderForm form = new ConnectionStringBuilderForm(_colorTheme);
+        var form = new ConnectionStringBuilderForm(_colorTheme);
 
         if (form.ShowDialog() == DialogResult.OK)
         {
-            ConnectionInfo connectionProperties = form.ConnectionInfo;
+            var connectionProperties = form.ConnectionInfo;
             Add(connectionProperties);
         }
     }

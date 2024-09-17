@@ -85,13 +85,13 @@ internal sealed class SqlLoggedSqlCommand : IDbCommand
 
     public IDataReader ExecuteReader()
     {
-        SqlLoggedSqlDataReader loggedSqlDataReader = new SqlLoggedSqlDataReader(_connection, _command);
+        var loggedSqlDataReader = new SqlLoggedSqlDataReader(_connection, _command);
         return loggedSqlDataReader.Execute();
     }
 
     public IDataReader ExecuteReader(CommandBehavior behavior)
     {
-        SqlLoggedSqlDataReader loggedSqlDataReader = new SqlLoggedSqlDataReader(_connection, _command);
+        var loggedSqlDataReader = new SqlLoggedSqlDataReader(_connection, _command);
         return loggedSqlDataReader.Execute(behavior);
     }
 

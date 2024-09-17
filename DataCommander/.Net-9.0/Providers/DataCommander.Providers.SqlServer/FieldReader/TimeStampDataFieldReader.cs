@@ -14,7 +14,7 @@ internal sealed class TimeStampDataFieldReader(
     {
         get
         {
-            object o = _sqlDataReader.GetValue(columnOrdinal);
+            var o = _sqlDataReader.GetValue(columnOrdinal);
             return o;
         }
     }

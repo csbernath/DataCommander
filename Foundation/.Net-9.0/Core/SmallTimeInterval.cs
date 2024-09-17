@@ -24,21 +24,21 @@ public readonly struct SmallTimeInterval : IEquatable<SmallTimeInterval>, ICompa
     [Pure]
     public readonly bool Intersects(SmallTimeInterval other)
     {
-        short start = Math.Max(Start.Value, other.Start.Value);
-        short end = Math.Min(End.Value, other.End.Value);
-        bool intersects = start < end;
+        var start = Math.Max(Start.Value, other.Start.Value);
+        var end = Math.Min(End.Value, other.End.Value);
+        var intersects = start < end;
         return intersects;
     }
 
     [Pure]
     public static bool Intersects(IEnumerable<SmallTimeInterval> egyik, IEnumerable<SmallTimeInterval> masik)
     {
-        List<SmallTimeInterval> rendezettEgyik = egyik.OrderBy(i => i.Start).ToList();
-        List<SmallTimeInterval> rendezettMasik = masik.OrderBy(i => i.Start).ToList();
-        bool intersects = false;
+        var rendezettEgyik = egyik.OrderBy(i => i.Start).ToList();
+        var rendezettMasik = masik.OrderBy(i => i.Start).ToList();
+        var intersects = false;
 
-        foreach (SmallTimeInterval egyikIdoszak in rendezettEgyik)
-        foreach (SmallTimeInterval masikIdoszak in rendezettMasik)
+        foreach (var egyikIdoszak in rendezettEgyik)
+        foreach (var masikIdoszak in rendezettMasik)
             if (egyikIdoszak.Intersects(masikIdoszak))
             {
                 intersects = true;
@@ -55,7 +55,7 @@ public readonly struct SmallTimeInterval : IEquatable<SmallTimeInterval>, ICompa
 
     public readonly int CompareTo(SmallTimeInterval other)
     {
-        int result = Start.Value.CompareTo(other.Start.Value);
+        var result = Start.Value.CompareTo(other.Start.Value);
         if (result == 0)
             result = End.Value.CompareTo(other.End.Value);
         return result;

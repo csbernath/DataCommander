@@ -16,20 +16,20 @@ public class GroupJoinResultSelector(string tableName, IRowSelector outerRowSele
     {
         get
         {
-            IEnumerable<Column> columns = _innerRowSelector.ResultColumns.Concat(_outerRowSelector.ResultColumns);
-            IEnumerable<ColumnSchema> columnSchemas = columns.Select(c => c.ColumnSchema);
+            var columns = _innerRowSelector.ResultColumns.Concat(_outerRowSelector.ResultColumns);
+            var columnSchemas = columns.Select(c => c.ColumnSchema);
             return new ColumnCollection(columnSchemas);
         }
     }
     
     public IEnumerable<object[]> Select(object[] innerRow, IEnumerable<object[]> outerRows)
     {
-        Lazy<object[]> lazyInnerValues = new Lazy<object[]>(() => _innerRowSelector.Select(innerRow).ToArray());
-        IEnumerable<object[]> resultRows = outerRows.Select(outerRow =>
+        var lazyInnerValues = new Lazy<object[]>(() => _innerRowSelector.Select(innerRow).ToArray());
+        var resultRows = outerRows.Select(outerRow =>
         {
-            IEnumerable<object> outerValues = _outerRowSelector.Select(outerRow);
-            object[] innerValues = lazyInnerValues.Value;
-            IEnumerable<object> resultValues = outerValues.Concat(innerValues);
+            var outerValues = _outerRowSelector.Select(outerRow);
+            var innerValues = lazyInnerValues.Value;
+            var resultValues = outerValues.Concat(innerValues);
             return resultValues.ToArray();
         });
         return resultRows;

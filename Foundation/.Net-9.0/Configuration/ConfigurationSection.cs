@@ -113,7 +113,7 @@ public sealed class ConfigurationSection
     {
         get
         {
-            string sectionName = typeof(ConfigurationSection).Namespace;
+            var sectionName = typeof(ConfigurationSection).Namespace;
             return sectionName;
         }
     }
@@ -129,9 +129,9 @@ public sealed class ConfigurationSection
     {
         get
         {
-            StackTrace trace = new StackTrace(1);
-            string nodeName = ConfigurationNodeName.FromNamespace(trace, 0);
-            ConfigurationNode node = SelectNode(nodeName, true);
+            var trace = new StackTrace(1);
+            var nodeName = ConfigurationNodeName.FromNamespace(trace, 0);
+            var node = SelectNode(nodeName, true);
             return node;
         }
     }
@@ -143,9 +143,9 @@ public sealed class ConfigurationSection
     {
         get
         {
-            StackTrace trace = new StackTrace(1);
-            string nodeName = ConfigurationNodeName.FromType(trace, 0);
-            ConfigurationNode node = SelectNode(nodeName, true);
+            var trace = new StackTrace(1);
+            var nodeName = ConfigurationNodeName.FromType(trace, 0);
+            var node = SelectNode(nodeName, true);
             return node;
         }
     }
@@ -157,9 +157,9 @@ public sealed class ConfigurationSection
     {
         get
         {
-            StackTrace trace = new StackTrace(1);
-            string nodeName = ConfigurationNodeName.FromMethod(trace, 0);
-            ConfigurationNode node = SelectNode(nodeName, true);
+            var trace = new StackTrace(1);
+            var nodeName = ConfigurationNodeName.FromMethod(trace, 0);
+            var node = SelectNode(nodeName, true);
             return node;
         }
     }
@@ -194,14 +194,14 @@ public sealed class ConfigurationSection
         {
             lock (this)
             {
-                Load(out ConfigurationNode rootNode, out _);
+                Load(out var rootNode, out _);
                 RootNode = rootNode;
             }
 
             Interlocked.Exchange(ref _changed, 0);
         }
 
-        ConfigurationNode node = RootNode != null ? RootNode.SelectNode(nodeName) : null;
+        var node = RootNode != null ? RootNode.SelectNode(nodeName) : null;
 
         if (throwOnError)
             Check(nodeName, node);
@@ -215,7 +215,7 @@ public sealed class ConfigurationSection
 
         try
         {
-            Load(out ConfigurationNode rootNode, out fileNames);
+            Load(out var rootNode, out fileNames);
             RootNode = rootNode;
         }
         catch (Exception e)
@@ -227,9 +227,9 @@ public sealed class ConfigurationSection
         {
             try
             {
-                foreach (string fileName in fileNames)
+                foreach (var fileName in fileNames)
                 {
-                    FileSystemWatcher watcher = new FileSystemWatcher(fileName)
+                    var watcher = new FileSystemWatcher(fileName)
                     {
                         NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime
                     };
@@ -257,7 +257,7 @@ public sealed class ConfigurationSection
 
     private void Load(out ConfigurationNode rootNode, out StringCollection fileNames)
     {
-        ConfigurationReader reader = new ConfigurationReader();
+        var reader = new ConfigurationReader();
         fileNames = [];
         rootNode = reader.Read(ConfigFileName, SectionName, fileNames);
     }

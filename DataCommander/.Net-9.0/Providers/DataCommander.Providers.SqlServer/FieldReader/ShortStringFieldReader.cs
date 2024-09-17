@@ -21,7 +21,7 @@ internal sealed class ShortStringFieldReader(
             }
             else
             {
-                string s = dataRecord.GetString(columnOrdinal);
+                var s = dataRecord.GetString(columnOrdinal);
 
                 if (sqlDbType == SqlDbType.Char ||
                     sqlDbType == SqlDbType.NChar)

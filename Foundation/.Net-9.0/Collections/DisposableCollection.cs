@@ -7,7 +7,7 @@ public class DisposableCollection<T> : Collection<T>, IDisposable where T : IDis
 {
     public void Dispose()
     {
-        foreach (T item in this)
+        foreach (var item in this)
             if (item != null)
                 item.Dispose();
     }

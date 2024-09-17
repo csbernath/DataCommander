@@ -43,8 +43,8 @@ internal sealed class LogFile(
         {
             Log.Write(LogLevel.Error, e.ToString());
 
-            string directory = Path.GetTempPath();
-            string fileName = Path.GetFileName(path);
+            var directory = Path.GetTempPath();
+            var fileName = Path.GetFileName(path);
             path = Path.Combine(directory, fileName);
             _fileStream = Open(path, dateTime);
 
@@ -53,7 +53,7 @@ internal sealed class LogFile(
 
         if (_fileStream.Length == 0)
         {
-            byte[] preamble = encoding.GetPreamble();
+            var preamble = encoding.GetPreamble();
             _fileStream.Write(preamble, 0, preamble.Length);
         }
     }
@@ -68,7 +68,7 @@ internal sealed class LogFile(
             Open(dateTime);
         }
 
-        byte[] array = encoding.GetBytes(text);
+        var array = encoding.GetBytes(text);
         _fileStream.Write(array, 0, array.Length);
 
         if (autoFlush)
@@ -79,7 +79,7 @@ internal sealed class LogFile(
 
     void ILogFile.Open()
     {
-        string begin = formatter.Begin();
+        var begin = formatter.Begin();
 
         if (begin != null)
             Write(LocalTime.Default.Now, begin);
@@ -87,7 +87,7 @@ internal sealed class LogFile(
 
     void ILogFile.Write(LogEntry entry)
     {
-        string text = formatter.Format(entry);
+        var text = formatter.Format(entry);
         Write(entry.CreationTime, text);
     }
 
@@ -97,18 +97,18 @@ internal sealed class LogFile(
     {
         if (_fileStream != null)
         {
-            string end = formatter.End();
+            var end = formatter.End();
 
             if (end != null)
                 Write(LocalTime.Default.Now, end);
 
             _fileStream.Close();
-            string name = _fileStream.Name;
+            var name = _fileStream.Name;
             _fileStream = null;
 
             if (fileAttributes != default)
             {
-                FileAttributes attributes = File.GetAttributes(name);
+                var attributes = File.GetAttributes(name);
                 attributes |= fileAttributes; // FileAttributes.ReadOnly | FileAttributes.Hidden;
                 File.SetAttributes(name, attributes);
             }

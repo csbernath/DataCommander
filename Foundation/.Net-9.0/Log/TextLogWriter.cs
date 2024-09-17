@@ -18,7 +18,7 @@ public sealed class TextLogWriter : ILogWriter
 
     void ILogWriter.Write(LogEntry entry)
     {
-        string s = _formatter.Format(entry);
+        var s = _formatter.Format(entry);
         _textWriter.Write(s);
     }
 

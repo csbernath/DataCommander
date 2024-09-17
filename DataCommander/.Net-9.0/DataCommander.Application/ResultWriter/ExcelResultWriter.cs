@@ -40,7 +40,7 @@ internal sealed class ExcelResultWriter : IResultWriter
     {
         _logResultWriter.AfterExecuteReader();
 
-        string fileName = Path.GetTempFileName() + ".xlsx";
+        var fileName = Path.GetTempFileName() + ".xlsx";
         _excelPackage = new ExcelPackage(new FileInfo(fileName));
     }
 
@@ -59,13 +59,13 @@ internal sealed class ExcelResultWriter : IResultWriter
     {
         _logResultWriter.WriteRows(rows, rowCount);
 
-        ExcelRange cells = _excelWorksheet.Cells;
+        var cells = _excelWorksheet.Cells;
 
-        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+        for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
         {
             object[] row = rows[rowIndex];
 
-            for (int columnIndex = 0; columnIndex < row.Length; columnIndex++)
+            for (var columnIndex = 0; columnIndex < row.Length; columnIndex++)
             {
                 cells[_rowCount + rowIndex, columnIndex + 1].Value = row[columnIndex];
             }
@@ -89,17 +89,17 @@ internal sealed class ExcelResultWriter : IResultWriter
 
     private void CreateTable(DataTable schemaTable)
     {
-        ExcelWorksheets worksheets = _excelPackage.Workbook.Worksheets;
-        string tableName = $"Table{worksheets.Count + 1}";
+        var worksheets = _excelPackage.Workbook.Worksheets;
+        var tableName = $"Table{worksheets.Count + 1}";
         _excelWorksheet = worksheets.Add(tableName);
-        ExcelRange cells = _excelWorksheet.Cells;
-        int columnIndex = 1;
+        var cells = _excelWorksheet.Cells;
+        var columnIndex = 1;
 
         foreach (DataRow schemaRow in schemaTable.Rows)
         {
-            FoundationDbColumn dataColumnSchema = FoundationDbColumnFactory.Create(schemaRow);
-            string columnName = dataColumnSchema.ColumnName;
-            ExcelRange cell = cells[1, columnIndex];
+            var dataColumnSchema = FoundationDbColumnFactory.Create(schemaRow);
+            var columnName = dataColumnSchema.ColumnName;
+            var cell = cells[1, columnIndex];
             cell.Value = columnName;
             cell.Style.Font.Bold = true;
             ++columnIndex;

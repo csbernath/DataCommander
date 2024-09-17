@@ -11,9 +11,9 @@ public static class IDictionaryExtensions
         ArgumentNullException.ThrowIfNull(items);
         ArgumentNullException.ThrowIfNull(keySelector);
 
-        foreach (TValue item in items)
+        foreach (var item in items)
         {
-            TKey key = keySelector(item);
+            var key = keySelector(item);
             dictionary.Add(key, item);
         }
     }
@@ -26,7 +26,7 @@ public static class IDictionaryExtensions
         ArgumentNullException.ThrowIfNull(dictionary);
         ArgumentNullException.ThrowIfNull(valueFactory);
 
-        if (!dictionary.TryGetValue(key, out TValue value))
+        if (!dictionary.TryGetValue(key, out var value))
         {
             value = valueFactory(key);
             dictionary.Add(key, value);
@@ -39,7 +39,7 @@ public static class IDictionaryExtensions
     {
         ArgumentNullException.ThrowIfNull(dictionary);
 
-        dictionary.TryGetValue(key, out TValue value);
+        dictionary.TryGetValue(key, out var value);
         return value;
     }
 }

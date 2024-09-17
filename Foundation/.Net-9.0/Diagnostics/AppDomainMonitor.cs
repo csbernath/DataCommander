@@ -29,15 +29,15 @@ public static class AppDomainMonitor
 
     public static string GetEnvironmentInfo()
     {
-        long tickCount64 = Environment.TickCount64;
-        double totalDays = (double)tickCount64 / TimeSpan.MillisecondsPerDay;
-        long workingSet = Environment.WorkingSet;
-        WindowsCurrentVersion windowsVersionInfo = WindowsCurrentVersionRepository.Get();
-        string stopwatchFrequency = GetStopwatchFrequency();
-        DateTime zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
-        string tickCountString = $"{tickCount64} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";
+        var tickCount64 = Environment.TickCount64;
+        var totalDays = (double)tickCount64 / TimeSpan.MillisecondsPerDay;
+        var workingSet = Environment.WorkingSet;
+        var windowsVersionInfo = WindowsCurrentVersionRepository.Get();
+        var stopwatchFrequency = GetStopwatchFrequency();
+        var zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
+        var tickCountString = $"{tickCount64} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";
 
-        string message = $@"Environment information
+        var message = $@"Environment information
 MachineName:            {Environment.MachineName}
 ProcessorCount:         {Environment.ProcessorCount}
 OSVersion:              {Environment.OSVersion}
@@ -71,9 +71,9 @@ TempPath:               {Path.GetTempPath()}";
 
     public static string GetCurrentDomainState()
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         stringBuilder.Append("CurrentDomainState:\r\n");
-        AppDomain appDomain = AppDomain.CurrentDomain;
+        var appDomain = AppDomain.CurrentDomain;
         AppendAppDomainState(appDomain, stringBuilder);
         return stringBuilder.ToString();
     }
@@ -82,19 +82,19 @@ TempPath:               {Path.GetTempPath()}";
     {
         try
         {
-            string friendlyName = appDomain.FriendlyName;
+            var friendlyName = appDomain.FriendlyName;
             sb.AppendFormat("FriendlyName: {0}\r\n", friendlyName);
-            Assembly[] assemblies = appDomain.GetAssemblies();
+            var assemblies = appDomain.GetAssemblies();
             sb.AppendLine("Assemblies:");
 
             List<AssemblyInfo> assemblyInfos = [];
 
-            for (int i = 0; i < assemblies.Length; i++)
+            for (var i = 0; i < assemblies.Length; i++)
             {
                 try
                 {
-                    Assembly assembly = assemblies[i];
-                    AssemblyInfo assemblyInfo = GetAssemblyInfo(assembly);
+                    var assembly = assemblies[i];
+                    var assemblyInfo = GetAssemblyInfo(assembly);
                     assemblyInfos.Add(assemblyInfo);
                 }
                 catch (Exception e)
@@ -115,7 +115,7 @@ TempPath:               {Path.GetTempPath()}";
 
     private static AssemblyInfo GetAssemblyInfo(Assembly assembly)
     {
-        bool isDynamic = assembly.IsDynamic;
+        var isDynamic = assembly.IsDynamic;
         string location = null;
         Version fileVersion = null;
         DateTime? date = null;
@@ -127,9 +127,9 @@ TempPath:               {Path.GetTempPath()}";
             date = File.GetLastWriteTime(location);
         }
 
-        AssemblyName name = assembly.GetName();
-        byte[] publicKeyToken = name.GetPublicKeyToken();
-        string publicKeyTokenString = publicKeyToken != null ? Hex.GetString(publicKeyToken, false) : null;
+        var name = assembly.GetName();
+        var publicKeyToken = name.GetPublicKeyToken();
+        var publicKeyTokenString = publicKeyToken != null ? Hex.GetString(publicKeyToken, false) : null;
 
         return new AssemblyInfo(name.Name, fileVersion, name.Version, date, publicKeyTokenString, assembly.ImageRuntimeVersion, location, isDynamic);
     }
@@ -140,7 +140,7 @@ TempPath:               {Path.GetTempPath()}";
 
         try
         {
-            FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(fileName);
+            var fileVersionInfo = FileVersionInfo.GetVersionInfo(fileName);
 
             fileVersion = new Version(
                 fileVersionInfo.FileMajorPart,

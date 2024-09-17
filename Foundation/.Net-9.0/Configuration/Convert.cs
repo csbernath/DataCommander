@@ -8,7 +8,7 @@ internal static class Convert
 {
     public static object ParseNumber(string source, NumberStyles style, Type conversionType)
     {
-        TypeCode typeCode = Type.GetTypeCode(conversionType);
+        var typeCode = Type.GetTypeCode(conversionType);
         object value = typeCode switch
         {
             TypeCode.SByte => sbyte.Parse(source, style),
@@ -51,7 +51,7 @@ internal static class Convert
             value = Enum.Parse(conversionType, source);
         else
         {
-            TypeCode typeCode = Type.GetTypeCode(conversionType);
+            var typeCode = Type.GetTypeCode(conversionType);
 
             switch (typeCode)
             {
@@ -74,7 +74,7 @@ internal static class Convert
                     else if (conversionType == typeof(Encoding))
                     {
                         bool isInt32;
-                        int codepage = 0;
+                        var codepage = 0;
 
                         try
                         {

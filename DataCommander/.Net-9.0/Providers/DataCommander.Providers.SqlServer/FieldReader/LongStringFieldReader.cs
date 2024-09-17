@@ -18,7 +18,7 @@ internal sealed class LongStringFieldReader(IDataRecord dataRecord, int columnOr
             }
             else
             {
-                string s = dataRecord.GetString(columnOrdinal);
+                var s = dataRecord.GetString(columnOrdinal);
                 value = new StringField(s, SqlServerProvider.ShortStringSize);
             }
 

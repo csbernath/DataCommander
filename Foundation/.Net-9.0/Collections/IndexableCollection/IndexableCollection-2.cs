@@ -12,12 +12,12 @@ public partial class IndexableCollection<T> : ICollection<T>
 
     public void Add(T item)
     {
-        foreach (ICollectionIndex<T> index in Indexes) index.Add(item);
+        foreach (var index in Indexes) index.Add(item);
     }
 
     public void Clear()
     {
-        foreach (ICollectionIndex<T> index in Indexes) index.Clear();
+        foreach (var index in Indexes) index.Clear();
     }
 
     public bool Contains(T item) => _defaultIndex.Contains(item);

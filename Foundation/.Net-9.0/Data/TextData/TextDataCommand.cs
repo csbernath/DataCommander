@@ -117,15 +117,15 @@ public sealed class TextDataCommand : DbCommand
     /// <returns></returns>
     public override int ExecuteNonQuery()
     {
-        IList<TextDataColumn> columns = Parameters.GetParameterValue<IList<TextDataColumn>>("columns");
-        IList<ITextDataConverter> converters = Parameters.GetParameterValue<IList<ITextDataConverter>>("converters");
-        IEnumerable<object[]> rows = Parameters.GetParameterValue<IEnumerable<object[]>>("rows");
-        IConverter<TextDataCommand, TextWriter> getTextWriter = Parameters.GetParameterValue<IConverter<TextDataCommand, TextWriter>>("getTextWriter");
-        TextWriter textWriter = getTextWriter.Convert(this);
-        TextDataStreamWriter textDataStreamWriter = new TextDataStreamWriter(textWriter, columns, converters);
-        int count = 0;
+        var columns = Parameters.GetParameterValue<IList<TextDataColumn>>("columns");
+        var converters = Parameters.GetParameterValue<IList<ITextDataConverter>>("converters");
+        var rows = Parameters.GetParameterValue<IEnumerable<object[]>>("rows");
+        var getTextWriter = Parameters.GetParameterValue<IConverter<TextDataCommand, TextWriter>>("getTextWriter");
+        var textWriter = getTextWriter.Convert(this);
+        var textDataStreamWriter = new TextDataStreamWriter(textWriter, columns, converters);
+        var count = 0;
 
-        foreach (object[] row in rows)
+        foreach (var row in rows)
         {
             textDataStreamWriter.WriteRow(row);
             count++;

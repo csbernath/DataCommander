@@ -7,19 +7,19 @@ public static class ProviderInfoRepository
 {
     public static IEnumerable<ProviderInfo> GetProviderInfos()
     {
-        ConfigurationNode node = Settings.SelectNode("DataCommander/Providers", true);
+        var node = Settings.SelectNode("DataCommander/Providers", true);
 
-        foreach (ConfigurationNode? childNode in node.ChildNodes)
+        foreach (var childNode in node.ChildNodes)
         {
             childNode.Attributes.TryGetAttributeValue("Enabled", out bool enabled);
             if (enabled)
             {
-                string identifier = childNode.Name;
+                var identifier = childNode.Name;
 
                 if (!childNode.Attributes.TryGetAttributeValue("Name", out string name))
                     name = identifier;
 
-                ProviderInfo provider = new ProviderInfo(identifier, name);
+                var provider = new ProviderInfo(identifier, name);
                 yield return provider;
             }
         }

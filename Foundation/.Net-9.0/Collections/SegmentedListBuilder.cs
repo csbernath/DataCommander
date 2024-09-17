@@ -16,8 +16,8 @@ public sealed class SegmentedListBuilder<T>
     {
         get
         {
-            int count = 0;
-            int segmentCount = _segments.Count;
+            var count = 0;
+            var segmentCount = _segments.Count;
             if (segmentCount > 0)
                 count += (segmentCount - 1) * _segmentItemCapacity;
             count += _nextSegmentItemIndex;
@@ -31,7 +31,7 @@ public sealed class SegmentedListBuilder<T>
 
         if (_segments.Count > 0 && _nextSegmentItemIndex < _segmentItemCapacity)
         {
-            int lastSegmentIndex = _segments.Count - 1;
+            var lastSegmentIndex = _segments.Count - 1;
             currentSegment = _segments[lastSegmentIndex];
         }
         else
@@ -47,7 +47,7 @@ public sealed class SegmentedListBuilder<T>
 
     public IReadOnlyList<T> ToReadOnlyCollection()
     {
-        int count = Count;
+        var count = Count;
         return new ReadOnlySegmentedList(_segments, count);
     }
 
@@ -57,13 +57,13 @@ public sealed class SegmentedListBuilder<T>
         {
             get
             {
-                int segmentLength = segments[0].Length;
+                var segmentLength = segments[0].Length;
 
-                int segmentIndex = index / segmentLength;
-                T[] segment = segments[segmentIndex];
+                var segmentIndex = index / segmentLength;
+                var segment = segments[segmentIndex];
 
-                int segmentItemIndex = index % segmentLength;
-                T value = segment[segmentItemIndex];
+                var segmentItemIndex = index % segmentLength;
+                var value = segment[segmentItemIndex];
                 return value;
             }
         }
@@ -72,15 +72,15 @@ public sealed class SegmentedListBuilder<T>
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            int segmentIndex = 0;
-            int lastSegmentIndex = segments.Count - 1;
+            var segmentIndex = 0;
+            var lastSegmentIndex = segments.Count - 1;
 
-            foreach (T[] segment in segments)
+            foreach (var segment in segments)
             {
-                int segmentLength = segment.Length;
-                int segmentItemCount = segmentIndex < lastSegmentIndex ? segmentLength : count % segmentLength;
+                var segmentLength = segment.Length;
+                var segmentItemCount = segmentIndex < lastSegmentIndex ? segmentLength : count % segmentLength;
 
-                for (int i = 0; i < segmentItemCount; i++) yield return segment[i];
+                for (var i = 0; i < segmentItemCount; i++) yield return segment[i];
 
                 segmentIndex++;
             }

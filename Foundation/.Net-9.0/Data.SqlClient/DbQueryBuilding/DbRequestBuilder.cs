@@ -20,7 +20,7 @@ public sealed class DbRequestBuilder
 
     public string Build()
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         stringBuilder.Append($@"using System;
 using System.Collections.ObjectModel;
@@ -56,7 +56,7 @@ namespace {_request.Namespace}
         string csharpTypeName;
         if (sqlDbType == SqlDbType.Structured)
         {
-            string userDefinedTableType = dataType.Split('.')[1];
+            var userDefinedTableType = dataType.Split('.')[1];
             csharpTypeName = $"ReadOnlyCollection<{userDefinedTableType}>";
         }
         else
@@ -71,8 +71,8 @@ namespace {_request.Namespace}
 
     private static string GetCSharpTypeName(Type dbColumnDataType, bool isNullable)
     {
-        CSharpType csharpType = CSharpTypeArray.CSharpTypes.First(i => i.Type == dbColumnDataType);
-        string csharpTypeName = csharpType.Name;
+        var csharpType = CSharpTypeArray.CSharpTypes.First(i => i.Type == dbColumnDataType);
+        var csharpTypeName = csharpType.Name;
 
         if (isNullable && dbColumnDataType.IsValueType)
             csharpTypeName += '?';
@@ -82,7 +82,7 @@ namespace {_request.Namespace}
 
     private static string GetDataRecordMethodName(DbQueryResultField field)
     {
-        TypeCode typeCode = Type.GetTypeCode(field.DataType);
+        var typeCode = Type.GetTypeCode(field.DataType);
         string methodName = null;
         switch (typeCode)
         {
@@ -145,9 +145,9 @@ namespace {_request.Namespace}
 
     private string GetHandlerClass()
     {
-        string commandTimeoutString = _request.CommandTimeout != null ? _request.CommandTimeout.Value.ToString() : "null";
+        var commandTimeoutString = _request.CommandTimeout != null ? _request.CommandTimeout.Value.ToString() : "null";
 
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         stringBuilder.Append($"\r\n\r\npublic sealed class {_request.Name}Db{GetRequestType()}Handler\r\n{{\r\n");
         stringBuilder.Append("    private const string CommandText = @\"\";\r\n");
         stringBuilder.Append($"    private readonly int? CommandTimeout = {commandTimeoutString};\r\n");
@@ -178,13 +178,13 @@ namespace {_request.Namespace}
 
             stringBuilder.Append("\r\n\r\n");
 
-            Sequence sequence = new Sequence();
-            foreach (DbQueryResult result in _request.Results)
+            var sequence = new Sequence();
+            foreach (var result in _request.Results)
             {
                 if (sequence.Next() > 0)
                     stringBuilder.Append("\r\n\r\n");
 
-                string readMethod = GetReadRecordMethod(result);
+                var readMethod = GetReadRecordMethod(result);
                 stringBuilder.Append(readMethod.Indent(1));
             }
         }
@@ -195,7 +195,7 @@ namespace {_request.Namespace}
 
     private string GetExecuteReaderAsyncMethod()
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         stringBuilder.Append($@"private async Task<{_request.Name}DbQueryResult> ExecuteReaderAsync(ExecuteReaderRequest request)
 {{
     {_request.Name}DbQueryResult result = null;
@@ -213,7 +213,7 @@ namespace {_request.Namespace}
 
     private string GetExecuteReaderMethod()
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         stringBuilder.Append($@"private {_request.Name}DbQueryResult ExecuteReader(ExecuteReaderRequest request)
 {{
     {_request.Name}DbQueryResult result = null;
@@ -221,10 +221,10 @@ namespace {_request.Namespace}
     executor.ExecuteReader(request, dataReader =>
     {{
 ");
-        Sequence sequence = new Sequence();
-        foreach (DbQueryResult result in _request.Results)
+        var sequence = new Sequence();
+        foreach (var result in _request.Results)
         {
-            int index = sequence.Next();
+            var index = sequence.Next();
             string next = null;
             if (index > 0)
             {
@@ -239,7 +239,7 @@ namespace {_request.Namespace}
         stringBuilder.Append($"\r\n        result = new {_request.Name}DbQueryResult(");
 
         sequence.Reset();
-        foreach (DbQueryResult result in _request.Results)
+        foreach (var result in _request.Results)
         {
             if (sequence.Next() > 0)
                 stringBuilder.Append(", ");
@@ -256,10 +256,10 @@ namespace {_request.Namespace}
 
     private string GetHandleMethod()
     {
-        string responseType = _request.Results.Count == 0 ? "int" : $"{_request.Name}DbQueryResult";
-        string requestParameter = _request.Results.Count == 0 ? "command" : "query";
+        var responseType = _request.Results.Count == 0 ? "int" : $"{_request.Name}DbQueryResult";
+        var requestParameter = _request.Results.Count == 0 ? "command" : "query";
 
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         stringBuilder.Append($@"public {responseType} Handle({_request.Name}Db{GetRequestType()} {requestParameter})
 {{
     ArgumentNullException.ThrowIfNull({requestParameter});
@@ -282,9 +282,9 @@ namespace {_request.Namespace}
 
     private string GetHandleAsyncMethod()
     {
-        string request = _request.Results.Count == 0 ? "command" : "query";
-        string result = _request.Results.Count == 0 ? "int" : $"{_request.Name}DbQueryResult";
-        StringBuilder stringBuilder = new StringBuilder();
+        var request = _request.Results.Count == 0 ? "command" : "query";
+        var result = _request.Results.Count == 0 ? "int" : $"{_request.Name}DbQueryResult";
+        var stringBuilder = new StringBuilder();
         stringBuilder.Append($@"public Task<{result}> HandleAsync({_request.Name}Db{GetRequestType()} {request}, CancellationToken cancellationToken)
 {{
     ArgumentNullException.ThrowIfNull({request});
@@ -308,11 +308,11 @@ namespace {_request.Namespace}
 
     private string GetExecuteReaderAsyncMethodFragment()
     {
-        StringBuilder stringBuilder = new StringBuilder();
-        Sequence sequence = new Sequence();
-        foreach (DbQueryResult result in _request.Results)
+        var stringBuilder = new StringBuilder();
+        var sequence = new Sequence();
+        foreach (var result in _request.Results)
         {
-            string next = sequence.Next() == 0 ? null : "Next";
+            var next = sequence.Next() == 0 ? null : "Next";
             stringBuilder.Append(
                 $"var {result.FieldName.ToCamelCase()} = (await dataReader.Read{next}ResultAsync(128, Read{result.Name}, request.CancellationToken));\r\n");
         }
@@ -323,11 +323,11 @@ namespace {_request.Namespace}
 
     private string GetQueryResultClass()
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         stringBuilder.Append($"public sealed class {_request.Name}DbQueryResult\r\n{{\r\n");
 
-        Sequence sequence = new Sequence();
-        foreach (DbQueryResult result in _request.Results)
+        var sequence = new Sequence();
+        foreach (var result in _request.Results)
         {
             if (sequence.Next() > 0)
                 stringBuilder.Append("\r\n");
@@ -343,11 +343,11 @@ namespace {_request.Namespace}
 
     private string GetQueryResultClassConstructor(ReadOnlyCollection<DbQueryResult> results)
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         stringBuilder.Append($"public {_request.Name}DbQueryResult(");
 
-        Sequence sequence = new Sequence();
-        foreach (DbQueryResult result in results)
+        var sequence = new Sequence();
+        foreach (var result in results)
         {
             if (sequence.Next() > 0)
                 stringBuilder.Append(", ");
@@ -358,7 +358,7 @@ namespace {_request.Namespace}
         stringBuilder.Append(")\r\n");
         stringBuilder.Append("{\r\n");
 
-        foreach (DbQueryResult result in results)
+        foreach (var result in results)
             stringBuilder.Append($"    {result.FieldName} = {result.FieldName.ToCamelCase()};\r\n");
 
         stringBuilder.Append('}');
@@ -370,14 +370,14 @@ namespace {_request.Namespace}
 
     private string GetRecordClasses()
     {
-        StringBuilder stringBuilder = new StringBuilder();
-        Sequence sequence = new Sequence();
-        foreach (DbQueryResult result in _request.Results)
+        var stringBuilder = new StringBuilder();
+        var sequence = new Sequence();
+        foreach (var result in _request.Results)
         {
             if (sequence.Next() > 0)
                 stringBuilder.Append("\r\n\r\n");
 
-            string recordClass = GetRecordClass(result);
+            var recordClass = GetRecordClass(result);
             stringBuilder.Append(recordClass);
         }
 
@@ -388,13 +388,13 @@ namespace {_request.Namespace}
 
     private string GetRequestClass()
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         stringBuilder.Append($@"public sealed class {_request.Name}Db{GetRequestType()}
 {{
 ");
         if (_request.Parameters.Count > 0)
         {
-            foreach (DbRequestParameter parameter in _request.Parameters)
+            foreach (var parameter in _request.Parameters)
                 stringBuilder.Append(
                     $"    public readonly {GetCSharpTypeName(parameter.SqlDbType, parameter.DataType, parameter.IsNullable)} {parameter.Name.ToPascalCase()};\r\n");
 
@@ -408,12 +408,12 @@ namespace {_request.Namespace}
 
     private string GetRequestClassConstructor()
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         stringBuilder.Append($"public {_request.Name}Db{GetRequestType()}(");
 
-        Sequence sequence = new Sequence();
-        foreach (DbRequestParameter parameter in _request.Parameters)
+        var sequence = new Sequence();
+        foreach (var parameter in _request.Parameters)
         {
             if (sequence.Next() > 0)
                 stringBuilder.Append(", ");
@@ -424,7 +424,7 @@ namespace {_request.Namespace}
 
         stringBuilder.Append(")\r\n{\r\n");
 
-        foreach (DbRequestParameter parameter in _request.Parameters)
+        foreach (var parameter in _request.Parameters)
             stringBuilder.Append($"    {parameter.Name.ToPascalCase()} = {parameter.Name};\r\n");
 
         stringBuilder.Append('}');
@@ -434,15 +434,15 @@ namespace {_request.Namespace}
 
     private static string GetReadRecordMethod(DbQueryResult result)
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         stringBuilder.Append($"private static {result.Name} Read{result.Name}(IDataRecord dataRecord)\r\n");
         stringBuilder.Append("{\r\n");
 
-        Sequence sequence = new Sequence();
-        foreach (DbQueryResultField field in result.Fields)
+        var sequence = new Sequence();
+        foreach (var field in result.Fields)
         {
-            int index = sequence.Next();
+            var index = sequence.Next();
             stringBuilder.Append($"    var {field.Name.ToCamelCase()} = dataRecord.{GetDataRecordMethodName(field)}({index});\r\n");
         }
 
@@ -450,7 +450,7 @@ namespace {_request.Namespace}
         stringBuilder.Append($"    return new {result.Name}(");
 
         sequence.Reset();
-        foreach (DbQueryResultField field in result.Fields)
+        foreach (var field in result.Fields)
         {
             if (sequence.Next() > 0)
                 stringBuilder.Append(", ");
@@ -466,13 +466,13 @@ namespace {_request.Namespace}
 
     private static string GetRecordClass(DbQueryResult result)
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         stringBuilder.Append("public sealed class ");
         stringBuilder.Append(result.Name);
         stringBuilder.Append("\r\n{\r\n");
 
-        Sequence sequence = new Sequence();
-        foreach (DbQueryResultField field in result.Fields)
+        var sequence = new Sequence();
+        foreach (var field in result.Fields)
         {
             if (sequence.Next() > 0)
                 stringBuilder.AppendLine();
@@ -494,12 +494,12 @@ namespace {_request.Namespace}
 
     private static string GetRecordClassConstructor(DbQueryResult result)
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         stringBuilder.Append($"public {result.Name}(");
 
-        Sequence sequence = new Sequence();
-        foreach (DbQueryResultField field in result.Fields)
+        var sequence = new Sequence();
+        foreach (var field in result.Fields)
         {
             if (sequence.Next() > 0)
                 stringBuilder.Append(", ");
@@ -510,7 +510,7 @@ namespace {_request.Namespace}
         stringBuilder.Append(")\r\n");
         stringBuilder.Append("{\r\n");
 
-        foreach (DbQueryResultField field in result.Fields)
+        foreach (var field in result.Fields)
             stringBuilder.Append($"    {field.Name} = {field.Name.ToCamelCase()};\r\n");
 
         stringBuilder.Append('}');
@@ -529,7 +529,7 @@ namespace {_request.Namespace}
 
     private string GetToExecuteReaderRequestMethod()
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         stringBuilder.Append($@"private ExecuteReaderRequest ToExecuteReaderRequest({_request.Name}DbQuery query, CancellationToken cancellationToken)
 {{    
     var createCommandRequest = ToCreateCommandRequest(query);
@@ -540,13 +540,13 @@ namespace {_request.Namespace}
 
     private string GetToParametersMethod()
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         stringBuilder.Append(
             $"private static ReadOnlyCollection<object> ToParameters({_request.Name}Db{GetRequestType()} {GetRequestType().ToCamelCase()})\r\n");
         stringBuilder.Append("{\r\n");
         stringBuilder.Append("    var parameters = new SqlParameterCollectionBuilder();\r\n");
 
-        foreach (DbRequestParameter parameter in _request.Parameters)
+        foreach (var parameter in _request.Parameters)
         {
             if (parameter.SqlDbType == SqlDbType.Structured)
                 stringBuilder.Append(
@@ -562,7 +562,7 @@ namespace {_request.Namespace}
                     $"    parameters.AddVarChar(\"{parameter.Name}\", {parameter.Size}, {GetRequestType().ToCamelCase()}.{parameter.Name.ToPascalCase()});\r\n");
             else
             {
-                string method = parameter.SqlDbType switch
+                var method = parameter.SqlDbType switch
                 {
                     SqlDbType.Bit => !parameter.IsNullable ? "Add" : "AddNullableBit",
                     SqlDbType.Date => !parameter.IsNullable ? "AddDate" : "AddNullableDate",

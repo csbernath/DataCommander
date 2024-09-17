@@ -11,14 +11,14 @@ public class RowSelector(IReadOnlyCollection<IValueSelector> valueSelectors) : I
     {
         get
         {
-            IEnumerable<ColumnSchema> columnSchemas = _valueSelectors.Select(s => s.ResultColumnSchema);
+            var columnSchemas = _valueSelectors.Select(s => s.ResultColumnSchema);
             return new ColumnCollection(columnSchemas);
         }
     }
 
     public IEnumerable<object> Select(object[] row)
     {
-        IEnumerable<object> values = _valueSelectors
+        var values = _valueSelectors
             .Select(valueSelector => valueSelector.Select(row));
         return values;
     }

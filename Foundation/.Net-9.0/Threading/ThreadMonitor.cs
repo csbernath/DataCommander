@@ -62,16 +62,16 @@ public static class ThreadMonitor
         lock (Threads)
             currentThreads = Threads.Values.ToArray();
 
-        TimeSpan remaining = TimeSpan.FromMilliseconds(millisecondsTimeout);
+        var remaining = TimeSpan.FromMilliseconds(millisecondsTimeout);
 
-        foreach (WorkerThread thread in currentThreads)
+        foreach (var thread in currentThreads)
         {
             if (thread.ThreadState == ThreadState.Unstarted)
                 removableThreads.Add(thread);
             else
             {
-                System.Diagnostics.Stopwatch stopwatch = System.Diagnostics.Stopwatch.StartNew();
-                bool joined = thread.Thread.Join(remaining);
+                var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+                var joined = thread.Thread.Join(remaining);
                 stopwatch.Stop();
 
                 if (remaining >= stopwatch.Elapsed)
@@ -86,13 +86,13 @@ public static class ThreadMonitor
 
         if (removableThreads.Count > 0)
             lock (Threads)
-                foreach (WorkerThread thread in removableThreads)
+                foreach (var thread in removableThreads)
                     Threads.Remove(thread.ManagedThreadId);
     }
 
     private static string ToString(DateTime dateTime)
     {
-        string s = dateTime == DateTime.MinValue
+        var s = dateTime == DateTime.MinValue
             ? null
             : dateTime.ToString("yyyy.MM.dd HH:mm:ss.ffffff", CultureInfo.InvariantCulture);
         return s;

@@ -30,7 +30,7 @@ public sealed class PriorityMonitor<T>
 
     public LockRequest Enter(int priority)
     {
-        LockRequest lockRequest = new LockRequest(this, priority);
+        var lockRequest = new LockRequest(this, priority);
 
         lock (_lockRequests)
         {
@@ -90,7 +90,7 @@ public sealed class PriorityMonitor<T>
             }
             else
             {
-                LockRequest first = _lockRequests.First();
+                var first = _lockRequests.First();
                 _lockRequests.Remove(first);
                 CurrentLockRequest = first;
                 first.Complete();
@@ -146,7 +146,7 @@ public sealed class PriorityMonitor<T>
         {
             if (Monitor != null)
             {
-                PriorityMonitor<T> monitor = Monitor;
+                var monitor = Monitor;
                 monitor.Exit(this);
                 Monitor = null;
             }

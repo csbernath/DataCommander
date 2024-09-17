@@ -15,7 +15,7 @@ internal sealed class SchemaCollectionNode(DatabaseNode database) : ITreeNode
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        string commandText = CreateCommandText();
+        var commandText = CreateCommandText();
         Foundation.Collections.ReadOnly.ReadOnlySegmentLinkedList<SchemaNode> treeNodes = await Db.ExecuteReaderAsync(
             database.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
@@ -27,18 +27,18 @@ internal sealed class SchemaCollectionNode(DatabaseNode database) : ITreeNode
 
     private string CreateCommandText()
     {
-        string commandText = @"select s.name
+        var commandText = @"select s.name
 from {0}.sys.schemas s (nolock)
 order by s.name";
 
-        SqlCommandBuilder sqlCommandBuilder = new SqlCommandBuilder();
+        var sqlCommandBuilder = new SqlCommandBuilder();
         commandText = string.Format(commandText, sqlCommandBuilder.QuoteIdentifier(database.Name));
         return commandText;
     }
 
     private SchemaNode ReadRecord(IDataRecord dataRecord)
     {
-        string name = dataRecord.GetString(0);
+        var name = dataRecord.GetString(0);
         return new SchemaNode(database, name);
     }
 

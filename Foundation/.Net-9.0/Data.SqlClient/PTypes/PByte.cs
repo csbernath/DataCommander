@@ -32,7 +32,7 @@ public struct PByte : INullable
 
     public static bool operator ==(PByte x, PByte y)
     {
-        bool isEqual = x.ValueType == y.ValueType;
+        var isEqual = x.ValueType == y.ValueType;
 
         if (isEqual)
         {
@@ -52,13 +52,13 @@ public struct PByte : INullable
 
     public static PByte Parse(string s, PValueType type)
     {
-        PByte sp = string.IsNullOrEmpty(s) ? new PByte(type) : SqlByte.Parse(s);
+        var sp = string.IsNullOrEmpty(s) ? new PByte(type) : SqlByte.Parse(s);
         return sp;
     }
 
     public override readonly bool Equals(object y)
     {
-        bool equals = y is PByte;
+        var equals = y is PByte;
 
         if (equals)
             equals = this == (PByte)y;
@@ -68,7 +68,7 @@ public struct PByte : INullable
 
     public override int GetHashCode()
     {
-        int hashCode = _sql.GetHashCode();
+        var hashCode = _sql.GetHashCode();
         return hashCode;
     }
 

@@ -28,7 +28,7 @@ internal sealed class SqlServerProvider : IProvider
 {
     static SqlServerProvider()
     {
-        ConfigurationNode configurationNode = Settings.CurrentType;
+        var configurationNode = Settings.CurrentType;
         ShortStringSize = configurationNode.Attributes["ShortStringSize"].GetValue<int>();
     }
 
@@ -42,12 +42,12 @@ internal sealed class SqlServerProvider : IProvider
 
         foreach (SqlError sqlError in sqlErrors)
         {
-            InfoMessageSeverity severity = sqlError.Class == 0
+            var severity = sqlError.Class == 0
                 ? InfoMessageSeverity.Information
                 : InfoMessageSeverity.Error;
 
-            string header = sqlError.GetHeader();
-            string message = sqlError.Message;
+            var header = sqlError.GetHeader();
+            var message = sqlError.Message;
             messages.Add(InfoMessageFactory.Create(severity, header, message));
         }
 
@@ -62,7 +62,7 @@ internal sealed class SqlServerProvider : IProvider
 
     public string? GetConnectionName(IDbConnection connection)
     {
-        SqlConnection sqlConnection = (SqlConnection)connection;
+        var sqlConnection = (SqlConnection)connection;
         return ConnectionNameProvider.GetConnectionName(sqlConnection);
     }
 
@@ -77,7 +77,7 @@ internal sealed class SqlServerProvider : IProvider
         {
             if (_keyWords == null)
             {
-                ConfigurationNode folder = Settings.CurrentType;
+                var folder = Settings.CurrentType;
                 _keyWords = folder.Attributes["TSqlKeyWords"].GetValue<string[]>();
             }
 
@@ -97,7 +97,7 @@ internal sealed class SqlServerProvider : IProvider
 
     string IProvider.CommandToString(IDbCommand command)
     {
-        SqlCommand sqlCommand = (SqlCommand)command;
+        var sqlCommand = (SqlCommand)command;
         return sqlCommand.ToLogString();
     }
 
@@ -105,7 +105,7 @@ internal sealed class SqlServerProvider : IProvider
 
     IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
     {
-        SqlDataReaderHelper sqlDataReaderHelper = new SqlDataReaderHelper(dataReader);
+        var sqlDataReaderHelper = new SqlDataReaderHelper(dataReader);
         return sqlDataReaderHelper;
     }
 
@@ -125,31 +125,31 @@ internal sealed class SqlServerProvider : IProvider
             from sourceSchemaRow in sourceSchemaTable.AsEnumerable()
             select FoundationDbColumnFactory.Create(sourceSchemaRow).ColumnName;
 
-        using (IDbCommand command = destinationConnection.CreateCommand())
+        using (var command = destinationConnection.CreateCommand())
         {
             command.CommandText = $"select {string.Join(",", sourceColumnNames)} from {destinationTableName}";
             command.CommandType = CommandType.Text;
 
-            using (IDataReader dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
+            using (var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
             {
                 schemaTable = dataReader.GetSchemaTable();
                 count = dataReader.FieldCount;
                 dataTypeNames = new string[count];
 
-                for (int i = 0; i < count; i++) dataTypeNames[i] = dataReader.GetDataTypeName(i);
+                for (var i = 0; i < count; i++) dataTypeNames[i] = dataReader.GetDataTypeName(i);
             }
         }
 
-        StringBuilder insertInto = new StringBuilder();
+        var insertInto = new StringBuilder();
         insertInto.AppendFormat("insert into [{0}](", destinationTableName);
-        StringBuilder values = new StringBuilder();
+        var values = new StringBuilder();
         values.Append("values(");
-        DataRowCollection schemaRows = schemaTable.Rows;
+        var schemaRows = schemaTable.Rows;
         count = schemaRows.Count;
         converters = new Converter<object, object>[count];
         insertCommand = destinationConnection.CreateCommand();
 
-        for (int i = 0; i < count; i++)
+        for (var i = 0; i < count; i++)
         {
             if (i > 0)
             {
@@ -157,14 +157,14 @@ internal sealed class SqlServerProvider : IProvider
                 values.Append(',');
             }
 
-            FoundationDbColumn columnSchema = FoundationDbColumnFactory.Create(schemaRows[i]);
+            var columnSchema = FoundationDbColumnFactory.Create(schemaRows[i]);
             insertInto.AppendFormat("[{0}]", columnSchema.ColumnName);
             values.AppendFormat("@p{0}", i);
 
-            int columnSize = columnSchema.ColumnSize;
-            int providerType = columnSchema.ProviderType;
-            DbType dbType = (DbType)providerType;
-            SqlParameter parameter = new SqlParameter
+            var columnSize = columnSchema.ColumnSize;
+            var providerType = columnSchema.ProviderType;
+            var dbType = (DbType)providerType;
+            var parameter = new SqlParameter
             {
                 ParameterName = $"@p{i}"
             };
@@ -245,8 +245,8 @@ internal sealed class SqlServerProvider : IProvider
 
     void IProvider.DeriveParameters(IDbCommand command)
     {
-        SqlConnection? sqlConnection = (SqlConnection)command.Connection;
-        SqlCommand sqlCommand = new SqlCommand(command.CommandText, sqlConnection)
+        var sqlConnection = (SqlConnection)command.Connection;
+        var sqlCommand = new SqlCommand(command.CommandText, sqlConnection)
         {
             CommandType = command.CommandType,
             CommandTimeout = command.CommandTimeout
@@ -256,7 +256,7 @@ internal sealed class SqlServerProvider : IProvider
         command.Parameters.Clear();
         while (sqlCommand.Parameters.Count > 0)
         {
-            SqlParameter parameter = sqlCommand.Parameters[0];
+            var parameter = sqlCommand.Parameters[0];
             sqlCommand.Parameters.RemoveAt(0);
             command.Parameters.Add(parameter);
         }
@@ -264,18 +264,18 @@ internal sealed class SqlServerProvider : IProvider
 
     public XmlReader ExecuteXmlReader(IDbCommand command)
     {
-        SqlCommand sqlCommand = (SqlCommand)command;
+        var sqlCommand = (SqlCommand)command;
         return sqlCommand.ExecuteXmlReader();
     }
 
     string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
     {
-        FoundationDbColumn schemaRow = FoundationDbColumnFactory.Create(sourceSchemaRow);
-        int columnSize = schemaRow.ColumnSize;
-        bool? allowDbNull = schemaRow.AllowDbNull;
-        Type dataType = schemaRow.DataType;
-        TypeCode typeCode = Type.GetTypeCode(dataType);
-        string typeName = typeCode switch
+        var schemaRow = FoundationDbColumnFactory.Create(sourceSchemaRow);
+        var columnSize = schemaRow.ColumnSize;
+        var allowDbNull = schemaRow.AllowDbNull;
+        var dataType = schemaRow.DataType;
+        var typeCode = Type.GetTypeCode(dataType);
+        var typeName = typeCode switch
         {
             TypeCode.Int32 => SqlDataTypeName.Int,
             TypeCode.DateTime => SqlDataTypeName.DateTime,
@@ -288,8 +288,8 @@ internal sealed class SqlServerProvider : IProvider
 
     Type IProvider.GetColumnType(FoundationDbColumn column)
     {
-        SqlDbType dbType = (SqlDbType)column.ProviderType;
-        int columnSize = column.ColumnSize;
+        var dbType = (SqlDbType)column.ProviderType;
+        var columnSize = column.ColumnSize;
         Type type;
 
         switch (dbType)
@@ -339,26 +339,26 @@ internal sealed class SqlServerProvider : IProvider
     async Task<GetCompletionResult> IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position,
         CancellationToken cancellationToken)
     {
-        bool fromCache = false;
+        var fromCache = false;
         List<IObjectName> array = null;
-        SqlParser sqlStatement = new SqlParser(text);
-        List<Token> tokens = sqlStatement.Tokens;
-        sqlStatement.FindToken(position, out Token? previousToken, out Token? currentToken);
+        var sqlStatement = new SqlParser(text);
+        var tokens = sqlStatement.Tokens;
+        sqlStatement.FindToken(position, out var previousToken, out var currentToken);
         int startPosition;
         int length;
 
         if (currentToken != null)
         {
             List<string> parts = new IdentifierParser(new StringReader(currentToken.Value)).Parse().ToList();
-            string? lastPart = parts.Count > 0
+            var lastPart = parts.Count > 0
                 ? parts.Last()
                 : null;
-            int lastPartLength = lastPart != null
+            var lastPartLength = lastPart != null
                 ? lastPart.Length
                 : 0;
             startPosition = currentToken.EndPosition - lastPartLength + 1;
             length = lastPartLength;
-            string value = currentToken.Value;
+            var value = currentToken.Value;
             if (value.Length > 0 && value[0] == '@')
             {
                 if (value.StartsWith("@@"))
@@ -369,10 +369,10 @@ internal sealed class SqlServerProvider : IProvider
                 {
                     SortedList<string?, object> list = [];
 
-                    for (int i = 0; i < tokens.Count; i++)
+                    for (var i = 0; i < tokens.Count; i++)
                     {
-                        Token token = tokens[i];
-                        string? keyWord = token.Value;
+                        var token = tokens[i];
+                        var keyWord = token.Value;
 
                         if (keyWord != null && keyWord.Length >= 2 && keyWord.StartsWith(value) && keyWord != value)
                             if (!list.ContainsKey(token.Value))
@@ -391,7 +391,7 @@ internal sealed class SqlServerProvider : IProvider
 
         if (array == null)
         {
-            SqlObject? sqlObject = sqlStatement.FindSqlObject(previousToken, currentToken);
+            var sqlObject = sqlStatement.FindSqlObject(previousToken, currentToken);
             string commandText = null;
 
             if (sqlObject != null)
@@ -415,7 +415,7 @@ internal sealed class SqlServerProvider : IProvider
                             List<string>? nameParts = sqlObject.Name != null
                             ? new IdentifierParser(new StringReader(sqlObject.Name)).Parse().ToList()
                             : null;
-                            int namePartsCount = nameParts != null
+                            var namePartsCount = nameParts != null
                             ? nameParts.Count
                             : 0;
                             List<string> statements = [];
@@ -470,7 +470,7 @@ internal sealed class SqlServerProvider : IProvider
                         else
                             owners = ["dbo", "sys"];
 
-                        StringBuilder sb = new StringBuilder();
+                        var sb = new StringBuilder();
                         for (i = 0; i < owners.Length; i++)
                         {
                             if (i > 0) sb.Append(',');
@@ -478,7 +478,7 @@ internal sealed class SqlServerProvider : IProvider
                             sb.AppendFormat("'{0}'", owners[i]);
                         }
 
-                        string ownersString = sb.ToString();
+                        var ownersString = sb.ToString();
                         commandText = string.Format(@"declare @schema_id int
 select  top 1 @schema_id = s.schema_id
 from    [{0}].sys.schemas s
@@ -519,7 +519,7 @@ end", name.Database, ownersString, name.Name);
                     case SqlObjectTypes.Value:
                         string[] items = sqlObject.ParentName.Split('.');
                         i = items.Length - 1;
-                        string columnName = items[i];
+                        var columnName = items[i];
                         string tableNameOrAlias = null;
                         if (i > 0)
                         {
@@ -529,16 +529,16 @@ end", name.Database, ownersString, name.Name);
 
                         if (tableNameOrAlias != null)
                         {
-                            bool contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out string? tableName);
+                            var contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out var tableName);
                             if (contains)
                             {
                                 string where;
-                                int tokenIndex = previousToken.Index + 1;
+                                var tokenIndex = previousToken.Index + 1;
                                 if (tokenIndex < tokens.Count)
                                 {
-                                    Token token = tokens[tokenIndex];
-                                    string? tokenValue = token.Value;
-                                    int indexofAny = tokenValue.IndexOfAny(['\r', '\n']);
+                                    var token = tokens[tokenIndex];
+                                    var tokenValue = token.Value;
+                                    var indexofAny = tokenValue.IndexOfAny(['\r', '\n']);
                                     if (indexofAny >= 0) tokenValue = tokenValue[..indexofAny];
 
                                     string? like;
@@ -582,12 +582,12 @@ from
                     if (connection.State != ConnectionState.Open)
                         connection.OpenAsync(CancellationToken.None).Wait();
 
-                    IDbCommandAsyncExecutor executor = connection.Connection.CreateCommandAsyncExecutor();
+                    var executor = connection.Connection.CreateCommandAsyncExecutor();
                     await executor.ExecuteReaderAsync(new ExecuteReaderRequest(commandText, null, transaction), async (dataReader, cancellationToken2) =>
                     {
                         while (true)
                         {
-                            int fieldCount = dataReader.FieldCount;
+                            var fieldCount = dataReader.FieldCount;
                             while (await dataReader.ReadAsync(cancellationToken2))
                             {
                                 string schemaName;
@@ -625,13 +625,13 @@ from
 
     DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
     {
-        SqlParameter sqlParameter = (SqlParameter)parameter;
+        var sqlParameter = (SqlParameter)parameter;
         return new SqlDataParameter(sqlParameter);
     }
 
     string IProvider.GetExceptionMessage(Exception exception)
     {
-        string message = exception is SqlException sqlException
+        var message = exception is SqlException sqlException
             ? sqlException.Errors.ToLogString()
             : exception.ToString();
         return message;
@@ -639,7 +639,7 @@ from
 
     DataTable IProvider.GetParameterTable(IDataParameterCollection parameters)
     {
-        DataTable dataTable = new DataTable();
+        var dataTable = new DataTable();
         dataTable.Columns.Add(" ");
         dataTable.Columns.Add("ParameterName");
         dataTable.Columns.Add("DbType");
@@ -650,18 +650,18 @@ from
         dataTable.Columns.Add("Direction");
         dataTable.Columns.Add("Value", typeof(object));
         dataTable.Columns.Add("TypeName", typeof(string));
-        int index = 0;
+        var index = 0;
 
         foreach (SqlParameter p in parameters)
         {
-            DataRow row = dataTable.NewRow();
+            var row = dataTable.NewRow();
 
             row[0] = index;
             row[1] = p.ParameterName;
             row[2] = p.DbType.ToString("G");
             row[3] = p.SqlDbType.ToString().ToLower();
 
-            byte precision = p.Precision;
+            var precision = p.Precision;
             int size;
 
             if (precision > 0)
@@ -703,7 +703,7 @@ from
     DataTable IProvider.GetSchemaTable(IDataReader dataReader)
     {
         DataTable table = null;
-        DataTable? schemaTable = dataReader.GetSchemaTable();
+        var schemaTable = dataReader.GetSchemaTable();
 
         if (schemaTable != null)
         {
@@ -711,20 +711,20 @@ from
             Log.Trace(CallerInformation.Create(), "{0}", schemaTable.TableName);
 
             table = new DataTable("SchemaTable");
-            DataColumnCollection columns = table.Columns;
+            var columns = table.Columns;
             columns.Add(" ", typeof(int));
             columns.Add("  ", typeof(string));
             columns.Add("Name", typeof(string));
             columns.Add("Size", typeof(int));
             columns.Add("DbType", typeof(string));
             columns.Add("DataType", typeof(Type));
-            int columnIndex = 0;
+            var columnIndex = 0;
             int? columnOrdinalAddition = null;
 
             foreach (DataRow dataRow in schemaTable.Rows)
             {
-                FoundationDbColumn dataColumnSchema = FoundationDbColumnFactory.Create(dataRow);
-                int columnOrdinal = dataColumnSchema.ColumnOrdinal;
+                var dataColumnSchema = FoundationDbColumnFactory.Create(dataRow);
+                var columnOrdinal = dataColumnSchema.ColumnOrdinal;
 
                 if (columnOrdinalAddition == null)
                 {
@@ -734,12 +734,12 @@ from
                         columnOrdinalAddition = 0;
                 }
 
-                string primaryKey = GetPrimaryKey(dataColumnSchema);
+                var primaryKey = GetPrimaryKey(dataColumnSchema);
 
-                int columnSize = dataColumnSchema.ColumnSize;
-                SqlDbType dbType = (SqlDbType)dataColumnSchema.ProviderType;
-                string dataTypeName = dataReader.GetDataTypeName(columnIndex);
-                StringBuilder sb = new StringBuilder();
+                var columnSize = dataColumnSchema.ColumnSize;
+                var dbType = (SqlDbType)dataColumnSchema.ProviderType;
+                var dataTypeName = dataReader.GetDataTypeName(columnIndex);
+                var sb = new StringBuilder();
                 sb.Append(dataTypeName);
 
                 switch (dbType)
@@ -761,8 +761,8 @@ from
                         break;
 
                     case SqlDbType.Decimal:
-                        short precision = dataColumnSchema.NumericPrecision.GetValueOrDefault();
-                        short scale = dataColumnSchema.NumericScale.GetValueOrDefault();
+                        var precision = dataColumnSchema.NumericPrecision.GetValueOrDefault();
+                        var scale = dataColumnSchema.NumericScale.GetValueOrDefault();
 
                         if (scale == 0)
                             sb.AppendFormat("({0})", precision);
@@ -780,7 +780,7 @@ from
                         break;
                 }
 
-                bool allowDbNull = dataColumnSchema.AllowDbNull.GetValueOrDefault();
+                var allowDbNull = dataColumnSchema.AllowDbNull.GetValueOrDefault();
                 if (!allowDbNull) sb.Append(" not null");
 
                 table.Rows.Add(columnOrdinal + columnOrdinalAddition, primaryKey, dataColumnSchema.ColumnName, columnSize, sb.ToString(),
@@ -795,7 +795,7 @@ from
 
     private static string GetPrimaryKey(FoundationDbColumn dataColumnSchema)
     {
-        string primaryKey = dataColumnSchema.IsKey == true
+        var primaryKey = dataColumnSchema.IsKey == true
             ? "PKEY"
             : string.Empty;
 
@@ -812,18 +812,18 @@ from
 
     List<Statement> IProvider.GetStatements(string commandText)
     {
-        SqlParser sqlStatement = new SqlParser(commandText);
-        List<Token> tokens = sqlStatement.Tokens;
+        var sqlStatement = new SqlParser(commandText);
+        var tokens = sqlStatement.Tokens;
         List<Statement> statements = [];
 
         IEnumerable<Token[]> statementTokenArrays = tokens.Split(token => IsBatchSeparator(commandText, token)).Where(statementTokens => statementTokens.Length > 0);
 
         foreach (Token[]? statementTokens in statementTokenArrays)
         {
-            int startIndex = statementTokens[0].StartPosition;
-            int endIndex = statementTokens.Last().EndPosition;
-            int length = endIndex - startIndex + 1;
-            Statement statement = new Statement(statementTokens[0].LineIndex, commandText.Substring(startIndex, length));
+            var startIndex = statementTokens[0].StartPosition;
+            var endIndex = statementTokens.Last().EndPosition;
+            var length = endIndex - startIndex + 1;
+            var statement = new Statement(statementTokens[0].LineIndex, commandText.Substring(startIndex, length));
             statements.Add(statement);
         }
 
@@ -834,7 +834,7 @@ from
 
     List<InfoMessage> IProvider.ToInfoMessages(Exception exception)
     {
-        DateTime now = LocalTime.Default.Now;
+        var now = LocalTime.Default.Now;
         List<InfoMessage> infoMessages;
 
         if (exception is AggregateException aggregateException)
@@ -844,8 +844,8 @@ from
             infoMessages = ToInfoMessages(sqlException.Errors, now);
         else
         {
-            string message = exception.ToLogString();
-            InfoMessage infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Error, null, message);
+            var message = exception.ToLogString();
+            var infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Error, null, message);
             infoMessages = [infoMessage];
         }
 
@@ -857,7 +857,7 @@ from
         Exception unaggregatedException;
         if (aggregateException.InnerExceptions.Count == 1)
         {
-            Exception innerException = aggregateException.InnerExceptions[0];
+            var innerException = aggregateException.InnerExceptions[0];
             if (innerException is AggregateException aggregateException2)
                 unaggregatedException = UnAggregateException(aggregateException2);
             else
@@ -876,7 +876,7 @@ from
             target = DBNull.Value;
         else
         {
-            IConvertible convertible = (IConvertible)source;
+            var convertible = (IConvertible)source;
             target = convertible.ToString(null);
         }
 
@@ -890,7 +890,7 @@ from
             target = DBNull.Value;
         else
         {
-            DecimalField decimalField = (DecimalField)source;
+            var decimalField = (DecimalField)source;
             target = decimalField.DecimalValue;
         }
 
@@ -899,19 +899,19 @@ from
 
     private static bool IsBatchSeparator(string commandText, Token token)
     {
-        bool isBatchSeparator =
+        var isBatchSeparator =
             token.Type == TokenType.KeyWord &&
             string.Compare(token.Value, "GO", StringComparison.InvariantCultureIgnoreCase) == 0;
 
         if (isBatchSeparator)
         {
-            int lineStartIndex = commandText.LastIndexOf('\n', token.StartPosition);
+            var lineStartIndex = commandText.LastIndexOf('\n', token.StartPosition);
             lineStartIndex++;
-            int lineEndIndex = commandText.IndexOf('\n', token.EndPosition + 1);
+            var lineEndIndex = commandText.IndexOf('\n', token.EndPosition + 1);
             if (lineEndIndex == -1) lineEndIndex = commandText.Length - 1;
 
-            int lineLength = lineEndIndex - lineStartIndex + 1;
-            string line = commandText.Substring(lineStartIndex, lineLength);
+            var lineLength = lineEndIndex - lineStartIndex + 1;
+            var line = commandText.Substring(lineStartIndex, lineLength);
             line = line.Trim();
             isBatchSeparator = string.Compare(line, "GO", StringComparison.InvariantCultureIgnoreCase) == 0;
         }

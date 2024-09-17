@@ -8,7 +8,7 @@ public static class CreateInsertSqlStatementMethodFactory
 {
     public static ReadOnlyCollection<Line> Create(string schema, string table, ReadOnlyCollection<Column> columns)
     {
-        TextBuilder textBuilder = new TextBuilder();
+        var textBuilder = new TextBuilder();
         textBuilder.Add($"public static ReadOnlyCollection<Line> CreateInsertSqlStatement(IEnumerable<{table}> records)");
         using (textBuilder.AddCSharpBlock())
         {
@@ -31,11 +31,11 @@ public static class CreateInsertSqlStatementMethodFactory
             textBuilder.Add("var columns = new[]");
             using (textBuilder.AddCSharpBlock())
             {
-                foreach (IndexedItem<Column> indexedColumn in columns.SelectIndexed())
+                foreach (var indexedColumn in columns.SelectIndexed())
                 {
                     if (indexedColumn.Index > 0)
                         textBuilder.AddToLastLine(",");
-                    Column column = indexedColumn.Value;
+                    var column = indexedColumn.Value;
                     textBuilder.Add($"\"{column.ColumnName}\"");
                 }
             }
@@ -44,12 +44,12 @@ public static class CreateInsertSqlStatementMethodFactory
             textBuilder.Add($"var rows = records.Select(record => new[]");
             using (textBuilder.AddCSharpBlock())
             {
-                foreach (IndexedItem<Column> indexedColumn in columns.SelectIndexed())
+                foreach (var indexedColumn in columns.SelectIndexed())
                 {
                     if (indexedColumn.Index > 0)
                         textBuilder.AddToLastLine(",");
-                    Column column = indexedColumn.Value;
-                    string methodName = MethodName.GetToSqlConstantMethodName(column.SqlDataTypeName, column.IsNullable);
+                    var column = indexedColumn.Value;
+                    var methodName = MethodName.GetToSqlConstantMethodName(column.SqlDataTypeName, column.IsNullable);
                     textBuilder.Add($"record.{column.ColumnName}.{methodName}()");
                 }
             }

@@ -14,15 +14,15 @@ public static class ConnectionInfoRepository
 
     public static IEnumerable<ConnectionInfo> Get()
     {
-        string path = GetPath();
+        var path = GetPath();
         IEnumerable<ConnectionInfo> connectionInfos;
         if (Path.Exists(path))
         {
             IEnumerable<ConnectionDto> connectionDtos;            
-            using (StreamReader streamReader = File.OpenText(path))
+            using (var streamReader = File.OpenText(path))
             {
-                JsonSerializer serializer = new JsonSerializer();
-                JsonTextReader jsonReader = new JsonTextReader(streamReader);
+                var serializer = new JsonSerializer();
+                var jsonReader = new JsonTextReader(streamReader);
                 connectionDtos = serializer.Deserialize<ConnectionDto[]>(jsonReader);
             }
 
@@ -38,10 +38,10 @@ public static class ConnectionInfoRepository
     {
         IEnumerable<ConnectionDto> connectionDtos = connectionInfos
             .Select(connectionProperties => connectionProperties.ToConnectionDto());
-        string path = GetPath();
-        using (StreamWriter streamWriter = new StreamWriter(path, false, Encoding.UTF8))
+        var path = GetPath();
+        using (var streamWriter = new StreamWriter(path, false, Encoding.UTF8))
         {
-            JsonSerializer serializer = new JsonSerializer
+            var serializer = new JsonSerializer
             {
                 Formatting = Formatting.Indented
             };
@@ -51,8 +51,8 @@ public static class ConnectionInfoRepository
 
     private static string GetPath()
     {
-        string applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(false);
-        string path = applicationDataFolderPath + Path.DirectorySeparatorChar + "ConnectionInfoRepository.json";
+        var applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(false);
+        var path = applicationDataFolderPath + Path.DirectorySeparatorChar + "ConnectionInfoRepository.json";
         return path;
     }
 }

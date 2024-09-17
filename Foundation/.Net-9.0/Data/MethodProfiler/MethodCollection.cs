@@ -18,7 +18,7 @@ internal sealed class MethodCollection : IEnumerable<MethodBase>
 
     public int Add(MethodBase method)
     {
-        int id = Interlocked.Increment(ref _idSequence);
+        var id = Interlocked.Increment(ref _idSequence);
         _methods.TryAdd(method, id);
         return id;
     }

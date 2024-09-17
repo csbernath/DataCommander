@@ -38,23 +38,23 @@ internal sealed class JobNode : ITreeNode
         {
             new MenuItem("HelpJob", OnHelpJobClick, EmptyReadOnlyCollection<MenuItem>.Value)
         }.ToReadOnlyCollection();
-        ContextMenu contextMenu = new ContextMenu(menuItems);
+        var contextMenu = new ContextMenu(menuItems);
 
         return contextMenu;
     }
 
     private void OnHelpJobClick(object? sender, EventArgs e)
     {
-        string commandText = $@"msdb..sp_help_job @job_name = {_name.ToNullableNVarChar()}";
+        var commandText = $@"msdb..sp_help_job @job_name = {_name.ToNullableNVarChar()}";
         DataSet dataSet;
 
-        using (Microsoft.Data.SqlClient.SqlConnection connection = _jobs.Server.CreateConnection())
+        using (var connection = _jobs.Server.CreateConnection())
         {
-            IDbCommandExecutor executor = connection.CreateCommandExecutor();
+            var executor = connection.CreateCommandExecutor();
             dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText), CancellationToken.None);
         }
 
-        IQueryForm? queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender;
         queryForm.ShowDataSet(dataSet);
     }
 }

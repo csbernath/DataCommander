@@ -12,7 +12,7 @@ public static class UndoRedoService
         ArgumentNullException.ThrowIfNull(undoRedoState);
         ArgumentNullException.ThrowIfNull(items);
 
-        int unprocessedItemCount = undoRedoState.GetUnprocessedItemCount();
+        var unprocessedItemCount = undoRedoState.GetUnprocessedItemCount();
         if (unprocessedItemCount > 0)
             undoRedoState.Items.RemoveRange(undoRedoState.ProcessedItemCount, unprocessedItemCount);
 
@@ -30,7 +30,7 @@ public static class UndoRedoService
         if (undoRedoState.ProcessedItemCount < itemCount)
             throw new InvalidOperationException("Nincs meg a megadott darabszámú visszavonható művelet.");
 
-        int processedItemCount = undoRedoState.ProcessedItemCount - itemCount;
+        var processedItemCount = undoRedoState.ProcessedItemCount - itemCount;
         List<T> items = undoRedoState.Items.Take(processedItemCount).ToList();
         process(items);
         undoRedoState.ProcessedItemCount = processedItemCount;
@@ -42,7 +42,7 @@ public static class UndoRedoService
         Assert.IsInRange(itemCount > 0);
         ArgumentNullException.ThrowIfNull(process);
 
-        int unprocessedItemCount = undoRedoState.GetUnprocessedItemCount();
+        var unprocessedItemCount = undoRedoState.GetUnprocessedItemCount();
         if (unprocessedItemCount < itemCount)
             throw new InvalidOperationException("Nincs meg a megadott számú ismételhető művelet.");
 

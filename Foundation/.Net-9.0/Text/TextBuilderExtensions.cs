@@ -10,7 +10,7 @@ public static class TextBuilderExtensions
     public static IDisposable AddBlock(this TextBuilder indentedTextBuilder, string begin, string end)
     {
         indentedTextBuilder.Add(begin);
-        IDisposable indentation = indentedTextBuilder.Indent(1);
+        var indentation = indentedTextBuilder.Indent(1);
 
         return new Disposer(() =>
         {

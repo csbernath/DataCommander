@@ -25,7 +25,7 @@ internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
 
     private async Task<ReadOnlySegmentLinkedList<TableNode>> GetTableNodes(CancellationToken cancellationToken)
     {
-        string commandText = CreateCommandText();
+        var commandText = CreateCommandText();
         ReadOnlySegmentLinkedList<TableNode> tableNodes = await Db.ExecuteReaderAsync(
             DatabaseNode.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
@@ -37,7 +37,7 @@ internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
 
     private string CreateCommandText()
     {
-        string commandText = $@"select
+        var commandText = $@"select
     s.name,
     tbl.name,
     tbl.object_id,
@@ -70,10 +70,10 @@ order by 1,2";
 
     private TableNode ReadRecord(IDataRecord dataRecord)
     {
-        string schema = dataRecord.GetString(0);
-        string name = dataRecord.GetString(1);
-        int objectId = dataRecord.GetInt32(2);
-        TemporalType temporalType = (TemporalType)dataRecord.GetByte(3);
+        var schema = dataRecord.GetString(0);
+        var name = dataRecord.GetString(1);
+        var objectId = dataRecord.GetInt32(2);
+        var temporalType = (TemporalType)dataRecord.GetByte(3);
         return new TableNode(DatabaseNode, schema, name, objectId, temporalType);
     }
 

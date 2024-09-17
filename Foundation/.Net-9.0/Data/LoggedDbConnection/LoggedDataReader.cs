@@ -26,14 +26,14 @@ internal sealed class LoggedDataReader : IDataReader
 
     bool IDataReader.Read()
     {
-        bool read = _dataReader.Read();
+        var read = _dataReader.Read();
         if (read)
         {
             ++_rowCount;
         }
         else if (_afterRead != null)
         {
-            AfterReadEventArgs eventArgs = new AfterReadEventArgs(_rowCount);
+            var eventArgs = new AfterReadEventArgs(_rowCount);
             _afterRead(this, eventArgs);
         }
 

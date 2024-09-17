@@ -7,7 +7,7 @@ public static class ValidationFactory
 {
     public static ReadOnlyCollection<Line> Create(string message)
     {
-        TextBuilder textBuilder = new TextBuilder();
+        var textBuilder = new TextBuilder();
         textBuilder.Add("textBuilder.Add(\"if @@rowcount = 0\");");
         textBuilder.Add("using (textBuilder.AddBlock(\"begin\", \"end\"))");
         using (textBuilder.AddCSharpBlock())

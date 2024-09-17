@@ -17,8 +17,8 @@ public class ElementIndexComparer<T> : IComparer<T>
 
     public int Compare(T x, T y)
     {
-        int xIndex = _items[x];
-        int yIndex = _items[y];
+        var xIndex = _items[x];
+        var yIndex = _items[y];
         return xIndex.CompareTo(yIndex);
     }
 }

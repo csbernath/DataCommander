@@ -27,7 +27,7 @@ public sealed class ReadOnlySortedList<TKey, TValue> : IReadOnlyDictionary<TKey,
     {
         get
         {
-            int index = IndexOfKey(key);
+            var index = IndexOfKey(key);
 
             if (index < 0)
                 throw new KeyNotFoundException();
@@ -42,7 +42,7 @@ public sealed class ReadOnlySortedList<TKey, TValue> : IReadOnlyDictionary<TKey,
     public bool TryGetValue(TKey key, out TValue value)
     {
         bool succeeded;
-        int index = IndexOfKey(key);
+        var index = IndexOfKey(key);
 
         if (index >= 0)
         {
@@ -69,7 +69,7 @@ public sealed class ReadOnlySortedList<TKey, TValue> : IReadOnlyDictionary<TKey,
         if (_items.Count > 0)
             indexOfKey = BinarySearch.IndexOf(0, _items.Count - 1, index =>
             {
-                KeyValuePair<TKey, TValue> otherItem = _items[index];
+                var otherItem = _items[index];
                 return _comparison(key, otherItem.Key);
             });
         else

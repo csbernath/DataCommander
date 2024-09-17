@@ -19,7 +19,7 @@ public sealed class DateTimeDataFieldReader(
             }
             else
             {
-                DateTime dateTime = dataRecord.GetDateTime(columnOrdinal);
+                var dateTime = dataRecord.GetDateTime(columnOrdinal);
                 value = new DateTimeField(dateTime);
             }
 

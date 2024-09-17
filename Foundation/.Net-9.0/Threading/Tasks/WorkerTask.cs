@@ -11,7 +11,7 @@ public class WorkerTask
 
     public WorkerTask(Action<object> action, object state, CancellationToken cancellationToken, TaskCreationOptions taskCreationOptions, string name)
     {
-        CreateTaskResponse response = TaskMonitor.CreateTask(action, state, cancellationToken, taskCreationOptions, name);
+        var response = TaskMonitor.CreateTask(action, state, cancellationToken, taskCreationOptions, name);
         _task = response.Task;
         _taskInfo = response.TaskInfo;
     }

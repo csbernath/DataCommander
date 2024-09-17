@@ -10,8 +10,8 @@ public class KeyEqualityComparer : IEqualityComparer<Key>
 
     public int GetHashCode(Key key)
     {
-        HashCode hashCode = new HashCode();
-        foreach (object value in key.Values)
+        var hashCode = new HashCode();
+        foreach (var value in key.Values)
             hashCode.Add(value);
         return hashCode.ToHashCode();
     }

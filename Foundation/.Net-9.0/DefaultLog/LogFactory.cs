@@ -18,23 +18,23 @@ internal sealed class LogFactory : ILogFactory
     public LogFactory()
     {
         List<LogWriter> logWriters = [];
-        ConfigurationNode node = Settings.CurrentType;
+        var node = Settings.CurrentType;
 
-        node.Attributes.TryGetAttributeValue("DateTimeKind", DateTimeKind.Utc, out DateTimeKind dateTimeKind);
+        node.Attributes.TryGetAttributeValue("DateTimeKind", DateTimeKind.Utc, out var dateTimeKind);
         _dateTimeProvider = dateTimeKind == DateTimeKind.Utc
             ? UniversalTime.Default
             : LocalTime.Default;
 
-        ConfigurationNode logWritersNode = node.ChildNodes["LogWriters"];
+        var logWritersNode = node.ChildNodes["LogWriters"];
 
-        foreach (ConfigurationNode childNode in logWritersNode.ChildNodes)
+        foreach (var childNode in logWritersNode.ChildNodes)
         {
-            ConfigurationAttributeCollection attributes = childNode.Attributes;
-            bool enabled = attributes["Enabled"].GetValue<bool>();
+            var attributes = childNode.Attributes;
+            var enabled = attributes["Enabled"].GetValue<bool>();
 
             if (enabled)
             {
-                LogWriter logWriter = ReadLogWriter(childNode);
+                var logWriter = ReadLogWriter(childNode);
                 if (logWriter != null)
                     logWriters.Add(logWriter);
             }
@@ -43,14 +43,14 @@ internal sealed class LogFactory : ILogFactory
         if (logWriters.Count > 0)
         {
             _multipeLog = new MultipleLog(logWriters);
-            foreach (LogWriter logWriter in logWriters)
+            foreach (var logWriter in logWriters)
                 logWriter.logWriter.Open();
         }
     }
 
     public LogFactory(bool forInternalUse)
     {
-        LogWriter logWriter = new LogWriter(new TextLogWriter(TraceWriter.Instance, new TextLogFormatter()), LogLevel.Debug);
+        var logWriter = new LogWriter(new TextLogWriter(TraceWriter.Instance, new TextLogFormatter()), LogLevel.Debug);
         _dateTimeProvider = LocalTime.Default;
         _multipeLog = new MultipleLog(logWriter.ItemToArray());
     }
@@ -59,8 +59,8 @@ internal sealed class LogFactory : ILogFactory
     {
         get
         {
-            FileLogWriter fileLogWriter = _multipeLog.LogWriters.Select(w => w.logWriter).OfType<FileLogWriter>().FirstOrDefault();
-            string fileName = fileLogWriter != null ? fileLogWriter.FileName : null;
+            var fileLogWriter = _multipeLog.LogWriters.Select(w => w.logWriter).OfType<FileLogWriter>().FirstOrDefault();
+            var fileName = fileLogWriter != null ? fileLogWriter.FileName : null;
             return fileName;
         }
     }
@@ -77,7 +77,7 @@ internal sealed class LogFactory : ILogFactory
     {
         if (_multipeLog != null)
         {
-            LogEntry logEntry = LogEntryFactory.Create(log.LoggedName, _dateTimeProvider.Now, message, logLevel);
+            var logEntry = LogEntryFactory.Create(log.LoggedName, _dateTimeProvider.Now, message, logLevel);
             _multipeLog.Write(logEntry);
         }
     }
@@ -86,8 +86,8 @@ internal sealed class LogFactory : ILogFactory
     {
         if (_multipeLog != null)
         {
-            string message = string.Format(format, args);
-            LogEntry logEntry = LogEntryFactory.Create(log.LoggedName, _dateTimeProvider.Now, message, logLevel);
+            var message = string.Format(format, args);
+            var logEntry = LogEntryFactory.Create(log.LoggedName, _dateTimeProvider.Now, message, logLevel);
             _multipeLog.Write(logEntry);
         }
     }
@@ -96,8 +96,8 @@ internal sealed class LogFactory : ILogFactory
     {
         if (_multipeLog != null)
         {
-            string message = getMessage();
-            LogEntry logEntry = LogEntryFactory.Create(log.LoggedName, _dateTimeProvider.Now, message, logLevel);
+            var message = getMessage();
+            var logEntry = LogEntryFactory.Create(log.LoggedName, _dateTimeProvider.Now, message, logLevel);
             _multipeLog.Write(logEntry);
         }
     }
@@ -105,9 +105,9 @@ internal sealed class LogFactory : ILogFactory
     private static LogWriter ReadLogWriter(ConfigurationNode node)
     {
         LogWriter logWriter = null;
-        ConfigurationAttributeCollection attributes = node.Attributes;
-        string type = attributes["Type"].GetValue<string>();
-        LogLevel logLevel = attributes["LogLevel"].GetValue<LogLevel>();
+        var attributes = node.Attributes;
+        var type = attributes["Type"].GetValue<string>();
+        var logLevel = attributes["LogLevel"].GetValue<LogLevel>();
 
         switch (type)
         {
@@ -130,17 +130,17 @@ internal sealed class LogFactory : ILogFactory
 
             case "FileLogWriter":
             {
-                    string path = attributes["Path"].GetValue<string>();
+                    var path = attributes["Path"].GetValue<string>();
                 path = Environment.ExpandEnvironmentVariables(path);
 
-                attributes.TryGetAttributeValue("Async", true, out bool async);
-                attributes.TryGetAttributeValue("BufferSize", 1048576, out int bufferSize); // 1 MB
-                attributes.TryGetAttributeValue("TimerPeriod", TimeSpan.FromSeconds(10), out TimeSpan timerPeriod);
-                attributes.TryGetAttributeValue("AutoFlush", true, out bool autoFlush);
-                attributes.TryGetAttributeValue("FileAttributes", FileAttributes.ReadOnly | FileAttributes.Hidden, out FileAttributes fileAttributes);
-                attributes.TryGetAttributeValue("DateTimeKind", DateTimeKind.Utc, out DateTimeKind dateTimeKind);
+                attributes.TryGetAttributeValue("Async", true, out var async);
+                attributes.TryGetAttributeValue("BufferSize", 1048576, out var bufferSize); // 1 MB
+                attributes.TryGetAttributeValue("TimerPeriod", TimeSpan.FromSeconds(10), out var timerPeriod);
+                attributes.TryGetAttributeValue("AutoFlush", true, out var autoFlush);
+                attributes.TryGetAttributeValue("FileAttributes", FileAttributes.ReadOnly | FileAttributes.Hidden, out var fileAttributes);
+                attributes.TryGetAttributeValue("DateTimeKind", DateTimeKind.Utc, out var dateTimeKind);
 
-                    FileLogWriter fileLogWriter = new FileLogWriter(path, Encoding.UTF8, async, bufferSize, timerPeriod, autoFlush, fileAttributes, dateTimeKind);
+                    var fileLogWriter = new FileLogWriter(path, Encoding.UTF8, async, bufferSize, timerPeriod, autoFlush, fileAttributes, dateTimeKind);
                 logWriter = new LogWriter(fileLogWriter, logLevel);
             }
                 break;
@@ -170,7 +170,7 @@ internal sealed class LogFactory : ILogFactory
 
         public void Dispose()
         {
-            foreach (LogWriter logWriter in LogWriters)
+            foreach (var logWriter in LogWriters)
             {
                 logWriter.logWriter.Dispose();
             }
@@ -178,10 +178,10 @@ internal sealed class LogFactory : ILogFactory
 
         public void Write(LogEntry logEntry)
         {
-            LogLevel logLevel = logEntry.LogLevel;
-            for (int i = 0; i < LogWriters.Length; ++i)
+            var logLevel = logEntry.LogLevel;
+            for (var i = 0; i < LogWriters.Length; ++i)
             {
-                LogWriter logWriter = LogWriters[i];
+                var logWriter = LogWriters[i];
                 if (logWriter.LogLevel >= logLevel)
                     logWriter.logWriter.Write(logEntry);
             }

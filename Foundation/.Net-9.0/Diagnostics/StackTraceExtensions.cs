@@ -10,11 +10,11 @@ public static class StackTraceExtensions
     {
         ArgumentNullException.ThrowIfNull(trace);
 
-        StringBuilder stringBuilder = new StringBuilder();
-        int count = trace.FrameCount;
-        for (int i = 0; i < count; ++i)
+        var stringBuilder = new StringBuilder();
+        var count = trace.FrameCount;
+        for (var i = 0; i < count; ++i)
         {
-            StackFrame frame = trace.GetFrame(i);
+            var frame = trace.GetFrame(i);
             stringBuilder.AppendLine(frame.ToLogString());
         }
 
@@ -23,7 +23,7 @@ public static class StackTraceExtensions
 
     public static string GetTrace(int skipFrames)
     {
-        StackTrace trace = new StackTrace(skipFrames, true);
+        var trace = new StackTrace(skipFrames, true);
         return ToLogString(trace);
     }
 }

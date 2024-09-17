@@ -29,7 +29,7 @@ internal sealed class DatabaseCollectionNode(ConnectionStringAndCredential conne
             1,
             dataRecord =>
             {
-                string name = dataRecord.GetString(1);
+                var name = dataRecord.GetString(1);
                 return new DatabaseNode(this, name);
             },cancellationToken);
     }

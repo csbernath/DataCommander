@@ -38,7 +38,7 @@ public struct PVariant : INullable
     {
         readonly get
         {
-            object value = ValueType switch
+            var value = ValueType switch
             {
                 PValueType.Value or PValueType.Null => _sql,
                 _ => null,

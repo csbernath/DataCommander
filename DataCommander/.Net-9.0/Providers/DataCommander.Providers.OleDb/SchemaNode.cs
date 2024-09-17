@@ -14,7 +14,7 @@ sealed class SchemaNode(CatalogNode catalog, string name) : ITreeNode
     {
         get
         {
-            string? name = Name;
+            var name = Name;
 
             if (name == null)
                 name = "[No schemas found]";

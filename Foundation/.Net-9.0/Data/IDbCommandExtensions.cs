@@ -15,7 +15,7 @@ public static class IDbCommandExtensions
 
         if (value != null)
         {
-            IDbDataParameter parameter = command.CreateParameter();
+            var parameter = command.CreateParameter();
             parameter.ParameterName = parameterName;
             parameter.Value = value;
 
@@ -25,7 +25,7 @@ public static class IDbCommandExtensions
 
     public static DataSet ExecuteDataSet(this IDbCommand command, CancellationToken cancellationToken)
     {
-        DataSet dataSet = new DataSet();
+        var dataSet = new DataSet();
         command.Fill(dataSet, cancellationToken);
         return dataSet;
     }
@@ -34,7 +34,7 @@ public static class IDbCommandExtensions
     {
         ArgumentNullException.ThrowIfNull(command);
 
-        DataTable dataTable = new DataTable
+        var dataTable = new DataTable
         {
             Locale = CultureInfo.InvariantCulture
         };
@@ -47,7 +47,7 @@ public static class IDbCommandExtensions
     {
         ArgumentNullException.ThrowIfNull(command);
 
-        object scalar = command.ExecuteScalar();
+        var scalar = command.ExecuteScalar();
         Assert.IsTrue(scalar is T);
         return (T)scalar;
     }
@@ -56,7 +56,7 @@ public static class IDbCommandExtensions
     {
         ArgumentNullException.ThrowIfNull(command);
 
-        object scalar = command.ExecuteScalar();
+        var scalar = command.ExecuteScalar();
         return ValueReader.GetValueOrDefault<T>(scalar);
     }
 
@@ -65,23 +65,23 @@ public static class IDbCommandExtensions
         ArgumentNullException.ThrowIfNull(command);
         ArgumentNullException.ThrowIfNull(dataSet);
 
-        int rowCount = 0;
-        int resultIndex = 0;
-        DataTableCollection dataTables = dataSet.Tables;
+        var rowCount = 0;
+        var resultIndex = 0;
+        var dataTables = dataSet.Tables;
 
         if (!cancellationToken.IsCancellationRequested)
         {
-            IDbConnection connection = command.Connection;
+            var connection = command.Connection;
 
-            using (ConnectionStateManager connectionStateManager = new ConnectionStateManager(connection))
+            using (var connectionStateManager = new ConnectionStateManager(connection))
             {
                 connectionStateManager.Open();
 
-                using (IDataReader reader = command.ExecuteReader())
+                using (var reader = command.ExecuteReader())
                 {
                     while (true)
                     {
-                        int fieldCount = reader.FieldCount;
+                        var fieldCount = reader.FieldCount;
 
                         if (fieldCount > 0)
                         {
@@ -100,13 +100,13 @@ public static class IDbCommandExtensions
                                 dataSet.Tables.Add(table);
                             }
 
-                            int count = reader.Fill(table, cancellationToken);
+                            var count = reader.Fill(table, cancellationToken);
                             rowCount += count;
                         }
 
                         if (!cancellationToken.IsCancellationRequested)
                         {
-                            bool nextResult = reader.NextResult();
+                            var nextResult = reader.NextResult();
 
                             if (!nextResult)
                             {
@@ -131,19 +131,19 @@ public static class IDbCommandExtensions
     {
         ArgumentNullException.ThrowIfNull(command);
 
-        int rowCount = 0;
+        var rowCount = 0;
 
         if (!cancellationToken.IsCancellationRequested)
         {
-            IDbConnection connection = command.Connection;
+            var connection = command.Connection;
 
-            using (ConnectionStateManager connectionStateManager = new ConnectionStateManager(connection))
+            using (var connectionStateManager = new ConnectionStateManager(connection))
             {
                 connectionStateManager.Open();
 
                 try
                 {
-                    using (IDataReader dataReader = command.ExecuteReader())
+                    using (var dataReader = command.ExecuteReader())
                         rowCount = dataReader.Fill(dataTable, cancellationToken);
                 }
                 catch (Exception exception)
@@ -160,7 +160,7 @@ public static class IDbCommandExtensions
     {
         ArgumentNullException.ThrowIfNull(command);
 
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 
         switch (command.CommandType)
         {

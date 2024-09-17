@@ -9,14 +9,14 @@ internal sealed class MethodFormatter : IFormatter
 {
     void IFormatter.AppendTo(StringBuilder sb, object[] args)
     {
-        MethodBase method = (MethodBase)args[0];
-        int methodId = (int)args[1];
+        var method = (MethodBase)args[0];
+        var methodId = (int)args[1];
         sb.AppendFormat("exec MethodProfilerMethod_Add @applicationId,{0},", methodId);
-        System.Type type = method.DeclaringType;
-        Assembly assembly = type.Assembly;
-        string assemblyName = assembly.GetName().Name;
-        string typeName = type.FullName;
-        string methodName = method.Name;
+        var type = method.DeclaringType;
+        var assembly = type.Assembly;
+        var assemblyName = assembly.GetName().Name;
+        var typeName = type.FullName;
+        var methodName = method.Name;
         sb.Append(assemblyName.ToNullableNVarChar());
         sb.Append(',');
         sb.Append(typeName.ToNullableNVarChar());

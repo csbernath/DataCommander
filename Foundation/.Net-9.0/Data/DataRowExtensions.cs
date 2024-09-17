@@ -10,7 +10,7 @@ public static class DataRowExtensions
     public static T GetValueField<T>(this DataRow dataRow, string name) where T : struct
     {
         ArgumentNullException.ThrowIfNull(dataRow);
-        object value = dataRow[name];
+        var value = dataRow[name];
         Assert.IsTrue(value != DBNull.Value);
         return (T)dataRow[name];
     }
@@ -25,7 +25,7 @@ public static class DataRowExtensions
     public static T? GetNullableValueField<T>(this DataRow dataRow, string name) where T : struct
     {
         ArgumentNullException.ThrowIfNull(dataRow, nameof(dataRow));
-        object value = dataRow[name];
+        var value = dataRow[name];
         return GetNullableValue<T>(value);
     }
 
@@ -33,14 +33,14 @@ public static class DataRowExtensions
     {
         ArgumentNullException.ThrowIfNull(dataRow, nameof(dataRow));
         ArgumentNullException.ThrowIfNull(column);
-        object value = dataRow[column];
+        var value = dataRow[column];
         return GetNullableValue<T>(value);
     }
 
     public static T GetReferenceField<T>(this DataRow dataRow, string name) where T : class
     {
         ArgumentNullException.ThrowIfNull(dataRow);
-        object value = dataRow[name];
+        var value = dataRow[name];
         return value == DBNull.Value
             ? default
             : (T)value;
@@ -49,7 +49,7 @@ public static class DataRowExtensions
     public static T GetReferenceField<T>(this DataRow dataRow, int columnIndex) where T : class
     {
         ArgumentNullException.ThrowIfNull(dataRow, nameof(dataRow));
-        object value = dataRow[columnIndex];
+        var value = dataRow[columnIndex];
         return value == DBNull.Value
             ? default
             : (T)value;
@@ -58,7 +58,7 @@ public static class DataRowExtensions
     public static T GetValue<T>(this DataRow dataRow, string name)
     {
         ArgumentNullException.ThrowIfNull(dataRow, nameof(dataRow));
-        object valueObject = dataRow[name];
+        var valueObject = dataRow[name];
         Assert.IsTrue(valueObject is T);
         return (T)valueObject;
     }
@@ -66,21 +66,21 @@ public static class DataRowExtensions
     public static T GetValue<T>(this DataRow dataRow, string name, T outputNullValue)
     {
         ArgumentNullException.ThrowIfNull(dataRow, nameof(dataRow));
-        object valueObject = dataRow[name];
+        var valueObject = dataRow[name];
         return ValueReader.GetValue(valueObject, outputNullValue);
     }
 
     public static T GetValueOrDefault<T>(this DataRow dataRow, int columnIndex)
     {
         ArgumentNullException.ThrowIfNull(dataRow, nameof(dataRow));
-        object value = dataRow[columnIndex];
+        var value = dataRow[columnIndex];
         return ValueReader.GetValueOrDefault<T>(value);
     }
 
     public static T GetValueOrDefault<T>(this DataRow dataRow, string name)
     {
         ArgumentNullException.ThrowIfNull(dataRow, nameof(dataRow));
-        object value = dataRow[name];
+        var value = dataRow[name];
         return ValueReader.GetValueOrDefault<T>(value);
     }
 
@@ -88,13 +88,13 @@ public static class DataRowExtensions
     {
         ArgumentNullException.ThrowIfNull(dataRow, nameof(dataRow));
 
-        StringTable stringTable = new StringTable(2);
-        DataTable dataTable = dataRow.Table;
-        object[] itemArray = dataRow.ItemArray;
+        var stringTable = new StringTable(2);
+        var dataTable = dataRow.Table;
+        var itemArray = dataRow.ItemArray;
 
-        for (int i = 0; i < itemArray.Length; ++i)
+        for (var i = 0; i < itemArray.Length; ++i)
         {
-            StringTableRow row = stringTable.NewRow();
+            var row = stringTable.NewRow();
             row[0] = dataTable.Columns[i].ColumnName;
             row[1] = itemArray[i].ToString();
             stringTable.Rows.Add(row);

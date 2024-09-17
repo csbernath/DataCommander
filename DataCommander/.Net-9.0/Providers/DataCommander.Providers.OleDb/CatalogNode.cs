@@ -12,7 +12,7 @@ internal class CatalogNode(OleDbConnection connection, string? name) : ITreeNode
     {
         get
         {
-            string? name = Name;
+            var name = Name;
 
             if (name == null)
                 name = "[No catalogs found]";
@@ -32,14 +32,14 @@ internal class CatalogNode(OleDbConnection connection, string? name) : ITreeNode
         try
         {
             object[] restrictions = new object[] { Name };
-            System.Data.DataTable? dataTable = Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Schemata, restrictions);
-            int count = dataTable.Rows.Count;
-            System.Data.DataColumn? nameColumn = dataTable.Columns["SCHEMA_NAME"];
+            var dataTable = Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Schemata, restrictions);
+            var count = dataTable.Rows.Count;
+            var nameColumn = dataTable.Columns["SCHEMA_NAME"];
             treeNodes = new ITreeNode[count];
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
-                string schemaName = (string)dataTable.Rows[i][nameColumn];
+                var schemaName = (string)dataTable.Rows[i][nameColumn];
                 treeNodes[i] = new SchemaNode(this, schemaName);
             }
         }

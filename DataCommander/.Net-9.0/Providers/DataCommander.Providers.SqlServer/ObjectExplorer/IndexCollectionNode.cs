@@ -15,9 +15,9 @@ internal sealed class IndexCollectionNode(DatabaseNode databaseNode, int id) : I
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        SqlCommandBuilder cb = new SqlCommandBuilder();
+        var cb = new SqlCommandBuilder();
 
-        string commandText = string.Format(@"select
+        var commandText = string.Format(@"select
     i.name,
     i.index_id,
     i.type,
@@ -33,19 +33,19 @@ where
 order by i.name",
             cb.QuoteIdentifier(databaseNode.Name));
 
-        SqlParameterCollectionBuilder parameters = new SqlParameterCollectionBuilder();
+        var parameters = new SqlParameterCollectionBuilder();
         parameters.Add("object_id", id);
-        ExecuteReaderRequest request = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
-        SqlCommandExecutor executor = new SqlCommandExecutor(databaseNode.Databases.Server.CreateConnection);
+        var request = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
+        var executor = new SqlCommandExecutor(databaseNode.Databases.Server.CreateConnection);
         return await executor.ExecuteReaderAsync(
             request,
             128,
             dataRecord =>
             {
-                string name = dataRecord.GetStringOrDefault(0);
-                int indexId = dataRecord.GetInt32(1);
-                byte type = dataRecord.GetByte(2);
-                bool isUnique = dataRecord.GetBoolean(3);
+                var name = dataRecord.GetStringOrDefault(0);
+                var indexId = dataRecord.GetInt32(1);
+                var type = dataRecord.GetByte(2);
+                var isUnique = dataRecord.GetBoolean(3);
                 return new IndexNode(databaseNode, id, indexId, name, type, isUnique);
             },
             cancellationToken);

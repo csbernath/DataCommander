@@ -19,7 +19,7 @@ public class SegmentLinkedListBuilder<T>
     public void Add(T item)
     {
         T[] segment;
-        int index = _count % _segmentLength;
+        var index = _count % _segmentLength;
         if (index == 0)
         {
             segment = new T[_segmentLength];

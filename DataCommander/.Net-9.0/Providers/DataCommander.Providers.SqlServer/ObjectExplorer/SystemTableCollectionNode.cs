@@ -16,17 +16,17 @@ internal sealed class SystemTableCollectionNode(DatabaseNode databaseNode) : ITr
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        string commandText = CreateCommandText();
+        var commandText = CreateCommandText();
         Foundation.Collections.ReadOnly.ReadOnlySegmentLinkedList<TableNode> tableNodes = await Db.ExecuteReaderAsync(
             DatabaseNode.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
             dataRecord =>
             {
-                string schema = dataRecord.GetString(0);
-                string name = dataRecord.GetString(1);
-                int id = dataRecord.GetInt32(2);
-                TemporalType temporalType = (TemporalType)dataRecord.GetByte(3);
+                var schema = dataRecord.GetString(0);
+                var name = dataRecord.GetString(1);
+                var id = dataRecord.GetInt32(2);
+                var temporalType = (TemporalType)dataRecord.GetByte(3);
                 return new TableNode(DatabaseNode, schema, name, id, temporalType);
             },
             cancellationToken);
@@ -35,7 +35,7 @@ internal sealed class SystemTableCollectionNode(DatabaseNode databaseNode) : ITr
 
     private string CreateCommandText()
     {
-        string commandText = $@"select
+        var commandText = $@"select
     s.name,
     tbl.name,
     tbl.object_id,

@@ -41,26 +41,26 @@ public struct StopwatchTimeSpan(long ticks)
 
     public static int ToInt32(long ticks, int multiplier)
     {
-        double d = (double) multiplier * ticks / StopwatchConstants.TicksPerSecond;
-        int int32 = (int) Math.Round(d);
+        var d = (double) multiplier * ticks / StopwatchConstants.TicksPerSecond;
+        var int32 = (int) Math.Round(d);
         return int32;
     }
 
     public static long ToInt64(long ticks, long multiplier)
     {
-        double d = (double) multiplier * ticks / Stopwatch.Frequency;
-        long int64 = (long) Math.Round(d);
+        var d = (double) multiplier * ticks / Stopwatch.Frequency;
+        var int64 = (long) Math.Round(d);
         return int64;
     }
 
     public static string ToString(long ticks, int scale)
     {
-        long totalSeconds = ticks / StopwatchConstants.TicksPerSecond;
-        long fractionTicks = ticks - totalSeconds * StopwatchConstants.TicksPerSecond;
-        long multiplier = Pow10(scale);
-        double fraction = (double) multiplier * fractionTicks / StopwatchConstants.TicksPerSecond;
+        var totalSeconds = ticks / StopwatchConstants.TicksPerSecond;
+        var fractionTicks = ticks - totalSeconds * StopwatchConstants.TicksPerSecond;
+        var multiplier = Pow10(scale);
+        var fraction = (double) multiplier * fractionTicks / StopwatchConstants.TicksPerSecond;
         fraction = Math.Round(fraction);
-        long fractionInt64 = (long) fraction;
+        var fractionInt64 = (long) fraction;
         if (fractionInt64 == multiplier)
         {
             fractionInt64 = 0;
@@ -71,8 +71,8 @@ public struct StopwatchTimeSpan(long ticks)
         if (scale > 0)
             fractionString = $".{fractionInt64.ToString().PadLeft(scale, '0')}";
 
-        StringBuilder stringBuilder = new StringBuilder();
-        long days = ticks / StopwatchConstants.TicksPerDay;
+        var stringBuilder = new StringBuilder();
+        var days = ticks / StopwatchConstants.TicksPerDay;
 
         if (days != 0)
         {
@@ -82,9 +82,9 @@ public struct StopwatchTimeSpan(long ticks)
             stringBuilder.Append('.');
         }
 
-        long hours = totalSeconds / 3600;
-        int seconds = (int) (totalSeconds - (hours * 3600));
-        int minutes = seconds / 60;
+        var hours = totalSeconds / 3600;
+        var seconds = (int) (totalSeconds - (hours * 3600));
+        var minutes = seconds / 60;
         seconds -= minutes * 60;
 
         if (stringBuilder.Length > 0 || hours > 0)
@@ -97,7 +97,7 @@ public struct StopwatchTimeSpan(long ticks)
         stringBuilder.Append(':');
         stringBuilder.Append(seconds.ToString().PadLeft(2, '0'));
 
-        string s = $"{stringBuilder}{fractionString}";
+        var s = $"{stringBuilder}{fractionString}";
         return s;
     }
 
@@ -105,7 +105,7 @@ public struct StopwatchTimeSpan(long ticks)
 
     public static TimeSpan ToTimeSpan(long stopwatchTicks)
     {
-        long dateTimeTicks = (long) (stopwatchTicks * StopwatchConstants.TimeSpanTicksPerStopwatchTick);
+        var dateTimeTicks = (long) (stopwatchTicks * StopwatchConstants.TimeSpanTicksPerStopwatchTick);
         return new TimeSpan(dateTimeTicks);
     }
 

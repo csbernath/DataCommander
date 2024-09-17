@@ -38,10 +38,10 @@ public class JsonResultWriter(Action<InfoMessage> addInfoMessage) : IResultWrite
         if (_guid == null)
             _guid = Guid.NewGuid();
 
-        string path = Path.Combine(Path.GetTempPath(), $"JsonResult {_guid} {_tableIndex}.json");
+        var path = Path.Combine(Path.GetTempPath(), $"JsonResult {_guid} {_tableIndex}.json");
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, $"Creating file {path}..."));
 
-        StreamWriter streamWriter = new StreamWriter(path, false, Encoding.UTF8);
+        var streamWriter = new StreamWriter(path, false, Encoding.UTF8);
         _jsonTextWriter = new JsonTextWriter(streamWriter)
         {
             Formatting = Formatting.Indented
@@ -55,16 +55,16 @@ public class JsonResultWriter(Action<InfoMessage> addInfoMessage) : IResultWrite
     {
         _logResultWriter.WriteRows(rows, rowCount);
 
-        for (int rowIndex = 0; rowIndex < rowCount; ++rowIndex)
+        for (var rowIndex = 0; rowIndex < rowCount; ++rowIndex)
         {
             object[] row = rows[rowIndex];
 
             _jsonTextWriter.WriteStartObject();
 
-            for (int columnIndex = 0; columnIndex < row.Length; ++columnIndex)
+            for (var columnIndex = 0; columnIndex < row.Length; ++columnIndex)
             {
-                FoundationDbColumn column = _columns[columnIndex];
-                object value = row[columnIndex];
+                var column = _columns[columnIndex];
+                var value = row[columnIndex];
 
                 _jsonTextWriter.WritePropertyName(column.ColumnName);
 

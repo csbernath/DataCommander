@@ -25,7 +25,7 @@ public sealed class SingleThreadPool
     {
         ArgumentNullException.ThrowIfNull(callback);
 
-        Tuple<WaitCallback, object> tuple = Tuple.Create(callback, state);
+        var tuple = Tuple.Create(callback, state);
 
         lock (_workItems)
         {
@@ -47,11 +47,11 @@ public sealed class SingleThreadPool
             _workItems.Clear();
         }
 
-        for (int i = 0; i < array.Length; i++)
+        for (var i = 0; i < array.Length; i++)
         {
-            Tuple<WaitCallback, object> workItem = array[i];
-            WaitCallback callback = workItem.Item1;
-            object state = workItem.Item2;
+            var workItem = array[i];
+            var callback = workItem.Item1;
+            var state = workItem.Item2;
 
             try
             {
@@ -68,7 +68,7 @@ public sealed class SingleThreadPool
 
     private void Start()
     {
-        WaitHandle[] waitHandles = new[]
+        var waitHandles = new[]
         {
             Thread.StopRequest,
             _enqueueEvent

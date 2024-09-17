@@ -19,8 +19,8 @@ internal sealed class SqlLogConnection(
     {
         get
         {
-            int microseconds = StopwatchTimeSpan.ToInt32(duration, 1000000);
-            StringBuilder sb = new StringBuilder();
+            var microseconds = StopwatchTimeSpan.ToInt32(duration, 1000000);
+            var sb = new StringBuilder();
             sb.AppendFormat(
                 "exec LogConnectionOpen {0},{1},{2},{3},{4},{5},{6}",
                 ApplicationId,
@@ -33,8 +33,8 @@ internal sealed class SqlLogConnection(
 
             if (exception != null)
             {
-                SqlLogError error = new SqlLogError(ApplicationId, ConnectionNo, 0, 0, exception);
-                string commandText = error.CommandText;
+                var error = new SqlLogError(ApplicationId, ConnectionNo, 0, 0, exception);
+                var commandText = error.CommandText;
                 sb.Append(commandText);
             }
 

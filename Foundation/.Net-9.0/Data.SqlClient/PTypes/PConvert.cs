@@ -13,7 +13,7 @@ public static class PConvert
             sp = PBoolean.Empty;
         else
         {
-            SqlBoolean sql = (SqlBoolean)sqlBoolean;
+            var sql = (SqlBoolean)sqlBoolean;
             sp = sql;
         }
 
@@ -28,7 +28,7 @@ public static class PConvert
             sp = PDateTime.Empty;
         else
         {
-            SqlDateTime sql = (SqlDateTime)sqlDateTime;
+            var sql = (SqlDateTime)sqlDateTime;
             sp = sql;
         }
 
@@ -43,7 +43,7 @@ public static class PConvert
             sp = PDecimal.Empty;
         else
         {
-            SqlDecimal sql = (SqlDecimal)sqlDecimal;
+            var sql = (SqlDecimal)sqlDecimal;
             sp = sql;
         }
 
@@ -58,7 +58,7 @@ public static class PConvert
             sp = PDouble.Empty;
         else
         {
-            SqlDouble sql = (SqlDouble)sqlDouble;
+            var sql = (SqlDouble)sqlDouble;
             sp = sql;
         }
 
@@ -73,7 +73,7 @@ public static class PConvert
             sp = PInt16.Empty;
         else
         {
-            SqlInt16 sql = (SqlInt16)value;
+            var sql = (SqlInt16)value;
             sp = sql;
         }
 
@@ -88,7 +88,7 @@ public static class PConvert
             sp = PInt32.Empty;
         else
         {
-            SqlInt32 sql = (SqlInt32)value;
+            var sql = (SqlInt32)value;
             sp = sql;
         }
 
@@ -103,7 +103,7 @@ public static class PConvert
             sp = PMoney.Empty;
         else
         {
-            SqlMoney sql = (SqlMoney)sqlMoney;
+            var sql = (SqlMoney)sqlMoney;
             sp = sql;
         }
 
@@ -118,7 +118,7 @@ public static class PConvert
             sp = PString.Empty;
         else
         {
-            SqlString sql = (SqlString)sqlString;
+            var sql = (SqlString)sqlString;
             sp = sql;
         }
 

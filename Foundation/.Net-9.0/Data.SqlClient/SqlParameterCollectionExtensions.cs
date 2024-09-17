@@ -13,13 +13,13 @@ public static class SqlParameterCollectionExtensions
 {
     public static void Add(this ICollection<SqlParameter> parameters, string parameterName, object value)
     {
-        SqlParameter parameter = new SqlParameter(parameterName, value);
+        var parameter = new SqlParameter(parameterName, value);
         parameters.Add(parameter);
     }
 
     public static void Add(this ICollection<SqlParameter> parameters, string parameterName, SqlDbType sqlDbType, object value)
     {
-        SqlParameter parameter = SqlParameterFactory.Create(parameterName, sqlDbType, value);
+        var parameter = SqlParameterFactory.Create(parameterName, sqlDbType, value);
         parameters.Add(parameter);
     }
 
@@ -27,14 +27,14 @@ public static class SqlParameterCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(parameters);
 
-        StringBuilder stringBuilder = new StringBuilder();
-        bool first = true;
+        var stringBuilder = new StringBuilder();
+        var first = true;
         string s;
-        NumberFormatInfo numberFormatInfo = NumberFormatInfo.InvariantInfo;
+        var numberFormatInfo = NumberFormatInfo.InvariantInfo;
 
         foreach (SqlParameter parameter in parameters)
         {
-            object value = parameter.Value;
+            var value = parameter.Value;
 
             if (value != null)
             {
@@ -53,7 +53,7 @@ public static class SqlParameterCollectionExtensions
                             s = SqlNull.NullString;
                         else
                         {
-                            Type type = value.GetType();
+                            var type = value.GetType();
                             if (value is INullable nullable)
                             {
                                 if (nullable.IsNull)
@@ -63,7 +63,7 @@ public static class SqlParameterCollectionExtensions
                                     switch (parameter.SqlDbType)
                                     {
                                         case SqlDbType.Bit:
-                                            SqlBoolean sqlBoolean = (SqlBoolean)value;
+                                            var sqlBoolean = (SqlBoolean)value;
                                             s = sqlBoolean.ByteValue.ToString();
                                             break;
 
@@ -79,15 +79,15 @@ public static class SqlParameterCollectionExtensions
                                             break;
 
                                         case SqlDbType.DateTime:
-                                            SqlDateTime sqlDateTime = (SqlDateTime)value;
-                                            DateTime dateTime = sqlDateTime.Value;
+                                            var sqlDateTime = (SqlDateTime)value;
+                                            var dateTime = sqlDateTime.Value;
                                             s = dateTime.ToSqlConstant();
                                             break;
 
                                         case SqlDbType.Float:
-                                            SqlDouble sqlDouble = (SqlDouble)value;
-                                            double d = sqlDouble.Value;
-                                            long i = (long)d;
+                                            var sqlDouble = (SqlDouble)value;
+                                            var d = sqlDouble.Value;
+                                            var i = (long)d;
 
                                             if (i == d)
                                                 s = i.ToString(numberFormatInfo);
@@ -97,18 +97,18 @@ public static class SqlParameterCollectionExtensions
                                             break;
 
                                         case SqlDbType.Real:
-                                            SqlSingle sqlSingle = (SqlSingle)value;
+                                            var sqlSingle = (SqlSingle)value;
                                             s = sqlSingle.ToString();
                                             break;
 
                                         case SqlDbType.Decimal:
-                                            SqlDecimal sqlDecimal = (SqlDecimal)value;
+                                            var sqlDecimal = (SqlDecimal)value;
                                             s = sqlDecimal.ToString();
                                             break;
 
                                         case SqlDbType.Money:
-                                            SqlMoney sqlMoney = (SqlMoney)value;
-                                            decimal dec = sqlMoney.Value;
+                                            var sqlMoney = (SqlMoney)value;
+                                            var dec = sqlMoney.Value;
                                             i = (long)dec;
                                             s = i == dec ? i.ToString(numberFormatInfo) : dec.ToString(numberFormatInfo);
                                             break;
@@ -129,13 +129,13 @@ public static class SqlParameterCollectionExtensions
                             {
                                 if (type.IsArray)
                                 {
-                                    Type elementType = type.GetElementType();
-                                    TypeCode elementTypeCode = Type.GetTypeCode(elementType);
+                                    var elementType = type.GetElementType();
+                                    var elementTypeCode = Type.GetTypeCode(elementType);
 
                                     switch (elementTypeCode)
                                     {
                                         case TypeCode.Byte:
-                                            byte[] bytes = (byte[])value;
+                                            var bytes = (byte[])value;
                                             s = "0x" + Hex.GetString(bytes, true);
                                             break;
 
@@ -146,12 +146,12 @@ public static class SqlParameterCollectionExtensions
                                 }
                                 else
                                 {
-                                    TypeCode typeCode = Type.GetTypeCode(type);
+                                    var typeCode = Type.GetTypeCode(type);
 
                                     switch (typeCode)
                                     {
                                         case TypeCode.Boolean:
-                                            bool b = (bool)value;
+                                            var b = (bool)value;
                                             s = b ? "1" : "0";
                                             break;
 
@@ -162,12 +162,12 @@ public static class SqlParameterCollectionExtensions
                                             break;
 
                                         case TypeCode.DateTime:
-                                            DateTime dateTime = (DateTime)value;
+                                            var dateTime = (DateTime)value;
                                             s = dateTime.ToSqlConstant();
                                             break;
 
                                         case TypeCode.Decimal:
-                                            decimal decimalValue = (decimal)value;
+                                            var decimalValue = (decimal)value;
                                             s = decimalValue.ToString(numberFormatInfo);
                                             break;
 

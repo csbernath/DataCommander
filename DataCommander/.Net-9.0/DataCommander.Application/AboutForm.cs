@@ -16,20 +16,20 @@ public partial class AboutForm : Form
 
     public AboutForm(ColorTheme colorTheme)
     {
-        Assembly? assembly = Assembly.GetEntryAssembly();
-        string path = assembly.Location;
-        DateTime lastWriteTime = File.GetLastWriteTime(path);
-        WindowsCurrentVersion windowsCurrentVersion = WindowsCurrentVersionRepository.Get();
-        int buildNumber = int.Parse(windowsCurrentVersion.CurrentBuild);
-        string windowsName =
+        var assembly = Assembly.GetEntryAssembly();
+        var path = assembly.Location;
+        var lastWriteTime = File.GetLastWriteTime(path);
+        var windowsCurrentVersion = WindowsCurrentVersionRepository.Get();
+        var buildNumber = int.Parse(windowsCurrentVersion.CurrentBuild);
+        var windowsName =
             WindowsNameCalculator.GetWindowsNameFromBuildNumber(buildNumber, windowsCurrentVersion.EditionId, windowsCurrentVersion.DisplayVersion);
-        float? brightness = colorTheme?.BackColor.GetBrightness();
+        var brightness = colorTheme?.BackColor.GetBrightness();
 
-        string? bodyStyle = brightness < 0.12f
+        var bodyStyle = brightness < 0.12f
             ? "body {background-color: #202020;color:#dcdcdc}"
             : null;
 
-        string text =
+        var text =
             $@"
 <style>
     {bodyStyle}
@@ -96,17 +96,17 @@ Credits:
         else
         {
             string url = null;
-            bool exists = false;
+            var exists = false;
 
             if (e.Url.Scheme == "applicationdatafile")
             {
-                string applicationDataFileName = DataCommanderApplication.Instance.FileName;
+                var applicationDataFileName = DataCommanderApplication.Instance.FileName;
                 exists = true;
                 url = applicationDataFileName;
             }
             else if (e.Url.Scheme == "logfile")
             {
-                string logFileName = LogFactory.Instance.FileName;
+                var logFileName = LogFactory.Instance.FileName;
                 if (logFileName != null)
                 {
                     exists = true;
@@ -121,7 +121,7 @@ Credits:
 
             if (exists)
             {
-                ProcessStartInfo processStartInfo = new ProcessStartInfo
+                var processStartInfo = new ProcessStartInfo
                 {
                     FileName = url,
                     UseShellExecute = true

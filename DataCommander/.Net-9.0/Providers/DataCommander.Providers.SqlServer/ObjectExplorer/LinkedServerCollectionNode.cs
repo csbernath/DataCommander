@@ -24,7 +24,7 @@ internal sealed class LinkedServerCollectionNode : ITreeNode
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        string commandText = CreateCommandText();
+        var commandText = CreateCommandText();
         return await Db.ExecuteReaderAsync(
             Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
@@ -44,7 +44,7 @@ order by s.name";
 
     private LinkedServerNode ReadRecord(IDataRecord dataRecord)
     {
-        string name = dataRecord.GetString(0);
+        var name = dataRecord.GetString(0);
         return new LinkedServerNode(this, name);
     }
 

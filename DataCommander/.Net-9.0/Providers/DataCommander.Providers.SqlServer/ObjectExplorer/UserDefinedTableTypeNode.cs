@@ -34,24 +34,24 @@ internal sealed class UserDefinedTableTypeNode(DatabaseNode database, int id, st
             new("Script", Script_OnClick, EmptyReadOnlyCollection<MenuItem>.Value)
         }.ToReadOnlyCollection();
 
-        ContextMenu contextMenu = new ContextMenu(menuItems);
+        var contextMenu = new ContextMenu(menuItems);
         return contextMenu;
     }
 
     private void Script_OnClick(object? sender, EventArgs e)
     {
-        IQueryForm queryForm = (IQueryForm)sender!;
-        SqlConnectionInfo connectionInfo = SqlObjectScripter.CreateSqlConnectionInfo(database.Databases.Server.ConnectionStringAndCredential);
-        ServerConnection connection = new ServerConnection(connectionInfo);
+        var queryForm = (IQueryForm)sender!;
+        var connectionInfo = SqlObjectScripter.CreateSqlConnectionInfo(database.Databases.Server.ConnectionStringAndCredential);
+        var connection = new ServerConnection(connectionInfo);
         connection.Connect();
-        Server server = new Server(connection);
-        Database database1 = server.Databases[database.Name];
-        UserDefinedTableType userDefinedTableType = database1.UserDefinedTableTypes[name, schema];
-        System.Collections.Specialized.StringCollection stringCollection = userDefinedTableType.Script();
+        var server = new Server(connection);
+        var database1 = server.Databases[database.Name];
+        var userDefinedTableType = database1.UserDefinedTableTypes[name, schema];
+        var stringCollection = userDefinedTableType.Script();
 
-        StringBuilder sb = new StringBuilder();
-        bool first = true;
-        foreach (string? s in stringCollection)
+        var sb = new StringBuilder();
+        var first = true;
+        foreach (var s in stringCollection)
         {
             if (first)
                 first = false;

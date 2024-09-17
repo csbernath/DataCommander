@@ -19,7 +19,7 @@ internal sealed class Lock
 
     public bool TryEnter()
     {
-        bool entered = Monitor.TryEnter(_lockObject);
+        var entered = Monitor.TryEnter(_lockObject);
         if (entered)
         {
             Interlocked.Increment(ref _counter);

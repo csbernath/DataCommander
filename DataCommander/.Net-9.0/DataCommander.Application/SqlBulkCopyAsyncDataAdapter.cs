@@ -39,7 +39,7 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
     private void sqlBulkCopy_SqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
     {
         _rowCount += e.RowsCopied;
-        string message = $"{_rowCount} rows copied.";
+        var message = $"{_rowCount} rows copied.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
         if (_cancelRequested)
         {
@@ -68,7 +68,7 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
         Exception exception = null;
         try
         {
-            foreach (AsyncDataAdapterCommand command in _commands)
+            foreach (var command in _commands)
             {
                 if (_cancelRequested)
                 {
@@ -76,7 +76,7 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
                 }
 
                 _command = command.Command;
-                using (IDataReader dataReader = _command.ExecuteReader())
+                using (var dataReader = _command.ExecuteReader())
                 {
                     _sqlBulkCopy.WriteToServer(dataReader);
                 }

@@ -6,7 +6,7 @@ public sealed class Sequence
 
     public int Next()
     {
-        int next = _index;
+        var next = _index;
         ++_index;
         return next;
     }

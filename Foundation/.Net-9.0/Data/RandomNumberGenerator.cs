@@ -8,9 +8,9 @@ public static class RandomNumberGeneratorExtensions
     public static long GetInt64(this RandomNumberGenerator randomNumberGenerator)
     {
         ArgumentNullException.ThrowIfNull(randomNumberGenerator);
-        byte[] data = new byte[8];
+        var data = new byte[8];
         randomNumberGenerator.GetBytes(data);
-        long randomNumber = BitConverter.ToInt64(data, 0);
+        var randomNumber = BitConverter.ToInt64(data, 0);
         return randomNumber;
     }
 }

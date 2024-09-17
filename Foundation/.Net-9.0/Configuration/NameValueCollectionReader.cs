@@ -18,7 +18,7 @@ public class NameValueCollectionReader
 
     public T GetValue<T>(string name, TryParse<T> tryParse, T defaultValue)
     {
-        bool contains = TryGetValue(name, tryParse, out T value);
+        var contains = TryGetValue(name, tryParse, out var value);
         if (!contains)
             value = defaultValue;
 
@@ -31,23 +31,23 @@ public class NameValueCollectionReader
 
     public string GetString(string name)
     {
-        _tryGetValue(name, out string value);
+        _tryGetValue(name, out var value);
         return value;
     }
 
     public bool TryGetBoolean(string name, out bool value)
     {
-        bool contains = TryGetValue(name, bool.TryParse, out value);
+        var contains = TryGetValue(name, bool.TryParse, out value);
         return contains;
     }
 
     public bool TryGetDateTime(string name, IFormatProvider provider, DateTimeStyles styles, out DateTime value)
     {
-        bool contains = _tryGetValue(name, out string s);
+        var contains = _tryGetValue(name, out var s);
 
         if (contains)
         {
-            bool succeeded = DateTime.TryParse(s, provider, styles, out value);
+            var succeeded = DateTime.TryParse(s, provider, styles, out value);
             Assert.IsTrue(succeeded);
         }
         else
@@ -58,11 +58,11 @@ public class NameValueCollectionReader
 
     public bool TryGetDouble(string name, out double value)
     {
-        bool contains = _tryGetValue(name, out string s);
+        var contains = _tryGetValue(name, out var s);
 
         if (contains)
         {
-            bool succeeded = double.TryParse(s, out value);
+            var succeeded = double.TryParse(s, out value);
             Assert.IsTrue(succeeded);
         }
         else
@@ -73,11 +73,11 @@ public class NameValueCollectionReader
 
     public bool TryGetDouble(string name, NumberStyles style, IFormatProvider provider, out double value)
     {
-        bool contains = _tryGetValue(name, out string s);
+        var contains = _tryGetValue(name, out var s);
 
         if (contains)
         {
-            bool succeeded = double.TryParse(s, style, provider, out value);
+            var succeeded = double.TryParse(s, style, provider, out value);
             Assert.IsTrue(succeeded);
         }
         else
@@ -88,12 +88,12 @@ public class NameValueCollectionReader
 
     public bool TryGetEnum<T>(string name, out T value)
     {
-        bool contains = _tryGetValue(name, out string s);
+        var contains = _tryGetValue(name, out var s);
 
         if (contains)
         {
-            Type enumType = typeof(T);
-            object valueObject = Enum.Parse(enumType, s);
+            var enumType = typeof(T);
+            var valueObject = Enum.Parse(enumType, s);
             value = (T) valueObject;
         }
         else
@@ -104,29 +104,29 @@ public class NameValueCollectionReader
 
     public bool TryGetInt16(string name, out short value)
     {
-        bool contains = TryGetValue(name, short.TryParse, out value);
+        var contains = TryGetValue(name, short.TryParse, out value);
         return contains;
     }
 
     public bool TryGetInt32(string name, out int value)
     {
-        bool contains = TryGetValue(name, int.TryParse, out value);
+        var contains = TryGetValue(name, int.TryParse, out value);
         return contains;
     }
 
     public bool TryGetInt64(string name, out long value)
     {
-        bool contains = TryGetValue(name, long.TryParse, out value);
+        var contains = TryGetValue(name, long.TryParse, out value);
         return contains;
     }
 
     public bool TryGetSingle(string name, NumberStyles style, IFormatProvider provider, out float value)
     {
-        bool contains = _tryGetValue(name, out string s);
+        var contains = _tryGetValue(name, out var s);
 
         if (contains)
         {
-            bool succeeded = float.TryParse(s, style, provider, out value);
+            var succeeded = float.TryParse(s, style, provider, out value);
             Assert.IsTrue(succeeded);
         }
         else
@@ -137,7 +137,7 @@ public class NameValueCollectionReader
 
     public bool TryGetString(string name, out string value)
     {
-        bool contains = _tryGetValue(name, out string s);
+        var contains = _tryGetValue(name, out var s);
 
         value = contains
             ? s
@@ -148,7 +148,7 @@ public class NameValueCollectionReader
 
     public bool TryGetTimeSpan(string name, out TimeSpan value)
     {
-        bool contains = _tryGetValue(name, out string s);
+        var contains = _tryGetValue(name, out var s);
 
         value = contains
             ? TimeSpan.Parse(s)
@@ -161,11 +161,11 @@ public class NameValueCollectionReader
     {
         ArgumentNullException.ThrowIfNull(tryParse);
 
-        bool contains = _tryGetValue(name, out string s);
+        var contains = _tryGetValue(name, out var s);
 
         if (contains)
         {
-            bool succeeded = tryParse(s, out value);
+            var succeeded = tryParse(s, out value);
             Assert.IsTrue(succeeded);
         }
         else

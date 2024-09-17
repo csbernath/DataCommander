@@ -11,11 +11,11 @@ public static class QueueExtensions
         ArgumentNullException.ThrowIfNull(queue, nameof(queue));
         Assert.IsTrue(queue.Count > 0);
 
-        T[] array = new T[queue.Count];
+        var array = new T[queue.Count];
         queue.CopyTo(array, 0);
         queue.Clear();
-        int last = array.Length - 1;
-        for (int i = 0; i < last; i++)
+        var last = array.Length - 1;
+        for (var i = 0; i < last; i++)
             queue.Enqueue(array[i]);
 
         return array[last];

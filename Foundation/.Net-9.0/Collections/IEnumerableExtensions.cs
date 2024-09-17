@@ -18,14 +18,14 @@ public static class IEnumerableExtensions
     public static IEnumerable<PreviousAndCurrent<TSource>> SelectPreviousAndCurrent<TSource>(this IEnumerable<TSource> source)
     {
         if (source != null)
-            using (IEnumerator<TSource> enumerator = source.GetEnumerator())
+            using (var enumerator = source.GetEnumerator())
             {
                 if (enumerator.MoveNext())
                 {
-                    TSource previous = enumerator.Current;
+                    var previous = enumerator.Current;
                     while (enumerator.MoveNext())
                     {
-                        TSource current = enumerator.Current;
+                        var current = enumerator.Current;
                         yield return new PreviousAndCurrent<TSource>(previous, current);
                         previous = current;
                     }
@@ -53,8 +53,8 @@ public static class IEnumerableExtensions
         {
             while (true)
             {
-                bool moveNext1 = enumerator1.MoveNext();
-                bool moveNext2 = enumerator2.MoveNext();
+                var moveNext1 = enumerator1.MoveNext();
+                var moveNext2 = enumerator2.MoveNext();
 
                 if (moveNext1)
                 {
@@ -83,7 +83,7 @@ public static class IEnumerableExtensions
 
     public static DynamicArray<TSource> ToDynamicArray<TSource>(this IEnumerable<TSource> source, int initialSize, int maxSize)
     {
-        DynamicArray<TSource> dynamicArray = new DynamicArray<TSource>(initialSize, maxSize)
+        var dynamicArray = new DynamicArray<TSource>(initialSize, maxSize)
         {
             source
         };
@@ -92,7 +92,7 @@ public static class IEnumerableExtensions
 
     public static SegmentedCollection<TSource> ToSegmentedCollection<TSource>(this IEnumerable<TSource> source, int segmentSize)
     {
-        SegmentedCollection<TSource> collection = new SegmentedCollection<TSource>(segmentSize)
+        var collection = new SegmentedCollection<TSource>(segmentSize)
         {
             source
         };

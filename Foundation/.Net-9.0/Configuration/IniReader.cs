@@ -14,32 +14,32 @@ public static class IniReader
     /// <returns></returns>
     public static ConfigurationNode Read(TextReader reader)
     {
-        ConfigurationNode node = new ConfigurationNode(null);
-        ConfigurationNode currentNode = node;
+        var node = new ConfigurationNode(null);
+        var currentNode = node;
 
         while (reader.Peek() != -1)
         {
-            string line = reader.ReadLine();
+            var line = reader.ReadLine();
 
             if (!string.IsNullOrEmpty(line))
             {
                 if (line[0] == '[')
                 {
-                    int index = line.IndexOf(']');
-                    string name = line[1..index];
-                    ConfigurationNode childNode = new ConfigurationNode(name);
+                    var index = line.IndexOf(']');
+                    var name = line[1..index];
+                    var childNode = new ConfigurationNode(name);
                     node.AddChildNode(childNode);
                     currentNode = childNode;
                 }
                 else
                 {
-                    int index = line.IndexOf('=');
+                    var index = line.IndexOf('=');
 
                     if (index >= 0)
                     {
-                        string name = line[..index];
-                        int length = line.Length - index - 1;
-                        string value = line.Substring(index + 1, length);
+                        var name = line[..index];
+                        var length = line.Length - index - 1;
+                        var value = line.Substring(index + 1, length);
                         currentNode.Attributes.Add(new ConfigurationAttribute(name, value, null));
                     }
                 }

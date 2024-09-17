@@ -95,17 +95,17 @@ public sealed class ConfigurationNode(string name)
 
     public ConfigurationNode Clone()
     {
-        ConfigurationNode clone = new ConfigurationNode(Name);
+        var clone = new ConfigurationNode(Name);
 
-        foreach (ConfigurationAttribute attribute in Attributes)
+        foreach (var attribute in Attributes)
         {
-            ConfigurationAttribute attributeClone = attribute.Clone();
+            var attributeClone = attribute.Clone();
             clone.Attributes.Add(attributeClone);
         }
 
-        foreach (ConfigurationNode childNode in ChildNodes)
+        foreach (var childNode in ChildNodes)
         {
-            ConfigurationNode childNodeClone = childNode.Clone();
+            var childNodeClone = childNode.Clone();
             clone.AddChildNode(childNodeClone);
         }
 
@@ -116,12 +116,12 @@ public sealed class ConfigurationNode(string name)
     {
         ArgumentNullException.ThrowIfNull(nodeName);
 
-        ConfigurationNode node = this;
-        string[] nodeNames = nodeName.Split(Delimiter);
+        var node = this;
+        var nodeNames = nodeName.Split(Delimiter);
 
-        for (int i = 0; i < nodeNames.Length; i++)
+        for (var i = 0; i < nodeNames.Length; i++)
         {
-            bool contains = node.ChildNodes.TryGetValue(nodeNames[i], out ConfigurationNode childNode);
+            var contains = node.ChildNodes.TryGetValue(nodeNames[i], out var childNode);
             if (!contains)
             {
                 childNode = new ConfigurationNode(nodeNames[i]);
@@ -143,16 +143,16 @@ public sealed class ConfigurationNode(string name)
     /// Returns null if no child node found.</returns>
     public ConfigurationNode SelectNode(string path)
     {
-        ConfigurationNode node = this;
+        var node = this;
 
         if (path != null)
         {
-            string[] childNodeNames = path.Split(Delimiter);
-            int depth = 0;
+            var childNodeNames = path.Split(Delimiter);
+            var depth = 0;
 
-            foreach (string childNodeName in childNodeNames)
+            foreach (var childNodeName in childNodeNames)
             {
-                bool contains = node.ChildNodes.TryGetValue(childNodeName, out ConfigurationNode childNode);
+                var contains = node.ChildNodes.TryGetValue(childNodeName, out var childNode);
 
                 if (contains)
                 {
@@ -189,12 +189,12 @@ public sealed class ConfigurationNode(string name)
     {
         textWriter.WriteLine("[" + FullName + "]");
 
-        foreach (ConfigurationAttribute attribute in Attributes)
+        foreach (var attribute in Attributes)
             attribute.Write(textWriter);
 
         textWriter.WriteLine();
 
-        foreach (ConfigurationNode childNode in ChildNodes)
+        foreach (var childNode in ChildNodes)
             childNode.Write(textWriter);
     }
 
@@ -207,8 +207,8 @@ public sealed class ConfigurationNode(string name)
     {
         ArgumentNullException.ThrowIfNull(textWriter);
 
-        StringBuilder sb = new StringBuilder();
-        string indent = new string(' ', level * 2);
+        var sb = new StringBuilder();
+        var indent = new string(' ', level * 2);
         sb.Append(indent);
         sb.Append(Name);
         sb.Append("\t\t");
@@ -216,7 +216,7 @@ public sealed class ConfigurationNode(string name)
 
         if (Attributes.Count > 0)
         {
-            foreach (ConfigurationAttribute attribute in Attributes)
+            foreach (var attribute in Attributes)
             {
                 sb.Append('\t');
                 sb.Append(attribute.Name);
@@ -225,9 +225,9 @@ public sealed class ConfigurationNode(string name)
                 sb.Append(attribute.Description);
                 sb.Append('\t');
 
-                object value = attribute.Value;
-                string valueString = value != null ? value.ToString() : null;
-                bool multiline = valueString.IndexOf('\n') >= 0;
+                var value = attribute.Value;
+                var valueString = value != null ? value.ToString() : null;
+                var multiline = valueString.IndexOf('\n') >= 0;
 
                 if (multiline)
                 {
@@ -248,7 +248,7 @@ public sealed class ConfigurationNode(string name)
 
         textWriter.Write(sb);
 
-        foreach (ConfigurationNode childNode in ChildNodes)
+        foreach (var childNode in ChildNodes)
         {
             childNode.WriteDocumentation(textWriter, level + 1);
         }

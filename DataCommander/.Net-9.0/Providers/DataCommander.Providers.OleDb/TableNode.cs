@@ -15,7 +15,7 @@ sealed class TableNode(SchemaNode schema, string? name) : ITreeNode
     {
         get
         {
-            string? name1 = name;
+            var name1 = name;
 
             if (name1 == null)
                 name1 = "[No tables found]";
@@ -41,7 +41,7 @@ sealed class TableNode(SchemaNode schema, string? name) : ITreeNode
 
             if (name != null)
             {
-                string name2 = name.IndexOf(' ') >= 0
+                var name2 = name.IndexOf(' ') >= 0
                     ? "[" + name + "]"
                     : name;
                 query = "select * from " + name2;
@@ -55,20 +55,20 @@ sealed class TableNode(SchemaNode schema, string? name) : ITreeNode
 
     public ContextMenu? GetContextMenu()
     {
-        MenuItem menuItem = new MenuItem("Columns", Columns_Click, []);
+        var menuItem = new MenuItem("Columns", Columns_Click, []);
         System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> items = new[] { menuItem }.ToReadOnlyCollection();
-        ContextMenu contextMenu = new ContextMenu(items);
+        var contextMenu = new ContextMenu(items);
         return contextMenu;
     }
 
     private void Columns_Click(object sender, EventArgs e)
     {
         object[] restrictions = new object[] { schema.Catalog.Name, schema.Name, name };
-        DataTable? dataTable = schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, restrictions);
-        DataSet dataSet = new DataSet();
+        var dataTable = schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, restrictions);
+        var dataSet = new DataSet();
         dataSet.Tables.Add(dataTable);
 
-        IQueryForm queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender;
         queryForm.ShowDataSet(dataSet);
     }
 }

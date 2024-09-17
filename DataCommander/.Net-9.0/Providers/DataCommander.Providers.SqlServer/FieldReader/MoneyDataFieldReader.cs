@@ -38,7 +38,7 @@ internal sealed class MoneyDataFieldReader(
             }
             else
             {
-                decimal d = dataRecord.GetDecimal(columnOrdinal);
+                var d = dataRecord.GetDecimal(columnOrdinal);
                 value = new DecimalField(NumberFormatInfo, d, null);
             }
 

@@ -18,7 +18,7 @@ internal sealed class DoubleFieldReader(IDataRecord dataRecord, int columnOrdina
             }
             else
             {
-                double d = dataRecord.GetDouble(columnOrdinal);
+                var d = dataRecord.GetDouble(columnOrdinal);
                 value = new DoubleField(d);
             }
 

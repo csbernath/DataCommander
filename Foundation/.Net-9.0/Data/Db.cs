@@ -25,9 +25,9 @@ public static class Db
         ExecuteReaderRequest request,
         Action<IDataReader> readResults)
     {
-        using DbConnection connection = createConnection();
+        using var connection = createConnection();
         connection.Open();
-        IDbCommandExecutor executor = connection.CreateCommandExecutor();
+        var executor = connection.CreateCommandExecutor();
         executor.ExecuteReader(request, readResults);
     }
 
@@ -54,19 +54,19 @@ public static class Db
         Func<DbDataReader, CancellationToken, Task> readResults,
         CancellationToken cancellationToken)
     {
-        await using (DbConnection connection = createConnection())
+        await using (var connection = createConnection())
         {
             await connection.OpenAsync(cancellationToken);
-            IDbCommandAsyncExecutor executor = connection.CreateCommandAsyncExecutor();
+            var executor = connection.CreateCommandAsyncExecutor();
             await executor.ExecuteReaderAsync(executeReaderRequest, readResults, cancellationToken);
         }
     }
 
     public static object ExecuteScalar(Func<DbConnection> createConnection, CreateCommandRequest createCommandRequest)
     {
-        using DbConnection connection = createConnection();
-        IDbCommandExecutor executor = connection.CreateCommandExecutor();
-        object scalar = executor.ExecuteScalar(createCommandRequest);
+        using var connection = createConnection();
+        var executor = connection.CreateCommandExecutor();
+        var scalar = executor.ExecuteScalar(createCommandRequest);
         return scalar;
     }
 
@@ -76,10 +76,10 @@ public static class Db
         CancellationToken cancellationToken)
     {
         object scalar;
-        await using (DbConnection connection = createConnection())
+        await using (var connection = createConnection())
         {
             await connection.OpenAsync(cancellationToken);
-            IDbCommandAsyncExecutor executor = connection.CreateCommandAsyncExecutor();
+            var executor = connection.CreateCommandAsyncExecutor();
             scalar = await executor.ExecuteScalarAsync(createCommandRequest, cancellationToken);
         }
 

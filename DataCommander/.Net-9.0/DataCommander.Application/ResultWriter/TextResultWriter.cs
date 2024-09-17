@@ -31,7 +31,7 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
 
     private static void Write(StringBuilder stringBuilder, string text, int width)
     {
-        int length = width - text.Length;
+        var length = width - text.Length;
 
         if (length > 0)
         {
@@ -52,21 +52,21 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
 
         if (schemaTable != null)
         {
-            DataColumn? columnNameColumn = schemaTable.Columns[SchemaTableColumn.ColumnName];
-            DataColumn? columnSizeColumn = schemaTable.Columns["ColumnSize"];
-            DataColumn? dataTypeColumn = schemaTable.Columns["DataType"];
+            var columnNameColumn = schemaTable.Columns[SchemaTableColumn.ColumnName];
+            var columnSizeColumn = schemaTable.Columns["ColumnSize"];
+            var dataTypeColumn = schemaTable.Columns["DataType"];
 
-            int fieldCount = schemaTable.Rows.Count;
+            var fieldCount = schemaTable.Rows.Count;
             _columnSize = new int[fieldCount];
 
-            StringBuilder stringBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
-            for (int i = 0; i < fieldCount; i++)
+            for (var i = 0; i < fieldCount; i++)
             {
-                DataRow schemaRow = schemaTable.Rows[i];
-                string columnName = (string)schemaRow[columnNameColumn];
-                Type type = (Type)schemaRow[dataTypeColumn];
-                int numOfBytes = (int)schemaRow[columnSizeColumn];
+                var schemaRow = schemaTable.Rows[i];
+                var columnName = (string)schemaRow[columnNameColumn];
+                var type = (Type)schemaRow[dataTypeColumn];
+                var numOfBytes = (int)schemaRow[columnSizeColumn];
 
                 Type elementType;
 
@@ -80,7 +80,7 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
                 else
                     elementType = type;
 
-                TypeCode typeCode = Type.GetTypeCode(elementType);
+                var typeCode = Type.GetTypeCode(elementType);
 
                 int numOfChars;
 
@@ -111,8 +111,8 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
 
                     case TypeCode.Decimal:
                         //numOfChars = numOfBytes;
-                        short precision = (short)schemaRow["NumericPrecision"];
-                        short scale = schemaRow.Field<short>("NumericScale");
+                        var precision = (short)schemaRow["NumericPrecision"];
+                        var scale = schemaRow.Field<short>("NumericScale");
                         numOfChars = precision + 3;
                         break;
 
@@ -143,9 +143,9 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
             if (fieldCount > 0)
             {
                 stringBuilder = new StringBuilder();
-                int last = fieldCount - 1;
+                var last = fieldCount - 1;
 
-                for (int i = 0; i < last; i++)
+                for (var i = 0; i < last; i++)
                 {
                     stringBuilder.Append('-', _columnSize[i]);
                     stringBuilder.Append(' ');
@@ -172,21 +172,21 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
         }
         else
         {
-            Type type = value.GetType();
-            TypeCode typeCode = Type.GetTypeCode(type);
-            bool isArray = type.IsArray;
+            var type = value.GetType();
+            var typeCode = Type.GetTypeCode(type);
+            var isArray = type.IsArray;
 
             if (isArray)
             {
                 if (typeCode == TypeCode.Byte)
                 {
-                    byte[] bytes = (byte[])value;
-                    StringBuilder sb = new StringBuilder();
+                    var bytes = (byte[])value;
+                    var sb = new StringBuilder();
                     sb.Append("0x");
 
-                    for (int i = 0; i < bytes.Length; i++)
+                    for (var i = 0; i < bytes.Length; i++)
                     {
-                        string s = bytes[i].ToString("x");
+                        var s = bytes[i].ToString("x");
 
                         if (s.Length == 1)
                         {
@@ -208,7 +208,7 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
                         break;
 
                     case TypeCode.DateTime:
-                        DateTime dateTime = (DateTime)value;
+                        var dateTime = (DateTime)value;
                         stringValue = dateTime.ToString("yyyy.MM.dd HH:mm:ss.fff");
                         break;
 
@@ -233,14 +233,14 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
 
         try
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            for (int i = 0; i < rowCount; i++)
+            for (var i = 0; i < rowCount; i++)
             {
                 object[] row = rows[i];
-                int last = row.Length - 1;
+                var last = row.Length - 1;
 
-                for (int j = 0; j < last; j++)
+                for (var j = 0; j < last; j++)
                 {
                     Write(sb, StringValue(row[j], _columnSize[j]), _columnSize[j]);
                     sb.Append(' ');
@@ -269,12 +269,12 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
     {
         if (parameters.Count > 0)
         {
-            StringTable stringTable = new StringTable(4);
+            var stringTable = new StringTable(4);
 
             foreach (IDataParameter parameter in parameters)
             {
-                string name = parameter.ParameterName;
-                object? value = parameter.Value;
+                var name = parameter.ParameterName;
+                var value = parameter.Value;
                 string valueString;
 
                 if (value == null)
@@ -290,7 +290,7 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
                     switch (parameter.DbType)
                     {
                         case DbType.DateTime:
-                            DateTime dateTime = (DateTime)value;
+                            var dateTime = (DateTime)value;
                             valueString = dateTime.ToSqlConstant();
                             break;
 
@@ -376,7 +376,7 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
                 //    }
                 //}
 
-                StringTableRow row = stringTable.NewRow();
+                var row = stringTable.NewRow();
                 row[0] = parameter.Direction.ToString();
                 row[1] = name;
                 row[2] = parameter.DbType.ToString("G");

@@ -14,7 +14,7 @@ internal sealed class ScalarValuedFunctionCollectionNode(DatabaseNode database) 
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        string commandText = CreateCommandText();
+        var commandText = CreateCommandText();
         return await Db.ExecuteReaderAsync(
             database.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
@@ -25,7 +25,7 @@ internal sealed class ScalarValuedFunctionCollectionNode(DatabaseNode database) 
 
     private string CreateCommandText()
     {
-        string commandText = @"select
+        var commandText = @"select
     s.name	as SchemaName,
 	o.name	as Name,
 	o.type
@@ -40,9 +40,9 @@ order by 1,2";
 
     private FunctionNode ReadRecord(IDataRecord dataRecord)
     {
-        string owner = dataRecord.GetString(0);
-        string name = dataRecord.GetString(1);
-        string xtype = dataRecord.GetString(2);
+        var owner = dataRecord.GetString(0);
+        var name = dataRecord.GetString(1);
+        var xtype = dataRecord.GetString(2);
         return new FunctionNode(database, owner, name, xtype);
     }
 

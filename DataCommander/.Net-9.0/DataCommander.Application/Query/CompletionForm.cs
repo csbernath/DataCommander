@@ -38,15 +38,15 @@ internal sealed class CompletionForm : Form
 
     public void Initialize(QueryTextBox textBox, GetCompletionResult result, ColorTheme colorTheme)
     {
-        MemberListBox listBox = new MemberListBox(this, textBox, colorTheme);
+        var listBox = new MemberListBox(this, textBox, colorTheme);
         listBox.Initialize(result);
         listBox.Dock = DockStyle.Fill;
 
         Controls.Add(listBox);
 
-        int charIndex = textBox.RichTextBox.SelectionStart;
-        System.Drawing.Point pos = textBox.RichTextBox.GetPositionFromCharIndex(charIndex);
-        System.Drawing.Point location = textBox.RichTextBox.PointToScreen(pos);
+        var charIndex = textBox.RichTextBox.SelectionStart;
+        var pos = textBox.RichTextBox.GetPositionFromCharIndex(charIndex);
+        var location = textBox.RichTextBox.PointToScreen(pos);
         location.Y += 20;
         Location = location;
     }

@@ -17,7 +17,7 @@ public sealed class DateTimeField(DateTime value) : IComparable, IConvertible
             "yyyy-MM-dd HH:mm:ss.fff"
         };
 
-        bool succeeded = DateTime.TryParseExact(s, formats, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out dateTime);
+        var succeeded = DateTime.TryParseExact(s, formats, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out dateTime);
         return succeeded;
     }
 
@@ -45,14 +45,14 @@ public sealed class DateTimeField(DateTime value) : IComparable, IConvertible
     public int CompareTo(object? obj)
     {
         int result;
-        Type type = obj.GetType();
-        TypeCode typeCode = Type.GetTypeCode(type);
+        var type = obj.GetType();
+        var typeCode = Type.GetTypeCode(type);
 
         switch (typeCode)
         {
             case TypeCode.String:
-                string s = (string)obj;
-                bool succeeded = TryParse(s, out DateTime dateTime);
+                var s = (string)obj;
+                var succeeded = TryParse(s, out var dateTime);
 
                 if (succeeded)
                 {
@@ -66,7 +66,7 @@ public sealed class DateTimeField(DateTime value) : IComparable, IConvertible
                 break;
 
             case TypeCode.Object:
-                DateTimeField dateTimeField = (DateTimeField)obj;
+                var dateTimeField = (DateTimeField)obj;
                 result = Value.CompareTo(dateTimeField.Value);
                 break;
 

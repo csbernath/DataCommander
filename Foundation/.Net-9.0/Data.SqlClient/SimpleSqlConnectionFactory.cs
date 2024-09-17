@@ -16,10 +16,10 @@ public sealed class SimpleSqlConnectionFactory
     {
         ArgumentNullException.ThrowIfNull(section);
 
-        ConfigurationNode node = section.SelectNode(nodeName, true);
+        var node = section.SelectNode(nodeName, true);
         _connectionString = node.Attributes["ConnectionString"].GetValue<string>();
 
-        bool contains = node.Attributes.TryGetAttributeValue("CommandTimeout", out TimeSpan timeSpan);
+        var contains = node.Attributes.TryGetAttributeValue("CommandTimeout", out TimeSpan timeSpan);
 
         if (contains)
             CommandTimeout = (int)timeSpan.TotalSeconds;
@@ -27,13 +27,13 @@ public sealed class SimpleSqlConnectionFactory
             CommandTimeout = 259200; // 3 days
 
         node.Attributes.TryGetAttributeValue("IsSafe", out bool isSafe);
-        ConfigurationNode sqlLogNode = node.ChildNodes["SqlLog"];
+        var sqlLogNode = node.ChildNodes["SqlLog"];
         sqlLogNode.Attributes.TryGetAttributeValue("Enabled", out bool enabled);
 
         if (enabled)
         {
-            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_connectionString);
-            string applicationName = sqlConnectionStringBuilder.ApplicationName;
+            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_connectionString);
+            var applicationName = sqlConnectionStringBuilder.ApplicationName;
             contains = sqlLogNode.Attributes.TryGetAttributeValue("ConnectionString", null, out string logConnectionString);
 
             if (!contains)
@@ -43,7 +43,7 @@ public sealed class SimpleSqlConnectionFactory
                 if (!contains)
                     dataSource = sqlConnectionStringBuilder.DataSource;
 
-                string initialCatalog = sqlLogNode.Attributes["Initial Catalog"].GetValue<string>();
+                var initialCatalog = sqlLogNode.Attributes["Initial Catalog"].GetValue<string>();
 
                 sqlConnectionStringBuilder = new SqlConnectionStringBuilder
                 {
@@ -57,15 +57,15 @@ public sealed class SimpleSqlConnectionFactory
                 logConnectionString = sqlConnectionStringBuilder.ConnectionString;
             }
 
-            string loggedSqlCommandFilterNodeName = sqlLogNode.FullName + ConfigurationNode.Delimiter + "LoggedSqlCommandFilter";
-            SimpleLoggedSqlCommandFilter filter = new SimpleLoggedSqlCommandFilter(section, loggedSqlCommandFilterNodeName);
+            var loggedSqlCommandFilterNodeName = sqlLogNode.FullName + ConfigurationNode.Delimiter + "LoggedSqlCommandFilter";
+            var filter = new SimpleLoggedSqlCommandFilter(section, loggedSqlCommandFilterNodeName);
 
             if (isSafe)
                 Factory = new SafeLoggedSqlConnectionFactory(logConnectionString, applicationName, filter);
             else
                 Factory = new SqlLoggedSqlConnectionFactory(logConnectionString, applicationName, filter);
 
-            Threading.WorkerThread thread = Factory.Thread;
+            var thread = Factory.Thread;
             thread.Start();
         }
         else
@@ -128,7 +128,7 @@ public sealed class SimpleSqlConnectionFactory
 
         if (name != null)
         {
-            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_connectionString);
+            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_connectionString);
             sqlConnectionStringBuilder.ApplicationName = string.Format(CultureInfo.InvariantCulture, "{0} {1}", sqlConnectionStringBuilder.ApplicationName,
                 name);
             connectionString = sqlConnectionStringBuilder.ConnectionString;

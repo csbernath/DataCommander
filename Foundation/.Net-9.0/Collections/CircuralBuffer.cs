@@ -22,10 +22,10 @@ public sealed class CircularBuffer<T> : IList<T>
     {
         if (Count > 0)
         {
-            int current = _head;
+            var current = _head;
             while (true)
             {
-                T item = _array[current];
+                var item = _array[current];
                 yield return item;
                 if (current == _tail) break;
 
@@ -36,7 +36,7 @@ public sealed class CircularBuffer<T> : IList<T>
 
     IEnumerator IEnumerable.GetEnumerator()
     {
-        IEnumerable<T> enumerable = (IEnumerable<T>) this;
+        var enumerable = (IEnumerable<T>) this;
         return enumerable.GetEnumerator();
     }
 
@@ -80,7 +80,7 @@ public sealed class CircularBuffer<T> : IList<T>
     {
         ArgumentNullException.ThrowIfNull(items);
 
-        foreach (T item in items)
+        foreach (var item in items)
             AddTail(item);
     }
 
@@ -94,7 +94,7 @@ public sealed class CircularBuffer<T> : IList<T>
     {
         Assert.IsValidOperation(Count > 0);
 
-        T item = _array[_head];
+        var item = _array[_head];
         _array[_head] = default;
         _head = (_head + 1) % _array.Length;
         Count--;
@@ -113,7 +113,7 @@ public sealed class CircularBuffer<T> : IList<T>
     {
         Assert.IsValidOperation(Count > 0);
 
-        T item = _array[_tail];
+        var item = _array[_tail];
         _array[_tail] = default;
         _tail = (_tail - 1) % _array.Length;
         Count--;
@@ -124,7 +124,7 @@ public sealed class CircularBuffer<T> : IList<T>
     {
         Assert.IsValidOperation(capacity >= Count);
 
-        T[] target = new T[capacity];
+        var target = new T[capacity];
         if (Count > 0)
         {
             if (_head <= _tail)
@@ -133,7 +133,7 @@ public sealed class CircularBuffer<T> : IList<T>
             }
             else
             {
-                int headCount = _array.Length - _head;
+                var headCount = _array.Length - _head;
                 Array.Copy(_array, _head, target, 0, headCount);
                 Array.Copy(_array, 0, target, headCount, _tail + 1);
             }

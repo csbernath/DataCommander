@@ -12,10 +12,10 @@ public static class IEnumerableExtensionsIndexedItem
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(predicate);
 
-        int firstIndex = -1;
-        TSource firstItem = default(TSource);
+        var firstIndex = -1;
+        var firstItem = default(TSource);
 
-        foreach (TSource item in source)
+        foreach (var item in source)
         {
             ++firstIndex;
             if (predicate(item))
@@ -34,11 +34,11 @@ public static class IEnumerableExtensionsIndexedItem
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(firstArgumentIsExtremum);
 
-        int extremumIndex = -1;
-        TSource extremumItem = default(TSource);
-        int itemIndex = 0;
+        var extremumIndex = -1;
+        var extremumItem = default(TSource);
+        var itemIndex = 0;
 
-        foreach (TSource item in source)
+        foreach (var item in source)
         {
             if (itemIndex == 0 || firstArgumentIsExtremum(item, extremumItem))
             {
@@ -57,14 +57,14 @@ public static class IEnumerableExtensionsIndexedItem
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(selector);
 
-        int minIndex = -1;
-        TSource minItem = default(TSource);
-        int minValue = default(int);
-        int itemIndex = 0;
+        var minIndex = -1;
+        var minItem = default(TSource);
+        var minValue = default(int);
+        var itemIndex = 0;
 
-        foreach (TSource item in source)
+        foreach (var item in source)
         {
-            int value = selector(item);
+            var value = selector(item);
 
             if (itemIndex == 0 || value < minValue)
             {

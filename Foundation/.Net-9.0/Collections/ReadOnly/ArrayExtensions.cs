@@ -18,9 +18,9 @@ public static class ArrayExtensions
     [Pure]
     public static ReadOnlyArray<TResult> SelectToReadOnlyArray<TSource, TResult>(this TSource[] source, Func<TSource, TResult> selector)
     {
-        TResult[] result = new TResult[source.Length];
+        var result = new TResult[source.Length];
 
-        for (int i = 0; i < source.Length; ++i)
+        for (var i = 0; i < source.Length; ++i)
             result[i] = selector(source[i]);
 
         return result.ToReadOnlyArray();

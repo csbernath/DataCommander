@@ -21,7 +21,7 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
     {
         get
         {
-            using SqlConnection connection = CreateConnection();
+            using var connection = CreateConnection();
             connection.Open();
             return ConnectionNameProvider.GetConnectionName(connection);
         }
@@ -31,10 +31,10 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        DatabaseCollectionNode node = new DatabaseCollectionNode(this);
-        SecurityNode securityNode = new SecurityNode(this);
-        ServerObjectCollectionNode serverObjectCollectionNode = new ServerObjectCollectionNode(this);
-        JobCollectionNode jobCollectionNode = new JobCollectionNode(this);
+        var node = new DatabaseCollectionNode(this);
+        var securityNode = new SecurityNode(this);
+        var serverObjectCollectionNode = new ServerObjectCollectionNode(this);
+        var jobCollectionNode = new JobCollectionNode(this);
         return Task.FromResult<IEnumerable<ITreeNode>>([node, securityNode, serverObjectCollectionNode, jobCollectionNode]);
     }
 
@@ -52,7 +52,7 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
 
     private void Properties_OnClick(object? sender, EventArgs e)
     {
-        string commandText = @"create table #SVer(ID int,  Name  sysname, Internal_Value int, Value nvarchar(512))
+        var commandText = @"create table #SVer(ID int,  Name  sysname, Internal_Value int, Value nvarchar(512))
 insert #SVer exec master.dbo.xp_msver
 insert #SVer select t.*
 from sys.dm_os_host_info
@@ -141,7 +141,7 @@ convert(sysname, serverproperty(N'collation')) AS [Collation],
 drop table #SVer";
 
 
-        DataTable dataTable = new DataTable();
+        var dataTable = new DataTable();
         dataTable.Columns.Add("Name");
         dataTable.Columns.Add("Value");
         
@@ -149,19 +149,19 @@ drop table #SVer";
         {
             while (dataReader.Read())
             {
-                for (int index = 0; index < dataReader.FieldCount; ++index)
+                for (var index = 0; index < dataReader.FieldCount; ++index)
                 {
-                    string name = dataReader.GetName(index);
-                    object value = dataReader.GetValue(index);
+                    var name = dataReader.GetName(index);
+                    var value = dataReader.GetValue(index);
                     dataTable.Rows.Add([name, value]);
                 }
             }
         });
 
-        DataSet dataSet = new DataSet();
+        var dataSet = new DataSet();
         dataSet.Tables.Add(dataTable);
 
-        IQueryForm? queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender;
         queryForm.ShowDataSet(dataSet);
     }
 }

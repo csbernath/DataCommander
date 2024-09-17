@@ -15,7 +15,7 @@ internal sealed class InternalConnectionHelper : IInternalConnectionHelper
         InternalConnectionField = typeof(SqlConnection).GetField(
             "_internalConnection",
             BindingFlags.Instance | BindingFlags.NonPublic);
-        System.Type internalConnectionType = InternalConnectionField.FieldType;
+        var internalConnectionType = InternalConnectionField.FieldType;
         IsOpenField = internalConnectionType.GetField(
             "_fConnectionOpen",
             BindingFlags.Instance | BindingFlags.NonPublic);
@@ -23,14 +23,14 @@ internal sealed class InternalConnectionHelper : IInternalConnectionHelper
 
     object IInternalConnectionHelper.GetInternalConnection(IDbConnection connection)
     {
-        object internalConnection = InternalConnectionField.GetValue(connection);
+        var internalConnection = InternalConnectionField.GetValue(connection);
         return internalConnection;
     }
 
     bool IInternalConnectionHelper.IsOpen(object internalConnection)
     {
-        object value = IsOpenField.GetValue(internalConnection);
-        bool isOpen = (bool)value;
+        var value = IsOpenField.GetValue(internalConnection);
+        var isOpen = (bool)value;
         return isOpen;
     }
 }

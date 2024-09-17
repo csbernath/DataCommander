@@ -27,14 +27,14 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
 
     void IResultWriter.AfterExecuteReader()
     {
-        string fileName = Path.GetTempFileName() + ".sdf";
+        var fileName = Path.GetTempFileName() + ".sdf";
         messageWriter.WriteLine(fileName);
-        DbConnectionStringBuilder sb = new DbConnectionStringBuilder
+        var sb = new DbConnectionStringBuilder
         {
             { "Data Source", fileName }
         };
-        string connectionString = sb.ConnectionString;
-        SqlCeEngine sqlCeEngine = new SqlCeEngine(connectionString);
+        var connectionString = sb.ConnectionString;
+        var sqlCeEngine = new SqlCeEngine(connectionString);
         sqlCeEngine.CreateDatabase();
         _connection = new SqlCeConnection(connectionString);
         _connection.Open();
@@ -46,26 +46,26 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
 
     void IResultWriter.WriteTableBegin(DataTable schemaTable)
     {
-        StringBuilder createTable = new StringBuilder();
+        var createTable = new StringBuilder();
         createTable.AppendFormat("create table [{0}]\r\n(\r\n", tableName);
-        StringBuilder insertInto = new StringBuilder();
+        var insertInto = new StringBuilder();
         insertInto.AppendFormat("insert into [{0}](", tableName);
-        StringBuilder values = new StringBuilder();
+        var values = new StringBuilder();
         values.Append("values(");
-        StringTable stringTable = new StringTable(3);
+        var stringTable = new StringTable(3);
         _insertCommand = _connection.CreateCommand();
-        int last = schemaTable.Rows.Count - 1;
+        var last = schemaTable.Rows.Count - 1;
 
-        for (int i = 0; i <= last; i++)
+        for (var i = 0; i <= last; i++)
         {
-            DataRow dataRow = schemaTable.Rows[i];
-            FoundationDbColumn schemaRow = FoundationDbColumnFactory.Create(dataRow);
-            string columnName = schemaRow.ColumnName;
-            int columnSize = schemaRow.ColumnSize;
-            bool? allowDbNull = schemaRow.AllowDbNull;
-            Type dataType = schemaRow.DataType;
-            string dataTypeName = "???";
-            TypeCode typeCode = Type.GetTypeCode(dataType);
+            var dataRow = schemaTable.Rows[i];
+            var schemaRow = FoundationDbColumnFactory.Create(dataRow);
+            var columnName = schemaRow.ColumnName;
+            var columnSize = schemaRow.ColumnSize;
+            var allowDbNull = schemaRow.AllowDbNull;
+            var dataType = schemaRow.DataType;
+            var dataTypeName = "???";
+            var typeCode = Type.GetTypeCode(dataType);
             string typeName;
             SqlDbType sqlDbType;
 
@@ -83,8 +83,8 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
 
                 case TypeCode.Decimal:
                     sqlDbType = SqlDbType.Decimal;
-                    short precision = schemaRow.NumericPrecision.Value;
-                    short scale = schemaRow.NumericScale.Value;
+                    var precision = schemaRow.NumericPrecision.Value;
+                    var scale = schemaRow.NumericScale.Value;
 
                     if (precision > 38)
                     {
@@ -138,8 +138,8 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
                     break;
 
                 case TypeCode.String:
-                    string dataTypeNameUpper = dataTypeName.ToUpper();
-                    bool isFixedLength = dataTypeName switch
+                    var dataTypeNameUpper = dataTypeName.ToUpper();
+                    var isFixedLength = dataTypeName switch
                     {
                         "CHAR" or "NCHAR" => true,
                         _ => false,
@@ -169,7 +169,7 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
                     throw new NotImplementedException();
             }
 
-            StringTableRow row = stringTable.NewRow();
+            var row = stringTable.NewRow();
             row[1] = columnName;
             row[2] = typeName;
 
@@ -189,20 +189,20 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
             }
 
             stringTable.Rows.Add(row);
-            SqlCeParameter parameter = new SqlCeParameter(null, sqlDbType);
+            var parameter = new SqlCeParameter(null, sqlDbType);
             _insertCommand.Parameters.Add(parameter);
         }
 
         createTable.AppendLine(stringTable.ToString(4));
         createTable.Append(')');
-        string commandText = createTable.ToString();
+        var commandText = createTable.ToString();
         messageWriter.WriteLine(commandText);
-        IDbCommandExecutor executor = _connection.CreateCommandExecutor();
+        var executor = _connection.CreateCommandExecutor();
         executor.ExecuteNonQuery(new CreateCommandRequest(commandText));
         insertInto.Append(") ");
         values.Append(')');
         insertInto.Append(values);
-        string insertCommandText = insertInto.ToString();
+        var insertCommandText = insertInto.ToString();
         messageWriter.WriteLine(insertCommandText);
         _insertCommand.CommandText = insertInto.ToString();
     }
@@ -217,13 +217,13 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
 
     void IResultWriter.WriteRows(object[][] rows, int rowCount)
     {
-        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+        for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
         {
             object[] row = rows[rowIndex];
 
-            for (int columnIndex = 0; columnIndex < row.Length; columnIndex++)
+            for (var columnIndex = 0; columnIndex < row.Length; columnIndex++)
             {
-                object value = row[columnIndex];
+                var value = row[columnIndex];
                 _insertCommand.Parameters[columnIndex].Value = value;
             }
 

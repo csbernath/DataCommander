@@ -20,23 +20,23 @@ public readonly struct DateOnlyInterval
     [Pure]
     public bool Contains(DateOnly date)
     {
-        bool contains = Start <= date && date <= End;
+        var contains = Start <= date && date <= End;
         return contains;
     }
 
     [Pure]
     public bool Contains(DateOnlyInterval other)
     {
-        bool contains = Start <= other.Start && other.End <= End;
+        var contains = Start <= other.Start && other.End <= End;
         return contains;
     }
 
     [Pure]
     public DateOnlyInterval? Intersect(DateOnlyInterval other)
     {
-        DateOnly start = ElementPair.Max(Start, other.Start);
-        DateOnly end = ElementPair.Min(End, other.End);
-        bool intersects = start <= end;
+        var start = ElementPair.Max(Start, other.Start);
+        var end = ElementPair.Min(End, other.End);
+        var intersects = start <= end;
         return intersects
             ? new DateOnlyInterval(start, end)
             : (DateOnlyInterval?) null;
@@ -45,9 +45,9 @@ public readonly struct DateOnlyInterval
     [Pure]
     public bool Intersects(DateOnlyInterval other)
     {
-        DateOnly start = ElementPair.Max(Start, other.Start);
-        DateOnly end = ElementPair.Min(End, other.End);
-        bool intersects = start <= end;
+        var start = ElementPair.Max(Start, other.Start);
+        var end = ElementPair.Min(End, other.End);
+        var intersects = start <= end;
         return intersects;
     }
 
@@ -61,7 +61,7 @@ public readonly struct DateOnlyInterval
     [Pure]
     public IEnumerable<DateOnly> GetDates()
     {
-        for (DateOnly date = Start; date <= End; date = date.AddDays(1))
+        for (var date = Start; date <= End; date = date.AddDays(1))
             yield return date;
     }
 

@@ -41,7 +41,7 @@ public readonly struct Date : IComparable<Date>, IEquatable<Date>
     [Pure]
     public readonly Date AddDays(long value)
     {
-        long valueInt64 = (long) _value + value;
+        var valueInt64 = (long) _value + value;
         ulong valueUInt64;
 
         if (valueInt64 < 0)
@@ -65,9 +65,9 @@ public readonly struct Date : IComparable<Date>, IEquatable<Date>
 
     private static ulong ToDateValue(DateTime dateTime)
     {
-        TimeSpan timeSpan = dateTime - MinDateTime;
-        double totalDays = timeSpan.TotalDays;
-        ulong value = (ulong) totalDays;
+        var timeSpan = dateTime - MinDateTime;
+        var totalDays = timeSpan.TotalDays;
+        var value = (ulong) totalDays;
         return value;
     }
 

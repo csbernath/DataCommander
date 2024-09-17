@@ -25,7 +25,7 @@ public static class ValueReader
     public static TResult GetValueOrDefault<TResult>(object value)
     {
         object inputNullValue = DBNull.Value;
-        TResult outputNullValue = default(TResult);
+        var outputNullValue = default(TResult);
         return GetValue(value, inputNullValue, outputNullValue);
     }
 }

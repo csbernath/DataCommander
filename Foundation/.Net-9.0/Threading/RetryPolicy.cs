@@ -13,7 +13,7 @@ public class RetryPolicy(int maxTryCount, TimeSpan beforeRetry, Func<Exception, 
         bool anotherTryAllowed;
         TimeSpan? waitBeforeRetry;
 
-        bool isTransient = transient(exception);
+        var isTransient = transient(exception);
         if (isTransient)
         {
             anotherTryAllowed = true;

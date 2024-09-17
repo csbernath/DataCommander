@@ -12,9 +12,9 @@ public static class IEnumerableExtensionsTo
     [Pure]
     public static string ToLogString<TSource>(this IEnumerable<TSource> source, Func<TSource, string> toString)
     {
-        StringBuilder stringBuilder = new StringBuilder();
-        int index = 0;
-        foreach (TSource item in source)
+        var stringBuilder = new StringBuilder();
+        var index = 0;
+        foreach (var item in source)
         {
             if (stringBuilder.Length > 0)
                 stringBuilder.AppendLine();
@@ -29,7 +29,7 @@ public static class IEnumerableExtensionsTo
     [Pure]
     public static ReadOnlyDictionary<TKey, TSource> ToReadOnlyDictionary<TKey, TSource>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
     {
-        Dictionary<TKey, TSource> dictionary = source.ToDictionary(keySelector);
+        var dictionary = source.ToDictionary(keySelector);
         return new ReadOnlyDictionary<TKey, TSource>(dictionary);
     }
 
@@ -37,7 +37,7 @@ public static class IEnumerableExtensionsTo
     public static ReadOnlyDictionary<TKey, TElement> ToReadOnlyDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source,
         Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
     {
-        Dictionary<TKey, TElement> dictionary = source.ToDictionary(keySelector, elementSelector);
+        var dictionary = source.ToDictionary(keySelector, elementSelector);
         return new ReadOnlyDictionary<TKey, TElement>(dictionary);
     }
 
@@ -47,7 +47,7 @@ public static class IEnumerableExtensionsTo
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(keySelector);
 
-        SortedDictionary<TKey, TValue> dictionary = new SortedDictionary<TKey, TValue>
+        var dictionary = new SortedDictionary<TKey, TValue>
         {
             { source, keySelector }
         };
@@ -59,10 +59,10 @@ public static class IEnumerableExtensionsTo
         Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
     {
         SortedDictionary<TKey, TElement> dictionary = [];
-        foreach (TSource sourceItem in source)
+        foreach (var sourceItem in source)
         {
-            TKey key = keySelector(sourceItem);
-            TElement element = elementSelector(sourceItem);
+            var key = keySelector(sourceItem);
+            var element = elementSelector(sourceItem);
             dictionary.Add(key, element);
         }
 
@@ -76,9 +76,9 @@ public static class IEnumerableExtensionsTo
         ArgumentNullException.ThrowIfNull(keySelector);
 
         SortedList<TKey, TValue> list = [];
-        foreach (TValue sourceItem in source)
+        foreach (var sourceItem in source)
         {
-            TKey key = keySelector(sourceItem);
+            var key = keySelector(sourceItem);
             list.Add(key, sourceItem);
         }
 

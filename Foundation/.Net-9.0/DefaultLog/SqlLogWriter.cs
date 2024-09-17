@@ -99,7 +99,7 @@ internal sealed class SqlLogWriter : ILogWriter
 
                 lock (_entryQueue)
                 {
-                    int count = _entryQueue.Count;
+                    var count = _entryQueue.Count;
                     array = new LogEntry[count];
                     _entryQueue.CopyTo(array);
                     _entryQueue.Clear();
@@ -117,11 +117,11 @@ internal sealed class SqlLogWriter : ILogWriter
     {
         try
         {
-            LogEntry[] array = (LogEntry[])state;
-            StringBuilder sb = new StringBuilder();
+            var array = (LogEntry[])state;
+            var sb = new StringBuilder();
             string commandText;
 
-            for (int i = 0; i < array.Length; i++)
+            for (var i = 0; i < array.Length; i++)
             {
                 commandText = _logEntryToCommandText(array[i]);
                 sb.AppendLine(commandText);
@@ -129,10 +129,10 @@ internal sealed class SqlLogWriter : ILogWriter
 
             commandText = sb.ToString();
 
-            using (IDbConnection connection = _createConnection())
+            using (var connection = _createConnection())
             {
                 connection.Open();
-                IDbCommand command = connection.CreateCommand();
+                var command = connection.CreateCommand();
                 command.CommandType = CommandType.Text;
                 command.CommandText = commandText;
                 command.CommandTimeout = _commandTimeout;

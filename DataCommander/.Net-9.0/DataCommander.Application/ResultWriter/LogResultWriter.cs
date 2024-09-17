@@ -57,11 +57,11 @@ internal sealed class LogResultWriter : IResultWriter
         _beforeExecuteReaderTimestamp = Stopwatch.GetTimestamp();
         ++_commandCount;
 
-        System.Data.Common.DbCommand command = asyncDataAdapterCommand.Command;
+        var command = asyncDataAdapterCommand.Command;
         const long duration = 0;
-        string header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount-1}]";
-        string message = $"Before executing reader at line {asyncDataAdapterCommand.LineIndex + 1}...\r\n{command.CommandText}";
-        System.Data.Common.DbParameterCollection parameters = command.Parameters;
+        var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount-1}]";
+        var message = $"Before executing reader at line {asyncDataAdapterCommand.LineIndex + 1}...\r\n{command.CommandText}";
+        var parameters = command.Parameters;
         if (!parameters.IsNullOrEmpty())
             message += "\r\n" + command.Parameters.ToLogString();
 
@@ -79,9 +79,9 @@ internal sealed class LogResultWriter : IResultWriter
 
     void IResultWriter.AfterExecuteReader()
     {
-        long duration = Stopwatch.GetTimestamp() - _beforeExecuteReaderTimestamp;
-        string header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount - 1}]";
-        string message = "Executing reader...";
+        var duration = Stopwatch.GetTimestamp() - _beforeExecuteReaderTimestamp;
+        var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount - 1}]";
+        var message = "Executing reader...";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
 
         _tableCount = 0;
@@ -89,25 +89,25 @@ internal sealed class LogResultWriter : IResultWriter
 
     void IResultWriter.AfterCloseReader(int affectedRows)
     {
-        long duration = Stopwatch.GetTimestamp() - _beforeExecuteReaderTimestamp;
-        string header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount-1}]";
-        StringBuilder stringBuilder = new StringBuilder();
+        var duration = Stopwatch.GetTimestamp() - _beforeExecuteReaderTimestamp;
+        var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount-1}]";
+        var stringBuilder = new StringBuilder();
         stringBuilder.Append($"Reader closed.");
         if (affectedRows >= 0)
             stringBuilder.Append($" {StringExtensions.SingularOrPlural(affectedRows, "row", "rows")} affected.");
-        string message = stringBuilder.ToString();
+        var message = stringBuilder.ToString();
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
 
         if (_query != null)
         {
-            string? directory = _fileName != null ? Path.GetDirectoryName(_fileName) : Path.GetTempPath();
+            var directory = _fileName != null ? Path.GetDirectoryName(_fileName) : Path.GetTempPath();
             ReadOnlyCollection<DbQueryResult> results = _query.Results.EmptyIfNull().Zip(_results, ToResult).ToReadOnlyCollection();
-            DbRequest query = new DbRequest(directory, _query.Name, _query.Using, _query.Namespace, _commandText, 0, _parameters, results);
+            var query = new DbRequest(directory, _query.Name, _query.Using, _query.Namespace, _commandText, 0, _parameters, results);
 
-            DbRequestBuilder queryBuilder = new DbRequestBuilder(query);
-            string csharpSourceCode = queryBuilder.Build();
+            var queryBuilder = new DbRequestBuilder(query);
+            var csharpSourceCode = queryBuilder.Build();
 
-            string path = Path.Combine(query.Directory, $"{query.Name}.generated.cs");
+            var path = Path.Combine(query.Directory, $"{query.Name}.generated.cs");
             File.WriteAllText(path, csharpSourceCode, Encoding.UTF8);
 
             _query = null;
@@ -123,9 +123,9 @@ internal sealed class LogResultWriter : IResultWriter
         ++_tableCount;
         _rowCount = 0;
 
-        long duration = _writeTableBeginTimestamp - _beforeExecuteReaderTimestamp;
-        string header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount-1}]";
-        string message =
+        var duration = _writeTableBeginTimestamp - _beforeExecuteReaderTimestamp;
+        var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount-1}]";
+        var message =
             $"Result[{_tableCount - 1}] has {StringExtensions.SingularOrPlural(schemaTable.Rows.Count, "column", "columns")}.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
 
@@ -135,7 +135,7 @@ internal sealed class LogResultWriter : IResultWriter
 
         if (_provider.Identifier == ProviderIdentifier.SqlServer)
         {
-            TextBuilder declareTableScript = ToDeclareTableScript(schemaTable.TableName, dbColumns);
+            var declareTableScript = ToDeclareTableScript(schemaTable.TableName, dbColumns);
             message = $"\r\n{declareTableScript.ToLines().ToIndentedString("    ")}";
             _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, message));
         }
@@ -148,7 +148,7 @@ internal sealed class LogResultWriter : IResultWriter
         if (_query != null)
         {
             ReadOnlyCollection<DbQueryResultField> fields = dbColumns.Select(ToField).ToReadOnlyCollection();
-            Result result = new Result(fields);
+            var result = new Result(fields);
             _results.Add(result);
         }
     }
@@ -156,14 +156,14 @@ internal sealed class LogResultWriter : IResultWriter
     private static TextBuilder ToDeclareTableScript(string tableName, IReadOnlyList<FoundationDbColumn> dbColumns)
     {
         Dictionary<SqlDbType, SqlDataType> sqlDataTypes = SqlDataTypeRepository.SqlDataTypes.ToDictionary(t => t.SqlDbType);
-        TextBuilder textBuilder = new TextBuilder();
+        var textBuilder = new TextBuilder();
         textBuilder.Add($"declare @{tableName} table");
         using (textBuilder.AddBlock("(", ")"))
         {
-            for (int columnIndex = 0; columnIndex < dbColumns.Count; ++columnIndex)
+            for (var columnIndex = 0; columnIndex < dbColumns.Count; ++columnIndex)
             {
-                FoundationDbColumn dbColumn = dbColumns[columnIndex];
-                StringBuilder columnScript = ToDeclareTableColumnScript(dbColumn, sqlDataTypes);
+                var dbColumn = dbColumns[columnIndex];
+                var columnScript = ToDeclareTableColumnScript(dbColumn, sqlDataTypes);
 
                 if (columnIndex < dbColumns.Count - 1)
                     columnScript.Append(',');
@@ -179,10 +179,10 @@ internal sealed class LogResultWriter : IResultWriter
         FoundationDbColumn dbColumn,
         IReadOnlyDictionary<SqlDbType, SqlDataType> sqlDataTypes)
     {
-        SqlDbType sqlDbType = (SqlDbType)dbColumn.ProviderType;
-        SqlDataType sqlDataType = sqlDataTypes[sqlDbType];
+        var sqlDbType = (SqlDbType)dbColumn.ProviderType;
+        var sqlDataType = sqlDataTypes[sqlDbType];
 
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         stringBuilder.Append(dbColumn.ColumnName);
         stringBuilder.Append(' ');
         stringBuilder.Append(sqlDataType.SqlDataTypeName);
@@ -220,16 +220,16 @@ internal sealed class LogResultWriter : IResultWriter
 
     private DataTransferObjectField ToDataTransferObjectField(FoundationDbColumn dbColumn)
     {
-        string name = dbColumn.ColumnName;
+        var name = dbColumn.ColumnName;
 
-        CSharpType cSharpType = CSharpTypeArray.CSharpTypes.First(t => t.Type == dbColumn.DataType);
-        StringBuilder stringBuilder = new StringBuilder();
+        var cSharpType = CSharpTypeArray.CSharpTypes.First(t => t.Type == dbColumn.DataType);
+        var stringBuilder = new StringBuilder();
         stringBuilder.Append(cSharpType.Name);
 
         if (dbColumn.AllowDbNull == true && cSharpType.Type != typeof(string))
             stringBuilder.Append('?');
 
-        string type = stringBuilder.ToString();
+        var type = stringBuilder.ToString();
         
         return new DataTransferObjectField(name, type);
     }
@@ -238,9 +238,9 @@ internal sealed class LogResultWriter : IResultWriter
 
     void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
     {
-        long duration = Stopwatch.GetTimestamp() - _firstRowReadBeginTimestamp;
-        string header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount-1}]";
-        string message = $"Result[{_tableCount - 1}] first row read completed.";
+        var duration = Stopwatch.GetTimestamp() - _firstRowReadBeginTimestamp;
+        var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount-1}]";
+        var message = $"Result[{_tableCount - 1}] first row read completed.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
     }
 
@@ -248,9 +248,9 @@ internal sealed class LogResultWriter : IResultWriter
 
     void IResultWriter.WriteTableEnd()
     {
-        long duration = Stopwatch.GetTimestamp() - _writeTableBeginTimestamp;
-        string header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount - 1}]";
-        string message =
+        var duration = Stopwatch.GetTimestamp() - _writeTableBeginTimestamp;
+        var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount - 1}]";
+        var message =
             $"Result[{_tableCount - 1}] has {StringExtensions.SingularOrPlural(_rowCount, "row", "rows")}.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
     }
@@ -261,15 +261,15 @@ internal sealed class LogResultWriter : IResultWriter
 
     void IResultWriter.End()
     {
-        long duration = Stopwatch.GetTimestamp() - _beginTimestamp;
-        string header = StopwatchTimeSpan.ToString(duration, 3);
-        string message = $"Query completed {StringExtensions.SingularOrPlural(_commandCount, "command", "commands")}.";
+        var duration = Stopwatch.GetTimestamp() - _beginTimestamp;
+        var header = StopwatchTimeSpan.ToString(duration, 3);
+        var message = $"Query completed {StringExtensions.SingularOrPlural(_commandCount, "command", "commands")}.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
     }
 
     private static DbQueryResult ToResult(string result, Result sql)
     {
-        Parser.ParseResult(result, out string? name, out string? fieldName);
+        Parser.ParseResult(result, out var name, out var fieldName);
         return new DbQueryResult(name, fieldName, sql.Fields);
     }
 

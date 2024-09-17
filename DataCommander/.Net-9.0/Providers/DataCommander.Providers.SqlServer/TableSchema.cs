@@ -11,14 +11,14 @@ internal static class TableSchema
 {
     public static GetTableSchemaResult GetTableSchema(IDbConnection connection, string? tableName)
     {
-        SqlCommandBuilder sqlCommandBuilder = new SqlCommandBuilder();
+        var sqlCommandBuilder = new SqlCommandBuilder();
 
-        DatabaseObjectMultipartName fourPartName = new DatabaseObjectMultipartName(connection.Database, tableName);
-        string? owner = fourPartName.Schema;
+        var fourPartName = new DatabaseObjectMultipartName(connection.Database, tableName);
+        var owner = fourPartName.Schema;
         if (owner == null)
             owner = "dbo";
 
-        string commandText = string.Format(@"declare @id int
+        var commandText = string.Format(@"declare @id int
 
 select
     @id = o.object_id
@@ -84,7 +84,7 @@ order by ic.index_column_id",
             owner.ToNullableNVarChar(),
             fourPartName.Name.ToNullableNVarChar());
 
-        IDbCommandExecutor executor = DbCommandExecutorFactory.Create(connection);
+        var executor = DbCommandExecutorFactory.Create(connection);
         GetTableSchemaResult getTableSchemaResult = null;
         executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
         {
@@ -97,18 +97,18 @@ order by ic.index_column_id",
 
     private static Column ReadColumn(IDataRecord dataRecord)
     {
-        string columnName = dataRecord.GetString(0);
-        int columnId = dataRecord.GetInt32(1);
-        string typeName = dataRecord.GetString(2);
-        bool? isNullable = dataRecord.GetNullableBoolean(3);
-        bool isComputed = dataRecord.GetBoolean(4);
-        int defaultObjectId = dataRecord.GetInt32(5);
+        var columnName = dataRecord.GetString(0);
+        var columnId = dataRecord.GetInt32(1);
+        var typeName = dataRecord.GetString(2);
+        var isNullable = dataRecord.GetNullableBoolean(3);
+        var isComputed = dataRecord.GetBoolean(4);
+        var defaultObjectId = dataRecord.GetInt32(5);
         return new Column(columnName, columnId, typeName, isNullable, isComputed, defaultObjectId);
     }
 
     private static UniqueIndexColumn ReadUniqueIndexColumn(IDataRecord dataRecord)
     {
-        int columnId = dataRecord.GetInt32(0);
+        var columnId = dataRecord.GetInt32(0);
         return new UniqueIndexColumn(columnId);
     }
 }

@@ -14,7 +14,7 @@ internal sealed class UserDefinedTableTypeCollectionNode(DatabaseNode database) 
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        string commandText = CreateCommandText();
+        var commandText = CreateCommandText();
         return await Db.ExecuteReaderAsync(
             database.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
@@ -25,7 +25,7 @@ internal sealed class UserDefinedTableTypeCollectionNode(DatabaseNode database) 
 
     private string CreateCommandText()
     {
-        string commandText = $@"select
+        var commandText = $@"select
     s.name,
     t.name,
     type_table_object_id
@@ -38,9 +38,9 @@ order by 1,2";
 
     private UserDefinedTableTypeNode ReadRecord(IDataRecord dataRecord)
     {
-        string schema = dataRecord.GetString(0);
-        string name = dataRecord.GetString(1);
-        int id = dataRecord.GetInt32(2);
+        var schema = dataRecord.GetString(0);
+        var name = dataRecord.GetString(1);
+        var id = dataRecord.GetInt32(2);
         return new UserDefinedTableTypeNode(database, id, schema, name);
     }
 

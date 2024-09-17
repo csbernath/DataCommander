@@ -16,10 +16,10 @@ public static class IEnumerableExtensions
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(columns);
 
-        StringTable table = new StringTable(columns.Count);
+        var table = new StringTable(columns.Count);
 
-        StringTableRow row = table.NewRow();
-        int columnIndex = 0;
+        var row = table.NewRow();
+        var columnIndex = 0;
         foreach (StringTableColumnInfo<TSource> column in columns)
         {
             row[columnIndex] = column.ColumnName;
@@ -29,10 +29,10 @@ public static class IEnumerableExtensions
 
         table.Rows.Add(row);
 
-        StringTableRow secondRow = table.NewRow();
+        var secondRow = table.NewRow();
         table.Rows.Add(secondRow);
 
-        foreach (TSource? item in source)
+        foreach (var item in source)
         {
             row = table.NewRow();
             columnIndex = 0;
@@ -45,10 +45,10 @@ public static class IEnumerableExtensions
             table.Rows.Add(row);
         }
 
-        int[] columnWidths = new int[columns.Count];
+        var columnWidths = new int[columns.Count];
         for (columnIndex = 0;columnIndex < columns.Count;++columnIndex)
         {
-            int max = table.Rows
+            var max = table.Rows
                 .Select(r => r[columnIndex] == null ? 0 : r[columnIndex].Length)
                 .Max();
             secondRow[columnIndex] = new string('-', max);

@@ -43,12 +43,12 @@ public sealed class ReadOnlyNonUniqueSortedList<TKey, TValue>
         get
         {
             IReadOnlyList<TValue> readOnlyList;
-            int index = IndexOf(key);
+            var index = IndexOf(key);
             if (index >= 0)
             {
-                int currentGroupIndex = _groups[index];
-                int nextGroupIndex = index < _groups.Count - 1 ? _groups[index + 1] : _values.Count;
-                int count = nextGroupIndex - currentGroupIndex;
+                var currentGroupIndex = _groups[index];
+                var nextGroupIndex = index < _groups.Count - 1 ? _groups[index + 1] : _values.Count;
+                var count = nextGroupIndex - currentGroupIndex;
 
                 readOnlyList = new ReadOnlyListSegment<TValue>(_values, currentGroupIndex, count);
             }
@@ -65,12 +65,12 @@ public sealed class ReadOnlyNonUniqueSortedList<TKey, TValue>
 
     public IEnumerable<IReadOnlyList<TValue>> GetGroups()
     {
-        int lastGroupIndex = _groups.Count - 1;
-        for (int groupIndex = 0; groupIndex <= lastGroupIndex; ++groupIndex)
+        var lastGroupIndex = _groups.Count - 1;
+        for (var groupIndex = 0; groupIndex <= lastGroupIndex; ++groupIndex)
         {
-            int valueStartIndex = _groups[groupIndex];
-            int valueNextStartIndex = groupIndex < lastGroupIndex ? _groups[groupIndex + 1] : _values.Count;
-            int valueCount = valueNextStartIndex - valueStartIndex;
+            var valueStartIndex = _groups[groupIndex];
+            var valueNextStartIndex = groupIndex < lastGroupIndex ? _groups[groupIndex + 1] : _values.Count;
+            var valueCount = valueNextStartIndex - valueStartIndex;
             yield return new ReadOnlyListSegment<TValue>(_values, valueStartIndex, valueCount);
         }
     }
@@ -79,15 +79,15 @@ public sealed class ReadOnlyNonUniqueSortedList<TKey, TValue>
     {
         if (_values.Count > 0)
         {
-            int notEqualsCount = _values.SelectPreviousAndCurrentKey(_keySelector).Count(k => _comparison(k.Previous, k.Current) != 0);
-            int smallArrayMaxLength = LargeObjectHeap.GetSmallArrayMaxLength(sizeof(int));
-            int itemCount = notEqualsCount + 1;
-            SegmentedArrayBuilder<int> segmentedArrayBuilder = new SegmentedArrayBuilder<int>(itemCount, smallArrayMaxLength);
+            var notEqualsCount = _values.SelectPreviousAndCurrentKey(_keySelector).Count(k => _comparison(k.Previous, k.Current) != 0);
+            var smallArrayMaxLength = LargeObjectHeap.GetSmallArrayMaxLength(sizeof(int));
+            var itemCount = notEqualsCount + 1;
+            var segmentedArrayBuilder = new SegmentedArrayBuilder<int>(itemCount, smallArrayMaxLength);
 
             segmentedArrayBuilder.Add(0);
-            int index = 0;
+            var index = 0;
 
-            foreach (PreviousAndCurrent<TKey> key in _values.SelectPreviousAndCurrentKey(_keySelector))
+            foreach (var key in _values.SelectPreviousAndCurrentKey(_keySelector))
             {
                 index++;
 
@@ -106,9 +106,9 @@ public sealed class ReadOnlyNonUniqueSortedList<TKey, TValue>
         if (_groups != null)
             index = BinarySearch.IndexOf(0, _groups.Count - 1, currentIndex =>
             {
-                int valueIndex = _groups[currentIndex];
-                TValue otherValue = _values[valueIndex];
-                TKey otherKey = _keySelector(otherValue);
+                var valueIndex = _groups[currentIndex];
+                var otherValue = _values[valueIndex];
+                var otherKey = _keySelector(otherValue);
                 return _comparison(key, otherKey);
             });
         else

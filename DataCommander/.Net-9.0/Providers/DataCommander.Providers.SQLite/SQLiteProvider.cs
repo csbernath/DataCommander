@@ -30,7 +30,7 @@ public sealed class SQLiteProvider : IProvider
     {
         get
         {
-            ConfigurationNode node = Settings.CurrentType;
+            var node = Settings.CurrentType;
             string[] keyWords = node.Attributes["SQLiteKeyWords"].GetValue<string[]>();
             return keyWords;
         }
@@ -57,12 +57,12 @@ public sealed class SQLiteProvider : IProvider
     DataTable IProvider.GetSchemaTable(IDataReader dataReader)
     {
         DataTable table = null;
-        DataTable? schemaTable = dataReader.GetSchemaTable();
+        var schemaTable = dataReader.GetSchemaTable();
 
         if (schemaTable != null)
         {
             table = new DataTable("SchemaTable");
-            DataColumnCollection columns = table.Columns;
+            var columns = table.Columns;
             columns.Add(" ", typeof(int));
             columns.Add("  ", typeof(string));
             columns.Add("Name", typeof(string));
@@ -71,25 +71,25 @@ public sealed class SQLiteProvider : IProvider
             columns.Add("ProviderType", typeof(DbType));
             columns.Add("DataType", typeof(Type));
 
-            for (int i = 0; i < schemaTable.Rows.Count; i++)
+            for (var i = 0; i < schemaTable.Rows.Count; i++)
             {
-                DataRow row = schemaTable.Rows[i];
-                FoundationDbColumn dataColumnSchema = FoundationDbColumnFactory.Create(row);
-                int columnOrdinal = dataColumnSchema.ColumnOrdinal + 1;
-                bool isKey = row.GetValueOrDefault<bool>("isKey");
-                string pk = string.Empty;
+                var row = schemaTable.Rows[i];
+                var dataColumnSchema = FoundationDbColumnFactory.Create(row);
+                var columnOrdinal = dataColumnSchema.ColumnOrdinal + 1;
+                var isKey = row.GetValueOrDefault<bool>("isKey");
+                var pk = string.Empty;
 
                 if (isKey)
                 {
                     pk = "PKEY";
                 }
 
-                int columnSize = dataColumnSchema.ColumnSize;
-                DbType dbType = (DbType)row["ProviderType"];
-                bool allowDbNull = (bool)row["AllowDBNull"];
-                StringBuilder sb = new StringBuilder();
+                var columnSize = dataColumnSchema.ColumnSize;
+                var dbType = (DbType)row["ProviderType"];
+                var allowDbNull = (bool)row["AllowDBNull"];
+                var sb = new StringBuilder();
 
-                string dataTypeName = dataReader.GetDataTypeName(i);
+                var dataTypeName = dataReader.GetDataTypeName(i);
                 sb.Append(dataTypeName);
 
                 if (!allowDbNull)
@@ -131,19 +131,19 @@ public sealed class SQLiteProvider : IProvider
     public Task<GetCompletionResult> GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position,
         CancellationToken cancellationToken)
     {
-        SqlParser sqlStatement = new SqlParser(text);
-        List<Api.Query.Token> tokens = sqlStatement.Tokens;
-        sqlStatement.FindToken(position, out Api.Query.Token? previousToken, out Api.Query.Token? currentToken);
+        var sqlStatement = new SqlParser(text);
+        var tokens = sqlStatement.Tokens;
+        sqlStatement.FindToken(position, out var previousToken, out var currentToken);
         int startPosition;
         int length;
         List<IObjectName> items = null;
-        bool fromCache = false;
+        var fromCache = false;
 
         if (currentToken != null)
         {
             startPosition = currentToken.StartPosition;
             length = currentToken.EndPosition - currentToken.StartPosition + 1;
-            string? value = currentToken.Value;
+            var value = currentToken.Value;
         }
         else
         {
@@ -151,7 +151,7 @@ public sealed class SQLiteProvider : IProvider
             length = 0;
         }
 
-        SqlObject? sqlObject = sqlStatement.FindSqlObject(previousToken, currentToken);
+        var sqlObject = sqlStatement.FindSqlObject(previousToken, currentToken);
         if (sqlObject != null)
         {
             string commandText = null;
@@ -190,10 +190,10 @@ order by name collate nocase";
 
             if (commandText != null)
             {
-                IDbCommandAsyncExecutor executor = DbCommandExecutorFactory.Create(connection.Connection);
+                var executor = DbCommandExecutorFactory.Create(connection.Connection);
                 items = executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
                 {
-                    string name = dataRecord.GetStringOrDefault(0);
+                    var name = dataRecord.GetStringOrDefault(0);
                     return (IObjectName)new ObjectName(name);
                 }).ToList();
             }
@@ -209,7 +209,7 @@ order by name collate nocase";
 
     string IProvider.GetExceptionMessage(Exception e)
     {
-        string message = e switch
+        var message = e switch
         {
             SQLiteException sqliteException => $"ErrorCode: {sqliteException.ErrorCode}\r\nMessage: {sqliteException.Message}",
             _ => e.ToString(),
@@ -224,9 +224,9 @@ order by name collate nocase";
 
     string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
     {
-        FoundationDbColumn schemaRow = FoundationDbColumnFactory.Create(sourceSchemaRow);
-        int columnSize = schemaRow.ColumnSize;
-        bool? allowDbNull = schemaRow.AllowDbNull;
+        var schemaRow = FoundationDbColumnFactory.Create(sourceSchemaRow);
+        var columnSize = schemaRow.ColumnSize;
+        var allowDbNull = schemaRow.AllowDbNull;
         string typeName;
 
         switch (sourceDataTypeName.ToLower())
@@ -239,8 +239,8 @@ order by name collate nocase";
                 break;
 
             case SqlDataTypeName.Decimal:
-                short precision = schemaRow.NumericPrecision.Value;
-                short scale = schemaRow.NumericScale.Value;
+                var precision = schemaRow.NumericPrecision.Value;
+                var scale = schemaRow.NumericScale.Value;
                 if (scale == 0)
                 {
                     typeName = $"decimal({precision})";
@@ -273,7 +273,7 @@ order by name collate nocase";
         }
         else
         {
-            IConvertible convertible = (IConvertible)source;
+            var convertible = (IConvertible)source;
             target = convertible.ToString(null);
         }
 
@@ -314,21 +314,21 @@ order by name collate nocase";
         string[] dataTypeNames;
         int count;
 
-        using (IDbCommand command = destinationconnection.CreateCommand())
+        using (var command = destinationconnection.CreateCommand())
         {
             command.CommandText = $"select * from {destinationTableName}";
             command.CommandType = CommandType.Text;
 
-            using (IDataReader dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
+            using (var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
             {
                 schemaTable = dataReader.GetSchemaTable();
                 count = dataReader.FieldCount;
                 dataTypeNames = new string[count];
 
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
-                    string dataTypeName = dataReader.GetDataTypeName(i);
-                    int index = dataTypeName.IndexOf('(');
+                    var dataTypeName = dataReader.GetDataTypeName(i);
+                    var index = dataTypeName.IndexOf('(');
                     if (index >= 0)
                     {
                         dataTypeName = dataTypeName[..index];
@@ -339,16 +339,16 @@ order by name collate nocase";
             }
         }
 
-        StringBuilder insertInto = new StringBuilder();
+        var insertInto = new StringBuilder();
         insertInto.AppendFormat("insert into [{0}](", destinationTableName);
-        StringBuilder values = new StringBuilder();
+        var values = new StringBuilder();
         values.Append("values(");
-        DataRowCollection schemaRows = schemaTable.Rows;
+        var schemaRows = schemaTable.Rows;
         count = schemaRows.Count;
         converters = new Converter<object, object>[count];
         insertCommand = destinationconnection.CreateCommand();
 
-        for (int i = 0; i < count; i++)
+        for (var i = 0; i < count; i++)
         {
             if (i > 0)
             {
@@ -356,14 +356,14 @@ order by name collate nocase";
                 values.Append(',');
             }
 
-            FoundationDbColumn columnSchema = FoundationDbColumnFactory.Create(schemaRows[i]);
+            var columnSchema = FoundationDbColumnFactory.Create(schemaRows[i]);
             insertInto.AppendFormat("[{0}]", columnSchema.ColumnName);
             values.Append('?');
 
-            int columnSize = columnSchema.ColumnSize;
-            int providerType = columnSchema.ProviderType;
-            DbType dbType = (DbType)providerType;
-            SQLiteParameter parameter = new SQLiteParameter(dbType);
+            var columnSize = columnSchema.ColumnSize;
+            var providerType = columnSchema.ProviderType;
+            var dbType = (DbType)providerType;
+            var parameter = new SQLiteParameter(dbType);
             insertCommand.Parameters.Add(parameter);
 
             switch (dataTypeNames[i].ToLower())

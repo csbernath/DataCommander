@@ -12,7 +12,7 @@ public sealed class AppLockMethods
     {
         const string commandText = "sp_getapplock";
 
-        SqlParameterCollectionBuilder builder = new SqlParameterCollectionBuilder();
+        var builder = new SqlParameterCollectionBuilder();
         builder.Add("Resource", resourceName);
         builder.Add("LockMode", lockMode.ToString());
 
@@ -25,19 +25,19 @@ public sealed class AppLockMethods
         if (databasePrincipal != null)
             builder.Add("DbPrincipal", databasePrincipal);
 
-        SqlParameter returnCodeParameter = new SqlParameter
+        var returnCodeParameter = new SqlParameter
         {
             //ParameterName = "returnCode",
             //SqlDbType = SqlDbType.Int,
             Direction = ParameterDirection.ReturnValue
         };
         builder.Add(returnCodeParameter);
-        System.Collections.ObjectModel.ReadOnlyCollection<object> parameters = builder.ToReadOnlyCollection();
+        var parameters = builder.ToReadOnlyCollection();
 
-        CreateCommandRequest createCommandRequest = new CreateCommandRequest(commandText, parameters, CommandType.StoredProcedure, null, transaction);
+        var createCommandRequest = new CreateCommandRequest(commandText, parameters, CommandType.StoredProcedure, null, transaction);
         connection.CreateCommandExecutor().ExecuteNonQuery(createCommandRequest);
 
-        GetAppLockReturnCode returnCode = (GetAppLockReturnCode)(int)returnCodeParameter.Value;
+        var returnCode = (GetAppLockReturnCode)(int)returnCodeParameter.Value;
         return returnCode;
     }
 }

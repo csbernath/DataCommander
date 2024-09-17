@@ -47,7 +47,7 @@ public struct PString : INullable
 
     public static bool operator ==(PString x, PString y)
     {
-        bool isEqual = x.ValueType == y.ValueType;
+        var isEqual = x.ValueType == y.ValueType;
         if (isEqual)
             if (x.ValueType == PValueType.Value)
                 isEqual = x._sql.Value == y._sql.Value;
@@ -71,7 +71,7 @@ public struct PString : INullable
 
     public override readonly bool Equals(object obj)
     {
-        bool equals = obj is PString;
+        var equals = obj is PString;
         if (equals)
             equals = this == (PString)obj;
         return equals;
@@ -79,7 +79,7 @@ public struct PString : INullable
 
     public override int GetHashCode()
     {
-        int hashCode = _sql.GetHashCode();
+        var hashCode = _sql.GetHashCode();
         return hashCode;
     }
 
@@ -92,7 +92,7 @@ public struct PString : INullable
     {
         get
         {
-            object value = ValueType switch
+            var value = ValueType switch
             {
                 PValueType.Value or PValueType.Null => (object)_sql,
                 _ => null,

@@ -21,7 +21,7 @@ public static class SqlConstantMapper
     [Pure]
     public static string ToSqlConstant(this SmallDate source)
     {
-        DateTime dateTime = source.ToDateTime();
+        var dateTime = source.ToDateTime();
         const string format = "yyyyMMdd";
         return $"'{dateTime.ToString(format, CultureInfo.InvariantCulture)}'";
     }
@@ -35,7 +35,7 @@ public static class SqlConstantMapper
     [Pure]
     public static string ToSqlConstant(this DateTime source)
     {
-        TimeSpan timeOfDay = source.TimeOfDay;
+        var timeOfDay = source.TimeOfDay;
         string format;
 
         if (timeOfDay == TimeSpan.Zero)

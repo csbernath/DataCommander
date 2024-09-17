@@ -23,7 +23,7 @@ internal sealed class Connection : ConnectionBase
 
     void OnInfoMessage(object sender, OleDbInfoMessageEventArgs e)
     {
-        string text = e.Message;
+        var text = e.Message;
         InvokeInfoMessage([InfoMessageFactory.Create(InfoMessageSeverity.Information, null, text)]);
     }
 

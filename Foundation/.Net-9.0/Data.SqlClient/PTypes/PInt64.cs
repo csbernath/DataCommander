@@ -58,7 +58,7 @@ public struct PInt64 : INullable
 
     public static bool operator ==(PInt64 x, PInt64 y)
     {
-        bool isEqual = x.ValueType == y.ValueType;
+        var isEqual = x.ValueType == y.ValueType;
 
         if (isEqual)
         {
@@ -73,7 +73,7 @@ public struct PInt64 : INullable
 
     public static PInt64 Parse(string s, PValueType type)
     {
-        PInt64 sp = string.IsNullOrEmpty(s)
+        var sp = string.IsNullOrEmpty(s)
             ? new PInt64(type)
             : SqlInt64.Parse(s);
         return sp;
@@ -81,7 +81,7 @@ public struct PInt64 : INullable
 
     public override readonly bool Equals(object y)
     {
-        bool equals = y is PInt64;
+        var equals = y is PInt64;
         if (equals)
             equals = this == (PInt64)y;
         return equals;
@@ -89,7 +89,7 @@ public struct PInt64 : INullable
 
     public override int GetHashCode()
     {
-        int hashCode = _sql.GetHashCode();
+        var hashCode = _sql.GetHashCode();
         return hashCode;
     }
 

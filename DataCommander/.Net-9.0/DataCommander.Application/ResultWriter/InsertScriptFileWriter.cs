@@ -32,8 +32,8 @@ internal sealed class InsertScriptFileWriter : IResultWriter
 
     public static string GetDataTypeName(Type dataType)
     {
-        TypeCode typeCode = Type.GetTypeCode(dataType);
-        string dataTypeName = typeCode switch
+        var typeCode = Type.GetTypeCode(dataType);
+        var dataTypeName = typeCode switch
         {
             TypeCode.Boolean => SqlDataTypeName.Bit,
             TypeCode.DateTime => SqlDataTypeName.DateTime,
@@ -50,24 +50,24 @@ internal sealed class InsertScriptFileWriter : IResultWriter
 
     public static string GetCreateTableStatement(DataTable schemaTable)
     {
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb.AppendFormat("create table {0}\r\n(\r\n", schemaTable.TableName);
-        bool first = true;
+        var first = true;
 
         foreach (DataRow schemaRow in schemaTable.Rows)
         {
-            FoundationDbColumn dataColumnSchema = FoundationDbColumnFactory.Create(schemaRow);
+            var dataColumnSchema = FoundationDbColumnFactory.Create(schemaRow);
 
             if (first)
                 first = false;
             else
                 sb.Append(",\r\n");
 
-            int columnSize = dataColumnSchema.ColumnSize;
-            string columnSizeString = columnSize == int.MaxValue ? "max" : columnSize.ToString();
-            Type dataType = dataColumnSchema.DataType;
+            var columnSize = dataColumnSchema.ColumnSize;
+            var columnSizeString = columnSize == int.MaxValue ? "max" : columnSize.ToString();
+            var dataType = dataColumnSchema.DataType;
             string dataTypeName;
-            bool contains = schemaTable.Columns.Contains("DataTypeName");
+            var contains = schemaTable.Columns.Contains("DataTypeName");
 
             if (contains)
                 dataTypeName = (string)schemaRow["DataTypeName"];
@@ -109,8 +109,8 @@ internal sealed class InsertScriptFileWriter : IResultWriter
 
         if (value != null)
         {
-            Type type = value.GetType();
-            FieldType fieldType = FieldTypeDictionary.Instance.GetValueOrDefault(type);
+            var type = value.GetType();
+            var fieldType = FieldTypeDictionary.Instance.GetValueOrDefault(type);
 
             switch (fieldType)
             {
@@ -119,25 +119,25 @@ internal sealed class InsertScriptFileWriter : IResultWriter
                     break;
 
                 case FieldType.BinaryField:
-                    BinaryField binaryField = (BinaryField)value;
-                    StringBuilder sb = new StringBuilder();
+                    var binaryField = (BinaryField)value;
+                    var sb = new StringBuilder();
                     sb.Append("0x");
                     sb.Append(Hex.Encode(binaryField.Value, true));
                     s = sb.ToString();
                     break;
 
                 case FieldType.StringField:
-                    StringField stringField = (StringField)value;
+                    var stringField = (StringField)value;
                     s = stringField.Value.ToNullableNVarChar();
                     break;
 
                 case FieldType.DateTimeField:
-                    DateTimeField dateTimeField = (DateTimeField)value;
+                    var dateTimeField = (DateTimeField)value;
                     s = dateTimeField.Value.ToSqlConstant();
                     break;
 
                 default:
-                    TypeCode typeCode = Type.GetTypeCode(type);
+                    var typeCode = Type.GetTypeCode(type);
 
                     switch (typeCode)
                     {
@@ -146,12 +146,12 @@ internal sealed class InsertScriptFileWriter : IResultWriter
                             break;
 
                         case TypeCode.Boolean:
-                            bool b = (bool)value;
+                            var b = (bool)value;
                             s = b ? "1" : "0";
                             break;
 
                         case TypeCode.Decimal:
-                            decimal d = (decimal)value;
+                            var d = (decimal)value;
                             s = d.ToString(QueryForm.NumberFormat);
                             break;
 
@@ -182,14 +182,14 @@ internal sealed class InsertScriptFileWriter : IResultWriter
                         default:
                             if (value is DoubleField doubleField)
                             {
-                                double doubleValue = doubleField.Value;
+                                var doubleValue = doubleField.Value;
                                 s = doubleValue.ToString(QueryForm.NumberFormat);
                             }
                             else
                             {
                                 if (value is DecimalField decimalField)
                                 {
-                                    decimal decimalValue = decimalField.DecimalValue;
+                                    var decimalValue = decimalField.DecimalValue;
                                     s = decimalValue.ToString(QueryForm.NumberFormat);
                                 }
                                 else
@@ -230,20 +230,20 @@ internal sealed class InsertScriptFileWriter : IResultWriter
 
     private static string GetSqlStatementPrefix(string? tableName, DataTable schemaTable)
     {
-        DataRowCollection schemaRows = schemaTable.Rows;
-        int columnCount = schemaRows.Count;
-        StringBuilder sb = new StringBuilder();
+        var schemaRows = schemaTable.Rows;
+        var columnCount = schemaRows.Count;
+        var sb = new StringBuilder();
         sb.AppendFormat("insert into {0}(", tableName);
 
-        for (int columnIndex = 0; columnIndex < columnCount; columnIndex++)
+        for (var columnIndex = 0; columnIndex < columnCount; columnIndex++)
         {
             if (columnIndex > 0)
             {
                 sb.Append(',');
             }
 
-            DataRow schemaRow = schemaRows[columnIndex];
-            string columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
+            var schemaRow = schemaRows[columnIndex];
+            var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
             sb.Append(columnName);
         }
 
@@ -257,9 +257,9 @@ internal sealed class InsertScriptFileWriter : IResultWriter
         _messageWriter.WriteLine(GetCreateTableStatement(schemaTable));
         _sqlStatementPrefix = GetSqlStatementPrefix(_tableName, _schemaTable);
 
-        string path = Path.GetTempFileName();
+        var path = Path.GetTempFileName();
         _messageWriter.WriteLine("fileName: {0}", path);
-        Encoding encoding = Encoding.UTF8;
+        var encoding = Encoding.UTF8;
         _streamWriter = new StreamWriter(path, false, encoding, 4096);
     }
 
@@ -273,10 +273,10 @@ internal sealed class InsertScriptFileWriter : IResultWriter
 
     void IResultWriter.WriteRows(object[][] rows, int rowCount)
     {
-        int fieldCount = _schemaTable.Rows.Count;
-        StringBuilder sb = new StringBuilder();
+        var fieldCount = _schemaTable.Rows.Count;
+        var sb = new StringBuilder();
 
-        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+        for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
         {
             if (_firstRow)
             {
@@ -290,14 +290,14 @@ internal sealed class InsertScriptFileWriter : IResultWriter
             object[] values = rows[rowIndex];
             sb.Append(_sqlStatementPrefix);
 
-            for (int i = 0; i < fieldCount; i++)
+            for (var i = 0; i < fieldCount; i++)
             {
                 if (i > 0)
                 {
                     sb.Append(',');
                 }
 
-                string s = ToString(values[i]);
+                var s = ToString(values[i]);
                 sb.Append(s);
             }
 

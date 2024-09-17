@@ -6,8 +6,8 @@ internal static class DbConnectionStringBuilderExtensions
 {
     public static string? GetValue(this DbConnectionStringBuilder dbConnectionStringBuilder, string keyword)
     {
-        bool contains = dbConnectionStringBuilder.TryGetValue(keyword, out object? valueObject);
-        string? value = contains ? (string?)valueObject : null;
+        var contains = dbConnectionStringBuilder.TryGetValue(keyword, out var valueObject);
+        var value = contains ? (string?)valueObject : null;
         return value;
     }
 }

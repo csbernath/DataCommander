@@ -10,13 +10,13 @@ public static class ElementPair
 
     public static T Min<T>(T x, T y, IComparer<T> comparer)
     {
-        int result = comparer.Compare(x, y);
+        var result = comparer.Compare(x, y);
         return result <= 0 ? x : y;
     }
 
     public static T Max<T>(T x, T y, IComparer<T> comparer)
     {
-        int result = comparer.Compare(x, y);
+        var result = comparer.Compare(x, y);
         return result <= 0 ? y : x;
     }
 }

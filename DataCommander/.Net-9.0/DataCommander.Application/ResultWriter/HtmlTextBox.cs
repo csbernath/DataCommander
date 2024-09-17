@@ -43,9 +43,9 @@ internal sealed class HtmlTextBox : UserControl
             _fileName = Path.GetTempFileName();
             _fileName += ".xml";
 
-            using (FileStream fileStream = new FileStream(_fileName, FileMode.OpenOrCreate))
+            using (var fileStream = new FileStream(_fileName, FileMode.OpenOrCreate))
             {
-                using (StreamWriter streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
+                using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
                 {
                     streamWriter.Write(value);
                     streamWriter.Close();
@@ -95,7 +95,7 @@ internal sealed class HtmlTextBox : UserControl
     /// </summary>
     private void InitializeComponent()
     {
-        System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(HtmlTextBox));
+        var resources = new System.Resources.ResourceManager(typeof(HtmlTextBox));
         this._webBrowser = new WebBrowser();
         GarbageMonitor.Default.Add("webBrowser", this._webBrowser);
         // ((System.ComponentModel.ISupportInitialize)(this.webBrowser)).BeginInit();

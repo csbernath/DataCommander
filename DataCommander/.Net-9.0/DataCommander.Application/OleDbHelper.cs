@@ -9,8 +9,8 @@ public static class OleDbHelper
 {
     public static DataTable Convert(object adodbRecordset)
     {
-        OleDbDataAdapter adapter = new OleDbDataAdapter();
-        DataTable dataTable = new DataTable();
+        var adapter = new OleDbDataAdapter();
+        var dataTable = new DataTable();
         adapter.Fill(dataTable, adodbRecordset);
         return dataTable;
     }
@@ -18,22 +18,22 @@ public static class OleDbHelper
     [CLSCompliant(false)]
     public static DataTable Convert(_Recordset recordset, out OleDbParameter[] columns)
     {
-        OleDbDataAdapter adapter = new OleDbDataAdapter();
-        DataTable dataTable = new DataTable();
+        var adapter = new OleDbDataAdapter();
+        var dataTable = new DataTable();
         adapter.Fill(dataTable, recordset);
         columns = new OleDbParameter[recordset.Fields.Count];
-        int index = 0;
+        var index = 0;
 
         foreach (Field field in recordset.Fields)
         {
-            OleDbParameter param = new OleDbParameter
+            var param = new OleDbParameter
             {
                 SourceColumn = field.Name,
                 OleDbType = (OleDbType)field.Type
             };
 
-            int size = field.DefinedSize;
-            byte precision = field.Precision;
+            var size = field.DefinedSize;
+            var precision = field.Precision;
 
             if (size == 0) 
                 size = precision;
@@ -53,7 +53,7 @@ public static class OleDbHelper
 
     public static void DropTable(string tableName, OleDbConnection connection)
     {
-        OleDbCommand command = connection.CreateCommand();
+        var command = connection.CreateCommand();
         command.CommandText = "drop table " + tableName;
 
         try
@@ -67,13 +67,13 @@ public static class OleDbHelper
 
     private static void CreateTableSql(string tableName, OleDbParameter[] columns, OleDbConnection connection)
     {
-        string cmdText = "create table " + tableName + "(";
-        int i = 0;
-        int count = columns.Length;
+        var cmdText = "create table " + tableName + "(";
+        var i = 0;
+        var count = columns.Length;
 
-        foreach (OleDbParameter column in columns)
+        foreach (var column in columns)
         {
-            string sqlType = column.OleDbType switch
+            var sqlType = column.OleDbType switch
             {
                 OleDbType.Char => "char(" + column.Size + ")",
                 OleDbType.DBDate => "datetime",
@@ -102,20 +102,20 @@ public static class OleDbHelper
 
         cmdText += ")";
 
-        OleDbCommand command = connection.CreateCommand();
+        var command = connection.CreateCommand();
         command.CommandText = cmdText;
         command.ExecuteNonQuery();
     }
 
     private static void CreateTableJet(string tableName, OleDbParameter[] columns, OleDbConnection connection)
     {
-        string cmdText = "create table " + tableName + "(";
-        int i = 0;
-        int count = columns.Length;
+        var cmdText = "create table " + tableName + "(";
+        var i = 0;
+        var count = columns.Length;
 
-        foreach (OleDbParameter column in columns)
+        foreach (var column in columns)
         {
-            string sqlType = column.OleDbType switch
+            var sqlType = column.OleDbType switch
             {
                 OleDbType.Char => "char(" + column.Size + ")",
                 OleDbType.DBDate => "datetime",
@@ -144,7 +144,7 @@ public static class OleDbHelper
 
         cmdText += ")";
 
-        OleDbCommand command = connection.CreateCommand();
+        var command = connection.CreateCommand();
         command.CommandText = cmdText;
         command.ExecuteNonQuery();
     }
@@ -165,8 +165,8 @@ public static class OleDbHelper
 
     public static void CopyTable(DataTable sourceTable, OleDbConnection connection)
     {
-        OleDbDataAdapter adapter = new OleDbDataAdapter("select * from " + sourceTable.TableName + " where 0=1", connection);
-        DataTable destTable = new DataTable();
+        var adapter = new OleDbDataAdapter("select * from " + sourceTable.TableName + " where 0=1", connection);
+        var destTable = new DataTable();
         adapter.Fill(destTable);
 
         foreach (DataRow sourceRow in sourceTable.Rows)
@@ -174,7 +174,7 @@ public static class OleDbHelper
             destTable.Rows.Add(sourceRow.ItemArray);
         }
 
-        OleDbCommandBuilder builder = new OleDbCommandBuilder(adapter);
+        var builder = new OleDbCommandBuilder(adapter);
         adapter.Update(destTable);
     }
 
@@ -183,8 +183,8 @@ public static class OleDbHelper
         string tableName,
         OleDbConnection connection)
     {
-        Recordset rs = (Recordset)adodbRecordset;
-        DataTable sourceTable = Convert(rs, out OleDbParameter[]? columns);
+        var rs = (Recordset)adodbRecordset;
+        var sourceTable = Convert(rs, out var columns);
         sourceTable.TableName = tableName;
         DropTable(tableName, connection);
         CreateTable(tableName, columns, connection);

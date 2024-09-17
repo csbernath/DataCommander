@@ -12,7 +12,7 @@ public class SortedArray<TKey, TValue>(TValue[] values, Func<TValue, TKey> keySe
     {
         get
         {
-            int index = IndexOfKey(key);
+            var index = IndexOfKey(key);
 
             if (index < 0)
                 throw new KeyNotFoundException();
@@ -22,13 +22,13 @@ public class SortedArray<TKey, TValue>(TValue[] values, Func<TValue, TKey> keySe
 
         set
         {
-            int index = IndexOfKey(key);
+            var index = IndexOfKey(key);
 
             if (index < 0)
                 throw new KeyNotFoundException();
 
-            TValue originalValue = values[index];
-            TKey originalKey = keySelector(originalValue);
+            var originalValue = values[index];
+            var originalKey = keySelector(originalValue);
 
             Assert.IsTrue(comparison(originalKey, key) == 0);
 
@@ -42,7 +42,7 @@ public class SortedArray<TKey, TValue>(TValue[] values, Func<TValue, TKey> keySe
     public bool TryGetValue(TKey key, out TValue value)
     {
         bool succeeded;
-        int index = IndexOfKey(key);
+        var index = IndexOfKey(key);
 
         if (index >= 0)
         {
@@ -65,8 +65,8 @@ public class SortedArray<TKey, TValue>(TValue[] values, Func<TValue, TKey> keySe
         if (values.Length > 0)
             indexOfKey = BinarySearch.IndexOf(0, values.Length - 1, index =>
             {
-                TValue otherValue = values[index];
-                TKey otherKey = keySelector(otherValue);
+                var otherValue = values[index];
+                var otherKey = keySelector(otherValue);
                 return comparison(key, otherKey);
             });
         else
@@ -77,9 +77,9 @@ public class SortedArray<TKey, TValue>(TValue[] values, Func<TValue, TKey> keySe
 
     public void SetValue(int index, TValue value)
     {
-        TKey key = keySelector(value);
-        TValue originalValue = values[index];
-        TKey originalKey = keySelector(originalValue);
+        var key = keySelector(value);
+        var originalValue = values[index];
+        var originalKey = keySelector(originalValue);
 
         Assert.IsTrue(comparison(originalKey, key) == 0);
 

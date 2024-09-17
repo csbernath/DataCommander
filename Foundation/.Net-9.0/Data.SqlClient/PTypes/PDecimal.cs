@@ -39,7 +39,7 @@ public readonly struct PDecimal : INullable
 
     public static bool operator ==(PDecimal x, PDecimal y)
     {
-        bool isEqual = x.ValueType == y.ValueType;
+        var isEqual = x.ValueType == y.ValueType;
 
         if (isEqual)
         {
@@ -61,7 +61,7 @@ public readonly struct PDecimal : INullable
 
     public override readonly bool Equals(object y)
     {
-        bool equals = y is PDecimal;
+        var equals = y is PDecimal;
 
         if (equals)
         {

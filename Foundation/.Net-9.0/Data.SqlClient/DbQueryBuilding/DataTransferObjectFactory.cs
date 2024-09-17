@@ -8,16 +8,16 @@ public static class DataTransferObjectFactory
 {
     public static ReadOnlyCollection<Line> CreateDataTransferObject(string name, ReadOnlyCollection<DataTransferObjectField> fields)
     {
-        TextBuilder textBuilder = new TextBuilder();
+        var textBuilder = new TextBuilder();
 
         textBuilder.Add($"public sealed class {name}");
         using (textBuilder.AddCSharpBlock())
         {
-            foreach (DataTransferObjectField field in fields)
+            foreach (var field in fields)
                 textBuilder.Add($"public readonly {field.Type} {field.Name};");
 
             textBuilder.Add(Line.Empty);
-            ReadOnlyCollection<Line> constructor = GetConstructor(name, fields);
+            var constructor = GetConstructor(name, fields);
             textBuilder.Add(constructor);
         }
 
@@ -26,13 +26,13 @@ public static class DataTransferObjectFactory
 
     private static ReadOnlyCollection<Line> GetConstructor(string name, ReadOnlyCollection<DataTransferObjectField> fields)
     {
-        TextBuilder textBuilder = new TextBuilder();
+        var textBuilder = new TextBuilder();
 
-        string parameters = fields.Select(field => $"{field.Type} {field.Name.ToCamelCase()}").Join(", ");
+        var parameters = fields.Select(field => $"{field.Type} {field.Name.ToCamelCase()}").Join(", ");
         textBuilder.Add($"public {name}({parameters})");
         using (textBuilder.AddCSharpBlock())
         {
-            foreach (DataTransferObjectField field in fields)
+            foreach (var field in fields)
                 textBuilder.Add($"{field.Name} = {field.Name.ToCamelCase()};");
         }
 

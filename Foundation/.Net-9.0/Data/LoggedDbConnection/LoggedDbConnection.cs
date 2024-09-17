@@ -66,7 +66,7 @@ public sealed class LoggedDbConnection : IDbConnection
 
     IDbCommand IDbConnection.CreateCommand()
     {
-        IDbCommand command = _connection.CreateCommand();
+        var command = _connection.CreateCommand();
         return new LoggedDbCommand(command, _beforeExecuteCommand, _afterExecuteCommand, _afterRead);
     }
 
@@ -76,7 +76,7 @@ public sealed class LoggedDbConnection : IDbConnection
     {
         if (_beforeOpen != null)
         {
-            BeforeOpenDbConnectionEventArgs eventArgs = new BeforeOpenDbConnectionEventArgs(_connection.ConnectionString);
+            var eventArgs = new BeforeOpenDbConnectionEventArgs(_connection.ConnectionString);
             _beforeOpen(this, eventArgs);
         }
 
@@ -94,7 +94,7 @@ public sealed class LoggedDbConnection : IDbConnection
             }
             finally
             {
-                AfterOpenDbConnectionEventArgs eventArgs = new AfterOpenDbConnectionEventArgs(exception);
+                var eventArgs = new AfterOpenDbConnectionEventArgs(exception);
                 _afterOpen(this, eventArgs);
             }
         }

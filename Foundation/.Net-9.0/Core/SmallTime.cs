@@ -24,7 +24,7 @@ public readonly struct SmallTime : IEquatable<SmallTime>, IComparable<SmallTime>
 
     public override readonly string ToString()
     {
-        TimeSpan timeSpan = ToTimeSpan(_value);
+        var timeSpan = ToTimeSpan(_value);
         return timeSpan.ToString();
     }
 
@@ -37,8 +37,8 @@ public readonly struct SmallTime : IEquatable<SmallTime>, IComparable<SmallTime>
     {
         get
         {
-            int hours = _value / 60;
-            int minutes = _value - 60 * hours;
+            var hours = _value / 60;
+            var minutes = _value - 60 * hours;
             return $"{hours:D2}:{minutes:D2}";
         }
     }

@@ -22,14 +22,14 @@ internal sealed class IndexCollectionNode : ITreeNode
 
     public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        string commandText = $"PRAGMA index_list({_tableNode.Name});";
+        var commandText = $"PRAGMA index_list({_tableNode.Name});";
         Foundation.Collections.ReadOnly.ReadOnlySegmentLinkedList<IndexNode> list = await Db.ExecuteReaderAsync(
             () => ConnectionFactory.CreateConnection(_tableNode.DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
             new ExecuteReaderRequest(commandText),
             128,
             dataRecord =>
             {
-                string name = dataRecord.GetString(0);
+                var name = dataRecord.GetString(0);
                 return new IndexNode(_tableNode, name);
             },
             cancellationToken);

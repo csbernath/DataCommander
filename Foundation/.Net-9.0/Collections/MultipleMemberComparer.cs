@@ -8,11 +8,11 @@ public sealed class MultipleMemberComparer<T>(params IComparer<T>[] comparers) :
 
     int IComparer<T>.Compare(T x, T y)
     {
-        int result = 0;
+        var result = 0;
 
-        foreach (IComparer<T> comparer in _comparers)
+        foreach (var comparer in _comparers)
         {
-            int currentResult = comparer.Compare(x, y);
+            var currentResult = comparer.Compare(x, y);
             if (currentResult != 0)
             {
                 result = currentResult;

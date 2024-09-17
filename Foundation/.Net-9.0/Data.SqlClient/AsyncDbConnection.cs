@@ -56,7 +56,7 @@ public sealed class AsyncDbConnection : IDbConnection
 
     public IDbCommand CreateCommand()
     {
-        IDbCommand command = _cloneableConnection.CreateCommand();
+        var command = _cloneableConnection.CreateCommand();
         return new AsyncDbCommand(this, command);
     }
 
@@ -78,7 +78,7 @@ public sealed class AsyncDbConnection : IDbConnection
 
     internal int ExecuteNonQuery(AsyncDbCommand command)
     {
-        string commandText = ToString(command);
+        var commandText = ToString(command);
 
         lock (_commands)
             _commands.Add(commandText);
@@ -95,10 +95,10 @@ public sealed class AsyncDbConnection : IDbConnection
         switch (command.CommandType)
         {
             case CommandType.StoredProcedure:
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
                 sb.AppendFormat("exec {0}", command.CommandText);
-                SqlParameterCollection parameters = (SqlParameterCollection)command.Parameters;
-                string parametersString = IDataParameterCollectionExtensions.ToLogString(parameters);
+                var parameters = (SqlParameterCollection)command.Parameters;
+                var parametersString = IDataParameterCollectionExtensions.ToLogString(parameters);
 
                 if (parametersString.Length > 0)
                 {
@@ -156,9 +156,9 @@ public sealed class AsyncDbConnection : IDbConnection
                     _commands.Clear();
                 }
 
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
 
-                for (int i = 0; i < commandTextArray.Length; i++)
+                for (var i = 0; i < commandTextArray.Length; i++)
                 {
                     if (i > 0)
                     {
@@ -168,12 +168,12 @@ public sealed class AsyncDbConnection : IDbConnection
                     sb.Append(commandTextArray[i]);
                 }
 
-                string commandText = sb.ToString();
+                var commandText = sb.ToString();
                 Exception exception = null;
 
-                using (IDbConnection connection = (IDbConnection)_cloneable.Clone())
+                using (var connection = (IDbConnection)_cloneable.Clone())
                 {
-                    IDbCommand command = connection.CreateCommand();
+                    var command = connection.CreateCommand();
                     command.CommandText = commandText;
                     command.CommandTimeout = 600;
                     connection.Open();
@@ -190,7 +190,7 @@ public sealed class AsyncDbConnection : IDbConnection
 
                 if (exception != null)
                 {
-                    string message = exception.ToLogString();
+                    var message = exception.ToLogString();
                     Log.Write(LogLevel.Error, message);
                 }
             }

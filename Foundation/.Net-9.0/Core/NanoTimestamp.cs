@@ -10,19 +10,19 @@ public readonly struct NanoTimestamp
 
     public readonly DateTime ToUniversalTime()
     {
-        long timeSpanTicks = (long) (_ticks / 100);
-        DateTime universalTime = new DateTime(timeSpanTicks);
+        var timeSpanTicks = (long) (_ticks / 100);
+        var universalTime = new DateTime(timeSpanTicks);
         return universalTime;
     }
 
     public static NanoTimestamp FromStopwatchTimestamp(DateTime referenceUniversalTime, long referenceStopwatchTimestamp, long stopwatchTimestamp)
     {
-        double referenceNanoTimestampTicksDouble = referenceUniversalTime.Ticks * 100.0;
-        long stopwatchTicks = stopwatchTimestamp - referenceStopwatchTimestamp;
-        double seconds = (double) stopwatchTicks / StopwatchConstants.TicksPerSecond;
-        double nanoseconds = seconds * TenPowerConstants.TenPower9;
-        double nanoTimestampTicksDouble = referenceNanoTimestampTicksDouble + nanoseconds;
-        ulong nanoTimestampTicks = (ulong) nanoTimestampTicksDouble;
+        var referenceNanoTimestampTicksDouble = referenceUniversalTime.Ticks * 100.0;
+        var stopwatchTicks = stopwatchTimestamp - referenceStopwatchTimestamp;
+        var seconds = (double) stopwatchTicks / StopwatchConstants.TicksPerSecond;
+        var nanoseconds = seconds * TenPowerConstants.TenPower9;
+        var nanoTimestampTicksDouble = referenceNanoTimestampTicksDouble + nanoseconds;
+        var nanoTimestampTicks = (ulong) nanoTimestampTicksDouble;
         return new NanoTimestamp(nanoTimestampTicks);
     }
 }

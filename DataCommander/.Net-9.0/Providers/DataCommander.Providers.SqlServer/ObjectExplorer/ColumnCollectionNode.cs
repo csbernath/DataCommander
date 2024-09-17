@@ -16,15 +16,15 @@ internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : 
 
     private static ColumnNode ToColumnNode(IDataRecord dataRecord)
     {
-        int id = dataRecord.GetInt32(0);
-        string columnName = dataRecord.GetString(1);
-        byte systemTypeId = dataRecord.GetByte(2);
-        short maxLength = dataRecord.GetInt16(3);
-        byte precision = dataRecord.GetByte(4);
-        byte scale = dataRecord.GetByte(5);
-        bool isNullable = dataRecord.GetBoolean(6);
-        bool isComputed = dataRecord.GetBoolean(7);
-        string userTypeName = dataRecord.GetString(8);
+        var id = dataRecord.GetInt32(0);
+        var columnName = dataRecord.GetString(1);
+        var systemTypeId = dataRecord.GetByte(2);
+        var maxLength = dataRecord.GetInt16(3);
+        var precision = dataRecord.GetByte(4);
+        var scale = dataRecord.GetByte(5);
+        var isNullable = dataRecord.GetBoolean(6);
+        var isComputed = dataRecord.GetBoolean(7);
+        var userTypeName = dataRecord.GetString(8);
 
         return new ColumnNode(id, columnName, systemTypeId, maxLength, precision, scale, isNullable, isComputed, userTypeName);
     }
@@ -35,7 +35,7 @@ internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : 
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        string commandText = CreateCommandText();
+        var commandText = CreateCommandText();
         SortedDictionary<int, ColumnNode> columnNodes = null;
         await Db.ExecuteReaderAsync(
             databaseNode.Databases.Server.CreateConnection,
@@ -47,16 +47,16 @@ internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : 
                 await dataReader.NextResultAsync(cancellationToken);
                 while (await dataReader.ReadAsync(cancellationToken))
                 {
-                    int columnId = dataReader.GetInt32(0);
-                    ColumnNode columnNode = columnNodes[columnId];
+                    var columnId = dataReader.GetInt32(0);
+                    var columnNode = columnNodes[columnId];
                     columnNode.IsPrimaryKey = true;
                 }
 
                 await dataReader.NextResultAsync(cancellationToken);
                 while (await dataReader.ReadAsync(cancellationToken))
                 {
-                    int columnId = dataReader.GetInt32(0);
-                    ColumnNode columnNode = columnNodes[columnId];
+                    var columnId = dataReader.GetInt32(0);
+                    var columnNode = columnNodes[columnId];
                     columnNode.IsForeignKey = true;
                 }
             },
@@ -66,9 +66,9 @@ internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : 
 
     private string CreateCommandText()
     {
-        SqlCommandBuilder cb = new SqlCommandBuilder();
-        string databaseName = cb.QuoteIdentifier(databaseNode.Name);
-        string commandText = $@"select
+        var cb = new SqlCommandBuilder();
+        var databaseName = cb.QuoteIdentifier(databaseNode.Name);
+        var commandText = $@"select
     c.column_id,
     c.name,
     c.system_type_id,

@@ -24,9 +24,9 @@ public readonly struct DateTimeInterval
     [Pure]
     public readonly DateTimeInterval? Intersect(DateTimeInterval other)
     {
-        DateTime start = ElementPair.Max(Start, other.Start);
-        DateTime end = ElementPair.Min(End, other.End);
-        bool intersects = start < end;
+        var start = ElementPair.Max(Start, other.Start);
+        var end = ElementPair.Min(End, other.End);
+        var intersects = start < end;
         return intersects
             ? new DateTimeInterval(start, end)
             : (DateTimeInterval?) null;
@@ -35,16 +35,16 @@ public readonly struct DateTimeInterval
     [Pure]
     public readonly bool Intersects(DateTimeInterval other)
     {
-        DateTime start = ElementPair.Max(Start, other.Start);
-        DateTime end = ElementPair.Min(End, other.End);
-        bool intersects = start < end;
+        var start = ElementPair.Max(Start, other.Start);
+        var end = ElementPair.Min(End, other.End);
+        var intersects = start < end;
         return intersects;
     }
 
     [Pure]
     public readonly TimeSpan GetLength()
     {
-        TimeSpan length = End - Start;
+        var length = End - Start;
         return length;
     }
 

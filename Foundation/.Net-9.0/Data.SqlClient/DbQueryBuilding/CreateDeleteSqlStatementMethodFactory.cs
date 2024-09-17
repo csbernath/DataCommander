@@ -10,7 +10,7 @@ public static class CreateDeleteSqlStatementMethodFactory
     public static ReadOnlyCollection<Line> Create(string schema, string table, Column identifierColumn, Column versionColumn)
     {
         List<string> arguments = [];
-        string csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == identifierColumn.SqlDataTypeName).CSharpTypeName;
+        var csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == identifierColumn.SqlDataTypeName).CSharpTypeName;
         arguments.Add($"{csharpTypeName} {identifierColumn.ColumnName.ToCamelCase()}");
         if (versionColumn != null)
         {
@@ -18,14 +18,14 @@ public static class CreateDeleteSqlStatementMethodFactory
             arguments.Add($"{csharpTypeName} {versionColumn.ColumnName.ToCamelCase()}");
         }
 
-        TextBuilder textBuilder = new TextBuilder();
+        var textBuilder = new TextBuilder();
         textBuilder.Add($"public static ReadOnlyCollection<Line> CreateDeleteSqlStatement({arguments.Join(", ")})");
         using (textBuilder.AddCSharpBlock())
         {
             textBuilder.Add("var whereColumns = new[]");
             using (textBuilder.AddCSharpBlock())
             {
-                string method = MethodName.GetToSqlConstantMethodName(identifierColumn.SqlDataTypeName, identifierColumn.IsNullable);
+                var method = MethodName.GetToSqlConstantMethodName(identifierColumn.SqlDataTypeName, identifierColumn.IsNullable);
                 textBuilder.Add($"new ColumnNameValue(\"{identifierColumn.ColumnName}\", {identifierColumn.ColumnName.ToCamelCase()}.{method}())");
                 if (versionColumn != null)
                 {

@@ -29,7 +29,7 @@ public readonly struct SmallDate : IComparable<SmallDate>, IEquatable<SmallDate>
 
     public SmallDate(int year, int month, int day)
     {
-        DateTime dateTime = new DateTime(year, month, day);
+        var dateTime = new DateTime(year, month, day);
         _value = ToSmallDateValue(dateTime);
     }
 
@@ -40,13 +40,13 @@ public readonly struct SmallDate : IComparable<SmallDate>, IEquatable<SmallDate>
 
     public static explicit operator SmallDate(DateTime dateTime)
     {
-        ushort value = ToSmallDateValue(dateTime);
+        var value = ToSmallDateValue(dateTime);
         return new SmallDate(value);
     }
 
     public static SmallDate operator +(SmallDate smallDate, int value)
     {
-        int result = smallDate._value + value;
+        var result = smallDate._value + value;
         if (result < ushort.MinValue || ushort.MaxValue < result)
             throw new OverflowException();
         return new SmallDate((ushort) result);
@@ -67,7 +67,7 @@ public readonly struct SmallDate : IComparable<SmallDate>, IEquatable<SmallDate>
     [Pure]
     public readonly SmallDate AddDays(short value)
     {
-        int valueInt32 = _value + value;
+        var valueInt32 = _value + value;
         ushort valueUInt16;
 
         if (valueInt32 < ushort.MinValue)
@@ -89,9 +89,9 @@ public readonly struct SmallDate : IComparable<SmallDate>, IEquatable<SmallDate>
     [Pure]
     public SmallDate AddMonths(int months)
     {
-        DateTime dateTime = ToDateTime();
+        var dateTime = ToDateTime();
         dateTime = dateTime.AddMonths(months);
-        ushort result = ToSmallDateValue(dateTime);
+        var result = ToSmallDateValue(dateTime);
         return new SmallDate(result);
     }
 
@@ -101,13 +101,13 @@ public readonly struct SmallDate : IComparable<SmallDate>, IEquatable<SmallDate>
 
     public override readonly string ToString()
     {
-        DateTime dateTime = ToDateTime(_value);
+        var dateTime = ToDateTime(_value);
         return dateTime.ToShortDateString();
     }
 
     public readonly string ToString(string format)
     {
-        DateTime dateTime = ToDateTime(_value);
+        var dateTime = ToDateTime(_value);
         return dateTime.ToString(format);
     }
 
@@ -144,9 +144,9 @@ public readonly struct SmallDate : IComparable<SmallDate>, IEquatable<SmallDate>
         Assert.IsInRange(MinDateTime <= dateTime);
         Assert.IsInRange(dateTime <= MaxDateTime);
 
-        TimeSpan timeSpan = dateTime - MinDateTime;
-        double totalDays = timeSpan.TotalDays;
-        ushort value = (ushort) totalDays;
+        var timeSpan = dateTime - MinDateTime;
+        var totalDays = timeSpan.TotalDays;
+        var value = (ushort) totalDays;
         return value;
     }
 }

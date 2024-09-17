@@ -50,7 +50,7 @@ public struct PBoolean : INullable
 
     public static bool operator ==(PBoolean x, PBoolean y)
     {
-        bool isEqual = x.ValueType == y.ValueType;
+        var isEqual = x.ValueType == y.ValueType;
         if (isEqual)
         {
             if (x.ValueType == PValueType.Value)
@@ -68,7 +68,7 @@ public struct PBoolean : INullable
 
     public override readonly bool Equals(object y)
     {
-        bool equals = y is PBoolean;
+        var equals = y is PBoolean;
         if (equals)
             equals = this == (PBoolean)y;
         return equals;

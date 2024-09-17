@@ -27,10 +27,10 @@ public sealed class Int64PerformanceCounter
 
         while (true)
         {
-            long min = _min;
+            var min = _min;
             if (item < min)
             {
-                long originalMin = Interlocked.CompareExchange(ref _min, item, min);
+                var originalMin = Interlocked.CompareExchange(ref _min, item, min);
                 if (originalMin == min)
                     break;
                 else
@@ -42,10 +42,10 @@ public sealed class Int64PerformanceCounter
 
         while (true)
         {
-            long max = _max;
+            var max = _max;
             if (item > max)
             {
-                long originalMax = Interlocked.CompareExchange(ref _max, item, max);
+                var originalMax = Interlocked.CompareExchange(ref _max, item, max);
                 if (originalMax == max)
                     break;
                 else

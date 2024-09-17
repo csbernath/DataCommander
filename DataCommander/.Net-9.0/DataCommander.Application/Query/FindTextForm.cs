@@ -53,7 +53,7 @@ public class FindTextForm : Form
     {
         get
         {
-            RichTextBoxFinds richTextBoxFinds = RichTextBoxFinds.None;
+            var richTextBoxFinds = RichTextBoxFinds.None;
 
             if (_cbMatchCase.Checked)
             {
@@ -173,7 +173,7 @@ public class FindTextForm : Form
 
     private void btnOK_Click(object sender, EventArgs e)
     {
-        string text = _cbText.Text;
+        var text = _cbText.Text;
 
         if (text.Length > 0)
         {
@@ -181,7 +181,7 @@ public class FindTextForm : Form
             {
                 Cursor = Cursors.WaitCursor;
 
-                int i = _cbText.FindStringExact(text);
+                var i = _cbText.FindStringExact(text);
 
                 if (i < 0)
                 {

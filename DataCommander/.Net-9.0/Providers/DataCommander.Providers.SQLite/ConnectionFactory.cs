@@ -7,12 +7,12 @@ public static class ConnectionFactory
 {
     public static SQLiteConnection CreateConnection(ConnectionStringAndCredential connectionStringAndCredential)
     {
-        SQLiteConnectionStringBuilder sqliteConnectionStringBuilder = new SQLiteConnectionStringBuilder(connectionStringAndCredential.ConnectionString)
+        var sqliteConnectionStringBuilder = new SQLiteConnectionStringBuilder(connectionStringAndCredential.ConnectionString)
         {
             Pooling = false
         };
 
-        Credential? credential = connectionStringAndCredential.Credential;
+        var credential = connectionStringAndCredential.Credential;
         if (credential != null)
             sqliteConnectionStringBuilder.Password = PasswordFactory.Unprotect(credential.Password.Protected);
 

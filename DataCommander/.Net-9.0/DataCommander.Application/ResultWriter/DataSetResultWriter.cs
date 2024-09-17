@@ -46,8 +46,8 @@ internal sealed class DataSetResultWriter(Action<InfoMessage> addInfoMessage, bo
     void IResultWriter.WriteRows(object[][] rows, int rowCount)
     {
         _logResultWriter.WriteRows(rows, rowCount);
-        DataRowCollection targetRows = _dataTable.Rows;
-        for (int i = 0; i < rowCount; i++)
+        var targetRows = _dataTable.Rows;
+        for (var i = 0; i < rowCount; i++)
             targetRows.Add(rows[i]);
     }
 
@@ -66,7 +66,7 @@ internal sealed class DataSetResultWriter(Action<InfoMessage> addInfoMessage, bo
 
     private void CreateTable(DataTable schemaTable)
     {
-        string tableName = schemaTable.TableName;
+        var tableName = schemaTable.TableName;
         if (tableName == "SchemaTable")
             tableName = $"Table {_tableIndex}";
         if (showShemaTable)
@@ -81,14 +81,14 @@ internal sealed class DataSetResultWriter(Action<InfoMessage> addInfoMessage, bo
 
         foreach (DataRow schemaRow in schemaTable.Rows)
         {
-            FoundationDbColumn dataColumnSchema = FoundationDbColumnFactory.Create(schemaRow);
-            string columnName = dataColumnSchema.ColumnName;
-            int columnSize = dataColumnSchema.ColumnSize;
-            Type dataType = _provider.GetColumnType(dataColumnSchema);
+            var dataColumnSchema = FoundationDbColumnFactory.Create(schemaRow);
+            var columnName = dataColumnSchema.ColumnName;
+            var columnSize = dataColumnSchema.ColumnSize;
+            var dataType = _provider.GetColumnType(dataColumnSchema);
 
             DataColumn dataColumn;
-            int n = 2;
-            string columnName2 = columnName;
+            var n = 2;
+            var columnName2 = columnName;
 
             while (true)
             {

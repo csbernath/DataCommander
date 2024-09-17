@@ -20,15 +20,15 @@ internal sealed class StoredProcedureCollectionNode(DatabaseNode database, bool 
         if (!isMsShipped)
             treeNodes.Add(new StoredProcedureCollectionNode(database, true));
 
-        string commandText = GetCommandText();
+        var commandText = GetCommandText();
         Foundation.Collections.ReadOnly.ReadOnlySegmentLinkedList<StoredProcedureNode> rows = await Db.ExecuteReaderAsync(
             database.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
             dataRecord =>
             {
-                string owner = dataRecord.GetString(0);
-                string name = dataRecord.GetString(1);
+                var owner = dataRecord.GetString(0);
+                var name = dataRecord.GetString(1);
                 return new StoredProcedureNode(database, owner, name);
             },
             cancellationToken);
@@ -39,7 +39,7 @@ internal sealed class StoredProcedureCollectionNode(DatabaseNode database, bool 
 
     private string GetCommandText()
     {
-        string commandText = string.Format(@"
+        var commandText = string.Format(@"
 select  s.name as Owner,
         o.name as Name        
 from    [{0}].sys.all_objects o (readpast)

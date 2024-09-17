@@ -8,9 +8,9 @@ public static class SqlObjectScripter
 {
     public static SqlConnectionInfo CreateSqlConnectionInfo(ConnectionStringAndCredential connectionStringAndCredential)
     {
-        SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder(connectionStringAndCredential.ConnectionString);
+        var csb = new SqlConnectionStringBuilder(connectionStringAndCredential.ConnectionString);
 
-        SqlConnectionInfo connectionInfo = new SqlConnectionInfo
+        var connectionInfo = new SqlConnectionInfo
         {
             ApplicationName = csb.ApplicationName,
             ConnectionTimeout = csb.ConnectTimeout,
@@ -26,7 +26,7 @@ public static class SqlObjectScripter
             TrustServerCertificate = csb.TrustServerCertificate
         };
 
-        Credential? credential = connectionStringAndCredential.Credential;
+        var credential = connectionStringAndCredential.Credential;
         if (credential != null)
         {
             connectionInfo.UserName = credential.UserId;

@@ -55,15 +55,15 @@ end
 
 drop table #catalog";
 
-        using Microsoft.Data.SqlClient.SqlConnection connection = _linkedServer.LinkedServers.Server.CreateConnection();
+        using var connection = _linkedServer.LinkedServers.Server.CreateConnection();
         connection.Open();
 
-        SqlParameterCollectionBuilder parameters = new SqlParameterCollectionBuilder();
+        var parameters = new SqlParameterCollectionBuilder();
         parameters.Add("@name", _linkedServer.Name);
         parameters.Add("@getSystemCatalogs", false);
 
-        IDbCommandExecutor executor = connection.CreateCommandExecutor();
-        ExecuteReaderRequest executeReaderRequest = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
+        var executor = connection.CreateCommandExecutor();
+        var executeReaderRequest = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
         return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(executeReaderRequest, 128,
             dataRecord => new LinkedServerCatalogNode(_linkedServer, dataRecord.GetString(0))));
     }

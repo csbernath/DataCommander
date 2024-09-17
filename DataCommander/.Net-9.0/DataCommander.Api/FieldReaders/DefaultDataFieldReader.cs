@@ -17,9 +17,9 @@ public sealed class DefaultDataFieldReader(IDataRecord dataRecord, int columnOrd
             }
             catch (Exception e)
             {
-                string name = dataRecord.GetName(columnOrdinal);
-                string dataTypeName = dataRecord.GetDataTypeName(columnOrdinal);
-                string message = $"dataRecord.GetValue(columnordinal) failed. Column name: {name}, column dataTypeName: {dataTypeName}";
+                var name = dataRecord.GetName(columnOrdinal);
+                var dataTypeName = dataRecord.GetDataTypeName(columnOrdinal);
+                var message = $"dataRecord.GetValue(columnordinal) failed. Column name: {name}, column dataTypeName: {dataTypeName}";
                 throw new Exception(message, e);
             }
 

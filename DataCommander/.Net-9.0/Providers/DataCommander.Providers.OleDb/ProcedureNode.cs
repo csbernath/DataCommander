@@ -11,7 +11,7 @@ internal sealed class ProcedureNode(string name) : ITreeNode
     {
         get
         {
-            string? name1 = name;
+            var name1 = name;
 
             if (name1 == null)
                 name1 = "[No procedures found]";

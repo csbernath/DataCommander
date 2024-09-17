@@ -21,7 +21,7 @@ public static class Assert
     {
         if (argument != null)
         {
-            string message = $"Argument must be null: {argumentString}";
+            var message = $"Argument must be null: {argumentString}";
             throw new ArgumentException(message);
         }
     }

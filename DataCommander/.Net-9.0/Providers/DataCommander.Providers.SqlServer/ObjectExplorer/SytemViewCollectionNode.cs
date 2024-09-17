@@ -15,7 +15,7 @@ internal sealed class SystemViewCollectionNode(DatabaseNode databaseNode) : ITre
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        string commandText = CreateCommandText();
+        var commandText = CreateCommandText();
         return await Db.ExecuteReaderAsync(
             databaseNode.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
@@ -26,9 +26,9 @@ internal sealed class SystemViewCollectionNode(DatabaseNode databaseNode) : ITre
 
     private string CreateCommandText()
     {
-        SqlCommandBuilder cb = new SqlCommandBuilder();
-        string databaseName = cb.QuoteIdentifier(databaseNode.Name);
-        string commandText = $@"select
+        var cb = new SqlCommandBuilder();
+        var databaseName = cb.QuoteIdentifier(databaseNode.Name);
+        var commandText = $@"select
     s.name,
     v.name,
     v.object_id
@@ -42,9 +42,9 @@ order by 1,2";
 
     private ViewNode ReadRecord(IDataRecord dataRecord)
     {
-        string schema = dataRecord.GetString(0);
-        string name = dataRecord.GetString(1);
-        int id = dataRecord.GetInt32(2);
+        var schema = dataRecord.GetString(0);
+        var name = dataRecord.GetString(1);
+        var id = dataRecord.GetInt32(2);
         return new ViewNode(databaseNode, id, schema, name);
     }
 

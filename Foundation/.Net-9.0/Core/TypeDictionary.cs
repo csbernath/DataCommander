@@ -9,13 +9,13 @@ public sealed class TypeDictionary<TValue>
 
     public void Add<T>(TValue value)
     {
-        Type type = typeof(T);
+        var type = typeof(T);
         _selections.Add(type, value);
     }
 
     public bool TryGetValue<T>(out TValue value)
     {
-        Type type = typeof(T);
+        var type = typeof(T);
         return _selections.TryGetValue(type, out value);
     }
 
@@ -23,7 +23,7 @@ public sealed class TypeDictionary<TValue>
 
     public TValue GetValueOrDefault<T>()
     {
-        Type type = typeof(T);
+        var type = typeof(T);
         return GetValueOrDefault(type);
     }
 }

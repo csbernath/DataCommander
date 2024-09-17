@@ -29,21 +29,21 @@ public class Progress
     public void Add(int value, long timestamp)
     {
         Assert.IsTrue(value >= 0);
-        int newTaskCount = _currentTaskCount + value;
+        var newTaskCount = _currentTaskCount + value;
         Assert.IsTrue(newTaskCount <= _taskCount);
 
-        double newRatio = (double)newTaskCount / _taskCount;
-        double newPercentDouble = _startPercent + newRatio * (_endPercent - _startPercent);
+        var newRatio = (double)newTaskCount / _taskCount;
+        var newPercentDouble = _startPercent + newRatio * (_endPercent - _startPercent);
 
-        long elapsedTimeAmount = timestamp - _startTimestamp;
-        long estimatedTimeAmount = (long)(elapsedTimeAmount / newRatio);
-        string estimatedTimeAmountString = StopwatchTimeSpan.ToString(estimatedTimeAmount, 3);
+        var elapsedTimeAmount = timestamp - _startTimestamp;
+        var estimatedTimeAmount = (long)(elapsedTimeAmount / newRatio);
+        var estimatedTimeAmountString = StopwatchTimeSpan.ToString(estimatedTimeAmount, 3);
 
         System.Diagnostics.Debug.WriteLine(
             $"newTaskCount: {newTaskCount}, newPercentDouble: {newPercentDouble}, elapsed:  {StopwatchTimeSpan.ToString(elapsedTimeAmount, 3)} estimatedTimeAmount: {estimatedTimeAmountString}");
 
-        int newPercent = (int)newPercentDouble;
-        bool changed = _currentPercent < newPercent;
+        var newPercent = (int)newPercentDouble;
+        var changed = _currentPercent < newPercent;
         _currentPercent = newPercent;
         _currentTaskCount = newTaskCount;
         if (changed)

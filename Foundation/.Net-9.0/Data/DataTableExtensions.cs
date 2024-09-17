@@ -16,15 +16,15 @@ public static class DataTableExtensions
     public static string ToStringTableString(this DataTable dataTable)
     {
         ArgumentNullException.ThrowIfNull(dataTable, nameof(dataTable));
-        System.Collections.Generic.IEnumerable<DataRow> rows = dataTable.Rows.Cast<DataRow>().Where(dataRow => dataRow.RowState != DataRowState.Deleted);
-        StringTableColumnInfo<DataRow>[] columns = dataTable.Columns.Cast<DataColumn>().Select(ToStringTableColumnInfo).ToArray();
+        var rows = dataTable.Rows.Cast<DataRow>().Where(dataRow => dataRow.RowState != DataRowState.Deleted);
+        var columns = dataTable.Columns.Cast<DataColumn>().Select(ToStringTableColumnInfo).ToArray();
         return rows.ToString(columns);
     }
 
     internal static StringTableColumnInfo<DataRow> ToStringTableColumnInfo(DataColumn dataColumn)
     {
-        int columnIndex = dataColumn.Ordinal;
-        StringTableColumnAlign align = GetStringTableColumnAlign(dataColumn.DataType);
+        var columnIndex = dataColumn.Ordinal;
+        var align = GetStringTableColumnAlign(dataColumn.DataType);
 
         return new StringTableColumnInfo<DataRow>(
             dataColumn.ColumnName,
@@ -34,8 +34,8 @@ public static class DataTableExtensions
 
     private static StringTableColumnAlign GetStringTableColumnAlign(Type dataType)
     {
-        TypeCode typeCode = Type.GetTypeCode(dataType);
-        StringTableColumnAlign stringTableColumnAlign = StringTableColumnAlign.Left;
+        var typeCode = Type.GetTypeCode(dataType);
+        var stringTableColumnAlign = StringTableColumnAlign.Left;
 
         switch (typeCode)
         {

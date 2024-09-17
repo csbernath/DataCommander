@@ -35,7 +35,7 @@ public struct PSingle : INullable
 
     public static bool operator ==(PSingle x, PSingle y)
     {
-        bool isEqual = x.ValueType == y.ValueType;
+        var isEqual = x.ValueType == y.ValueType;
 
         if (isEqual)
             if (x.ValueType == PValueType.Value)
@@ -48,13 +48,13 @@ public struct PSingle : INullable
 
     public static PSingle Parse(string s, PValueType type)
     {
-        PSingle sp = string.IsNullOrEmpty(s) ? new PSingle(type) : SqlSingle.Parse(s);
+        var sp = string.IsNullOrEmpty(s) ? new PSingle(type) : SqlSingle.Parse(s);
         return sp;
     }
 
     public override readonly bool Equals(object y)
     {
-        bool equals = y is PSingle;
+        var equals = y is PSingle;
 
         if (equals)
             equals = this == (PSingle)y;
@@ -64,7 +64,7 @@ public struct PSingle : INullable
 
     public override int GetHashCode()
     {
-        int hashCode = _sql.GetHashCode();
+        var hashCode = _sql.GetHashCode();
         return hashCode;
     }
 

@@ -17,9 +17,9 @@ public static class DbDataReaderExtensions
         List<Table> tables = [];
         while (dbDataReader.FieldCount > 0)
         {
-            Table table = await dbDataReader.ReadTable(null, cancellationToken);
+            var table = await dbDataReader.ReadTable(null, cancellationToken);
             tables.Add(table);
-            bool hasNextResult = await dbDataReader.NextResultAsync(cancellationToken);
+            var hasNextResult = await dbDataReader.NextResultAsync(cancellationToken);
             if (!hasNextResult)
                 break;
         }
@@ -32,11 +32,11 @@ public static class DbDataReaderExtensions
         string tableName,
         CancellationToken cancellationToken)
     {
-        System.Collections.ObjectModel.ReadOnlyCollection<DbColumn> dbColumns = dbDataReader.GetColumnSchema();
-        IEnumerable<ColumnSchema> columnSchemas = dbColumns.Select(ToColumn);
-        ColumnCollection columns = new ColumnCollection(columnSchemas);
-        List<object[]> rows = await dbDataReader.ReadRows(cancellationToken);
-        Table table = new Table(tableName, columns, rows);
+        var dbColumns = dbDataReader.GetColumnSchema();
+        var columnSchemas = dbColumns.Select(ToColumn);
+        var columns = new ColumnCollection(columnSchemas);
+        var rows = await dbDataReader.ReadRows(cancellationToken);
+        var table = new Table(tableName, columns, rows);
         return table;
     }
 
@@ -59,7 +59,7 @@ public static class DbDataReaderExtensions
         List<object[]> rows = [];
         while (await dbDataReader.ReadAsync(cancellationToken))
         {
-            object[] row = new object[dbDataReader.FieldCount];
+            var row = new object[dbDataReader.FieldCount];
             dbDataReader.GetValues(row);
             rows.Add(row);
         }

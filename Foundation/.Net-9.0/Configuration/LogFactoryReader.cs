@@ -12,15 +12,15 @@ public static class LogFactoryReader
     public static void Read()
     {
         Log.Trace("Reading LogFactory configuration...");
-        ConfigurationNode node = Settings.SelectCurrentType();
+        var node = Settings.SelectCurrentType();
         if (node != null)
         {
-            string typeName = node.Attributes["TypeName"].GetValue<string>();
-            Type type = Type.GetType(typeName, true);
-            object instance = Activator.CreateInstance(type);
+            var typeName = node.Attributes["TypeName"].GetValue<string>();
+            var type = Type.GetType(typeName, true);
+            var instance = Activator.CreateInstance(type);
 
             Assert.IsTrue(instance is ILogFactory);
-            ILogFactory applicationLog = (ILogFactory) instance;
+            var applicationLog = (ILogFactory) instance;
             LogFactory.Set(applicationLog);
         }
 

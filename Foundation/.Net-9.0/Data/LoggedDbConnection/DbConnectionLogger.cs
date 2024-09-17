@@ -27,7 +27,7 @@ internal sealed class DbConnectionLogger
 
     private void ConnectionBeforeOpen(object sender, BeforeOpenDbConnectionEventArgs e)
     {
-        DbConnectionStringBuilder csb = new DbConnectionStringBuilder { ConnectionString = e.ConnectionString };
+        var csb = new DbConnectionStringBuilder { ConnectionString = e.ConnectionString };
 
         if (csb.ContainsKey("Password"))
         {
@@ -41,7 +41,7 @@ internal sealed class DbConnectionLogger
 
     private void ConnectionAfterOpen(object sender, AfterOpenDbConnectionEventArgs e)
     {
-        long duration = e.Timestamp - _beforeOpen.Timestamp;
+        var duration = e.Timestamp - _beforeOpen.Timestamp;
         if (e.Exception != null)
             Log.Write(LogLevel.Error, "Opening connection finished in {0} seconds. Exception:\r\n{1}", StopwatchTimeSpan.ToString(duration, 3),
                 e.Exception.ToLogString());
@@ -58,7 +58,7 @@ internal sealed class DbConnectionLogger
 
     private void ConnectionAfterExecuteReader(object sender, AfterExecuteCommandEventArgs e)
     {
-        long duration = e.Timestamp - _beforeExecuteReader.Timestamp;
+        var duration = e.Timestamp - _beforeExecuteReader.Timestamp;
         if (e.Exception != null)
         {
             Log.Write(LogLevel.Error, "{0}\r\nException:\r\n{1}", ToString(e.Command, duration), e.Exception.ToLogString());
@@ -70,7 +70,7 @@ internal sealed class DbConnectionLogger
 
     private void ConnectionAfterRead(object sender, AfterReadEventArgs e)
     {
-        long duration = e.Timestamp - _beforeExecuteReader.Timestamp;
+        var duration = e.Timestamp - _beforeExecuteReader.Timestamp;
         Log.Trace("{0} row(s) read in {1} seconds.", e.RowCount, StopwatchTimeSpan.ToString(duration, 3));
     }
 }

@@ -15,8 +15,8 @@ public static class IDbCommandExecutorExtensions
 
         executor.Execute(connection =>
         {
-            foreach (ExecuteCommandRequest request in requests)
-                using (IDbCommand command = connection.CreateCommand(request.CreateCommandRequest))
+            foreach (var request in requests)
+                using (var command = connection.CreateCommand(request.CreateCommandRequest))
                     request.Execute(command);
         });
     }
@@ -24,14 +24,14 @@ public static class IDbCommandExecutorExtensions
     public static void Execute(this IDbCommandExecutor executor, CreateCommandRequest request, Action<IDbCommand> execute)
     {
         ArgumentNullException.ThrowIfNull(executor);
-        ExecuteCommandRequest[] requests = new ExecuteCommandRequest(request, execute).ItemToArray();
+        var requests = new ExecuteCommandRequest(request, execute).ItemToArray();
         executor.Execute(requests);
     }
 
     public static int ExecuteNonQuery(this IDbCommandExecutor executor, CreateCommandRequest request)
     {
         ArgumentNullException.ThrowIfNull(executor);
-        int affectedRows = 0;
+        var affectedRows = 0;
         executor.Execute(request, command => affectedRows = command.ExecuteNonQuery());
         return affectedRows;
     }
@@ -52,7 +52,7 @@ public static class IDbCommandExecutorExtensions
 
         executor.Execute(request.CreateCommandRequest, command =>
         {
-            using IDataReader dataReader = command.ExecuteReader(request.CommandBehavior);
+            using var dataReader = command.ExecuteReader(request.CommandBehavior);
             readResults(dataReader);
         });
     }

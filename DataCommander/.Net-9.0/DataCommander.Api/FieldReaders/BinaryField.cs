@@ -11,10 +11,10 @@ public sealed class BinaryField : IConvertible
     public BinaryField(byte[] bytes)
     {
         Value = bytes;
-        int length = Math.Min(bytes.Length, 16);
-        char[] chars = Hex.Encode(bytes, length, true);
+        var length = Math.Min(bytes.Length, 16);
+        var chars = Hex.Encode(bytes, length, true);
 
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         stringBuilder.Append("0x");
         stringBuilder.Append(chars);
 

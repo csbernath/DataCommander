@@ -36,7 +36,7 @@ internal sealed class SqlLogCommand : ISqlLogItem
         _database = command.Connection.Database;
         _commandType = command.CommandType;
         _commandText = command.CommandText;
-        SqlParameterCollection parameters = (SqlParameterCollection)command.Parameters;
+        var parameters = (SqlParameterCollection)command.Parameters;
 
         if (parameters.Count > 0)
         {
@@ -55,19 +55,19 @@ internal sealed class SqlLogCommand : ISqlLogItem
             switch (_commandType)
             {
                 case CommandType.Text:
-                    int index = _commandText.IndexOf(' ');
+                    var index = _commandText.IndexOf(' ');
 
                     if (index >= 0)
                     {
-                        string word = _commandText[..index];
+                        var word = _commandText[..index];
                         word = word.ToLower();
 
                         switch (word)
                         {
                             case "exec":
                             case "execute":
-                                int startIndex = word.Length + 1;
-                                int endIndex = _commandText.IndexOf(' ', startIndex);
+                                var startIndex = word.Length + 1;
+                                var endIndex = _commandText.IndexOf(' ', startIndex);
 
                                 if (endIndex >= 0)
                                 {
@@ -86,8 +86,8 @@ internal sealed class SqlLogCommand : ISqlLogItem
                     break;
             }
 
-            SqLoglCommandExecution command = GetCommandExecution(_database, _commandText, out bool isNew);
-            StringBuilder sb = new StringBuilder();
+            var command = GetCommandExecution(_database, _commandText, out var isNew);
+            var sb = new StringBuilder();
 
             if (isNew)
             {
@@ -107,12 +107,12 @@ internal sealed class SqlLogCommand : ISqlLogItem
             sb.Append(',');
             sb.Append(_startDate.ToSqlConstant());
 
-            int microseconds = StopwatchTimeSpan.ToInt32(_duration, 1000000);
+            var microseconds = StopwatchTimeSpan.ToInt32(_duration, 1000000);
             sb.AppendFormat(",{0}\r\n", microseconds);
 
             if (_exception != null)
             {
-                SqlLogError error = new SqlLogError(_applicationId, _connectionNo, command.CommandNo, command.ExecutionNo, _exception);
+                var error = new SqlLogError(_applicationId, _connectionNo, command.CommandNo, command.ExecutionNo, _exception);
                 sb.Append(error.CommandText);
             }
 
@@ -127,7 +127,7 @@ internal sealed class SqlLogCommand : ISqlLogItem
     {
         SqLoglCommandExecution command;
         isNew = false;
-        string key = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", database, commandText);
+        var key = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", database, commandText);
 
         lock (_commands)
         {
@@ -137,7 +137,7 @@ internal sealed class SqlLogCommand : ISqlLogItem
             }
             else
             {
-                int commandNo = _commands.Count + 1;
+                var commandNo = _commands.Count + 1;
                 command = new SqLoglCommandExecution(commandNo);
                 _commands.Add(key, command);
                 isNew = true;

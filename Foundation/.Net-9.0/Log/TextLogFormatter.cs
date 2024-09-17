@@ -4,8 +4,8 @@ public sealed class TextLogFormatter : ILogFormatter
 {
     internal static string Format(LogEntry entry)
     {
-        char logLevelChar = GetLogLevelChar(entry);
-        string result =
+        var logLevelChar = GetLogLevelChar(entry);
+        var result =
             $"[{entry.CreationTime:HH:mm:ss.fff}|{entry.Id}|{logLevelChar}|{entry.ThreadName},{entry.ManagedThreadId}|{entry.LogName}] {entry.Message}\r\n";
         return result;
     }
@@ -16,7 +16,7 @@ public sealed class TextLogFormatter : ILogFormatter
 
     private static char GetLogLevelChar(LogEntry entry)
     {
-        char logLevelChar = entry.LogLevel switch
+        var logLevelChar = entry.LogLevel switch
         {
             LogLevel.Debug => 'D',
             LogLevel.Error => 'E',

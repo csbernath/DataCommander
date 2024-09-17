@@ -22,7 +22,7 @@ internal class DoubleBufferedDataGridView : DataGridView
     protected override void OnCursorChanged(EventArgs e)
     {
         base.OnCursorChanged(e);
-        bool bDefault = Cursor == Cursors.Default;
+        var bDefault = Cursor == Cursors.Default;
         DoubleBuffered = bDefault;
     }
 

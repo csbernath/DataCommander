@@ -23,21 +23,21 @@ public class ReadOnlySegmentLinkedList<T> : IReadOnlyCollection<T>
 
     public IEnumerator<T> GetEnumerator()
     {
-        LinkedListNode<T[]> linkedListNode = _linkedList.First;
+        var linkedListNode = _linkedList.First;
         while (linkedListNode != null)
         {
-            T[] segment = linkedListNode.Value;
+            var segment = linkedListNode.Value;
 
             int count;
             if (linkedListNode == _linkedList.Last)
             {
-                int remainder = _count % segment.Length;
+                var remainder = _count % segment.Length;
                 count = remainder == 0 ? segment.Length : remainder;
             }
             else
                 count = segment.Length;
 
-            for (int i = 0; i < count; ++i)
+            for (var i = 0; i < count; ++i)
                 yield return segment[i];
             linkedListNode = linkedListNode.Next;
         }
