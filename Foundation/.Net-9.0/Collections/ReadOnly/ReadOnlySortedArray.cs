@@ -11,7 +11,7 @@ public class ReadOnlySortedArray<TKey, TValue>(TValue[] values, Func<TValue, TKe
     {
         get
         {
-            var index = IndexOfKey(key);
+            int index = IndexOfKey(key);
 
             if (index < 0)
                 throw new KeyNotFoundException();
@@ -26,7 +26,7 @@ public class ReadOnlySortedArray<TKey, TValue>(TValue[] values, Func<TValue, TKe
     public bool TryGetValue(TKey key, out TValue value)
     {
         bool succeeded;
-        var index = IndexOfKey(key);
+        int index = IndexOfKey(key);
 
         if (index >= 0)
         {
@@ -49,8 +49,8 @@ public class ReadOnlySortedArray<TKey, TValue>(TValue[] values, Func<TValue, TKe
         if (values.Length > 0)
             indexOfKey = BinarySearch.IndexOf(0, values.Length - 1, index =>
             {
-                var otherValue = values[index];
-                var otherKey = keySelector(otherValue);
+                TValue otherValue = values[index];
+                TKey otherKey = keySelector(otherValue);
                 return comparison(key, otherKey);
             });
         else

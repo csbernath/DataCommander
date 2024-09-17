@@ -14,13 +14,13 @@ internal sealed class ViewCollectionNode(DatabaseNode database) : ITreeNode
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var treeNodes = new List<ITreeNode>
-        {
+        List<ITreeNode> treeNodes =
+        [
             new SystemViewCollectionNode(database)
-        };
+        ];
 
-        var databaseName = new SqlCommandBuilder().QuoteIdentifier(database.Name);
-        var commandText = $@"select
+        string databaseName = new SqlCommandBuilder().QuoteIdentifier(database.Name);
+        string commandText = $@"select
     s.name,
     v.name,
     v.object_id
@@ -35,9 +35,9 @@ order by 1,2";
             {
                 while (await dataReader.ReadAsync(cancellationToken))
                 {
-                    var schema = dataReader.GetString(0);
-                    var name = dataReader.GetString(1);
-                    var id = dataReader.GetInt32(2);
+                    string schema = dataReader.GetString(0);
+                    string name = dataReader.GetString(1);
+                    int id = dataReader.GetInt32(2);
                     treeNodes.Add(new ViewNode(database, id, schema, name));
                 }
             },

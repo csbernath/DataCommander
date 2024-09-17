@@ -14,7 +14,7 @@ internal sealed class ObjectName(SqlObject sqlObject, string schemaName, string 
     {
         get
         {
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             if (_schemaName != null)
             {
                 sb.Append(_schemaName);
@@ -31,8 +31,8 @@ internal sealed class ObjectName(SqlObject sqlObject, string schemaName, string 
     {
         get
         {
-            var sb = new StringBuilder();
-            var sqlCommandBuilder = new SqlCommandBuilder();
+            StringBuilder sb = new StringBuilder();
+            SqlCommandBuilder sqlCommandBuilder = new SqlCommandBuilder();
 
             if (_schemaName != null)
             {

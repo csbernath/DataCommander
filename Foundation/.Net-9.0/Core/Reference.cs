@@ -15,7 +15,7 @@ namespace Foundation.Core
 
         public static Reference Add(ReferenceCounter referenceCounter)
         {
-            var reference = new Reference(referenceCounter);
+            Reference reference = new Reference(referenceCounter);
             referenceCounter.Add();
             return reference;
         }

@@ -26,9 +26,9 @@ public class SafeLoggedSqlConnectionFactory : IDbConnectionFactory
 
     public IDbConnectionHelper CreateConnectionHelper(IDbConnection connection)
     {
-        var safeLoggedSqlConnection = (SafeLoggedSqlConnection)connection;
-        var loggedSqlConnection = (SqlLoggedSqlConnection.SqlLoggedSqlConnection)safeLoggedSqlConnection.Connection;
-        var sqlConnection = loggedSqlConnection.Connection;
+        SafeLoggedSqlConnection safeLoggedSqlConnection = (SafeLoggedSqlConnection)connection;
+        SqlLoggedSqlConnection.SqlLoggedSqlConnection loggedSqlConnection = (SqlLoggedSqlConnection.SqlLoggedSqlConnection)safeLoggedSqlConnection.Connection;
+        Microsoft.Data.SqlClient.SqlConnection sqlConnection = loggedSqlConnection.Connection;
         return new SqlConnectionFactory(sqlConnection, connection);
     }
 }

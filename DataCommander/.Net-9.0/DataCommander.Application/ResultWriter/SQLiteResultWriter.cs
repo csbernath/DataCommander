@@ -26,11 +26,13 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
 
     void IResultWriter.AfterExecuteReader()
     {
-        var fileName = Path.GetTempFileName() + ".sqlite";
+        string fileName = Path.GetTempFileName() + ".sqlite";
         messageWriter.WriteLine(fileName);
-        var sb = new SQLiteConnectionStringBuilder();
-        sb.DataSource = fileName;
-        sb.DateTimeFormat = SQLiteDateFormats.ISO8601;
+        SQLiteConnectionStringBuilder sb = new SQLiteConnectionStringBuilder
+        {
+            DataSource = fileName,
+            DateTimeFormat = SQLiteDateFormats.ISO8601
+        };
         _connection = new SQLiteConnection(sb.ConnectionString);
         _connection.Open();
     }
@@ -42,22 +44,22 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
     void IResultWriter.WriteTableBegin(DataTable schemaTable)
     {
         Trace.WriteLine(schemaTable.ToStringTableString());
-        var sb = new StringBuilder();
-        var schemaRows = schemaTable.Rows;
-        var schemaRowCount = schemaRows.Count;
+        StringBuilder sb = new StringBuilder();
+        DataRowCollection schemaRows = schemaTable.Rows;
+        int schemaRowCount = schemaRows.Count;
         string insertStatement = null;
-        var insertValues = new StringBuilder();
+        StringBuilder insertValues = new StringBuilder();
         _insertCommand = new SQLiteCommand();
-        var st = new StringTable(3);
+        StringTable st = new StringTable(3);
 
-        for (var i = 0; i < schemaRowCount; i++)
+        for (int i = 0; i < schemaRowCount; i++)
         {
-            var schemaRow = FoundationDbColumnFactory.Create(schemaRows[i]);
-            var stringTableRow = st.NewRow();
+            FoundationDbColumn schemaRow = FoundationDbColumnFactory.Create(schemaRows[i]);
+            StringTableRow stringTableRow = st.NewRow();
 
             if (i == 0)
             {
-                var tableName = schemaRow.BaseTableName;
+                string tableName = schemaRow.BaseTableName;
 
                 if (tableName != null)
                 {
@@ -78,13 +80,13 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
                 insertValues.Append(',');
             }
 
-            var columnName = schemaRow.ColumnName;
+            string columnName = schemaRow.ColumnName;
             stringTableRow[1] = columnName;
             insertStatement += columnName;
             insertValues.Append('?');
-            var columnSize = (int)schemaRow.ColumnSize;
-            var dataType = schemaRow.DataType;
-            var typeCode = Type.GetTypeCode(dataType);
+            int columnSize = (int)schemaRow.ColumnSize;
+            Type dataType = schemaRow.DataType;
+            TypeCode typeCode = Type.GetTypeCode(dataType);
             string typeName;
             DbType dbType;
 
@@ -101,8 +103,8 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
                     break;
 
                 case TypeCode.Decimal:
-                    var precision = schemaRow.NumericPrecision.Value;
-                    var scale = schemaRow.NumericPrecision.Value;
+                    short precision = schemaRow.NumericPrecision.Value;
+                    short scale = schemaRow.NumericPrecision.Value;
 
                     if (precision <= 28 && scale <= 28)
                     {
@@ -148,7 +150,7 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
 
             stringTableRow[2] = typeName;
             st.Rows.Add(stringTableRow);
-            var allowDbNull = schemaRow.AllowDbNull.Value;
+            bool allowDbNull = schemaRow.AllowDbNull.Value;
 
             if (!allowDbNull)
             {
@@ -160,7 +162,7 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
                 stringTableRow[2] += ',';
             }
 
-            var parameter = new SQLiteParameter(dbType);
+            SQLiteParameter parameter = new SQLiteParameter(dbType);
             _insertCommand.Parameters.Add(parameter);
         }
 
@@ -168,10 +170,10 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
         sb.Append(')');
         insertValues.Append(')');
         insertStatement += ") " + insertValues;
-        var commandText = sb.ToString();
+        string commandText = sb.ToString();
         Trace.WriteLine(commandText);
         Trace.WriteLine(insertStatement);
-        var executor = _connection.CreateCommandExecutor();
+        IDbCommandExecutor executor = _connection.CreateCommandExecutor();
         executor.ExecuteNonQuery(new CreateCommandRequest(commandText));
         _transaction = _connection.BeginTransaction();
         _insertCommand.Connection = _connection;
@@ -189,13 +191,13 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
 
     void IResultWriter.WriteRows(object[][] rows, int rowCount)
     {
-        for (var i = 0; i < rowCount; i++)
+        for (int i = 0; i < rowCount; i++)
         {
-            var row = rows[i];
+            object[] row = rows[i];
 
-            for (var j = 0; j < row.Length; j++)
+            for (int j = 0; j < row.Length; j++)
             {
-                var parameter = _insertCommand.Parameters[j];
+                SQLiteParameter parameter = _insertCommand.Parameters[j];
                 parameter.Value = row[j];
             }
 

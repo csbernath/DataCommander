@@ -18,15 +18,15 @@ internal sealed class SchemaCollectionNode(ObjectExplorer objectExplorer) : ITre
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        using (var connection = ObjectExplorer.CreateConnection())
+        using (Npgsql.NpgsqlConnection connection = ObjectExplorer.CreateConnection())
         {
             connection.Open();
-            var executor = connection.CreateCommandExecutor();
+            IDbCommandExecutor executor = connection.CreateCommandExecutor();
             return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(new ExecuteReaderRequest(@"select schema_name
 from information_schema.schemata
 order by schema_name"), 128, dataReader =>
             {
-                var name = dataReader.GetString(0);
+                string name = dataReader.GetString(0);
                 return new SchemaNode(this, name);
             }));
         }

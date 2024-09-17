@@ -11,28 +11,28 @@ public static class CreateUpdateSqlStatementMethodFactory
     public static ReadOnlyCollection<Line> Create(string schema, string table, Column identifierColumn, Column versionColumn,
         IReadOnlyCollection<Column> columns)
     {
-        var arguments = new List<string>
-        {
+        List<string> arguments =
+        [
             $"{table} record"
-        };
+        ];
         if (versionColumn != null)
         {
-            var csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == versionColumn.SqlDataTypeName).CSharpTypeName;
+            string csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == versionColumn.SqlDataTypeName).CSharpTypeName;
             arguments.Add($"{csharpTypeName} expected{versionColumn.ColumnName}");
         }
 
-        var textBuilder = new TextBuilder();
+        TextBuilder textBuilder = new TextBuilder();
         textBuilder.Add($"public static ReadOnlyCollection<Line> CreateUpdateSqlStatement({arguments.Join(", ")})");
         using (textBuilder.AddCSharpBlock())
         {
             textBuilder.Add("var setColumns = new []");
             using (textBuilder.AddCSharpBlock())
-                foreach (var item in columns.SelectIndexed())
+                foreach (IndexedItem<Column> item in columns.SelectIndexed())
                 {
                     if (item.Index > 0)
                         textBuilder.AddToLastLine(",");
-                    var column = item.Value;
-                    var method = MethodName.GetToSqlConstantMethodName(column.SqlDataTypeName, column.IsNullable);
+                    Column column = item.Value;
+                    string method = MethodName.GetToSqlConstantMethodName(column.SqlDataTypeName, column.IsNullable);
                     textBuilder.Add($"new ColumnNameValue(\"{column.ColumnName}\", record.{column.ColumnName}.{method}())");
                 }
 
@@ -41,7 +41,7 @@ public static class CreateUpdateSqlStatementMethodFactory
             textBuilder.Add("var whereColumns = new[]");
             using (textBuilder.AddCSharpBlock())
             {
-                var method = MethodName.GetToSqlConstantMethodName(identifierColumn.SqlDataTypeName, identifierColumn.IsNullable);
+                string method = MethodName.GetToSqlConstantMethodName(identifierColumn.SqlDataTypeName, identifierColumn.IsNullable);
                 textBuilder.Add($"new ColumnNameValue(\"{identifierColumn.ColumnName}\", record.{identifierColumn.ColumnName}.{method}())");
                 if (versionColumn != null)
                 {

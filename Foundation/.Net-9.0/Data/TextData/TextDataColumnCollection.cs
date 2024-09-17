@@ -44,7 +44,7 @@ public sealed class TextDataColumnCollection : IList<TextDataColumn>
 
     public int IndexOf(string columnName)
     {
-        var contains = _nameIndex.TryGetValue(columnName, out var column);
+        bool contains = _nameIndex.TryGetValue(columnName, out TextDataColumn column);
         int index;
 
         if (contains)
@@ -57,11 +57,11 @@ public sealed class TextDataColumnCollection : IList<TextDataColumn>
 
     internal int IndexOf(string columnName, bool throwException)
     {
-        var index = IndexOf(columnName);
+        int index = IndexOf(columnName);
 
         if (index < 0)
         {
-            var message = string.Format(CultureInfo.InvariantCulture, "Column '{0} not found.", columnName);
+            string message = string.Format(CultureInfo.InvariantCulture, "Column '{0} not found.", columnName);
             throw new IndexOutOfRangeException(message);
         }
 
@@ -70,7 +70,7 @@ public sealed class TextDataColumnCollection : IList<TextDataColumn>
 
     internal int IndexOf(TextDataColumn column, bool throwException)
     {
-        var index = IndexOf(column);
+        int index = IndexOf(column);
 
         if (index < 0)
         {

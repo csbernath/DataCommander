@@ -8,8 +8,8 @@ public static class LoggedDbConnectionFactory
     public static IDbConnection ToLoggedDbConnection(this IDbConnection connection)
     {
         ArgumentNullException.ThrowIfNull(connection);
-        var loggedDbConnection = new LoggedDbConnection(connection);
-        var logger = new DbConnectionLogger(loggedDbConnection);
+        LoggedDbConnection loggedDbConnection = new LoggedDbConnection(connection);
+        DbConnectionLogger logger = new DbConnectionLogger(loggedDbConnection);
         return loggedDbConnection;
     }
 }

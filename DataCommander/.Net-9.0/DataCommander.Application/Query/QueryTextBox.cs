@@ -70,10 +70,12 @@ public sealed class QueryTextBox : UserControl
     {
         if (keyWords != null)
         {
-            var keyWordList = new KeyWordList();
-            keyWordList.KeyWords = new string[keyWords.Length];
+            KeyWordList keyWordList = new KeyWordList
+            {
+                KeyWords = new string[keyWords.Length]
+            };
 
-            for (var i = 0; i < keyWords.Length; ++i)
+            for (int i = 0; i < keyWords.Length; ++i)
                 keyWordList.KeyWords[i] = keyWords[i].ToUpper();
 
             keyWordList.Color = color;
@@ -98,7 +100,7 @@ public sealed class QueryTextBox : UserControl
 
             if (value != null)
             {
-                var text = RichTextBox.Text;
+                string text = RichTextBox.Text;
                 Colorize(text, 0, text.Length - 1);
             }
 
@@ -110,7 +112,7 @@ public sealed class QueryTextBox : UserControl
 
     public void Paste()
     {
-        var format = DataFormats.GetFormat(DataFormats.UnicodeText);
+        DataFormats.Format format = DataFormats.GetFormat(DataFormats.UnicodeText);
         RichTextBox.Paste(format);
     }
 
@@ -199,10 +201,10 @@ public sealed class QueryTextBox : UserControl
                 _prevSelectionLength = _selectionLength;
                 _selectionLength = RichTextBox.SelectionLength;
 
-                var charIndex = _selectionStart;
-                var line = RichTextBox.GetLineFromCharIndex(charIndex) + 1;
-                var lineIndex = LineIndex(-1);
-                var col = charIndex - lineIndex + 1;
+                int charIndex = _selectionStart;
+                int line = RichTextBox.GetLineFromCharIndex(charIndex) + 1;
+                int lineIndex = LineIndex(-1);
+                int col = charIndex - lineIndex + 1;
                 _sbPanel.Text = "Ln " + line + " Col " + col;
                 _columnIndex = col;
             }
@@ -219,12 +221,12 @@ public sealed class QueryTextBox : UserControl
 
     public static int WordStart(string text, int index)
     {
-        var i = index;
-        var wordFound = false;
+        int i = index;
+        bool wordFound = false;
 
         while (i >= 0)
         {
-            var c = text[i];
+            char c = text[i];
 
             if (wordFound && IsSeparator(c))
                 break;
@@ -241,13 +243,13 @@ public sealed class QueryTextBox : UserControl
 
     public static string PrevWord(string text, ref int index)
     {
-        var wordEnd = -1;
+        int wordEnd = -1;
         string word = null;
 
         while (index >= 0)
         {
-            var c = text[index];
-            var isSeparator = IsSeparator(c) || index == 0;
+            char c = text[index];
+            bool isSeparator = IsSeparator(c) || index == 0;
 
             if (wordEnd != -1 && isSeparator)
             {
@@ -268,12 +270,12 @@ public sealed class QueryTextBox : UserControl
 
     public static int WordEnd(string text, int index)
     {
-        var length = text.Length;
-        var i = index;
+        int length = text.Length;
+        int i = index;
 
         while (i < length)
         {
-            var c = text[i];
+            char c = text[i];
 
             if (IsSeparator(c))
                 break;
@@ -288,12 +290,12 @@ public sealed class QueryTextBox : UserControl
 
     public static int NextWordStart(string text, int index)
     {
-        var length = text.Length;
-        var i = index;
+        int length = text.Length;
+        int i = index;
 
         while (i < length)
         {
-            var c = text[i];
+            char c = text[i];
 
             if (!IsSeparator(c))
                 break;
@@ -310,15 +312,15 @@ public sealed class QueryTextBox : UserControl
 
         try
         {
-            var maxTicks = Stopwatch.Frequency * 5; // max. 5 seconds
-            var stopwatch = new Stopwatch();
+            long maxTicks = Stopwatch.Frequency * 5; // max. 5 seconds
+            Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            var orgSelectionStart = Math.Max(RichTextBox.SelectionStart, 0);
-            var orgSelectionLength = Math.Max(RichTextBox.SelectionLength, 0);
+            int orgSelectionStart = Math.Max(RichTextBox.SelectionStart, 0);
+            int orgSelectionLength = Math.Max(RichTextBox.SelectionLength, 0);
 
-            var intPtr = RichTextBox.Handle;
-            var hWnd = intPtr.ToInt32();
+            nint intPtr = RichTextBox.Handle;
+            int hWnd = intPtr.ToInt32();
             NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.Gdi.SetRedraw, 0, 0);
 
             MethodProfiler.BeginMethodFraction("ControlText");
@@ -336,18 +338,18 @@ public sealed class QueryTextBox : UserControl
                 MethodProfiler.EndMethodFraction();
             }
 
-            var subString = text.Substring(startIndex, endIndex - startIndex + 1);
-            var tokenIterator = new TokenIterator(subString);
-            var tokens = new List<Token>();
+            string subString = text.Substring(startIndex, endIndex - startIndex + 1);
+            TokenIterator tokenIterator = new TokenIterator(subString);
+            List<Token> tokens = [];
             while (true)
             {
-                var token = tokenIterator.Next();
+                Token token = tokenIterator.Next();
                 if (token == null)
                     break;
                 tokens.Add(token);
             }
 
-            foreach (var token in tokens)
+            foreach (Token token in tokens)
             {
                 if (maxTicks < stopwatch.ElapsedTicks)
                     break;
@@ -360,8 +362,8 @@ public sealed class QueryTextBox : UserControl
                         color = _colorTheme != null
                             ? _colorTheme.ForeColor
                             : Color.Black;
-                        var keyWord = token.Value.ToUpper();
-                        foreach (var keyWordList in _keyWordLists)
+                        string keyWord = token.Value.ToUpper();
+                        foreach (KeyWordList keyWordList in _keyWordLists)
                         {
                             if (Array.BinarySearch(keyWordList.KeyWords, keyWord) >= 0)
                             {
@@ -414,7 +416,7 @@ public sealed class QueryTextBox : UserControl
             {
                 RichTextBox.SelectionChanged -= RichTextBox_SelectionChanged;
 
-                var text = RichTextBox.Text;
+                string text = RichTextBox.Text;
 
                 if (text.Length > 0)
                 {
@@ -450,21 +452,21 @@ public sealed class QueryTextBox : UserControl
                         // colorizing next word if necessary
                         if (_selectionStart > 0)
                         {
-                            var c = text[_selectionStart - 1];
+                            char c = text[_selectionStart - 1];
                             if (IsSeparator(c))
                                 if (_selectionStart < text.Length)
                                 {
-                                    var c2 = text[_selectionStart];
+                                    char c2 = text[_selectionStart];
                                     if (!IsSeparator(c2))
                                         endIndex = WordEnd(text, _selectionStart);
                                 }
                         }
 
-                        var length = endIndex - startIndex;
+                        int length = endIndex - startIndex;
                         if (endIndex < text.Length - 1)
                             length++;
 
-                        var s = text.Substring(startIndex, length);
+                        string s = text.Substring(startIndex, length);
                         Colorize(text, startIndex, endIndex);
                     }
                 }
@@ -486,7 +488,7 @@ public sealed class QueryTextBox : UserControl
 
     public static bool IsSeparator(char c)
     {
-        var isSeparator =
+        bool isSeparator =
             c == ' ' ||
             c == '.' || c == ',' || c == ';' ||
             c == '=' ||
@@ -521,27 +523,27 @@ public sealed class QueryTextBox : UserControl
 
                     if (e.Modifiers == Keys.None)
                     {
-                        var selectionLength = RichTextBox.SelectionLength;
+                        int selectionLength = RichTextBox.SelectionLength;
                         if (selectionLength == 0)
                         {
                             selectionLength = -((_columnIndex - 1) % TabSize) + TabSize;
-                            var text = new string(' ', selectionLength);
+                            string text = new string(' ', selectionLength);
                             RichTextBox.SelectedText = text;
                         }
                         else
                         {
-                            var selectionStart = RichTextBox.SelectionStart;
-                            var startLine = RichTextBox.GetLineFromCharIndex(selectionStart);
-                            var endLine = RichTextBox.GetLineFromCharIndex(selectionStart + selectionLength - 1);
+                            int selectionStart = RichTextBox.SelectionStart;
+                            int startLine = RichTextBox.GetLineFromCharIndex(selectionStart);
+                            int endLine = RichTextBox.GetLineFromCharIndex(selectionStart + selectionLength - 1);
 
-                            var startCharIndex = RichTextBox.GetFirstCharIndexFromLine(startLine);
-                            var firstCharIndex = RichTextBox.GetFirstCharIndexFromLine(endLine + 1);
-                            var endCharIndex = firstCharIndex >= 0 ? firstCharIndex - 1 : RichTextBox.TextLength;
+                            int startCharIndex = RichTextBox.GetFirstCharIndexFromLine(startLine);
+                            int firstCharIndex = RichTextBox.GetFirstCharIndexFromLine(endLine + 1);
+                            int endCharIndex = firstCharIndex >= 0 ? firstCharIndex - 1 : RichTextBox.TextLength;
 
                             RichTextBox.SelectionStart = startCharIndex;
                             RichTextBox.SelectionLength = endCharIndex - startCharIndex + 1;
 
-                            var selectedText = RichTextBox.SelectedText;
+                            string selectedText = RichTextBox.SelectedText;
                             selectedText = selectedText.GetLines().Select(i => i.IncreaseLineIndent(TabSize)).Join("\n");
                             selectedText += "\n";
                             RichTextBox.SelectedText = selectedText;
@@ -552,20 +554,20 @@ public sealed class QueryTextBox : UserControl
                     }
                     else if (e.Modifiers == Keys.Shift)
                     {
-                        var selectionStart = RichTextBox.SelectionStart;
-                        var selectionLength = RichTextBox.SelectionLength;
-                        var startLine = RichTextBox.GetLineFromCharIndex(selectionStart);
-                        var endLine = RichTextBox.GetLineFromCharIndex(selectionStart + selectionLength - 1);
+                        int selectionStart = RichTextBox.SelectionStart;
+                        int selectionLength = RichTextBox.SelectionLength;
+                        int startLine = RichTextBox.GetLineFromCharIndex(selectionStart);
+                        int endLine = RichTextBox.GetLineFromCharIndex(selectionStart + selectionLength - 1);
 
-                        var startCharIndex = RichTextBox.GetFirstCharIndexFromLine(startLine);
-                        var firstCharIndex = RichTextBox.GetFirstCharIndexFromLine(endLine + 1);
-                        var endCharIndex = firstCharIndex >= 0 ? firstCharIndex - 1 : RichTextBox.TextLength;
+                        int startCharIndex = RichTextBox.GetFirstCharIndexFromLine(startLine);
+                        int firstCharIndex = RichTextBox.GetFirstCharIndexFromLine(endLine + 1);
+                        int endCharIndex = firstCharIndex >= 0 ? firstCharIndex - 1 : RichTextBox.TextLength;
 
                         RichTextBox.SelectionStart = startCharIndex;
                         RichTextBox.SelectionLength = endCharIndex - startCharIndex + 1;
 
-                        var tabString = new string(' ', TabSize);
-                        var selectedText = RichTextBox.SelectedText;
+                        string tabString = new string(' ', TabSize);
+                        string selectedText = RichTextBox.SelectedText;
                         selectedText = selectedText.GetLines()
                             .Select(i => i.Replace("\t", tabString))
                             .Select(i => i.DecreaseLineIndent(TabSize)).Join("\n");
@@ -600,15 +602,15 @@ public sealed class QueryTextBox : UserControl
 
     private static bool GetDataPresent(IDataObject dataObject, string format)
     {
-        var dataFormat = DataFormats.GetFormat(format);
-        var name = dataFormat.Name;
+        DataFormats.Format dataFormat = DataFormats.GetFormat(format);
+        string name = dataFormat.Name;
         return dataObject.GetDataPresent(name);
     }
 
     private static object GetData(IDataObject dataObject, string format)
     {
-        var dataFormat = DataFormats.GetFormat(format);
-        var name = dataFormat.Name;
+        DataFormats.Format dataFormat = DataFormats.GetFormat(format);
+        string name = dataFormat.Name;
         return dataObject.GetData(name);
     }
 
@@ -616,16 +618,16 @@ public sealed class QueryTextBox : UserControl
 
     private void RichTextBox_DragDrop(object sender, DragEventArgs e)
     {
-        var dataObject = e.Data;
+        IDataObject? dataObject = e.Data;
 
         if (GetDataPresent(dataObject, DataFormats.UnicodeText))
         {
-            var text = (string)GetData(dataObject, DataFormats.UnicodeText);
-            var path = text;
+            string text = (string)GetData(dataObject, DataFormats.UnicodeText);
+            string path = text;
 
             if (File.Exists(path))
                 DataCommanderApplication.Instance.MainForm.LoadFiles(path.ItemToArray());
-            else if (Uri.TryCreate(path, UriKind.Absolute, out var uri))
+            else if (Uri.TryCreate(path, UriKind.Absolute, out Uri? uri))
             {
                 if (uri.Scheme == "file")
                 {
@@ -635,7 +637,7 @@ public sealed class QueryTextBox : UserControl
             }
             else
             {
-                var startIndex = RichTextBox.SelectionStart;
+                int startIndex = RichTextBox.SelectionStart;
                 RichTextBox.SelectionLength = 0;
                 RichTextBox.SelectedText = text;
                 RichTextBox.SelectionStart = startIndex + text.Length;
@@ -644,20 +646,20 @@ public sealed class QueryTextBox : UserControl
         }
         else if (GetDataPresent(dataObject, DataFormats.FileDrop))
         {
-            var fileNames = (string[])dataObject.GetData(DataFormats.FileDrop);
-            var fileName = fileNames[0];
-            var extension = Path.GetExtension(fileName);
+            string[]? fileNames = (string[])dataObject.GetData(DataFormats.FileDrop);
+            string fileName = fileNames[0];
+            string extension = Path.GetExtension(fileName);
             if (extension.In(".sql", ".txt"))
                 DataCommanderApplication.Instance.MainForm.LoadFiles(fileNames);
             else
             {
-                var bytes = File.ReadAllBytes(fileNames[0]);
-                var chars = Hex.Encode(bytes, true);
-                var stringBuilder = new StringBuilder();
+                byte[] bytes = File.ReadAllBytes(fileNames[0]);
+                char[] chars = Hex.Encode(bytes, true);
+                StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.Append("0x");
                 stringBuilder.Append(chars);
-                var text = stringBuilder.ToString();
-                var startIndex = RichTextBox.SelectionStart;
+                string text = stringBuilder.ToString();
+                int startIndex = RichTextBox.SelectionStart;
                 RichTextBox.SelectionLength = 0;
                 RichTextBox.SelectedText = text;
                 RichTextBox.SelectionStart = startIndex + text.Length;
@@ -672,21 +674,19 @@ public sealed class QueryTextBox : UserControl
 
     private void CreateTable_Click(object sender, EventArgs e)
     {
-        var queryForm = Parent as QueryForm;
-        if (queryForm != null)
+        if (Parent is QueryForm queryForm)
             queryForm.ScriptQueryAsCreateTable();
     }
 
     private void CopyTable_Click(object sender, EventArgs e)
     {
-        var queryForm = Parent as QueryForm;
-        if (queryForm != null)
+        if (Parent is QueryForm queryForm)
             queryForm.CopyTable();
     }
 
     private void CopyTableWithSqlBulkCopy_Click(object sender, EventArgs e)
     {
-        var queryForm = (QueryForm)Parent;
+        QueryForm? queryForm = (QueryForm)Parent;
         QueryForm.CopyTableWithSqlBulkCopy();
     }
 
@@ -694,19 +694,19 @@ public sealed class QueryTextBox : UserControl
     {
         if (e.Button == MouseButtons.Right)
         {
-            var contextMenu = new ContextMenuStrip(_components);
-            var items = contextMenu.Items;
-            var menuItem = new ToolStripMenuItem("Create table", null, CreateTable_Click);
+            ContextMenuStrip contextMenu = new ContextMenuStrip(_components);
+            ToolStripItemCollection items = contextMenu.Items;
+            ToolStripMenuItem menuItem = new ToolStripMenuItem("Create table", null, CreateTable_Click);
             items.Add(menuItem);
             menuItem = new ToolStripMenuItem("Copy table", null, CopyTable_Click);
             items.Add(menuItem);
 
-            var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
-            var index = Array.IndexOf(forms, (QueryForm)Parent);
+            Form[] forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
+            int index = Array.IndexOf(forms, (QueryForm)Parent);
             if (index < forms.Length - 1)
             {
-                var nextQueryForm = (QueryForm)forms[index + 1];
-                var destinationProvider = nextQueryForm.Provider;
+                QueryForm nextQueryForm = (QueryForm)forms[index + 1];
+                IProvider destinationProvider = nextQueryForm.Provider;
                 if (destinationProvider.DbProviderFactory == SqlClientFactory.Instance)
                 {
                     menuItem = new ToolStripMenuItem("Copy table with SqlBulkCopy", null,

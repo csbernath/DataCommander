@@ -76,17 +76,19 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
             _setTransaction(_transaction);
         }
 
-        var sqlTransaction = (SqlTransaction)_transaction;
-        _sqlBulkCopy = new SqlBulkCopy(_destinationSqlConnection, SqlBulkCopyOptions.Default, sqlTransaction);
-        _sqlBulkCopy.BulkCopyTimeout = int.MaxValue;
-        _sqlBulkCopy.DestinationTableName = _tableName;
-        _sqlBulkCopy.NotifyAfter = 10000;
+        SqlTransaction sqlTransaction = (SqlTransaction)_transaction;
+        _sqlBulkCopy = new SqlBulkCopy(_destinationSqlConnection, SqlBulkCopyOptions.Default, sqlTransaction)
+        {
+            BulkCopyTimeout = int.MaxValue,
+            DestinationTableName = _tableName,
+            NotifyAfter = 10000
+        };
         _sqlBulkCopy.SqlRowsCopied += sqlBulkCopy_SqlRowsCopied;
     }
 
     private void sqlBulkCopy_SqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
     {
-        var message = $"{e.RowsCopied} rows copied to destination.";
+        string message = $"{e.RowsCopied} rows copied to destination.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
 
         if (_cancellationToken.IsCancellationRequested)
@@ -97,19 +99,19 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
 
     private void InsertItems(IEnumerable<QueueItem> items)
     {
-        foreach (var item in items)
+        foreach (QueueItem item in items)
         {
-            var rows = item.Rows;
-            var dataTable = new DataTable();
+            object[][] rows = item.Rows;
+            DataTable dataTable = new DataTable();
 
-            for (var rowIndex = 0; rowIndex < rows.Length; rowIndex++)
+            for (int rowIndex = 0; rowIndex < rows.Length; rowIndex++)
             {
-                var row = rows[rowIndex];
-                var dataRow = dataTable.NewRow();
-                for (var columnIndex = 0; columnIndex < row.Length; columnIndex++)
+                object[] row = rows[rowIndex];
+                DataRow dataRow = dataTable.NewRow();
+                for (int columnIndex = 0; columnIndex < row.Length; columnIndex++)
                 {
-                    var sourceValue = row[columnIndex];
-                    var converter = _converters[columnIndex];
+                    object sourceValue = row[columnIndex];
+                    Converter<object, object> converter = _converters[columnIndex];
                     object destinationValue;
 
                     if (converter != null)
@@ -131,7 +133,7 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
             _sqlBulkCopy.WriteToServer(dataTable);
         }
 
-        var message = $"{_insertedRowCount} rows inserted.";
+        string message = $"{_insertedRowCount} rows inserted.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
     }
 
@@ -139,17 +141,17 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
     {
         try
         {
-            using (var methodLog = LogFactory.Instance.GetCurrentMethodLog())
+            using (ILog methodLog = LogFactory.Instance.GetCurrentMethodLog())
             {
                 while (true)
                 {
                     methodLog.Write(LogLevel.Trace, "this.queue.Count: {0}", _queue.Count);
                     if (!_queue.IsEmpty)
                     {
-                        var items = new List<QueueItem>(_queue.Count);
+                        List<QueueItem> items = new List<QueueItem>(_queue.Count);
                         while (true)
                         {
-                            var succeeded = _queue.TryDequeue(out var item);
+                            bool succeeded = _queue.TryDequeue(out QueueItem? item);
                             if (succeeded)
                             {
                                 items.Add(item);
@@ -207,19 +209,19 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
     {
         _logResultWriter.WriteRows(rows, rowCount);
         _readRowCount += rowCount;
-        var message = $"{_readRowCount} row(s) read.";
+        string message = $"{_readRowCount} row(s) read.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
-        var targetRows = new object[rowCount][];
-        for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
+        object[][] targetRows = new object[rowCount][];
+        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
         {
-            var sourceRow = rows[rowIndex];
-            var columnCount = sourceRow.Length;
-            var targetRow = new object[columnCount];
+            object[] sourceRow = rows[rowIndex];
+            int columnCount = sourceRow.Length;
+            object[] targetRow = new object[columnCount];
             Array.Copy(sourceRow, targetRow, columnCount);
             targetRows[rowIndex] = targetRow;
         }
 
-        var queueItem = new QueueItem
+        QueueItem queueItem = new QueueItem
         {
             Rows = targetRows
         };
@@ -245,7 +247,7 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
     void IResultWriter.End()
     {
         _logResultWriter.End();
-        using (var methodLog = LogFactory.Instance.GetCurrentMethodLog())
+        using (ILog methodLog = LogFactory.Instance.GetCurrentMethodLog())
         {
             _writeEnded = true;
             if (_task != null && !_task.IsCompleted)

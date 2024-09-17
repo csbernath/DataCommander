@@ -23,7 +23,7 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
     {
         get
         {
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             sb.Append(name);
 
             if (state == 6)
@@ -37,7 +37,7 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var children = new ITreeNode[]
+        ITreeNode[] children = new ITreeNode[]
         {
             new TableCollectionNode(this),
             new ViewCollectionNode(this),
@@ -53,17 +53,17 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
 
     public ContextMenu? GetContextMenu()
     {
-        var getInformationMenuItem = new MenuItem("Get information", GetInformationMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        var createDatabaseSnapshotMenuItem =
+        MenuItem getInformationMenuItem = new MenuItem("Get information", GetInformationMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+        MenuItem createDatabaseSnapshotMenuItem =
             new MenuItem("Create database snapshot script to clipboard", CreateDatabaseSnapshotScriptToClipboardMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        var menuItems = new[] { getInformationMenuItem, createDatabaseSnapshotMenuItem }.ToReadOnlyCollection();
-        var contextMenu = new ContextMenu(menuItems);
+        System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> menuItems = new[] { getInformationMenuItem, createDatabaseSnapshotMenuItem }.ToReadOnlyCollection();
+        ContextMenu contextMenu = new ContextMenu(menuItems);
         return contextMenu;
     }
 
     private void GetInformationMenuItem_Click(object sender, EventArgs e)
     {
-        var commandText = string.Format(@"select
+        string commandText = string.Format(@"select
     d.dbid,
     d.filename,
     DATABASEPROPERTYEX('{0}','Collation')         as [Collation],
@@ -83,11 +83,11 @@ select
 	convert(decimal(15,2),convert(float,fileproperty(name, 'SpaceUsed')) * 100.0 / size)	as [Used%],
 	convert(decimal(15,2),(f.size-fileproperty(name, 'SpaceUsed')) * 8096.0 / 1000000000)	as [Free (GB)]
 from	[{0}].sys.database_files f", name);
-        var queryForm = (IQueryForm)sender;
+        IQueryForm queryForm = (IQueryForm)sender;
         DataSet dataSet = null;
-        using (var connection = Databases.Server.CreateConnection())
+        using (SqlConnection connection = Databases.Server.CreateConnection())
         {
-            var executor = connection.CreateCommandExecutor();
+            IDbCommandExecutor executor = connection.CreateCommandExecutor();
             try
             {
                 dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText), CancellationToken.None);
@@ -104,13 +104,13 @@ from	[{0}].sys.database_files f", name);
 
     private void CreateDatabaseSnapshotScriptToClipboardMenuItem_Click(object? sender, EventArgs e)
     {
-        var databaseName = name;
+        string? databaseName = name;
 
-        var databaseSnapshotName = $"{databaseName}_Snapshot_{DateTime.Now:yyyyMMdd_HHmm}";
-        var logical_file_name = GetLogicalFileName(databaseName);
-        var osFileName = $"D:\\Backup\\{databaseSnapshotName}.ss";
+        string databaseSnapshotName = $"{databaseName}_Snapshot_{DateTime.Now:yyyyMMdd_HHmm}";
+        string logical_file_name = GetLogicalFileName(databaseName);
+        string osFileName = $"D:\\Backup\\{databaseSnapshotName}.ss";
 
-        var textBuilder = new TextBuilder();
+        TextBuilder textBuilder = new TextBuilder();
 
         textBuilder.Add($"CREATE DATABASE [{databaseSnapshotName}]");
         textBuilder.Add("ON");
@@ -129,26 +129,26 @@ from	[{0}].sys.database_files f", name);
         textBuilder.Add($"DATABASE_SNAPSHOT = {databaseSnapshotName.ToVarChar()}");
         textBuilder.Add($"ALTER DATABASE [{databaseName}] SET MULTI_USER WITH NO_WAIT");
 
-        var text = textBuilder.ToLines().ToIndentedString("  ");
-        var queryForm = (IQueryForm)sender;
+        string text = textBuilder.ToLines().ToIndentedString("  ");
+        IQueryForm? queryForm = (IQueryForm)sender;
         queryForm.SetClipboardText(text);
     }
 
     private string GetLogicalFileName(string? database)
     {
         string logicalFileName;
-            
-        var commandText = @$"select
+
+        string commandText = @$"select
     f.name
 from [{database}].sys.database_files f
 where
     f.type = 0";
-        using (var connection = Databases.Server.CreateConnection())
+        using (SqlConnection connection = Databases.Server.CreateConnection())
         {
             connection.Open();
-            var executor = connection.CreateCommandExecutor();
-            var createCommandRequest = new CreateCommandRequest(commandText);
-            var scalar = executor.ExecuteScalar(createCommandRequest);
+            IDbCommandExecutor executor = connection.CreateCommandExecutor();
+            CreateCommandRequest createCommandRequest = new CreateCommandRequest(commandText);
+            object scalar = executor.ExecuteScalar(createCommandRequest);
             logicalFileName = (string)scalar;
         }
 

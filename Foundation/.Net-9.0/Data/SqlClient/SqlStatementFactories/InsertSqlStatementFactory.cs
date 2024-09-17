@@ -20,18 +20,18 @@ public static class InsertSqlStatementFactory
         Assert.IsTrue(columns.Count > 0);
         Assert.IsTrue(rows.All(row => row.Count == columns.Count));
 
-        var textBuilder = new TextBuilder();
+        TextBuilder textBuilder = new TextBuilder();
         textBuilder.Add($"insert into {table}({columns.Join(",")})");
         textBuilder.Add("values");
 
         using (textBuilder.Indent(1))
         {
-            foreach (var indexedRow in rows.SelectIndexed())
+            foreach (IndexedItem<IReadOnlyCollection<string>> indexedRow in rows.SelectIndexed())
             {
                 if (indexedRow.Index > 0)
                     textBuilder.AddToLastLine(",");
 
-                var values = indexedRow.Value.Join(",");
+                string values = indexedRow.Value.Join(",");
                 textBuilder.Add($"({values})");
             }
         }

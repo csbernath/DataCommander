@@ -37,7 +37,7 @@ public class ReadOnlySortedSet<T> : IReadOnlySortedSet<T>
         if (_items.Count > 0)
             indexOfKey = BinarySearch.IndexOf(0, _items.Count - 1, index =>
             {
-                var otherItem = _items[index];
+                T otherItem = _items[index];
                 return _comparison(item, otherItem);
             });
         else

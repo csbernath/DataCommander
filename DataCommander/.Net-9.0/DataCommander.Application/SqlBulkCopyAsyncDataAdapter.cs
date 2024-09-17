@@ -26,10 +26,12 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
     public SqlBulkCopyAsyncDataAdapter(SqlConnection destinationConnection, SqlTransaction destionationTransaction, string destinationTableName,
         Action<InfoMessage> addInfoMessage)
     {
-        _sqlBulkCopy = new SqlBulkCopy(destinationConnection, SqlBulkCopyOptions.Default, destionationTransaction);
-        _sqlBulkCopy.BulkCopyTimeout = int.MaxValue;
-        _sqlBulkCopy.DestinationTableName = destinationTableName;
-        _sqlBulkCopy.NotifyAfter = 100000;
+        _sqlBulkCopy = new SqlBulkCopy(destinationConnection, SqlBulkCopyOptions.Default, destionationTransaction)
+        {
+            BulkCopyTimeout = int.MaxValue,
+            DestinationTableName = destinationTableName,
+            NotifyAfter = 100000
+        };
         _sqlBulkCopy.SqlRowsCopied += sqlBulkCopy_SqlRowsCopied;
         _addInfoMessage = addInfoMessage;
     }
@@ -37,7 +39,7 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
     private void sqlBulkCopy_SqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
     {
         _rowCount += e.RowsCopied;
-        var message = $"{_rowCount} rows copied.";
+        string message = $"{_rowCount} rows copied.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
         if (_cancelRequested)
         {
@@ -66,7 +68,7 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
         Exception exception = null;
         try
         {
-            foreach (var command in _commands)
+            foreach (AsyncDataAdapterCommand command in _commands)
             {
                 if (_cancelRequested)
                 {
@@ -74,7 +76,7 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
                 }
 
                 _command = command.Command;
-                using (var dataReader = _command.ExecuteReader())
+                using (IDataReader dataReader = _command.ExecuteReader())
                 {
                     _sqlBulkCopy.WriteToServer(dataReader);
                 }

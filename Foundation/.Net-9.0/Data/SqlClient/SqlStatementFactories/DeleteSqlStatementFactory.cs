@@ -14,7 +14,7 @@ public static class DeleteSqlStatementFactory
         Assert.IsTrue(!table.IsNullOrEmpty());
         ArgumentNullException.ThrowIfNull(whereColumns);
         Assert.IsTrue(whereColumns.Count > 0);
-        var textBuilder = new TextBuilder();
+        TextBuilder textBuilder = new TextBuilder();
         textBuilder.Add($"delete {table}");
         textBuilder.Add("where");
         using (textBuilder.Indent(1))

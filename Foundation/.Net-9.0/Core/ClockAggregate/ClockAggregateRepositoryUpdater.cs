@@ -11,7 +11,7 @@ public static class ClockAggregateRepositoryUpdater
     {
         Update();
 
-        var period = TimeSpan.FromMinutes(5);
+        TimeSpan period = TimeSpan.FromMinutes(5);
         _timer = new Timer(TimerCallback, null, period, period);
     }
 
@@ -19,7 +19,7 @@ public static class ClockAggregateRepositoryUpdater
 
     private static void Update()
     {
-        var clock = ClockAggregateRootFactory.Now();
+        ClockAggregateRoot clock = ClockAggregateRootFactory.Now();
         ClockAggregateRepository.Singleton.Save(clock);
     }
 

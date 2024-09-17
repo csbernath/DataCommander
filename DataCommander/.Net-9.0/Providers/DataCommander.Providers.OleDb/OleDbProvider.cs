@@ -44,19 +44,19 @@ internal sealed class OleDbProvider : IProvider
 
     public void DeriveParameters(IDbCommand command)
     {
-        var command2 = (OleDbCommand)command;
+        OleDbCommand command2 = (OleDbCommand)command;
         OleDbCommandBuilder.DeriveParameters(command2);
     }
 
     public DataParameterBase GetDataParameter(IDataParameter parameter)
     {
-        var oleDbParameter = (OleDbParameter)parameter;
+        OleDbParameter oleDbParameter = (OleDbParameter)parameter;
         return new DataParameterImp(oleDbParameter);
     }
 
     public static DataTable GetParameterTable(IDataParameterCollection parameters)
     {
-        var dataTable = new DataTable();
+        DataTable dataTable = new DataTable();
         dataTable.Columns.Add("ParameterName");
         dataTable.Columns.Add("DbType");
         dataTable.Columns.Add("OleDbType");
@@ -68,7 +68,7 @@ internal sealed class OleDbProvider : IProvider
 
         foreach (OleDbParameter p in parameters)
         {
-            var row = dataTable.NewRow();
+            DataRow row = dataTable.NewRow();
 
             row[0] = p.ParameterName;
             row[1] = p.DbType.ToString("G");
@@ -133,8 +133,8 @@ internal sealed class OleDbProvider : IProvider
         //
         //      return dataTable;
 
-        var table = new DataTable("SchemaTable");
-        var columns = table.Columns;
+        DataTable table = new DataTable("SchemaTable");
+        DataColumnCollection columns = table.Columns;
         columns.Add(" ", typeof(int));
         columns.Add("  ", typeof(string));
         columns.Add("Name", typeof(string));
@@ -143,27 +143,27 @@ internal sealed class OleDbProvider : IProvider
         columns.Add("DataType", typeof(Type));
         columns.Add("ProviderType", typeof(int));
 
-        var schemaTable = dataReader.GetSchemaTable();
+        DataTable? schemaTable = dataReader.GetSchemaTable();
 
-        for (var i = 0; i < schemaTable.Rows.Count; i++)
+        for (int i = 0; i < schemaTable.Rows.Count; i++)
         {
-            var row = schemaTable.Rows[i];
-            var columnOrdinal = (int)row["ColumnOrdinal"] + 1;
-            var isKey = row.GetValueOrDefault<bool>("IsKey");
+            DataRow row = schemaTable.Rows[i];
+            int columnOrdinal = (int)row["ColumnOrdinal"] + 1;
+            bool isKey = row.GetValueOrDefault<bool>("IsKey");
 
-            var pk = string.Empty;
+            string pk = string.Empty;
 
             if (isKey)
             {
                 pk = "PKEY";
             }
 
-            var columnSize = (int)row["ColumnSize"];
-            var dbType = (OleDbType)row["ProviderType"];
-            var allowDBNull = (bool)row["AllowDBNull"];
+            int columnSize = (int)row["ColumnSize"];
+            OleDbType dbType = (OleDbType)row["ProviderType"];
+            bool allowDBNull = (bool)row["AllowDBNull"];
 
-            var dataTypeName = dataReader.GetDataTypeName(i);
-            var sb = new StringBuilder();
+            string dataTypeName = dataReader.GetDataTypeName(i);
+            StringBuilder sb = new StringBuilder();
             sb.Append(dataReader.GetDataTypeName(i));
 
             switch (dbType)
@@ -178,8 +178,8 @@ internal sealed class OleDbProvider : IProvider
                     break;
 
                 case OleDbType.Decimal:
-                    var precision = (short)row["NumericPrecision"];
-                    var scale = (short)row["NumericScale"];
+                    short precision = (short)row["NumericPrecision"];
+                    short scale = (short)row["NumericScale"];
 
                     if (scale == 0)
                         sb.AppendFormat("({0})", precision);
@@ -215,7 +215,7 @@ internal sealed class OleDbProvider : IProvider
 
     Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
     {
-        var dbType = (OleDbType)dataColumnSchema.ProviderType;
+        OleDbType dbType = (OleDbType)dataColumnSchema.ProviderType;
         Type type = dbType switch
         {
             _ => typeof(object),
@@ -225,7 +225,7 @@ internal sealed class OleDbProvider : IProvider
 
     IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
     {
-        var oleDbDataReader = (OleDbDataReader)dataReader;
+        OleDbDataReader oleDbDataReader = (OleDbDataReader)dataReader;
         return new OleDbDataReaderHelper(oleDbDataReader);
     }
 

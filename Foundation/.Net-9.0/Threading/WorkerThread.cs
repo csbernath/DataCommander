@@ -47,7 +47,7 @@ public class WorkerThread
     {
         get
         {
-            var isStopRequested = _stopRequest.State == WorkerEventState.Signaled;
+            bool isStopRequested = _stopRequest.State == WorkerEventState.Signaled;
 
             if (isStopRequested)
             {
@@ -56,7 +56,7 @@ public class WorkerThread
                     _isStopAccepted = true;
                     if (Log.IsTraceEnabled())
                     {
-                        var stackTrace = new StackTrace(1, true);
+                        StackTrace stackTrace = new StackTrace(1, true);
                         Log.Trace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) accepted stop request.\r\n{stackTrace}");
                     }
                 }
@@ -125,9 +125,9 @@ public class WorkerThread
     public void WaitForStopOrContinue()
     {
         Log.Write(LogLevel.Error, $"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) is waiting for stop or continue request...");
-        var ticks = Stopwatch.GetTimestamp();
+        long ticks = Stopwatch.GetTimestamp();
         WaitHandle[] waitHandles = [_stopRequest, _continueRequest];
-        var index = WaitHandle.WaitAny(waitHandles);
+        int index = WaitHandle.WaitAny(waitHandles);
         ticks = Stopwatch.GetTimestamp() - ticks;
         string request = index switch
         {
@@ -143,21 +143,21 @@ public class WorkerThread
 
     public bool WaitForStop(TimeSpan timeout)
     {
-        var signaled = _stopRequest.WaitOne(timeout, false);
+        bool signaled = _stopRequest.WaitOne(timeout, false);
         return signaled;
     }
 
     public bool WaitForStop(int timeout)
     {
-        var signaled = _stopRequest.WaitOne(timeout, false);
+        bool signaled = _stopRequest.WaitOne(timeout, false);
         return signaled;
     }
 
     private void PrivateStart()
     {
-        var now = LocalTime.Default.Now;
-        var elapsed = now - StartTime;
-        var win32ThreadId = NativeMethods.GetCurrentThreadId();
+        DateTime now = LocalTime.Default.Now;
+        TimeSpan elapsed = now - StartTime;
+        uint win32ThreadId = NativeMethods.GetCurrentThreadId();
 
         Log.Trace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) started in {elapsed} seconds. Win32ThreadId: {win32ThreadId}");
 

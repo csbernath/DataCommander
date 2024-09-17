@@ -10,7 +10,7 @@ public static class ICollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(source);
 
-        var items = source.ToArray();
+        T[] items = source.ToArray();
         return new ReadOnlyArray<T>(items);
     }
 }

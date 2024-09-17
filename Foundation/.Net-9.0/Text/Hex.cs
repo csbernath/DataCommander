@@ -15,11 +15,11 @@ public static class Hex
     /// </summary>
     public static char[] Encode(byte value, bool isUpper)
     {
-        var d1 = (value & 0xF0) >> 4;
-        var d0 = value & 0x0F;
+        int d1 = (value & 0xF0) >> 4;
+        int d0 = value & 0x0F;
 
-        var digits = new char[2];
-        var hexChars = isUpper ? HexCharsUpper : HexCharsLower;
+        char[] digits = new char[2];
+        char[] hexChars = isUpper ? HexCharsUpper : HexCharsLower;
 
         digits[0] = hexChars[d1];
         digits[1] = hexChars[d0];
@@ -33,13 +33,13 @@ public static class Hex
     [CLSCompliant(false)]
     public static char[] Encode(ushort value, bool isUpper)
     {
-        var d3 = value >> 12;
-        var d2 = (value & 0x0F00) >> 8;
-        var d1 = (value & 0x00F0) >> 4;
-        var d0 = value & 0x000F;
+        int d3 = value >> 12;
+        int d2 = (value & 0x0F00) >> 8;
+        int d1 = (value & 0x00F0) >> 4;
+        int d0 = value & 0x000F;
 
-        var digits = new char[4];
-        var hexChars = isUpper ? HexCharsUpper : HexCharsLower;
+        char[] digits = new char[4];
+        char[] hexChars = isUpper ? HexCharsUpper : HexCharsLower;
 
         digits[0] = hexChars[d3];
         digits[1] = hexChars[d2];
@@ -54,17 +54,17 @@ public static class Hex
     /// </summary>
     public static char[] Encode(int value, bool isUpper)
     {
-        var d7 = value >> 28;
-        var d6 = (value & 0x0F000000) >> 24;
-        var d5 = (value & 0x00F00000) >> 20;
-        var d4 = (value & 0x000F0000) >> 16;
-        var d3 = (value & 0x0000F000) >> 12;
-        var d2 = (value & 0x00000F00) >> 8;
-        var d1 = (value & 0x000000F0) >> 4;
-        var d0 = value & 0x0000000F;
+        int d7 = value >> 28;
+        int d6 = (value & 0x0F000000) >> 24;
+        int d5 = (value & 0x00F00000) >> 20;
+        int d4 = (value & 0x000F0000) >> 16;
+        int d3 = (value & 0x0000F000) >> 12;
+        int d2 = (value & 0x00000F00) >> 8;
+        int d1 = (value & 0x000000F0) >> 4;
+        int d0 = value & 0x0000000F;
 
-        var digits = new char[8];
-        var hexChars = isUpper ? HexCharsUpper : HexCharsLower;
+        char[] digits = new char[8];
+        char[] hexChars = isUpper ? HexCharsUpper : HexCharsLower;
         digits[0] = hexChars[d7];
         digits[1] = hexChars[d6];
         digits[2] = hexChars[d5];
@@ -79,21 +79,21 @@ public static class Hex
 
     public static char[] Encode(byte[] bytes, bool isUpper)
     {
-        var length = bytes.Length;
+        int length = bytes.Length;
         return Encode(bytes, length, isUpper);
     }
 
     public static char[] Encode(byte[] bytes, int length, bool isUpper)
     {
-        var chars = new char[length << 1];
-        var j = 0;
-        var hexChars = isUpper ? HexCharsUpper : HexCharsLower;
+        char[] chars = new char[length << 1];
+        int j = 0;
+        char[] hexChars = isUpper ? HexCharsUpper : HexCharsLower;
 
-        for (var i = 0; i < length; i++)
+        for (int i = 0; i < length; i++)
         {
-            var value = bytes[i];
-            var d1 = (value & 0xF0) >> 4;
-            var d0 = value & 0x0F;
+            byte value = bytes[i];
+            int d1 = (value & 0xF0) >> 4;
+            int d0 = value & 0x0F;
 
             chars[j] = hexChars[d1];
             j++;
@@ -107,30 +107,30 @@ public static class Hex
     [CLSCompliant(false)]
     public static string GetString(ushort value, bool isUpper)
     {
-        var chars = Encode(value, isUpper);
-        var s = new string(chars);
+        char[] chars = Encode(value, isUpper);
+        string s = new string(chars);
         return s;
     }
 
     public static string GetString(int value, bool isUpper)
     {
-        var chars = Encode(value, isUpper);
-        var s = new string(chars);
+        char[] chars = Encode(value, isUpper);
+        string s = new string(chars);
         return s;
     }
 
     [CLSCompliant(false)]
     public static string GetString(ulong value, bool isUpper)
     {
-        var format = isUpper ? "X" : "x";
-        var s = value.ToString(format).PadLeft(16, '0');
+        string format = isUpper ? "X" : "x";
+        string s = value.ToString(format).PadLeft(16, '0');
         return s;
     }
 
     public static string GetString(byte[] bytes, bool isUpper)
     {
-        var chars = Encode(bytes, isUpper);
-        var s = new string(chars);
+        char[] chars = Encode(bytes, isUpper);
+        string s = new string(chars);
         return s;
     }
 }

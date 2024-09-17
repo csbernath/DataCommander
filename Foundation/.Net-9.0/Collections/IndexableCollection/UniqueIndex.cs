@@ -26,7 +26,7 @@ public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey
                 break;
 
             case SortOrder.Descending:
-                var comparer = ReverseComparer<TKey>.Default;
+                IComparer<TKey> comparer = ReverseComparer<TKey>.Default;
                 dictionary = new SortedDictionary<TKey, T>(comparer);
                 break;
 
@@ -84,11 +84,11 @@ public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey
 
     void ICollection<T>.Add(T item)
     {
-        var response = _getKey(item);
+        GetKeyResponse<TKey> response = _getKey(item);
 
         if (response.HasKey)
         {
-            var key = response.Key;
+            TKey key = response.Key;
 
             Assert.IsTrue(!_dictionary.ContainsKey(key));
 
@@ -101,18 +101,18 @@ public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey
     public bool Contains(T item)
     {
         ArgumentNullException.ThrowIfNull(item);
-        
-        var response = _getKey(item);
-        var contains = response.HasKey && _dictionary.ContainsKey(response.Key);
+
+        GetKeyResponse<TKey> response = _getKey(item);
+        bool contains = response.HasKey && _dictionary.ContainsKey(response.Key);
         return contains;
     }
 
     bool ICollection<T>.Remove(T item)
     {
         ArgumentNullException.ThrowIfNull(item);
-        
-        var response = _getKey(item);
-        var succeeded = response.HasKey && _dictionary.Remove(response.Key);
+
+        GetKeyResponse<TKey> response = _getKey(item);
+        bool succeeded = response.HasKey && _dictionary.Remove(response.Key);
         return succeeded;
     }
 

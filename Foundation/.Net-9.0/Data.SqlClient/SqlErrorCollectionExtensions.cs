@@ -11,10 +11,10 @@ public static class SqlErrorCollectionExtensions
 
         if (errors != null)
         {
-            var stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
             foreach (SqlError error in errors)
             {
-                var s = error.ToLogString();
+                string s = error.ToLogString();
                 stringBuilder.AppendLine(s);
             }
 

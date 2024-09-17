@@ -14,21 +14,21 @@ internal sealed class UserCollectionNode(DatabaseNode database) : ITreeNode
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var commandText = $"select name from {database.Name}..sysusers where islogin = 1 order by name";
+        string commandText = $"select name from {database.Name}..sysusers where islogin = 1 order by name";
         DataTable dataTable;
-        using (var connection = database.Databases.Server.CreateConnection())
+        using (Microsoft.Data.SqlClient.SqlConnection connection = database.Databases.Server.CreateConnection())
         {
-            var executor = connection.CreateCommandExecutor();
+            IDbCommandExecutor executor = connection.CreateCommandExecutor();
             dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText), CancellationToken.None);
         }
 
-        var dataRows = dataTable.Rows;
-        var count = dataRows.Count;
-        var treeNodes = new ITreeNode[count];
+        DataRowCollection dataRows = dataTable.Rows;
+        int count = dataRows.Count;
+        ITreeNode[] treeNodes = new ITreeNode[count];
 
-        for (var i = 0; i < count; ++i)
+        for (int i = 0; i < count; ++i)
         {
-            var name = (string) dataRows[i][0];
+            string name = (string) dataRows[i][0];
             treeNodes[i] = new UserNode(database, name);
         }
 

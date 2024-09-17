@@ -31,7 +31,7 @@ order by j.name";
             128,
             dataRecord =>
             {
-                var name = dataRecord.GetString(0);
+                string name = dataRecord.GetString(0);
                 return (ITreeNode)new JobNode(this, name);
             },
             cancellationToken);

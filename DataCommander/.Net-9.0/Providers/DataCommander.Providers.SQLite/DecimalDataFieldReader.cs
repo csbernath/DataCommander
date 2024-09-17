@@ -16,7 +16,7 @@ internal sealed class DecimalDataFieldReader(SQLiteDataReader dataReader, int co
         get
         {
             object value;
-            var isDbNull = _dataReader.IsDBNull(_columnOrdinal );
+            bool isDbNull = _dataReader.IsDBNull(_columnOrdinal );
 
             if (isDbNull)
             {
@@ -35,7 +35,7 @@ internal sealed class DecimalDataFieldReader(SQLiteDataReader dataReader, int co
                 //    value = new DecimalField( null, decimalValue, null );
                 //}
 
-                var decimalValue = _dataReader.GetDecimal(_columnOrdinal );
+                decimal decimalValue = _dataReader.GetDecimal(_columnOrdinal );
                 value = new DecimalField( null, decimalValue, null );
             }
 

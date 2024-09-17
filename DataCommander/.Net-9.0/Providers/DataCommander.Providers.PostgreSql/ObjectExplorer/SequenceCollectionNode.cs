@@ -16,17 +16,17 @@ internal sealed class SequenceCollectionNode(SchemaNode schemaNode) : ITreeNode
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-            using (var connection = _schemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection())
+            using (Npgsql.NpgsqlConnection connection = _schemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection())
             {
                 connection.Open();
-                var executor = connection.CreateCommandExecutor();
-                var commandText = $@"select sequence_name
+            IDbCommandExecutor executor = connection.CreateCommandExecutor();
+            string commandText = $@"select sequence_name
 from information_schema.sequences
 where sequence_schema = '{_schemaNode.Name}'
 order by sequence_name";
                 return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataReader =>
                 {
-                    var name = dataReader.GetString(0);
+                    string name = dataReader.GetString(0);
                     return new SequenceNode(this, name);
                 }));
             }

@@ -36,14 +36,14 @@ public static class TaskMonitor
         TaskCreationOptions taskCreationOptions,
         string name)
     {
-        var monitoredTaskState = new MonitoredTaskActionState
+        MonitoredTaskActionState monitoredTaskState = new MonitoredTaskActionState
         {
             Action = action,
             State = state
         };
 
-        var task = new Task(ExecuteAction, monitoredTaskState, cancellationToken, taskCreationOptions);
-        var taskInfo = new TaskInfo(task, name);
+        Task task = new Task(ExecuteAction, monitoredTaskState, cancellationToken, taskCreationOptions);
+        TaskInfo taskInfo = new TaskInfo(task, name);
         monitoredTaskState.TaskInfo = taskInfo;
 
         lock (Tasks)
@@ -65,14 +65,14 @@ public static class TaskMonitor
         TaskCreationOptions taskCreationOptions,
         string name)
     {
-        var monitoredTaskState = new MonitoredTaskFunctionState<TResult>
+        MonitoredTaskFunctionState<TResult> monitoredTaskState = new MonitoredTaskFunctionState<TResult>
         {
             Function = function,
             State = state
         };
 
-        var task = new Task<TResult>(ExecuteFunction<TResult>, monitoredTaskState, cancellationToken, taskCreationOptions);
-        var taskInfo = new TaskInfo(task, name);
+        Task<TResult> task = new Task<TResult>(ExecuteFunction<TResult>, monitoredTaskState, cancellationToken, taskCreationOptions);
+        TaskInfo taskInfo = new TaskInfo(task, name);
         monitoredTaskState.TaskInfo = taskInfo;
 
         lock (Tasks)
@@ -113,10 +113,10 @@ public static class TaskMonitor
 
     private static void ExecuteAction(object state)
     {
-        var monitoredTaskState = (MonitoredTaskActionState)state;
-        var taskInfo = monitoredTaskState.TaskInfo;
+        MonitoredTaskActionState monitoredTaskState = (MonitoredTaskActionState)state;
+        TaskInfo taskInfo = monitoredTaskState.TaskInfo;
         taskInfo.StartTime = LocalTime.Default.Now;
-        var thread = Thread.CurrentThread;
+        Thread thread = Thread.CurrentThread;
         taskInfo.ManagedThreadId = thread.ManagedThreadId;
         taskInfo.IsThreadPoolThread = thread.IsThreadPoolThread;
 
@@ -133,10 +133,10 @@ public static class TaskMonitor
 
     private static TResult ExecuteFunction<TResult>(object state)
     {
-        var monitoredTaskState = (MonitoredTaskFunctionState<TResult>)state;
-        var taskInfo = monitoredTaskState.TaskInfo;
+        MonitoredTaskFunctionState<TResult> monitoredTaskState = (MonitoredTaskFunctionState<TResult>)state;
+        TaskInfo taskInfo = monitoredTaskState.TaskInfo;
         taskInfo.StartTime = LocalTime.Default.Now;
-        var thread = Thread.CurrentThread;
+        Thread thread = Thread.CurrentThread;
         taskInfo.ManagedThreadId = thread.ManagedThreadId;
         taskInfo.IsThreadPoolThread = thread.IsThreadPoolThread;
 

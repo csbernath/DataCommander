@@ -11,9 +11,9 @@ public sealed class ConfigurationNodeTree
 
     public void LoadXml(string xml, string sectionName)
     {
-        var reader = new ConfigurationReader();
-        var textReader = new StringReader(xml);
-        var xmlReader = new XmlTextReader(textReader);
+        ConfigurationReader reader = new ConfigurationReader();
+        StringReader textReader = new StringReader(xml);
+        XmlTextReader xmlReader = new XmlTextReader(textReader);
         _rootNode = reader.Read(xmlReader, null, sectionName, null);
     }
 
@@ -25,7 +25,7 @@ public sealed class ConfigurationNodeTree
         xmlWriter.WriteStartElement(sectionName);
         ConfigurationWriter.Write(xmlWriter, _rootNode.Attributes);
 
-        foreach (var childNode in _rootNode.ChildNodes)
+        foreach (ConfigurationNode childNode in _rootNode.ChildNodes)
         {
             ConfigurationWriter.WriteNode(xmlWriter, childNode);
         }
@@ -37,9 +37,9 @@ public sealed class ConfigurationNodeTree
     {
         string s;
 
-        using (var textWriter = new StringWriter(CultureInfo.InvariantCulture))
+        using (StringWriter textWriter = new StringWriter(CultureInfo.InvariantCulture))
         {
-            var xmlWriter = new XmlTextWriter(textWriter) {Formatting = Formatting.Indented, Indentation = 2, IndentChar = ' '};
+            XmlTextWriter xmlWriter = new XmlTextWriter(textWriter) {Formatting = Formatting.Indented, Indentation = 2, IndentChar = ' '};
             Save(xmlWriter, sectionName);
             xmlWriter.Close();
             s = textWriter.ToString();
@@ -53,16 +53,16 @@ public sealed class ConfigurationNodeTree
         if (_rootNode == null)
             _rootNode = new ConfigurationNode(null);
 
-        var node = _rootNode;
+        ConfigurationNode node = _rootNode;
 
         if (path != null)
         {
-            var nodeNames = path.Split(ConfigurationNode.Delimiter);
+            string[] nodeNames = path.Split(ConfigurationNode.Delimiter);
 
-            for (var i = 0; i < nodeNames.Length; i++)
+            for (int i = 0; i < nodeNames.Length; i++)
             {
-                var childNodeName = nodeNames[i];
-                var contains = node.ChildNodes.TryGetValue(childNodeName, out var childNode);
+                string childNodeName = nodeNames[i];
+                bool contains = node.ChildNodes.TryGetValue(childNodeName, out ConfigurationNode childNode);
 
                 if (!contains)
                 {

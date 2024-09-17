@@ -11,8 +11,8 @@ public class SafeSqlConnectionFactory : IDbConnectionFactory
 
     public IDbConnectionHelper CreateConnectionHelper(IDbConnection connection)
     {
-        var safeSqlConnection = (SafeSqlConnection)connection;
-        var sqlConnection = (SqlConnection)safeSqlConnection.Connection;
+        SafeSqlConnection safeSqlConnection = (SafeSqlConnection)connection;
+        SqlConnection sqlConnection = (SqlConnection)safeSqlConnection.Connection;
         return new SqlConnectionFactory(sqlConnection, connection);
     }
 }

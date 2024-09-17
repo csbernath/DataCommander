@@ -19,9 +19,9 @@ public sealed class ApplicationData
     {
         get
         {
-            var trace = new StackTrace(1);
-            var nodeName = ConfigurationNodeName.FromNamespace(trace, 0);
-            var node = CreateNode(nodeName);
+            StackTrace trace = new StackTrace(1);
+            string nodeName = ConfigurationNodeName.FromNamespace(trace, 0);
+            ConfigurationNode node = CreateNode(nodeName);
             return node;
         }
     }
@@ -30,23 +30,23 @@ public sealed class ApplicationData
     {
         get
         {
-            var trace = new StackTrace(1);
-            var nodeName = ConfigurationNodeName.FromType(trace, 0);
-            var node = CreateNode(nodeName);
+            StackTrace trace = new StackTrace(1);
+            string nodeName = ConfigurationNodeName.FromType(trace, 0);
+            ConfigurationNode node = CreateNode(nodeName);
             return node;
         }
     }
 
     public static string GetApplicationDataFolderPath(bool versioned)
     {
-        var sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         sb.Append(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
 
         string company;
         string product;
 
-        var assembly = Assembly.GetEntryAssembly();
-        var companyAttribute =
+        Assembly assembly = Assembly.GetEntryAssembly();
+        AssemblyCompanyAttribute companyAttribute =
             (AssemblyCompanyAttribute) Attribute.GetCustomAttribute(assembly, typeof(AssemblyCompanyAttribute));
 
         if (companyAttribute != null)
@@ -59,7 +59,7 @@ public sealed class ApplicationData
         else
             company = null;
 
-        var productAttribute =
+        AssemblyProductAttribute productAttribute =
             (AssemblyProductAttribute) Attribute.GetCustomAttribute(assembly, typeof(AssemblyProductAttribute));
 
         if (productAttribute != null)
@@ -72,7 +72,7 @@ public sealed class ApplicationData
         else
             product = null;
 
-        var name = assembly.GetName();
+        AssemblyName name = assembly.GetName();
 
         if (product == null)
             product = name.Name;
@@ -98,7 +98,7 @@ public sealed class ApplicationData
 
     public void Load(XmlReader xmlReader)
     {
-        var reader = new ConfigurationReader();
+        ConfigurationReader reader = new ConfigurationReader();
         RootNode = reader.Read(xmlReader, _sectionName, null, null);
 
         if (RootNode == null)
@@ -112,8 +112,8 @@ public sealed class ApplicationData
 
         if (File.Exists(fileName))
         {
-            var reader = new ConfigurationReader();
-            var fileNames = new StringCollection();
+            ConfigurationReader reader = new ConfigurationReader();
+            StringCollection fileNames = [];
             RootNode = reader.Read(fileName, sectionName, fileNames);
         }
         else
@@ -128,7 +128,7 @@ public sealed class ApplicationData
         xmlWriter.WriteStartElement(sectionName);
         ConfigurationWriter.Write(xmlWriter, RootNode.Attributes);
 
-        foreach (var childNode in RootNode.ChildNodes)
+        foreach (ConfigurationNode childNode in RootNode.ChildNodes)
             ConfigurationWriter.WriteNode(xmlWriter, childNode);
 
         xmlWriter.WriteEndElement();
@@ -136,10 +136,10 @@ public sealed class ApplicationData
 
     public void Save(string fileName, string sectionName)
     {
-        var directoryName = Path.GetDirectoryName(fileName);
+        string directoryName = Path.GetDirectoryName(fileName);
         Directory.CreateDirectory(directoryName);
 
-        using (var xmlTextWriter = new XmlTextWriter(fileName, Encoding.UTF8))
+        using (XmlTextWriter xmlTextWriter = new XmlTextWriter(fileName, Encoding.UTF8))
         {
             xmlTextWriter.Formatting = Formatting.Indented;
             xmlTextWriter.Indentation = 2;
@@ -153,7 +153,7 @@ public sealed class ApplicationData
 
     public void Save()
     {
-        var directoryName = Path.GetDirectoryName(_fileName);
+        string directoryName = Path.GetDirectoryName(_fileName);
 
         if (!Directory.Exists(directoryName))
             Directory.CreateDirectory(directoryName);

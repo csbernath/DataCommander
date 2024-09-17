@@ -43,9 +43,9 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
     {
         ListBox.Items.Clear();
 
-        foreach (var item in _result.Items)
+        foreach (IObjectName item in _result.Items)
         {
-            var listBoxItem = new ListBoxItem<IObjectName>(item, ToString);
+            ListBoxItem<IObjectName> listBoxItem = new ListBoxItem<IObjectName>(item, ToString);
             ListBox.Items.Add(listBoxItem);
         }
     }
@@ -61,11 +61,11 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
             _prefix = _textBox.Text.Substring(result.StartPosition, result.Length);
             if (_prefix.Length > 0)
             {
-                var items = _prefix.Split('.');
+                string[] items = _prefix.Split('.');
 
-                var count = result.Items[0].UnquotedName.Count(c => c == '.') + 1;
-                var stringBuilder = new StringBuilder();
-                for (var i = Math.Max(items.Length - count, 0); i < items.Length; i++)
+                int count = result.Items[0].UnquotedName.Count(c => c == '.') + 1;
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int i = Math.Max(items.Length - count, 0); i < items.Length; i++)
                 {
                     if (stringBuilder.Length > 0)
                         stringBuilder.Append('.');
@@ -124,39 +124,39 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
     private void Close()
     {
         _textBox.KeyboardHandler = null;
-        var form = (Form)Parent;
+        Form? form = (Form)Parent;
         form.Controls.Remove(this);
         form.Close();
     }
 
     private void SelectItem()
     {
-        var listBoxItem = (ListBoxItem<IObjectName>)ListBox.SelectedItem;
+        ListBoxItem<IObjectName>? listBoxItem = (ListBoxItem<IObjectName>)ListBox.SelectedItem;
 
         if (listBoxItem != null)
         {
-            var selectedItem = listBoxItem.Item.UnquotedName;
-            var startIndex = _result.StartPosition;
-            var tokenIterator = new TokenIterator(_textBox.Text[startIndex..]);
-            var token = tokenIterator.Next();
+            string selectedItem = listBoxItem.Item.UnquotedName;
+            int startIndex = _result.StartPosition;
+            TokenIterator tokenIterator = new TokenIterator(_textBox.Text[startIndex..]);
+            Token token = tokenIterator.Next();
             int length;
             if (token != null && token.StartPosition == 0)
                 length = token.EndPosition - token.StartPosition + 1;
             else
                 length = 0;
 
-            var originalText = _textBox.Text.Substring(startIndex, length);
-            var originalItems = originalText.Split('.');
-            var newItems = selectedItem.Split('.');
-            var sb = new StringBuilder();
-            for (var i = 0; i < originalItems.Length - newItems.Length; i++)
+            string originalText = _textBox.Text.Substring(startIndex, length);
+            string[] originalItems = originalText.Split('.');
+            string[] newItems = selectedItem.Split('.');
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < originalItems.Length - newItems.Length; i++)
             {
                 if (sb.Length > 0)
                     sb.Append('.');
                 sb.Append(originalItems[i]);
             }
 
-            for (var i = 0; i < newItems.Length; i++)
+            for (int i = 0; i < newItems.Length; i++)
             {
                 if (sb.Length > 0)
                     sb.Append('.');
@@ -178,7 +178,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
     public bool HandleKeyDown(KeyEventArgs e)
     {
         bool handled;
-        var hWnd = ListBox.Handle.ToInt32();
+        int hWnd = ListBox.Handle.ToInt32();
         NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.Keyboard.KeyDown, (int)e.KeyCode, 0);
 
         if (e.KeyCode.In(Keys.Down, Keys.Up, Keys.PageDown, Keys.PageUp, Keys.Home, Keys.End))
@@ -186,13 +186,13 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
             handled = true;
             if (e.KeyCode == Keys.Down && e.Shift)
             {
-                var startIndex = ListBox.SelectedIndex + 1;
+                int startIndex = ListBox.SelectedIndex + 1;
                 if (startIndex < ListBox.Items.Count - 1)
                     FindNext(startIndex);
             }
             else if (e.KeyCode == Keys.Up && e.Shift)
             {
-                var startIndex = ListBox.SelectedIndex - 1;
+                int startIndex = ListBox.SelectedIndex - 1;
                 if (startIndex > 0)
                     FindPrevious(startIndex);
             }
@@ -200,7 +200,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
         else if (e.KeyCode.In(Keys.Subtract, Keys.OemMinus) && e.Control)
         {
             handled = true;
-            var filteredItems = ListBox.Items.Cast<ListBoxItem<IObjectName>>()
+            ListBoxItem<IObjectName>[] filteredItems = ListBox.Items.Cast<ListBoxItem<IObjectName>>()
                 .Where(item => IndexOf(item.Item.UnquotedName, _prefix) >= 0)
                 .ToArray();
             ListBox.Items.Clear();
@@ -226,7 +226,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
             .Where(item => item.IndexOf >= 0)
             .ToList();
 
-        var index = -1;
+        int index = -1;
 
         if (filteredItems.Count > 0)
             index = filteredItems.MinIndexedItem(i => i.IndexOf).Value.Index;
@@ -237,10 +237,10 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
             if (index >= 3)
             {
                 // scrolling 3 items up
-                var wParam = (int)NativeMethods.Message.ScrollBarParameter.ThumbPosition;
-                var pos = (index - 3) << 16;
+                int wParam = (int)NativeMethods.Message.ScrollBarParameter.ThumbPosition;
+                int pos = (index - 3) << 16;
                 wParam += pos;
-                var hWnd = ListBox.Handle.ToInt32();
+                int hWnd = ListBox.Handle.ToInt32();
                 NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.ScrollBar.VScroll, wParam, 0);
             }
         }
@@ -248,10 +248,10 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
 
     private static int IndexOf(string item, string searchPattern)
     {
-        var index = item.IndexOf(searchPattern, StringComparison.InvariantCultureIgnoreCase);
+        int index = item.IndexOf(searchPattern, StringComparison.InvariantCultureIgnoreCase);
         if (index == -1)
         {
-            var camelHumps = GetCamelHumps(item);
+            string camelHumps = GetCamelHumps(item);
             index = camelHumps.IndexOf(searchPattern, StringComparison.InvariantCultureIgnoreCase);
         }
 
@@ -260,11 +260,11 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
 
     private static string GetCamelHumps(string source)
     {
-        var stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
 
-        for (var i = 0; i < source.Length; ++i)
+        for (int i = 0; i < source.Length; ++i)
         {
-            var c = source[i];
+            char c = source[i];
 
             if (i == 0)
                 stringBuilder.Append(c);
@@ -280,11 +280,11 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
 
     private void FindNext(int startIndex)
     {
-        var items = ListBox.Items.Cast<ListBoxItem<IObjectName>>().ToList();
-        var index = LinearSearch.IndexOf(startIndex, items.Count - 1, currentIndex =>
+        System.Collections.Generic.List<ListBoxItem<IObjectName>> items = ListBox.Items.Cast<ListBoxItem<IObjectName>>().ToList();
+        int index = LinearSearch.IndexOf(startIndex, items.Count - 1, currentIndex =>
         {
-            var item = items[currentIndex];
-            var name = item.Item.UnquotedName;
+            ListBoxItem<IObjectName> item = items[currentIndex];
+            string name = item.Item.UnquotedName;
             return name.IndexOf(_prefix) >= 0;
         });
         if (index >= 0)
@@ -293,11 +293,11 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
 
     private void FindPrevious(int startIndex)
     {
-        var items = ListBox.Items.Cast<ListBoxItem<IObjectName>>().ToList();
-        var index = LinearSearch.LastIndexOf(startIndex, items.Count - 1, currentIndex =>
+        System.Collections.Generic.List<ListBoxItem<IObjectName>> items = ListBox.Items.Cast<ListBoxItem<IObjectName>>().ToList();
+        int index = LinearSearch.LastIndexOf(startIndex, items.Count - 1, currentIndex =>
         {
-            var item = items[currentIndex];
-            var name = item.Item.UnquotedName;
+            ListBoxItem<IObjectName> item = items[currentIndex];
+            string name = item.Item.UnquotedName;
             return name.IndexOf(_prefix) >= 0;
         });
         if (index >= 0)
@@ -306,7 +306,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
 
     public bool HandleKeyPress(KeyPressEventArgs e)
     {
-        var handled = false;
+        bool handled = false;
 
         if (e.KeyChar == '\r' || e.KeyChar == '\n')
         {
@@ -326,7 +326,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
             if (e.KeyChar == '\x08')
             {
                 // Backspace
-                var length = _prefix.Length;
+                int length = _prefix.Length;
                 if (length > 0)
                     _prefix = _prefix[..(length - 1)];
             }

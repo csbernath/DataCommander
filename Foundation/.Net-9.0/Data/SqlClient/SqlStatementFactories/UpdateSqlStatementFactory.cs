@@ -20,7 +20,7 @@ public static class UpdateSqlStatementFactory
         Assert.IsTrue(whereColumns.Count > 0);
         Assert.IsTrue(whereColumns.All(column => !column.Value.IsNullOrEmpty()));
 
-        var textBuilder = new TextBuilder();
+        TextBuilder textBuilder = new TextBuilder();
         textBuilder.Add($"update {table}");
         textBuilder.Add("set");
         using (textBuilder.Indent(1))

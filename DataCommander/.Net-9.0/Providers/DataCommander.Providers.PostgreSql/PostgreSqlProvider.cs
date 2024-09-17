@@ -50,20 +50,20 @@ internal sealed class PostgreSqlProvider : IProvider
         CancellationToken cancellationToken)
     {
         List<IObjectName> array = null;
-        var sqlStatement = new SqlParser(text);
-        var tokens = sqlStatement.Tokens;
-        sqlStatement.FindToken(position, out var previousToken, out var currentToken);
+        SqlParser sqlStatement = new SqlParser(text);
+        List<Api.Query.Token> tokens = sqlStatement.Tokens;
+        sqlStatement.FindToken(position, out Api.Query.Token? previousToken, out Api.Query.Token? currentToken);
 
         int startPosition;
         int length;
         if (currentToken != null)
         {
-            var parts = new IdentifierParser(new StringReader(currentToken.Value)).Parse().ToList();
-            var lastPart = parts.Count > 0 ? parts.Last() : null;
-            var lastPartLength = lastPart != null ? lastPart.Length : 0;
+            List<string> parts = new IdentifierParser(new StringReader(currentToken.Value)).Parse().ToList();
+            string? lastPart = parts.Count > 0 ? parts.Last() : null;
+            int lastPartLength = lastPart != null ? lastPart.Length : 0;
             startPosition = currentToken.EndPosition - lastPartLength + 1;
             length = lastPartLength;
-            var value = currentToken.Value;
+            string value = currentToken.Value;
             if (value.Length > 0 && value[0] == '@')
             {
                 if (value.StartsWith("@@"))
@@ -72,12 +72,12 @@ internal sealed class PostgreSqlProvider : IProvider
                 }
                 else
                 {
-                    var list = new SortedList<string, object>();
+                    SortedList<string, object> list = [];
 
-                    for (var i = 0; i < tokens.Count; i++)
+                    for (int i = 0; i < tokens.Count; i++)
                     {
-                        var token = tokens[i];
-                        var keyWord = token.Value;
+                        Api.Query.Token token = tokens[i];
+                        string? keyWord = token.Value;
 
                         if (keyWord != null && keyWord.Length >= 2 && keyWord.StartsWith(value) && keyWord != value)
                             if (!list.ContainsKey(token.Value))
@@ -96,7 +96,7 @@ internal sealed class PostgreSqlProvider : IProvider
 
         if (array == null)
         {
-            var sqlObject = sqlStatement.FindSqlObject(previousToken, currentToken);
+            SqlObject? sqlObject = sqlStatement.FindSqlObject(previousToken, currentToken);
             string commandText = null;
 
             if (sqlObject != null)
@@ -117,11 +117,11 @@ internal sealed class PostgreSqlProvider : IProvider
                     case SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function:
                     {
                         name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
-                        var nameParts = sqlObject.Name != null
+                            List<string>? nameParts = sqlObject.Name != null
                             ? new IdentifierParser(new StringReader(sqlObject.Name)).Parse().ToList()
                             : null;
-                        var namePartsCount = nameParts != null ? nameParts.Count : 0;
-                        var statements = new List<string>();
+                            int namePartsCount = nameParts != null ? nameParts.Count : 0;
+                            List<string> statements = [];
 
                         switch (namePartsCount)
                         {
@@ -139,9 +139,9 @@ internal sealed class PostgreSqlProvider : IProvider
                             case 2:
                                 if (nameParts[0] != null)
                                 {
-                                    // TODO statements.Add(SqlServerObject.GetSchemas(database: nameParts[0]));
+                                        // TODO statements.Add(SqlServerObject.GetSchemas(database: nameParts[0]));
 
-                                    var objectTypes = sqlObject.Type.ToTableTypes();
+                                        List<string> objectTypes = sqlObject.Type.ToTableTypes();
                                     statements.Add(SqlServerObject.GetTables(schema: nameParts[0], tableTypes: objectTypes));
                                 }
 
@@ -151,7 +151,7 @@ internal sealed class PostgreSqlProvider : IProvider
                             {
                                 if (nameParts[0] != null && nameParts[1] != null)
                                 {
-                                    var objectTypes = sqlObject.Type.ToObjectTypes();
+                                            List<string> objectTypes = sqlObject.Type.ToObjectTypes();
                                     statements.Add(SqlServerObject.GetObjects(database: nameParts[0], schema: nameParts[1], objectTypes: objectTypes));
                                 }
                             }
@@ -175,7 +175,7 @@ internal sealed class PostgreSqlProvider : IProvider
                             owners = ["dbo", "sys"];
                         }
 
-                        var sb = new StringBuilder();
+                        StringBuilder sb = new StringBuilder();
                         for (i = 0; i < owners.Length; i++)
                         {
                             if (i > 0)
@@ -184,7 +184,7 @@ internal sealed class PostgreSqlProvider : IProvider
                             sb.AppendFormat("'{0}'", owners[i]);
                         }
 
-                        var ownersString = sb.ToString();
+                        string ownersString = sb.ToString();
                         commandText =
                             $@"select c.column_name
 from information_schema.columns c
@@ -215,9 +215,9 @@ order by 1", name.Database);
                         break;
 
                     case SqlObjectTypes.Value:
-                        var items = sqlObject.ParentName.Split('.');
+                        string[] items = sqlObject.ParentName.Split('.');
                         i = items.Length - 1;
-                        var columnName = items[i];
+                        string columnName = items[i];
                         string tableNameOrAlias = null;
                         if (i > 0)
                         {
@@ -227,16 +227,16 @@ order by 1", name.Database);
 
                         if (tableNameOrAlias != null)
                         {
-                            var contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out var tableName);
+                            bool contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out string? tableName);
                             if (contains)
                             {
                                 string where;
-                                var tokenIndex = previousToken.Index + 1;
+                                int tokenIndex = previousToken.Index + 1;
                                 if (tokenIndex < tokens.Count)
                                 {
-                                    var token = tokens[tokenIndex];
-                                    var tokenValue = token.Value;
-                                    var indexofAny = tokenValue.IndexOfAny(['\r', '\n']);
+                                    Api.Query.Token token = tokens[tokenIndex];
+                                    string? tokenValue = token.Value;
+                                    int indexofAny = tokenValue.IndexOfAny(['\r', '\n']);
                                     if (indexofAny >= 0)
                                     {
                                         tokenValue = tokenValue[..indexofAny];
@@ -277,7 +277,7 @@ order by 1", name.Database);
             if (commandText != null)
             {
                 Log.Write(LogLevel.Trace, "commandText:\r\n{0}", commandText);
-                var list = new List<IObjectName>();
+                List<IObjectName> list = [];
                 try
                 {
                     if (connection.State != ConnectionState.Open)
@@ -285,13 +285,13 @@ order by 1", name.Database);
                         connection.OpenAsync(CancellationToken.None).Wait();
                     }
 
-                    var executor = connection.Connection.CreateCommandExecutor();
+                    IDbCommandExecutor executor = connection.Connection.CreateCommandExecutor();
                     //new DbTransactionScope(connection.Connection, transaction);
                     executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
                     {
                         while (true)
                         {
-                            var fieldCount = dataReader.FieldCount;
+                            int fieldCount = dataReader.FieldCount;
                             while (dataReader.Read())
                             {
                                 string schemaName;
@@ -344,7 +344,7 @@ order by 1", name.Database);
 
     List<InfoMessage> IProvider.ToInfoMessages(Exception e)
     {
-        var message = e.ToString();
+        string message = e.ToString();
 
         return
         [

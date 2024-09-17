@@ -22,7 +22,7 @@ internal sealed class ObjectExplorer(IProvider provider) : IObjectExplorer
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var treeNodes = new ITreeNode[]
+        ITreeNode[] treeNodes = new ITreeNode[]
         {
             new CatalogsNode(_connection)
         };

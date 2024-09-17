@@ -21,7 +21,7 @@ internal sealed class TableNode(DatabaseNode databaseNode, string? name) : ITree
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var treeNodes = new ITreeNode[1];
+        ITreeNode[] treeNodes = new ITreeNode[1];
         treeNodes[0] = new IndexCollectionNode(this);
         return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
     }
@@ -35,26 +35,26 @@ internal sealed class TableNode(DatabaseNode databaseNode, string? name) : ITree
         string? databaseName,
         string? name)
     {
-        var commandText = $@"
+        string commandText = $@"
 select  sql
 from	{databaseName}.sqlite_master
 where	name	= '{name}'";
-        var executor = DbCommandExecutorFactory.Create(connection);
-        var scalar = executor.ExecuteScalar(new CreateCommandRequest(commandText));
-        var script = (string) scalar;
+        IDbCommandAsyncExecutor executor = DbCommandExecutorFactory.Create(connection);
+        object scalar = executor.ExecuteScalar(new CreateCommandRequest(commandText));
+        string script = (string) scalar;
         return script;
     }
 
     private void Script_Click(object sender, EventArgs e)
     {
         string script;
-        using (var connection = ConnectionFactory.CreateConnection(DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential))
+        using (SQLiteConnection connection = ConnectionFactory.CreateConnection(DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential))
         {
             connection.Open();
             script = GetScript(connection, DatabaseNode.Name, Name);
         }
 
-        var queryForm = (IQueryForm)sender;
+        IQueryForm queryForm = (IQueryForm)sender;
         queryForm.ShowText(script);
     }
 
@@ -64,8 +64,8 @@ where	name	= '{name}'";
 
         if (Name != "sqlite_master")
         {
-            var item = new MenuItem("Script", Script_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-            var items = new[] { item }.ToReadOnlyCollection();
+            MenuItem item = new MenuItem("Script", Script_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+            System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> items = new[] { item }.ToReadOnlyCollection();
             contextMenu = new ContextMenu(items);
         }
 

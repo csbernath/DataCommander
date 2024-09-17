@@ -36,7 +36,7 @@ internal sealed class TableNode(DatabaseNode databaseNode, string? owner, string
     {
         get
         {
-            var temporalType = type switch
+            string? temporalType = type switch
             {
                 TemporalType.NonTemporalTable => null,
                 TemporalType.HistoryTable => "History",
@@ -53,11 +53,11 @@ internal sealed class TableNode(DatabaseNode databaseNode, string? owner, string
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var treeNodes = new List<ITreeNode>();
+        List<ITreeNode> treeNodes = [];
 
         if (type == TemporalType.SystemVersionedTemporalTable)
         {
-            var commandText = @$"select t.name,t.object_id
+            string commandText = @$"select t.name,t.object_id
 from [{DatabaseNode.Name}].sys.tables t
 where
     t.object_id in
@@ -67,8 +67,8 @@ where
         where object_id = {id}
     )";
             string? historyTableName = null;
-            var historyTableId = 0;
-            var request = new ExecuteReaderRequest(commandText);
+            int historyTableId = 0;
+            ExecuteReaderRequest request = new ExecuteReaderRequest(commandText);
             await Db.ExecuteReaderAsync(
                 DatabaseNode.Databases.Server.CreateConnection,
                 request,
@@ -98,19 +98,19 @@ where
     {
         get
         {
-            var name1 = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
-            using var connection = DatabaseNode.Databases.Server.CreateConnection();
+            DatabaseObjectMultipartName name1 = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
+            using Microsoft.Data.SqlClient.SqlConnection connection = DatabaseNode.Databases.Server.CreateConnection();
             connection.Open();
-            var text = GetSelectStatement(connection, name1);
+            string text = GetSelectStatement(connection, name1);
             return text;
         }
     }
 
     public ContextMenu? GetContextMenu()
     {
-        var editRows = new MenuItem("Edit Rows", EditRows, EmptyReadOnlyCollection<MenuItem>.Value);
+        MenuItem editRows = new MenuItem("Edit Rows", EditRows, EmptyReadOnlyCollection<MenuItem>.Value);
 
-        var dropdownItems = new[]
+        ReadOnlyCollection<MenuItem> dropdownItems = new[]
         {
             new MenuItem("CREATE to clipboard", CreateTableScriptToClipboard, EmptyReadOnlyCollection<MenuItem>.Value),
             new MenuItem("SELECT to clipboard", SelectScript_Click, EmptyReadOnlyCollection<MenuItem>.Value),
@@ -119,13 +119,13 @@ where
             new MenuItem("C# ORM to clipboard", CsharpOrm_Click, EmptyReadOnlyCollection<MenuItem>.Value),
             new MenuItem("C# DTO with properties to clipboard", DataTransferObjectWithProperties_Click, EmptyReadOnlyCollection<MenuItem>.Value)
         }.ToReadOnlyCollection();
-        var scriptTableAs = new MenuItem("Script Table as", null, dropdownItems);
+        MenuItem scriptTableAs = new MenuItem("Script Table as", null, dropdownItems);
 
-        var schema = new MenuItem("Schema", Schema_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        var indexes = new MenuItem("Indexes", Indexes_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+        MenuItem schema = new MenuItem("Schema", Schema_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+        MenuItem indexes = new MenuItem("Indexes", Indexes_Click, EmptyReadOnlyCollection<MenuItem>.Value);
 
-        var items = new[] { editRows, scriptTableAs, schema, indexes }.ToReadOnlyCollection();
-        var menu = new ContextMenu(items);
+        ReadOnlyCollection<MenuItem> items = new[] { editRows, scriptTableAs, schema, indexes }.ToReadOnlyCollection();
+        ContextMenu menu = new ContextMenu(items);
 
         return menu;
     }
@@ -135,7 +135,7 @@ where
         ArgumentNullException.ThrowIfNull(connection);
         ArgumentNullException.ThrowIfNull(databaseObjectMultipartName);
 
-        var commandText = $@"select  c.name
+        string commandText = $@"select  c.name
 from    [{databaseObjectMultipartName.Database}].sys.schemas s (nolock)
 join    [{databaseObjectMultipartName.Database}].sys.objects o (nolock)
     on s.schema_id = o.schema_id
@@ -146,13 +146,13 @@ where
     and o.name = '{databaseObjectMultipartName.Name}'
 order by c.column_id";
 
-        var columnNames = new StringBuilder();
-        var first = true;
+        StringBuilder columnNames = new StringBuilder();
+        bool first = true;
 
         if (connection.State != ConnectionState.Open)
             connection.Open();
 
-        var executor = connection.CreateCommandExecutor();
+        IDbCommandExecutor executor = connection.CreateCommandExecutor();
         executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
         {
             while (dataReader.Read())
@@ -168,7 +168,7 @@ order by c.column_id";
             }
         });
 
-        var query =
+        string query =
             $@"select  {columnNames}
 from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.Schema}].[{
     databaseObjectMultipartName.Name}]";
@@ -178,15 +178,15 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
 
     private void EditRows(object sender, EventArgs e)
     {
-        var name1 = DatabaseNode.Name + "." + owner + "." + name;
-        var query = "select * from " + name1;
-        var queryForm = (IQueryForm)sender;            
+        string name1 = DatabaseNode.Name + "." + owner + "." + name;
+        string query = "select * from " + name1;
+        IQueryForm queryForm = (IQueryForm)sender;            
         queryForm.EditRows(query);
     }
 
     private void Schema_Click(object sender, EventArgs e)
     {
-        var commandText = string.Format(
+        string commandText = string.Format(
             @"use [{0}]
 exec sp_MShelpcolumns N'{1}.[{2}]', @orderby = 'id'
 exec sp_MStablekeys N'{1}.[{2}]', null, 14
@@ -194,16 +194,16 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
 
         Log.Write(LogLevel.Trace, commandText);
         DataSet dataSet;
-        using (var connection = DatabaseNode.Databases.Server.CreateConnection())
+        using (Microsoft.Data.SqlClient.SqlConnection connection = DatabaseNode.Databases.Server.CreateConnection())
         {
-            var executor = connection.CreateCommandExecutor();
+            IDbCommandExecutor executor = connection.CreateCommandExecutor();
             dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText), CancellationToken.None);
         }
 
-        var columns = dataSet.Tables[0];
-        var keys = dataSet.Tables[1];
+        DataTable columns = dataSet.Tables[0];
+        DataTable keys = dataSet.Tables[1];
 
-        var schema = new DataTable();
+        DataTable schema = new DataTable();
         schema.Columns.Add(" ", typeof(int));
         schema.Columns.Add("  ", typeof(string));
         schema.Columns.Add("Name", typeof(string));
@@ -220,16 +220,16 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
             else
                 identity = string.Empty;
 
-            var sb = new StringBuilder();
-            var dbType = column["col_typename"].ToString();
+            StringBuilder sb = new StringBuilder();
+            string? dbType = column["col_typename"].ToString();
             sb.Append(dbType);
 
             switch (dbType)
             {
                 case "decimal":
                 case "numeric":
-                    var precision = Convert.ToInt32(column["col_prec"]);
-                    var scale = Convert.ToInt32(column["col_scale"]);
+                    int precision = Convert.ToInt32(column["col_prec"]);
+                    int scale = Convert.ToInt32(column["col_scale"]);
 
                     if (scale == 0)
                         sb.AppendFormat("({0})", precision);
@@ -243,7 +243,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
                 case "varchar":
                 case "nvarchar":
                 case "varbinary":
-                    var columnLength = (int)column["col_len"];
+                    int columnLength = (int)column["col_len"];
                     string columnlengthString;
 
                     if (columnLength == -1)
@@ -257,8 +257,8 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
 
             if (!Convert.ToBoolean(column["col_null"])) sb.Append(" not null");
 
-            var collation = ValueReader.GetValue(column["collation"], string.Empty);
-            var formula = string.Empty;
+            string collation = ValueReader.GetValue(column["collation"], string.Empty);
+            string? formula = string.Empty;
 
             if (column["text"] != DBNull.Value) formula = column["text"].ToString();
 
@@ -267,22 +267,22 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
 
         if (keys.Rows.Count > 0)
         {
-            var pk = (from row in keys.AsEnumerable()
+            DataRow? pk = (from row in keys.AsEnumerable()
                 where row.Field<byte>("cType") == 1
                 select row).FirstOrDefault();
 
             if (pk != null)
-                for (var i = 1; i <= 16; i++)
+                for (int i = 1; i <= 16; i++)
                 {
-                    var keyColObj = pk["cKeyCol" + i];
+                    object keyColObj = pk["cKeyCol" + i];
 
                     if (keyColObj == DBNull.Value) break;
 
-                    var keyCol = keyColObj.ToString();
+                    string? keyCol = keyColObj.ToString();
 
-                    var filter = $"Name = '{keyCol}'";
-                    var dataRow = schema.Select(filter)[0];
-                    var identity = dataRow[1].ToString();
+                    string filter = $"Name = '{keyCol}'";
+                    DataRow dataRow = schema.Select(filter)[0];
+                    string? identity = dataRow[1].ToString();
 
                     if (identity.Length > 0)
                         dataRow[1] = "PKEY," + dataRow[1];
@@ -293,34 +293,34 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
 
         dataSet.Tables.Add(schema);
 
-        var queryForm = (IQueryForm)sender;
+        IQueryForm queryForm = (IQueryForm)sender;
         queryForm.ShowDataSet(dataSet);
     }
 
     private void CreateTableScriptToClipboard(object? sender, EventArgs e)
     {
-        var queryForm = (IQueryForm)sender;
+        IQueryForm? queryForm = (IQueryForm)sender;
         queryForm.SetStatusbarPanelText("Copying table script to clipboard...");
-        var cancellationTokenSource = new CancellationTokenSource();
-        var cancelableOperationForm = queryForm.CreateCancelableOperationForm(cancellationTokenSource, TimeSpan.FromSeconds(1),
+        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        ICancelableOperationForm cancelableOperationForm = queryForm.CreateCancelableOperationForm(cancellationTokenSource, TimeSpan.FromSeconds(1),
             "Copying table script to clipboard...", string.Empty);
-        var stopwatch = Stopwatch.StartNew();
-        var text = cancelableOperationForm.Execute(new Task<string>(GetCreateTableScript));
-        var elapsedTicks = stopwatch.ElapsedTicks;
+        Stopwatch stopwatch = Stopwatch.StartNew();
+        string text = cancelableOperationForm.Execute(new Task<string>(GetCreateTableScript));
+        long elapsedTicks = stopwatch.ElapsedTicks;
         queryForm.SetClipboardText(text);
         queryForm.SetStatusbarPanelText($"Copying CREATE TABLE script to clipboard finished in {StopwatchTimeSpan.ToString(elapsedTicks, 3)} seconds.");
     }
 
     private string GetCreateTableScript()
     {
-        var connectionInfo = SqlObjectScripter.CreateSqlConnectionInfo(DatabaseNode.Databases.Server.ConnectionStringAndCredential);
-        var connection = new ServerConnection(connectionInfo);
+        SqlConnectionInfo connectionInfo = SqlObjectScripter.CreateSqlConnectionInfo(DatabaseNode.Databases.Server.ConnectionStringAndCredential);
+        ServerConnection connection = new ServerConnection(connectionInfo);
         connection.Connect();
-        var server = new Server(connection);
-        var database = server.Databases[DatabaseNode.Name];
-        var table = database.Tables[name, owner];
+        Server server = new Server(connection);
+        Database database = server.Databases[DatabaseNode.Name];
+        Table table = database.Tables[name, owner];
 
-        var options = new ScriptingOptions
+        ScriptingOptions options = new ScriptingOptions
         {
             AnsiPadding = true,
             Default = true,
@@ -334,10 +334,10 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
             ScriptBatchTerminator = true
         };
 
-        var stringCollection = table.Script(options);
-        var stringBuilder = new StringBuilder();
-        var first = true;
-        foreach (var stringCollectionItem in stringCollection)
+        System.Collections.Specialized.StringCollection stringCollection = table.Script(options);
+        StringBuilder stringBuilder = new StringBuilder();
+        bool first = true;
+        foreach (string? stringCollectionItem in stringCollection)
         {
             if (first)
                 first = false;
@@ -347,7 +347,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
                 stringBuilder.AppendLine("GO");
             }
 
-            var reindented = stringCollectionItem.Replace("\t", "    ");
+            string reindented = stringCollectionItem.Replace("\t", "    ");
             stringBuilder.Append(reindented);
         }
 
@@ -356,33 +356,33 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
 
     private void Indexes_Click(object sender, EventArgs e)
     {
-        var commandText = $"use [{DatabaseNode.Name}] exec sp_helpindex [{owner}.{name}]";
+        string commandText = $"use [{DatabaseNode.Name}] exec sp_helpindex [{owner}.{name}]";
         DataTable dataTable;
-        using (var connection = DatabaseNode.Databases.Server.CreateConnection())
+        using (Microsoft.Data.SqlClient.SqlConnection connection = DatabaseNode.Databases.Server.CreateConnection())
         {
-            var executor = connection.CreateCommandExecutor();
+            IDbCommandExecutor executor = connection.CreateCommandExecutor();
             dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText), CancellationToken.None);
         }
 
         dataTable.TableName = $"{name} indexes";
-            
-        var dataSet = new DataSet();
+
+        DataSet dataSet = new DataSet();
         dataSet.Tables.Add(dataTable);
-            
-        var queryForm = (IQueryForm)sender;            
+
+        IQueryForm queryForm = (IQueryForm)sender;            
         queryForm.ShowDataSet(dataSet);
     }
 
     private void SelectScript_Click(object? sender, EventArgs e)
     {
-        var name1 = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
+        DatabaseObjectMultipartName name1 = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
         string selectStatement;
-        using (var connection = DatabaseNode.Databases.Server.CreateConnection())
+        using (Microsoft.Data.SqlClient.SqlConnection connection = DatabaseNode.Databases.Server.CreateConnection())
         {
             selectStatement = GetSelectStatement(connection, name1);
         }
 
-        var queryForm = (IQueryForm)sender;
+        IQueryForm? queryForm = (IQueryForm)sender;
         queryForm.SetClipboardText(selectStatement);
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
@@ -399,19 +399,19 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
 
     private static Column ReadColumn(IDataRecord dataRecord)
     {
-        var columnName = dataRecord.GetStringOrDefault(0);
-        var typeName = dataRecord.GetString(1);
-        var maxLength = dataRecord.GetInt16(2);
-        var precision = dataRecord.GetByte(3);
-        var scale = dataRecord.GetByte(4);
-        var isNullable = dataRecord.GetNullableBoolean(5);
+        string columnName = dataRecord.GetStringOrDefault(0);
+        string typeName = dataRecord.GetString(1);
+        short maxLength = dataRecord.GetInt16(2);
+        byte precision = dataRecord.GetByte(3);
+        byte scale = dataRecord.GetByte(4);
+        bool? isNullable = dataRecord.GetNullableBoolean(5);
 
         return new Column(columnName, typeName, maxLength, precision, scale, isNullable);
     }
 
     private void InsertScript_Click(object? sender, EventArgs e)
     {
-        var commandText = string.Format(@"select
+        string commandText = string.Format(@"select
     c.name,
     t.name as TypeName,
     c.max_length,
@@ -430,15 +430,15 @@ where
 	and o.name = '{2}'
 order by c.column_id", DatabaseNode.Name, owner, name);
         Log.Write(LogLevel.Trace, commandText);
-        var columns = Db.ExecuteReader(
+        ReadOnlySegmentLinkedList<Column> columns = Db.ExecuteReader(
             DatabaseNode.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
             ReadColumn);
 
-        var stringBuilder = new StringBuilder();
-        var first = true;
-        foreach (var column in columns)
+        StringBuilder stringBuilder = new StringBuilder();
+        bool first = true;
+        foreach (Column? column in columns)
         {
             if (first)
                 first = false;
@@ -447,17 +447,17 @@ order by c.column_id", DatabaseNode.Name, owner, name);
 
             stringBuilder.Append("declare");
 
-            var variableName = column.ColumnName;
+            string variableName = column.ColumnName;
             variableName = char.ToLower(variableName[0]) + variableName[1..];
-            var typeName = column.TypeName;
+            string typeName = column.TypeName;
 
             switch (typeName)
             {
                 case SqlDataTypeName.Char:
                 case SqlDataTypeName.VarChar:
                 {
-                    var maxLength = column.MaxLength;
-                    var maxLengthString = maxLength >= 0 ? maxLength.ToString() : "max";
+                        short maxLength = column.MaxLength;
+                        string maxLengthString = maxLength >= 0 ? maxLength.ToString() : "max";
                     typeName += "(" + maxLengthString + ")";
                 }
                     break;
@@ -465,15 +465,15 @@ order by c.column_id", DatabaseNode.Name, owner, name);
                 case SqlDataTypeName.NChar:
                 case SqlDataTypeName.NVarChar:
                 {
-                    var maxLength = column.MaxLength;
-                    var maxLengthString = maxLength >= 0 ? (maxLength / 2).ToString() : "max";
+                        short maxLength = column.MaxLength;
+                        string maxLengthString = maxLength >= 0 ? (maxLength / 2).ToString() : "max";
                     typeName += "(" + maxLengthString + ")";
                 }
                     break;
 
                 case SqlDataTypeName.Decimal:
-                    var precision = column.Precision;
-                    var scale = column.Scale;
+                    byte precision = column.Precision;
+                    byte scale = column.Scale;
                     if (scale == 0)
                         typeName += "(" + precision + ")";
                     else
@@ -490,7 +490,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
         stringBuilder.AppendFormat("\r\n\r\ninsert into {0}.{1}\r\n(\r\n    ", owner, name);
         first = true;
 
-        foreach (var column in columns)
+        foreach (Column? column in columns)
         {
             if (first)
                 first = false;
@@ -503,16 +503,16 @@ order by c.column_id", DatabaseNode.Name, owner, name);
         stringBuilder.Append("\r\n)\r\nselect\r\n");
         first = true;
 
-        var stringTable = new StringTable(3);
-        var sequence = new Sequence();
-        foreach (var column in columns)
+        StringTable stringTable = new StringTable(3);
+        Sequence sequence = new Sequence();
+        foreach (Column? column in columns)
         {
-            var stringTableRow = stringTable.NewRow();
-            var variableName = column.ColumnName;
+            StringTableRow stringTableRow = stringTable.NewRow();
+            string variableName = column.ColumnName;
             variableName = char.ToLower(variableName[0]) + variableName[1..];
             stringTableRow[1] = $"@{variableName}";
 
-            var text = $"as {column.ColumnName}";
+            string text = $"as {column.ColumnName}";
             if (sequence.Next() < columns.Count - 1)
                 text += ',';
 
@@ -522,7 +522,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
 
         stringBuilder.Append(stringTable.ToString(4));
 
-        var queryForm = (IQueryForm)sender;
+        IQueryForm? queryForm = (IQueryForm)sender;
         queryForm.SetClipboardText(stringBuilder.ToString());            
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
@@ -530,24 +530,24 @@ order by c.column_id", DatabaseNode.Name, owner, name);
     private string CreateUpdateScript()
     {
         GetTableSchemaResult getTableSchemaResult;
-        using (var connection = DatabaseNode.Databases.Server.CreateConnection())
+        using (Microsoft.Data.SqlClient.SqlConnection connection = DatabaseNode.Databases.Server.CreateConnection())
         {
             connection.Open();
-            var tableName = $"{DatabaseNode.Name}.{owner}.{name}";
+            string tableName = $"{DatabaseNode.Name}.{owner}.{name}";
             getTableSchemaResult = TableSchema.GetTableSchema(connection, tableName);
         }
 
-        var textBuilder = new TextBuilder();
+        TextBuilder textBuilder = new TextBuilder();
 
         textBuilder.Add($"update {Name}");
         textBuilder.Add("set");
         using (textBuilder.Indent(1))
         {
-            var last = getTableSchemaResult.Columns.Count - 1;
-            foreach (var item in getTableSchemaResult.Columns.SelectIndexed())
+            int last = getTableSchemaResult.Columns.Count - 1;
+            foreach (IndexedItem<Api.Column> item in getTableSchemaResult.Columns.SelectIndexed())
             {
-                var column = item.Value;
-                var line = new StringBuilder();
+                Api.Column column = item.Value;
+                StringBuilder line = new StringBuilder();
                 line.Append($"{column.ColumnName} = @{column.ColumnName}");
                 if (item.Index < last)
                     line.Append(',');
@@ -560,12 +560,12 @@ order by c.column_id", DatabaseNode.Name, owner, name);
             textBuilder.Add("where");
             using (textBuilder.Indent(1))
             {
-                var last = getTableSchemaResult.UniqueIndexColumns.Count - 1;
-                foreach (var item in getTableSchemaResult.UniqueIndexColumns.SelectIndexed())
+                int last = getTableSchemaResult.UniqueIndexColumns.Count - 1;
+                foreach (IndexedItem<UniqueIndexColumn> item in getTableSchemaResult.UniqueIndexColumns.SelectIndexed())
                 {
-                    var columnId = item.Value.ColumnId;
-                    var column = getTableSchemaResult.Columns.First(i => i.ColumnId == columnId);
-                    var line = new StringBuilder();
+                    int columnId = item.Value.ColumnId;
+                    Api.Column column = getTableSchemaResult.Columns.First(i => i.ColumnId == columnId);
+                    StringBuilder line = new StringBuilder();
                     line.Append($"{column.ColumnName} = @{column.ColumnName}");
                     if (item.Index < last)
                         line.Append(',');
@@ -574,15 +574,15 @@ order by c.column_id", DatabaseNode.Name, owner, name);
             }
         }
 
-        var script = textBuilder.ToLines().ToIndentedString("    ");
+        string script = textBuilder.ToLines().ToIndentedString("    ");
         return script;
     }
 
     private void UpdateScript_Click(object? sender, EventArgs e)
     {
-        var script = CreateUpdateScript();
+        string script = CreateUpdateScript();
 
-        var queryForm = (IQueryForm)sender;
+        IQueryForm? queryForm = (IQueryForm)sender;
         queryForm.SetClipboardText(script);
 
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
@@ -591,44 +591,44 @@ order by c.column_id", DatabaseNode.Name, owner, name);
     private void CsharpOrm_Click(object? sender, EventArgs e)
     {
         GetTableSchemaResult getTableSchemaResult;
-        using (var connection = DatabaseNode.Databases.Server.CreateConnection())
+        using (Microsoft.Data.SqlClient.SqlConnection connection = DatabaseNode.Databases.Server.CreateConnection())
         {
             connection.Open();
 
-            var databaseName = DatabaseNode.Name.Contains('.')
+            string databaseName = DatabaseNode.Name.Contains('.')
                 ? $"[{DatabaseNode.Name}]"
                 : DatabaseNode.Name;
 
-            var tableName = $"{databaseName}.{owner}.{name}";
+            string tableName = $"{databaseName}.{owner}.{name}";
             getTableSchemaResult = TableSchema.GetTableSchema(connection, tableName);
         }
 
-        var dataTransferObjectFields = getTableSchemaResult.Columns
+        ReadOnlyCollection<DataTransferObjectField> dataTransferObjectFields = getTableSchemaResult.Columns
             .Select(column =>
             {
-                var name = column.ColumnName;
-                var typeName = column.TypeName;
-                var isNullable = column.IsNullable;
-                var csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == typeName).CSharpTypeName;
-                var csharpType = CSharpTypeArray.CSharpTypes.First(i => i.Name == csharpTypeName);
+                string name = column.ColumnName;
+                string typeName = column.TypeName;
+                bool? isNullable = column.IsNullable;
+                string csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == typeName).CSharpTypeName;
+                CSharpType csharpType = CSharpTypeArray.CSharpTypes.First(i => i.Name == csharpTypeName);
                 if (isNullable == true && csharpType.Type.IsValueType)
                     csharpTypeName += "?";
 
                 return new DataTransferObjectField(name, csharpTypeName);
             })
             .ToReadOnlyCollection();
-        var dataTransferObject = DataTransferObjectFactory.CreateDataTransferObject(name, dataTransferObjectFields).ToIndentedString("    ");
+        string dataTransferObject = DataTransferObjectFactory.CreateDataTransferObject(name, dataTransferObjectFields).ToIndentedString("    ");
 
-        var columns = getTableSchemaResult.Columns
+        ReadOnlyCollection<Foundation.Data.SqlClient.DbQueryBuilding.Column> columns = getTableSchemaResult.Columns
             .Select(i => new Foundation.Data.SqlClient.DbQueryBuilding.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
             .ToReadOnlyCollection();
-        var createInsertSqlSqlStatementMethod = CreateInsertSqlStatementMethodFactory.Create(owner, name, columns);
+        ReadOnlyCollection<Line> createInsertSqlSqlStatementMethod = CreateInsertSqlStatementMethodFactory.Create(owner, name, columns);
 
-        var identifierColumn = getTableSchemaResult.UniqueIndexColumns
+        Foundation.Data.SqlClient.DbQueryBuilding.Column? identifierColumn = getTableSchemaResult.UniqueIndexColumns
             .Select(i => getTableSchemaResult.Columns.First(j => j.ColumnId == i.ColumnId))
             .Select(i => new Foundation.Data.SqlClient.DbQueryBuilding.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
             .FirstOrDefault();
-        var versionColumn = columns.FirstOrDefault(i => i.ColumnName == "Version");
+        Foundation.Data.SqlClient.DbQueryBuilding.Column? versionColumn = columns.FirstOrDefault(i => i.ColumnName == "Version");
 
         ReadOnlyCollection<Line>? createUpdateSqlStatementMethod;            
         ReadOnlyCollection<Line>? createDeleteSqlStatementMethod;
@@ -649,7 +649,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
             createDeleteSqlStatementMethod = null;
         }
 
-        var textBuilder = new TextBuilder();
+        TextBuilder textBuilder = new TextBuilder();
         textBuilder.Add(dataTransferObject);
         textBuilder.Add(Line.Empty);
         textBuilder.Add($"public static class {name}SqlStatementFactory");
@@ -670,7 +670,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
             }
         }
 
-        var queryForm = (IQueryForm)sender;
+        IQueryForm? queryForm = (IQueryForm)sender;
         queryForm.SetClipboardText(textBuilder.ToLines().ToIndentedString("    "));
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
@@ -678,36 +678,36 @@ order by c.column_id", DatabaseNode.Name, owner, name);
     private void DataTransferObjectWithProperties_Click(object? sender, EventArgs e)
     {
         GetTableSchemaResult getTableSchemaResult;
-        using (var connection = DatabaseNode.Databases.Server.CreateConnection())
+        using (Microsoft.Data.SqlClient.SqlConnection connection = DatabaseNode.Databases.Server.CreateConnection())
         {
             connection.Open();
 
-            var databaseName = DatabaseNode.Name.Contains('.')
+            string databaseName = DatabaseNode.Name.Contains('.')
                 ? $"[{DatabaseNode.Name}]"
                 : DatabaseNode.Name;
 
-            var tableName = $"{databaseName}.{owner}.{name}";
+            string tableName = $"{databaseName}.{owner}.{name}";
             getTableSchemaResult = TableSchema.GetTableSchema(connection, tableName);
         }
-        
-        var dataTransferObjectFields = getTableSchemaResult.Columns
+
+        ReadOnlyCollection<DataTransferObjectField> dataTransferObjectFields = getTableSchemaResult.Columns
             .Select(column =>
             {
-                var name = column.ColumnName;
-                var typeName = column.TypeName;
-                var isNullable = column.IsNullable;
-                var csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == typeName).CSharpTypeName;
-                var csharpType = CSharpTypeArray.CSharpTypes.First(i => i.Name == csharpTypeName);
+                string name = column.ColumnName;
+                string typeName = column.TypeName;
+                bool? isNullable = column.IsNullable;
+                string csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == typeName).CSharpTypeName;
+                CSharpType csharpType = CSharpTypeArray.CSharpTypes.First(i => i.Name == csharpTypeName);
                 if (isNullable == true && csharpType.Type.IsValueType)
                     csharpTypeName += "?";
 
                 return new DataTransferObjectField(name, csharpTypeName);
             })
             .ToReadOnlyCollection();
-        
-        var classWithProperties = DataTransferObjectWithPropertiesFactory.Create(name, dataTransferObjectFields).ToIndentedString("    ");
 
-        var queryForm = (IQueryForm)sender;
+        string classWithProperties = DataTransferObjectWithPropertiesFactory.Create(name, dataTransferObjectFields).ToIndentedString("    ");
+
+        IQueryForm? queryForm = (IQueryForm)sender;
         queryForm.SetClipboardText(classWithProperties);
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }

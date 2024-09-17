@@ -17,7 +17,7 @@ public sealed class SingleFieldDataReader(IDataRecord dataRecord, int columnOrdi
             }
             else
             {
-                var singleValue = (float)dataRecord[columnOrdinal];
+                float singleValue = (float)dataRecord[columnOrdinal];
                 value = new SingleField(singleValue);
             }
 

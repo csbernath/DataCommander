@@ -17,7 +17,7 @@ internal sealed class SqlServerConnectionStringBuilder : IDbConnectionStringBuil
 
     bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
     {
-        var supportedKeywords = new[]
+        string[] supportedKeywords = new[]
         {
             ConnectionStringKeyword.DataSource,
             ConnectionStringKeyword.InitialCatalog,

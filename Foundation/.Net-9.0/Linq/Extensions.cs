@@ -10,8 +10,8 @@ public static class Extensions
 {
     public static bool IfAsNotNull<TSource, TTarget>(this TSource source, Action<TTarget> action) where TTarget : class
     {
-        var target = source as TTarget;
-        var selected = target != null;
+        TTarget target = source as TTarget;
+        bool selected = target != null;
         if (selected)
             action(target);
 
@@ -34,11 +34,11 @@ public static class Extensions
         {
             try
             {
-                var xmlSerializer = new XmlSerializer(source.GetType());
+                XmlSerializer xmlSerializer = new XmlSerializer(source.GetType());
 
-                using (var stringWriter = new StringWriter())
+                using (StringWriter stringWriter = new StringWriter())
                 {
-                    var xmlTextWriter = new XmlTextWriter(stringWriter)
+                    XmlTextWriter xmlTextWriter = new XmlTextWriter(stringWriter)
                     {
                         Formatting = Formatting.Indented,
                         Indentation = 2,

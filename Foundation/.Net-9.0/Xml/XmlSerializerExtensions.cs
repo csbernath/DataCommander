@@ -11,9 +11,9 @@ public static class XmlSerializerExtensions
     {
         ArgumentNullException.ThrowIfNull(xmlSerializer);
 
-        var stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
 
-        using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
+        using (XmlWriter xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
             xmlSerializer.Serialize(xmlWriter, o);
 
         return stringBuilder.ToString();

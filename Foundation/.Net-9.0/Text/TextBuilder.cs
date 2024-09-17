@@ -17,7 +17,7 @@ public sealed class TextBuilder
 
     public void Add(string text)
     {
-        var line = new Line(_indentation, text);
+        Line line = new Line(_indentation, text);
         _lines.Add(line);
     }
 
@@ -25,7 +25,7 @@ public sealed class TextBuilder
     {
         ArgumentNullException.ThrowIfNull(line);
 
-        var modifiedLine = line.Indent(_indentation);
+        Line modifiedLine = line.Indent(_indentation);
         _lines.Add(modifiedLine);
     }
 
@@ -33,16 +33,16 @@ public sealed class TextBuilder
     {
         ArgumentNullException.ThrowIfNull(lines);
 
-        var modifiedLines = lines.Select(line => line.Indent(_indentation));
+        IEnumerable<Line> modifiedLines = lines.Select(line => line.Indent(_indentation));
         _lines.AddRange(modifiedLines);
     }
 
     public void AddToLastLine(string text)
     {
         Assert.IsValidOperation(_lines.Count > 0);
-        var last = _lines.Count - 1;
-        var line = _lines[last];
-        var modifiedLine = new Line(line.Indentation, line.Text + text);
+        int last = _lines.Count - 1;
+        Line line = _lines[last];
+        Line modifiedLine = new Line(line.Indentation, line.Text + text);
         _lines[last] = modifiedLine;
     }
 

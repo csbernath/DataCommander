@@ -9,9 +9,9 @@ public static class DataContractSerialization
 {
     public static string Serialize<T>(T objectGraph)
     {
-        var serializer = new DataContractSerializer(typeof(T));
+        DataContractSerializer serializer = new DataContractSerializer(typeof(T));
         string xml;
-        using (var memoryStream = new MemoryStream())
+        using (MemoryStream memoryStream = new MemoryStream())
         {
             serializer.WriteObject(memoryStream, objectGraph);
             xml = Encoding.UTF8.GetString(memoryStream.ToArray());
@@ -22,22 +22,22 @@ public static class DataContractSerialization
 
     public static string Serialize<T>(T objectGraph, XmlWriterSettings xmlWriterSettings)
     {
-        var stringBuilder = new StringBuilder();
-        using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
+        StringBuilder stringBuilder = new StringBuilder();
+        using (XmlWriter xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
         {
-            var serializer = new DataContractSerializer(typeof(T));
+            DataContractSerializer serializer = new DataContractSerializer(typeof(T));
             serializer.WriteObject(xmlWriter, objectGraph);
         }
 
-        var xml = stringBuilder.ToString();
+        string xml = stringBuilder.ToString();
         return xml;
     }
 
     public static T Deserialize<T>(string xml)
     {
-        var serializer = new DataContractSerializer(typeof(T));
+        DataContractSerializer serializer = new DataContractSerializer(typeof(T));
         T objectGraph;
-        using (var xmlReader = XmlReader.Create(new StringReader(xml)))
+        using (XmlReader xmlReader = XmlReader.Create(new StringReader(xml)))
             objectGraph = (T) serializer.ReadObject(xmlReader);
         return objectGraph;
     }

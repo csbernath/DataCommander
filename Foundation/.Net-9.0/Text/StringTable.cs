@@ -15,7 +15,7 @@ public class StringTable
     {
         Assert.IsInRange(columnCount >= 0);
 
-        for (var i = 0; i < columnCount; i++)
+        for (int i = 0; i < columnCount; i++)
             Columns.Add(new StringTableColumn());
     }
 
@@ -25,12 +25,12 @@ public class StringTable
 
     private int GetMaxColumnWidth(int columnIndex)
     {
-        var rowCount = Rows.Count;
+        int rowCount = Rows.Count;
 
-        var maxColumnWidth = rowCount > 0
+        int maxColumnWidth = rowCount > 0
             ? Rows.Max(row =>
             {
-                var value = row[columnIndex];
+                string value = row[columnIndex];
                 return value?.Length ?? 0;
             })
             : 0;
@@ -40,10 +40,10 @@ public class StringTable
 
     public override string ToString()
     {
-        var count = Columns.Count;
-        var columnWidths = new int[count];
+        int count = Columns.Count;
+        int[] columnWidths = new int[count];
 
-        for (var i = 0; i < count; i++)
+        for (int i = 0; i < count; i++)
             columnWidths[i] = GetMaxColumnWidth(i);
 
         return ToString(columnWidths, " ");
@@ -51,16 +51,16 @@ public class StringTable
 
     public string ToString(int indent)
     {
-        var columnWidths = new int[Columns.Count];
-        var last = Columns.Count - 1;
+        int[] columnWidths = new int[Columns.Count];
+        int last = Columns.Count - 1;
 
-        for (var i = 0; i <= last; i++)
+        for (int i = 0; i <= last; i++)
         {
-            var width = GetMaxColumnWidth(i);
+            int width = GetMaxColumnWidth(i);
 
             if (i < last)
             {
-                var remainder = (width + 1) % indent;
+                int remainder = (width + 1) % indent;
 
                 if (remainder != 0)
                     width += indent - remainder;
@@ -76,10 +76,10 @@ public class StringTable
     {
         ArgumentNullException.ThrowIfNull(columnWidths);
 
-        var stringBuilder = new StringBuilder();
-        var first = true;
+        StringBuilder stringBuilder = new StringBuilder();
+        bool first = true;
 
-        foreach (var row in Rows)
+        foreach (StringTableRow row in Rows)
         {
             if (first)
                 first = false;
@@ -102,15 +102,15 @@ public class StringTable
         ArgumentNullException.ThrowIfNull(columnWidths);
         ArgumentNullException.ThrowIfNull(stringBuilder);
 
-        var last = Columns.Count - 1;
+        int last = Columns.Count - 1;
 
-        for (var j = 0; j <= last; ++j)
+        for (int j = 0; j <= last; ++j)
         {
             if (j > 0)
                 stringBuilder.Append(columnSeparator);
 
-            var column = Columns[j];
-            var alignRight = column.Align == StringTableColumnAlign.Right;
+            StringTableColumn column = Columns[j];
+            bool alignRight = column.Align == StringTableColumnAlign.Right;
 
             string text;
             if (j == last && !alignRight)

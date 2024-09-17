@@ -12,7 +12,7 @@ public class NativeSqlCommandFactory : IDbConnectionFactory
 
     public IDbConnectionHelper CreateConnectionHelper(IDbConnection connection)
     {
-        var sqlConnection = (SqlConnection)connection;
+        SqlConnection sqlConnection = (SqlConnection)connection;
         return new SqlConnectionFactory(sqlConnection, connection);
     }
 }

@@ -9,8 +9,8 @@ public static class SqlErrorExtensions
     public static string GetHeader(this SqlError error)
     {
         ArgumentNullException.ThrowIfNull(error);
-        var stringBuilder = new StringBuilder();
-        var hasProcedure = !string.IsNullOrEmpty(error.Procedure);
+        StringBuilder stringBuilder = new StringBuilder();
+        bool hasProcedure = !string.IsNullOrEmpty(error.Procedure);
 
         if (error.Number == 0 && error.Class == 0 && error.State == 1)
         {
@@ -37,7 +37,7 @@ public static class SqlErrorExtensions
     public static string ToLogString(this SqlError error)
     {
         ArgumentNullException.ThrowIfNull(error);
-        var stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.Append(error.GetHeader());
         stringBuilder.Append(error.Message);
         return stringBuilder.ToString();

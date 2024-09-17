@@ -53,10 +53,12 @@ public sealed partial class QueryForm
 
     public void ShowXml(string tabPageName, string xml)
     {
-        var htmlTextBox = new HtmlTextBox();
-        htmlTextBox.Dock = DockStyle.Fill;
+        HtmlTextBox htmlTextBox = new HtmlTextBox
+        {
+            Dock = DockStyle.Fill
+        };
 
-        var tabPage = new TabPage(tabPageName);
+        TabPage tabPage = new TabPage(tabPageName);
         _tabControl.TabPages.Add(tabPage);
         tabPage.Controls.Add(htmlTextBox);
 
@@ -86,7 +88,7 @@ public sealed partial class QueryForm
     {
         string text;
 
-        using (var reader = new StreamReader(path, Encoding.Default, true))
+        using (StreamReader reader = new StreamReader(path, Encoding.Default, true))
         {
             Log.Write(LogLevel.Trace, "reader.CurrentEncoding.EncodingName: {0}", reader.CurrentEncoding.EncodingName);
             text = reader.ReadToEnd();
@@ -100,7 +102,7 @@ public sealed partial class QueryForm
 
     public void SetStatusbarPanelText(string text)
     {
-        var color = _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText;
+        Color color = _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText;
         SetStatusbarPanelText(text, color);
     }
 
@@ -110,12 +112,12 @@ public sealed partial class QueryForm
         {
             _font = value;
             _queryTextBox.Font = value;
-            var size1 = TextRenderer.MeasureText("1", value);
-            var size2 = TextRenderer.MeasureText("12", value);
-            var width = _queryTextBox.TabSize * (size2.Width - size1.Width);
-            var tabs = new int[12];
+            Size size1 = TextRenderer.MeasureText("1", value);
+            Size size2 = TextRenderer.MeasureText("12", value);
+            int width = _queryTextBox.TabSize * (size2.Width - size1.Width);
+            int[] tabs = new int[12];
 
-            for (var i = 0; i < tabs.Length; i++)
+            for (int i = 0; i < tabs.Length; i++)
                 tabs[i] = (i + 1) * width;
 
             //_queryTextBox.EnableChangeEvent(false);
@@ -130,7 +132,7 @@ public sealed partial class QueryForm
 
     public void ShowDataSet(DataSet dataSet)
     {
-        using (var log = LogFactory.Instance.GetCurrentMethodLog())
+        using (ILog log = LogFactory.Instance.GetCurrentMethodLog())
         {
             if (dataSet != null && dataSet.Tables.Count > 0)
             {
@@ -138,7 +140,7 @@ public sealed partial class QueryForm
                 string? text;
                 if (_openTableMode)
                 {
-                    var tableName = _sqlStatement.FindTableName();
+                    string? tableName = _sqlStatement.FindTableName();
                     text = tableName;
                     dataSet.Tables[0].TableName = tableName;
                     getTableSchemaResult = Provider.GetTableSchema(Connection.Connection, tableName);
@@ -149,27 +151,29 @@ public sealed partial class QueryForm
                     text = $"Set {ResultSetCount}";
                 }
 
-                var resultSetTabPage = new TabPage(text);
+                TabPage resultSetTabPage = new TabPage(text);
                 GarbageMonitor.Default.Add("resultSetTabPage", resultSetTabPage);
                 resultSetTabPage.ToolTipText = null; // TODO
                 _resultSetsTabControl.TabPages.Add(resultSetTabPage);
                 _resultSetsTabControl.SelectedTab = resultSetTabPage;
                 if (dataSet.Tables.Count > 1)
                 {
-                    var tabControl = new TabControl { Dock = DockStyle.Fill };
+                    TabControl tabControl = new TabControl { Dock = DockStyle.Fill };
                     tabControl.MouseUp += DataTableTabControl_MouseUp;
 
-                    var index = 0;
+                    int index = 0;
                     foreach (DataTable dataTable in dataSet.Tables)
                     {
-                        var commandBuilder = Provider.DbProviderFactory.CreateCommandBuilder();
-                        var control = QueryFormStaticMethods.CreateControlFromDataTable(this, commandBuilder, dataTable, getTableSchemaResult, TableStyle,
+                        System.Data.Common.DbCommandBuilder? commandBuilder = Provider.DbProviderFactory.CreateCommandBuilder();
+                        Control control = QueryFormStaticMethods.CreateControlFromDataTable(this, commandBuilder, dataTable, getTableSchemaResult, TableStyle,
                             !_openTableMode, _colorTheme);
                         control.Dock = DockStyle.Fill;
-                        var rowCount = StringExtensions.SingularOrPlural(dataTable.Rows.Count, "row", "rows");
+                        string rowCount = StringExtensions.SingularOrPlural(dataTable.Rows.Count, "row", "rows");
                         text = $"{dataTable.TableName} ({rowCount})";
-                        var tabPage = new TabPage(text);
-                        tabPage.ToolTipText = null; // TODO
+                        TabPage tabPage = new TabPage(text)
+                        {
+                            ToolTipText = null // TODO
+                        };
                         tabPage.Controls.Add(control);
                         tabControl.TabPages.Add(tabPage);
                         index++;
@@ -179,8 +183,8 @@ public sealed partial class QueryForm
                 }
                 else
                 {
-                    var commandBuilder = Provider.DbProviderFactory.CreateCommandBuilder();
-                    var control = QueryFormStaticMethods.CreateControlFromDataTable(this, commandBuilder, dataSet.Tables[0], getTableSchemaResult, TableStyle,
+                    System.Data.Common.DbCommandBuilder? commandBuilder = Provider.DbProviderFactory.CreateCommandBuilder();
+                    Control control = QueryFormStaticMethods.CreateControlFromDataTable(this, commandBuilder, dataSet.Tables[0], getTableSchemaResult, TableStyle,
                         !_openTableMode, _colorTheme);
                     control.Dock = DockStyle.Fill;
                     resultSetTabPage.Controls.Add(control);
@@ -191,7 +195,7 @@ public sealed partial class QueryForm
 
     public void ShowMessage(Exception exception)
     {
-        var infoMessages = Provider.ToInfoMessages(exception);
+        System.Collections.Generic.List<InfoMessage> infoMessages = Provider.ToInfoMessages(exception);
         AddInfoMessages(infoMessages);
 
         _tabControl.SelectedTab = _messagesTabPage;
@@ -234,7 +238,7 @@ public sealed partial class QueryForm
             _timer.Start();
             const int maxRecords = int.MaxValue;
             _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
-            var resultWriter = _dataSetResultWriter;
+            DataSetResultWriter resultWriter = _dataSetResultWriter;
             _dataAdapter = new AsyncDataAdapter(Provider,  maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
             _dataAdapter.Start(new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray());
         }
@@ -246,13 +250,13 @@ public sealed partial class QueryForm
 
     public void ShowText(string text)
     {
-        var mainForm = DataCommanderApplication.Instance.MainForm;
+        MainForm mainForm = DataCommanderApplication.Instance.MainForm;
         mainForm.Cursor = Cursors.WaitCursor;
 
         try
         {
-            var selectionStart = _queryTextBox.RichTextBox.TextLength;
-            var append = text;
+            int selectionStart = _queryTextBox.RichTextBox.TextLength;
+            string append = text;
             _queryTextBox.RichTextBox.AppendText(append);
             _queryTextBox.RichTextBox.SelectionStart = selectionStart;
             _queryTextBox.RichTextBox.SelectionLength = append.Length;

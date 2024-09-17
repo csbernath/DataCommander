@@ -27,7 +27,7 @@ public struct PBinary : INullable
 
     public static bool operator ==(PBinary x, PBinary y)
     {
-        var isEqual = x.ValueType == y.ValueType;
+        bool isEqual = x.ValueType == y.ValueType;
         if (isEqual)
             if (x.ValueType == PValueType.Value)
                 isEqual = x._sql.Value == y._sql.Value;
@@ -38,7 +38,7 @@ public struct PBinary : INullable
 
     public override readonly bool Equals(object y)
     {
-        var equals = y is PBinary;
+        bool equals = y is PBinary;
         if (equals)
             equals = this == (PBinary)y;
         return equals;

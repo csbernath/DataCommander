@@ -86,13 +86,15 @@ internal class DataTableEditor : UserControl
                 // TODO
                 // dataGrid.TableStyles.Add(ts);                    
 
-                var graphics = CreateGraphics();
-                var font = _dataGrid.Font;
+                Graphics graphics = CreateGraphics();
+                Font font = _dataGrid.Font;
 
                 foreach (DataColumn dataColumn in _dataTable.Columns)
                 {
-                    var textBoxColumn = new DataGridViewTextBoxColumn();
-                    textBoxColumn.DataPropertyName = dataColumn.ColumnName;
+                    DataGridViewTextBoxColumn textBoxColumn = new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = dataColumn.ColumnName
+                    };
 
                     string columnName;
                     if (dataColumn.ExtendedProperties.ContainsKey("ColumnName"))
@@ -109,15 +111,15 @@ internal class DataTableEditor : UserControl
                     }
 
                     textBoxColumn.HeaderText = columnName;
-                    var maxWidth = graphics.MeasureString(columnName, font).Width;
-                    var type = (Type)dataColumn.ExtendedProperties[0];
+                    float maxWidth = graphics.MeasureString(columnName, font).Width;
+                    Type? type = (Type)dataColumn.ExtendedProperties[0];
 
                     if (type == null)
                     {
                         type = (Type)dataColumn.DataType;
                     }
 
-                    var typeCode = Type.GetTypeCode(type);
+                    TypeCode typeCode = Type.GetTypeCode(type);
 
                     if (typeCode == TypeCode.Byte ||
                         typeCode == TypeCode.SByte ||
@@ -140,16 +142,16 @@ internal class DataTableEditor : UserControl
 
                     if (true)
                     {
-                        var rowIndex = 0;
+                        int rowIndex = 0;
 
                         foreach (DataRow dataRow in _dataTable.Rows)
                         {
-                            var s = dataRow[dataColumn].ToString();
-                            var length = s.Length;
+                            string? s = dataRow[dataColumn].ToString();
+                            int length = s.Length;
 
                             if (length <= 256)
                             {
-                                var width = graphics.MeasureString(s, font).Width;
+                                float width = graphics.MeasureString(s, font).Width;
 
 
                                 if (width > maxWidth)
@@ -216,7 +218,7 @@ internal class DataTableEditor : UserControl
 
             if (_tableSchema != null)
             {
-                var uniqueIndexColumns = UniqueIndexColumns.ToArray();
+                Column[] uniqueIndexColumns = UniqueIndexColumns.ToArray();
                 string message;
 
                 if (uniqueIndexColumns.Length > 0)
@@ -225,7 +227,7 @@ internal class DataTableEditor : UserControl
                 else
                     message = "WARNING: The table has no primary key/unique index.";
 
-                var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+                QueryForm? queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
                 queryForm.AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, message));
             }
         }
@@ -234,7 +236,7 @@ internal class DataTableEditor : UserControl
     private IEnumerable<Column> UniqueIndexColumns =>
         _tableSchema.UniqueIndexColumns.Select(i =>
         {
-            var column = _tableSchema.Columns.First(j => j.ColumnId == i.ColumnId);
+            Column column = _tableSchema.Columns.First(j => j.ColumnId == i.ColumnId);
             return column;
         });
 
@@ -242,11 +244,11 @@ internal class DataTableEditor : UserControl
     {
         get
         {
-            var cell = _dataGrid.CurrentCell;
-            var rowNumber = cell.RowIndex;
-            var columnNumber = cell.ColumnIndex;
-            var dataRow = _dataTable.DefaultView[rowNumber].Row;
-            var value = dataRow[columnNumber];
+            DataGridViewCell? cell = _dataGrid.CurrentCell;
+            int rowNumber = cell.RowIndex;
+            int columnNumber = cell.ColumnIndex;
+            DataRow dataRow = _dataTable.DefaultView[rowNumber].Row;
+            object value = dataRow[columnNumber];
             return value;
         }
     }
@@ -277,7 +279,7 @@ internal class DataTableEditor : UserControl
     /// </summary>
     private void InitializeComponent()
     {
-        var dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
         this._dataGrid = new DoubleBufferedDataGridView();
         GarbageMonitor.Default.Add("dataGrid", "DoubleBufferedDataGridView", 0, this._dataGrid);
         this._dataGrid.PublicDoubleBuffered = true;
@@ -321,23 +323,23 @@ internal class DataTableEditor : UserControl
             valueString = "null";
         else
         {
-            var type = (Type)column.ExtendedProperties[0];
+            Type? type = (Type)column.ExtendedProperties[0];
 
             if (type == null)
                 type = column.DataType;
 
-            var typeCode = Type.GetTypeCode(type);
+            TypeCode typeCode = Type.GetTypeCode(type);
 
             switch (typeCode)
             {
                 case TypeCode.Boolean:
-                    var boolValue = (bool)Convert.ChangeType(value, typeof(bool));
+                    bool boolValue = (bool)Convert.ChangeType(value, typeof(bool));
                     valueString = boolValue ? "1" : "0";
                     break;
 
                 case TypeCode.DateTime:
                     valueString = (string)value;
-                    var succeeded = DateTimeField.TryParse(valueString, out var dateTime);
+                    bool succeeded = DateTimeField.TryParse(valueString, out DateTime dateTime);
 
                     if (succeeded)
                         valueString = dateTime.ToSqlConstant();
@@ -345,14 +347,14 @@ internal class DataTableEditor : UserControl
                     break;
 
                 case TypeCode.String:
-                    var stringValue = (string)value;
+                    string stringValue = (string)value;
                     valueString = stringValue.ToNullableNVarChar();
                     break;
 
                 default:
                     if (type == typeof(Guid))
                     {
-                        var guid = (Guid)value;
+                        Guid guid = (Guid)value;
                         valueString = guid.ToString().ToNullableVarChar();
                     }
                     else
@@ -367,17 +369,17 @@ internal class DataTableEditor : UserControl
 
     private string GetWhere(DataRow row)
     {
-        var columns = _tableSchema.Columns;
-        var stringBuilder = new StringBuilder();
-        var first = true;
-        var uniqueIndexColumns = UniqueIndexColumns.ToReadOnlyCollection();
+        System.Collections.ObjectModel.ReadOnlyCollection<Column> columns = _tableSchema.Columns;
+        StringBuilder stringBuilder = new StringBuilder();
+        bool first = true;
+        System.Collections.ObjectModel.ReadOnlyCollection<Column> uniqueIndexColumns = UniqueIndexColumns.ToReadOnlyCollection();
         if (uniqueIndexColumns.Count == 0)
             uniqueIndexColumns = columns.ToReadOnlyCollection();
 
-        foreach (var uniqueIndexColumn in uniqueIndexColumns)
+        foreach (Column? uniqueIndexColumn in uniqueIndexColumns)
         {
-            var columnId = uniqueIndexColumn.ColumnId;
-            var columnName = uniqueIndexColumn.ColumnName;
+            int columnId = uniqueIndexColumn.ColumnId;
+            string columnName = uniqueIndexColumn.ColumnName;
 
             if (first)
             {
@@ -387,14 +389,14 @@ internal class DataTableEditor : UserControl
             else
                 stringBuilder.Append(" and ");
 
-            var contains = row.Table.Columns.Contains(columnName);
+            bool contains = row.Table.Columns.Contains(columnName);
             if (contains)
             {
-                var dataColumn = _dataTable.Columns[columnName];
-                var value = row[dataColumn, DataRowVersion.Current];
-                var valueString = ToString(dataColumn, value);
-                var operatorString = value == DBNull.Value ? "is" : "=";
-                var quotedColumnName = _commandBuilder.QuoteIdentifier(columnName);
+                DataColumn? dataColumn = _dataTable.Columns[columnName];
+                object value = row[dataColumn, DataRowVersion.Current];
+                string valueString = ToString(dataColumn, value);
+                string operatorString = value == DBNull.Value ? "is" : "=";
+                string quotedColumnName = _commandBuilder.QuoteIdentifier(columnName);
                 stringBuilder.AppendFormat("{0} {1} {2}", quotedColumnName, operatorString, valueString);
             }
             else
@@ -406,17 +408,17 @@ internal class DataTableEditor : UserControl
 
     private void HandleDataRowAddAction(DataRow dataRow)
     {
-        var stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.AppendLine();
-        var valid = true;
+        bool valid = true;
 
-        foreach (var column in _tableSchema.Columns)
+        foreach (Column column in _tableSchema.Columns)
         {
-            var columnName = column.ColumnName;
-            var hasDefault = column.DefaultObjectId != 0;
-            var isNullable = column.IsNullable == true;
-            var isComputed = column.IsComputed;
-            var value = dataRow[columnName];
+            string columnName = column.ColumnName;
+            bool hasDefault = column.DefaultObjectId != 0;
+            bool isNullable = column.IsNullable == true;
+            bool isComputed = column.IsComputed;
+            object value = dataRow[columnName];
 
             if (value == DBNull.Value && !isNullable && !hasDefault && !isComputed)
             {
@@ -427,11 +429,11 @@ internal class DataTableEditor : UserControl
 
         if (valid)
         {
-            var table = dataRow.Table;
+            DataTable table = dataRow.Table;
             stringBuilder = new StringBuilder();
             stringBuilder.AppendFormat("\r\ninsert into {0}(", _tableName);
-            var first = true;
-            foreach (var column in _tableSchema.Columns)
+            bool first = true;
+            foreach (Column column in _tableSchema.Columns)
             {
                 if (!column.IsComputed)
                 {
@@ -447,27 +449,27 @@ internal class DataTableEditor : UserControl
             stringBuilder.Append(") values(");
             first = true;
 
-            var sequence = new Sequence();
-            foreach (var column in _tableSchema.Columns)
+            Sequence sequence = new Sequence();
+            foreach (Column column in _tableSchema.Columns)
             {
-                var columnIndex = sequence.Next();
+                int columnIndex = sequence.Next();
                 if (!column.IsComputed)
                 {
-                    var hasDeafult = column.DefaultObjectId != 0;
+                    bool hasDeafult = column.DefaultObjectId != 0;
 
                     if (first)
                         first = false;
                     else
                         stringBuilder.Append(',');
 
-                    var value = dataRow[columnIndex];
+                    object value = dataRow[columnIndex];
                     string valueString;
 
                     if (value == DBNull.Value && hasDeafult)
                         valueString = "default";
                     else
                     {
-                        var dataColumn = _dataTable.Columns[columnIndex];
+                        DataColumn dataColumn = _dataTable.Columns[columnIndex];
                         valueString = ToString(dataColumn, value);
                     }
 
@@ -478,7 +480,7 @@ internal class DataTableEditor : UserControl
             stringBuilder.Append(')');
         }
 
-        var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+        QueryForm? queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
         queryForm.AppendQueryText(stringBuilder.ToString());
     }
 
@@ -488,26 +490,25 @@ internal class DataTableEditor : UserControl
         //IProvider provider;
         //provider.DbProviderFactory.CreateCommandBuilder().QuoteIdentifier(
 
-        var sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         sb.AppendFormat("\r\nupdate {0}", _tableName);
-        var first = true;
-        var changed = false;
+        bool first = true;
+        bool changed = false;
 
         foreach (DataColumn column in dataRow.Table.Columns)
         {
-            var currentValue = dataRow[column, DataRowVersion.Current];
-            var proposedValue = dataRow[column, DataRowVersion.Proposed];
-            var comparable = currentValue as IComparable;
+            object currentValue = dataRow[column, DataRowVersion.Current];
+            object proposedValue = dataRow[column, DataRowVersion.Proposed];
             bool equals;
 
-            if (comparable != null)
+            if (currentValue is IComparable comparable)
             {
                 if (proposedValue == DBNull.Value)
                     @equals = currentValue == DBNull.Value;
                 else
                 {
-                    var currentType = currentValue.GetType();
-                    var proposedType = proposedValue.GetType();
+                    Type currentType = currentValue.GetType();
+                    Type proposedType = proposedValue.GetType();
                     int c;
 
                     try
@@ -516,7 +517,7 @@ internal class DataTableEditor : UserControl
                     }
                     catch
                     {
-                        var convertedValue = Convert.ChangeType(proposedValue, currentType);
+                        object convertedValue = Convert.ChangeType(proposedValue, currentType);
                         c = comparable.CompareTo(convertedValue);
                     }
 
@@ -538,18 +539,18 @@ internal class DataTableEditor : UserControl
                 else
                     sb.Append(", ");
 
-                var valueString = ToString(column, proposedValue);
-                var quotedColumnName = _commandBuilder.QuoteIdentifier(column.ColumnName);
+                string valueString = ToString(column, proposedValue);
+                string quotedColumnName = _commandBuilder.QuoteIdentifier(column.ColumnName);
                 sb.AppendFormat("{0} = {1}", quotedColumnName, valueString);
             }
         }
 
         if (changed)
         {
-            var where = GetWhere(dataRow);
+            string where = GetWhere(dataRow);
             sb.Append(@where);
-            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-            var text = sb.ToString();
+            QueryForm? queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            string text = sb.ToString();
             queryForm.AppendQueryText(text);
         }
     }
@@ -577,13 +578,13 @@ internal class DataTableEditor : UserControl
             _statementStringBuilder = new StringBuilder();
 
         _statementStringBuilder.AppendFormat("\r\ndelete from {0}", _tableName);
-        var where = GetWhere(e.Row);
+        string where = GetWhere(e.Row);
         _statementStringBuilder.Append(@where);
 
         if (_dataGrid.SelectedRows.Count == 1)
         {
-            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-            var text = _statementStringBuilder.ToString();
+            QueryForm? queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            string text = _statementStringBuilder.ToString();
             _statementStringBuilder = null;
             queryForm.AppendQueryText(text);
         }
@@ -591,12 +592,12 @@ internal class DataTableEditor : UserControl
 
     private void CopyColumnNames_Click(object sender, EventArgs e)
     {
-        var columnNames =
+        IEnumerable<string> columnNames =
             (from c in _dataGrid.Columns.Cast<DataGridViewColumn>()
                 where c.Visible
                 orderby c.DisplayIndex
                 select c.DataPropertyName);
-        var s = string.Join(",", columnNames);
+        string s = string.Join(",", columnNames);
         Clipboard.SetDataObject(s, true, 5, 200);
     }
 
@@ -613,25 +614,27 @@ internal class DataTableEditor : UserControl
 
     private void SaveTableAs_Click(object sender, EventArgs e)
     {
-        var saveFileDialog = new SaveFileDialog();
-        saveFileDialog.Title = "Save table";
-        saveFileDialog.Filter =
-            "HTML (*.htm)|*.htm|Fixed Width Columns (*.txt)|*.txt|Tab Separated Values (*.tsv)|*.tsv|XML Spreadsheet 2007(*.xlsx)|*.xlsx";
-        saveFileDialog.FilterIndex = 5;
-        saveFileDialog.AddExtension = true;
-        saveFileDialog.OverwritePrompt = true;
+        SaveFileDialog saveFileDialog = new SaveFileDialog
+        {
+            Title = "Save table",
+            Filter =
+            "HTML (*.htm)|*.htm|Fixed Width Columns (*.txt)|*.txt|Tab Separated Values (*.tsv)|*.tsv|XML Spreadsheet 2007(*.xlsx)|*.xlsx",
+            FilterIndex = 5,
+            AddExtension = true,
+            OverwritePrompt = true
+        };
 
         if (saveFileDialog.ShowDialog() == DialogResult.OK)
         {
             Cursor = Cursors.WaitCursor;
 
-            var path = saveFileDialog.FileName;
+            string path = saveFileDialog.FileName;
 
             _queryForm.SetStatusbarPanelText("Saving table...");
 
             Task.Factory.StartNew(() =>
             {
-                var stopwatch = Stopwatch.StartNew();
+                Stopwatch stopwatch = Stopwatch.StartNew();
 
                 try
                 {
@@ -644,45 +647,45 @@ internal class DataTableEditor : UserControl
                         //    break;
 
                         case 2:
-                            using (var streamWriter = new StreamWriter(path, false, Encoding.UTF8))
+                            using (StreamWriter streamWriter = new StreamWriter(path, false, Encoding.UTF8))
                                 streamWriter.Write(_dataTable.DefaultView.ToStringTableString());
                             break;
 
                         case 3:
-                            using (var streamWriter = new StreamWriter(path, false, Encoding.UTF8))
+                            using (StreamWriter streamWriter = new StreamWriter(path, false, Encoding.UTF8))
                                 Writer.Write(_dataTable.DefaultView, '\t', "\r\n", streamWriter);
                             break;
 
                         case 4: // XML Spreadsheet 2007(*.xlsx)
-                            var fileInfo = new FileInfo(path);
-                            using (var excelPackage = new ExcelPackage(fileInfo))
+                            FileInfo fileInfo = new FileInfo(path);
+                            using (ExcelPackage excelPackage = new ExcelPackage(fileInfo))
                             {
-                                var worksheet = excelPackage.Workbook.Worksheets.Add($"Worksheet {LocalTime.Default.Now:yyyy-MM-dd HHmmss}");
+                                ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add($"Worksheet {LocalTime.Default.Now:yyyy-MM-dd HHmmss}");
                                 worksheet.View.FreezePanes(2, 1);
 
-                                var dataView = _dataTable.DefaultView;
-                                var rowCount = dataView.Count;
-                                var columnCount = _dataTable.Columns.Count;
+                                DataView dataView = _dataTable.DefaultView;
+                                int rowCount = dataView.Count;
+                                int columnCount = _dataTable.Columns.Count;
 
-                                for (var columnIndex = 0; columnIndex < columnCount; columnIndex++)
+                                for (int columnIndex = 0; columnIndex < columnCount; columnIndex++)
                                 {
-                                    var cell = worksheet.Cells[1, columnIndex + 1];
+                                    ExcelRange cell = worksheet.Cells[1, columnIndex + 1];
                                     cell.Value = _dataTable.Columns[columnIndex].ColumnName;
                                     cell.Style.Font.Bold = true;
                                     // cell.Style.Border.Bottom.Style = ExcelBorderStyle.Medium;
                                 }
 
-                                for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                                 {
-                                    var dataRow = dataView[rowIndex];
-                                    for (var columnIndex = 0; columnIndex < columnCount; columnIndex++)
+                                    DataRowView dataRow = dataView[rowIndex];
+                                    for (int columnIndex = 0; columnIndex < columnCount; columnIndex++)
                                     {
-                                        var value = dataRow[columnIndex];
-                                        var cell = worksheet.Cells[rowIndex + 2, columnIndex + 1];
+                                        object value = dataRow[columnIndex];
+                                        ExcelRange cell = worksheet.Cells[rowIndex + 2, columnIndex + 1];
                                         cell.Value = value;
 
-                                        var type = value.GetType();
-                                        var typeCode = Type.GetTypeCode(type);
+                                        Type type = value.GetType();
+                                        TypeCode typeCode = Type.GetTypeCode(type);
                                         switch (typeCode)
                                         {
                                             case TypeCode.DateTime:
@@ -724,7 +727,7 @@ internal class DataTableEditor : UserControl
         try
         {
             Cursor = Cursors.WaitCursor;
-            var dataObject = new MyDataObject(_dataTable.DefaultView, GetColumnIndexes());
+            MyDataObject dataObject = new MyDataObject(_dataTable.DefaultView, GetColumnIndexes());
             Clipboard.SetDataObject(dataObject);
             _queryForm.SetStatusbarPanelText("Data copied to clipboard. Data is available in 3 formats: HTML, TAB separated text, FIXED width text.");
         }
@@ -736,11 +739,11 @@ internal class DataTableEditor : UserControl
 
     private void EditDataViewProperties_Click(object sender, EventArgs e)
     {
-        var properties = new DataViewProperties();
-        var dataView = _dataTable.DefaultView;
+        DataViewProperties properties = new DataViewProperties();
+        DataView dataView = _dataTable.DefaultView;
         properties.RowFilter = dataView.RowFilter;
         properties.Sort = dataView.Sort;
-        var form = new DataViewPropertiesForm(properties);
+        DataViewPropertiesForm form = new DataViewPropertiesForm(properties);
         if (form.ShowDialog(this) == DialogResult.OK)
         {
             dataView.RowFilter = properties.RowFilter;
@@ -751,22 +754,24 @@ internal class DataTableEditor : UserControl
 
     private void SaveBinaryField_Click(object sender, EventArgs e)
     {
-        var saveFileDialog = new SaveFileDialog();
-        saveFileDialog.Title = "Save Binary Field";
-        saveFileDialog.Filter = "Binary Files (*.bin)|*.bin";
-        saveFileDialog.AddExtension = true;
-        saveFileDialog.OverwritePrompt = true;
-        saveFileDialog.DefaultExt = "bin";
-        saveFileDialog.FileName = _columnName;
+        SaveFileDialog saveFileDialog = new SaveFileDialog
+        {
+            Title = "Save Binary Field",
+            Filter = "Binary Files (*.bin)|*.bin",
+            AddExtension = true,
+            OverwritePrompt = true,
+            DefaultExt = "bin",
+            FileName = _columnName
+        };
 
         if (saveFileDialog.ShowDialog() == DialogResult.OK)
         {
-            var binaryField = (BinaryField)_cellValue;
-            var path = saveFileDialog.FileName;
+            BinaryField binaryField = (BinaryField)_cellValue;
+            string path = saveFileDialog.FileName;
 
-            using (var fileStream = File.Create(path))
+            using (FileStream fileStream = File.Create(path))
             {
-                var bytes = binaryField.Value;
+                byte[] bytes = binaryField.Value;
                 fileStream.Write(bytes, 0, bytes.Length);
             }
         }
@@ -774,10 +779,10 @@ internal class DataTableEditor : UserControl
 
     private void OpenAsExcelFile_Click(object sender, EventArgs e)
     {
-        var binaryField = (BinaryField)_cellValue;
-        var path = Path.Combine(Path.GetTempPath(), Path.GetTempFileName() + ".zip");
+        BinaryField binaryField = (BinaryField)_cellValue;
+        string path = Path.Combine(Path.GetTempPath(), Path.GetTempFileName() + ".zip");
         File.WriteAllBytes(path, binaryField.Value);
-        var processStartInfo = new ProcessStartInfo
+        ProcessStartInfo processStartInfo = new ProcessStartInfo
         {
             FileName = path,
             UseShellExecute = true
@@ -787,26 +792,28 @@ internal class DataTableEditor : UserControl
 
     private void SaveStreamField_Click(object sender, EventArgs e)
     {
-        var saveFileDialog = new SaveFileDialog();
-        saveFileDialog.Title = "Save Binary Field";
-        saveFileDialog.Filter = "Binary Files (*.bin)|*.bin";
-        saveFileDialog.AddExtension = true;
-        saveFileDialog.OverwritePrompt = true;
-        saveFileDialog.DefaultExt = "bin";
+        SaveFileDialog saveFileDialog = new SaveFileDialog
+        {
+            Title = "Save Binary Field",
+            Filter = "Binary Files (*.bin)|*.bin",
+            AddExtension = true,
+            OverwritePrompt = true,
+            DefaultExt = "bin"
+        };
 
         if (saveFileDialog.ShowDialog() == DialogResult.OK)
         {
-            var streamField = (StreamField)_cellValue;
-            var path = saveFileDialog.FileName;
-            var source = streamField.Stream;
+            StreamField streamField = (StreamField)_cellValue;
+            string path = saveFileDialog.FileName;
+            Stream source = streamField.Stream;
 
-            using (var target = File.Create(path))
+            using (FileStream target = File.Create(path))
             {
-                var buffer = new byte[4096];
+                byte[] buffer = new byte[4096];
 
                 while (true)
                 {
-                    var readCount = source.Read(buffer, 0, buffer.Length);
+                    int readCount = source.Read(buffer, 0, buffer.Length);
 
                     if (readCount == 0)
                     {
@@ -821,11 +828,9 @@ internal class DataTableEditor : UserControl
 
     private void CopyStringField_Click(object sender, EventArgs e)
     {
-        var s = _cellValue as string;
-
-        if (s == null)
+        if (_cellValue is not string s)
         {
-            var stringField = (StringField)_cellValue;
+            StringField stringField = (StringField)_cellValue;
             s = stringField.Value;
         }
 
@@ -834,23 +839,25 @@ internal class DataTableEditor : UserControl
 
     private void SaveStringField_Click(object sender, EventArgs e)
     {
-        var saveFileDialog = new SaveFileDialog();
-        saveFileDialog.Title = "Save String Field";
-        saveFileDialog.AddExtension = true;
-        saveFileDialog.OverwritePrompt = true;
+        SaveFileDialog saveFileDialog = new SaveFileDialog
+        {
+            Title = "Save String Field",
+            AddExtension = true,
+            OverwritePrompt = true
+        };
 
         string value = null;
         Encoding encoding = null;
 
         if (_cellValue.IfAsNotNull(delegate(StringField stringField)
             {
-                var stringReader = new StringReader(stringField.Value);
-                var xmlTextReader = new XmlTextReader(stringReader);
+                StringReader stringReader = new StringReader(stringField.Value);
+                XmlTextReader xmlTextReader = new XmlTextReader(stringReader);
                 bool isXml;
 
                 try
                 {
-                    var read = xmlTextReader.Read();
+                    bool read = xmlTextReader.Read();
                     isXml = true;
                 }
                 catch
@@ -878,8 +885,8 @@ internal class DataTableEditor : UserControl
 
         if (saveFileDialog.ShowDialog() == DialogResult.OK)
         {
-            var path = saveFileDialog.FileName;
-            using (var streamWriter = new StreamWriter(path, false, encoding))
+            string path = saveFileDialog.FileName;
+            using (StreamWriter streamWriter = new StreamWriter(path, false, encoding))
             {
                 streamWriter.Write(value);
             }
@@ -895,7 +902,7 @@ internal class DataTableEditor : UserControl
     {
         try
         {
-            var dataView = _dataTable.DefaultView;
+            DataView dataView = _dataTable.DefaultView;
             dataView.RowFilter = rowFilter;
             _queryForm.SetStatusbarPanelText($"RowFilter ({rowFilter}) applied. {dataView.Count} row(s) found from {_dataTable.Rows.Count} row(s).");
         }
@@ -907,16 +914,18 @@ internal class DataTableEditor : UserControl
 
     private void RowFilter_Click(object sender, EventArgs e)
     {
-        var menuItem = (ToolStripMenuItem)sender;
-        var rowFilter = menuItem.Text;
+        ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
+        string? rowFilter = menuItem.Text;
         ApplyRowFilter(rowFilter);
     }
 
     private void Find_Click(object sender, EventArgs e)
     {
-        var form = new FindTextForm();
-        form.Text = "dataView.RowFilter = ...";
-        form.FindText = _columnName;
+        FindTextForm form = new FindTextForm
+        {
+            Text = "dataView.RowFilter = ...",
+            FindText = _columnName
+        };
 
         if (form.ShowDialog() == DialogResult.OK)
         {
@@ -926,12 +935,12 @@ internal class DataTableEditor : UserControl
 
     private void CopyArrayField_Click(object sender, EventArgs e)
     {
-        var sb = new StringBuilder();
-        var array = (Array)_cellValue;
+        StringBuilder sb = new StringBuilder();
+        Array array = (Array)_cellValue;
 
-        for (var i = 0; i < array.Length; i++)
+        for (int i = 0; i < array.Length; i++)
         {
-            var obj = array.GetValue(i);
+            object? obj = array.GetValue(i);
             sb.AppendLine(obj.ToString());
         }
 
@@ -940,13 +949,13 @@ internal class DataTableEditor : UserControl
 
     private void HideColumn_Click(object sender, EventArgs e)
     {
-        var column = _dataGrid.Columns[_columnIndex];
+        DataGridViewColumn column = _dataGrid.Columns[_columnIndex];
         column.Visible = false;
     }
 
     private void UnhideAllColumns_Click(object sender, EventArgs e)
     {
-        foreach (var column in _dataGrid.Columns.Cast<DataGridViewColumn>().Where(c => !c.Visible))
+        foreach (DataGridViewColumn? column in _dataGrid.Columns.Cast<DataGridViewColumn>().Where(c => !c.Visible))
         {
             column.Visible = true;
         }
@@ -957,32 +966,33 @@ internal class DataTableEditor : UserControl
         using (new CursorManager(Cursors.WaitCursor))
         {
             _queryForm.SetStatusbarPanelText("Copying table to clipboard as XML...");
-            var textWriter = new StringWriter();
-            var xmlWriter = new XmlTextWriter(textWriter);
-            xmlWriter.Formatting = Formatting.Indented;
-            xmlWriter.Indentation = 2;
-            xmlWriter.IndentChar = ' ';
+            StringWriter textWriter = new StringWriter();
+            XmlTextWriter xmlWriter = new XmlTextWriter(textWriter)
+            {
+                Formatting = Formatting.Indented,
+                Indentation = 2,
+                IndentChar = ' '
+            };
             xmlWriter.WriteStartElement("table");
 
-            var columns = _dataTable.Columns;
-            var columnCount = columns.Count;
+            DataColumnCollection columns = _dataTable.Columns;
+            int columnCount = columns.Count;
 
-            foreach (var row in _dataGrid.Rows.Cast<DataGridViewRow>().Where(r => r.Visible))
+            foreach (DataGridViewRow? row in _dataGrid.Rows.Cast<DataGridViewRow>().Where(r => r.Visible))
             {
                 xmlWriter.WriteStartElement("row");
-                for (var columnIndex = 0; columnIndex < columnCount; columnIndex++)
+                for (int columnIndex = 0; columnIndex < columnCount; columnIndex++)
                 {
                     if (_dataGrid.Columns[_columnIndex].Visible)
                     {
-                        var column = columns[columnIndex];
-                        var dataRowView = (DataRowView)row.DataBoundItem;
-                        var value = dataRowView[columnIndex];
+                        DataColumn column = columns[columnIndex];
+                        DataRowView? dataRowView = (DataRowView)row.DataBoundItem;
+                        object value = dataRowView[columnIndex];
                         if (value != DBNull.Value)
                         {
                             xmlWriter.WriteStartElement(column.ColumnName);
                             string valueString;
-                            var convertible = value as IConvertible;
-                            if (convertible != null)
+                            if (value is IConvertible convertible)
                             {
                                 valueString = convertible.ToString(null);
                             }
@@ -1036,7 +1046,7 @@ internal class DataTableEditor : UserControl
 
             xmlWriter.WriteEndElement();
             xmlWriter.Close();
-            var xml = textWriter.ToString();
+            string xml = textWriter.ToString();
             Clipboard.SetDataObject(xml, true, 5, 200);
             _queryForm.SetStatusbarPanelText("Table succesfully copied to clipboard as XML.");
         }
@@ -1067,7 +1077,7 @@ internal class DataTableEditor : UserControl
 
     private void UnhideRows_Click(object sender, EventArgs e)
     {
-        foreach (var row in _dataGrid.Rows.Cast<DataGridViewRow>().Where(r => !r.Visible))
+        foreach (DataGridViewRow? row in _dataGrid.Rows.Cast<DataGridViewRow>().Where(r => !r.Visible))
         {
             row.Visible = true;
         }
@@ -1077,8 +1087,8 @@ internal class DataTableEditor : UserControl
     {
         if (e.Button == MouseButtons.Right)
         {
-            var menu = new ContextMenuStrip(_components);
-            var rowFilter = _dataTable.DefaultView.RowFilter;
+            ContextMenuStrip menu = new ContextMenuStrip(_components);
+            string? rowFilter = _dataTable.DefaultView.RowFilter;
             ToolStripMenuItem menuItem;
             if (!string.IsNullOrEmpty(rowFilter))
             {
@@ -1086,7 +1096,7 @@ internal class DataTableEditor : UserControl
                 menu.Items.Add(menuItem);
             }
 
-            var hitTestInfo = _dataGrid.HitTest(e.X, e.Y);
+            DataGridView.HitTestInfo hitTestInfo = _dataGrid.HitTest(e.X, e.Y);
             switch (hitTestInfo.Type)
             {
                 case DataGridViewHitTestType.TopLeftHeader:
@@ -1105,7 +1115,7 @@ internal class DataTableEditor : UserControl
                     menuItem = new ToolStripMenuItem("Edit dataview properties", null, EditDataViewProperties_Click);
                     menu.Items.Add(menuItem);
 
-                    var any = _dataGrid.Columns.Cast<DataGridViewColumn>().Any(c => !c.Visible);
+                    bool any = _dataGrid.Columns.Cast<DataGridViewColumn>().Any(c => !c.Visible);
                     if (any)
                     {
                         menuItem = new ToolStripMenuItem("Unhide all columns", null, UnhideAllColumns_Click);
@@ -1136,10 +1146,10 @@ internal class DataTableEditor : UserControl
                 case DataGridViewHitTestType.Cell:
                 {
                     rowFilter = null;
-                    var rowNumber = hitTestInfo.RowIndex;
-                    var columnNumber = hitTestInfo.ColumnIndex;
+                        int rowNumber = hitTestInfo.RowIndex;
+                        int columnNumber = hitTestInfo.ColumnIndex;
 
-                    var dataRow = _dataTable.DefaultView[rowNumber].Row;
+                        DataRow dataRow = _dataTable.DefaultView[rowNumber].Row;
                     _columnName = _dataTable.Columns[columnNumber].ColumnName;
 
                     if (_columnName.IndexOf('!') >= 0)
@@ -1151,13 +1161,13 @@ internal class DataTableEditor : UserControl
                     menu.Items.Add(menuItem);
 
                     _cellValue = dataRow[columnNumber];
-                    var type = _cellValue.GetType();
-                    var fieldType = FieldTypeDictionary.Instance.GetValueOrDefault(type);
+                        Type type = _cellValue.GetType();
+                        FieldType fieldType = FieldTypeDictionary.Instance.GetValueOrDefault(type);
 
                     switch (fieldType)
                     {
                         case FieldType.StringField:
-                            var value = ((StringField)_cellValue).Value;
+                                string value = ((StringField)_cellValue).Value;
                             if (value != null && value.Length < 256)
                                 rowFilter = $"[{_columnName}] = '{value}'";
                             break;
@@ -1171,7 +1181,7 @@ internal class DataTableEditor : UserControl
                                 rowFilter = $"[{_columnName}] is null";
                             else
                             {
-                                var typeCode = Type.GetTypeCode(type);
+                                    TypeCode typeCode = Type.GetTypeCode(type);
                                 string valueStr;
 
                                 switch (typeCode)
@@ -1234,9 +1244,9 @@ internal class DataTableEditor : UserControl
 
                             case FieldType.StringField:
                             {
-                                var stringField = (StringField)_cellValue;
-                                var value = stringField.Value;
-                                var length = value != null ? value.Length : 0;
+                                        StringField stringField = (StringField)_cellValue;
+                                        string value = stringField.Value;
+                                        int length = value != null ? value.Length : 0;
                                 menuItem = new ToolStripMenuItem("Copy string field", null, CopyStringField_Click);
                                 menu.Items.Add(menuItem);
 
@@ -1251,8 +1261,8 @@ internal class DataTableEditor : UserControl
 
                             case FieldType.String:
                             {
-                                var value = (string)_cellValue;
-                                var length = value.Length;
+                                        string value = (string)_cellValue;
+                                        int length = value.Length;
 
                                 menuItem = new ToolStripMenuItem("Copy string field", null, CopyStringField_Click);
                                 menu.Items.Add(menuItem);
@@ -1284,7 +1294,7 @@ internal class DataTableEditor : UserControl
                     break;
             }
 
-            var pos = new Point(e.X, e.Y);
+            Point pos = new Point(e.X, e.Y);
             menu.Show(_dataGrid, pos);
         }
     }

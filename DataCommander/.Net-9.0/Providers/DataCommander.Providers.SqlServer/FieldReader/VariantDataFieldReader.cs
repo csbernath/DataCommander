@@ -24,29 +24,29 @@ internal sealed class VariantDataFieldReader(
             else
             {
                 value = _sqlDataReader.GetValue(columnOrdinal);
-                var type = value.GetType();
+                Type type = value.GetType();
 
                 if (type.IsArray)
                 {
-                    var elementType = type.GetElementType();
-                    var elementTypeCode = Type.GetTypeCode(elementType);
+                    Type? elementType = type.GetElementType();
+                    TypeCode elementTypeCode = Type.GetTypeCode(elementType);
 
                     switch (elementTypeCode)
                     {
                         case TypeCode.Byte:
-                            var bytes = (byte[]) value;
+                            byte[] bytes = (byte[]) value;
                             value = new BinaryField(bytes);
                             break;
                     }
                 }
                 else
                 {
-                    var typeCode = Type.GetTypeCode(type);
+                    TypeCode typeCode = Type.GetTypeCode(type);
 
                     switch (typeCode)
                     {
                         case TypeCode.DateTime:
-                            var dateTime = (DateTime) value;
+                            DateTime dateTime = (DateTime) value;
                             value = DateTimeField.ToString(dateTime);
                             break;
                     }

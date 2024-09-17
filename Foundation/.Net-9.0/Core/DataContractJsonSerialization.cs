@@ -9,8 +9,8 @@ public static class DataContractJsonSerialization
     public static string Serialize<T>(T objectGraph)
     {
         string json;
-        var serializer = new DataContractJsonSerializer(typeof(T));
-        using (var memoryStream = new MemoryStream())
+        DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
+        using (MemoryStream memoryStream = new MemoryStream())
         {
             serializer.WriteObject(memoryStream, objectGraph);
             json = Encoding.UTF8.GetString(memoryStream.ToArray());
@@ -21,9 +21,9 @@ public static class DataContractJsonSerialization
 
     public static T Deserialize<T>(string json)
     {
-        var serializer = new DataContractJsonSerializer(typeof(T));
+        DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
         object objectGraph;
-        using (var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(json)))
+        using (MemoryStream memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(json)))
             objectGraph = serializer.ReadObject(memoryStream);
         return (T) objectGraph;
     }

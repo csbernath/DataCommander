@@ -6,11 +6,11 @@ public static class ConnectionInfoMapper
 {
     public static ConnectionDto ToConnectionDto(this ConnectionInfo connectionInfo)
     {
-        var credential = connectionInfo.ConnectionStringAndCredential.Credential;
+        Credential? credential = connectionInfo.ConnectionStringAndCredential.Credential;
         CredentialDto? credentialDto = null;
         if (credential != null)
         {
-            var password = credential.Password.Protected;
+            byte[] password = credential.Password.Protected;
             credentialDto = new CredentialDto(credential.UserId, password);
         }
 
@@ -24,7 +24,7 @@ public static class ConnectionInfoMapper
         Credential? credential = null;
         if (connectionDto.Credential != null)
         {
-            var password = PasswordFactory.CreateFromProtected(connectionDto.Credential.Password);
+            Password password = PasswordFactory.CreateFromProtected(connectionDto.Credential.Password);
             credential = new Credential(connectionDto.Credential.UserId, password);
         }
 

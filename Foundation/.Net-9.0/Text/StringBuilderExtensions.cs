@@ -7,8 +7,8 @@ public static class StringBuilderExtensions
 {
     public static void Append(this StringBuilder stringBuilder, string separator, IEnumerable<string> values)
     {
-        var first = true;
-        foreach (var value in values)
+        bool first = true;
+        foreach (string value in values)
         {
             if (first)
                 first = false;

@@ -17,7 +17,7 @@ internal sealed class ColumnCollectionNode(TableNode tableNode) : ITreeNode
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var schemaNode = _tableNode.TableCollectionNode.SchemaNode;
+        SchemaNode schemaNode = _tableNode.TableCollectionNode.SchemaNode;
 
         return await Db.ExecuteReaderAsync(
             schemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection,
@@ -40,8 +40,8 @@ order by c.ordinal_position"),
 
     private ColumnNode ReadRecord(IDataRecord dataRecord)
     {
-        var columnName = dataRecord.GetString(0);
-        var dataType = dataRecord.GetString(2);
+        string columnName = dataRecord.GetString(0);
+        string dataType = dataRecord.GetString(2);
         return new ColumnNode(this, columnName, dataType);
     }
 

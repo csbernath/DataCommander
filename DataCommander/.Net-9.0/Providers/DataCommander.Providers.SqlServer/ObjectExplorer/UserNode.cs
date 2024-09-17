@@ -18,7 +18,7 @@ internal sealed class UserNode(DatabaseNode database, string? name) : ITreeNode
     {
         get
         {
-            var query = $@"declare @uid smallint
+            string query = $@"declare @uid smallint
 select @uid = uid
 from {database.Name}..sysusers
 where name = '{Name}'

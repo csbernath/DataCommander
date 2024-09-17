@@ -34,27 +34,27 @@ internal sealed class JobNode : ITreeNode
 
     public ContextMenu? GetContextMenu()
     {
-        var menuItems = new[]
+        System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> menuItems = new[]
         {
             new MenuItem("HelpJob", OnHelpJobClick, EmptyReadOnlyCollection<MenuItem>.Value)
         }.ToReadOnlyCollection();
-        var contextMenu = new ContextMenu(menuItems);
+        ContextMenu contextMenu = new ContextMenu(menuItems);
 
         return contextMenu;
     }
 
     private void OnHelpJobClick(object? sender, EventArgs e)
     {
-        var commandText = $@"msdb..sp_help_job @job_name = {_name.ToNullableNVarChar()}";
+        string commandText = $@"msdb..sp_help_job @job_name = {_name.ToNullableNVarChar()}";
         DataSet dataSet;
 
-        using (var connection = _jobs.Server.CreateConnection())
+        using (Microsoft.Data.SqlClient.SqlConnection connection = _jobs.Server.CreateConnection())
         {
-            var executor = connection.CreateCommandExecutor();
+            IDbCommandExecutor executor = connection.CreateCommandExecutor();
             dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText), CancellationToken.None);
         }
 
-        var queryForm = (IQueryForm)sender;
+        IQueryForm? queryForm = (IQueryForm)sender;
         queryForm.ShowDataSet(dataSet);
     }
 }

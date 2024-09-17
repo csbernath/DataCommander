@@ -15,7 +15,7 @@ public sealed class TextDataConnection : DbConnection
     /// <returns></returns>
     public new TextDataCommand CreateCommand()
     {
-        var command = new TextDataCommand { Connection = this };
+        TextDataCommand command = new TextDataCommand { Connection = this };
         return command;
     }
 

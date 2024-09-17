@@ -11,15 +11,15 @@ public static class DataSetExtensions
         ArgumentNullException.ThrowIfNull(dataSet);
         ArgumentNullException.ThrowIfNull(dataTableNames);
 
-        var dataTables = dataSet.Tables;
-        var count = dataTables.Count;
-        var i = 0;
+        DataTableCollection dataTables = dataSet.Tables;
+        int count = dataTables.Count;
+        int i = 0;
 
-        using var enumerator = dataTableNames.GetEnumerator();
+        using IEnumerator<string> enumerator = dataTableNames.GetEnumerator();
         while (i < count && enumerator.MoveNext())
         {
-            var dataTable = dataTables[i];
-            var dataTableName = enumerator.Current;
+            DataTable dataTable = dataTables[i];
+            string dataTableName = enumerator.Current;
             dataTable.TableName = dataTableName;
             i++;
         }

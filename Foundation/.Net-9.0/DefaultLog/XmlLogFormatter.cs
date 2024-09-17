@@ -46,8 +46,8 @@ internal sealed class XmlLogFormatter : ILogFormatter
 
     string ILogFormatter.Format(LogEntry entry)
     {
-        var textWriter = new StringWriter();
-        var xmlTextWriter = new XmlTextWriter(textWriter) { Formatting = Formatting.Indented, Indentation = 2, IndentChar = ' ' };
+        StringWriter textWriter = new StringWriter();
+        XmlTextWriter xmlTextWriter = new XmlTextWriter(textWriter) { Formatting = Formatting.Indented, Indentation = 2, IndentChar = ' ' };
         WriteTo(entry, xmlTextWriter);
         return textWriter.ToString();
     }

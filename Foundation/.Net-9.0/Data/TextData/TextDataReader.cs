@@ -29,13 +29,13 @@ public sealed class TextDataReader : DbDataReader
 
         _command = command;
         _behavior = behavior;
-        var parameters = command.Parameters;
+        TextDataParameterCollection parameters = command.Parameters;
 
         Assert.IsTrue(parameters != null);
 
         _columns = parameters.GetParameterValue<TextDataColumnCollection>("columns");
-        var converters = parameters.GetParameterValue<IList<ITextDataConverter>>("converters");
-        var getTextReader = parameters.GetParameterValue<IConverter<TextDataCommand, TextReader>>("getTextReader");
+        IList<ITextDataConverter> converters = parameters.GetParameterValue<IList<ITextDataConverter>>("converters");
+        IConverter<TextDataCommand, TextReader> getTextReader = parameters.GetParameterValue<IConverter<TextDataCommand, TextReader>>("getTextReader");
         _textReader = getTextReader.Convert(command);
         _textDataStreamReader = new TextDataStreamReader(_textReader, _columns, converters);
     }
@@ -160,7 +160,7 @@ public sealed class TextDataReader : DbDataReader
     /// <returns></returns>
     public override string GetName(int ordinal)
     {
-        var column = _columns[ordinal];
+        TextDataColumn column = _columns[ordinal];
         return column.ColumnName;
     }
 
@@ -182,13 +182,15 @@ public sealed class TextDataReader : DbDataReader
     {
         if (_schemaTable == null)
         {
-            _schemaTable = new DataTable();
-            _schemaTable.Locale = CultureInfo.InvariantCulture;
+            _schemaTable = new DataTable
+            {
+                Locale = CultureInfo.InvariantCulture
+            };
             _schemaTable.Columns.Add("ColumnName", typeof(string));
             _schemaTable.Columns.Add("DataType", typeof(Type));
             _schemaTable.Columns.Add("IsKey", typeof(bool));
 
-            foreach (var column in _columns)
+            foreach (TextDataColumn column in _columns)
             {
                 object[] values =
                 [
@@ -304,7 +306,7 @@ public sealed class TextDataReader : DbDataReader
     {
         get
         {
-            var index = _columns.IndexOf(name, true);
+            int index = _columns.IndexOf(name, true);
             return _values[index];
         }
     }

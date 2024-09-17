@@ -31,7 +31,7 @@ public sealed class StreamWriterTransaction : IDisposable
     {
         Writer.Close();
         const NativeMethods.MoveFileExFlags flags = NativeMethods.MoveFileExFlags.ReplaceExisiting;
-        var succeeded = NativeMethods.MoveFileEx(_tempPath, _path, flags);
+        bool succeeded = NativeMethods.MoveFileEx(_tempPath, _path, flags);
 
         if (!succeeded)
             throw new Win32Exception();

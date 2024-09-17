@@ -18,8 +18,8 @@ public static class IDbCommandAsyncExecutorExtensions
         return executor.ExecuteAsync(
             async (connection, _) =>
             {
-                foreach (var request in requests)
-                    using (var command = connection.CreateCommand(request.CreateCommandRequest))
+                foreach (ExecuteCommandAsyncRequest request in requests)
+                    using (DbCommand command = connection.CreateCommand(request.CreateCommandRequest))
                         await request.Execute(command);
             },
             cancellationToken);
@@ -31,7 +31,7 @@ public static class IDbCommandAsyncExecutorExtensions
         Func<DbCommand, Task> executeCommand,
         CancellationToken cancellationToken)
     {
-        var requests = new[]
+        ExecuteCommandAsyncRequest[] requests = new[]
         {
             new ExecuteCommandAsyncRequest(createCommandRequest, executeCommand)
         };
@@ -43,11 +43,11 @@ public static class IDbCommandAsyncExecutorExtensions
         CreateCommandRequest createCommandRequest,
         CancellationToken cancellationToken)
     {
-        var affectedRows = 0;
+        int affectedRows = 0;
         await executor.ExecuteAsync(
             async (connection, _) =>
             {
-                await using (var command = connection.CreateCommand(createCommandRequest))
+                await using (DbCommand command = connection.CreateCommand(createCommandRequest))
                     affectedRows = await command.ExecuteNonQueryAsync(cancellationToken);
             },
             cancellationToken);
@@ -63,7 +63,7 @@ public static class IDbCommandAsyncExecutorExtensions
         await executor.ExecuteAsync(
             async (connection, _) =>
             {
-                await using (var command = connection.CreateCommand(createCommandRequest))
+                await using (DbCommand command = connection.CreateCommand(createCommandRequest))
                     scalar = await command.ExecuteScalarAsync(cancellationToken);
             },
             cancellationToken);
@@ -79,9 +79,9 @@ public static class IDbCommandAsyncExecutorExtensions
         return executor.ExecuteAsync(
             async (connection, _) =>
             {
-                await using (var command = connection.CreateCommand(executeReaderRequest.CreateCommandRequest))
+                await using (DbCommand command = connection.CreateCommand(executeReaderRequest.CreateCommandRequest))
                 {
-                    await using (var dataReader =
+                    await using (DbDataReader dataReader =
                                  await command.ExecuteReaderAsync(executeReaderRequest.CommandBehavior,
                                      cancellationToken))
                         await readResults(dataReader, cancellationToken);

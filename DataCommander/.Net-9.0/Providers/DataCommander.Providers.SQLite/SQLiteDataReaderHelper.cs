@@ -14,15 +14,15 @@ internal sealed class SQLiteDataReaderHelper : IDataReaderHelper
     public SQLiteDataReaderHelper( IDataReader dataReader )
     {
         _sqLiteDataReader = (SQLiteDataReader) dataReader;
-        var schemaTable = dataReader.GetSchemaTable();
+        DataTable? schemaTable = dataReader.GetSchemaTable();
 
         if (schemaTable != null)
         {
-            var rows = schemaTable.Rows;
-            var count = rows.Count;
+            DataRowCollection rows = schemaTable.Rows;
+            int count = rows.Count;
             _dataFieldReaders = new IDataFieldReader[ count ];
 
-            for (var i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
                 _dataFieldReaders[ i ] = CreateDataFieldReader( dataReader, rows[ i ] );
             }
@@ -33,9 +33,9 @@ internal sealed class SQLiteDataReaderHelper : IDataReaderHelper
         IDataRecord dataRecord,
         DataRow schemaRow )
     {
-        var sqLiteDataReader = (SQLiteDataReader) dataRecord;
-        var columnOrdinal = (int) schemaRow[ "ColumnOrdinal" ];
-        var dbType = (DbType) schemaRow[ SchemaTableColumn.ProviderType ];
+        SQLiteDataReader sqLiteDataReader = (SQLiteDataReader) dataRecord;
+        int columnOrdinal = (int) schemaRow[ "ColumnOrdinal" ];
+        DbType dbType = (DbType) schemaRow[ SchemaTableColumn.ProviderType ];
         IDataFieldReader dataFieldReader = dbType switch
         {
             DbType.Decimal => new DecimalDataFieldReader(sqLiteDataReader, columnOrdinal),
@@ -49,7 +49,7 @@ internal sealed class SQLiteDataReaderHelper : IDataReaderHelper
 
     int IDataReaderHelper.GetValues( object[] values )
     {
-        for (var i = 0; i < _dataFieldReaders.Length; i++)
+        for (int i = 0; i < _dataFieldReaders.Length; i++)
         {
             values[ i ] = _dataFieldReaders[ i ].Value;
         }

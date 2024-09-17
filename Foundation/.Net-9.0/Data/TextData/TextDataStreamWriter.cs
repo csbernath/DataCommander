@@ -29,12 +29,12 @@ internal sealed class TextDataStreamWriter
         ArgumentNullException.ThrowIfNull(values);
         Assert.IsTrue(Columns.Count == values.Length);
 
-        for (var i = 0; i < values.Length; i++)
+        for (int i = 0; i < values.Length; i++)
         {
-            var value = values[i];
-            var converter = _converters[i];
-            var column = Columns[i];
-            var valueString = converter.ToString(value, column);
+            object value = values[i];
+            ITextDataConverter converter = _converters[i];
+            TextDataColumn column = Columns[i];
+            string valueString = converter.ToString(value, column);
 
             Assert.IsTrue(!string.IsNullOrEmpty(valueString));
             Assert.IsTrue(column.MaxLength == valueString.Length);

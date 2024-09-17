@@ -32,9 +32,11 @@ public partial class OptionsForm : Form
 
     private void changeFontButton_Click(object sender, System.EventArgs e)
     {
-        var fontDialog = new FontDialog();
-        fontDialog.Font = _font;
-        var dialogResult = fontDialog.ShowDialog();
+        FontDialog fontDialog = new FontDialog
+        {
+            Font = _font
+        };
+        DialogResult dialogResult = fontDialog.ShowDialog();
 
         if (dialogResult == DialogResult.OK)
             _font = fontDialog.Font;

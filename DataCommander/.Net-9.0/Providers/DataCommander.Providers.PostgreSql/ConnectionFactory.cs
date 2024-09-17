@@ -7,13 +7,13 @@ public static class ConnectionFactory
 {
     public static NpgsqlConnection CreateConnection(ConnectionStringAndCredential connectionStringAndCredential)
     {
-        var npgsqlConnectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionStringAndCredential.ConnectionString)
+        NpgsqlConnectionStringBuilder npgsqlConnectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionStringAndCredential.ConnectionString)
         {
             ApplicationName = "Data Commander",
             Pooling = false
         };
 
-        var credential = connectionStringAndCredential.Credential;
+        Credential? credential = connectionStringAndCredential.Credential;
         if (credential != null)
         {
             npgsqlConnectionStringBuilder.Username = credential.UserId;

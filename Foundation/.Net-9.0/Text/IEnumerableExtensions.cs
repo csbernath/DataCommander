@@ -16,11 +16,11 @@ public static class IEnumerableExtensions
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(columns);
 
-        var table = new StringTable(columns.Count);
+        StringTable table = new StringTable(columns.Count);
 
-        var row = table.NewRow();
-        var columnIndex = 0;
-        foreach (var column in columns)
+        StringTableRow row = table.NewRow();
+        int columnIndex = 0;
+        foreach (StringTableColumnInfo<TSource> column in columns)
         {
             row[columnIndex] = column.ColumnName;
             table.Columns[columnIndex].Align = column.Align;
@@ -29,14 +29,14 @@ public static class IEnumerableExtensions
 
         table.Rows.Add(row);
 
-        var secondRow = table.NewRow();
+        StringTableRow secondRow = table.NewRow();
         table.Rows.Add(secondRow);
 
-        foreach (var item in source)
+        foreach (TSource? item in source)
         {
             row = table.NewRow();
             columnIndex = 0;
-            foreach (var column in columns)
+            foreach (StringTableColumnInfo<TSource> column in columns)
             {
                 row[columnIndex] = column.ToStringFunction(item)!;
                 ++columnIndex;
@@ -45,10 +45,10 @@ public static class IEnumerableExtensions
             table.Rows.Add(row);
         }
 
-        var columnWidths = new int[columns.Count];
+        int[] columnWidths = new int[columns.Count];
         for (columnIndex = 0;columnIndex < columns.Count;++columnIndex)
         {
-            var max = table.Rows
+            int max = table.Rows
                 .Select(r => r[columnIndex] == null ? 0 : r[columnIndex].Length)
                 .Max();
             secondRow[columnIndex] = new string('-', max);

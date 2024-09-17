@@ -16,16 +16,16 @@ internal sealed class ViewCollectionNode(SchemaNode schemaNode) : ITreeNode
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        using (var connection = _schemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection())
+        using (Npgsql.NpgsqlConnection connection = _schemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection())
         {
             connection.Open();
-            var executor = connection.CreateCommandExecutor();
+            IDbCommandExecutor executor = connection.CreateCommandExecutor();
             return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(new ExecuteReaderRequest($@"select table_name
 from information_schema.views
 where table_schema = '{_schemaNode.Name}'
 order by table_name"), 128, dataReader =>
             {
-                var name = dataReader.GetString(0);
+                string name = dataReader.GetString(0);
                 return new ViewNode(this, name);
             }));
         }

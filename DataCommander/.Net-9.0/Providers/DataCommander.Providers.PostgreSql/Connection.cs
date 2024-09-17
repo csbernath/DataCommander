@@ -37,13 +37,13 @@ internal sealed class Connection : ConnectionBase
 
     private void CreateConnection()
     {
-        var npgsqlConnectionStringBuilder = new NpgsqlConnectionStringBuilder(_connectionStringAndCredential.ConnectionString)
+        NpgsqlConnectionStringBuilder npgsqlConnectionStringBuilder = new NpgsqlConnectionStringBuilder(_connectionStringAndCredential.ConnectionString)
         {
             ApplicationName = "Data Commander",
             Pooling = false
         };
 
-        var credential = _connectionStringAndCredential.Credential;
+        Credential? credential = _connectionStringAndCredential.Credential;
         if (credential != null)
         {
             npgsqlConnectionStringBuilder.Username = credential.UserId;

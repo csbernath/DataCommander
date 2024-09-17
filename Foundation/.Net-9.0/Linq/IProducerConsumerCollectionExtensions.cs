@@ -10,10 +10,10 @@ public static class ProducerConsumerCollectionExtensions
         ArgumentNullException.ThrowIfNull(collection);
         ArgumentNullException.ThrowIfNull(target);
 
-        var i = 0;
+        int i = 0;
         while (i < target.Length)
         {
-            var succeeded = collection.TryTake(out var item);
+            bool succeeded = collection.TryTake(out T item);
             if (succeeded)
             {
                 target[i] = item;

@@ -10,46 +10,50 @@ public static class SqlParameterFactory
 {
     public static SqlParameter Create(string parameterName, SqlDbType sqlDbType, object value)
     {
-        var parameter = new SqlParameter(parameterName, sqlDbType);
-        parameter.Value = value;
+        SqlParameter parameter = new SqlParameter(parameterName, sqlDbType)
+        {
+            Value = value
+        };
         return parameter;
     }
 
     public static SqlParameter CreateNullableBit(string parameterName, bool? value)
     {
-        var parameterValue = ToParameterValue(value);
+        object parameterValue = ToParameterValue(value);
         return Create(parameterName, SqlDbType.Bit, parameterValue);
     }
 
     public static SqlParameter CreateNullableDate(string parameterName, DateTime? value)
     {
-        var parameterValue = ToParameterValue(value);
+        object parameterValue = ToParameterValue(value);
         return Create(parameterName, SqlDbType.Date, parameterValue);
     }
 
     public static SqlParameter CreateNullableDateTime(string parameterName, DateTime? value)
     {
-        var parameterValue = ToParameterValue(value);
+        object parameterValue = ToParameterValue(value);
         return Create(parameterName, SqlDbType.DateTime, parameterValue);
     }
 
     public static SqlParameter CreateNullableGuid(string parameterName, Guid? value)
     {
-        var parameterValue = ToParameterValue(value);
+        object parameterValue = ToParameterValue(value);
         return Create(parameterName, SqlDbType.UniqueIdentifier, parameterValue);
     }
 
     public static SqlParameter CreateNullableInt(string parameterName, int? value)
     {
-        var parameterValue = ToParameterValue(value);
+        object parameterValue = ToParameterValue(value);
         return Create(parameterName, SqlDbType.Int, parameterValue);
     }
 
     public static SqlParameter CreateChar(string parameterName, int size, string value)
     {
-        var parameterValue = value != null ? (object)value : DBNull.Value;
-        var parameter = new SqlParameter(parameterName, SqlDbType.Char, size);
-        parameter.Value = parameterValue;
+        object parameterValue = value != null ? (object)value : DBNull.Value;
+        SqlParameter parameter = new SqlParameter(parameterName, SqlDbType.Char, size)
+        {
+            Value = parameterValue
+        };
         return parameter;
     }
 
@@ -57,16 +61,18 @@ public static class SqlParameterFactory
 
     public static SqlParameter CreateNVarChar(string parameterName, int size, string value)
     {
-        var parameterValue = value != null ? (object)value : DBNull.Value;
-        var parameter = new SqlParameter(parameterName, SqlDbType.NVarChar, size);
-        parameter.Value = parameterValue;
+        object parameterValue = value != null ? (object)value : DBNull.Value;
+        SqlParameter parameter = new SqlParameter(parameterName, SqlDbType.NVarChar, size)
+        {
+            Value = parameterValue
+        };
         return parameter;
     }
 
     public static SqlParameter CreateStructured(string parameterName, string typeName, IReadOnlyCollection<SqlDataRecord> sqlDataRecords)
     {
         ArgumentNullException.ThrowIfNull(sqlDataRecords);
-        var parameter = new SqlParameter
+        SqlParameter parameter = new SqlParameter
         {
             ParameterName = parameterName,
             SqlDbType = SqlDbType.Structured,
@@ -81,9 +87,11 @@ public static class SqlParameterFactory
 
     public static SqlParameter CreateVarChar(string parameterName, int size, string value)
     {
-        var parameterValue = value != null ? (object)value : DBNull.Value;
-        var parameter = new SqlParameter(parameterName, SqlDbType.VarChar, size);
-        parameter.Value = parameterValue;
+        object parameterValue = value != null ? (object)value : DBNull.Value;
+        SqlParameter parameter = new SqlParameter(parameterName, SqlDbType.VarChar, size)
+        {
+            Value = parameterValue
+        };
         return parameter;
     }
 

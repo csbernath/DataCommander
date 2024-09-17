@@ -41,7 +41,7 @@ public class SequenceIndex<TKey, T> : ICollectionIndex<T>
 
     void ICollection<T>.Add(T item)
     {
-        var key = _getNextKey();
+        TKey key = _getNextKey();
         _dictionary.Add(key, item);
     }
 
@@ -53,8 +53,8 @@ public class SequenceIndex<TKey, T> : ICollectionIndex<T>
 
     bool ICollection<T>.Remove(T item)
     {
-        var key = _getKey(item);
-        var removed = _dictionary.Remove(key);
+        TKey key = _getKey(item);
+        bool removed = _dictionary.Remove(key);
         return removed;
     }
 }

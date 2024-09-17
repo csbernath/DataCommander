@@ -31,7 +31,7 @@ public sealed class TextDataParameterCollection : DbParameterCollection, IList<T
         ArgumentNullException.ThrowIfNull(value);
         Assert.IsTrue(value is TextDataParameter);
 
-        var parameter = (TextDataParameter)value;
+        TextDataParameter parameter = (TextDataParameter)value;
         _collection.Add(parameter);
         return _collection.Count - 1;
     }
@@ -124,8 +124,8 @@ public sealed class TextDataParameterCollection : DbParameterCollection, IList<T
     {
         Assert.IsTrue(Contains(parameterName));
 
-        var parameter = _nameIndex[parameterName];
-        var value = parameter.Value;
+        TextDataParameter parameter = _nameIndex[parameterName];
+        object value = parameter.Value;
 
         Assert.IsTrue(value is TResult);
         return (TResult)value;
@@ -144,7 +144,7 @@ public sealed class TextDataParameterCollection : DbParameterCollection, IList<T
 
     void IList<TextDataParameter>.RemoveAt(int index)
     {
-        var parameter = _listIndex[index];
+        TextDataParameter parameter = _listIndex[index];
         _collection.Remove(parameter);
     }
 

@@ -9,7 +9,7 @@ public sealed class SqlSequence(int id)
 
     public static void CreateSchema(IDbConnection connection)
     {
-        var commandText = @"create table dbo.Sequence
+        string commandText = @"create table dbo.Sequence
 (
     Id int not null,
     Name varchar(128) collate Latin1_General_CI_AS not null,
@@ -17,7 +17,7 @@ public sealed class SqlSequence(int id)
     constraint PK_Sequence primary key clustered(Id)
 )";
 
-        var executor = connection.CreateCommandExecutor();
+        IDbCommandExecutor executor = connection.CreateCommandExecutor();
         executor.ExecuteNonQuery(new CreateCommandRequest(commandText));
 
         commandText = @"create proc dbo.IncrementSequence
@@ -58,13 +58,13 @@ end";
 
     public int GetNextSequenceValue(IDbConnection connection)
     {
-        var command = connection.CreateCommand();
+        IDbCommand command = connection.CreateCommand();
         command.CommandType = CommandType.StoredProcedure;
         command.CommandText = "GetNextSequenceValue";
-        var parameter = new SqlParameter("@id", SqlDbType.Int) { Value = _id };
+        SqlParameter parameter = new SqlParameter("@id", SqlDbType.Int) { Value = _id };
         command.Parameters.Add(parameter);
-        var scalar = command.ExecuteScalar();
-        var value = (int)scalar;
+        object scalar = command.ExecuteScalar();
+        int value = (int)scalar;
         return value;
     }
 }

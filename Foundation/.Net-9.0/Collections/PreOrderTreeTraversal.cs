@@ -12,7 +12,7 @@ public static class PreOrderTreeTraversal
 
         action(rootNode);
 
-        foreach (var childNode in getChildNodes(rootNode))
+        foreach (T childNode in getChildNodes(rootNode))
             ForEach(childNode, getChildNodes, action);
     }
 
@@ -27,7 +27,7 @@ public static class PreOrderTreeTraversal
         if (predicate(rootNode))
             firstOrDefault = rootNode;
         else
-            foreach (var childNode in getChildNodes(rootNode))
+            foreach (T childNode in getChildNodes(rootNode))
             {
                 firstOrDefault = FirstOrDefault(childNode, getChildNodes, predicate);
                 if (firstOrDefault != null)

@@ -7,7 +7,7 @@ internal static class MonitorExtensions
 {
     public static void TryLock(object obj, Action action)
     {
-        var entered = Monitor.TryEnter(obj);
+        bool entered = Monitor.TryEnter(obj);
         if (entered)
         {
             try

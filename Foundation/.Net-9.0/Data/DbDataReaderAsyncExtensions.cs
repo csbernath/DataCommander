@@ -20,10 +20,10 @@ public static class DbDataReaderAsyncExtensions
     public static async Task<ReadOnlySegmentLinkedList<T>> ReadResultAsync<T>(this DbDataReader dataReader, int segmentLength,
         Func<IDataRecord, T> readRecord, CancellationToken cancellationToken)
     {
-        var segmentLinkedListBuilder = new SegmentLinkedListBuilder<T>(segmentLength);
+        SegmentLinkedListBuilder<T> segmentLinkedListBuilder = new SegmentLinkedListBuilder<T>(segmentLength);
         await dataReader.ReadResultAsync(() =>
         {
-            var record = readRecord(dataReader);
+            T record = readRecord(dataReader);
             segmentLinkedListBuilder.Add(record);
         }, cancellationToken);
         return segmentLinkedListBuilder.ToReadOnlySegmentLinkedList();
@@ -33,9 +33,9 @@ public static class DbDataReaderAsyncExtensions
         Func<IDataRecord, T> readRecord,
         CancellationToken cancellationToken)
     {
-        var nextResult = await dataReader.NextResultAsync(cancellationToken);
+        bool nextResult = await dataReader.NextResultAsync(cancellationToken);
         Assert.IsTrue(nextResult);
-        var records = await dataReader.ReadResultAsync(segmentLength, readRecord, cancellationToken);
+        ReadOnlySegmentLinkedList<T> records = await dataReader.ReadResultAsync(segmentLength, readRecord, cancellationToken);
         return records;
     }
 }

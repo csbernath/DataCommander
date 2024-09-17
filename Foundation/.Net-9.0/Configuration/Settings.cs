@@ -38,7 +38,7 @@ public static class Settings
         {
             if (_configFileName == null)
             {
-                var location = Assembly.GetEntryAssembly().Location;
+                string location = Assembly.GetEntryAssembly().Location;
                 _configFileName = $"{location}.config";
             }
 
@@ -60,8 +60,8 @@ public static class Settings
         {
             if (_section == null)
             {
-                var configFileName = ConfigFileName;
-                var sectionName = SectionName;
+                string configFileName = ConfigFileName;
+                string sectionName = SectionName;
                 _section = new ConfigurationSection(configFileName, sectionName);
             }
 
@@ -90,9 +90,9 @@ public static class Settings
         [MethodImpl(MethodImplOptions.NoInlining)]
         get
         {
-            var trace = new StackTrace(1);
-            var nodeName = ConfigurationNodeName.FromMethod(trace, 0);
-            var node = Section.SelectNode(nodeName, true);
+            StackTrace trace = new StackTrace(1);
+            string nodeName = ConfigurationNodeName.FromMethod(trace, 0);
+            ConfigurationNode node = Section.SelectNode(nodeName, true);
             return node;
         }
     }
@@ -105,9 +105,9 @@ public static class Settings
         [MethodImpl(MethodImplOptions.NoInlining)]
         get
         {
-            var trace = new StackTrace(1);
-            var nodeName = ConfigurationNodeName.FromType(trace, 0);
-            var node = Section.SelectNode(nodeName, true);
+            StackTrace trace = new StackTrace(1);
+            string nodeName = ConfigurationNodeName.FromType(trace, 0);
+            ConfigurationNode node = Section.SelectNode(nodeName, true);
             return node;
         }
     }
@@ -117,9 +117,9 @@ public static class Settings
         [MethodImpl(MethodImplOptions.NoInlining)]
         get
         {
-            var trace = new StackTrace(1);
-            var nodeName = ConfigurationNodeName.FromNamespace(trace, 0);
-            var node = Section.SelectNode(nodeName, true);
+            StackTrace trace = new StackTrace(1);
+            string nodeName = ConfigurationNodeName.FromNamespace(trace, 0);
+            ConfigurationNode node = Section.SelectNode(nodeName, true);
             return node;
         }
     }
@@ -133,12 +133,12 @@ public static class Settings
     {
         ArgumentNullException.ThrowIfNull(assembly);
 
-        var location = assembly.Location;
-        var uri = new Uri(location);
-        var fileName = uri.LocalPath;
-        var fileInfo = new FileInfo(fileName);
+        string location = assembly.Location;
+        Uri uri = new Uri(location);
+        string fileName = uri.LocalPath;
+        FileInfo fileInfo = new FileInfo(fileName);
         fileName = fileInfo.FullName;
-        var configFilename = fileName + ".config";
+        string configFilename = fileName + ".config";
         return configFilename;
     }
 
@@ -146,8 +146,8 @@ public static class Settings
 
     internal static ConfigurationNode SelectNode(Type type, bool throwOnError)
     {
-        var nodeName = ConfigurationNodeName.FromType(type);
-        var node = Section.SelectNode(nodeName, throwOnError);
+        string nodeName = ConfigurationNodeName.FromType(type);
+        ConfigurationNode node = Section.SelectNode(nodeName, throwOnError);
         return node;
     }
 
@@ -158,10 +158,10 @@ public static class Settings
     [MethodImpl(MethodImplOptions.NoInlining)]
     public static ConfigurationNode SelectCurrentType()
     {
-        var trace = new StackTrace(1);
-        var nodeName = ConfigurationNodeName.FromType(trace, 0);
+        StackTrace trace = new StackTrace(1);
+        string nodeName = ConfigurationNodeName.FromType(trace, 0);
         //log.Trace( "SelectCurrentType, nodeName={0}", nodeName );
-        var node = Section.SelectNode(nodeName, false);
+        ConfigurationNode node = Section.SelectNode(nodeName, false);
         return node;
     }
 }

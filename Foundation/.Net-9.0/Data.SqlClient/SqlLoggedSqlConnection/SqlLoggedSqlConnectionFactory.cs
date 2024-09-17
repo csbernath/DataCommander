@@ -41,8 +41,8 @@ public sealed class SqlLoggedSqlConnectionFactory : IDbConnectionFactory
 
     IDbConnectionHelper IDbConnectionFactory.CreateConnectionHelper(IDbConnection connection)
     {
-        var loggedSqlConnection = (SqlLoggedSqlConnection)connection;
-        var sqlConnection = loggedSqlConnection.Connection;
+        SqlLoggedSqlConnection loggedSqlConnection = (SqlLoggedSqlConnection)connection;
+        Microsoft.Data.SqlClient.SqlConnection sqlConnection = loggedSqlConnection.Connection;
         return new SqlConnectionFactory(sqlConnection, connection);
     }
 }

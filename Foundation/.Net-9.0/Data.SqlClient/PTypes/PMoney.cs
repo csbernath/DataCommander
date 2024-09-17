@@ -35,7 +35,7 @@ public struct PMoney : INullable
 
     public static bool operator ==(PMoney x, PMoney y)
     {
-        var isEqual = x.ValueType == y.ValueType;
+        bool isEqual = x.ValueType == y.ValueType;
         if (isEqual)
             if (x.ValueType == PValueType.Value)
                 isEqual = x._sql.Value == y._sql.Value;
@@ -47,13 +47,13 @@ public struct PMoney : INullable
 
     public static PMoney Parse(string s, PValueType type)
     {
-        var sp = string.IsNullOrEmpty(s) ? new PMoney(type) : SqlMoney.Parse(s);
+        PMoney sp = string.IsNullOrEmpty(s) ? new PMoney(type) : SqlMoney.Parse(s);
         return sp;
     }
 
     public override readonly bool Equals(object y)
     {
-        var equals = y is PMoney;
+        bool equals = y is PMoney;
         if (equals)
             equals = this == (PMoney)y;
         return equals;
@@ -61,7 +61,7 @@ public struct PMoney : INullable
 
     public override int GetHashCode()
     {
-        var hashCode = _sql.GetHashCode();
+        int hashCode = _sql.GetHashCode();
         return hashCode;
     }
 

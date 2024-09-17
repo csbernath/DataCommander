@@ -15,7 +15,7 @@ public sealed class TextDataRow
         _convert = convert;
         ItemArray = new object[columns.Count];
 
-        for (var i = 0; i < ItemArray.Length; i++)
+        for (int i = 0; i < ItemArray.Length; i++)
         {
             ItemArray[i] = DBNull.Value;
         }
@@ -27,15 +27,15 @@ public sealed class TextDataRow
     {
         get
         {
-            var index = Columns.IndexOf(columnName, true);
+            int index = Columns.IndexOf(columnName, true);
             return ItemArray[index];
         }
 
         set
         {
-            var index = Columns.IndexOf(columnName, true);
-            var column = Columns[index];
-            var convertedValue = _convert(value, column);
+            int index = Columns.IndexOf(columnName, true);
+            TextDataColumn column = Columns[index];
+            object convertedValue = _convert(value, column);
             ItemArray[index] = convertedValue;
         }
     }
@@ -48,14 +48,14 @@ public sealed class TextDataRow
     {
         get
         {
-            var index = Columns.IndexOf(column, true);
+            int index = Columns.IndexOf(column, true);
             return ItemArray[index];
         }
 
         set
         {
-            var index = Columns.IndexOf(column, true);
-            var convertedValue = _convert(value, column);
+            int index = Columns.IndexOf(column, true);
+            object convertedValue = _convert(value, column);
             ItemArray[index] = convertedValue;
         }
     }

@@ -17,16 +17,16 @@ internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var tableNodes = await GetTableNodes(cancellationToken);
-        var childNodes = new ITreeNode[] { new SystemTableCollectionNode(DatabaseNode) }
+        ReadOnlySegmentLinkedList<TableNode> tableNodes = await GetTableNodes(cancellationToken);
+        IEnumerable<ITreeNode> childNodes = new ITreeNode[] { new SystemTableCollectionNode(DatabaseNode) }
             .Concat(tableNodes);
         return childNodes;
     }
 
     private async Task<ReadOnlySegmentLinkedList<TableNode>> GetTableNodes(CancellationToken cancellationToken)
     {
-        var commandText = CreateCommandText();
-        var tableNodes = await Db.ExecuteReaderAsync(
+        string commandText = CreateCommandText();
+        ReadOnlySegmentLinkedList<TableNode> tableNodes = await Db.ExecuteReaderAsync(
             DatabaseNode.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
@@ -37,7 +37,7 @@ internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
 
     private string CreateCommandText()
     {
-        var commandText = $@"select
+        string commandText = $@"select
     s.name,
     tbl.name,
     tbl.object_id,
@@ -70,10 +70,10 @@ order by 1,2";
 
     private TableNode ReadRecord(IDataRecord dataRecord)
     {
-        var schema = dataRecord.GetString(0);
-        var name = dataRecord.GetString(1);
-        var objectId = dataRecord.GetInt32(2);
-        var temporalType = (TemporalType)dataRecord.GetByte(3);
+        string schema = dataRecord.GetString(0);
+        string name = dataRecord.GetString(1);
+        int objectId = dataRecord.GetInt32(2);
+        TemporalType temporalType = (TemporalType)dataRecord.GetByte(3);
         return new TableNode(DatabaseNode, schema, name, objectId, temporalType);
     }
 

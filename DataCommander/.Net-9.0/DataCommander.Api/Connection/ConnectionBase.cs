@@ -28,7 +28,7 @@ public abstract class ConnectionBase : IDisposable, IAsyncDisposable
     {
         get
         {
-            var database = Connection?.Database;
+            string? database = Connection?.Database;
             return database;
         }
     }

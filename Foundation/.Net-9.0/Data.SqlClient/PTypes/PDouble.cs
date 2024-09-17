@@ -34,7 +34,7 @@ public struct PDouble : INullable
 
     public static bool operator ==(PDouble x, PDouble y)
     {
-        var isEqual = x.ValueType == y.ValueType;
+        bool isEqual = x.ValueType == y.ValueType;
         if (isEqual)
             if (x.ValueType == PValueType.Value)
                 isEqual = x._sql.Value == y._sql.Value;
@@ -45,13 +45,13 @@ public struct PDouble : INullable
 
     public static PDouble Parse(string s, PValueType type)
     {
-        var sp = string.IsNullOrEmpty(s) ? new PDouble(type) : SqlDouble.Parse(s);
+        PDouble sp = string.IsNullOrEmpty(s) ? new PDouble(type) : SqlDouble.Parse(s);
         return sp;
     }
 
     public override readonly bool Equals(object y)
     {
-        var equals = y is PDouble;
+        bool equals = y is PDouble;
         if (equals)
             equals = this == (PDouble)y;
         return equals;

@@ -29,7 +29,7 @@ public class UniqueListIndex<TKey, T> : ICollectionIndex<T>
 
     public void Add(T item)
     {
-        var contains = _list.Contains(item);
+        bool contains = _list.Contains(item);
         if (contains) throw new ArgumentException();
         _list.Add(item);
     }

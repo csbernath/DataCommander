@@ -6,14 +6,14 @@ public sealed class DecimalString
     {
         //string separator = CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator;
         const char separator = '.';
-        var index = str.IndexOf(separator);
+        int index = str.IndexOf(separator);
 
         string intValue;
 
         if (index >= 0)
         {
             intValue = str[..index];
-            var fracValue = str[(index + 1)..];
+            string fracValue = str[(index + 1)..];
             Scale = (byte) fracValue.Length;
         }
         else

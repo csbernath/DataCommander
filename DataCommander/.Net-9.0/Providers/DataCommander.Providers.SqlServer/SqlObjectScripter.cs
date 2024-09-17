@@ -8,23 +8,25 @@ public static class SqlObjectScripter
 {
     public static SqlConnectionInfo CreateSqlConnectionInfo(ConnectionStringAndCredential connectionStringAndCredential)
     {
-        var csb = new SqlConnectionStringBuilder(connectionStringAndCredential.ConnectionString);
+        SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder(connectionStringAndCredential.ConnectionString);
 
-        var connectionInfo = new SqlConnectionInfo();
-        connectionInfo.ApplicationName = csb.ApplicationName;
-        connectionInfo.ConnectionTimeout = csb.ConnectTimeout;
-        connectionInfo.DatabaseName = csb.InitialCatalog;
-        connectionInfo.EncryptConnection = csb.Encrypt;
-        connectionInfo.MaxPoolSize = csb.MaxPoolSize;
-        connectionInfo.MinPoolSize = csb.MinPoolSize;
-        connectionInfo.PacketSize = csb.PacketSize;
-        connectionInfo.Pooled = csb.Pooling;
-        connectionInfo.ServerName = csb.DataSource;
-        connectionInfo.UseIntegratedSecurity = csb.IntegratedSecurity;
-        connectionInfo.WorkstationId = csb.WorkstationID;
-        connectionInfo.TrustServerCertificate = csb.TrustServerCertificate;
+        SqlConnectionInfo connectionInfo = new SqlConnectionInfo
+        {
+            ApplicationName = csb.ApplicationName,
+            ConnectionTimeout = csb.ConnectTimeout,
+            DatabaseName = csb.InitialCatalog,
+            EncryptConnection = csb.Encrypt,
+            MaxPoolSize = csb.MaxPoolSize,
+            MinPoolSize = csb.MinPoolSize,
+            PacketSize = csb.PacketSize,
+            Pooled = csb.Pooling,
+            ServerName = csb.DataSource,
+            UseIntegratedSecurity = csb.IntegratedSecurity,
+            WorkstationId = csb.WorkstationID,
+            TrustServerCertificate = csb.TrustServerCertificate
+        };
 
-        var credential = connectionStringAndCredential.Credential;
+        Credential? credential = connectionStringAndCredential.Credential;
         if (credential != null)
         {
             connectionInfo.UserName = credential.UserId;

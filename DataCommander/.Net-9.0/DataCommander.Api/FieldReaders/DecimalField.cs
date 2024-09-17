@@ -23,7 +23,7 @@ public sealed class DecimalField(
 
     int IComparable.CompareTo(object? obj)
     {
-        var other = (DecimalField) obj;
+        DecimalField? other = (DecimalField) obj;
         return DecimalValue.CompareTo(other.DecimalValue);
     }
 }

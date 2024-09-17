@@ -19,7 +19,7 @@ internal static class EntryPoint
         try
         {
             //var updateStarted = Update();
-            var updateStarted = false;
+            bool updateStarted = false;
             if (!updateStarted)
             {
                 LogFactoryReader.Read();
@@ -62,12 +62,12 @@ internal static class EntryPoint
 
     private static void Run()
     {
-        using var methodLog = LogFactory.Instance.GetCurrentMethodLog();
-        var applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(false);
-        var fileName = applicationDataFolderPath + Path.DirectorySeparatorChar + "ApplicationData.Net-9.0.xml";
+        using ILog methodLog = LogFactory.Instance.GetCurrentMethodLog();
+        string applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(false);
+        string fileName = applicationDataFolderPath + Path.DirectorySeparatorChar + "ApplicationData.Net-9.0.xml";
         methodLog.Write(LogLevel.Trace, "fileName: {0}", fileName);
-        var sectionName = Settings.SectionName;
-        var dataCommanderApplication = DataCommanderApplication.Instance;
+        string sectionName = Settings.SectionName;
+        DataCommanderApplication dataCommanderApplication = DataCommanderApplication.Instance;
         dataCommanderApplication.LoadApplicationData(fileName, sectionName);
         dataCommanderApplication.Run();
         dataCommanderApplication.SaveApplicationData();

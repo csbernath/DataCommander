@@ -54,17 +54,17 @@ public static class TypeNameCollection
 
     private static void Add(string name, Type type)
     {
-        var item = new TypeCollectionItem(name, type);
+        TypeCollectionItem item = new TypeCollectionItem(name, type);
         Collection.Add(item);
     }
 
     public static Type GetType(string typeName)
     {
-        var length = typeName.Length - 2;
-        var isArray = typeName != null && typeName.IndexOf("[]") == length;
-        var typeName2 = isArray ? typeName[..length] : typeName;
-        var contains = NameIndex.TryGetValue(typeName2, out var item);
-        var type = contains ? item.Type : Type.GetType(typeName2);
+        int length = typeName.Length - 2;
+        bool isArray = typeName != null && typeName.IndexOf("[]") == length;
+        string typeName2 = isArray ? typeName[..length] : typeName;
+        bool contains = NameIndex.TryGetValue(typeName2, out TypeCollectionItem item);
+        Type type = contains ? item.Type : Type.GetType(typeName2);
         if (type != null && isArray)
         {
             typeName2 = type.FullName + "[], " + type.Assembly.FullName;
@@ -80,12 +80,12 @@ public static class TypeNameCollection
 
         if (type.IsArray)
         {
-            var elementType = type.GetElementType();
+            Type elementType = type.GetElementType();
             typeName = GetTypeName(elementType) + "[]";
         }
         else if (type.IsEnum)
         {
-            var assembly = type.Assembly;
+            Assembly assembly = type.Assembly;
 
             if (assembly == SystemAssembly)
                 typeName = type.FullName;
@@ -94,7 +94,7 @@ public static class TypeNameCollection
         }
         else
         {
-            var contains = TypeIndex.TryGetValue(type, out var item);
+            bool contains = TypeIndex.TryGetValue(type, out TypeCollectionItem item);
             typeName = contains ? item.Name : type.FullName;
         }
 

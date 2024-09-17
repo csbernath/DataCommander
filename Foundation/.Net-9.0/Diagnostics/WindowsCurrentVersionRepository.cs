@@ -7,13 +7,13 @@ public static class WindowsCurrentVersionRepository
     public static WindowsCurrentVersion Get()
     {
 #pragma warning disable CA1416
-        using (var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion"))
+        using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion"))
         {
-            var productName = (string)key.GetValue("ProductName");
-            var displayVersion = (string)key.GetValue("DisplayVersion");
-            var editionId = (string)key.GetValue("EditionID");
-            var releaseId = (string)key.GetValue("ReleaseId");
-            var currentBuild = (string)key.GetValue("CurrentBuild");
+            string productName = (string)key.GetValue("ProductName");
+            string displayVersion = (string)key.GetValue("DisplayVersion");
+            string editionId = (string)key.GetValue("EditionID");
+            string releaseId = (string)key.GetValue("ReleaseId");
+            string currentBuild = (string)key.GetValue("CurrentBuild");
 
             return new WindowsCurrentVersion(productName, displayVersion, editionId, releaseId, currentBuild);
         }

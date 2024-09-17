@@ -36,7 +36,7 @@ public sealed class TokenIterator
             int startPosition;
             int endPosition;
             string? value;
-            var c = _text[_index];
+            char c = _text[_index];
 
             if (c == 'N')
             {
@@ -111,11 +111,11 @@ public sealed class TokenIterator
 
     private string? ReadKeyWord()
     {
-        var sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
         while (_index < _length)
         {
-            var c = _text[_index];
+            char c = _text[_index];
             if (char.IsWhiteSpace(c) || c == ',' || c == '(' || c == ')' || c == '=' || c == '+' || c == '*' ||
                 c == ';')
                 break;
@@ -125,19 +125,19 @@ public sealed class TokenIterator
             sb.Append(c);
         }
 
-        var keyWord = sb.ToString();
+        string keyWord = sb.ToString();
         return keyWord;
     }
 
     private string? ReadString()
     {
-        var sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         _index++;
-        var escape = false;
+        bool escape = false;
 
         while (_index < _length)
         {
-            var c = _text[_index];
+            char c = _text[_index];
             _index++;
 
             if (escape)
@@ -166,11 +166,11 @@ public sealed class TokenIterator
 
     private string? ReadDigit()
     {
-        var sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
         while (_index < _length)
         {
-            var c = _text[_index];
+            char c = _text[_index];
             if (!char.IsDigit(c))
                 break;
             else

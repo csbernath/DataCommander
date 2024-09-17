@@ -13,8 +13,8 @@ public static class IEnumerableExtensions
     {
         ArgumentNullException.ThrowIfNull(source);
 
-        var list = source.ToList();
-        var readOnlyCollection = list.ToReadOnlyCollection();
+        List<T> list = source.ToList();
+        ReadOnlyCollection<T> readOnlyCollection = list.ToReadOnlyCollection();
 
         return readOnlyCollection;
     }
@@ -23,12 +23,12 @@ public static class IEnumerableExtensions
     public static ReadOnlySegmentLinkedList<T> ToReadOnlySegmentLinkedList<T>(this IEnumerable<T> source, int segmentLength)
     {
         ArgumentNullException.ThrowIfNull(source);
-        var segmentLinkedListBuilder = new SegmentLinkedListBuilder<T>(segmentLength);
+        SegmentLinkedListBuilder<T> segmentLinkedListBuilder = new SegmentLinkedListBuilder<T>(segmentLength);
 
-        foreach (var item in source)
+        foreach (T item in source)
             segmentLinkedListBuilder.Add(item);
 
-        var readOnlySegmentLinkedList = segmentLinkedListBuilder.ToReadOnlySegmentLinkedList();
+        ReadOnlySegmentLinkedList<T> readOnlySegmentLinkedList = segmentLinkedListBuilder.ToReadOnlySegmentLinkedList();
         return readOnlySegmentLinkedList;
     }
 
@@ -38,8 +38,8 @@ public static class IEnumerableExtensions
         ArgumentNullException.ThrowIfNull(values);
         ArgumentNullException.ThrowIfNull(keySelector);
 
-        var items = values.Select(value => KeyValuePair.Create(keySelector(value), value)).ToList();
-        var comparer = Comparer<TKey>.Default;
+        List<KeyValuePair<TKey, TValue>> items = values.Select(value => KeyValuePair.Create(keySelector(value), value)).ToList();
+        Comparer<TKey> comparer = Comparer<TKey>.Default;
         return new ReadOnlySortedList<TKey, TValue>(items, comparer.Compare);
     }
 

@@ -10,7 +10,7 @@ public sealed class StreamFieldDataReader(IDataRecord dataRecord, int columnOrdi
     {
         get
         {
-            var stream = (Stream) dataRecord[columnOrdinal];
+            Stream stream = (Stream) dataRecord[columnOrdinal];
             object value;
 
             if (stream != null)

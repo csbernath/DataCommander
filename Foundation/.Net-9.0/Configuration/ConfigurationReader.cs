@@ -38,7 +38,7 @@ public sealed class ConfigurationReader
 
         if (true)
         {
-            var count = 0;
+            int count = 0;
 
             while (true)
             {
@@ -94,7 +94,7 @@ public sealed class ConfigurationReader
     /// <returns></returns>
     private bool FindSection(string sectionName)
     {
-        var found = false;
+        bool found = false;
 
         while (_xmlReader.Read())
         {
@@ -113,8 +113,8 @@ public sealed class ConfigurationReader
 
     private object ReadAttributeValueArray(Type elementType)
     {
-        var list = new List<object>();
-        var go = !_xmlReader.IsEmptyElement;
+        List<object> list = [];
+        bool go = !_xmlReader.IsEmptyElement;
 
         while (go && _xmlReader.Read())
         {
@@ -122,8 +122,8 @@ public sealed class ConfigurationReader
             {
                 case XmlNodeType.Element:
                 {
-                    var valueStr = _xmlReader["value"];
-                    var value = Convert.ChangeType(valueStr, elementType, _formatProvider);
+                        string valueStr = _xmlReader["value"];
+                        object value = Convert.ChangeType(valueStr, elementType, _formatProvider);
                     list.Add(value);
                 }
                     break;
@@ -137,8 +137,8 @@ public sealed class ConfigurationReader
             }
         }
 
-        var array = Array.CreateInstance(elementType, list.Count);
-        var values = (object[]) array;
+        Array array = Array.CreateInstance(elementType, list.Count);
+        object[] values = (object[]) array;
         list.CopyTo(values);
 
         return array;
@@ -146,18 +146,18 @@ public sealed class ConfigurationReader
 
     private object ReadAttributeValue(Type type)
     {
-        var typeCode = Type.GetTypeCode(type);
+        TypeCode typeCode = Type.GetTypeCode(type);
         object value = null;
         _xmlReader.MoveToContent();
 
         if (type.IsArray)
         {
-            var elementType = type.GetElementType();
+            Type elementType = type.GetElementType();
             typeCode = Type.GetTypeCode(elementType);
 
             if (typeCode == TypeCode.Byte)
             {
-                var innerXml = _xmlReader.ReadInnerXml();
+                string innerXml = _xmlReader.ReadInnerXml();
                 value = System.Convert.FromBase64String(innerXml);
             }
             else
@@ -171,7 +171,7 @@ public sealed class ConfigurationReader
             {
                 while (_xmlReader.Read())
                 {
-                    var isBreakable = false;
+                    bool isBreakable = false;
                     Trace.WriteLine(_xmlReader.NodeType);
 
                     switch (_xmlReader.NodeType)
@@ -196,14 +196,14 @@ public sealed class ConfigurationReader
         }
         else if (type == typeof(XmlNode))
         {
-            var innerXml = _xmlReader.ReadInnerXml();
-            var document = new XmlDocument();
+            string innerXml = _xmlReader.ReadInnerXml();
+            XmlDocument document = new XmlDocument();
             document.LoadXml(innerXml);
             value = document.DocumentElement;
         }
         else
         {
-            var innerXml = _xmlReader.ReadInnerXml();
+            string innerXml = _xmlReader.ReadInnerXml();
             value = XmlSerialization.Deserialize(innerXml, type);
         }
 
@@ -213,9 +213,8 @@ public sealed class ConfigurationReader
     private void AddError(ErrorType errorType, string message, Exception e)
     {
         string message2 = null;
-        var lineInfo = _xmlReader as IXmlLineInfo;
 
-        if (lineInfo != null && lineInfo.HasLineInfo())
+        if (_xmlReader is IXmlLineInfo lineInfo && lineInfo.HasLineInfo())
         {
             message2 +=
                 "LineNumber: " + lineInfo.LineNumber + Environment.NewLine +
@@ -230,7 +229,7 @@ public sealed class ConfigurationReader
     private void ReadAttribute(ConfigurationNode node)
     {
         ConfigurationAttribute attribute = null;
-        var name = _xmlReader["name"];
+        string name = _xmlReader["name"];
         object value = null;
 
         try
@@ -238,14 +237,14 @@ public sealed class ConfigurationReader
             if (name == null)
                 AddError(ErrorType.Warning, "name attribute not found", null);
 
-            var typeName = _xmlReader["type"];
-            var type = GetType(typeName);
+            string typeName = _xmlReader["type"];
+            Type type = GetType(typeName);
 
             if (type != null)
             {
-                var isNullStr = _xmlReader["isNull"];
-                var isNull = false;
-                var description = _xmlReader["description"];
+                string isNullStr = _xmlReader["isNull"];
+                bool isNull = false;
+                string description = _xmlReader["description"];
 
                 if (isNullStr != null)
                 {
@@ -261,7 +260,7 @@ public sealed class ConfigurationReader
 
                 if (!isNull)
                 {
-                    var valueStr = _xmlReader["value"];
+                    string valueStr = _xmlReader["value"];
 
                     try
                     {
@@ -301,17 +300,17 @@ public sealed class ConfigurationReader
 
     private void Read(ConfigurationNode node, StringCollection fileNames)
     {
-        var name = node.Name;
-        var endOfNode = _xmlReader.IsEmptyElement;
+        string name = node.Name;
+        bool endOfNode = _xmlReader.IsEmptyElement;
 
         if (name != null)
         {
-            var hasNext = _xmlReader.MoveToFirstAttribute();
+            bool hasNext = _xmlReader.MoveToFirstAttribute();
 
             while (hasNext)
             {
-                var attributeName = _xmlReader.Name;
-                var attributeValue = _xmlReader.Value;
+                string attributeName = _xmlReader.Name;
+                string attributeValue = _xmlReader.Value;
 
                 if (attributeName == "name")
                 {
@@ -320,7 +319,7 @@ public sealed class ConfigurationReader
                     node.Description = attributeValue;
                 else
                 {
-                    var attribute = new ConfigurationAttribute(attributeName, attributeValue, null);
+                    ConfigurationAttribute attribute = new ConfigurationAttribute(attributeName, attributeValue, null);
                     node.Attributes.Add(attribute);
                 }
 
@@ -334,7 +333,7 @@ public sealed class ConfigurationReader
             {
                 case XmlNodeType.Element:
                 {
-                    var elementName = _xmlReader.Name;
+                        string elementName = _xmlReader.Name;
 
                     switch (elementName)
                     {
@@ -344,8 +343,8 @@ public sealed class ConfigurationReader
 
                         case ConfigurationElementName.Node:
                         {
-                            var nodeName = _xmlReader.GetAttribute("name");
-                            var childNode = new ConfigurationNode(nodeName);
+                                    string nodeName = _xmlReader.GetAttribute("name");
+                                    ConfigurationNode childNode = new ConfigurationNode(nodeName);
                             node.AddChildNode(childNode);
                             Read(childNode, fileNames);
                         }
@@ -354,14 +353,14 @@ public sealed class ConfigurationReader
 
                         case "include":
                         {
-                            var fileName = _xmlReader.GetAttribute("fileName");
+                                    string fileName = _xmlReader.GetAttribute("fileName");
                             fileName = Environment.ExpandEnvironmentVariables(fileName);
 
-                            var reader2 = new ConfigurationReader();
-                            var includeNode = reader2.Read(fileName, _sectionName, fileNames);
+                                    ConfigurationReader reader2 = new ConfigurationReader();
+                                    ConfigurationNode includeNode = reader2.Read(fileName, _sectionName, fileNames);
                             node.Attributes.Add(includeNode.Attributes);
 
-                            foreach (var childNode in includeNode.ChildNodes)
+                            foreach (ConfigurationNode childNode in includeNode.ChildNodes)
                             {
                                 node.AddChildNode(childNode);
                             }
@@ -376,8 +375,8 @@ public sealed class ConfigurationReader
 
                         default:
                         {
-                            var nodeName = XmlConvert.DecodeName(elementName);
-                            var childNode = new ConfigurationNode(nodeName);
+                                    string nodeName = XmlConvert.DecodeName(elementName);
+                                    ConfigurationNode childNode = new ConfigurationNode(nodeName);
                             node.AddChildNode(childNode);
                             Read(childNode, fileNames);
                         }
@@ -397,14 +396,14 @@ public sealed class ConfigurationReader
 
     private void InitCultureInfo()
     {
-        var cultureInfo = _xmlReader["cultureInfo"];
+        string cultureInfo = _xmlReader["cultureInfo"];
         if (cultureInfo != null)
         {
             try
             {
                 try
                 {
-                    var culture = int.Parse(cultureInfo, CultureInfo.InvariantCulture);
+                    int culture = int.Parse(cultureInfo, CultureInfo.InvariantCulture);
                     _formatProvider = new CultureInfo(culture);
                 }
                 catch
@@ -425,7 +424,7 @@ public sealed class ConfigurationReader
     public ConfigurationNode Read(XmlReader xmlReader, string configFilename, string sectionName, StringCollection fileNames)
     {
         Log.Trace("ConfigurationReader.Read({0},{1})...", configFilename, sectionName);
-        var startTick = Stopwatch.GetTimestamp();
+        long startTick = Stopwatch.GetTimestamp();
         _xmlReader = xmlReader;
         _fileName = configFilename;
         _sectionName = sectionName;
@@ -434,11 +433,11 @@ public sealed class ConfigurationReader
 
         try
         {
-            var found = FindSection(sectionName);
+            bool found = FindSection(sectionName);
 
             if (found)
             {
-                var nodeType = xmlReader.MoveToContent();
+                XmlNodeType nodeType = xmlReader.MoveToContent();
 
                 if (nodeType == XmlNodeType.Element)
                 {
@@ -467,16 +466,16 @@ public sealed class ConfigurationReader
             AddError(ErrorType.Error, null, e);
         }
 
-        var ticks = Stopwatch.GetTimestamp() - startTick;
+        long ticks = Stopwatch.GetTimestamp() - startTick;
         message = $"{configFilename} loaded successfully in {StopwatchTimeSpan.ToString(ticks, 3)}.";
         LogLevel logLevel;
-        var source = _errors.Where(e => e.Type == ErrorType.Error);
+        IEnumerable<Error> source = _errors.Where(e => e.Type == ErrorType.Error);
 
         if (source.Any())
             logLevel = LogLevel.Error;
         else
         {
-            var enumerable = _errors.Where(e => e.Type == ErrorType.Warning);
+            IEnumerable<Error> enumerable = _errors.Where(e => e.Type == ErrorType.Warning);
             logLevel = enumerable.Any() ? LogLevel.Warning : LogLevel.Trace;
         }
 
@@ -495,11 +494,11 @@ public sealed class ConfigurationReader
     {
         ConfigurationNode node = null;
 
-        using (var stream = OpenStream(configFileName))
+        using (Stream stream = OpenStream(configFileName))
         {
             if (stream != null)
             {
-                var xmlTextReader = new XmlTextReader(stream);
+                XmlTextReader xmlTextReader = new XmlTextReader(stream);
                 node = Read(xmlTextReader, configFileName, sectionName, fileNames);
             }
         }
@@ -510,13 +509,13 @@ public sealed class ConfigurationReader
     public ConfigurationNode Read(XmlReader xmlReader)
     {
         _xmlReader = xmlReader;
-        var node = new ConfigurationNode(null);
-        var fileNames = new StringCollection();
+        ConfigurationNode node = new ConfigurationNode(null);
+        StringCollection fileNames = [];
         Read(node, fileNames);
 
         if (node.ChildNodes.Count == 1)
         {
-            var childNode = node.ChildNodes[0];
+            ConfigurationNode childNode = node.ChildNodes[0];
             node.RemoveChildNode(childNode);
             node = childNode;
         }

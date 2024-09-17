@@ -18,16 +18,16 @@ internal sealed class ProcedureCollectionNode(SchemaNode schema) : ITreeNode
 
         try
         {
-            var restrictions = new object[] { schema.Catalog.Name, schema.Name };
-            var dataTable = schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Procedures,
+            object[] restrictions = new object[] { schema.Catalog.Name, schema.Name };
+            System.Data.DataTable? dataTable = schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Procedures,
                 restrictions);
-            var count = dataTable.Rows.Count;
-            var procedureName = dataTable.Columns["PROCEDURE_NAME"];
+            int count = dataTable.Rows.Count;
+            System.Data.DataColumn? procedureName = dataTable.Columns["PROCEDURE_NAME"];
             treeNodes = new ITreeNode[count];
 
-            for (var i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
-                var name = (string)dataTable.Rows[i][procedureName];
+                string name = (string)dataTable.Rows[i][procedureName];
                 treeNodes[i] = new ProcedureNode(name);
             }
         }

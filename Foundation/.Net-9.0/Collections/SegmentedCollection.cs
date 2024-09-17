@@ -15,7 +15,7 @@ public class SegmentedCollection<T> : ICollection<T>
 
     IEnumerator<T> IEnumerable<T>.GetEnumerator()
     {
-        var segment = _first;
+        Segment segment = _first;
 
         while (segment != null)
         {
@@ -25,7 +25,7 @@ public class SegmentedCollection<T> : ICollection<T>
             else
                 count = Count <= _segmentLength ? Count : Count % _segmentLength;
 
-            for (var i = 0; i < count; i++) yield return segment.Items[i];
+            for (int i = 0; i < count; i++) yield return segment.Items[i];
 
             segment = segment.Next;
         }
@@ -33,7 +33,7 @@ public class SegmentedCollection<T> : ICollection<T>
 
     IEnumerator IEnumerable.GetEnumerator()
     {
-        var enumerable = (IEnumerable<T>) this;
+        IEnumerable<T> enumerable = (IEnumerable<T>) this;
         return enumerable.GetEnumerator();
     }
 
@@ -49,11 +49,11 @@ public class SegmentedCollection<T> : ICollection<T>
 
     public void Add(T item)
     {
-        var index = Count % _segmentLength;
+        int index = Count % _segmentLength;
 
         if (index == 0)
         {
-            var newSegment = new Segment
+            Segment newSegment = new Segment
             {
                 Items = new T[_segmentLength]
             };

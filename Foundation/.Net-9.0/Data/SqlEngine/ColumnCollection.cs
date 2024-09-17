@@ -25,7 +25,7 @@ public class ColumnCollection : IReadOnlyList<Column>
     
     public IEnumerator<Column> GetEnumerator()
     {
-        var enumerable = (IEnumerable<Column>)_columns;
+        IEnumerable<Column> enumerable = (IEnumerable<Column>)_columns;
         return enumerable.GetEnumerator();
     }
 
@@ -34,9 +34,9 @@ public class ColumnCollection : IReadOnlyList<Column>
     private Column GetColumn(string columnName)
     {
         Column result = null;
-        var count = 0;
+        int count = 0;
 
-        foreach (var column in _columnsByColumnName[columnName])
+        foreach (Column column in _columnsByColumnName[columnName])
         {
             ++count;
             if (count == 1)

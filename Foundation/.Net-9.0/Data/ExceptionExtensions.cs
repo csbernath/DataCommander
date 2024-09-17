@@ -9,7 +9,7 @@ public static class ExceptionExtensions
 {
     public static string ToLogString(this Exception e)
     {
-        var sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         Append(sb, e);
         return sb.ToString();
     }
@@ -36,8 +36,8 @@ public static class ExceptionExtensions
 
     private static void Append(StringBuilder sb, Exception exception)
     {
-        var current = exception;
-        var first = true;
+        Exception current = exception;
+        bool first = true;
 
         while (current != null)
         {

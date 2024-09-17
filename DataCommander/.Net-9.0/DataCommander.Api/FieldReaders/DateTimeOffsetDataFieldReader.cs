@@ -20,7 +20,7 @@ public sealed class DateTimeOffsetDataFieldReader(
             else
             {
                 value = dataRecord[columnOrdinal];
-                var dateTimeOffset = (DateTimeOffset)value;
+                DateTimeOffset dateTimeOffset = (DateTimeOffset)value;
                 value = new DateTimeOffsetField(dateTimeOffset);
             }
 

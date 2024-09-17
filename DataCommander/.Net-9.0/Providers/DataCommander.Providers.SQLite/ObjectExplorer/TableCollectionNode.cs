@@ -18,7 +18,7 @@ internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
 
     public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var commandText = $@"select	name
+        string commandText = $@"select	name
 from
 (
 	select	name
@@ -29,13 +29,13 @@ from
 ) t
 order by name collate nocase";
 
-        var list = await Db.ExecuteReaderAsync(
+        Foundation.Collections.ReadOnly.ReadOnlySegmentLinkedList<ITreeNode> list = await Db.ExecuteReaderAsync(
             () => ConnectionFactory.CreateConnection(_databaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
             new ExecuteReaderRequest(commandText),
             128,
             dataRecord =>
             {
-                var name = dataRecord.GetString(0);
+                string name = dataRecord.GetString(0);
                 return (ITreeNode)new TableNode(_databaseNode, name);
             },
             cancellationToken);

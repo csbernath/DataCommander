@@ -10,7 +10,7 @@ public static class IListExtensions
     {
         ArgumentNullException.ThrowIfNull(list);
 
-        var readOnlyCollection = list.Count == 0
+        ReadOnlyCollection<T> readOnlyCollection = list.Count == 0
             ? EmptyReadOnlyCollection<T>.Value
             : new ReadOnlyCollection<T>(list);
 

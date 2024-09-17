@@ -10,14 +10,14 @@ public static class FoundationDbColumnFactory
     {
         ArgumentNullException.ThrowIfNull(schemaTableRow);
 
-        var columnName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.ColumnName);
-        var columnOrdinal = (int)schemaTableRow[SchemaTableColumn.ColumnOrdinal];
-        var columnSize = (int)schemaTableRow[SchemaTableColumn.ColumnSize];
+        string columnName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.ColumnName);
+        int columnOrdinal = (int)schemaTableRow[SchemaTableColumn.ColumnOrdinal];
+        int columnSize = (int)schemaTableRow[SchemaTableColumn.ColumnSize];
 
-        var columns = schemaTableRow.Table.Columns;
+        DataColumnCollection columns = schemaTableRow.Table.Columns;
 
         short? numericPrecision = null;
-        var column = columns[SchemaTableColumn.NumericPrecision];
+        DataColumn column = columns[SchemaTableColumn.NumericPrecision];
         if (column != null)
             numericPrecision = schemaTableRow.IsNull(column)
                 ? (short?)null
@@ -30,20 +30,20 @@ public static class FoundationDbColumnFactory
                 ? (short?)null
                 : Convert.ToInt16(schemaTableRow[column]);
 
-        var isUnique = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.IsUnique);
-        var isKey = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.IsKey);
+        bool? isUnique = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.IsUnique);
+        bool? isKey = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.IsKey);
         //BaseServerName
         //BaseCatalogName
-        var baseColumnName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.BaseColumnName);
-        var baseSchemaName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.BaseSchemaName);
-        var baseTableName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.BaseTableName);
+        string baseColumnName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.BaseColumnName);
+        string baseSchemaName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.BaseSchemaName);
+        string baseTableName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.BaseTableName);
 
-        var dataTypeObject = schemaTableRow[SchemaTableColumn.DataType];
-        var dataType = dataTypeObject != DBNull.Value
+        object dataTypeObject = schemaTableRow[SchemaTableColumn.DataType];
+        Type dataType = dataTypeObject != DBNull.Value
             ? (Type)dataTypeObject
             : null;
-        var allowDbNull = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.AllowDBNull);
-        var providerType = schemaTableRow.GetValueField<int>(SchemaTableColumn.ProviderType);
+        bool? allowDbNull = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.AllowDBNull);
+        int providerType = schemaTableRow.GetValueField<int>(SchemaTableColumn.ProviderType);
 
         bool? isAliased = null;
         column = columns[SchemaTableColumn.IsAliased];
@@ -63,11 +63,11 @@ public static class FoundationDbColumnFactory
         //IsAutoIncrement
         //IsRowVersion
         //IsHidden
-        var isLong = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.IsLong);
+        bool? isLong = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.IsLong);
         //IsReadOnly
         //ProviderSpecificDataType
         //DataTypeName XmlSchemaCollectionDatabase XmlSchemaCollectionOwningSchema XmlSchemaCollectionName UdtAssemblyQualifiedName
-        var nonVersionedProviderType = 0;
+        int nonVersionedProviderType = 0;
         column = columns[SchemaTableColumn.NonVersionedProviderType];
         if (column != null)
             nonVersionedProviderType = (int)schemaTableRow[column];

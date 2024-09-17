@@ -15,30 +15,30 @@ internal sealed class SqlDataReaderHelper : IDataReaderHelper
     public SqlDataReaderHelper(IDataReader dataReader)
     {
         _sqlDataReader = (SqlDataReader) dataReader;
-        var schemaTable = dataReader.GetSchemaTable();
+        DataTable? schemaTable = dataReader.GetSchemaTable();
 
         if (schemaTable != null)
         {
-            var rows = schemaTable.Rows;
-            var count = rows.Count;
+            DataRowCollection rows = schemaTable.Rows;
+            int count = rows.Count;
             _dataFieldReaders = new IDataFieldReader[count];
 
-            for (var i = 0; i < count; ++i)
+            for (int i = 0; i < count; ++i)
                 _dataFieldReaders[i] = CreateDataFieldReader(dataReader, FoundationDbColumnFactory.Create(rows[i]));
         }
     }
 
     int IDataReaderHelper.GetValues(object[] values)
     {
-        for (var i = 0; i < _dataFieldReaders.Length; i++) values[i] = _dataFieldReaders[i].Value;
+        for (int i = 0; i < _dataFieldReaders.Length; i++) values[i] = _dataFieldReaders[i].Value;
 
         return _dataFieldReaders.Length;
     }
 
     private static IDataFieldReader CreateDataFieldReader(IDataRecord dataRecord, FoundationDbColumn dataColumnSchema)
     {
-        var columnOrdinal = dataColumnSchema.ColumnOrdinal;
-        var providerType = (SqlDbType) dataColumnSchema.ProviderType;
+        int columnOrdinal = dataColumnSchema.ColumnOrdinal;
+        SqlDbType providerType = (SqlDbType) dataColumnSchema.ProviderType;
         IDataFieldReader dataFieldReader;
 
         switch (providerType)
@@ -67,7 +67,7 @@ internal sealed class SqlDataReaderHelper : IDataReaderHelper
             case SqlDbType.NVarChar:
             case SqlDbType.Text:
             case SqlDbType.NText:
-                var columnSize = dataColumnSchema.ColumnSize;
+                int columnSize = dataColumnSchema.ColumnSize;
 
                 if (columnSize <= SqlServerProvider.ShortStringSize)
                     dataFieldReader = new ShortStringFieldReader(dataRecord, columnOrdinal, providerType);

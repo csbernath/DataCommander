@@ -9,10 +9,10 @@ public static class Parser
         name = result;
         fieldName = result;
 
-        var startIndex = result.IndexOf('(');
+        int startIndex = result.IndexOf('(');
         if (startIndex >= 0 && startIndex < result.Length - 1)
         {
-            var endIndex = result.IndexOf(')', startIndex + 1);
+            int endIndex = result.IndexOf(')', startIndex + 1);
             if (endIndex >= 0)
             {
                 name = result[..startIndex];

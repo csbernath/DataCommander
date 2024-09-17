@@ -67,17 +67,17 @@ internal sealed class CopyResultWriter(
 
     private void InsertItems(IEnumerable<QueueItem> items)
     {
-        var sb = new StringBuilder();
-        foreach (var item in items)
+        StringBuilder sb = new StringBuilder();
+        foreach (QueueItem item in items)
         {
-            var rows = item.Rows;
-            for (var rowIndex = 0; rowIndex < rows.Length; rowIndex++)
+            object[][] rows = item.Rows;
+            for (int rowIndex = 0; rowIndex < rows.Length; rowIndex++)
             {
-                var row = rows[rowIndex];
-                for (var columnIndex = 0; columnIndex < row.Length; columnIndex++)
+                object[] row = rows[rowIndex];
+                for (int columnIndex = 0; columnIndex < row.Length; columnIndex++)
                 {
-                    var sourceValue = row[columnIndex];
-                    var converter = _converters[columnIndex];
+                    object sourceValue = row[columnIndex];
+                    Converter<object, object> converter = _converters[columnIndex];
                     object destinationValue;
 
                     if (converter != null)
@@ -99,7 +99,7 @@ internal sealed class CopyResultWriter(
                         sb.AppendLine();
                     }
 
-                    var commandText = destinationProvider.CommandToString(_insertCommand);
+                    string commandText = destinationProvider.CommandToString(_insertCommand);
                     sb.Append(commandText);
                 }
                 else
@@ -113,11 +113,11 @@ internal sealed class CopyResultWriter(
 
         if (sb.Length > 0)
         {
-            var stopwatch = new Stopwatch();
-            var commandText = sb.ToString();
+            Stopwatch stopwatch = new Stopwatch();
+            string commandText = sb.ToString();
             try
             {
-                var executor = destinationConnection.Connection.CreateCommandExecutor();
+                IDbCommandExecutor executor = destinationConnection.Connection.CreateCommandExecutor();
                 executor.ExecuteNonQuery(new CreateCommandRequest(commandText, null, CommandType.Text, 3600, _insertCommand.Transaction));
             }
             catch (Exception e)
@@ -127,7 +127,7 @@ internal sealed class CopyResultWriter(
             }
         }
 
-        var message =
+        string message =
             $"{_readRowCount},{_insertedRowCount},{_readRowCount - _insertedRowCount},{_waitMilliseconds} (rows read,inserted,queued,wait).";
 
         addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
@@ -137,17 +137,17 @@ internal sealed class CopyResultWriter(
     {
         try
         {
-            using (var methodLog = LogFactory.Instance.GetCurrentMethodLog())
+            using (ILog methodLog = LogFactory.Instance.GetCurrentMethodLog())
             {
                 while (true)
                 {
                     methodLog.Write(LogLevel.Trace, "this.queue.Count: {0}", _queue.Count);
                     if (!_queue.IsEmpty)
                     {
-                        var items = new List<QueueItem>(_queue.Count);
+                        List<QueueItem> items = new List<QueueItem>(_queue.Count);
                         while (true)
                         {
-                            var succeeded = _queue.TryDequeue(out var item);
+                            bool succeeded = _queue.TryDequeue(out QueueItem? item);
                             if (succeeded)
                             {
                                 items.Add(item);
@@ -206,20 +206,20 @@ internal sealed class CopyResultWriter(
         _logResultWriter.WriteRows(rows, rowCount);
         _readRowCount += rowCount;
 
-        var message = $"{_readRowCount},{_insertedRowCount},{_readRowCount - _insertedRowCount} (rows read,inserted,queued).";
+        string message = $"{_readRowCount},{_insertedRowCount},{_readRowCount - _insertedRowCount} (rows read,inserted,queued).";
 
         addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
-        var targetRows = new object[rowCount][];
-        for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
+        object[][] targetRows = new object[rowCount][];
+        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
         {
-            var sourceRow = rows[rowIndex];
-            var columnCount = sourceRow.Length;
-            var targetRow = new object[columnCount];
+            object[] sourceRow = rows[rowIndex];
+            int columnCount = sourceRow.Length;
+            object[] targetRow = new object[columnCount];
             Array.Copy(sourceRow, targetRow, columnCount);
             targetRows[rowIndex] = targetRow;
         }
 
-        var queueItem = new QueueItem
+        QueueItem queueItem = new QueueItem
         {
             Rows = targetRows
         };
@@ -248,7 +248,7 @@ internal sealed class CopyResultWriter(
     void IResultWriter.End()
     {
         _logResultWriter.End();
-        using (var methodLog = LogFactory.Instance.GetCurrentMethodLog())
+        using (ILog methodLog = LogFactory.Instance.GetCurrentMethodLog())
         {
             _writeEnded = true;
             if (_task != null && !_task.IsCompleted)

@@ -10,8 +10,8 @@ public static class ConfigurationNodeName
     {
         ArgumentNullException.ThrowIfNull(type);
 
-        var name = type.FullName;
-        var nodeName = FromTypeDelimitedName(name);
+        string name = type.FullName;
+        string nodeName = FromTypeDelimitedName(name);
         return nodeName;
     }
 
@@ -19,8 +19,8 @@ public static class ConfigurationNodeName
     {
         ArgumentNullException.ThrowIfNull(trace);
 
-        var frame = trace.GetFrame(frameIndex);
-        var method = frame.GetMethod();
+        StackFrame frame = trace.GetFrame(frameIndex);
+        MethodBase method = frame.GetMethod();
         return method;
     }
 
@@ -28,8 +28,8 @@ public static class ConfigurationNodeName
     {
         ArgumentNullException.ThrowIfNull(method);
 
-        var name = method.DeclaringType.FullName + Type.Delimiter + method.Name;
-        var nodeName = FromTypeDelimitedName(name);
+        string name = method.DeclaringType.FullName + Type.Delimiter + method.Name;
+        string nodeName = FromTypeDelimitedName(name);
         return nodeName;
     }
 
@@ -37,8 +37,8 @@ public static class ConfigurationNodeName
     {
         ArgumentNullException.ThrowIfNull(trace);
 
-        var method = GetMethod(trace, frameIndex);
-        var nodeName = FromMethod(method);
+        MethodBase method = GetMethod(trace, frameIndex);
+        string nodeName = FromMethod(method);
         return nodeName;
     }
 
@@ -46,9 +46,9 @@ public static class ConfigurationNodeName
     {
         ArgumentNullException.ThrowIfNull(trace);
 
-        var method = GetMethod(trace, frameIndex);
-        var name = method.DeclaringType.Namespace;
-        var nodeName = FromTypeDelimitedName(name);
+        MethodBase method = GetMethod(trace, frameIndex);
+        string name = method.DeclaringType.Namespace;
+        string nodeName = FromTypeDelimitedName(name);
         return nodeName;
     }
 
@@ -56,9 +56,9 @@ public static class ConfigurationNodeName
     {
         ArgumentNullException.ThrowIfNull(trace);
 
-        var method = GetMethod(trace, frameIndex);
-        var type = method.DeclaringType;
-        var nodeName = FromType(type);
+        MethodBase method = GetMethod(trace, frameIndex);
+        Type type = method.DeclaringType;
+        string nodeName = FromType(type);
         return nodeName;
     }
 
@@ -66,7 +66,7 @@ public static class ConfigurationNodeName
     {
         ArgumentNullException.ThrowIfNull(name);
 
-        var nodeName = name.Replace(Type.Delimiter, ConfigurationNode.Delimiter);
+        string nodeName = name.Replace(Type.Delimiter, ConfigurationNode.Delimiter);
         return nodeName;
     }
 }

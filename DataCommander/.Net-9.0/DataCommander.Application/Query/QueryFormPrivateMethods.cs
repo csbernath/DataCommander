@@ -35,11 +35,11 @@ public sealed partial class QueryForm
     private void CloseResultSetTabPage(TabPage tabPage)
     {
         _resultSetsTabControl.TabPages.Remove(tabPage);
-        var control = tabPage.Controls[0];
+        Control control = tabPage.Controls[0];
         if (control is TabControl tabControl)
         {
-            var tabPages = tabControl.TabPages.Cast<TabPage>().ToList();
-            foreach (var subTabPage in tabPages)
+            System.Collections.Generic.List<TabPage> tabPages = tabControl.TabPages.Cast<TabPage>().ToList();
+            foreach (TabPage? subTabPage in tabPages)
             {
                 tabControl.TabPages.Remove(subTabPage);
                 CloseResultTabPage(subTabPage);
@@ -51,13 +51,13 @@ public sealed partial class QueryForm
 
     private bool SaveTextOnFormClosing()
     {
-        var cancel = false;
-        var length = QueryTextBox.Text.Length;
+        bool cancel = false;
+        int length = QueryTextBox.Text.Length;
         if (length > 0)
         {
-            var text = $"The text in {Text} has been changed.\r\nDo you want to save the changes?";
-            var caption = DataCommanderApplication.Instance.Name;
-            var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+            string text = $"The text in {Text} has been changed.\r\nDo you want to save the changes?";
+            string caption = DataCommanderApplication.Instance.Name;
+            DialogResult result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
             switch (result)
             {
                 case DialogResult.Yes:
@@ -82,12 +82,12 @@ public sealed partial class QueryForm
 
     private bool CancelQueryOnFormClosing()
     {
-        var cancel = false;
+        bool cancel = false;
         if (_dataAdapter != null)
         {
-            var text = "Are you sure you wish to cancel this query?";
-            var caption = DataCommanderApplication.Instance.Name;
-            var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+            string text = "Are you sure you wish to cancel this query?";
+            string caption = DataCommanderApplication.Instance.Name;
+            DialogResult result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
             if (result == DialogResult.Yes)
             {
                 CancelCommandQuery();
@@ -102,10 +102,10 @@ public sealed partial class QueryForm
 
     private bool AskUserToCommitTransactions()
     {
-        var cancel = false;
-        var text = "There are uncommitted transaction(s). Do you wish to commit these transaction(s) before closing the window?";
-        var caption = DataCommanderApplication.Instance.Name;
-        var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+        bool cancel = false;
+        string text = "There are uncommitted transaction(s). Do you wish to commit these transaction(s) before closing the window?";
+        string caption = DataCommanderApplication.Instance.Name;
+        DialogResult result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
         switch (result)
         {
             case DialogResult.Yes:
@@ -122,25 +122,25 @@ public sealed partial class QueryForm
 
     private bool CommitTransactionOnFormClosing()
     {
-        var cancel = false;
+        bool cancel = false;
         if (Connection is { State: ConnectionState.Open })
         {
             try
             {
-                var cancellationTokenSource = new CancellationTokenSource();
-                var cancellationToken = cancellationTokenSource.Token;
-                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
+                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                CancellationToken cancellationToken = cancellationTokenSource.Token;
+                CancelableOperationForm cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
                     "Getting transaction count...", string.Empty, _colorTheme);
-                var transactionCount = cancelableOperationForm.Execute(new Task<int>(() => Connection.GetTransactionCountAsync(cancellationToken).Result));
-                var hasTransactions = transactionCount > 0;
+                int transactionCount = cancelableOperationForm.Execute(new Task<int>(() => Connection.GetTransactionCountAsync(cancellationToken).Result));
+                bool hasTransactions = transactionCount > 0;
                 if (hasTransactions)
                     cancel = AskUserToCommitTransactions();
             }
             catch (Exception exception)
             {
-                var text = exception.ToString();
-                var caption = "Getting transaction count failed. Close window?";
-                var dialogResult = MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                string text = exception.ToString();
+                string caption = "Getting transaction count failed. Close window?";
+                DialogResult dialogResult = MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Error);
                 if (dialogResult == DialogResult.No)
                     cancel = true;
             }
@@ -155,7 +155,7 @@ public sealed partial class QueryForm
 
         if (Connection != null)
         {
-            var dataSource = Connection.DataSource;
+            string dataSource = Connection.DataSource;
             _parentStatusBar.Items[0].Text = $"Closing connection to data source {dataSource}'....";
             Connection.Close();
             _parentStatusBar.Items[0].Text = $"Connection to data source {dataSource} closed.";
@@ -180,7 +180,7 @@ public sealed partial class QueryForm
     {
         try
         {
-            var dataTable = oleDbConnection.GetOleDbSchemaTable(guid, null);
+            DataTable? dataTable = oleDbConnection.GetOleDbSchemaTable(guid, null);
             dataTable.TableName = name;
             dataSet.Tables.Add(dataTable);
         }
@@ -192,9 +192,9 @@ public sealed partial class QueryForm
 
     private void CloseResultSetTabPages()
     {
-        var tabPages = _resultSetsTabControl.TabPages.Cast<TabPage>().ToArray();
+        TabPage[] tabPages = _resultSetsTabControl.TabPages.Cast<TabPage>().ToArray();
 
-        foreach (var tabPage in tabPages)
+        foreach (TabPage? tabPage in tabPages)
             CloseResultSetTabPage(tabPage);
 
         ResultSetCount = 0;
@@ -213,12 +213,12 @@ public sealed partial class QueryForm
 
     private void WriteRows(long rowCount, int scale)
     {
-        var ticks = _stopwatch.ElapsedTicks;
+        long ticks = _stopwatch.ElapsedTicks;
         _sbPanelTimer.Text = StopwatchTimeSpan.ToString(ticks, scale);
-        var text = rowCount + " rows.";
+        string text = rowCount + " rows.";
         if (rowCount > 0)
         {
-            var seconds = (double)ticks / Stopwatch.Frequency;
+            double seconds = (double)ticks / Stopwatch.Frequency;
             text += " (" + Math.Round(rowCount / seconds, 0) + " rows/sec)";
         }
 
@@ -229,15 +229,15 @@ public sealed partial class QueryForm
     {
         if (_dataAdapter != null)
         {
-            var rowCount = _dataAdapter.RowCount;
+            long rowCount = _dataAdapter.RowCount;
             WriteRows(rowCount, 0);
         }
     }
 
     private ContextMenuStrip? GetContextMenu(ITreeNode treeNode)
     {
-        var contextMenu = treeNode.GetContextMenu();
-        var contextMenuStrip = contextMenu != null
+        ContextMenu? contextMenu = treeNode.GetContextMenu();
+        ContextMenuStrip? contextMenuStrip = contextMenu != null
             ? ToContextMenuStrip(contextMenu)
             : null;
         return contextMenuStrip;
@@ -249,7 +249,7 @@ public sealed partial class QueryForm
             .Select(ToToolStripMenuItem)
             .ToArray();
 
-        var contextMenuStrip = new ContextMenuStrip();
+        ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
         contextMenuStrip.Items.AddRange(menuItems);
 
         return contextMenuStrip;
@@ -257,7 +257,7 @@ public sealed partial class QueryForm
 
     private ToolStripMenuItem ToToolStripMenuItem(MenuItem source)
     {
-        var item = new ToolStripMenuItem(source.Text, null, (sender, args) =>
+        ToolStripMenuItem item = new ToolStripMenuItem(source.Text, null, (sender, args) =>
         {
             try
             {
@@ -268,7 +268,7 @@ public sealed partial class QueryForm
                 MessageBox.Show(exception.Message);
             }
         });
-        var dropdownItems = source.DropDownItems
+        ToolStripItem[] dropdownItems = source.DropDownItems
             .Select(ToToolStripMenuItem)
             .Cast<ToolStripItem>()
             .ToArray();
@@ -298,15 +298,15 @@ public sealed partial class QueryForm
 
     private void FindText(string text)
     {
-        var found = false;
-        var control = ActiveControl;
+        bool found = false;
+        Control? control = ActiveControl;
 
         try
         {
             Cursor = Cursors.WaitCursor;
             SetStatusbarPanelText($"Finding {text}...");
-            var options = _findTextForm.RichTextBoxFinds;
-            var comparison = options switch
+            RichTextBoxFinds options = _findTextForm.RichTextBoxFinds;
+            StringComparison comparison = options switch
             {
                 RichTextBoxFinds.None => StringComparison.InvariantCultureIgnoreCase,
                 RichTextBoxFinds.MatchCase => StringComparison.InvariantCulture,
@@ -317,12 +317,12 @@ public sealed partial class QueryForm
 
             if (control is TreeView treeView)
             {
-                var treeNode2 = treeView.SelectedNode.FirstNode;
+                TreeNode? treeNode2 = treeView.SelectedNode.FirstNode;
 
                 if (treeNode2 == null || treeNode2.Tag == null)
                     treeNode2 = treeView.SelectedNode.NextNode;
 
-                var treeNode = treeNode2;
+                TreeNode? treeNode = treeNode2;
 
                 while (treeNode != null)
                 {
@@ -340,39 +340,39 @@ public sealed partial class QueryForm
             }
             else
             {
-                var dataTableEditor = control as DataTableEditor;
+                DataTableEditor? dataTableEditor = control as DataTableEditor;
 
                 if (dataTableEditor == null)
                     dataTableEditor = control.Parent as DataTableEditor;
 
                 if (dataTableEditor != null)
                 {
-                    var dataTable = dataTableEditor.DataTable;
+                    DataTable dataTable = dataTableEditor.DataTable;
 
                     if (dataTable != null)
                     {
                         if (text.StartsWith("RowFilter="))
                         {
-                            var rowFilter = text[5..];
-                            var dataView = dataTable.DefaultView;
+                            string rowFilter = text[5..];
+                            DataView dataView = dataTable.DefaultView;
                             dataView.RowFilter = rowFilter;
-                            var count = dataView.Count;
+                            int count = dataView.Count;
                             found = count > 0;
                             SetStatusbarPanelText($"{count} rows found. RowFilter: {rowFilter}");
                         }
                         else if (text.StartsWith("Sort="))
                         {
-                            var sort = text[5..];
-                            var dataView = dataTable.DefaultView;
+                            string sort = text[5..];
+                            DataView dataView = dataTable.DefaultView;
                             dataView.Sort = sort;
                             SetStatusbarPanelText($"Rows sorted by {sort}.");
                         }
                         else
                         {
-                            var dataGrid = dataTableEditor.DataGrid;
-                            var cell = dataGrid.CurrentCell;
-                            var rowIndex = cell.RowIndex;
-                            var columnIndex = cell.ColumnIndex;
+                            DataGridView dataGrid = dataTableEditor.DataGrid;
+                            DataGridViewCell? cell = dataGrid.CurrentCell;
+                            int rowIndex = cell.RowIndex;
+                            int columnIndex = cell.ColumnIndex;
                             found = QueryFormStaticMethods.FindText(dataTable.DefaultView, matcher, ref rowIndex, ref columnIndex);
 
                             if (found)
@@ -386,15 +386,13 @@ public sealed partial class QueryForm
                 }
                 else
                 {
-                    var richTextBox = control as RichTextBox;
-
-                    if (richTextBox == null)
+                    if (control is not RichTextBox richTextBox)
                     {
                         richTextBox = QueryTextBox.RichTextBox;
                     }
 
-                    var start = richTextBox.SelectionStart + richTextBox.SelectionLength;
-                    var location = richTextBox.Find(text, start, options);
+                    int start = richTextBox.SelectionStart + richTextBox.SelectionLength;
+                    int location = richTextBox.Find(text, start, options);
                     found = location >= 0;
                 }
             }
@@ -407,7 +405,7 @@ public sealed partial class QueryForm
 
         if (!found)
         {
-            var message = $"The specified text was not found.\r\n\r\nText: {text}\r\nControl: {control.Name}";
+            string message = $"The specified text was not found.\r\n\r\nText: {text}\r\nControl: {control.Name}";
             MessageBox.Show(this, message, DataCommanderApplication.Instance.Name);
         }
     }
@@ -420,11 +418,11 @@ public sealed partial class QueryForm
         {
             SetStatusbarPanelText($"Saving file {fileName}...");
             const RichTextBoxStreamType type = RichTextBoxStreamType.UnicodePlainText;
-            var encoding = Encoding.Unicode;
+            Encoding encoding = Encoding.Unicode;
 
-            using (var stream = File.Create(fileName))
+            using (FileStream stream = File.Create(fileName))
             {
-                var preamble = encoding.GetPreamble();
+                byte[] preamble = encoding.GetPreamble();
                 stream.Write(preamble, 0, preamble.Length);
                 QueryTextBox.RichTextBox.SaveFile(stream, type);
             }
@@ -441,7 +439,7 @@ public sealed partial class QueryForm
 
     private void ShowSaveFileDialog()
     {
-        var saveFileDialog = new SaveFileDialog
+        SaveFileDialog saveFileDialog = new SaveFileDialog
         {
             Title = "Save Query",
             Filter = "Query Files (*.sql)|*.sql",
@@ -452,27 +450,27 @@ public sealed partial class QueryForm
 
         if (saveFileDialog.ShowDialog() == DialogResult.OK)
         {
-            var fileName = saveFileDialog.FileName;
+            string fileName = saveFileDialog.FileName;
             Save(fileName);
         }
     }
 
     private GetCompletionResult GetCompletion()
     {
-        var textBox = QueryTextBox.RichTextBox;
-        var text = textBox.Text;
-        var position = textBox.SelectionStart;
-        var cancellationTokenSource = new CancellationTokenSource();
-        var showDialogDelay = TimeSpan.FromSeconds(1);
+        RichTextBox textBox = QueryTextBox.RichTextBox;
+        string text = textBox.Text;
+        int position = textBox.SelectionStart;
+        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        TimeSpan showDialogDelay = TimeSpan.FromSeconds(1);
         const string formText = "Getting completion result...";
         const string textBoxText = "Please wait...";
-        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, showDialogDelay, formText, textBoxText, _colorTheme);
-        var startTimestamp = Stopwatch.GetTimestamp();
-        var response = cancelableOperationForm.Execute(new Task<GetCompletionResult?>(() =>
+        CancelableOperationForm cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, showDialogDelay, formText, textBoxText, _colorTheme);
+        long startTimestamp = Stopwatch.GetTimestamp();
+        GetCompletionResult? response = cancelableOperationForm.Execute(new Task<GetCompletionResult?>(() =>
             Provider.GetCompletion(Connection, _transaction, text, position, cancellationTokenSource.Token).Result));
-        var elapsed = Stopwatch.GetTimestamp() - startTimestamp;
-        var from = response.FromCache ? "cache" : "data source";
-        var count = response.Items != null ? response.Items.Count : 0;
+        long elapsed = Stopwatch.GetTimestamp() - startTimestamp;
+        string from = response.FromCache ? "cache" : "data source";
+        int count = response.Items != null ? response.Items.Count : 0;
         SetStatusbarPanelText($"GetCompletion returned {count} items from {from} in {StopwatchTimeSpan.ToString(elapsed, 3)} seconds.");
         return response;
     }
@@ -512,11 +510,11 @@ public sealed partial class QueryForm
                     }
 
                     DataSet dataSet = null;
-                    var i = 1;
+                    int i = 1;
 
                     do
                     {
-                        var dataTable = Provider.GetSchemaTable(dataReader);
+                        DataTable dataTable = Provider.GetSchemaTable(dataReader);
 
                         if (dataTable != null)
                         {
@@ -554,34 +552,34 @@ public sealed partial class QueryForm
         {
             _sqlStatement = new SqlParser(Query);
             _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
-            var dataSet = new DataSet();
-            using (var dataReader = _command.ExecuteReader())
+            DataSet dataSet = new DataSet();
+            using (DbDataReader dataReader = _command.ExecuteReader())
             {
-                var tableIndex = 0;
+                int tableIndex = 0;
 
                 while (true)
                 {
-                    var schemaTable = Provider.GetSchemaTable(dataReader);
-                    var dataReaderHelper = Provider.CreateDataReaderHelper(dataReader);
-                    var rowIndex = 0;
+                    DataTable schemaTable = Provider.GetSchemaTable(dataReader);
+                    IDataReaderHelper dataReaderHelper = Provider.CreateDataReaderHelper(dataReader);
+                    int rowIndex = 0;
 
                     while (dataReader.Read())
                     {
-                        var values = new object[dataReader.FieldCount];
+                        object[] values = new object[dataReader.FieldCount];
                         dataReaderHelper.GetValues(values);
 
-                        var dataTable = new DataTable($"Table[{tableIndex}].Rows[{rowIndex}]");
+                        DataTable dataTable = new DataTable($"Table[{tableIndex}].Rows[{rowIndex}]");
                         dataTable.Columns.Add(" ", typeof(int));
                         dataTable.Columns.Add("Name", typeof(string));
                         dataTable.Columns.Add("Value");
-                        var count = schemaTable.Rows.Count;
+                        int count = schemaTable.Rows.Count;
 
-                        for (var i = 0; i < count; ++i)
+                        for (int i = 0; i < count; ++i)
                         {
-                            var schemaRow = schemaTable.Rows[i];
-                            var columnName = schemaRow["Name"].ToString();
+                            DataRow schemaRow = schemaTable.Rows[i];
+                            string? columnName = schemaRow["Name"].ToString();
 
-                            var dataRow = dataTable.NewRow();
+                            DataRow dataRow = dataTable.NewRow();
                             dataRow[0] = i + 1;
                             dataRow[1] = columnName;
                             dataRow[2] = values[i];
@@ -629,16 +627,16 @@ public sealed partial class QueryForm
 
     internal void ScriptQueryAsCreateTable()
     {
-        var sqlStatement = new SqlParser(Query);
-        var command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
+        SqlParser sqlStatement = new SqlParser(Query);
+        DbCommand command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
 
-        var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
-        var index = Array.IndexOf(forms, this);
+        Form[] forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
+        int index = Array.IndexOf(forms, this);
         IProvider destinationProvider;
 
         if (index < forms.Length - 1)
         {
-            var nextQueryForm = (QueryForm)forms[index + 1];
+            QueryForm nextQueryForm = (QueryForm)forms[index + 1];
             destinationProvider = nextQueryForm.Provider;
         }
         else
@@ -647,30 +645,30 @@ public sealed partial class QueryForm
         DataTable schemaTable;
         string[] dataTypeNames;
 
-        using (var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
+        using (DbDataReader dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
         {
             schemaTable = dataReader.GetSchemaTable();
             dataTypeNames = new string[dataReader.FieldCount];
 
-            for (var i = 0; i < dataReader.FieldCount; i++)
+            for (int i = 0; i < dataReader.FieldCount; i++)
                 dataTypeNames[i] = dataReader.GetDataTypeName(i);
         }
 
-        var tableName = command.CommandType == CommandType.StoredProcedure ? command.CommandText : sqlStatement.FindTableName();
-        var createTable = new StringBuilder();
+        string? tableName = command.CommandType == CommandType.StoredProcedure ? command.CommandText : sqlStatement.FindTableName();
+        StringBuilder createTable = new StringBuilder();
         createTable.AppendFormat("create table [{0}]\r\n(\r\n", tableName);
-        var stringTable = new StringTable(3);
-        var last = schemaTable.Rows.Count - 1;
+        StringTable stringTable = new StringTable(3);
+        int last = schemaTable.Rows.Count - 1;
 
-        for (var i = 0; i <= last; i++)
+        for (int i = 0; i <= last; i++)
         {
-            var dataRow = schemaTable.Rows[i];
-            var schemaRow = FoundationDbColumnFactory.Create(dataRow);
-            var row = stringTable.NewRow();
-            var typeName = destinationProvider.GetColumnTypeName(Provider, dataRow, dataTypeNames[i]);
+            DataRow dataRow = schemaTable.Rows[i];
+            FoundationDbColumn schemaRow = FoundationDbColumnFactory.Create(dataRow);
+            StringTableRow row = stringTable.NewRow();
+            string typeName = destinationProvider.GetColumnTypeName(Provider, dataRow, dataTypeNames[i]);
             row[1] = schemaRow.ColumnName;
             row[2] = typeName;
-            var allowDbNull = schemaRow.AllowDbNull;
+            bool? allowDbNull = schemaRow.AllowDbNull;
 
             if (allowDbNull == false)
                 row[2] += " not null";
@@ -683,31 +681,31 @@ public sealed partial class QueryForm
 
         createTable.Append(stringTable.ToString(4));
         createTable.Append(')');
-        var commandText = createTable.ToString();
+        string commandText = createTable.ToString();
 
         AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "\r\n" + commandText));
     }
 
     internal void CopyTable()
     {
-        var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
-        var index = Array.IndexOf(forms, this);
+        Form[] forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
+        int index = Array.IndexOf(forms, this);
         if (index < forms.Length - 1)
         {
-            var nextQueryForm = (QueryForm)forms[index + 1];
-            var destinationProvider = nextQueryForm.Provider;
-            var destinationConnection = nextQueryForm.Connection;
-            var sqlStatement = new SqlParser(Query);
+            QueryForm nextQueryForm = (QueryForm)forms[index + 1];
+            IProvider destinationProvider = nextQueryForm.Provider;
+            ConnectionBase? destinationConnection = nextQueryForm.Connection;
+            SqlParser sqlStatement = new SqlParser(Query);
             _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
-            var tableName = _command.CommandType == CommandType.StoredProcedure ? _command.CommandText : sqlStatement.FindTableName();
+            string? tableName = _command.CommandType == CommandType.StoredProcedure ? _command.CommandText : sqlStatement.FindTableName();
 
             if (tableName[0] == '[' && destinationProvider.Identifier == "System.Data.OracleClient")
                 tableName = tableName[1..^1];
 
             IResultWriter resultWriter = new CopyResultWriter(AddInfoMessage, destinationProvider, destinationConnection, tableName,
                 nextQueryForm.InvokeSetTransaction, CancellationToken.None);
-            var maxRecords = int.MaxValue;
-            var rowBlockSize = 10000;
+            int maxRecords = int.MaxValue;
+            int rowBlockSize = 10000;
             AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, "Copying table..."));
             SetStatusbarPanelText("Copying table...");
             SetGui(CommandState.Cancel);

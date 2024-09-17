@@ -29,7 +29,7 @@ order by 1";
 
     private DatabaseNode ReadDatabaseNode(IDataRecord dataRecord)
     {
-        var name = dataRecord.GetString(0);
+        string name = dataRecord.GetString(0);
         return new DatabaseNode(databaseCollectionNode, name, 0);
     }
 

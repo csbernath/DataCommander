@@ -24,11 +24,11 @@ public sealed class ApplicationStartup(
 
     public Task Update()
     {
-        var entryAssembly = Assembly.GetEntryAssembly();
-        var title = GetTitle(entryAssembly);
-        var applicationName = title;
+        Assembly entryAssembly = Assembly.GetEntryAssembly();
+        string title = GetTitle(entryAssembly);
+        string applicationName = title;
 
-        var repository = new DeploymentCommandRepository(serializer);
+        DeploymentCommandRepository repository = new DeploymentCommandRepository(serializer);
 
         DeploymentCommand command;
         try
@@ -37,7 +37,7 @@ public sealed class ApplicationStartup(
         }
         catch
         {
-            var now = UniversalTime.Default.Now;
+            DateTime now = UniversalTime.Default.Now;
             command = new CheckForUpdates(now);
         }
 
@@ -54,10 +54,10 @@ public sealed class ApplicationStartup(
     {
         Directory.CreateDirectory(updaterDirectory);
 
-        var sequence = new Sequence();
-        var previousEventTimestamp = 0;
+        Sequence sequence = new Sequence();
+        int previousEventTimestamp = 0;
 
-        using (var webClient = new WebClient())
+        using (WebClient webClient = new WebClient())
         {
             webClient.DownloadProgressChanged += (sender, args) =>
             {
@@ -68,8 +68,8 @@ public sealed class ApplicationStartup(
                 }
                 else
                 {
-                    var current = Environment.TickCount;
-                    var elapsed = current - previousEventTimestamp;
+                    int current = Environment.TickCount;
+                    int elapsed = current - previousEventTimestamp;
                     if (elapsed >= 1000)
                     {
                         previousEventTimestamp = current;
@@ -90,7 +90,7 @@ public sealed class ApplicationStartup(
     private static async Task<Version> GetRemoteVersion(Uri address)
     {
         string text;
-        using (var webClient = new WebClient())
+        using (WebClient webClient = new WebClient())
             text = await webClient.DownloadStringTaskAsync(address);
 
         return new Version(text);
@@ -98,7 +98,7 @@ public sealed class ApplicationStartup(
 
     private static string GetTitle(Assembly entryAsembly)
     {
-        var title = entryAsembly.GetCustomAttributes().OfType<AssemblyTitleAttribute>().First().Title;
+        string title = entryAsembly.GetCustomAttributes().OfType<AssemblyTitleAttribute>().First().Title;
         return title;
     }
 
@@ -106,24 +106,24 @@ public sealed class ApplicationStartup(
     {
         if (checkForUpdates.When <= UniversalTime.Default.Now)
         {
-            var entryAssembly = Assembly.GetEntryAssembly();
-            var localVersion = entryAssembly.GetName().Version;
+            Assembly entryAssembly = Assembly.GetEntryAssembly();
+            Version localVersion = entryAssembly.GetName().Version;
             eventHandler(new CheckForUpdatesStarted());
-            var remoteVersion = await GetRemoteVersion(remoteVersionUri);
+            Version remoteVersion = await GetRemoteVersion(remoteVersionUri);
             if (localVersion < remoteVersion)
             {
                 eventHandler(new DownloadingNewVersionStarted(remoteVersion));
-                var address1 = new Uri(string.Format(address, (object)remoteVersion));
-                var guid = Guid.NewGuid();
-                var updaterDirectory = Path.Combine(Path.GetTempPath(), guid.ToString());
-                var zipFileName = Path.Combine(updaterDirectory, "Updater.zip");
+                Uri address1 = new Uri(string.Format(address, (object)remoteVersion));
+                Guid guid = Guid.NewGuid();
+                string updaterDirectory = Path.Combine(Path.GetTempPath(), guid.ToString());
+                string zipFileName = Path.Combine(updaterDirectory, "Updater.zip");
                 await DownloadUpdater(address1, updaterDirectory, zipFileName,
                     args => eventHandler(new DownloadProgressChanged(args)));
                 eventHandler(new NewVersionDownloaded());
                 ExtractZip(zipFileName, updaterDirectory);
 
-                var updaterExeFileName = Path.Combine(updaterDirectory, "DataCommander.Updater.exe");
-                var applicationExeFileName = entryAssembly.Location;
+                string updaterExeFileName = Path.Combine(updaterDirectory, "DataCommander.Updater.exe");
+                string applicationExeFileName = entryAssembly.Location;
                 StartUpdater(updaterExeFileName, applicationExeFileName);
                 _updateStarted = true;
             }
@@ -143,19 +143,19 @@ public sealed class ApplicationStartup(
 
     private void ScheduleCheckForUpdates()
     {
-        var entryAssembly = Assembly.GetEntryAssembly();
-        var title = GetTitle(entryAssembly);
-        var applicationName = title;
-        var now = UniversalTime.Default.Now;
-        var tomorrow = now.AddDays(1);
+        Assembly entryAssembly = Assembly.GetEntryAssembly();
+        string title = GetTitle(entryAssembly);
+        string applicationName = title;
+        DateTime now = UniversalTime.Default.Now;
+        DateTime tomorrow = now.AddDays(1);
 
-        var repository = new DeploymentCommandRepository(serializer);
+        DeploymentCommandRepository repository = new DeploymentCommandRepository(serializer);
         repository.Save(applicationName, new CheckForUpdates(tomorrow));
     }
 
     private static void StartUpdater(string updaterExeFileName, string applicationExeFileName)
     {
-        var processStartInfo = new ProcessStartInfo
+        ProcessStartInfo processStartInfo = new ProcessStartInfo
         {
             FileName = updaterExeFileName,
             WorkingDirectory = Path.GetDirectoryName(updaterExeFileName),

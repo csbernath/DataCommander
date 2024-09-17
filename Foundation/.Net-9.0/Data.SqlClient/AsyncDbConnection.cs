@@ -22,8 +22,10 @@ public sealed class AsyncDbConnection : IDbConnection
     {
         _cloneableConnection = cloneableConnection;
         _cloneable = (ICloneable)cloneableConnection;
-        _thread = new WorkerThread(Start);
-        _thread.Name = threadName;
+        _thread = new WorkerThread(Start)
+        {
+            Name = threadName
+        };
         _thread.Start();
     }
 
@@ -54,7 +56,7 @@ public sealed class AsyncDbConnection : IDbConnection
 
     public IDbCommand CreateCommand()
     {
-        var command = _cloneableConnection.CreateCommand();
+        IDbCommand command = _cloneableConnection.CreateCommand();
         return new AsyncDbCommand(this, command);
     }
 
@@ -76,7 +78,7 @@ public sealed class AsyncDbConnection : IDbConnection
 
     internal int ExecuteNonQuery(AsyncDbCommand command)
     {
-        var commandText = ToString(command);
+        string commandText = ToString(command);
 
         lock (_commands)
             _commands.Add(commandText);
@@ -93,10 +95,10 @@ public sealed class AsyncDbConnection : IDbConnection
         switch (command.CommandType)
         {
             case CommandType.StoredProcedure:
-                var sb = new StringBuilder();
+                StringBuilder sb = new StringBuilder();
                 sb.AppendFormat("exec {0}", command.CommandText);
-                var parameters = (SqlParameterCollection)command.Parameters;
-                var parametersString = IDataParameterCollectionExtensions.ToLogString(parameters);
+                SqlParameterCollection parameters = (SqlParameterCollection)command.Parameters;
+                string parametersString = IDataParameterCollectionExtensions.ToLogString(parameters);
 
                 if (parametersString.Length > 0)
                 {
@@ -154,9 +156,9 @@ public sealed class AsyncDbConnection : IDbConnection
                     _commands.Clear();
                 }
 
-                var sb = new StringBuilder();
+                StringBuilder sb = new StringBuilder();
 
-                for (var i = 0; i < commandTextArray.Length; i++)
+                for (int i = 0; i < commandTextArray.Length; i++)
                 {
                     if (i > 0)
                     {
@@ -166,12 +168,12 @@ public sealed class AsyncDbConnection : IDbConnection
                     sb.Append(commandTextArray[i]);
                 }
 
-                var commandText = sb.ToString();
+                string commandText = sb.ToString();
                 Exception exception = null;
 
-                using (var connection = (IDbConnection)_cloneable.Clone())
+                using (IDbConnection connection = (IDbConnection)_cloneable.Clone())
                 {
-                    var command = connection.CreateCommand();
+                    IDbCommand command = connection.CreateCommand();
                     command.CommandText = commandText;
                     command.CommandTimeout = 600;
                     connection.Open();
@@ -188,7 +190,7 @@ public sealed class AsyncDbConnection : IDbConnection
 
                 if (exception != null)
                 {
-                    var message = exception.ToLogString();
+                    string message = exception.ToLogString();
                     Log.Write(LogLevel.Error, message);
                 }
             }

@@ -30,9 +30,9 @@ internal sealed class ViewNode(DatabaseNode database, int id, string? schema, st
     {
         get
         {
-            var name1 = new DatabaseObjectMultipartName(null, database.Name, schema, name);
+            DatabaseObjectMultipartName name1 = new DatabaseObjectMultipartName(null, database.Name, schema, name);
             string text;
-            using (var connection = database.Databases.Server.CreateConnection())
+            using (Microsoft.Data.SqlClient.SqlConnection connection = database.Databases.Server.CreateConnection())
                 text = TableNode.GetSelectStatement(connection, name1);
             return text;
         }
@@ -40,24 +40,24 @@ internal sealed class ViewNode(DatabaseNode database, int id, string? schema, st
 
     public ContextMenu? GetContextMenu()
     {
-        var menuItemScriptObject = new MenuItem("Script View as CREATE to clipboard", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        var items = new[] { menuItemScriptObject }.ToReadOnlyCollection();
-        var contextMenu = new ContextMenu(items);
+        MenuItem menuItemScriptObject = new MenuItem("Script View as CREATE to clipboard", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+        System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> items = new[] { menuItemScriptObject }.ToReadOnlyCollection();
+        ContextMenu contextMenu = new ContextMenu(items);
         return contextMenu;
     }
 
     private void menuItemScriptObject_Click(object sender, EventArgs e)
     {
-        var task = new Task<string>(() => menuItemScriptObject_ClickAsync(sender).Result);
+        Task<string> task = new Task<string>(() => menuItemScriptObject_ClickAsync(sender).Result);
         task.Start();
-        var queryForm = (IQueryForm)sender;
+        IQueryForm queryForm = (IQueryForm)sender;
         queryForm.SetClipboardText(task.Result);
     }
 
     private async Task<string> menuItemScriptObject_ClickAsync(object sender)
     {
         string text;
-        await using (var connection = database.Databases.Server.CreateConnection())
+        await using (Microsoft.Data.SqlClient.SqlConnection connection = database.Databases.Server.CreateConnection())
         {
             await connection.OpenAsync();
             text = await SqlDatabase.GetSysComments(connection, database.Name, schema, name, CancellationToken.None);

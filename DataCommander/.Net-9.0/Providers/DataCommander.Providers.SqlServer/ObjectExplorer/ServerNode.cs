@@ -21,7 +21,7 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
     {
         get
         {
-            using var connection = CreateConnection();
+            using SqlConnection connection = CreateConnection();
             connection.Open();
             return ConnectionNameProvider.GetConnectionName(connection);
         }
@@ -31,10 +31,10 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var node = new DatabaseCollectionNode(this);
-        var securityNode = new SecurityNode(this);
-        var serverObjectCollectionNode = new ServerObjectCollectionNode(this);
-        var jobCollectionNode = new JobCollectionNode(this);
+        DatabaseCollectionNode node = new DatabaseCollectionNode(this);
+        SecurityNode securityNode = new SecurityNode(this);
+        ServerObjectCollectionNode serverObjectCollectionNode = new ServerObjectCollectionNode(this);
+        JobCollectionNode jobCollectionNode = new JobCollectionNode(this);
         return Task.FromResult<IEnumerable<ITreeNode>>([node, securityNode, serverObjectCollectionNode, jobCollectionNode]);
     }
 
@@ -43,7 +43,7 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
 
     public ContextMenu? GetContextMenu()
     {
-        var menuItems = new MenuItem[]
+        System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> menuItems = new MenuItem[]
         {
             new("Properties", Properties_OnClick, EmptyReadOnlyCollection<MenuItem>.Value)
         }.ToReadOnlyCollection();
@@ -52,7 +52,7 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
 
     private void Properties_OnClick(object? sender, EventArgs e)
     {
-        var commandText = @"create table #SVer(ID int,  Name  sysname, Internal_Value int, Value nvarchar(512))
+        string commandText = @"create table #SVer(ID int,  Name  sysname, Internal_Value int, Value nvarchar(512))
 insert #SVer exec master.dbo.xp_msver
 insert #SVer select t.*
 from sys.dm_os_host_info
@@ -141,7 +141,7 @@ convert(sysname, serverproperty(N'collation')) AS [Collation],
 drop table #SVer";
 
 
-        var dataTable = new DataTable();
+        DataTable dataTable = new DataTable();
         dataTable.Columns.Add("Name");
         dataTable.Columns.Add("Value");
         
@@ -149,19 +149,19 @@ drop table #SVer";
         {
             while (dataReader.Read())
             {
-                for (var index = 0; index < dataReader.FieldCount; ++index)
+                for (int index = 0; index < dataReader.FieldCount; ++index)
                 {
-                    var name = dataReader.GetName(index);
-                    var value = dataReader.GetValue(index);
+                    string name = dataReader.GetName(index);
+                    object value = dataReader.GetValue(index);
                     dataTable.Rows.Add([name, value]);
                 }
             }
         });
 
-        var dataSet = new DataSet();
+        DataSet dataSet = new DataSet();
         dataSet.Tables.Add(dataTable);
-        
-        var queryForm = (IQueryForm)sender;
+
+        IQueryForm? queryForm = (IQueryForm)sender;
         queryForm.ShowDataSet(dataSet);
     }
 }

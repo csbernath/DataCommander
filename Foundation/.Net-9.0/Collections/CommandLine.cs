@@ -17,15 +17,15 @@ public sealed class CommandLine
         ArgumentNullException.ThrowIfNull(commandLine);
 
         _arguments = new IndexableCollection<CommandLineArgument>(ListIndex);
-        var dictionary = new Dictionary<string, ICollection<CommandLineArgument>>(StringComparer.InvariantCultureIgnoreCase);
+        Dictionary<string, ICollection<CommandLineArgument>> dictionary = new Dictionary<string, ICollection<CommandLineArgument>>(StringComparer.InvariantCultureIgnoreCase);
         NameIndex = new NonUniqueIndex<string, CommandLineArgument>(
             "nameIndex",
             argument => GetKeyResponse.Create(argument.Name != null, argument.Name),
             dictionary,
             () => []);
         _arguments.Indexes.Add(NameIndex);
-        var stringReader = new StringReader(commandLine);
-        var arguments = Parse(stringReader);
+        StringReader stringReader = new StringReader(commandLine);
+        IEnumerable<CommandLineArgument> arguments = Parse(stringReader);
         _arguments.Add(arguments);
     }
 
@@ -34,12 +34,12 @@ public sealed class CommandLine
 
     private static string ReadString(TextReader textReader)
     {
-        var read = textReader.Read();
-        var c = (char)read;
+        int read = textReader.Read();
+        char c = (char)read;
 
         Assert.IsTrue(c == '"');
 
-        var sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
         while (true)
         {
@@ -53,21 +53,21 @@ public sealed class CommandLine
             sb.Append(c);
         }
 
-        var value = sb.ToString();
+        string value = sb.ToString();
         return value;
     }
 
     private static string ReadName(TextReader textReader)
     {
-        var read = textReader.Read();
-        var c = (char)read;
+        int read = textReader.Read();
+        char c = (char)read;
         Assert.IsTrue(c == '/' || c == '-');
 
-        var sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
         while (true)
         {
-            var peek = textReader.Peek();
+            int peek = textReader.Peek();
 
             if (peek == -1) break;
 
@@ -79,23 +79,23 @@ public sealed class CommandLine
             textReader.Read();
         }
 
-        var name = sb.Length > 0 ? sb.ToString() : null;
+        string name = sb.Length > 0 ? sb.ToString() : null;
 
         return name;
     }
 
     private static string ReadValue(TextReader textReader)
     {
-        var sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
         while (true)
         {
-            var peek = textReader.Peek();
+            int peek = textReader.Peek();
 
             if (peek == -1)
                 break;
 
-            var c = (char)peek;
+            char c = (char)peek;
 
             if (char.IsWhiteSpace(c))
                 break;
@@ -105,19 +105,19 @@ public sealed class CommandLine
             textReader.Read();
         }
 
-        var value = sb.ToString();
+        string value = sb.ToString();
         return value;
     }
 
     private static Tuple<string, string> ReadNameValue(TextReader textReader)
     {
-        var name = ReadName(textReader);
+        string name = ReadName(textReader);
         string value;
-        var peek = textReader.Peek();
+        int peek = textReader.Peek();
 
         if (peek >= 0)
         {
-            var c = (char)peek;
+            char c = (char)peek;
 
             if (c == ':' || c == '=')
             {
@@ -138,27 +138,27 @@ public sealed class CommandLine
 
     private static IEnumerable<CommandLineArgument> Parse(TextReader textReader)
     {
-        var index = 0;
+        int index = 0;
 
         while (true)
         {
-            var peek = textReader.Peek();
+            int peek = textReader.Peek();
 
             if (peek == -1) break;
 
-            var c = (char)peek;
+            char c = (char)peek;
 
             if (c == '"')
             {
-                var value = ReadString(textReader);
-                var argument = new CommandLineArgument(index, null, value);
+                string value = ReadString(textReader);
+                CommandLineArgument argument = new CommandLineArgument(index, null, value);
                 index++;
                 yield return argument;
             }
             else if (c == '/' || c == '-')
             {
-                var nameValue = ReadNameValue(textReader);
-                var argument = new CommandLineArgument(index, nameValue.Item1, nameValue.Item2);
+                Tuple<string, string> nameValue = ReadNameValue(textReader);
+                CommandLineArgument argument = new CommandLineArgument(index, nameValue.Item1, nameValue.Item2);
                 index++;
                 yield return argument;
             }
@@ -168,8 +168,8 @@ public sealed class CommandLine
             }
             else
             {
-                var value = ReadValue(textReader);
-                var argument = new CommandLineArgument(index, null, value);
+                string value = ReadValue(textReader);
+                CommandLineArgument argument = new CommandLineArgument(index, null, value);
                 index++;
                 yield return argument;
             }

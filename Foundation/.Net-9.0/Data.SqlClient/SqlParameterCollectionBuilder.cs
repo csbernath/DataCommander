@@ -17,79 +17,79 @@ public class SqlParameterCollectionBuilder
 
     public void Add(string parameterName, object value)
     {
-        var parameter = new SqlParameter(parameterName, value);
+        SqlParameter parameter = new SqlParameter(parameterName, value);
         Add(parameter);
     }
 
     public void AddNullableBit(string parameterName, bool? value)
     {
-        var parameter = SqlParameterFactory.CreateNullableBit(parameterName, value);
+        SqlParameter parameter = SqlParameterFactory.CreateNullableBit(parameterName, value);
         Add(parameter);
     }
 
     public void AddNullableDate(string parameterName, DateTime? value)
     {
-        var parameter = SqlParameterFactory.CreateNullableDate(parameterName, value);
+        SqlParameter parameter = SqlParameterFactory.CreateNullableDate(parameterName, value);
         Add(parameter);
     }
 
     public void AddNullableDateTime(string parameterName, DateTime? value)
     {
-        var parameter = SqlParameterFactory.CreateNullableDateTime(parameterName, value);
+        SqlParameter parameter = SqlParameterFactory.CreateNullableDateTime(parameterName, value);
         Add(parameter);
     }
 
     public void AddNullableGuid(string parameterName, Guid? value)
     {
-        var parameter = SqlParameterFactory.CreateNullableGuid(parameterName, value);
+        SqlParameter parameter = SqlParameterFactory.CreateNullableGuid(parameterName, value);
         Add(parameter);
     }
 
     public void AddNullableInt(string parameterName, int? value)
     {
-        var parameter = SqlParameterFactory.CreateNullableInt(parameterName, value);
+        SqlParameter parameter = SqlParameterFactory.CreateNullableInt(parameterName, value);
         Add(parameter);
     }
 
     public void Add(string parameterName, SqlDbType sqlDbType, object value)
     {
-        var parameter = SqlParameterFactory.Create(parameterName, sqlDbType, value);
+        SqlParameter parameter = SqlParameterFactory.Create(parameterName, sqlDbType, value);
         Add(parameter);
     }
 
     public void AddChar(string parameterName, int size, string value)
     {
-        var parameter = SqlParameterFactory.CreateChar(parameterName, size, value);
+        SqlParameter parameter = SqlParameterFactory.CreateChar(parameterName, size, value);
         Add(parameter);
     }
 
     public void AddDate(string parameterName, DateTime value)
     {
-        var parameter = SqlParameterFactory.CreateDate(parameterName, value);
+        SqlParameter parameter = SqlParameterFactory.CreateDate(parameterName, value);
         Add(parameter);
     }
 
     public void AddNVarChar(string parameterName, int size, string value)
     {
-        var parameter = SqlParameterFactory.CreateNVarChar(parameterName, size, value);
+        SqlParameter parameter = SqlParameterFactory.CreateNVarChar(parameterName, size, value);
         Add(parameter);
     }
 
     public void AddStructured(string parameterName, string typeName, IReadOnlyCollection<SqlDataRecord> sqlDataRecords)
     {
-        var parameter = SqlParameterFactory.CreateStructured(parameterName, typeName, sqlDataRecords);
+        SqlParameter parameter = SqlParameterFactory.CreateStructured(parameterName, typeName, sqlDataRecords);
         Add(parameter);
     }
 
     public void AddVarChar(string parameterName, int size, string value)
     {
-        var parameter = SqlParameterFactory.CreateVarChar(parameterName, size, value);
+        SqlParameter parameter = SqlParameterFactory.CreateVarChar(parameterName, size, value);
         Add(parameter);
     }
 
     public void AddXml(string parameterName, string value)
     {
-        var parameter = SqlParameterFactory.CreateXml(parameterName, value);
+        SqlParameter parameter = SqlParameterFactory.CreateXml(parameterName, value);
         Add(parameter);
     }
 

@@ -8,11 +8,11 @@ internal sealed class IdentifierParser(TextReader textReader)
 {
     public IEnumerable<string> Parse()
     {
-        var peekChar = default(char);
+        char peekChar = default(char);
 
         while (true)
         {
-            var peek = textReader.Peek();
+            int peek = textReader.Peek();
 
             if (peek == -1)
                 break;
@@ -33,16 +33,16 @@ internal sealed class IdentifierParser(TextReader textReader)
     private string ReadQuotedIdentifier()
     {
         textReader.Read();
-        var identifier = new StringBuilder();
+        StringBuilder identifier = new StringBuilder();
 
         while (true)
         {
-            var peek = textReader.Peek();
+            int peek = textReader.Peek();
 
             if (peek == -1)
                 break;
 
-            var peekChar = (char) peek;
+            char peekChar = (char) peek;
 
             if (peekChar == ']')
             {
@@ -59,16 +59,16 @@ internal sealed class IdentifierParser(TextReader textReader)
 
     private string ReadUnquotedIdentifier()
     {
-        var identifier = new StringBuilder();
+        StringBuilder identifier = new StringBuilder();
 
         while (true)
         {
-            var peek = textReader.Peek();
+            int peek = textReader.Peek();
 
             if (peek == -1)
                 break;
 
-            var peekChar = (char) peek;
+            char peekChar = (char) peek;
 
             if (peekChar == '.')
             {

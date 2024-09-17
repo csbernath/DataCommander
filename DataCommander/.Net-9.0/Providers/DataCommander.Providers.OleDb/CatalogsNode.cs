@@ -18,14 +18,14 @@ internal class CatalogsNode(OleDbConnection connection) : ITreeNode
 
         try
         {
-            var dataTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Catalogs, null);
-            var count = dataTable.Rows.Count;
-            var nameColumn = dataTable.Columns["CATALOG_NAME"];
+            System.Data.DataTable? dataTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Catalogs, null);
+            int count = dataTable.Rows.Count;
+            System.Data.DataColumn? nameColumn = dataTable.Columns["CATALOG_NAME"];
             treeNodes = new ITreeNode[count];
 
-            for (var i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
-                var name = (string)dataTable.Rows[i][nameColumn];
+                string name = (string)dataTable.Rows[i][nameColumn];
                 treeNodes[i] = new CatalogNode(connection, name);
             }
         }

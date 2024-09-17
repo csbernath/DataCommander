@@ -7,7 +7,7 @@ internal static class SqlObjectTypesExtensions
 {
     public static List<string> ToTableTypes(this SqlObjectTypes sqlObjectTypes)
     {
-        var list = new List<string>();
+        List<string> list = [];
 
         if (sqlObjectTypes.HasFlag(SqlObjectTypes.Table))
         {
@@ -31,7 +31,7 @@ internal static class SqlObjectTypesExtensions
 
     public static List<string> ToObjectTypes(this SqlObjectTypes sqlObjectTypes)
     {
-        var list = new List<string>();
+        List<string> list = [];
 
         if (sqlObjectTypes.HasFlag(SqlObjectTypes.Table))
         {

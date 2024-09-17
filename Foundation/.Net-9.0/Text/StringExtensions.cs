@@ -9,16 +9,16 @@ public static class StringExtensions
 {
     public static ReadOnlyCollection<Line> ToLines(this string text, string indentation)
     {
-        var lines = new List<Line>();
-        using (var stringReader = new StringReader(text))
+        List<Line> lines = [];
+        using (StringReader stringReader = new StringReader(text))
         {
             while (true)
             {
                 if (stringReader.Peek() == -1)
                     break;
 
-                var lineString = stringReader.ReadLine();
-                var line = lineString!.ToLine(indentation);
+                string? lineString = stringReader.ReadLine();
+                Line line = lineString!.ToLine(indentation);
                 lines.Add(line);
             }
         }
@@ -28,8 +28,8 @@ public static class StringExtensions
 
     private static Line ToLine(this string lineString, string indentation)
     {
-        var text = lineString;
-        var indentationCount = 0;
+        string text = lineString;
+        int indentationCount = 0;
 
         while (true)
         {

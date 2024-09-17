@@ -19,7 +19,7 @@ public static class LogExtensions
     public static void Error(this ILog log, string format, params object[] args)
     {
         ArgumentNullException.ThrowIfNull(log, nameof(log));
-        var message = string.Format(format, args);
+        string message = string.Format(format, args);
         log.Error(message);
     }
 
@@ -32,7 +32,7 @@ public static class LogExtensions
     public static void Trace(this ILog log, string format, params object[] args)
     {
         ArgumentNullException.ThrowIfNull(log, nameof(log));
-        var message = string.Format(format, args);
+        string message = string.Format(format, args);
         log.Trace(message);
     }
 
@@ -41,7 +41,7 @@ public static class LogExtensions
         ArgumentNullException.ThrowIfNull(log, nameof(log));
         ArgumentNullException.ThrowIfNull(callerInformation, nameof(callerInformation));
 
-        var messageWithCallerInformation =
+        string messageWithCallerInformation =
             $"CallerInformation: {callerInformation.CallerMemberName},{callerInformation.CallerFilePath},{callerInformation.CallerLineNumber}\r\n{message}";
 
         log.Trace(messageWithCallerInformation);
@@ -51,14 +51,14 @@ public static class LogExtensions
     {
         ArgumentNullException.ThrowIfNull(log, nameof(log));
         ArgumentNullException.ThrowIfNull(callerInformation, nameof(callerInformation));
-        var message = string.Format(format, args);
+        string message = string.Format(format, args);
         log.Trace(callerInformation, message);
     }
 
     public static void Write(this ILog log, LogLevel logLevel, string format, params object[] args)
     {
         ArgumentNullException.ThrowIfNull(log, nameof(log));
-        var message = string.Format(format, args);
+        string message = string.Format(format, args);
         log.Write(logLevel, message);
     }
 }

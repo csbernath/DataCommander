@@ -19,28 +19,28 @@ internal sealed class TriggerNode(DatabaseNode databaseNode, int id, string? nam
 
     public ContextMenu? GetContextMenu()
     {
-        var menuItemScriptObject = new MenuItem("Script Object", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        var items = new[] { menuItemScriptObject }.ToReadOnlyCollection();
-        var contextMenu = new ContextMenu(items);
+        MenuItem menuItemScriptObject = new MenuItem("Script Object", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+        System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> items = new[] { menuItemScriptObject }.ToReadOnlyCollection();
+        ContextMenu contextMenu = new ContextMenu(items);
         return contextMenu;
     }
 
     private void menuItemScriptObject_Click(object sender, EventArgs e)
     {
-        var cb = new SqlCommandBuilder();
-        var databaseName = cb.QuoteIdentifier(databaseNode.Name);
-        var commandText = $@"select m.definition
+        SqlCommandBuilder cb = new SqlCommandBuilder();
+        string databaseName = cb.QuoteIdentifier(databaseNode.Name);
+        string commandText = $@"select m.definition
 from {databaseName}.sys.sql_modules m (nolock)
 where m.object_id = {id}";
         string definition;
-        using (var connection = databaseNode.Databases.Server.CreateConnection())
+        using (SqlConnection connection = databaseNode.Databases.Server.CreateConnection())
         {
             connection.Open();
-            var executor = connection.CreateCommandExecutor();
+            IDbCommandExecutor executor = connection.CreateCommandExecutor();
             definition = (string)executor.ExecuteScalar(new CreateCommandRequest(commandText));
         }
 
-        var queryForm = (IQueryForm)sender;
+        IQueryForm queryForm = (IQueryForm)sender;
         queryForm.ShowText(definition);
     }
 }

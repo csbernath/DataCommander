@@ -154,7 +154,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// <exception cref="T:System.InvalidOperationException">This results in an invalid XML document.</exception>
     public override void WriteEndElement()
     {
-        var stackItem = _stack.Pop();
+        StackItem stackItem = _stack.Pop();
 
         if (stackItem.HasChildNodes)
         {
@@ -302,7 +302,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// <param name="ns"></param>
     public override void WriteStartAttribute(string prefix, string localName, string ns)
     {
-        var stackItem = _stack.Peek();
+        StackItem stackItem = _stack.Peek();
         stackItem.HasAttributes = true;
 
         _textWriter.WriteLine();
@@ -340,7 +340,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// <exception cref="T:System.InvalidOperationException">The writer is closed.</exception>
     public override void WriteStartElement(string prefix, string localName, string ns)
     {
-        var parent = _stack.Count > 0 ? _stack.Peek() : null;
+        StackItem parent = _stack.Count > 0 ? _stack.Peek() : null;
 
         if (parent != null)
         {
@@ -361,7 +361,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
         _textWriter.Write('<');
         _textWriter.Write(localName);
 
-        var stackItem = new StackItem(localName);
+        StackItem stackItem = new StackItem(localName);
         _stack.Push(stackItem);
     }
 
@@ -373,8 +373,8 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
 
     private static string Encode(char c)
     {
-        var charCode = (ushort)c;
-        var encoded = "&#x" + charCode.ToString("x", CultureInfo.InvariantCulture) + ';';
+        ushort charCode = (ushort)c;
+        string encoded = "&#x" + charCode.ToString("x", CultureInfo.InvariantCulture) + ';';
         return encoded;
     }
 
@@ -387,16 +387,16 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     {
         _textWriter.Write('"');
 
-        for (var i = 0; i < text.Length; i++)
+        for (int i = 0; i < text.Length; i++)
         {
-            var c = text[i];
+            char c = text[i];
 
             switch (c)
             {
                 case '"':
                 case '\r':
                 case '\n':
-                    var encoded = Encode(c);
+                    string encoded = Encode(c);
                     _textWriter.Write(encoded);
                     break;
 

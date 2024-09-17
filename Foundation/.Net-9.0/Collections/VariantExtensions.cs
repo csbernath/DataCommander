@@ -14,17 +14,17 @@ public static class VariantExtensions
         switch (variant.Type)
         {
             case 0:
-                var value1 = (T1) variant.Value;
+                T1 value1 = (T1) variant.Value;
                 action1(value1);
                 break;
 
             case 1:
-                var value2 = (T2) variant.Value;
+                T2 value2 = (T2) variant.Value;
                 action2(value2);
                 break;
 
             case 2:
-                var value3 = (T3) variant.Value;
+                T3 value3 = (T3) variant.Value;
                 action3(value3);
                 break;
         }
@@ -33,22 +33,22 @@ public static class VariantExtensions
     public static TResult Function<T0, T1, T2, TResult>(this Variant<T0, T1, T2> variant, Func<T0, TResult> function0, Func<T1, TResult> function1,
         Func<T2, TResult> function2)
     {
-        var result = default(TResult);
+        TResult result = default(TResult);
 
         switch (variant.Type)
         {
             case 0:
-                var value0 = (T0) variant.Value;
+                T0 value0 = (T0) variant.Value;
                 result = function0(value0);
                 break;
 
             case 1:
-                var value1 = (T1) variant.Value;
+                T1 value1 = (T1) variant.Value;
                 result = function1(value1);
                 break;
 
             case 2:
-                var value2 = (T2) variant.Value;
+                T2 value2 = (T2) variant.Value;
                 result = function2(value2);
                 break;
         }

@@ -25,14 +25,14 @@ internal sealed class DatabaseCollectionNode : ITreeNode
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var list = new List<ITreeNode>
-        {
+        List<ITreeNode> list =
+        [
             new SystemDatabaseCollectionNode(this),
             new DatabaseSnapshotCollectionNode(this)
-        };
+        ];
 
-        var commandText = CreateCommandText();
-        var databaseNodes = await Db.ExecuteReaderAsync(
+        string commandText = CreateCommandText();
+        Foundation.Collections.ReadOnly.ReadOnlySegmentLinkedList<DatabaseNode> databaseNodes = await Db.ExecuteReaderAsync(
             Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
@@ -57,8 +57,8 @@ order by d.name";
 
     private DatabaseNode ReadRecord(IDataRecord dataRecord)
     {
-        var name = dataRecord.GetString(0);
-        var state = dataRecord.GetByte(1);
+        string name = dataRecord.GetString(0);
+        byte state = dataRecord.GetByte(1);
         return new DatabaseNode(this, name, state);
     }
 

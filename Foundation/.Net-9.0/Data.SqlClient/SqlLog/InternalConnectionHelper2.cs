@@ -17,16 +17,16 @@ internal sealed class InternalConnectionHelper2 : IInternalConnectionHelper
 
     object IInternalConnectionHelper.GetInternalConnection(IDbConnection connection)
     {
-        var internalConnection = InternalConnectionField.GetValue(connection);
+        object internalConnection = InternalConnectionField.GetValue(connection);
         return internalConnection;
     }
 
     bool IInternalConnectionHelper.IsOpen(object internalConnection)
     {
-        var type = internalConnection.GetType();
-        var isOpenField = type.GetField("_fConnectionOpen", BindingFlags.Instance | BindingFlags.NonPublic);
-        var value = isOpenField.GetValue(internalConnection);
-        var isOpen = (bool)value;
+        System.Type type = internalConnection.GetType();
+        FieldInfo isOpenField = type.GetField("_fConnectionOpen", BindingFlags.Instance | BindingFlags.NonPublic);
+        object value = isOpenField.GetValue(internalConnection);
+        bool isOpen = (bool)value;
         return isOpen;
     }
 }

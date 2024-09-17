@@ -15,8 +15,8 @@ public static class ConfigurationWriter
 
         if (node.HasName)
         {
-            var nodeName = node.Name;
-            var encodedName = XmlConvert.EncodeName(nodeName);
+            string nodeName = node.Name;
+            string encodedName = XmlConvert.EncodeName(nodeName);
 
             if (nodeName == encodedName)
             {
@@ -42,31 +42,31 @@ public static class ConfigurationWriter
 
             Write(xmlWriter, node.Attributes);
 
-            foreach (var childNode in node.ChildNodes)
+            foreach (ConfigurationNode childNode in node.ChildNodes)
                 WriteNode(xmlWriter, childNode);
         }
     }
 
     public static void Write(XmlWriter xmlWriter, ConfigurationAttributeCollection attributes)
     {
-        foreach (var attribute in attributes)
+        foreach (ConfigurationAttribute attribute in attributes)
         {
             using (xmlWriter.WriteElement(ConfigurationElementName.Attribute))
             {
                 xmlWriter.WriteAttributeString("name", attribute.Name);
-                var value = attribute.Value;
+                object value = attribute.Value;
 
                 if (value != null)
                 {
-                    var type = value.GetType();
+                    Type type = value.GetType();
 
                     if (type != typeof(string))
                     {
-                        var typeName = TypeNameCollection.GetTypeName(type);
+                        string typeName = TypeNameCollection.GetTypeName(type);
                         xmlWriter.WriteAttributeString("type", typeName);
                     }
 
-                    var typeCode = Type.GetTypeCode(type);
+                    TypeCode typeCode = Type.GetTypeCode(type);
                     string strValue;
 
                     switch (typeCode)
@@ -74,15 +74,15 @@ public static class ConfigurationWriter
                         case TypeCode.Object:
                             if (type == typeof(TimeSpan))
                             {
-                                var timeSpan = (TimeSpan) value;
+                                TimeSpan timeSpan = (TimeSpan) value;
                                 strValue = timeSpan.ToString();
                                 xmlWriter.WriteAttributeString("value", strValue);
                             }
                             else if (type.IsArray)
                             {
-                                var array = (Array) value;
+                                Array array = (Array) value;
 
-                                for (var j = 0; j < array.Length; j++)
+                                for (int j = 0; j < array.Length; j++)
                                 {
                                     using (xmlWriter.WriteElement("a"))
                                     {
@@ -94,7 +94,7 @@ public static class ConfigurationWriter
                             }
                             else
                             {
-                                var xmlSerializer = new XmlSerializer(type);
+                                XmlSerializer xmlSerializer = new XmlSerializer(type);
                                 xmlSerializer.Serialize(xmlWriter, value);
                             }
 

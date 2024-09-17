@@ -11,7 +11,7 @@ public sealed class SqlCommandExecutor(Func<SqlConnection> createConnection) : I
 {
     public void Execute(Action<IDbConnection> execute)
     {
-        using (var connection = createConnection())
+        using (SqlConnection connection = createConnection())
         {
             connection.Open();
             execute(connection);
@@ -20,7 +20,7 @@ public sealed class SqlCommandExecutor(Func<SqlConnection> createConnection) : I
 
     public async Task ExecuteAsync(Func<DbConnection, CancellationToken, Task> execute, CancellationToken cancellationToken)
     {
-        await using (var connection = createConnection())
+        await using (SqlConnection connection = createConnection())
         {
             await connection.OpenAsync(cancellationToken);
             await execute(connection, cancellationToken);

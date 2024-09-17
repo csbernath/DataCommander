@@ -18,13 +18,13 @@ public static class IEnumeratorExtensions
         ArgumentNullException.ThrowIfNull(enumerator);
         Assert.IsInRange(count >= 0);
 
-        var list = new List<T>(count);
+        List<T> list = new List<T>(count);
 
-        for (var i = 0; i < count; ++i)
+        for (int i = 0; i < count; ++i)
         {
             if (enumerator.MoveNext())
             {
-                var item = enumerator.Current;
+                T item = enumerator.Current;
                 list.Add(item);
             }
             else

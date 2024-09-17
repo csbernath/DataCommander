@@ -36,7 +36,7 @@ public struct PInt16 : INullable
 
     public static bool operator ==(PInt16 x, PInt16 y)
     {
-        var isEqual = x.ValueType == y.ValueType;
+        bool isEqual = x.ValueType == y.ValueType;
 
         if (isEqual)
             if (x.ValueType == PValueType.Value)
@@ -49,13 +49,13 @@ public struct PInt16 : INullable
 
     public static PInt16 Parse(string s, PValueType type)
     {
-        var sp = string.IsNullOrEmpty(s) ? new PInt16(type) : SqlInt16.Parse(s);
+        PInt16 sp = string.IsNullOrEmpty(s) ? new PInt16(type) : SqlInt16.Parse(s);
         return sp;
     }
 
     public override readonly bool Equals(object y)
     {
-        var equals = y is PInt16;
+        bool equals = y is PInt16;
 
         if (equals)
             equals = this == (PInt16)y;
@@ -65,7 +65,7 @@ public struct PInt16 : INullable
 
     public override int GetHashCode()
     {
-        var hashCode = _sql.GetHashCode();
+        int hashCode = _sql.GetHashCode();
         return hashCode;
     }
 

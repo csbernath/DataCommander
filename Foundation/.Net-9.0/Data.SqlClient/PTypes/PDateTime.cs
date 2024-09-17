@@ -47,7 +47,7 @@ public struct PDateTime : INullable
 
     public static bool operator ==(PDateTime x, PDateTime y)
     {
-        var isEqual = x.ValueType == y.ValueType;
+        bool isEqual = x.ValueType == y.ValueType;
         if (isEqual)
         {
             if (x.ValueType == PValueType.Value)
@@ -75,7 +75,7 @@ public struct PDateTime : INullable
 
     public override readonly bool Equals(object y)
     {
-        var equals = y is PDateTime;
+        bool equals = y is PDateTime;
         if (equals)
             equals = this == (PDateTime)y;
 

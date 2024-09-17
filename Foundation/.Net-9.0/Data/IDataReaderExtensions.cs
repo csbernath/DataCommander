@@ -12,10 +12,10 @@ public static class IDataReaderExtensions
 {
     public static ReadOnlySegmentLinkedList<T> ReadResult<T>(this IDataReader dataReader, int segmentLength, Func<IDataRecord, T> readRecord)
     {
-        var segmentLinkedListBuilder = new SegmentLinkedListBuilder<T>(segmentLength);
+        SegmentLinkedListBuilder<T> segmentLinkedListBuilder = new SegmentLinkedListBuilder<T>(segmentLength);
         while (dataReader.Read())
         {
-            var record = readRecord(dataReader);
+            T record = readRecord(dataReader);
             segmentLinkedListBuilder.Add(record);
         }
 
@@ -24,17 +24,17 @@ public static class IDataReaderExtensions
 
     public static ReadOnlySegmentLinkedList<T> ReadNextResult<T>(this IDataReader dataReader, int segmentLength, Func<IDataRecord, T> readRecord)
     {
-        var nextResult = dataReader.NextResult();
+        bool nextResult = dataReader.NextResult();
         Assert.IsTrue(nextResult);
         return dataReader.ReadResult(segmentLength, readRecord);
     }
 
     public static T ReadScalar<T>(this IDataReader dataReader, Func<IDataRecord, T> readScalar)
     {
-        var read = dataReader.Read();
+        bool read = dataReader.Read();
         Assert.IsTrue(read);
 
-        var scalar = readScalar(dataReader);
+        T scalar = readScalar(dataReader);
 
         read = dataReader.Read();
         Assert.IsTrue(!read);
@@ -44,10 +44,10 @@ public static class IDataReaderExtensions
 
     public static T ReadNextScalar<T>(this IDataReader dataReader, Func<IDataRecord, T> readScalar)
     {
-        var nextResult = dataReader.NextResult();
+        bool nextResult = dataReader.NextResult();
         Assert.IsTrue(nextResult);
 
-        var scalar = dataReader.ReadScalar(readScalar);
+        T scalar = dataReader.ReadScalar(readScalar);
         return scalar;
     }
 
@@ -56,18 +56,18 @@ public static class IDataReaderExtensions
         ArgumentNullException.ThrowIfNull(dataReader);
         ArgumentNullException.ThrowIfNull(dataSet);
 
-        var rowCount = 0;
+        int rowCount = 0;
 
         while (true)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var table = new DataTable
+            DataTable table = new DataTable
             {
                 Locale = CultureInfo.InvariantCulture
             };
 
-            var count = dataReader.Fill(table, cancellationToken);
+            int count = dataReader.Fill(table, cancellationToken);
             rowCount += count;
             dataSet.Tables.Add(table);
 
@@ -83,25 +83,25 @@ public static class IDataReaderExtensions
         ArgumentNullException.ThrowIfNull(dataReader);
         ArgumentNullException.ThrowIfNull(dataTable);
 
-        var schemaTable = dataReader.GetSchemaTable();
+        DataTable schemaTable = dataReader.GetSchemaTable();
 
         if (schemaTable != null)
         {
-            var columns = dataTable.Columns;
+            DataColumnCollection columns = dataTable.Columns;
 
             if (columns.Count == 0)
                 SchemaFiller.FillSchema(schemaTable, dataTable);
         }
 
-        var fieldCount = dataReader.FieldCount;
-        var rows = dataTable.Rows;
-        var rowCount = 0;
+        int fieldCount = dataReader.FieldCount;
+        DataRowCollection rows = dataTable.Rows;
+        int rowCount = 0;
 
         while (dataReader.Read())
         {
-            var values = new object[fieldCount];
+            object[] values = new object[fieldCount];
             dataReader.GetValues(values);
-            var row = rows.Add(values);
+            DataRow row = rows.Add(values);
             row.AcceptChanges();
             rowCount++;
 

@@ -16,18 +16,17 @@ internal sealed class SqlLogError(
     {
         get
         {
-            var sb = new StringBuilder();
-            var sqlEx = exception as SqlException;
+            StringBuilder sb = new StringBuilder();
 
-            if (sqlEx != null)
+            if (exception is SqlException sqlEx)
             {
-                var errors = sqlEx.Errors;
-                var count = errors.Count;
+                SqlErrorCollection errors = sqlEx.Errors;
+                int count = errors.Count;
 
-                for (var i = 0; i < count; i++)
+                for (int i = 0; i < count; i++)
                 {
-                    var error = errors[i];
-                    var procedure = error.Procedure;
+                    SqlError error = errors[i];
+                    string procedure = error.Procedure;
 
                     if (procedure.Length == 0)
                         procedure = null;
@@ -37,7 +36,7 @@ internal sealed class SqlLogError(
             }
             else
             {
-                var text = exception.ToString();
+                string text = exception.ToString();
                 sb.AppendFormat("exec LogException {0},{1},{2},{3},{4}", applicationId, connectionNo, commandNo, executionNo, text.ToNullableVarChar());
             }
 

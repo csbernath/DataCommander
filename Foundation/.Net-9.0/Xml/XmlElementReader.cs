@@ -22,13 +22,13 @@ public class XmlElementReader(XmlReader xmlReader)
         XmlDocument xmlDocument,
         XmlAttributeCollection attributes )
     {
-        var exists = xmlReader.MoveToFirstAttribute();
+        bool exists = xmlReader.MoveToFirstAttribute();
 
         while (exists)
         {
-            var name = xmlReader.Name;
-            var value = xmlReader.Value;
-            var xmlAttribute = xmlDocument.CreateAttribute( name );
+            string name = xmlReader.Name;
+            string value = xmlReader.Value;
+            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute( name );
             xmlAttribute.Value = value;
             attributes.Append( xmlAttribute );
             exists = xmlReader.MoveToNextAttribute();
@@ -37,11 +37,11 @@ public class XmlElementReader(XmlReader xmlReader)
 
     private static bool MoveToElement( XmlReader xmlReader )
     {
-        var found = false;
+        bool found = false;
 
         while (xmlReader.Read())
         {
-            var nodeType = xmlReader.NodeType;
+            XmlNodeType nodeType = xmlReader.NodeType;
 
             if (nodeType == XmlNodeType.Element)
             {
@@ -60,14 +60,14 @@ public class XmlElementReader(XmlReader xmlReader)
     public XmlElement ReadStartElement()
     {
         XmlElement xmlElement = null;
-        var found = MoveToElement(_xmlReader);
+        bool found = MoveToElement(_xmlReader);
 
         if (found)
         {
-            var xmlDocument = new XmlDocument();
-            var name = _xmlReader.Name;
+            XmlDocument xmlDocument = new XmlDocument();
+            string name = _xmlReader.Name;
             xmlElement = xmlDocument.CreateElement( name );
-            var attributes = xmlElement.Attributes;
+            XmlAttributeCollection attributes = xmlElement.Attributes;
             ReadAttributes(_xmlReader, xmlDocument, attributes );
         }
 
@@ -77,7 +77,7 @@ public class XmlElementReader(XmlReader xmlReader)
     private static XmlElement ReadElement( XmlReader xmlReader, XmlDocument xmlDocument, int level )
     {
 #if DEBUG
-        var xmlLineInfo = xmlReader as IXmlLineInfo;
+        IXmlLineInfo xmlLineInfo = xmlReader as IXmlLineInfo;
 
         if (xmlLineInfo != null)
         {
@@ -85,9 +85,9 @@ public class XmlElementReader(XmlReader xmlReader)
         }
 #endif
 
-        var name = xmlReader.Name;
-        var isEmptyElement = xmlReader.IsEmptyElement;
-        var xmlElement = xmlDocument.CreateElement( name );
+        string name = xmlReader.Name;
+        bool isEmptyElement = xmlReader.IsEmptyElement;
+        XmlElement xmlElement = xmlDocument.CreateElement( name );
 
         if (xmlReader.HasAttributes)
         {
@@ -98,32 +98,32 @@ public class XmlElementReader(XmlReader xmlReader)
         {
             while (true)
             {
-                var read = xmlReader.Read();
+                bool read = xmlReader.Read();
 
                 if (!read)
                 {
                     break;
                 }
 
-                var nodeType = xmlReader.NodeType;
-                var breakable = false;
+                XmlNodeType nodeType = xmlReader.NodeType;
+                bool breakable = false;
 
                 switch (nodeType)
                 {
                     case XmlNodeType.Text:
-                        var value = xmlReader.Value;
-                        var xmlText = xmlDocument.CreateTextNode( value );
+                        string value = xmlReader.Value;
+                        XmlText xmlText = xmlDocument.CreateTextNode( value );
                         xmlElement.AppendChild( xmlText );
                         break;
 
                     case XmlNodeType.CDATA:
-                        var data = xmlReader.Value;
-                        var xmlCDataSection = xmlDocument.CreateCDataSection( data );
+                        string data = xmlReader.Value;
+                        XmlCDataSection xmlCDataSection = xmlDocument.CreateCDataSection( data );
                         xmlElement.AppendChild( xmlCDataSection );
                         break;
 
                     case XmlNodeType.Element:
-                        var childElement = ReadElement( xmlReader, xmlDocument, level + 1 );
+                        XmlElement childElement = ReadElement( xmlReader, xmlDocument, level + 1 );
                         xmlElement.AppendChild( childElement );
                         break;
 
@@ -159,7 +159,7 @@ public class XmlElementReader(XmlReader xmlReader)
     public XmlElement ReadElement()
     {
 #if DEBUG
-        var xmlLineInfo = _xmlReader as IXmlLineInfo;
+        IXmlLineInfo xmlLineInfo = _xmlReader as IXmlLineInfo;
 
         if (xmlLineInfo != null)
         {
@@ -174,8 +174,8 @@ public class XmlElementReader(XmlReader xmlReader)
 #if DEBUG
             Trace.WriteLine($"{_xmlReader.Name},{_xmlReader.NodeType}");
 #endif
-            var nodeType = _xmlReader.NodeType;
-            var breakable = false;
+            XmlNodeType nodeType = _xmlReader.NodeType;
+            bool breakable = false;
 
             switch (nodeType)
             {

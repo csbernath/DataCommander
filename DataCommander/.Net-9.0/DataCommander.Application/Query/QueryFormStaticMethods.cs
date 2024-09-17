@@ -55,17 +55,19 @@ internal static class QueryFormStaticMethods
         bool readOnly,
         ColorTheme colorTheme)
     {
-        var editor = new DataTableEditor(queryForm, commandBuilder, colorTheme);
-        editor.ReadOnly = readOnly;
-        editor.DataTable = dataTable;
-        editor.TableName = dataTable.TableName;
-        editor.TableSchema = getTableSchemaResult;
+        DataTableEditor editor = new DataTableEditor(queryForm, commandBuilder, colorTheme)
+        {
+            ReadOnly = readOnly,
+            DataTable = dataTable,
+            TableName = dataTable.TableName,
+            TableSchema = getTableSchemaResult
+        };
         return editor;
     }
 
     private static ListView CreateListViewFromDataTable(DataTable dataTable)
     {
-        var listView = new ListView
+        ListView listView = new ListView
         {
             View = View.Details,
             GridLines = true,
@@ -76,13 +78,13 @@ internal static class QueryFormStaticMethods
 
         foreach (DataColumn dataColumn in dataTable.Columns)
         {
-            var columnHeader = new ColumnHeader
+            ColumnHeader columnHeader = new ColumnHeader
             {
                 Text = dataColumn.ColumnName,
                 Width = -2
             };
 
-            var type = (Type)dataColumn.ExtendedProperties[0];
+            Type? type = (Type)dataColumn.ExtendedProperties[0];
 
             if (type == null)
             {
@@ -94,14 +96,14 @@ internal static class QueryFormStaticMethods
             listView.Columns.Add(columnHeader);
         }
 
-        var count = dataTable.Columns.Count;
-        var items = new string[count];
+        int count = dataTable.Columns.Count;
+        string[] items = new string[count];
 
         foreach (DataRow dataRow in dataTable.Rows)
         {
-            for (var i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
-                var value = dataRow[i];
+                object value = dataRow[i];
 
                 if (value == DBNull.Value)
                 {
@@ -113,7 +115,7 @@ internal static class QueryFormStaticMethods
                 }
             }
 
-            var listViewItem = new ListViewItem(items);
+            ListViewItem listViewItem = new ListViewItem(items);
             listView.Items.Add(listViewItem);
         }
 
@@ -122,8 +124,8 @@ internal static class QueryFormStaticMethods
 
     public static HorizontalAlignment GetHorizontalAlignment(Type type)
     {
-        var typeCode = Type.GetTypeCode(type);
-        var align = typeCode switch
+        TypeCode typeCode = Type.GetTypeCode(type);
+        HorizontalAlignment align = typeCode switch
         {
             TypeCode.SByte or TypeCode.Int16 or TypeCode.Int32 or TypeCode.Int64 or TypeCode.Byte or TypeCode.UInt16 or TypeCode.UInt32 or TypeCode.UInt64 or TypeCode.Decimal => HorizontalAlignment.Right,
             _ => HorizontalAlignment.Left,
@@ -133,15 +135,15 @@ internal static class QueryFormStaticMethods
 
     public static bool FindText(DataView dataView, IStringMatcher matcher, ref int rowIndex, ref int columnIndex)
     {
-        var found = false;
-        var dataTable = dataView.Table;
-        var rowCount = dataView.Count;
-        var columnCount = dataTable.Columns.Count;
-        var currentValueObject = dataTable.DefaultView[rowIndex][columnIndex];
+        bool found = false;
+        DataTable? dataTable = dataView.Table;
+        int rowCount = dataView.Count;
+        int columnCount = dataTable.Columns.Count;
+        object currentValueObject = dataTable.DefaultView[rowIndex][columnIndex];
         string currentValue;
         if (currentValueObject is StringField)
         {
-            var stringField = currentValueObject as StringField;
+            StringField? stringField = currentValueObject as StringField;
             currentValue = stringField.Value;
         }
         else
@@ -163,9 +165,9 @@ internal static class QueryFormStaticMethods
 
         if (rowIndex == 0)
         {
-            for (var i = columnIndex + 1; i < dataTable.Columns.Count; i++)
+            for (int i = columnIndex + 1; i < dataTable.Columns.Count; i++)
             {
-                var dataColumn = dataTable.Columns[i];
+                DataColumn dataColumn = dataTable.Columns[i];
                 found = matcher.IsMatch(dataColumn.ColumnName);
 
                 if (found)
@@ -178,7 +180,7 @@ internal static class QueryFormStaticMethods
 
         if (!found)
         {
-            var dataRow = dataTable.DefaultView[rowIndex].Row;
+            DataRow dataRow = dataTable.DefaultView[rowIndex].Row;
 
             while (true)
             {
@@ -220,7 +222,7 @@ internal static class QueryFormStaticMethods
     public static void AddInfoMessageToQueryForm(QueryForm queryForm, long elapsedTicks, string connectionName, string providerName,
         ConnectionBase connection)
     {
-        var message = $@"Connection opened in {StopwatchTimeSpan.ToString(elapsedTicks, 3)} seconds.
+        string message = $@"Connection opened in {StopwatchTimeSpan.ToString(elapsedTicks, 3)} seconds.
 Connection name: {connectionName}
 Provider name:   {providerName}
 Data source:     {connection.DataSource}
@@ -228,7 +230,7 @@ Database:        {connection.Database}
 Server version:  {connection.ServerVersion}
 {connection.ConnectionInformation}";
 
-        var infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message);
+        InfoMessage infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message);
         queryForm.AddInfoMessage(infoMessage);
     }
 }

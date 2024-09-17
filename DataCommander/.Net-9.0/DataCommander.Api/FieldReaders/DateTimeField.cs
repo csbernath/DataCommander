@@ -9,7 +9,7 @@ public sealed class DateTimeField(DateTime value) : IComparable, IConvertible
 
     public static bool TryParse(string s, out DateTime dateTime)
     {
-        var formats = new[]
+        string[] formats = new[]
         {
             "yyyyMMdd",
             "yyyy-MM-dd",
@@ -17,7 +17,7 @@ public sealed class DateTimeField(DateTime value) : IComparable, IConvertible
             "yyyy-MM-dd HH:mm:ss.fff"
         };
 
-        var succeeded = DateTime.TryParseExact(s, formats, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out dateTime);
+        bool succeeded = DateTime.TryParseExact(s, formats, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out dateTime);
         return succeeded;
     }
 
@@ -45,14 +45,14 @@ public sealed class DateTimeField(DateTime value) : IComparable, IConvertible
     public int CompareTo(object? obj)
     {
         int result;
-        var type = obj.GetType();
-        var typeCode = Type.GetTypeCode(type);
+        Type type = obj.GetType();
+        TypeCode typeCode = Type.GetTypeCode(type);
 
         switch (typeCode)
         {
             case TypeCode.String:
-                var s = (string)obj;
-                var succeeded = TryParse(s, out var dateTime);
+                string s = (string)obj;
+                bool succeeded = TryParse(s, out DateTime dateTime);
 
                 if (succeeded)
                 {
@@ -66,7 +66,7 @@ public sealed class DateTimeField(DateTime value) : IComparable, IConvertible
                 break;
 
             case TypeCode.Object:
-                var dateTimeField = (DateTimeField)obj;
+                DateTimeField dateTimeField = (DateTimeField)obj;
                 result = Value.CompareTo(dateTimeField.Value);
                 break;
 

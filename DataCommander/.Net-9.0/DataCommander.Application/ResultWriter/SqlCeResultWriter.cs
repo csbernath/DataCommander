@@ -27,14 +27,14 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
 
     void IResultWriter.AfterExecuteReader()
     {
-        var fileName = Path.GetTempFileName() + ".sdf";
+        string fileName = Path.GetTempFileName() + ".sdf";
         messageWriter.WriteLine(fileName);
-        var sb = new DbConnectionStringBuilder
+        DbConnectionStringBuilder sb = new DbConnectionStringBuilder
         {
             { "Data Source", fileName }
         };
-        var connectionString = sb.ConnectionString;
-        var sqlCeEngine = new SqlCeEngine(connectionString);
+        string connectionString = sb.ConnectionString;
+        SqlCeEngine sqlCeEngine = new SqlCeEngine(connectionString);
         sqlCeEngine.CreateDatabase();
         _connection = new SqlCeConnection(connectionString);
         _connection.Open();
@@ -46,26 +46,26 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
 
     void IResultWriter.WriteTableBegin(DataTable schemaTable)
     {
-        var createTable = new StringBuilder();
+        StringBuilder createTable = new StringBuilder();
         createTable.AppendFormat("create table [{0}]\r\n(\r\n", tableName);
-        var insertInto = new StringBuilder();
+        StringBuilder insertInto = new StringBuilder();
         insertInto.AppendFormat("insert into [{0}](", tableName);
-        var values = new StringBuilder();
+        StringBuilder values = new StringBuilder();
         values.Append("values(");
-        var stringTable = new StringTable(3);
+        StringTable stringTable = new StringTable(3);
         _insertCommand = _connection.CreateCommand();
-        var last = schemaTable.Rows.Count - 1;
+        int last = schemaTable.Rows.Count - 1;
 
-        for (var i = 0; i <= last; i++)
+        for (int i = 0; i <= last; i++)
         {
-            var dataRow = schemaTable.Rows[i];
-            var schemaRow = FoundationDbColumnFactory.Create(dataRow);
-            var columnName = schemaRow.ColumnName;
-            var columnSize = schemaRow.ColumnSize;
-            var allowDbNull = schemaRow.AllowDbNull;
-            var dataType = schemaRow.DataType;
-            var dataTypeName = "???";
-            var typeCode = Type.GetTypeCode(dataType);
+            DataRow dataRow = schemaTable.Rows[i];
+            FoundationDbColumn schemaRow = FoundationDbColumnFactory.Create(dataRow);
+            string columnName = schemaRow.ColumnName;
+            int columnSize = schemaRow.ColumnSize;
+            bool? allowDbNull = schemaRow.AllowDbNull;
+            Type dataType = schemaRow.DataType;
+            string dataTypeName = "???";
+            TypeCode typeCode = Type.GetTypeCode(dataType);
             string typeName;
             SqlDbType sqlDbType;
 
@@ -83,8 +83,8 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
 
                 case TypeCode.Decimal:
                     sqlDbType = SqlDbType.Decimal;
-                    var precision = schemaRow.NumericPrecision.Value;
-                    var scale = schemaRow.NumericScale.Value;
+                    short precision = schemaRow.NumericPrecision.Value;
+                    short scale = schemaRow.NumericScale.Value;
 
                     if (precision > 38)
                     {
@@ -138,8 +138,8 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
                     break;
 
                 case TypeCode.String:
-                    var dataTypeNameUpper = dataTypeName.ToUpper();
-                    var isFixedLength = dataTypeName switch
+                    string dataTypeNameUpper = dataTypeName.ToUpper();
+                    bool isFixedLength = dataTypeName switch
                     {
                         "CHAR" or "NCHAR" => true,
                         _ => false,
@@ -169,7 +169,7 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
                     throw new NotImplementedException();
             }
 
-            var row = stringTable.NewRow();
+            StringTableRow row = stringTable.NewRow();
             row[1] = columnName;
             row[2] = typeName;
 
@@ -189,20 +189,20 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
             }
 
             stringTable.Rows.Add(row);
-            var parameter = new SqlCeParameter(null, sqlDbType);
+            SqlCeParameter parameter = new SqlCeParameter(null, sqlDbType);
             _insertCommand.Parameters.Add(parameter);
         }
 
         createTable.AppendLine(stringTable.ToString(4));
         createTable.Append(')');
-        var commandText = createTable.ToString();
+        string commandText = createTable.ToString();
         messageWriter.WriteLine(commandText);
-        var executor = _connection.CreateCommandExecutor();
+        IDbCommandExecutor executor = _connection.CreateCommandExecutor();
         executor.ExecuteNonQuery(new CreateCommandRequest(commandText));
         insertInto.Append(") ");
         values.Append(')');
         insertInto.Append(values);
-        var insertCommandText = insertInto.ToString();
+        string insertCommandText = insertInto.ToString();
         messageWriter.WriteLine(insertCommandText);
         _insertCommand.CommandText = insertInto.ToString();
     }
@@ -217,13 +217,13 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
 
     void IResultWriter.WriteRows(object[][] rows, int rowCount)
     {
-        for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
+        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
         {
-            var row = rows[rowIndex];
+            object[] row = rows[rowIndex];
 
-            for (var columnIndex = 0; columnIndex < row.Length; columnIndex++)
+            for (int columnIndex = 0; columnIndex < row.Length; columnIndex++)
             {
-                var value = row[columnIndex];
+                object value = row[columnIndex];
                 _insertCommand.Parameters[columnIndex].Value = value;
             }
 

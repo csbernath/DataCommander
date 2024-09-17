@@ -12,11 +12,11 @@ public static class ArrayExtensions
 
         if (arrays != null)
         {
-            var resultLength = arrays.Sum(a => a.Length);
+            int resultLength = arrays.Sum(a => a.Length);
             result = new T[resultLength];
-            var index = 0;
+            int index = 0;
 
-            foreach (var array in arrays)
+            foreach (T[] array in arrays)
             {
                 array.CopyTo(result, index);
                 index += array.Length;
@@ -40,26 +40,26 @@ public static class ArrayExtensions
 
     public static bool Contains<T>(this T[] array, T item)
     {
-        var comparer = EqualityComparer<T>.Default;
+        EqualityComparer<T> comparer = EqualityComparer<T>.Default;
         return array.Contains(item, comparer);
     }
 
     public static bool Contains<T>(this T[] array, T item, IEqualityComparer<T> comparer)
     {
-        var index = array.IndexOf(item, comparer);
-        var contains = index >= 0;
+        int index = array.IndexOf(item, comparer);
+        bool contains = index >= 0;
         return contains;
     }
 
     public static int IndexOf<T>(this T[] array, T item, IEqualityComparer<T> comparer)
     {
-        var index = -1;
+        int index = -1;
 
         if (array != null)
         {
             ArgumentNullException.ThrowIfNull(comparer);
 
-            for (var i = 0; i < array.Length; i++)
+            for (int i = 0; i < array.Length; i++)
             {
                 if (comparer.Equals(array[i], item))
                 {
@@ -74,7 +74,7 @@ public static class ArrayExtensions
 
     public static int IndexOf<T>(this T[] array, T item)
     {
-        var comparer = EqualityComparer<T>.Default;
+        EqualityComparer<T> comparer = EqualityComparer<T>.Default;
         return array.IndexOf(item, comparer);
     }
 }

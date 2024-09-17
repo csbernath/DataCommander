@@ -17,7 +17,7 @@ internal sealed class IndexNode(DatabaseNode databaseNode, int parentId, int id,
     {
         get
         {
-            var stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
 
             stringBuilder.Append(name);
             stringBuilder.Append(" (");

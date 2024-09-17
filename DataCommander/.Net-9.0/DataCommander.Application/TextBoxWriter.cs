@@ -19,7 +19,7 @@ public class TextBoxWriter(TextBoxBase textBox) : TextWriter
 
     public override void WriteLine(string? value)
     {
-        var line = value + Environment.NewLine;
+        string line = value + Environment.NewLine;
         textBox.Invoke(new AppendTextDelegate(AppendText), line);
     }
 }

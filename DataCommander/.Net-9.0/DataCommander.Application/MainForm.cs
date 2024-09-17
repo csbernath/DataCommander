@@ -67,7 +67,7 @@ public class MainForm : Form
 
     private void SetColorTheme(bool darkColorTheme)
     {
-        var colorTheme = darkColorTheme
+        ColorTheme? colorTheme = darkColorTheme
             ? new ColorTheme(
                 Color.FromArgb(220, 220, 220),
                 Color.FromArgb(30, 30, 30),
@@ -96,15 +96,15 @@ public class MainForm : Form
         //
         LoadLayout();
 
-        var start = Process.GetCurrentProcess().StartTime;
-        var end = DateTime.Now;
-        var elapsed = end - start;
+        DateTime start = Process.GetCurrentProcess().StartTime;
+        DateTime end = DateTime.Now;
+        TimeSpan elapsed = end - start;
 
-        var message = $"Application loaded in {new StopwatchTimeSpan(elapsed).ToString(3)} seconds.";
+        string message = $"Application loaded in {new StopwatchTimeSpan(elapsed).ToString(3)} seconds.";
         _toolStripStatusLabel.Text = message;
         Log.Trace(message);
 
-        if (!DataCommanderApplication.Instance.ApplicationData.CurrentType.Attributes.TryGetAttributeValue<bool>("DarkColorTheme", out var darkColorTheme))
+        if (!DataCommanderApplication.Instance.ApplicationData.CurrentType.Attributes.TryGetAttributeValue<bool>("DarkColorTheme", out bool darkColorTheme))
             darkColorTheme = false;
 
         SetColorTheme(darkColorTheme);
@@ -125,7 +125,7 @@ public class MainForm : Form
             _mainMenu.ForeColor = _colorTheme.ForeColor;
             _mainMenu.BackColor = _colorTheme.BackColor;
 
-            foreach (var menuItem in _mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
+            foreach (ToolStripMenuItem menuItem in _mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
             foreach (ToolStripItem x in menuItem.DropDownItems)
                 _colorTheme.Apply(x);
 
@@ -151,15 +151,15 @@ public class MainForm : Form
 
     private static string BytesToText(long bytes)
     {
-        var megaBytes = bytes / 1024.0 / 1024.0;
-        var text = $"{Math.Round(megaBytes, 0)}";
+        double megaBytes = bytes / 1024.0 / 1024.0;
+        string text = $"{Math.Round(megaBytes, 0)}";
         return text;
     }
 
     public void UpdateTotalMemory()
     {
-        var totalMemory = GC.GetTotalMemory(false);
-        var workingSet = Environment.WorkingSet;
+        long totalMemory = GC.GetTotalMemory(false);
+        long workingSet = Environment.WorkingSet;
 
         _managedMemoryToolStripStatusLabel.Text = $"{BytesToText(totalMemory)} / {BytesToText(workingSet)} MB";
 
@@ -498,14 +498,14 @@ public class MainForm : Form
 
     private void optionsMenuItem_Click(object sender, EventArgs e)
     {
-        var optionsForm = new OptionsForm(_colorTheme != null, SelectedFont, _colorTheme);
+        OptionsForm optionsForm = new OptionsForm(_colorTheme != null, SelectedFont, _colorTheme);
         if (optionsForm.ShowDialog() == DialogResult.OK)
         {
-            var darkColorTheme = optionsForm.DarkColorTheme;
+            bool darkColorTheme = optionsForm.DarkColorTheme;
             SetColorTheme(darkColorTheme);
             SelectedFont = optionsForm.SelectedFont;
 
-            var attributes = DataCommanderApplication.Instance.ApplicationData.CurrentType.Attributes;
+            Foundation.Configuration.ConfigurationAttributeCollection attributes = DataCommanderApplication.Instance.ApplicationData.CurrentType.Attributes;
             attributes.SetAttributeValue("DarkColorTheme", darkColorTheme);
             attributes.SetAttributeValue("Font", Serialize(SelectedFont));
         }
@@ -515,16 +515,18 @@ public class MainForm : Form
     {
         try
         {
-            var connectionForm = new ConnectionListForm(_statusBar, _colorTheme);
+            ConnectionListForm connectionForm = new ConnectionListForm(_statusBar, _colorTheme);
 
             if (connectionForm.ShowDialog() == DialogResult.OK)
             {
                 Log.Trace(CallerInformation.Create(), "connectionForm.ShowDialog() finished.");
-                var connectionInfo = connectionForm.ConnectionInfo;
-                var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);                
-                var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
-                var queryForm = new QueryForm(this, provider, connectionInfo, connectionForm.Connection, _statusBar, _colorTheme);
-                queryForm.MdiParent = this;
+                ConnectionInfo connectionInfo = connectionForm.ConnectionInfo;
+                ProviderInfo providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
+                IProvider provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
+                QueryForm queryForm = new QueryForm(this, provider, connectionInfo, connectionForm.Connection, _statusBar, _colorTheme)
+                {
+                    MdiParent = this
+                };
 
                 if (SelectedFont != null)
                     queryForm.Font = SelectedFont;
@@ -545,9 +547,9 @@ public class MainForm : Form
                         break;
                 }
 
-                var connectionStringBuilder = provider.CreateConnectionStringBuilder();
+                IDbConnectionStringBuilder connectionStringBuilder = provider.CreateConnectionStringBuilder();
                 connectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
-                var connection = connectionForm.Connection;
+                ConnectionBase connection = connectionForm.Connection;
                 QueryFormStaticMethods.AddInfoMessageToQueryForm(queryForm, connectionForm.ElapsedTicks, connectionInfo.ConnectionName, providerInfo.Name, connection);
                 queryForm.Show();
 
@@ -581,38 +583,38 @@ public class MainForm : Form
 
     private void mnuAbout_Click(object sender, EventArgs e)
     {
-        var aboutForm = new AboutForm(_colorTheme);
+        AboutForm aboutForm = new AboutForm(_colorTheme);
         aboutForm.ShowDialog();
     }
 
     private void SaveLayout()
     {
-        var applicationData = DataCommanderApplication.Instance.ApplicationData;
+        Foundation.Configuration.ApplicationData applicationData = DataCommanderApplication.Instance.ApplicationData;
         FormPosition.Save(this, applicationData);
-        var folder = applicationData.CurrentType;
-        var array = new string[_recentFileList.Count];
+        Foundation.Configuration.ConfigurationNode folder = applicationData.CurrentType;
+        string[] array = new string[_recentFileList.Count];
         _recentFileList.CopyTo(array, 0);
         folder.Attributes.SetAttributeValue("RecentFileList", array);
     }
 
     private void mnuRecentFile_Click(object sender, EventArgs e)
     {
-        var menuItem = (ToolStripMenuItem)sender;
-        var index = _mnuRecentFileList.DropDownItems.IndexOf(menuItem);
-        var count = _recentFileList.Count;
-        var path = _recentFileList[count - index - 1];
+        ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
+        int index = _mnuRecentFileList.DropDownItems.IndexOf(menuItem);
+        int count = _recentFileList.Count;
+        string? path = _recentFileList[count - index - 1];
         LoadFiles([path]);
     }
 
     private void CreateRecentFileListMenu()
     {
-        var menuItems = new List<ToolStripMenuItem>();
-        var count = _recentFileList.Count;
-        for (var i = 0; i < count; i++)
+        List<ToolStripMenuItem> menuItems = [];
+        int count = _recentFileList.Count;
+        for (int i = 0; i < count; i++)
         {
-            var path = _recentFileList[count - i - 1];
-            var text = $"{i + 1} {path}";
-            var menuItem = new ToolStripMenuItem(text, null, mnuRecentFile_Click);
+            string? path = _recentFileList[count - i - 1];
+            string text = $"{i + 1} {path}";
+            ToolStripMenuItem menuItem = new ToolStripMenuItem(text, null, mnuRecentFile_Click);
             menuItems.Add(menuItem);
         }
 
@@ -622,10 +624,10 @@ public class MainForm : Form
 
     private void LoadLayout()
     {
-        var applicationData = DataCommanderApplication.Instance.ApplicationData;
+        Foundation.Configuration.ApplicationData applicationData = DataCommanderApplication.Instance.ApplicationData;
         FormPosition.Load(applicationData, this);
-        var folder = applicationData.CurrentType;
-        var contains = folder.Attributes.TryGetAttributeValue("RecentFileList", out string[] array);
+        Foundation.Configuration.ConfigurationNode folder = applicationData.CurrentType;
+        bool contains = folder.Attributes.TryGetAttributeValue("RecentFileList", out string[] array);
 
         if (contains && array != null)
         {
@@ -651,19 +653,21 @@ public class MainForm : Form
     {
         try
         {
-            var fileDialog = new OpenFileDialog();
-            fileDialog.Filter =
-                "SQL script files(*.sql)|*.sql|Access Files(*.mdb)|*.mdb|Access 2007 Files(*.accdb)|*.accdb|Excel files (*.xls;*.xlsx)|*.xls;*.xlsx|MSI files (*.msi)|*.msi|SQLite files (*.*)|*.*|SQL Server Compact files (*.sdf)|*.sdf|SQL Server Compact 4.0 files (*.sdf)|*.sdf";
-            fileDialog.RestoreDirectory = true;
-            var currentDirectory = Environment.CurrentDirectory;
+            OpenFileDialog fileDialog = new OpenFileDialog
+            {
+                Filter =
+                "SQL script files(*.sql)|*.sql|Access Files(*.mdb)|*.mdb|Access 2007 Files(*.accdb)|*.accdb|Excel files (*.xls;*.xlsx)|*.xls;*.xlsx|MSI files (*.msi)|*.msi|SQLite files (*.*)|*.*|SQL Server Compact files (*.sdf)|*.sdf|SQL Server Compact 4.0 files (*.sdf)|*.sdf",
+                RestoreDirectory = true
+            };
+            string currentDirectory = Environment.CurrentDirectory;
 
             if (fileDialog.ShowDialog(this) == DialogResult.OK)
             {
                 if (Environment.CurrentDirectory != currentDirectory)
                     Environment.CurrentDirectory = currentDirectory;
 
-                var fileName = fileDialog.FileName;
-                var extension = Path.GetExtension(fileName).ToLower();
+                string fileName = fileDialog.FileName;
+                string extension = Path.GetExtension(fileName).ToLower();
                 string connectionString = null;
                 IProvider provider = null;
 
@@ -720,19 +724,20 @@ public class MainForm : Form
 
                 if (provider != null)
                 {
-                    var connectionStringAndCredential= new ConnectionStringAndCredential(connectionString, null);
-                    var connection = provider.CreateConnection(connectionStringAndCredential);
+                    ConnectionStringAndCredential connectionStringAndCredential = new ConnectionStringAndCredential(connectionString, null);
+                    ConnectionBase connection = provider.CreateConnection(connectionStringAndCredential);
                     await connection.OpenAsync(CancellationToken.None);
-                    var connectionInfo = new ConnectionInfo(null, provider.Identifier, connectionStringAndCredential);
+                    ConnectionInfo connectionInfo = new ConnectionInfo(null, provider.Identifier, connectionStringAndCredential);
 
-                    var connectionInfos = ConnectionInfoRepository.Get().ToList();
+                    List<ConnectionInfo> connectionInfos = ConnectionInfoRepository.Get().ToList();
                     connectionInfos.Add(connectionInfo);
                     ConnectionInfoRepository.Save(connectionInfos);
 
-                    var queryForm = new QueryForm(this, provider, connectionInfo, connection, _statusBar, _colorTheme);
-
-                    queryForm.MdiParent = this;
-                    queryForm.Font = SelectedFont;
+                    QueryForm queryForm = new QueryForm(this, provider, connectionInfo, connection, _statusBar, _colorTheme)
+                    {
+                        MdiParent = this,
+                        Font = SelectedFont
+                    };
                     queryForm.Show();
                 }
             }
@@ -751,12 +756,12 @@ public class MainForm : Form
 
     public void LoadFiles(string[] fileNames)
     {
-        var i = fileNames.Length - 1;
-        var path = fileNames[i];
-        var queryForm = (QueryForm)ActiveMdiChild;
+        int i = fileNames.Length - 1;
+        string path = fileNames[i];
+        QueryForm? queryForm = (QueryForm)ActiveMdiChild;
         queryForm.LoadFile(path);
 
-        var index = _recentFileList.IndexOf(path);
+        int index = _recentFileList.IndexOf(path);
 
         if (index >= 0)
             _recentFileList.RemoveAt(index);
@@ -769,13 +774,13 @@ public class MainForm : Form
 
     private static string Serialize(Font font)
     {
-        var serializedFont = JsonConvert.SerializeObject(font);
+        string serializedFont = JsonConvert.SerializeObject(font);
         return serializedFont;
     }
 
     private static Font DeserializeFont(string serializedFont)
     {
-        var font = serializedFont != null
+        Font? font = serializedFont != null
             ? JsonConvert.DeserializeObject<Font>(serializedFont)
             : null;
         return font;
@@ -789,7 +794,7 @@ public class MainForm : Form
 
     private void saveButton_Click(object sender, EventArgs e)
     {
-        var queryForm = (QueryForm)ActiveMdiChild;
+        QueryForm? queryForm = (QueryForm)ActiveMdiChild;
 
         if (queryForm != null)
             queryForm.Save();
@@ -799,12 +804,14 @@ public class MainForm : Form
 
     private async void CreateMenuItem_Click(object sender, EventArgs e)
     {
-        var dialog = new SaveFileDialog();
-        dialog.Filter = "SQL Server Compact 4.0 files (*.sdf)|*.sdf|SQLite files (*.sqlite)|*.sqlite";
+        SaveFileDialog dialog = new SaveFileDialog
+        {
+            Filter = "SQL Server Compact 4.0 files (*.sdf)|*.sdf|SQLite files (*.sqlite)|*.sqlite"
+        };
 
-        var result = dialog.ShowDialog();
+        DialogResult result = dialog.ShowDialog();
 
-        var sb = new DbConnectionStringBuilder();
+        DbConnectionStringBuilder sb = [];
 
         if (result == DialogResult.OK)
         {
@@ -818,7 +825,7 @@ public class MainForm : Form
                 case 1:
                     providerIdentifier = ProviderIdentifier.SqlServerCe40;
                     connectionString = sb.ConnectionString;
-                    var engine = new SqlCeEngine(connectionString);
+                    SqlCeEngine engine = new SqlCeEngine(connectionString);
                     engine.CreateDatabase();
                     break;
 
@@ -831,17 +838,19 @@ public class MainForm : Form
                     throw new Exception();
             }
 
-            var provider = ProviderFactory.CreateProvider(providerIdentifier);
+            IProvider? provider = ProviderFactory.CreateProvider(providerIdentifier);
             Assert.IsTrue(provider != null);
 
-            var connectionStringAndCredential = new ConnectionStringAndCredential(connectionString, null);
-            var connectionInfo = new ConnectionInfo(null, providerIdentifier, connectionStringAndCredential);
-            var connection = provider.CreateConnection(connectionStringAndCredential);
+            ConnectionStringAndCredential connectionStringAndCredential = new ConnectionStringAndCredential(connectionString, null);
+            ConnectionInfo connectionInfo = new ConnectionInfo(null, providerIdentifier, connectionStringAndCredential);
+            ConnectionBase connection = provider.CreateConnection(connectionStringAndCredential);
             await connection.OpenAsync(CancellationToken.None);
 
-            var queryForm = new QueryForm(this, provider, connectionInfo, connection, _statusBar, _colorTheme);
-            queryForm.MdiParent = this;
-            queryForm.Font = SelectedFont;
+            QueryForm queryForm = new QueryForm(this, provider, connectionInfo, connection, _statusBar, _colorTheme)
+            {
+                MdiParent = this,
+                Font = SelectedFont
+            };
             queryForm.Show();
         }
     }
@@ -849,7 +858,7 @@ public class MainForm : Form
     private static void ShowContents()
     {
         const string url = "https://github.com/csbernath/DataCommander/blob/master/README.md";
-        var processStartInfo = new ProcessStartInfo
+        ProcessStartInfo processStartInfo = new ProcessStartInfo
         {
             FileName = url,
             UseShellExecute = true
@@ -872,12 +881,12 @@ public class MainForm : Form
             if (_queryFormToolStrip != null)
                 _toolStripPanel.Controls.Remove(_queryFormToolStrip);
 
-            var queryForm = (QueryForm)ActiveMdiChild;
-            var queryFormToolStrip = queryForm.ToolStrip;
+            QueryForm queryForm = (QueryForm)ActiveMdiChild;
+            ToolStrip queryFormToolStrip = queryForm.ToolStrip;
             if (queryFormToolStrip != null)
             {
                 queryFormToolStrip.Visible = true;
-                var location = new Point(_toolStrip.Right, _toolStrip.Top);
+                Point location = new Point(_toolStrip.Right, _toolStrip.Top);
                 _toolStripPanel.Join(queryFormToolStrip, location);
                 _toolStripPanel.PerformLayout();
 
@@ -894,12 +903,12 @@ public class MainForm : Form
     {
         while (true)
         {
-            var mdiChildren = MdiChildren;
-            var length = mdiChildren.Length;
+            Form[] mdiChildren = MdiChildren;
+            int length = mdiChildren.Length;
             if (length == 0)
                 break;
 
-            var mdiChild = mdiChildren[length - 1];
+            Form mdiChild = mdiChildren[length - 1];
             mdiChild.Close();
 
             if (MdiChildren.Length == length)
@@ -913,17 +922,16 @@ public class MainForm : Form
         _toolStripStatusLabel.Text = "Saving all items...";
         Log.Write(LogLevel.Trace, "Saving all items...");
 
-        var fileNamePrefix = Path.GetTempPath() + "DataCommander.SaveAll." + '[' + DateTime.Now.ToString("yyyyMMddHHmmss.fff") + ']';
-        var index = 1;
-        foreach (var mdiChild in MdiChildren)
+        string fileNamePrefix = Path.GetTempPath() + "DataCommander.SaveAll." + '[' + DateTime.Now.ToString("yyyyMMddHHmmss.fff") + ']';
+        int index = 1;
+        foreach (Form mdiChild in MdiChildren)
         {
-            var queryForm = mdiChild as QueryForm;
-            if (queryForm != null)
+            if (mdiChild is QueryForm queryForm)
             {
-                var text = queryForm.QueryTextBox.Text;
+                string text = queryForm.QueryTextBox.Text;
                 if (!string.IsNullOrEmpty(text))
                 {
-                    var fileName = fileNamePrefix + '[' + index.ToString().PadLeft(3, '0') + "].sql";
+                    string fileName = fileNamePrefix + '[' + index.ToString().PadLeft(3, '0') + "].sql";
                     text = text.Replace("\n", "\r\n");
                     File.WriteAllText(fileName, text, Encoding.UTF8);
                     index++;
@@ -943,7 +951,7 @@ public class MainForm : Form
     private void CheckForToolStripMenuItem_Click(object sender, EventArgs e)
     {
         const string url = "https://github.com/csbernath/DataCommander/releases";
-        var processStartInfo = new ProcessStartInfo
+        ProcessStartInfo processStartInfo = new ProcessStartInfo
         {
             FileName = url,
             UseShellExecute = true
@@ -955,14 +963,14 @@ public class MainForm : Form
     {
         if (e.Button == MouseButtons.Right)
         {
-            var menu = new ContextMenuStrip(components);
+            ContextMenuStrip menu = new ContextMenuStrip(components);
 
-            var menuItem = new ToolStripMenuItem("Collect garbage");
+            ToolStripMenuItem menuItem = new ToolStripMenuItem("Collect garbage");
             menuItem.Click += CollectGarbage_Click;
             menu.Items.Add(menuItem);
 
-            var bounds = _managedMemoryToolStripStatusLabel.Bounds;
-            var location = e.Location;
+            Rectangle bounds = _managedMemoryToolStripStatusLabel.Bounds;
+            Point location = e.Location;
             menu.Show(_statusBar, bounds.X + location.X, bounds.Y + location.Y);
         }
     }
@@ -971,7 +979,7 @@ public class MainForm : Form
     {
         GC.Collect();
 
-        var stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.AppendLine();
         stringBuilder.Append(GarbageMonitor.Default.State);
         stringBuilder.AppendLine();

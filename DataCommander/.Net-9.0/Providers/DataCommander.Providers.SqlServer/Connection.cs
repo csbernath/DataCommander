@@ -34,11 +34,11 @@ internal sealed class Connection : ConnectionBase
     {
         get
         {
-            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_sqlConnection.ConnectionString);
-            var userName = sqlConnectionStringBuilder.IntegratedSecurity
+            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_sqlConnection.ConnectionString);
+            string userName = sqlConnectionStringBuilder.IntegratedSecurity
                 ? WindowsIdentity.GetCurrent().Name
                 : sqlConnectionStringBuilder.UserID;
-            var caption = $"{_sqlConnection.DataSource}.{_sqlConnection.Database} ({userName} ({_serverProcessId}))";
+            string caption = $"{_sqlConnection.DataSource}.{_sqlConnection.Database} ({userName} ({_serverProcessId}))";
             return caption;
         }
     }
@@ -50,12 +50,12 @@ internal sealed class Connection : ConnectionBase
     {
         get
         {
-            var executor = _sqlConnection.CreateCommandExecutor();
-            var commandText = "select @@version";
-            var version = (string)executor.ExecuteScalar(new CreateCommandRequest(commandText));
-            var serverVersion = _sqlConnection.ServerVersion;
-            var contains = SqlServerVersionInfoRepository.TryGetByVersion(serverVersion, out var sqlServerVersionInfo);
-            var description = contains ? sqlServerVersionInfo.Name : null;
+            IDbCommandExecutor executor = _sqlConnection.CreateCommandExecutor();
+            string commandText = "select @@version";
+            string version = (string)executor.ExecuteScalar(new CreateCommandRequest(commandText));
+            string serverVersion = _sqlConnection.ServerVersion;
+            bool contains = SqlServerVersionInfoRepository.TryGetByVersion(serverVersion, out SqlServerVersionInfo? sqlServerVersionInfo);
+            string? description = contains ? sqlServerVersionInfo.Name : null;
             return @$"Server name: {_serverName}
 {version}
 {description}";
@@ -64,21 +64,21 @@ internal sealed class Connection : ConnectionBase
 
     public override async Task<int> GetTransactionCountAsync(CancellationToken cancellationToken)
     {
-        var executor = _sqlConnection.CreateCommandAsyncExecutor();
-        var scalar = await executor.ExecuteScalarAsync(new CreateCommandRequest("select @@trancount"), cancellationToken);
-        var transactionCount = (int)scalar;
+        IDbCommandAsyncExecutor executor = _sqlConnection.CreateCommandAsyncExecutor();
+        object scalar = await executor.ExecuteScalarAsync(new CreateCommandRequest("select @@trancount"), cancellationToken);
+        int transactionCount = (int)scalar;
         return transactionCount;
     }
 
     private void CreateConnection()
     {
-        var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_connectionStringAndCredential.ConnectionString)
+        SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_connectionStringAndCredential.ConnectionString)
         {
             ApplicationName = "Data Commander",
             Pooling = false
         };
-        var credential = _connectionStringAndCredential.Credential;
-        var sqlCredential = credential != null
+        Credential? credential = _connectionStringAndCredential.Credential;
+        SqlCredential? sqlCredential = credential != null
             ? new SqlCredential(credential.UserId, credential.Password.SecureString)
             : null;
         _sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString, sqlCredential);
@@ -90,7 +90,7 @@ internal sealed class Connection : ConnectionBase
 
     private void OnStateChange(object sender, StateChangeEventArgs e)
     {
-        var text = $"Connection.State changed. OriginalState: {e.OriginalState}, CurrentState: {e.CurrentState}";
+        string text = $"Connection.State changed. OriginalState: {e.OriginalState}, CurrentState: {e.CurrentState}";
         InvokeInfoMessage(
         [
             InfoMessageFactory.Create(InfoMessageSeverity.Information, null, text)
@@ -108,7 +108,7 @@ internal sealed class Connection : ConnectionBase
             const string commandText = @"select @@servername
 set arithabort on";
 
-            var executor = DbCommandExecutorFactory.Create(_sqlConnection);
+            IDbCommandAsyncExecutor executor = DbCommandExecutorFactory.Create(_sqlConnection);
             var items = await executor.ExecuteReaderAsync(
                 new ExecuteReaderRequest(commandText),
                 1,
@@ -123,23 +123,23 @@ set arithabort on";
 
     private void OnInfoMessage(object sender, SqlInfoMessageEventArgs e)
     {
-        var clock = ClockAggregateRepository.Singleton.Get();
-        var localTime = clock.GetLocalTimeFromCurrentEnvironmentTickCount();
-        var infoMessages = SqlServerProvider.ToInfoMessages(e.Errors, localTime);
+        ClockAggregateRoot clock = ClockAggregateRepository.Singleton.Get();
+        DateTime localTime = clock.GetLocalTimeFromCurrentEnvironmentTickCount();
+        System.Collections.Generic.List<InfoMessage> infoMessages = SqlServerProvider.ToInfoMessages(e.Errors, localTime);
 
         if (e.Errors.Count > 0)
         {
-            var error = e.Errors[0];
+            SqlError error = e.Errors[0];
             if (error.Number == SqlErrorNumber.PercentProcessed)
             {
-                var elapsed = Stopwatch.GetTimestamp() - _createCommandTimestamp;
-                var index = error.Message.IndexOf(' ');
-                var percentString = error.Message[..index];
-                var percent = int.Parse(percentString);
-                var remainingPercent = 100 - percent;
-                var estimated = (long)Math.Round(100.0 / percent * elapsed);
-                var estimatedRemaining = remainingPercent * elapsed / percent;
-                var infoMessage = new InfoMessage(localTime, InfoMessageSeverity.Verbose, null,
+                long elapsed = Stopwatch.GetTimestamp() - _createCommandTimestamp;
+                int index = error.Message.IndexOf(' ');
+                string percentString = error.Message[..index];
+                int percent = int.Parse(percentString);
+                int remainingPercent = 100 - percent;
+                long estimated = (long)Math.Round(100.0 / percent * elapsed);
+                long estimatedRemaining = remainingPercent * elapsed / percent;
+                InfoMessage infoMessage = new InfoMessage(localTime, InfoMessageSeverity.Verbose, null,
                     $"Estimated time: {StopwatchTimeSpan.ToString(estimated, 0)} remaining time: {StopwatchTimeSpan.ToString(estimatedRemaining, 0)}, finishes at: {LocalTime.Default.Now.AddSeconds(estimatedRemaining * StopwatchConstants.SecondsPerTick)}");
                 infoMessages.Add(infoMessage);
             }

@@ -9,7 +9,7 @@ public static class DotNetFrameworkVersionStore
 
     static DotNetFrameworkVersionStore()
     {
-        var items = new[]
+        KeyValuePair<int, string>[] items = new[]
         {
             KeyValuePair.Create(378389, "4.5"),
             KeyValuePair.Create(378675, "4.5.1 (server)"),

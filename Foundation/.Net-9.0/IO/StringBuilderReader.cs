@@ -17,7 +17,7 @@ public sealed class StringBuilderReader : TextReader
 
     public override int Peek()
     {
-        var result = _index < _stringBuilder.Length
+        int result = _index < _stringBuilder.Length
             ? _stringBuilder[_index]
             : -1;
         return result;
@@ -40,7 +40,7 @@ public sealed class StringBuilderReader : TextReader
 
     public override int Read(char[] buffer, int index, int count)
     {
-        var result = Math.Min(count, _stringBuilder.Length - _index);
+        int result = Math.Min(count, _stringBuilder.Length - _index);
 
         if (result > 0)
         {

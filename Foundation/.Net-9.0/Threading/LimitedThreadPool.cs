@@ -16,7 +16,7 @@ public sealed class LimitedThreadPool<T>(int maxThreadCount)
 
     public bool QueueUserWorkItem(Action<T> waitCallback, T state)
     {
-        var item = Tuple.Create(waitCallback, state);
+        Tuple<Action<T>, T> item = Tuple.Create(waitCallback, state);
         bool succeeded;
         if (_availableThreadCount > 0)
         {
@@ -44,8 +44,8 @@ public sealed class LimitedThreadPool<T>(int maxThreadCount)
             {
                 while (_queue.Count > 0 && _availableThreadCount > 0)
                 {
-                    var item = _queue.Dequeue();
-                    var succeeded = ThreadPool.QueueUserWorkItem(Callback, item);
+                    Tuple<Action<T>, T> item = _queue.Dequeue();
+                    bool succeeded = ThreadPool.QueueUserWorkItem(Callback, item);
                     Interlocked.Decrement(ref _availableThreadCount);
                 }
             }
@@ -56,9 +56,9 @@ public sealed class LimitedThreadPool<T>(int maxThreadCount)
     {
         try
         {
-            var item = (Tuple<Action<T>, T>)stateObject;
-            var waitCallback = item.Item1;
-            var state = item.Item2;
+            Tuple<Action<T>, T> item = (Tuple<Action<T>, T>)stateObject;
+            Action<T> waitCallback = item.Item1;
+            T state = item.Item2;
             waitCallback(state);
         }
         finally

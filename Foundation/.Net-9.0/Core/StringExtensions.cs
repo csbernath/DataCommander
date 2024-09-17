@@ -21,11 +21,11 @@ public static class StringExtensions
 
     public static IEnumerable<string> GetLines(this string source)
     {
-        using (var stringReader = new StringReader(source))
+        using (StringReader stringReader = new StringReader(source))
         {
             while (true)
             {
-                var line = stringReader.ReadLine();
+                string line = stringReader.ReadLine();
                 if (line == null)
                     break;
 
@@ -38,7 +38,7 @@ public static class StringExtensions
     {
         ArgumentNullException.ThrowIfNull(line);
         Assert.IsInRange(indentSize > 0);
-        var stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.Append(new string(' ', indentSize));
         stringBuilder.Append(line);
         return stringBuilder.ToString();
@@ -48,7 +48,7 @@ public static class StringExtensions
     {
         Assert.IsTrue(!string.IsNullOrEmpty(line));
         Assert.IsInRange(indentSize > 0);
-        var index = line.IndexOf(c => !char.IsWhiteSpace(c));
+        int index = line.IndexOf(c => !char.IsWhiteSpace(c));
         string decreasedLine;
         if (index > 0)
         {
@@ -63,8 +63,8 @@ public static class StringExtensions
 
     public static int IndexOf(this string source, Func<char, bool> predicate)
     {
-        var result = -1;
-        for (var index = 0; index < source.Length; ++index)
+        int result = -1;
+        for (int index = 0; index < source.Length; ++index)
         {
             if (predicate(source[index]))
             {
@@ -108,21 +108,21 @@ public static class StringExtensions
         ArgumentNullException.ThrowIfNull(value);
         Assert.IsInRange(value.Length >= length);
 
-        var startIndex = value.Length - length;
+        int startIndex = value.Length - length;
         return value[startIndex..];
     }
 
     private static string Indent(this string source, string indentString, int indentCount)
     {
         indentString = string.Join(string.Empty, Enumerable.Repeat(indentString, indentCount));
-        var stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
 
-        using (var stringReader = new StringReader(source))
+        using (StringReader stringReader = new StringReader(source))
         {
-            var sequence = new Sequence();
+            Sequence sequence = new Sequence();
             while (true)
             {
-                var line = stringReader.ReadLine();
+                string line = stringReader.ReadLine();
                 if (line == null)
                     break;
 

@@ -18,18 +18,18 @@ public sealed class UpdaterStartup
 
     public void Update(string applicationName, string updaterDirectory, string applicationExeFileName)
     {
-        var applicationDirectory = Path.GetDirectoryName(applicationExeFileName);
+        string applicationDirectory = Path.GetDirectoryName(applicationExeFileName);
 
-        var backupDirectory = Path.Combine(updaterDirectory, $"{applicationName}.Backup");
+        string backupDirectory = Path.Combine(updaterDirectory, $"{applicationName}.Backup");
         CopyDirectory(applicationDirectory, backupDirectory);
 
-        var sourceDirectory = Path.Combine(updaterDirectory, applicationName);
+        string sourceDirectory = Path.Combine(updaterDirectory, applicationName);
         CopyDirectory(sourceDirectory, applicationDirectory);
 
-        var repository = new DeploymentCommandRepository(_serializer);
+        DeploymentCommandRepository repository = new DeploymentCommandRepository(_serializer);
         repository.Save(applicationName, new DeleteUpdater(updaterDirectory));
 
-        var processStartInfo = new ProcessStartInfo
+        ProcessStartInfo processStartInfo = new ProcessStartInfo
         {
             WorkingDirectory = applicationDirectory,
             FileName = applicationExeFileName,
@@ -40,8 +40,8 @@ public sealed class UpdaterStartup
 
     private static void CopyDirectory(string sourceDirectoryName, string targetDirectoryName)
     {
-        var sourceDirectory = new DirectoryInfo(sourceDirectoryName);
-        var targetDirectory = new DirectoryInfo(targetDirectoryName);
+        DirectoryInfo sourceDirectory = new DirectoryInfo(sourceDirectoryName);
+        DirectoryInfo targetDirectory = new DirectoryInfo(targetDirectoryName);
         Copy(sourceDirectory, targetDirectory);
     }
 
@@ -50,20 +50,20 @@ public sealed class UpdaterStartup
         if (!targetDirectory.Exists)
             targetDirectory.Create();
 
-        foreach (var file in sourceDirectory.GetFiles())
+        foreach (FileInfo file in sourceDirectory.GetFiles())
             Copy(file, targetDirectory);
 
-        foreach (var sourceSubDirectory in sourceDirectory.GetDirectories())
+        foreach (DirectoryInfo sourceSubDirectory in sourceDirectory.GetDirectories())
         {
-            var targetSubDirectoryName = Path.Combine(targetDirectory.FullName, sourceSubDirectory.Name);
-            var targetSubDirectory = new DirectoryInfo(targetSubDirectoryName);
+            string targetSubDirectoryName = Path.Combine(targetDirectory.FullName, sourceSubDirectory.Name);
+            DirectoryInfo targetSubDirectory = new DirectoryInfo(targetSubDirectoryName);
             Copy(sourceSubDirectory, targetSubDirectory);
         }
     }
 
     private static void Copy(FileInfo sourceFile, DirectoryInfo targetDirectory)
     {
-        var targetFileName = Path.Combine(targetDirectory.FullName, sourceFile.Name);
+        string targetFileName = Path.Combine(targetDirectory.FullName, sourceFile.Name);
         sourceFile.CopyTo(targetFileName);
     }
 }

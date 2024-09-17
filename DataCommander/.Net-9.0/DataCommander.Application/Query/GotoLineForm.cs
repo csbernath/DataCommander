@@ -42,8 +42,8 @@ public class GotoLineForm : Form
     {
         get
         {
-            var s = _lineNumberTextBox.Text;
-            var lineNumber = int.Parse(s);
+            string s = _lineNumberTextBox.Text;
+            int lineNumber = int.Parse(s);
             return lineNumber;
         }
     }
@@ -133,8 +133,8 @@ public class GotoLineForm : Form
     {
         try
         {
-            var s = _lineNumberTextBox.Text;
-            var lineNumber = int.Parse(s);
+            string s = _lineNumberTextBox.Text;
+            int lineNumber = int.Parse(s);
 
             if (lineNumber >= 1 && lineNumber <= _maxLineLineNumber)
             {

@@ -24,26 +24,26 @@ public sealed class WorkerThreadPoolManager(
     {
         if (_pool.QueuedItemCount > 0)
         {
-            var addableThreadCount = _pool.MaxThreadCount - _pool.Dequeuers.Count;
-            var count = Math.Min(addableThreadCount, 5);
+            int addableThreadCount = _pool.MaxThreadCount - _pool.Dequeuers.Count;
+            int count = Math.Min(addableThreadCount, 5);
 
-            for (var i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
-                var callback = _waitCallbackFactory.CreateWaitCallback();
-                var dequeuer = new WorkerThreadPoolDequeuer(callback);
+                WaitCallback callback = _waitCallbackFactory.CreateWaitCallback();
+                WorkerThreadPoolDequeuer dequeuer = new WorkerThreadPoolDequeuer(callback);
                 _pool.Dequeuers.Add(dequeuer);
                 dequeuer.Thread.Start();
             }
         }
         else
         {
-            var timestamp = Stopwatch.GetTimestamp();
-            var dequeuers = new List<WorkerThreadPoolDequeuer>();
-            var threads = new WorkerThreadCollection();
+            long timestamp = Stopwatch.GetTimestamp();
+            List<WorkerThreadPoolDequeuer> dequeuers = [];
+            WorkerThreadCollection threads = [];
 
-            foreach (var dequeuer in _pool.Dequeuers)
+            foreach (WorkerThreadPoolDequeuer dequeuer in _pool.Dequeuers)
             {
-                var milliseconds = StopwatchTimeSpan.ToInt32(timestamp - dequeuer.LastActivityTimestamp, 1000);
+                int milliseconds = StopwatchTimeSpan.ToInt32(timestamp - dequeuer.LastActivityTimestamp, 1000);
 
                 if (milliseconds >= 10000)
                 {
@@ -52,12 +52,12 @@ public sealed class WorkerThreadPoolManager(
                 }
             }
 
-            foreach (var dequeuer in dequeuers)
+            foreach (WorkerThreadPoolDequeuer dequeuer in dequeuers)
             {
                 _pool.Dequeuers.Remove(dequeuer);
             }
 
-            var stopEvent = new ManualResetEvent(false);
+            ManualResetEvent stopEvent = new ManualResetEvent(false);
             threads.Stop(stopEvent);
             stopEvent.WaitOne();
         }

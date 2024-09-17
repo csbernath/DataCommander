@@ -46,22 +46,22 @@ from	{database.Name}.{owner}.[{name}]()",
 
     public ContextMenu? GetContextMenu()
     {
-        var scriptObjectMenuItem = new MenuItem("Script Object", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        var menuItems = new[] { scriptObjectMenuItem }.ToReadOnlyCollection();
-        var contextMenu = new ContextMenu(menuItems);
+        MenuItem scriptObjectMenuItem = new MenuItem("Script Object", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+        System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> menuItems = new[] { scriptObjectMenuItem }.ToReadOnlyCollection();
+        ContextMenu contextMenu = new ContextMenu(menuItems);
         return contextMenu;
     }
 
     private void menuItemScriptObject_Click(object sender, EventArgs e)
     {
         string text;
-        using (var connection = database.Databases.Server.CreateConnection())
+        using (Microsoft.Data.SqlClient.SqlConnection connection = database.Databases.Server.CreateConnection())
         {
             connection.Open();
             text = SqlDatabase.GetSysComments(connection, database.Name, owner, name, CancellationToken.None).Result;
         }
 
-        var queryForm = (IQueryForm)sender;
+        IQueryForm queryForm = (IQueryForm)sender;
         queryForm.ShowText(text);
     }
 }

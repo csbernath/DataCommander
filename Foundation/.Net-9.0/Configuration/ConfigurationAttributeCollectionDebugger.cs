@@ -9,7 +9,7 @@ internal sealed class ConfigurationAttributeCollectionDebugger(ConfigurationAttr
     {
         get
         {
-            var array = new ConfigurationAttribute[collection.Count];
+            ConfigurationAttribute[] array = new ConfigurationAttribute[collection.Count];
             collection.CopyTo(array, 0);
             return array;
         }

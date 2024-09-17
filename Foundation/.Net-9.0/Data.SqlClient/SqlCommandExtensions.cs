@@ -11,7 +11,7 @@ public static class SqlCommandExtensions
     {
         ArgumentNullException.ThrowIfNull(command);
 
-        var sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         switch (command.CommandType)
         {
             case CommandType.StoredProcedure:
@@ -21,10 +21,10 @@ public static class SqlCommandExtensions
                 break;
 
             case CommandType.Text:
-                var parameters = command.Parameters;
+                SqlParameterCollection parameters = command.Parameters;
                 if (parameters.Count > 0)
                 {
-                    var parametersString = GetSpExecuteSqlParameters(parameters);
+                    string parametersString = GetSpExecuteSqlParameters(parameters);
                     sb.AppendFormat(
                         "exec sp_executesql {0},{1}",
                         command.CommandText.ToNullableNVarChar(),
@@ -45,8 +45,8 @@ public static class SqlCommandExtensions
 
     private static string GetSpExecuteSqlParameters(SqlParameterCollection parameters)
     {
-        var sb = new StringBuilder();
-        var first = true;
+        StringBuilder sb = new StringBuilder();
+        bool first = true;
         foreach (SqlParameter parameter in parameters)
         {
             if (first)
@@ -58,7 +58,7 @@ public static class SqlCommandExtensions
                 sb.Append(',');
             }
 
-            var dataTypeName = parameter.GetDataTypeName();
+            string dataTypeName = parameter.GetDataTypeName();
             sb.AppendFormat("{0} {1}", parameter.ParameterName, dataTypeName);
         }
         return sb.ToString();

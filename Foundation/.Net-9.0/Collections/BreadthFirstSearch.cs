@@ -10,20 +10,20 @@ public static class BreadthFirstSearch
         ArgumentNullException.ThrowIfNull(getChildNodes);
         ArgumentNullException.ThrowIfNull(visit);
 
-        var queue = new Queue<TNode>();
+        Queue<TNode> queue = new Queue<TNode>();
         queue.Enqueue(node);
 
         while (queue.Count > 0)
         {
-            var currentNode = queue.Dequeue();
-            var continueSearch = visit(currentNode);
+            TNode currentNode = queue.Dequeue();
+            bool continueSearch = visit(currentNode);
 
             if (!continueSearch)
                 break;
 
-            var childNodes = getChildNodes(currentNode);
+            IEnumerable<TNode> childNodes = getChildNodes(currentNode);
 
-            foreach (var childNode in childNodes)
+            foreach (TNode childNode in childNodes)
                 queue.Enqueue(childNode);
         }
     }

@@ -14,7 +14,7 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
 
     int IList<WorkerThread>.IndexOf(WorkerThread item)
     {
-        var index = _threads.IndexOf(item);
+        int index = _threads.IndexOf(item);
         return index;
     }
 
@@ -106,7 +106,7 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
     {
         lock (_threads)
         {
-            foreach (var thread in _threads)
+            foreach (WorkerThread thread in _threads)
             {
                 thread.Start();
             }
@@ -120,7 +120,7 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
     {
         lock (_threads)
         {
-            foreach (var thread in _threads)
+            foreach (WorkerThread thread in _threads)
             {
                 thread.Stop();
             }
@@ -134,7 +134,7 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
     public void Stop(EventWaitHandle stopEvent)
     {
         ArgumentNullException.ThrowIfNull(stopEvent);
-        var stopper = new Stopper(_threads, stopEvent);
+        Stopper stopper = new Stopper(_threads, stopEvent);
         stopper.Stop();
     }
 
@@ -146,7 +146,7 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
         {
             lock (threads)
             {
-                foreach (var thread in threads)
+                foreach (WorkerThread thread in threads)
                 {
                     thread.Stopped += Thread_Stopped;
                     thread.Stop();

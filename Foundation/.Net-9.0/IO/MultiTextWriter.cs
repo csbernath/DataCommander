@@ -15,19 +15,19 @@ public class MultiTextWriter : TextWriter
 
     public override void Write(char value)
     {
-        foreach (var textWriter in _textWriters)
+        foreach (TextWriter textWriter in _textWriters)
             textWriter.Write(value);
     }
 
     public override void Write(char[] buffer, int index, int count)
     {
-        var value = new string(buffer, index, count);
+        string value = new string(buffer, index, count);
         Write(value);
     }
 
     public override void Write(string value)
     {
-        foreach (var textWriter in _textWriters)
+        foreach (TextWriter textWriter in _textWriters)
         {
             textWriter.Write(value);
         }

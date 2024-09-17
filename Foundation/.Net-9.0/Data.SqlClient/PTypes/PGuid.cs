@@ -35,7 +35,7 @@ public readonly struct PGuid : INullable
 
     public static bool operator ==(PGuid x, PGuid y)
     {
-        var isEqual = x.ValueType == y.ValueType;
+        bool isEqual = x.ValueType == y.ValueType;
         if (isEqual)
             if (x.ValueType == PValueType.Value)
                 isEqual = x._sql.Value == y._sql.Value;
@@ -46,13 +46,13 @@ public readonly struct PGuid : INullable
 
     public static PGuid Parse(string s, PValueType type)
     {
-        var sp = string.IsNullOrEmpty(s) ? new PGuid(type) : SqlGuid.Parse(s);
+        PGuid sp = string.IsNullOrEmpty(s) ? new PGuid(type) : SqlGuid.Parse(s);
         return sp;
     }
 
     public override readonly bool Equals(object y)
     {
-        var equals = y is PGuid;
+        bool equals = y is PGuid;
         if (equals)
             equals = this == (PGuid)y;
         return equals;
@@ -60,7 +60,7 @@ public readonly struct PGuid : INullable
 
     public override readonly int GetHashCode()
     {
-        var hashCode = _sql.GetHashCode();
+        int hashCode = _sql.GetHashCode();
         return hashCode;
     }
 

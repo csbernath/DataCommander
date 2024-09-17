@@ -38,8 +38,8 @@ internal sealed class AsyncDataAdapter(
         if (commands != null)
         {
             _cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = _cancellationTokenSource.Token;
-            var task = new Task(async () => await Fill(commands, cancellationToken), cancellationToken, TaskCreationOptions.LongRunning);
+            CancellationToken cancellationToken = _cancellationTokenSource.Token;
+            Task task = new Task(async () => await Fill(commands, cancellationToken), cancellationToken, TaskCreationOptions.LongRunning);
             task.Start();
         }
         else
@@ -53,7 +53,7 @@ internal sealed class AsyncDataAdapter(
             _cancellationTokenSource.Cancel();
             if (provider.IsCommandCancelable)
             {
-                var task = new Task(() => { _command.Command.Cancel(); });
+                Task task = new Task(() => { _command.Command.Cancel(); });
                 task.Start();
             }
         }
@@ -68,18 +68,18 @@ internal sealed class AsyncDataAdapter(
         using (LogFactory.Instance.GetCurrentMethodLog())
         {
             Exception exception = null;
-            var dataReaderHelper = provider.CreateDataReaderHelper(dataReader);
-            var schemaRows = schemaTable.Rows;
-            var count = schemaRows.Count;
+            IDataReaderHelper dataReaderHelper = provider.CreateDataReaderHelper(dataReader);
+            DataRowCollection schemaRows = schemaTable.Rows;
+            int count = schemaRows.Count;
 
             resultWriter.WriteTableBegin(schemaTable);
 
-            var fieldCount = dataReader.FieldCount;
+            int fieldCount = dataReader.FieldCount;
 
             if (fieldCount < 0)
                 fieldCount = 0;
 
-            var rows = new object[rowBlockSize][];
+            object[][] rows = new object[rowBlockSize][];
             int i;
 
             for (i = 0; i < rowBlockSize; i++)
@@ -87,9 +87,9 @@ internal sealed class AsyncDataAdapter(
 
             _rowCount = 0;
             i = 0;
-            var first = true;
-            var exitFromWhile = false;
-            var stopwatch = Stopwatch.StartNew();
+            bool first = true;
+            bool exitFromWhile = false;
+            Stopwatch stopwatch = Stopwatch.StartNew();
 
             while (!cancellationToken.IsCancellationRequested && !exitFromWhile)
             {
@@ -101,10 +101,10 @@ internal sealed class AsyncDataAdapter(
                     resultWriter.FirstRowReadBegin();
                     read = await dataReader.ReadAsync(cancellationToken);
 
-                    var dataTypeNames = new string[count];
+                    string[] dataTypeNames = new string[count];
 
                     if (read)
-                        for (var j = 0; j < count; ++j)
+                        for (int j = 0; j < count; ++j)
                             dataTypeNames[j] = dataReader.GetDataTypeName(j);
 
                     resultWriter.FirstRowReadEnd(dataTypeNames);
@@ -166,7 +166,7 @@ internal sealed class AsyncDataAdapter(
     {
         ArgumentNullException.ThrowIfNull(asyncDataAdapterCommand);
         Exception exception = null;
-        var command = asyncDataAdapterCommand.Command;
+        DbCommand command = asyncDataAdapterCommand.Command;
 
         try
         {
@@ -193,21 +193,21 @@ internal sealed class AsyncDataAdapter(
         {
             _command = asyncDataAdapterCommand;
             dataReader = await command.ExecuteReaderAsync(cancellationToken);
-            var fieldCount = dataReader.FieldCount;
+            int fieldCount = dataReader.FieldCount;
             resultWriter.AfterExecuteReader();
-            var tableIndex = 0;
+            int tableIndex = 0;
 
             while (!cancellationToken.IsCancellationRequested)
             {
                 if (fieldCount > 0)
                 {
-                    var schemaTable = await dataReader.GetSchemaTableAsync(cancellationToken);
+                    DataTable? schemaTable = await dataReader.GetSchemaTableAsync(cancellationToken);
                     if (schemaTable != null)
                     {
                         Log.Trace($"schemaTable:\r\n{schemaTable.ToStringTableString()}");
                         if (asyncDataAdapterCommand.Query != null)
                         {
-                            Parser.ParseResult(asyncDataAdapterCommand.Query.Results[tableIndex], out var name, out var fieldName);
+                            Parser.ParseResult(asyncDataAdapterCommand.Query.Results[tableIndex], out string? name, out string? fieldName);
                             schemaTable.TableName = name;
                         }
                     }
@@ -226,7 +226,7 @@ internal sealed class AsyncDataAdapter(
             if (dataReader != null)
             {
                 await dataReader.CloseAsync();
-                var recordsAffected = dataReader.RecordsAffected;
+                int recordsAffected = dataReader.RecordsAffected;
                 resultWriter.AfterCloseReader(recordsAffected);
             }
         }
@@ -238,7 +238,7 @@ internal sealed class AsyncDataAdapter(
 
         try
         {
-            foreach (var command in commands)
+            foreach (AsyncDataAdapterCommand command in commands)
             {
                 await Fill(command, cancellationToken);
                 command.Command.Dispose();

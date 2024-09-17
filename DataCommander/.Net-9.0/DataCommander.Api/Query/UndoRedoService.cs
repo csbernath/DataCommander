@@ -12,11 +12,11 @@ public static class UndoRedoService
         ArgumentNullException.ThrowIfNull(undoRedoState);
         ArgumentNullException.ThrowIfNull(items);
 
-        var unprocessedItemCount = undoRedoState.GetUnprocessedItemCount();
+        int unprocessedItemCount = undoRedoState.GetUnprocessedItemCount();
         if (unprocessedItemCount > 0)
             undoRedoState.Items.RemoveRange(undoRedoState.ProcessedItemCount, unprocessedItemCount);
 
-        var itemList = items.ToList();
+        List<T> itemList = items.ToList();
         undoRedoState.Items.AddRange(itemList);
         undoRedoState.ProcessedItemCount += itemList.Count;
     }
@@ -30,8 +30,8 @@ public static class UndoRedoService
         if (undoRedoState.ProcessedItemCount < itemCount)
             throw new InvalidOperationException("Nincs meg a megadott darabszámú visszavonható művelet.");
 
-        var processedItemCount = undoRedoState.ProcessedItemCount - itemCount;
-        var items = undoRedoState.Items.Take(processedItemCount).ToList();
+        int processedItemCount = undoRedoState.ProcessedItemCount - itemCount;
+        List<T> items = undoRedoState.Items.Take(processedItemCount).ToList();
         process(items);
         undoRedoState.ProcessedItemCount = processedItemCount;
     }
@@ -42,11 +42,11 @@ public static class UndoRedoService
         Assert.IsInRange(itemCount > 0);
         ArgumentNullException.ThrowIfNull(process);
 
-        var unprocessedItemCount = undoRedoState.GetUnprocessedItemCount();
+        int unprocessedItemCount = undoRedoState.GetUnprocessedItemCount();
         if (unprocessedItemCount < itemCount)
             throw new InvalidOperationException("Nincs meg a megadott számú ismételhető művelet.");
 
-        var items = undoRedoState.Items.GetRange(undoRedoState.ProcessedItemCount, itemCount).ToList();
+        List<T> items = undoRedoState.Items.GetRange(undoRedoState.ProcessedItemCount, itemCount).ToList();
         process(items);
         undoRedoState.ProcessedItemCount += itemCount;
     }

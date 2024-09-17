@@ -72,8 +72,8 @@ public sealed class SqlLog
 
     static SqlLog()
     {
-        var version = Environment.Version;
-        var major = version.Major;
+        Version version = Environment.Version;
+        int major = version.Major;
 
         if (major == 1)
         {
@@ -118,21 +118,21 @@ public sealed class SqlLog
                 _queue.Clear();
             }
 
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
-            for (var i = 0; i < array.Length; i++)
+            for (int i = 0; i < array.Length; i++)
             {
-                var item = array[i];
-                var commandText = item.CommandText;
+                ISqlLogItem item = array[i];
+                string commandText = item.CommandText;
                 sb.Append(commandText);
             }
 
-            var cmdText = sb.ToString();
+            string cmdText = sb.ToString();
             long ticks = 0;
 
             try
             {
-                var command = _connection.CreateCommand();
+                IDbCommand command = _connection.CreateCommand();
                 command.CommandText = cmdText;
                 command.CommandTimeout = 259200;
                 ticks = Stopwatch.GetTimestamp();
@@ -145,8 +145,8 @@ public sealed class SqlLog
             }
             finally
             {
-                var seconds = (double)ticks / Stopwatch.Frequency;
-                var speed = (int)(array.Length / seconds);
+                double seconds = (double)ticks / Stopwatch.Frequency;
+                int speed = (int)(array.Length / seconds);
 
                 Log.Trace(
                     "SqlLog.Flush() called. Count: {0}, Elapsed: {1}, Speed: {2} item/sec\r\n{3}",
@@ -164,7 +164,7 @@ public sealed class SqlLog
 
         while (!Thread.IsStopRequested)
         {
-            var i = WaitHandle.WaitAny(waitHandles);
+            int i = WaitHandle.WaitAny(waitHandles);
             CheckConnections();
 
             if (i == 0)
@@ -182,13 +182,13 @@ public sealed class SqlLog
             Flush();
         }
 
-        var endDate = LocalTime.Default.Now;
+        DateTime endDate = LocalTime.Default.Now;
 
         lock (_applications)
         {
-            foreach (var applicationId in _applications.Keys)
+            foreach (int applicationId in _applications.Keys)
             {
-                var item = new SqlLogApplicationEnd(applicationId, endDate);
+                SqlLogApplicationEnd item = new SqlLogApplicationEnd(applicationId, endDate);
                 Enqueue(item);
             }
         }
@@ -200,12 +200,12 @@ public sealed class SqlLog
 
     public int ApplicationStart(string name, DateTime startDate, bool safe)
     {
-        var sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         sb.Append("exec LogApplicationStart ");
         sb.Append(name.ToNullableVarChar());
         sb.Append(',');
         sb.Append(startDate.ToSqlConstant());
-        var commandText = sb.ToString();
+        string commandText = sb.ToString();
 
         if (_connection.State != ConnectionState.Open)
         {
@@ -215,10 +215,10 @@ public sealed class SqlLog
                 _connection.Connection.Open();
         }
 
-        var executor = _connection.CreateCommandExecutor();
-        var applicationId = (int)executor.ExecuteScalar(new CreateCommandRequest(commandText));
+        IDbCommandExecutor executor = _connection.CreateCommandExecutor();
+        int applicationId = (int)executor.ExecuteScalar(new CreateCommandRequest(commandText));
         Log.Trace("SqlLog.ApplicationStart({0})", applicationId);
-        var commands = new Dictionary<string, SqLoglCommandExecution>();
+        Dictionary<string, SqLoglCommandExecution> commands = [];
 
         lock (_applications)
             _applications.Add(applicationId, commands);
@@ -233,7 +233,7 @@ public sealed class SqlLog
     /// <param name="endDate">The end date of the application.</param>
     public void ApplicationEnd(int applicationId, DateTime endDate)
     {
-        var item = new SqlLogApplicationEnd(applicationId, endDate);
+        SqlLogApplicationEnd item = new SqlLogApplicationEnd(applicationId, endDate);
         Enqueue(item);
 
         lock (_applications)
@@ -244,29 +244,29 @@ public sealed class SqlLog
         object internalConnection,
         DateTime endDate)
     {
-        var sqlLogConnection = _connections[internalConnection];
+        SqlLogConnection sqlLogConnection = _connections[internalConnection];
 
         lock (_connections)
             _connections.Remove(internalConnection);
 
         if (sqlLogConnection != null)
         {
-            var applicationId = sqlLogConnection.ApplicationId;
-            var connectionNo = sqlLogConnection.ConnectionNo;
-            var item = new SqlLogConnectionClose(applicationId, connectionNo, endDate);
+            int applicationId = sqlLogConnection.ApplicationId;
+            int connectionNo = sqlLogConnection.ConnectionNo;
+            SqlLogConnectionClose item = new SqlLogConnectionClose(applicationId, connectionNo, endDate);
             Enqueue(item);
         }
     }
 
     private void CheckConnections()
     {
-        var list = new List<object>();
+        List<object> list = [];
 
         lock (_connections)
         {
-            foreach (var connection in _connections.Keys)
+            foreach (object connection in _connections.Keys)
             {
-                var isOpen = InternalConnectionHelper.IsOpen(connection);
+                bool isOpen = InternalConnectionHelper.IsOpen(connection);
 
                 if (!isOpen)
                     list.Add(connection);
@@ -281,7 +281,7 @@ public sealed class SqlLog
 
     private void CloseConnections(IEnumerable<object> connections, DateTime endDate)
     {
-        foreach (var connection in connections)
+        foreach (object connection in connections)
             ConnectionClosed(connection, endDate);
     }
 
@@ -313,13 +313,13 @@ public sealed class SqlLog
         long duration,
         Exception exception)
     {
-        var internalConnection = InternalConnectionHelper.GetInternalConnection(connection);
+        object internalConnection = InternalConnectionHelper.GetInternalConnection(connection);
         SqlLogConnection sqlLogConnection = null;
 
         if (internalConnection != null)
             _connections.TryGetValue(internalConnection, out sqlLogConnection);
 
-        var isNew = sqlLogConnection == null;
+        bool isNew = sqlLogConnection == null;
         int connectionNo;
 
         if (sqlLogConnection != null)
@@ -327,8 +327,8 @@ public sealed class SqlLog
         else
         {
             connectionNo = Interlocked.Increment(ref _connectionCounter);
-            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connection.ConnectionString);
-            var name = sqlConnectionStringBuilder.ApplicationName;
+            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connection.ConnectionString);
+            string name = sqlConnectionStringBuilder.ApplicationName;
             sqlLogConnection = new SqlLogConnection(applicationId, connectionNo, name, userName, hostName, startDate, duration, exception);
 
             if (internalConnection != null)
@@ -337,7 +337,7 @@ public sealed class SqlLog
                     _connections.Add(internalConnection, sqlLogConnection);
             }
 
-            var trace = new StackTrace(2, true).ToString();
+            string trace = new StackTrace(2, true).ToString();
             Log.Trace("LoggedSqlConnection.Open() succeeded. ConnectionNo: {0}\r\n{1}", connectionNo, trace);
 
             Enqueue(sqlLogConnection);
@@ -353,16 +353,16 @@ public sealed class SqlLog
     /// <param name="connection"></param>
     public void CloseConnection(IDbConnection connection)
     {
-        var internalConnection = InternalConnectionHelper.GetInternalConnection(connection);
+        object internalConnection = InternalConnectionHelper.GetInternalConnection(connection);
         connection.Close();
 
         if (internalConnection != null)
         {
-            var isOpen = InternalConnectionHelper.IsOpen(internalConnection);
+            bool isOpen = InternalConnectionHelper.IsOpen(internalConnection);
 
             if (!isOpen)
             {
-                var endDate = LocalTime.Default.Now;
+                DateTime endDate = LocalTime.Default.Now;
                 ConnectionClosed(internalConnection, endDate);
             }
         }
@@ -375,16 +375,16 @@ public sealed class SqlLog
     /// <param name="connection"></param>
     public void DisposeConnection(IDbConnection connection)
     {
-        var internalConnection = InternalConnectionHelper.GetInternalConnection(connection);
+        object internalConnection = InternalConnectionHelper.GetInternalConnection(connection);
         connection.Dispose();
 
         if (internalConnection != null)
         {
-            var isOpen = InternalConnectionHelper.IsOpen(internalConnection);
+            bool isOpen = InternalConnectionHelper.IsOpen(internalConnection);
 
             if (!isOpen)
             {
-                var endDate = LocalTime.Default.Now;
+                DateTime endDate = LocalTime.Default.Now;
                 ConnectionClosed(internalConnection, endDate);
             }
         }
@@ -407,8 +407,8 @@ public sealed class SqlLog
         long duration,
         Exception exception)
     {
-        var commands = _applications[applicationId];
-        var item = new SqlLogCommand(applicationId, commands, connectionNo, command, startDate, duration, exception);
+        Dictionary<string, SqLoglCommandExecution> commands = _applications[applicationId];
+        SqlLogCommand item = new SqlLogCommand(applicationId, commands, connectionNo, command, startDate, duration, exception);
         Enqueue(item);
     }
 }

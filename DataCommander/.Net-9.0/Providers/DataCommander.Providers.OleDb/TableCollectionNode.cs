@@ -20,19 +20,19 @@ internal sealed class TableCollectionNode(SchemaNode schema) : ITreeNode
         try
         {
             object[] restrictions = null;
-            var catalog = schema.Catalog.Name;
+            string? catalog = schema.Catalog.Name;
 
             if (catalog != null)
                 restrictions = [catalog, schema.Name];
 
             DataTable dataTable = dataTable = schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, restrictions);
-            var count = dataTable.Rows.Count;
-            var nameColumn = dataTable.Columns["TABLE_NAME"];
+            int count = dataTable.Rows.Count;
+            DataColumn? nameColumn = dataTable.Columns["TABLE_NAME"];
             treeNodes = new ITreeNode[count];
 
-            for (var i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
-                var name = (string)dataTable.Rows[i][nameColumn];
+                string name = (string)dataTable.Rows[i][nameColumn];
                 treeNodes[i] = new TableNode(schema, name);
             }
         }

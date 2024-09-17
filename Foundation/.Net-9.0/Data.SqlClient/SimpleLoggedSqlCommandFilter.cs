@@ -25,50 +25,50 @@ internal sealed class SimpleLoggedSqlCommandFilter : ISqlLoggedSqlCommandFilter
 
     private void SettingsChanged(object sender, EventArgs e)
     {
-        using (var log = LogFactory.Instance.GetCurrentMethodLog())
+        using (ILog log = LogFactory.Instance.GetCurrentMethodLog())
         {
-            var node = _section.SelectNode(_nodeName, false);
+            ConfigurationNode node = _section.SelectNode(_nodeName, false);
             if (node != null)
             {
-                var list = new List<SimpleLoggedSqlCommandFilterRule>();
+                List<SimpleLoggedSqlCommandFilterRule> list = [];
 
-                foreach (var childNode in node.ChildNodes)
+                foreach (ConfigurationNode childNode in node.ChildNodes)
                 {
-                    var attributes = childNode.Attributes;
-                    var include = attributes["Include"].GetValue<bool>();
-                    var userName = attributes["UserName"].GetValue<string>();
+                    ConfigurationAttributeCollection attributes = childNode.Attributes;
+                    bool include = attributes["Include"].GetValue<bool>();
+                    string userName = attributes["UserName"].GetValue<string>();
 
                     if (userName == "*")
                     {
                         userName = null;
                     }
 
-                    var hostName = attributes["HostName"].GetValue<string>();
+                    string hostName = attributes["HostName"].GetValue<string>();
 
                     if (hostName == "*")
                     {
                         hostName = null;
                     }
 
-                    var database = attributes["Database"].GetValue<string>();
+                    string database = attributes["Database"].GetValue<string>();
 
                     if (database == "*")
                     {
                         database = null;
                     }
 
-                    var commandText = attributes["CommandText"].GetValue<string>();
+                    string commandText = attributes["CommandText"].GetValue<string>();
 
                     if (commandText == "*")
                     {
                         commandText = null;
                     }
 
-                    var rule = new SimpleLoggedSqlCommandFilterRule(include, userName, hostName, database, commandText);
+                    SimpleLoggedSqlCommandFilterRule rule = new SimpleLoggedSqlCommandFilterRule(include, userName, hostName, database, commandText);
                     list.Add(rule);
                 }
 
-                var count = list.Count;
+                int count = list.Count;
                 SimpleLoggedSqlCommandFilterRule[] rules;
 
                 if (count > 0)
@@ -97,14 +97,14 @@ internal sealed class SimpleLoggedSqlCommandFilter : ISqlLoggedSqlCommandFilter
         {
             contains = false;
 
-            for (var i = 0; i < _rules.Length; i++)
+            for (int i = 0; i < _rules.Length; i++)
             {
-                var rule = _rules[i];
-                var match = rule.Match(userName, hostName, command);
+                SimpleLoggedSqlCommandFilterRule rule = _rules[i];
+                bool match = rule.Match(userName, hostName, command);
 
                 if (match)
                 {
-                    var include = rule.Include;
+                    bool include = rule.Include;
                     contains = (include && match) || !match;
                     break;
                 }

@@ -14,10 +14,10 @@ public static partial class IEnumerableExtensions
     {
         ArgumentNullException.ThrowIfNull(source, nameof(source));
 
-        var countIsGreaterThan = false;
-        var filteredCount = 0;
+        bool countIsGreaterThan = false;
+        int filteredCount = 0;
 
-        foreach (var item in source)
+        foreach (TSource item in source)
         {
             if (predicate(item))
             {
@@ -41,7 +41,7 @@ public static partial class IEnumerableExtensions
     {
         TSource? result = null;
 
-        foreach (var item in source)
+        foreach (TSource item in source)
         {
             if (predicate(item))
             {
@@ -60,14 +60,14 @@ public static partial class IEnumerableExtensions
         Assert.IsInRange(count >= 0);
         Assert.IsInRange(partitionCount > 0);
 
-        var partitionSize = count / partitionCount;
-        var remainder = count % partitionCount;
+        int partitionSize = count / partitionCount;
+        int remainder = count % partitionCount;
 
-        using (var enumerator = source.GetEnumerator())
+        using (IEnumerator<TSource> enumerator = source.GetEnumerator())
         {
-            for (var partitionIndex = 0; partitionIndex < partitionCount; partitionIndex++)
+            for (int partitionIndex = 0; partitionIndex < partitionCount; partitionIndex++)
             {
-                var currentPartitionSize = partitionSize;
+                int currentPartitionSize = partitionSize;
                 if (remainder > 0)
                 {
                     currentPartitionSize++;
@@ -76,7 +76,7 @@ public static partial class IEnumerableExtensions
 
                 if (currentPartitionSize > 0)
                 {
-                    var partition = enumerator.TakeRange(currentPartitionSize);
+                    List<TSource> partition = enumerator.TakeRange(currentPartitionSize);
                     if (partition.Count > 0)
                         yield return partition;
                     else
@@ -95,12 +95,12 @@ public static partial class IEnumerableExtensions
         Func<TResult, bool> breaker,
         Func<TResult, TResult, bool> comparer)
     {
-        var selectedIndex = -1;
-        var selectedSource = default(TSource);
-        var selectedResult = default(TResult);
-        var currentIndex = 0;
+        int selectedIndex = -1;
+        TSource selectedSource = default(TSource);
+        TResult selectedResult = default(TResult);
+        int currentIndex = 0;
 
-        foreach (var currentSource in source)
+        foreach (TSource currentSource in source)
         {
             if (currentIndex == 0)
             {
@@ -110,11 +110,11 @@ public static partial class IEnumerableExtensions
             }
             else
             {
-                var currentResult = selector(currentSource);
+                TResult currentResult = selector(currentSource);
                 if (breaker(currentResult))
                     break;
 
-                var comparisonResult = comparer(currentResult, selectedResult);
+                bool comparisonResult = comparer(currentResult, selectedResult);
                 if (comparisonResult)
                 {
                     selectedIndex = currentIndex;
@@ -137,13 +137,13 @@ public static partial class IEnumerableExtensions
         string result;
         if (source != null)
         {
-            var stringBuilder = new StringBuilder();
-            foreach (var item in source)
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach (T item in source)
             {
                 if (stringBuilder.Length > 0)
                     stringBuilder.Append(separator);
 
-                var itemString = toString(item);
+                string itemString = toString(item);
                 stringBuilder.Append(itemString);
             }
 
@@ -160,10 +160,10 @@ public static partial class IEnumerableExtensions
 
     public static TSource MinOrDefault<TSource>(this IEnumerable<TSource> source) where TSource : IComparable<TSource>
     {
-        var minItem = default(TSource);
-        var first = true;
+        TSource minItem = default(TSource);
+        bool first = true;
             
-        foreach (var item in source)
+        foreach (TSource item in source)
         {
             if (first)
             {
@@ -187,9 +187,9 @@ public static partial class IEnumerableExtensions
     public static IEnumerable<TResult> SelectWhere<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> select,
         Func<TResult, bool> where)
     {
-        foreach (var item in source)
+        foreach (TSource item in source)
         {
-            var result = select(item);
+            TResult result = select(item);
             if (where(result))
                 yield return result;
         }
@@ -198,9 +198,9 @@ public static partial class IEnumerableExtensions
     [Pure]
     public static IEnumerable<TResult> SelectWhereIsNotNull<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> select)
     {
-        foreach (var item in source)
+        foreach (TSource item in source)
         {
-            var result = select(item);
+            TResult result = select(item);
             if (result != null)
                 yield return result;
         }
@@ -212,8 +212,8 @@ public static partial class IEnumerableExtensions
     [Pure]
     public static IEnumerable<TSource[]> Split<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> isSeparator)
     {
-        var list = new List<TSource>();
-        foreach (var item in source)
+        List<TSource> list = [];
+        foreach (TSource item in source)
         {
             if (isSeparator(item))
             {
@@ -231,11 +231,11 @@ public static partial class IEnumerableExtensions
     [Pure]
     public static IEnumerable<List<TSource>> TakeRanges<TSource>(this IEnumerable<TSource> source, int rangeSize)
     {
-        using (var enumerator = source.GetEnumerator())
+        using (IEnumerator<TSource> enumerator = source.GetEnumerator())
         {
             while (true)
             {
-                var range = enumerator.TakeRange(rangeSize);
+                List<TSource> range = enumerator.TakeRange(rangeSize);
                 if (range.Count == 0)
                     break;
                 yield return range;
@@ -246,10 +246,10 @@ public static partial class IEnumerableExtensions
     [Pure]
     public static bool TryGetFirst<T>(this IEnumerable<T> source, Func<T, bool> predicate, out T first)
     {
-        var succeeded = false;
+        bool succeeded = false;
         first = default;
 
-        foreach (var item in source)
+        foreach (T item in source)
         {
             if (predicate(item))
             {

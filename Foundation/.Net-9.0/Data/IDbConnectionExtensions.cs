@@ -8,7 +8,7 @@ public static class IDbConnectionExtensions
 
     public static IDbCommand CreateCommand(this IDbConnection connection, CreateCommandRequest request)
     {
-        var command = connection.CreateCommand();
+        IDbCommand command = connection.CreateCommand();
         command.Initialize(request);
         return command;
     }

@@ -17,8 +17,8 @@ internal sealed class InternalLog(ILogWriter logWriter, IDateTimeProvider dateTi
 
     void ILog.Write(LogLevel logLevel, string message)
     {
-        var now = dateTimeProvider.Now;
-        var logEntry = LogEntryFactory.Create(name, now, message, logLevel);
+        DateTime now = dateTimeProvider.Now;
+        LogEntry logEntry = LogEntryFactory.Create(name, now, message, logLevel);
         logWriter.Write(logEntry);
     }
 }

@@ -9,9 +9,9 @@ public static class IEnumerableExtensions
     [Pure]
     public static Option<TSource> FirstOrOptionNone<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) where TSource : struct
     {
-        var result = Option<TSource>.None;
+        Option<TSource> result = Option<TSource>.None;
 
-        foreach (var item in source)
+        foreach (TSource item in source)
         {
             if (predicate(item))
             {

@@ -12,8 +12,8 @@ public static class DataViewExtensions
     {
         ArgumentNullException.ThrowIfNull(dataView, nameof(dataView));
 
-        var rows = dataView.Cast<DataRowView>().Select((dataRowView, rowIndex) => dataRowView.Row);
-        var columns = dataView.Table.Columns.Cast<DataColumn>().Select(DataTableExtensions.ToStringTableColumnInfo).ToArray();
+        System.Collections.Generic.IEnumerable<DataRow> rows = dataView.Cast<DataRowView>().Select((dataRowView, rowIndex) => dataRowView.Row);
+        StringTableColumnInfo<DataRow>[] columns = dataView.Table.Columns.Cast<DataColumn>().Select(DataTableExtensions.ToStringTableColumnInfo).ToArray();
         return rows.ToString(columns);
     }
 }

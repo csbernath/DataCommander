@@ -27,7 +27,7 @@ public class WorkerThreadPoolDequeuer
 
         while (!Thread.IsStopRequested)
         {
-            var dequeued = _pool.Dequeue(_callback, waitHandles);
+            bool dequeued = _pool.Dequeue(_callback, waitHandles);
 
             if (dequeued)
             {

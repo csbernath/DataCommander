@@ -11,9 +11,9 @@ public static class XmlSerialization
     {
         ArgumentNullException.ThrowIfNull(type);
 
-        var stringReader = new StringReader(xml);
-        var xmlSerializer = new XmlSerializer(type);
-        var obj = xmlSerializer.Deserialize(stringReader);
+        StringReader stringReader = new StringReader(xml);
+        XmlSerializer xmlSerializer = new XmlSerializer(type);
+        object obj = xmlSerializer.Deserialize(stringReader);
         return obj;
     }
 
@@ -22,30 +22,30 @@ public static class XmlSerialization
         ArgumentNullException.ThrowIfNull(xmlReader);
         ArgumentNullException.ThrowIfNull(type);
 
-        var xmlSerializer = new XmlSerializer(type);
-        var obj = xmlSerializer.Deserialize(xmlReader);
+        XmlSerializer xmlSerializer = new XmlSerializer(type);
+        object obj = xmlSerializer.Deserialize(xmlReader);
         return obj;
     }
 
     public static T Deserialize<T>(string xml)
     {
-        var obj = Deserialize(xml, typeof(T));
+        object obj = Deserialize(xml, typeof(T));
         return (T) obj;
     }
 
     public static T Deserialize<T>(XmlReader xmlReader)
     {
-        var obj = Deserialize(xmlReader, typeof(T));
+        object obj = Deserialize(xmlReader, typeof(T));
         return (T) obj;
     }
 
     public static string Serialize(object source)
     {
         ArgumentNullException.ThrowIfNull(source);
-        var type = source.GetType();
-        var xmlSerializer = new XmlSerializer(type);
+        Type type = source.GetType();
+        XmlSerializer xmlSerializer = new XmlSerializer(type);
 
-        var settings = new XmlWriterSettings
+        XmlWriterSettings settings = new XmlWriterSettings
         {
             OmitXmlDeclaration = true
         };

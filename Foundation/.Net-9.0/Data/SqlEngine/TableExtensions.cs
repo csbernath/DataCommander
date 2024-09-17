@@ -14,10 +14,10 @@ public static class TableExtensions
         IGroupJoinResultSelector groupJoinResultSelector,
         IEqualityComparer<Key> comparer)
     {
-        var groupJoinResult = outerTable.Rows
+        IEnumerable<IEnumerable<object[]>> groupJoinResult = outerTable.Rows
             .GroupJoin(innerTable.Rows, outerKeySelector, innerKeySelector, groupJoinResultSelector.Select, comparer);
-        var resultRows = groupJoinResult.SelectMany(r => r.ToArray());
-        var resultTable = new Table(groupJoinResultSelector.ResultTableName, groupJoinResultSelector.ResultColumns,
+        IEnumerable<object[]> resultRows = groupJoinResult.SelectMany(r => r.ToArray());
+        Table resultTable = new Table(groupJoinResultSelector.ResultTableName, groupJoinResultSelector.ResultColumns,
             resultRows);
         return resultTable;
     }
@@ -27,7 +27,7 @@ public static class TableExtensions
         Func<object[], Key> keySelector,
         IComparer<Key> comparer)
     {
-        var rows = table.Rows
+        IOrderedEnumerable<object[]> rows = table.Rows
             .OrderBy(keySelector, comparer);
         return new Table(null, table.Columns, rows);
     }
@@ -37,7 +37,7 @@ public static class TableExtensions
         string resultTableName,
         Func<object[], bool> predicate)
     {
-        var rows = table.Rows
+        IEnumerable<object[]> rows = table.Rows
             .Where(predicate);
         return new Table(resultTableName, table.Columns, rows);
     }

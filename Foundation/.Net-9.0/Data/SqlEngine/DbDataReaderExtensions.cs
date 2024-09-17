@@ -14,12 +14,12 @@ public static class DbDataReaderExtensions
         this DbDataReader dbDataReader,
         CancellationToken cancellationToken)
     {
-        var tables = new List<Table>();
+        List<Table> tables = [];
         while (dbDataReader.FieldCount > 0)
         {
-            var table = await dbDataReader.ReadTable(null, cancellationToken);
+            Table table = await dbDataReader.ReadTable(null, cancellationToken);
             tables.Add(table);
-            var hasNextResult = await dbDataReader.NextResultAsync(cancellationToken);
+            bool hasNextResult = await dbDataReader.NextResultAsync(cancellationToken);
             if (!hasNextResult)
                 break;
         }
@@ -32,11 +32,11 @@ public static class DbDataReaderExtensions
         string tableName,
         CancellationToken cancellationToken)
     {
-        var dbColumns = dbDataReader.GetColumnSchema();
-        var columnSchemas = dbColumns.Select(ToColumn);
-        var columns = new ColumnCollection(columnSchemas);
-        var rows = await dbDataReader.ReadRows(cancellationToken);
-        var table = new Table(tableName, columns, rows);
+        System.Collections.ObjectModel.ReadOnlyCollection<DbColumn> dbColumns = dbDataReader.GetColumnSchema();
+        IEnumerable<ColumnSchema> columnSchemas = dbColumns.Select(ToColumn);
+        ColumnCollection columns = new ColumnCollection(columnSchemas);
+        List<object[]> rows = await dbDataReader.ReadRows(cancellationToken);
+        Table table = new Table(tableName, columns, rows);
         return table;
     }
 
@@ -56,10 +56,10 @@ public static class DbDataReaderExtensions
         this DbDataReader dbDataReader,
         CancellationToken cancellationToken)
     {
-        var rows = new List<object[]>();
+        List<object[]> rows = [];
         while (await dbDataReader.ReadAsync(cancellationToken))
         {
-            var row = new object[dbDataReader.FieldCount];
+            object[] row = new object[dbDataReader.FieldCount];
             dbDataReader.GetValues(row);
             rows.Add(row);
         }

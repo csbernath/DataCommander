@@ -40,7 +40,7 @@ internal sealed class ForJsonAutoResultWriter(Action<InfoMessage> addInfoMessage
 
         if (_isJsonAuto)
         {
-            var column = FoundationDbColumnFactory.Create(schemaTable.Rows[0]);
+            FoundationDbColumn column = FoundationDbColumnFactory.Create(schemaTable.Rows[0]);
             _isJsonAuto = column.DataType == typeof(string);
         }
 
@@ -48,8 +48,8 @@ internal sealed class ForJsonAutoResultWriter(Action<InfoMessage> addInfoMessage
         {
             Assert.IsNull(_path);
 
-            var identifier = LocalTime.Default.Now.ToString("yyyy-MM-dd HHmmss.fff");
-            var tempPath = Path.GetTempPath();
+            string identifier = LocalTime.Default.Now.ToString("yyyy-MM-dd HHmmss.fff");
+            string tempPath = Path.GetTempPath();
             _path = Path.Combine(tempPath, identifier + ".json");
             _textWriter = new StreamWriter(_path, false, Encoding.UTF8);
             _formattedPath = Path.Combine(tempPath, identifier + "formatted.json");
@@ -68,11 +68,11 @@ internal sealed class ForJsonAutoResultWriter(Action<InfoMessage> addInfoMessage
 
         if (_isJsonAuto)
         {
-            for (var rowIndex = 0; rowIndex < rowCount; ++rowIndex)
+            for (int rowIndex = 0; rowIndex < rowCount; ++rowIndex)
             {
-                var row = rows[rowIndex];
-                var stringField = (StringField)row[0];
-                var fragment = stringField.Value;
+                object[] row = rows[rowIndex];
+                StringField stringField = (StringField)row[0];
+                string fragment = stringField.Value;
                 _textWriter.Write(fragment);
             }
         }
@@ -87,16 +87,16 @@ internal sealed class ForJsonAutoResultWriter(Action<InfoMessage> addInfoMessage
             _textWriter.Close();
             _textWriter = null;
 
-            using (var streamReader = new StreamReader(_path))
+            using (StreamReader streamReader = new StreamReader(_path))
             {
-                using (var jsonTextReader = new JsonTextReader(streamReader))
+                using (JsonTextReader jsonTextReader = new JsonTextReader(streamReader))
                 {
-                    using (var jsonTextWriter = new JsonTextWriter(new StreamWriter(_formattedPath)))
+                    using (JsonTextWriter jsonTextWriter = new JsonTextWriter(new StreamWriter(_formattedPath)))
                     {
                         jsonTextWriter.Formatting = Formatting.Indented;
                         while (true)
                         {
-                            var read = jsonTextReader.Read();
+                            bool read = jsonTextReader.Read();
                             if (!read)
                                 break;
 
@@ -113,7 +113,7 @@ internal sealed class ForJsonAutoResultWriter(Action<InfoMessage> addInfoMessage
                                 case JsonToken.StartConstructor:
                                     break;
                                 case JsonToken.PropertyName:
-                                    var propertyName = (string)jsonTextReader.Value;
+                                    string? propertyName = (string)jsonTextReader.Value;
                                     jsonTextWriter.WritePropertyName(propertyName);
                                     break;
                                 case JsonToken.Comment:
@@ -122,25 +122,25 @@ internal sealed class ForJsonAutoResultWriter(Action<InfoMessage> addInfoMessage
                                     break;
                                 case JsonToken.Integer:
                                 {
-                                    var value = jsonTextReader.Value;
+                                        object? value = jsonTextReader.Value;
                                     jsonTextWriter.WriteValue(value);
                                 }
                                     break;
                                 case JsonToken.Float:
                                 {
-                                    var value = jsonTextReader.Value;
+                                        object? value = jsonTextReader.Value;
                                     jsonTextWriter.WriteValue(value);
                                 }
                                     break;
                                 case JsonToken.String:
                                 {
-                                    var value = jsonTextReader.Value;
+                                        object? value = jsonTextReader.Value;
                                     jsonTextWriter.WriteValue(value);
                                 }
                                     break;
                                 case JsonToken.Boolean:
                                 {
-                                    var value = jsonTextReader.Value;
+                                        object? value = jsonTextReader.Value;
                                     jsonTextWriter.WriteValue(value);
                                 }
                                     break;
@@ -158,7 +158,7 @@ internal sealed class ForJsonAutoResultWriter(Action<InfoMessage> addInfoMessage
                                     break;
                                 case JsonToken.Date:
                                 {
-                                    var value = jsonTextReader.Value;
+                                        object? value = jsonTextReader.Value;
                                     jsonTextWriter.WriteValue(value);
                                 }
                                     break;

@@ -33,8 +33,8 @@ internal sealed class DataGridViewResultWriter : IResultWriter
 
     private static DataGridViewColumn ToDataGridViewColumn(DataRow schemaDataRow)
     {
-        var schema = FoundationDbColumnFactory.Create(schemaDataRow);
-        var column = new DataGridViewTextBoxColumn()
+        FoundationDbColumn schema = FoundationDbColumnFactory.Create(schemaDataRow);
+        DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn()
         {
             AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
             Name = schema.ColumnName
@@ -44,12 +44,14 @@ internal sealed class DataGridViewResultWriter : IResultWriter
 
     void IResultWriter.WriteTableBegin(DataTable schemaTable)
     {
-        var dataGridView = new DoubleBufferedDataGridView();
-        dataGridView.AllowUserToAddRows = false;
-        dataGridView.AllowUserToDeleteRows = false;
-        dataGridView.AutoSize = false;
+        DoubleBufferedDataGridView dataGridView = new DoubleBufferedDataGridView
+        {
+            AllowUserToAddRows = false,
+            AllowUserToDeleteRows = false,
+            AutoSize = false
+        };
 
-        var columns =
+        DataGridViewColumn[] columns =
             (from schemaRow in schemaTable.AsEnumerable()
                 select ToDataGridViewColumn(schemaRow)).ToArray();
         dataGridView.Columns.AddRange(columns);
@@ -66,17 +68,19 @@ internal sealed class DataGridViewResultWriter : IResultWriter
 
     void IResultWriter.WriteRows(object[][] rows, int rowCount)
     {
-        var dataGridView = DataGridViews[^1];
-        var targetRows = dataGridView.Rows;
-        for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
+        DoubleBufferedDataGridView dataGridView = DataGridViews[^1];
+        DataGridViewRowCollection targetRows = dataGridView.Rows;
+        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
         {
-            var sourceRow = rows[rowIndex];
-            var targetRow = new DataGridViewRow();
-            var cells = targetRow.Cells;
-            foreach (var sourceValue in sourceRow)
+            object[] sourceRow = rows[rowIndex];
+            DataGridViewRow targetRow = new DataGridViewRow();
+            DataGridViewCellCollection cells = targetRow.Cells;
+            foreach (object sourceValue in sourceRow)
             {
-                var cell = new DataGridViewTextBoxCell();
-                cell.Value = sourceValue;
+                DataGridViewTextBoxCell cell = new DataGridViewTextBoxCell
+                {
+                    Value = sourceValue
+                };
                 cells.Add(cell);
             }
 

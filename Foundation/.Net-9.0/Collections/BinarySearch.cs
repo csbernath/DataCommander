@@ -15,12 +15,12 @@ public static class BinarySearch
         Assert.IsInRange(minIndex <= maxIndex);
         ArgumentNullException.ThrowIfNull(compareTo);
 
-        var result = -1;
+        int result = -1;
 
         while (minIndex <= maxIndex)
         {
-            var midIndex = minIndex + (maxIndex - minIndex) / 2;
-            var comparisonResult = compareTo(midIndex);
+            int midIndex = minIndex + (maxIndex - minIndex) / 2;
+            int comparisonResult = compareTo(midIndex);
             if (comparisonResult == 0)
             {
                 result = midIndex;
@@ -42,12 +42,12 @@ public static class BinarySearch
 
     public static void Search(int minIndex, int maxIndex, Func<int, bool> lessThan, Func<int, bool> equals)
     {
-        var currentMinIndex = minIndex;
-        var currentMaxIndex = maxIndex;
+        int currentMinIndex = minIndex;
+        int currentMaxIndex = maxIndex;
 
         while (currentMinIndex < currentMaxIndex)
         {
-            var midIndex = currentMinIndex + (currentMaxIndex - currentMinIndex) / 2;
+            int midIndex = currentMinIndex + (currentMaxIndex - currentMinIndex) / 2;
 
             if (lessThan(midIndex))
             {

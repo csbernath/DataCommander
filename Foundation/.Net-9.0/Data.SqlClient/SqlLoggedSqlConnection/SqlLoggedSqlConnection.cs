@@ -54,8 +54,8 @@ public sealed class SqlLoggedSqlConnection : IDbConnection
     public void Open()
     {
         Exception exception = null;
-        var startDate = LocalTime.Default.Now;
-        var duration = Stopwatch.GetTimestamp();
+        DateTime startDate = LocalTime.Default.Now;
+        long duration = Stopwatch.GetTimestamp();
 
         try
         {
@@ -96,8 +96,8 @@ public sealed class SqlLoggedSqlConnection : IDbConnection
     {
         int count;
         Exception exception = null;
-        var startDate = LocalTime.Default.Now;
-        var duration = Stopwatch.GetTimestamp();
+        DateTime startDate = LocalTime.Default.Now;
+        long duration = Stopwatch.GetTimestamp();
 
         try
         {
@@ -111,7 +111,7 @@ public sealed class SqlLoggedSqlConnection : IDbConnection
         finally
         {
             duration = Stopwatch.GetTimestamp() - duration;
-            var contains = exception != null || Filter == null || Filter.Contains(UserName, HostName, command);
+            bool contains = exception != null || Filter == null || Filter.Contains(UserName, HostName, command);
 
             if (contains)
             {
@@ -127,8 +127,8 @@ public sealed class SqlLoggedSqlConnection : IDbConnection
         object scalar = null;
 
         Exception exception = null;
-        var startDate = LocalTime.Default.Now;
-        var duration = Stopwatch.GetTimestamp();
+        DateTime startDate = LocalTime.Default.Now;
+        long duration = Stopwatch.GetTimestamp();
 
         try
         {
@@ -142,7 +142,7 @@ public sealed class SqlLoggedSqlConnection : IDbConnection
         finally
         {
             duration = Stopwatch.GetTimestamp() - duration;
-            var contains = exception != null || Filter == null || Filter.Contains(UserName, HostName, command);
+            bool contains = exception != null || Filter == null || Filter.Contains(UserName, HostName, command);
 
             if (contains)
             {

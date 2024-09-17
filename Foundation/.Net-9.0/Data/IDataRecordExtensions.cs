@@ -8,8 +8,8 @@ public static class IDataRecordExtensions
     public static byte[] GetBytes(this IDataRecord dataRecord, int fieldIndex)
     {
         ArgumentNullException.ThrowIfNull(dataRecord);
-        var valueObject = dataRecord.GetValue(fieldIndex);
-        var value = (byte[])valueObject;
+        object valueObject = dataRecord.GetValue(fieldIndex);
+        byte[] value = (byte[])valueObject;
         return value;
     }
 

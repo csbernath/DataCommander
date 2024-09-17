@@ -8,7 +8,7 @@ public class ColumnValueSelector(Column sourceColumn) : IValueSelector
 
     public object Select(object[] row)
     {
-        var value = row[_sourceColumn.ColumnIndex];
+        object value = row[_sourceColumn.ColumnIndex];
         return value;
     }
 }

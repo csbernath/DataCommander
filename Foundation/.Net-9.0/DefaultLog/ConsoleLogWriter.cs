@@ -26,7 +26,7 @@ public sealed class ConsoleLogWriter : ILogWriter
     {
         lock (LockObject)
         {
-            var color = Console.ForegroundColor;
+            ConsoleColor color = Console.ForegroundColor;
 
             switch (logEntry.LogLevel)
             {

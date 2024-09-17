@@ -10,9 +10,9 @@ internal static class ConnectionNameProvider
         string dataSource;
         string? serverVersion;
         string? userId = null;
-        var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connection.ConnectionString);
+        SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connection.ConnectionString);
         dataSource = sqlConnectionStringBuilder.DataSource;
-        var integratedSecurity = sqlConnectionStringBuilder.IntegratedSecurity;
+        bool integratedSecurity = sqlConnectionStringBuilder.IntegratedSecurity;
         if (!integratedSecurity)
         {
             userId = connection.Credential != null
@@ -23,10 +23,10 @@ internal static class ConnectionNameProvider
         serverVersion = connection.ServerVersion;
         if (integratedSecurity)
         {
-            var commanExecutor = connection.CreateCommandExecutor();
+            IDbCommandExecutor commanExecutor = connection.CreateCommandExecutor();
             const string commandText = "select suser_sname()";
-            var createCommandRequest = new CreateCommandRequest(commandText);
-            var scalar = commanExecutor.ExecuteScalar(createCommandRequest);
+            CreateCommandRequest createCommandRequest = new CreateCommandRequest(commandText);
+            object scalar = commanExecutor.ExecuteScalar(createCommandRequest);
             userId = (string)scalar;
         }
 

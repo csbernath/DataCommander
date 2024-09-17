@@ -21,23 +21,23 @@ public readonly struct SmallDateInterval
     [Pure]
     public readonly bool Contains(SmallDate date)
     {
-        var contains = Start <= date && date <= End;
+        bool contains = Start <= date && date <= End;
         return contains;
     }
 
     [Pure]
     public readonly bool Contains(SmallDateInterval other)
     {
-        var contains = Start <= other.Start && other.End <= End;
+        bool contains = Start <= other.Start && other.End <= End;
         return contains;
     }
 
     [Pure]
     public readonly SmallDateInterval? Intersect(SmallDateInterval other)
     {
-        var start = ElementPair.Max(Start, other.Start);
-        var end = ElementPair.Min(End, other.End);
-        var intersects = start <= end;
+        SmallDate start = ElementPair.Max(Start, other.Start);
+        SmallDate end = ElementPair.Min(End, other.End);
+        bool intersects = start <= end;
         return intersects
             ? new SmallDateInterval(start, end)
             : (SmallDateInterval?) null;
@@ -46,31 +46,31 @@ public readonly struct SmallDateInterval
     [Pure]
     public readonly bool Intersects(SmallDateInterval other)
     {
-        var start = ElementPair.Max(Start, other.Start);
-        var end = ElementPair.Min(End, other.End);
-        var intersects = start <= end;
+        SmallDate start = ElementPair.Max(Start, other.Start);
+        SmallDate end = ElementPair.Min(End, other.End);
+        bool intersects = start <= end;
         return intersects;
     }
 
     [Pure]
     public readonly int GetLength()
     {
-        var length = End - Start + 1;
+        int length = End - Start + 1;
         return length;
     }
 
     [Pure]
     public readonly IEnumerable<SmallDate> GetDates()
     {
-        for (var date = Start; date <= End; date = date.AddDays(1))
+        for (SmallDate date = Start; date <= End; date = date.AddDays(1))
             yield return date;
     }
 
     [Pure]
     public readonly DateTimeInterval ToFoundationDateTimeInterval()
     {
-        var start = Start.ToDateTime();
-        var end = End.ToDateTime().AddDays(1);
+        System.DateTime start = Start.ToDateTime();
+        System.DateTime end = End.ToDateTime().AddDays(1);
         return new DateTimeInterval(start, end);
     }
 

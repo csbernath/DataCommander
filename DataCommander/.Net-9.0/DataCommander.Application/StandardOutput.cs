@@ -14,13 +14,13 @@ internal sealed class StandardOutput(TextWriter textWriter, QueryForm queryForm)
 
     public void WriteLine(params object[] args)
     {
-        var sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-        for (var i = 0; i < args.Length; i++)
+        for (int i = 0; i < args.Length; i++)
         {
             if (args[i] != null)
             {
-                var s = args[i].ToString();
+                string? s = args[i].ToString();
                 sb.Append(s);
 
                 if (i != args.Length - 1)
@@ -37,19 +37,19 @@ internal sealed class StandardOutput(TextWriter textWriter, QueryForm queryForm)
     {
         if (arg is Recordset recordset)
         {
-            var dataSet = new DataSet();
-            var adapter = new OleDbDataAdapter();
-            var objRs = arg;
+            DataSet dataSet = new DataSet();
+            OleDbDataAdapter adapter = new OleDbDataAdapter();
+            object? objRs = arg;
 
             while (objRs != null)
             {
-                var dataTable = new DataTable();
+                DataTable dataTable = new DataTable();
                 adapter.Fill(dataTable, objRs);
                 dataSet.Tables.Add(dataTable);
 
                 try
                 {
-                    objRs = recordset.NextRecordset(out var recordsAffected);
+                    objRs = recordset.NextRecordset(out object? recordsAffected);
                     TextWriter.WriteLine(recordsAffected + " row(s) affected.");
                 }
                 catch
@@ -62,7 +62,7 @@ internal sealed class StandardOutput(TextWriter textWriter, QueryForm queryForm)
         }
         else
         {
-            var s = arg.ToString();
+            string? s = arg.ToString();
             TextWriter.Write(s);
         }
     }

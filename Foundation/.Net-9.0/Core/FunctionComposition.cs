@@ -6,7 +6,7 @@ public static class FunctionComposition
 {
     public static Func<TX, TZ> Compose<TX, TY, TZ>(Func<TX, TY> func1, Func<TY, TZ> func2)
     {
-        var composition = new UnaryFunctionComposition<TX, TY, TZ>(func1, func2);
+        UnaryFunctionComposition<TX, TY, TZ> composition = new UnaryFunctionComposition<TX, TY, TZ>(func1, func2);
         return composition.Evaluate;
     }
 
@@ -26,8 +26,8 @@ public static class FunctionComposition
 
         public TZ Evaluate(TX x)
         {
-            var y = _func1(x);
-            var z = _func2(y);
+            TY y = _func1(x);
+            TZ z = _func2(y);
             return z;
         }
     }

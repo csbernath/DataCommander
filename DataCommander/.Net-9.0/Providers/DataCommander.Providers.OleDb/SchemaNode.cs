@@ -14,7 +14,7 @@ sealed class SchemaNode(CatalogNode catalog, string name) : ITreeNode
     {
         get
         {
-            var name = Name;
+            string? name = Name;
 
             if (name == null)
                 name = "[No schemas found]";
@@ -27,7 +27,7 @@ sealed class SchemaNode(CatalogNode catalog, string name) : ITreeNode
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var treeNodes = new ITreeNode[2];
+        ITreeNode[] treeNodes = new ITreeNode[2];
         treeNodes[0] = new TableCollectionNode(this);
         treeNodes[1] = new ProcedureCollectionNode(this);
 

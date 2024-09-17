@@ -8,7 +8,7 @@ public static class SqlParameterExtensions
 {
     public static string GetDataTypeName(this SqlParameter parameter)
     {
-        var stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.Append(parameter.SqlDbType.ToString().ToLowerInvariant());
 
         switch (parameter.SqlDbType)
@@ -24,7 +24,7 @@ public static class SqlParameterExtensions
             case SqlDbType.NChar:
             case SqlDbType.VarChar:
             case SqlDbType.NVarChar:
-                var size = parameter.Size;
+                int size = parameter.Size;
                 string sizeString;
 
                 if (size == -1 || size == int.MaxValue)

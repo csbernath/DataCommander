@@ -17,7 +17,7 @@ internal sealed class RoleNode(DatabaseNode database, string? name) : ITreeNode
     {
         get
         {
-            var query = string.Format(@"declare @uid smallint
+            string query = string.Format(@"declare @uid smallint
 select @uid = uid from {0}..sysusers where name = '{1}'
 
 select u.name from {0}..sysmembers m

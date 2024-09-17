@@ -16,7 +16,7 @@ internal sealed class TriggerCollectionNode(DatabaseNode databaseNode, int id) :
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var commandText = CreateCommandText();
+        string commandText = CreateCommandText();
         return await Db.ExecuteReaderAsync(
             databaseNode.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
@@ -27,10 +27,10 @@ internal sealed class TriggerCollectionNode(DatabaseNode databaseNode, int id) :
 
     private string CreateCommandText()
     {
-        var cb = new SqlCommandBuilder();
-        var databaseName = cb.QuoteIdentifier(databaseNode.Name);
+        SqlCommandBuilder cb = new SqlCommandBuilder();
+        string databaseName = cb.QuoteIdentifier(databaseNode.Name);
 
-        var commandText = $@"select
+        string commandText = $@"select
     name,
     object_id
 from {databaseName}.sys.triggers
@@ -41,8 +41,8 @@ order by name";
 
     private TriggerNode ReadRecord(IDataRecord dataRecord)
     {
-        var name = dataRecord.GetString(0);
-        var id = dataRecord.GetInt32(1);
+        string name = dataRecord.GetString(0);
+        int id = dataRecord.GetInt32(1);
         return new TriggerNode(databaseNode, id, name);
     }
 

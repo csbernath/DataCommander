@@ -28,7 +28,7 @@ public class ReadOnlySortedSetArray<T> : IReadOnlySortedSet<T>
 
     public IEnumerator<T> GetEnumerator()
     {
-        foreach (var item in _items)
+        foreach (T item in _items)
             yield return item;
     }
 
@@ -41,7 +41,7 @@ public class ReadOnlySortedSetArray<T> : IReadOnlySortedSet<T>
         if (_items.Length > 0)
             indexOfKey = BinarySearch.IndexOf(0, _items.Length - 1, index =>
             {
-                var otherItem = _items[index];
+                T otherItem = _items[index];
                 return _comparison(item, otherItem);
             });
         else

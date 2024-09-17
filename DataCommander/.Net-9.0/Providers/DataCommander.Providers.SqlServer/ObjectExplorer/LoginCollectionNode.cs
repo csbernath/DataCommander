@@ -23,7 +23,7 @@ internal sealed class LoginCollectionNode : ITreeNode
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var commandText = CreateCommandText();
+        string commandText = CreateCommandText();
         return await Db.ExecuteReaderAsync(
             _server.CreateConnection,
             new ExecuteReaderRequest(commandText),
@@ -43,7 +43,7 @@ order by name";
 
     private static LoginNode ReadRecord(IDataRecord dataRecord)
     {
-        var name = dataRecord.GetString(0);
+        string name = dataRecord.GetString(0);
         return new LoginNode(name);
     }
 

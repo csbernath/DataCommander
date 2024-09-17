@@ -52,18 +52,18 @@ public class SafeDbConnection : IDbConnection
 
     public IDbCommand CreateCommand()
     {
-        var command = Connection.CreateCommand();
+        IDbCommand command = Connection.CreateCommand();
         return new SafeDbCommand(this, command);
     }
 
     public void Open()
     {
-        var count = 0;
+        int count = 0;
 
         while (!_safeDbConnection.CancellationToken.IsCancellationRequested)
         {
             count++;
-            var stopwatch = new Stopwatch();
+            Stopwatch stopwatch = new Stopwatch();
 
             try
             {
@@ -107,7 +107,7 @@ public class SafeDbConnection : IDbConnection
 
         while (!_safeDbConnection.CancellationToken.IsCancellationRequested)
         {
-            var ticks = Stopwatch.GetTimestamp();
+            long ticks = Stopwatch.GetTimestamp();
 
             try
             {
@@ -123,7 +123,7 @@ public class SafeDbConnection : IDbConnection
                     reader.Dispose();
                 }
 
-                var state = Connection.State;
+                ConnectionState state = Connection.State;
 
                 Log.Write(
                     LogLevel.Error,
@@ -189,8 +189,8 @@ public class SafeDbConnection : IDbConnection
         if (Connection.State != ConnectionState.Open)
             Open();
 
-        var count = 0;
-        var tryCount = 0;
+        int count = 0;
+        int tryCount = 0;
 
         while (tryCount == 0 || !_safeDbConnection.CancellationToken.IsCancellationRequested)
         {

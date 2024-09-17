@@ -17,7 +17,7 @@ public sealed class BooleanDataFieldReader(IDataRecord dataRecord, int columnOrd
             }
             else
             {
-                var booleanValue = dataRecord.GetBoolean(columnOrdinal);
+                bool booleanValue = dataRecord.GetBoolean(columnOrdinal);
                 value = new BooleanField(booleanValue);
             }
 

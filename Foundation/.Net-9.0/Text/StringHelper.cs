@@ -10,15 +10,15 @@ public static class StringHelper
 {
     public static string FormatColumn(string col, int colWidth, bool alignRight)
     {
-        var length = col != null
+        int length = col != null
             ? col.Length
             : 0;
-        var spaceLen = colWidth - length;
+        int spaceLen = colWidth - length;
         string formatted;
 
         if (spaceLen >= 0)
         {
-            var space = new string(' ', spaceLen);
+            string space = new string(' ', spaceLen);
 
             if (alignRight)
             {
@@ -52,7 +52,7 @@ public static class StringHelper
     {
         fixed (char* pfixed = s)
         {
-            for (var p = pfixed; *p != 0; p++)
+            for (char* p = pfixed; *p != 0; p++)
             {
                 *p = char.ToLower(*p, CultureInfo.CurrentCulture);
             }
@@ -63,7 +63,7 @@ public static class StringHelper
     {
         fixed (char* pfixed = s)
         {
-            for (var p = pfixed; *p != 0; p++)
+            for (char* p = pfixed; *p != 0; p++)
             {
                 *p = char.ToUpper(*p, CultureInfo.CurrentCulture);
             }
@@ -75,14 +75,14 @@ public static class StringHelper
         ArgumentNullException.ThrowIfNull(textWriter);
         ArgumentNullException.ThrowIfNull(obj);
 
-        var type = obj.GetType();
-        var methodInfo = type.GetMethod(methodName);
-        var parameterInfos = methodInfo!.GetParameters();
-        var typeName = TypeNameCollection.GetTypeName(methodInfo.ReturnType);
-        var line = typeName + " " + methodName + "(" + Environment.NewLine;
-        var length = Math.Min(parameters.Length, parameterInfos.Length);
+        Type type = obj.GetType();
+        System.Reflection.MethodInfo? methodInfo = type.GetMethod(methodName);
+        System.Reflection.ParameterInfo[] parameterInfos = methodInfo!.GetParameters();
+        string typeName = TypeNameCollection.GetTypeName(methodInfo.ReturnType);
+        string line = typeName + " " + methodName + "(" + Environment.NewLine;
+        int length = Math.Min(parameters.Length, parameterInfos.Length);
 
-        for (var i = 0; i < length; i++)
+        for (int i = 0; i < length; i++)
         {
             typeName = TypeNameCollection.GetTypeName(parameterInfos[i].ParameterType);
 
@@ -102,7 +102,7 @@ public static class StringHelper
 
     public static bool ParseBoolean(string value, bool nullValue)
     {
-        var b = !string.IsNullOrEmpty(value)
+        bool b = !string.IsNullOrEmpty(value)
             ? bool.Parse(value)
             : nullValue;
         return b;

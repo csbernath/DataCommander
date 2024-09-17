@@ -10,7 +10,7 @@ public static class IDataParameterCollectionExtensions
 {
     public static void AddRange(this IDataParameterCollection dataParameterCollection, IEnumerable<object> parameters)
     {
-        foreach (var parameter in parameters)
+        foreach (object parameter in parameters)
             dataParameterCollection.Add(parameter);
     }
 
@@ -18,14 +18,14 @@ public static class IDataParameterCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(parameters);
 
-        var stringBuilder = new StringBuilder();
-        var first = true;
+        StringBuilder stringBuilder = new StringBuilder();
+        bool first = true;
 
         foreach (IDataParameter parameter in parameters)
         {
             if (parameter.Direction != ParameterDirection.ReturnValue)
             {
-                var value = parameter.Value;
+                object value = parameter.Value;
 
                 if (value != null)
                 {
@@ -37,12 +37,12 @@ public static class IDataParameterCollectionExtensions
                     }
                     else
                     {
-                        var dbType = parameter.DbType;
+                        DbType dbType = parameter.DbType;
 
                         switch (dbType)
                         {
                             case DbType.DateTime:
-                                var dateTime = (DateTime)value;
+                                DateTime dateTime = (DateTime)value;
                                 valueString = dateTime.ToSqlConstant();
                                 break;
 
@@ -74,7 +74,7 @@ public static class IDataParameterCollectionExtensions
             }
         }
 
-        var s = stringBuilder.ToString();
+        string s = stringBuilder.ToString();
 
         return s;
     }

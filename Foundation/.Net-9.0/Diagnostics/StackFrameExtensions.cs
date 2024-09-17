@@ -10,20 +10,20 @@ internal static class StackFrameExtensions
     {
         ArgumentNullException.ThrowIfNull(frame);
 
-        var stringBuilder = new StringBuilder();
-        var method = frame.GetMethod();
-        var type = method.DeclaringType;
-        var typeName = type.FullName;
-        var name = method.Name;
+        StringBuilder stringBuilder = new StringBuilder();
+        System.Reflection.MethodBase method = frame.GetMethod();
+        Type type = method.DeclaringType;
+        string typeName = type.FullName;
+        string name = method.Name;
         stringBuilder.AppendFormat("   at {0}.{1}(", typeName, name);
-        var parameters = method.GetParameters();
+        System.Reflection.ParameterInfo[] parameters = method.GetParameters();
 
-        for (var j = 0; j < parameters.Length; j++)
+        for (int j = 0; j < parameters.Length; j++)
         {
             if (j > 0)
                 stringBuilder.Append(',');
 
-            var parameter = parameters[j];
+            System.Reflection.ParameterInfo parameter = parameters[j];
             type = parameter.ParameterType;
             typeName = type.Name;
             name = parameter.Name;
@@ -34,12 +34,12 @@ internal static class StackFrameExtensions
         stringBuilder.Append(')');
         stringBuilder.Append($" ILOffset: 0x{frame.GetILOffset().ToString("x")}, ");
 
-        var fileName = frame.GetFileName();
+        string fileName = frame.GetFileName();
 
         if (fileName != null)
         {
-            var fileLineNumber = frame.GetFileLineNumber();
-            var fileColumnNumber = frame.GetFileColumnNumber();
+            int fileLineNumber = frame.GetFileLineNumber();
+            int fileColumnNumber = frame.GetFileColumnNumber();
             stringBuilder.AppendFormat(" in {0}:line {1},column {2}", fileName, fileLineNumber, fileColumnNumber);
         }
 

@@ -7,7 +7,7 @@ internal static class RetryEngine
 {
     public static void Execute(Action action, int maxRetryCount, Func<Exception, RetryPolicyHandleExceptionResult> exceptionHandler, CancellationToken cancellationToken)
     {
-        var tryCount = 0;
+        int tryCount = 0;
         while (true)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -23,7 +23,7 @@ internal static class RetryEngine
                 if (tryCount == maxRetryCount)
                     throw;
 
-                var result = exceptionHandler(exception);
+                RetryPolicyHandleExceptionResult result = exceptionHandler(exception);
 
                 if (!result.AnotherTryAllowed)
                     throw;

@@ -14,7 +14,7 @@ internal sealed class RoleCollectionNode(DatabaseNode database) : ITreeNode
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var commandText = $"select name from {database.Name}..sysusers where issqlrole = 1 order by name";
+        string commandText = $"select name from {database.Name}..sysusers where issqlrole = 1 order by name";
         return await Db.ExecuteReaderAsync(
             database.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
@@ -25,7 +25,7 @@ internal sealed class RoleCollectionNode(DatabaseNode database) : ITreeNode
 
     private RoleNode ReadRecord(IDataRecord dataRecord)
     {
-        var name = dataRecord.GetString(0);
+        string name = dataRecord.GetString(0);
         return new RoleNode(database, name);
     }
 

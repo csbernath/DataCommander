@@ -11,7 +11,7 @@ public static class AppSettings
 
     private static NameValueCollectionReader CreateInstance()
     {
-        var reader = new Reader(ConfigurationManager.AppSettings);
+        Reader reader = new Reader(ConfigurationManager.AppSettings);
         return new NameValueCollectionReader(reader.TryGetValue);
     }
 
@@ -19,15 +19,15 @@ public static class AppSettings
     {
         get
         {
-            var nameValueCollection = ConfigurationManager.AppSettings;
+            NameValueCollection nameValueCollection = ConfigurationManager.AppSettings;
 
-            var stackTrace = new StackTrace(1);
-            var stackFrame = stackTrace.GetFrame(0);
-            var methodBase = stackFrame.GetMethod();
-            var typeName = methodBase.DeclaringType.FullName;
-            var prefix = typeName + Type.Delimiter;
+            StackTrace stackTrace = new StackTrace(1);
+            StackFrame stackFrame = stackTrace.GetFrame(0);
+            System.Reflection.MethodBase methodBase = stackFrame.GetMethod();
+            string typeName = methodBase.DeclaringType.FullName;
+            string prefix = typeName + Type.Delimiter;
 
-            var reader = new PrefixedReader(nameValueCollection, prefix);
+            PrefixedReader reader = new PrefixedReader(nameValueCollection, prefix);
             return new NameValueCollectionReader(reader.TryGetValue);
         }
     }
@@ -46,7 +46,7 @@ public static class AppSettings
         public bool TryGetValue(string name, out string value)
         {
             value = _nameValueCollection[name];
-            var contains = value != null;
+            bool contains = value != null;
             return contains;
         }
     }
@@ -67,9 +67,9 @@ public static class AppSettings
 
         public bool TryGetValue(string name, out string value)
         {
-            var prefixedName = _prefix != null ? _prefix + name : name;
+            string prefixedName = _prefix != null ? _prefix + name : name;
             value = _nameValueCollection[prefixedName];
-            var contains = value != null;
+            bool contains = value != null;
             return contains;
         }
     }

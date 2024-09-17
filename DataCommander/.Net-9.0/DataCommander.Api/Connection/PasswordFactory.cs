@@ -10,31 +10,31 @@ public static class PasswordFactory
 
     public static Password CreateFromPlainText(string plainText)
     {
-        var @protected = Protect(plainText);
-        var secureString = SecureStringFactory.CreateFromPlainText(plainText);
+        byte[] @protected = Protect(plainText);
+        System.Security.SecureString secureString = SecureStringFactory.CreateFromPlainText(plainText);
         return new Password(@protected, secureString);
     }
 
     public static Password CreateFromProtected(byte[] @protected)
     {
-        var plainText = Unprotect(@protected);
-        var secureString = SecureStringFactory.CreateFromPlainText(plainText);
+        string plainText = Unprotect(@protected);
+        System.Security.SecureString secureString = SecureStringFactory.CreateFromPlainText(plainText);
         return new Password(@protected, secureString);
     }
 
     public static string Unprotect(byte[] @protected)
     {
-        var bytes = ProtectedData.Unprotect(@protected, Entropy, DataProtectionScope.CurrentUser);
-        var password = Encoding.UTF8.GetString(bytes);
+        byte[] bytes = ProtectedData.Unprotect(@protected, Entropy, DataProtectionScope.CurrentUser);
+        string password = Encoding.UTF8.GetString(bytes);
         return password;
     }
 
     private static byte[] Protect(string password)
     {
-        var bytes = !string.IsNullOrEmpty(password)
+        byte[] bytes = !string.IsNullOrEmpty(password)
             ? Encoding.UTF8.GetBytes(password)
             : [];
-        var protectedBytes = ProtectedData.Protect(bytes, Entropy, DataProtectionScope.CurrentUser);
+        byte[] protectedBytes = ProtectedData.Protect(bytes, Entropy, DataProtectionScope.CurrentUser);
         return protectedBytes;
     }
 }

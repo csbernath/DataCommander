@@ -14,7 +14,7 @@ public static class ICollectionExtensions
         //Assert.IsTrue(collection != null || items == null);
 
         if (items != null)
-            foreach (var item in items)
+            foreach (T item in items)
                 collection.Add(item);
     }
 
@@ -32,13 +32,13 @@ public static class ICollectionExtensions
 
     public static bool IsNullOrEmpty(this ICollection collection)
     {
-        var isNullOrEmpty = collection == null || collection.Count == 0;
+        bool isNullOrEmpty = collection == null || collection.Count == 0;
         return isNullOrEmpty;
     }
 
     public static bool IsNullOrEmpty<T>(this ICollection<T> collection)
     {
-        var isNullOrEmpty = collection == null || collection.Count == 0;
+        bool isNullOrEmpty = collection == null || collection.Count == 0;
         return isNullOrEmpty;
     }
 
@@ -48,12 +48,12 @@ public static class ICollectionExtensions
     {
         Assert.IsTrue(collection != null || items == null);
 
-        var count = 0;
+        int count = 0;
 
         if (items != null)
-            foreach (var item in items)
+            foreach (T item in items)
             {
-                var removed = collection.Remove(item);
+                bool removed = collection.Remove(item);
                 if (removed)
                     count++;
             }
@@ -65,7 +65,7 @@ public static class ICollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(source, nameof(source));
 
-        var target = new T[source.Count];
+        T[] target = new T[source.Count];
         source.CopyTo(target, 0);
         return target;
     }
@@ -113,8 +113,8 @@ public static class ICollectionExtensions
             }
             else
             {
-                var enumerable = (IEnumerable) _source;
-                var enumerableT = enumerable.Cast<TResult>();
+                IEnumerable enumerable = (IEnumerable) _source;
+                IEnumerable<TResult> enumerableT = enumerable.Cast<TResult>();
                 contains = enumerableT.Contains(item);
             }
 

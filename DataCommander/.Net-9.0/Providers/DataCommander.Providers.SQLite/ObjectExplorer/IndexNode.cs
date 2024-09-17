@@ -28,15 +28,15 @@ internal sealed class IndexNode(TableNode tableNode, string? name) : ITreeNode
     {
         get
         {
-            var commandText = $@"select sql
+            string commandText = $@"select sql
 from main.sqlite_master
 where
     type = 'index'
     and name = '{_name}'";
-            var scalar = Db.ExecuteScalar(
+            object scalar = Db.ExecuteScalar(
                 () => ConnectionFactory.CreateConnection(_tableNode.DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
                 new CreateCommandRequest(commandText));
-            var sql = (string)scalar;
+            string sql = (string)scalar;
             return sql;
         }
     }

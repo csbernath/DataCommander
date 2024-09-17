@@ -13,7 +13,7 @@ public class SafeLoggedSqlConnection : SafeDbConnection, ISafeDbConnection
     public SafeLoggedSqlConnection(SqlLog.SqlLog sqlLog, int applicationId, string userName, string hostName, string connectionString,
         ISqlLoggedSqlCommandFilter filter, CancellationToken cancellationToken)
     {
-        var connection = new SqlLoggedSqlConnection.SqlLoggedSqlConnection(sqlLog, applicationId, userName, hostName, connectionString, filter);
+        SqlLoggedSqlConnection.SqlLoggedSqlConnection connection = new SqlLoggedSqlConnection.SqlLoggedSqlConnection(sqlLog, applicationId, userName, hostName, connectionString, filter);
         _cancellationToken = cancellationToken;
 
         Initialize(connection, this);

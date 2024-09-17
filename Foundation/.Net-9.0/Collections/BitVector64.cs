@@ -12,13 +12,13 @@ public struct BitVector64(ulong data)
     {
         readonly get
         {
-            var bit = 1UL << index;
+            ulong bit = 1UL << index;
             return (Value & bit) == bit;
         }
 
         set
         {
-            var bit = 1UL << index;
+            ulong bit = 1UL << index;
 
             if (value)
                 Value |= bit;
@@ -29,7 +29,7 @@ public struct BitVector64(ulong data)
 
     public override readonly string ToString()
     {
-        var value = Value.ToString("X");
+        string value = Value.ToString("X");
         value = value.PadLeft(16, '0');
         return value;
     }

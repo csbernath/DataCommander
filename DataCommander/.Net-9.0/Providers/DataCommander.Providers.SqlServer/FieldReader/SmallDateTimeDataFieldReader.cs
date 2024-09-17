@@ -20,7 +20,7 @@ internal sealed class SmallDateTimeDataFieldReader(
             }
             else
             {
-                var dateTime = dataRecord.GetDateTime(columnOrdinal);
+                DateTime dateTime = dataRecord.GetDateTime(columnOrdinal);
                 string format;
 
                 if (dateTime.TimeOfDay.Ticks == 0)

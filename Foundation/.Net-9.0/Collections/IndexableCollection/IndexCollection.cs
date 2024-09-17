@@ -25,7 +25,7 @@ public class IndexCollection<T> : ICollection<ICollectionIndex<T>>
     public bool Remove(ICollectionIndex<T> item)
     {
         bool succeeded;
-        var contains = _dictionary.ContainsValue(item);
+        bool contains = _dictionary.ContainsValue(item);
         succeeded = contains && _dictionary.Remove(item.Name);
         return succeeded;
     }

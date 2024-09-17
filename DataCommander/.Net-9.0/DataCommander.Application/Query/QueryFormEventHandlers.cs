@@ -32,8 +32,8 @@ public sealed partial class QueryForm
 {
     private void CloseResultSetTabPage_Click(object sender, EventArgs e)
     {
-        var toolStripMenuItem = (ToolStripMenuItem)sender;
-        var tabPage = (TabPage)toolStripMenuItem.Tag;
+        ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)sender;
+        TabPage? tabPage = (TabPage)toolStripMenuItem.Tag;
         CloseResultSetTabPage(tabPage);
         toolStripMenuItem.Tag = null;
     }
@@ -46,7 +46,7 @@ public sealed partial class QueryForm
         using (new CursorManager(Cursors.WaitCursor))
         {
             base.OnFormClosing(formClosingEventArgs);
-            var cancel = SaveTextOnFormClosing();
+            bool cancel = SaveTextOnFormClosing();
             if (!cancel)
             {
                 cancel = CancelQueryOnFormClosing();
@@ -87,18 +87,18 @@ public sealed partial class QueryForm
 
     private void menuObjectExplorer_Click(object sender, EventArgs e)
     {
-        var visible = !_tvObjectExplorer.Visible;
+        bool visible = !_tvObjectExplorer.Visible;
         _tvObjectExplorer.Visible = visible;
         _splitterObjectExplorer.Visible = visible;
     }
 
     private void tvObjectBrowser_BeforeExpand(object sender, TreeViewCancelEventArgs e)
     {
-        var treeNode = e.Node;
+        TreeNode? treeNode = e.Node;
 
         if (treeNode.Nodes.Count > 0)
         {
-            var treeNode2 = (ITreeNode)treeNode.Nodes[0].Tag;
+            ITreeNode? treeNode2 = (ITreeNode)treeNode.Nodes[0].Tag;
 
             if (treeNode2 == null)
             {
@@ -108,17 +108,17 @@ public sealed partial class QueryForm
                 {
                     try
                     {
-                        var startTimestamp = Stopwatch.GetTimestamp();                        
-                        var cancellationTokenSource = new CancellationTokenSource();
-                        var cancellationToken = cancellationTokenSource.Token;
+                        long startTimestamp = Stopwatch.GetTimestamp();
+                        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                        CancellationToken cancellationToken = cancellationTokenSource.Token;
                         treeNode2 = (ITreeNode)treeNode.Tag;
-                        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
+                        CancelableOperationForm cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
                             "Getting tree node children...",
                             $@"Parent node type: {treeNode2.GetType().Name}
 Parent node name: {treeNode2.Name}
 Please wait...",
                             _colorTheme);
-                        var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() =>
+                        IEnumerable<ITreeNode> children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() =>
                             treeNode2.GetChildren(false, cancellationToken).Result));
                         treeNode.Nodes.Clear();
                         AddNodes(treeNode.Nodes, children, treeNode2.Sortable, startTimestamp);
@@ -135,7 +135,7 @@ Please wait...",
             }
             else
             {
-                var count = treeNode.GetNodeCount(false);
+                int count = treeNode.GetNodeCount(false);
                 SetStatusbarPanelText(treeNode.Text + " node has " + count + " children.");
             }
         }
@@ -147,15 +147,15 @@ Please wait...",
         {
             case MouseButtons.Left:
             case MouseButtons.Right:
-                var treeNode = _tvObjectExplorer.GetNodeAt(e.X, e.Y);
+                TreeNode? treeNode = _tvObjectExplorer.GetNodeAt(e.X, e.Y);
                 if (treeNode != null)
                 {
-                    var treeNode2 = (ITreeNode)treeNode.Tag;
+                    ITreeNode? treeNode2 = (ITreeNode)treeNode.Tag;
 
                     if (e.Button != MouseButtons.Left)
                         _tvObjectExplorer.SelectedNode = treeNode;
 
-                    var text = treeNode.Text;
+                    string text = treeNode.Text;
                 }
 
                 break;
@@ -167,33 +167,33 @@ Please wait...",
 
     private void MnuRefresh_Click(object sender, EventArgs e)
     {
-        var treeNodeV = _tvObjectExplorer.SelectedNode;
+        TreeNode? treeNodeV = _tvObjectExplorer.SelectedNode;
         if (treeNodeV != null)
         {
-            var treeNode = (ITreeNode)treeNodeV.Tag;
+            ITreeNode? treeNode = (ITreeNode)treeNodeV.Tag;
             treeNodeV.Nodes.Clear();
 
-            var startTimestamp = Stopwatch.GetTimestamp();
-            var cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = cancellationTokenSource.Token;
-            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
+            long startTimestamp = Stopwatch.GetTimestamp();
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken cancellationToken = cancellationTokenSource.Token;
+            CancelableOperationForm cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
                 "Getting tree node children...", "Please wait...", _colorTheme);
-            var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => treeNode.GetChildren(true, cancellationToken).Result));
+            IEnumerable<ITreeNode> children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => treeNode.GetChildren(true, cancellationToken).Result));
             AddNodes(treeNodeV.Nodes, children, treeNode.Sortable, startTimestamp);
         }
     }
 
     private void MnuRefreshObjectExplorer_Click(object sender, EventArgs e)
     {
-        var objectExplorer = Provider.CreateObjectExplorer();
+        IObjectExplorer objectExplorer = Provider.CreateObjectExplorer();
         if (objectExplorer != null)
         {
             using (new CursorManager(Cursors.WaitCursor))
             {
-                var rootNodes = _tvObjectExplorer.Nodes;
+                TreeNodeCollection rootNodes = _tvObjectExplorer.Nodes;
                 rootNodes.Clear();
-                var startTimestamp = Stopwatch.GetTimestamp();                
-                var treeNodes = objectExplorer.GetChildren(true, CancellationToken.None).Result;
+                long startTimestamp = Stopwatch.GetTimestamp();
+                IEnumerable<ITreeNode> treeNodes = objectExplorer.GetChildren(true, CancellationToken.None).Result;
                 AddNodes(rootNodes, treeNodes, objectExplorer.Sortable, startTimestamp);
             }
         }
@@ -205,11 +205,11 @@ Please wait...",
         {
             if (e.Button == MouseButtons.Right)
             {
-                var treeNodeV = _tvObjectExplorer.SelectedNode;
+                TreeNode? treeNodeV = _tvObjectExplorer.SelectedNode;
                 if (treeNodeV != null)
                 {
-                    var treeNode = (ITreeNode)treeNodeV.Tag;
-                    var contextMenu = GetContextMenu(treeNode);
+                    ITreeNode? treeNode = (ITreeNode)treeNodeV.Tag;
+                    ContextMenuStrip? contextMenu = GetContextMenu(treeNode);
 
                     if (!treeNode.IsLeaf)
                     {
@@ -227,14 +227,14 @@ Please wait...",
                             contextMenu.BackColor = _colorTheme.BackColor;
                         }
 
-                        var contains = components.Components.Cast<IComponent>().Contains(contextMenu);
+                        bool contains = components.Components.Cast<IComponent>().Contains(contextMenu);
                         if (!contains)
                         {
                             components.Add(contextMenu);
                             GarbageMonitor.Default.Add("contextMenu", contextMenu);
                         }
 
-                        var pos = new Point(e.X, e.Y);
+                        Point pos = new Point(e.X, e.Y);
                         contextMenu.Show(_tvObjectExplorer, pos);
                     }
                 }
@@ -250,20 +250,19 @@ Please wait...",
 
     private void mnuGoTo_Click(object sender, EventArgs e)
     {
-        var control = ActiveControl;
-        var richTextBox = control as RichTextBox;
-        if (richTextBox == null)
+        Control? control = ActiveControl;
+        if (control is not RichTextBox richTextBox)
             richTextBox = QueryTextBox.RichTextBox;
 
-        var charIndex = richTextBox.SelectionStart;
-        var currentLineNumber = richTextBox.GetLineFromCharIndex(charIndex) + 1;
-        var form = new GotoLineForm();
-        var maxLineNumber = richTextBox.Lines.Length;
+        int charIndex = richTextBox.SelectionStart;
+        int currentLineNumber = richTextBox.GetLineFromCharIndex(charIndex) + 1;
+        GotoLineForm form = new GotoLineForm();
+        int maxLineNumber = richTextBox.Lines.Length;
         form.Init(currentLineNumber, maxLineNumber);
 
         if (form.ShowDialog(this) == DialogResult.OK)
         {
-            var lineNumber = form.LineNumber;
+            int lineNumber = form.LineNumber;
             charIndex = NativeMethods.SendMessage(richTextBox.Handle.ToInt32(), (int)NativeMethods.Message.EditBox.LineIndex, lineNumber - 1, 0);
             richTextBox.SelectionStart = charIndex;
         }
@@ -276,8 +275,8 @@ Please wait...",
             if (_findTextForm == null)
                 _findTextForm = new FindTextForm();
 
-            var control = ActiveControl;
-            var dataTableViewer = control as DataTableEditor;
+            Control? control = ActiveControl;
+            DataTableEditor? dataTableViewer = control as DataTableEditor;
 
             if (dataTableViewer == null)
             {
@@ -287,8 +286,8 @@ Please wait...",
 
             if (dataTableViewer != null)
             {
-                var dataTable = dataTableViewer.DataTable;
-                var name = dataTable.TableName;
+                DataTable dataTable = dataTableViewer.DataTable;
+                string name = dataTable.TableName;
                 _findTextForm.Text = $"Find (DataTable: {name})";
             }
             else
@@ -307,7 +306,7 @@ Please wait...",
     {
         if (_findTextForm != null)
         {
-            var text = _findTextForm.FindText;
+            string text = _findTextForm.FindText;
             if (text != null)
                 FindText(text);
         }
@@ -339,10 +338,10 @@ Please wait...",
         {
             using (new CursorManager(Cursors.WaitCursor))
             {
-                var response = GetCompletion();
+                GetCompletionResult response = GetCompletion();
                 if (response.Items != null)
                 {
-                    var completionForm = new CompletionForm(this);
+                    CompletionForm completionForm = new CompletionForm(this);
                     completionForm.Initialize(QueryTextBox, response, _colorTheme);
                     completionForm.ItemSelected += completionForm_ItemSelected;
                     completionForm.Show(this);
@@ -354,13 +353,13 @@ Please wait...",
 
     private void completionForm_ItemSelected(object sender, ItemSelectedEventArgs e)
     {
-        var textBox = QueryTextBox;
+        QueryTextBox textBox = QueryTextBox;
 
-        var intPtr = textBox.RichTextBox.Handle;
-        var hWnd = intPtr.ToInt32();
+        nint intPtr = textBox.RichTextBox.Handle;
+        int hWnd = intPtr.ToInt32();
         NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.Gdi.SetRedraw, 0, 0);
 
-        var objectName = e.ObjectName.QuotedName;
+        string objectName = e.ObjectName.QuotedName;
 
         textBox.RichTextBox.SelectionStart = e.StartIndex;
         textBox.RichTextBox.SelectionLength = e.Length;
@@ -403,12 +402,12 @@ Please wait...",
             _sqlStatement = new SqlParser(Query);
             _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
 
-            using (var dataReader = _command.ExecuteReader())
+            using (DbDataReader dataReader = _command.ExecuteReader())
             {
                 while (true)
                 {
-                    var writer = new StringWriter();
-                    var read = false;
+                    StringWriter writer = new StringWriter();
+                    bool read = false;
 
                     while (dataReader.Read())
                     {
@@ -417,15 +416,15 @@ Please wait...",
                             read = true;
                         }
 
-                        var fragment = (string)dataReader[0];
+                        string fragment = (string)dataReader[0];
                         writer.Write(fragment);
                     }
 
                     if (read)
                     {
-                        var xml = writer.ToString();
-                        var xmlDocument = new XmlDocument();
-                        var path = Path.GetTempFileName() + ".xml";
+                        string xml = writer.ToString();
+                        XmlDocument xmlDocument = new XmlDocument();
+                        string path = Path.GetTempFileName() + ".xml";
 
                         try
                         {
@@ -434,18 +433,20 @@ Please wait...",
                         }
                         catch
                         {
-                            var xmlWriter = new XmlTextWriter(path, Encoding.UTF8);
+                            XmlTextWriter xmlWriter = new XmlTextWriter(path, Encoding.UTF8);
                             xmlWriter.WriteStartElement("DataCommanderRoot");
                             xmlWriter.WriteRaw(xml);
                             xmlWriter.WriteEndElement();
                             xmlWriter.Close();
                         }
 
-                        var resultSetTabPage = new TabPage("Xml");
+                        TabPage resultSetTabPage = new TabPage("Xml");
                         _resultSetsTabControl.TabPages.Add(resultSetTabPage);
 
-                        var htmlTextBox = new HtmlTextBox();
-                        htmlTextBox.Dock = DockStyle.Fill;
+                        HtmlTextBox htmlTextBox = new HtmlTextBox
+                        {
+                            Dock = DockStyle.Fill
+                        };
 
                         resultSetTabPage.Controls.Add(htmlTextBox);
 
@@ -471,18 +472,18 @@ Please wait...",
     {
         try
         {
-            var sqlKeyWords = Settings.CurrentType.Attributes["SqlReservedWords"].GetValue<string[]>();
-            var providerKeyWords = Provider.KeyWords;
-            var keyWordHashSet = sqlKeyWords.Concat(providerKeyWords)
+            string[] sqlKeyWords = Settings.CurrentType.Attributes["SqlReservedWords"].GetValue<string[]>();
+            string[] providerKeyWords = Provider.KeyWords;
+            HashSet<string> keyWordHashSet = sqlKeyWords.Concat(providerKeyWords)
                 .Select(keyWord => keyWord.ToUpper())
                 .ToHashSet();
 
             _sqlStatement = new SqlParser(Query);
             _command = _sqlStatement.CreateCommand(Provider, Connection, CommandType.Text, _commandTimeout);
-            var tableName = _sqlStatement.FindTableName();
-            var tableIndex = 0;
+            string? tableName = _sqlStatement.FindTableName();
+            int tableIndex = 0;
 
-            using (var dataReader = _command.ExecuteReader())
+            using (DbDataReader dataReader = _command.ExecuteReader())
             {
                 while (true)
                 {
@@ -491,9 +492,9 @@ Please wait...",
                         tableName = $"Table{tableIndex}";
                     }
 
-                    var dataReaderHelper = Provider.CreateDataReaderHelper(dataReader);
-                    var schemaTable = dataReader.GetSchemaTable();
-                    var sb = new StringBuilder();
+                    IDataReaderHelper dataReaderHelper = Provider.CreateDataReaderHelper(dataReader);
+                    DataTable? schemaTable = dataReader.GetSchemaTable();
+                    StringBuilder sb = new StringBuilder();
 
                     if (schemaTable != null)
                     {
@@ -503,17 +504,17 @@ Please wait...",
                             tableName = schemaTable.TableName;
 
                         _standardOutput.WriteLine(InsertScriptFileWriter.GetCreateTableStatement(schemaTable));
-                        var schemaRows = schemaTable.Rows;
-                        var columnCount = schemaRows.Count;
+                        DataRowCollection schemaRows = schemaTable.Rows;
+                        int columnCount = schemaRows.Count;
                         sb.AppendFormat("insert into {0}(", tableName);
 
-                        for (var i = 0; i < columnCount; i++)
+                        for (int i = 0; i < columnCount; i++)
                         {
                             if (i > 0)
                                 sb.Append(',');
 
-                            var schemaRow = schemaRows[i];
-                            var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
+                            DataRow schemaRow = schemaRows[i];
+                            string columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
 
                             if (keyWordHashSet.Contains((columnName.ToUpper())))
                                 columnName = new SqlCommandBuilder().QuoteIdentifier(columnName);
@@ -523,23 +524,23 @@ Please wait...",
                     }
 
                     sb.Append(") values(");
-                    var insertInto = sb.ToString();
-                    var fieldCount = dataReader.FieldCount;
+                    string insertInto = sb.ToString();
+                    int fieldCount = dataReader.FieldCount;
                     sb.Length = 0;
-                    var statementCount = 0;
+                    int statementCount = 0;
 
                     while (dataReader.Read())
                     {
-                        var values = new object[fieldCount];
+                        object[] values = new object[fieldCount];
                         dataReaderHelper.GetValues(values);
                         sb.Append(insertInto);
 
-                        for (var i = 0; i < fieldCount; i++)
+                        for (int i = 0; i < fieldCount; i++)
                         {
                             if (i > 0)
                                 sb.Append(',');
 
-                            var s = InsertScriptFileWriter.ToString(values[i]);
+                            string s = InsertScriptFileWriter.ToString(values[i]);
                             sb.Append(s);
                         }
 
@@ -579,46 +580,46 @@ Please wait...",
         {
             _sqlStatement = new SqlParser(Query);
             _command = _sqlStatement.CreateCommand(Provider, Connection, CommandType.Text, _commandTimeout);
-            var tableName = _sqlStatement.FindTableName();
+            string? tableName = _sqlStatement.FindTableName();
 
             if (tableName != null)
             {
-                using (var dataReader = _command.ExecuteReader())
+                using (DbDataReader dataReader = _command.ExecuteReader())
                 {
-                    var dataReaderHelper = Provider.CreateDataReaderHelper(dataReader);
-                    var schemaTable = dataReader.GetSchemaTable();
-                    var schemaRows = schemaTable.Rows;
-                    var columnCount = schemaRows.Count;
-                    var sb = new StringBuilder();
+                    IDataReaderHelper dataReaderHelper = Provider.CreateDataReaderHelper(dataReader);
+                    DataTable? schemaTable = dataReader.GetSchemaTable();
+                    DataRowCollection schemaRows = schemaTable.Rows;
+                    int columnCount = schemaRows.Count;
+                    StringBuilder sb = new StringBuilder();
                     sb.AppendFormat("insert into {0}(", tableName);
 
-                    for (var i = 0; i < columnCount; ++i)
+                    for (int i = 0; i < columnCount; ++i)
                     {
                         if (i > 0)
                             sb.Append(',');
 
-                        var schemaRow = schemaRows[i];
-                        var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
+                        DataRow schemaRow = schemaRows[i];
+                        string columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
                         sb.Append(columnName);
                     }
 
                     sb.Append(")\r\nselect\r\n");
-                    var insertInto = sb.ToString();
-                    var fieldCount = dataReader.FieldCount;
+                    string insertInto = sb.ToString();
+                    int fieldCount = dataReader.FieldCount;
 
                     while (dataReader.Read())
                     {
-                        var values = new object[fieldCount];
+                        object[] values = new object[fieldCount];
                         dataReaderHelper.GetValues(values);
                         sb = new StringBuilder();
                         sb.Append(insertInto);
 
-                        for (var i = 0; i < fieldCount; i++)
+                        for (int i = 0; i < fieldCount; i++)
                         {
                             if (i > 0)
                                 sb.Append(",\r\n");
 
-                            var s = InsertScriptFileWriter.ToString(values[i]);
+                            string s = InsertScriptFileWriter.ToString(values[i]);
                             sb.AppendFormat("    {0} as {1}", s, dataReader.GetName(i));
                         }
 
@@ -635,32 +636,32 @@ Please wait...",
 
     private void tvObjectBrowser_ItemDrag(object sender, ItemDragEventArgs e)
     {
-        var treeNode = (TreeNode)e.Item;
-        var text = treeNode.Text;
+        TreeNode? treeNode = (TreeNode)e.Item;
+        string text = treeNode.Text;
         _tvObjectExplorer.DoDragDrop(text, DragDropEffects.All);
     }
 
     private async void mnuDuplicateConnection_Click(object sender, EventArgs e)
     {
-        var mainForm = DataCommanderApplication.Instance.MainForm;
-        var index = mainForm.MdiChildren.Length;
+        MainForm mainForm = DataCommanderApplication.Instance.MainForm;
+        int index = mainForm.MdiChildren.Length;
 
-        var connection = Provider.CreateConnection(_connectionInfo.ConnectionStringAndCredential);
+        ConnectionBase connection = Provider.CreateConnection(_connectionInfo.ConnectionStringAndCredential);
         //connection.ConnectionName = Connection.ConnectionName;
-        var cancellationTokenSource = new CancellationTokenSource();
-        var cancellationToken = cancellationTokenSource.Token;
-        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
+        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        CancellationToken cancellationToken = cancellationTokenSource.Token;
+        CancelableOperationForm cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
             "Opening connection...", string.Empty, _colorTheme);
-        var stopwatch = Stopwatch.StartNew();
+        Stopwatch stopwatch = Stopwatch.StartNew();
         cancelableOperationForm.Execute(new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken)));
-        var elapsedTicks = stopwatch.ElapsedTicks;
-        
-        var database = Connection.Database;
+        long elapsedTicks = stopwatch.ElapsedTicks;
+
+        string? database = Connection.Database;
 
         if (connection.Database != Connection.Database)
             connection.Connection.ChangeDatabase(database);
 
-        var queryForm = new QueryForm(_mainForm, Provider, _connectionInfo, connection, mainForm.StatusBar, _colorTheme);
+        QueryForm queryForm = new QueryForm(_mainForm, Provider, _connectionInfo, connection, mainForm.StatusBar, _colorTheme);
 
         if (mainForm.SelectedFont != null)
             queryForm.Font = mainForm.SelectedFont;
@@ -668,8 +669,8 @@ Please wait...",
         queryForm.MdiParent = mainForm;
         queryForm.WindowState = WindowState;
         queryForm.Show();
-        
-        var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == _connectionInfo.ProviderIdentifier);
+
+        ProviderInfo providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == _connectionInfo.ProviderIdentifier);
         QueryFormStaticMethods.AddInfoMessageToQueryForm(queryForm, elapsedTicks, _connectionInfo.ConnectionName, providerInfo.Name, connection);
     }
 
@@ -680,12 +681,12 @@ Please wait...",
 
     private void createSqlCeDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        var sqlStatement = new SqlParser(Query);
+        SqlParser sqlStatement = new SqlParser(Query);
         _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
-        var maxRecords = int.MaxValue;
-        var tableName = sqlStatement.FindTableName();
-        var sqlCeResultWriter = new SqlCeResultWriter(_textBoxWriter, tableName);
-        var asyncDataAdatper = new AsyncDataAdapter(Provider, maxRecords, _rowBlockSize, sqlCeResultWriter, EndFillInvoker, WriteEndInvoker);
+        int maxRecords = int.MaxValue;
+        string? tableName = sqlStatement.FindTableName();
+        SqlCeResultWriter sqlCeResultWriter = new SqlCeResultWriter(_textBoxWriter, tableName);
+        AsyncDataAdapter asyncDataAdatper = new AsyncDataAdapter(Provider, maxRecords, _rowBlockSize, sqlCeResultWriter, EndFillInvoker, WriteEndInvoker);
         asyncDataAdatper.Start(new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray());
     }
 
@@ -693,7 +694,7 @@ Please wait...",
     {
         if (_transaction == null)
         {
-            var transaction = Connection.Connection.BeginTransaction();
+            DbTransaction transaction = Connection.Connection.BeginTransaction();
             SetTransaction(transaction);
         }
     }
@@ -727,7 +728,7 @@ Please wait...",
             }
             catch (Exception ex)
             {
-                var message = $"Rollback failed. Exception:\r\n{ex.ToLogString()}";
+                string message = $"Rollback failed. Exception:\r\n{ex.ToLogString()}";
                 AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Error, null, message));
             }
 
@@ -748,16 +749,16 @@ Please wait...",
     {
         if (sender != null && e.Button == MouseButtons.Middle)
         {
-            var tabControl = (TabControl)sender;
-            var hitTestInfo = new Tchittestinfo(e.X, e.Y);
-            var index = SendMessage(tabControl.Handle, TcmHittest, IntPtr.Zero, ref hitTestInfo);
+            TabControl? tabControl = (TabControl)sender;
+            Tchittestinfo hitTestInfo = new Tchittestinfo(e.X, e.Y);
+            int index = SendMessage(tabControl.Handle, TcmHittest, IntPtr.Zero, ref hitTestInfo);
             if (index >= 0)
             {
                 tabControl.TabPages.RemoveAt(index);
 
                 if (tabControl.TabPages.Count == 0)
                 {
-                    var tabPage = (TabPage)tabControl.Parent;
+                    TabPage? tabPage = (TabPage)tabControl.Parent;
                     tabControl = (TabControl)tabPage.Parent;
                     tabControl.TabPages.Remove(tabPage);
                 }
@@ -771,21 +772,23 @@ Please wait...",
     {
         if (e.Button == MouseButtons.Right)
         {
-            var contextMenu = new ContextMenuStrip(components);
-            var values = Enum.GetValues(typeof(ResultWriterType));
+            ContextMenuStrip contextMenu = new ContextMenuStrip(components);
+            Array values = Enum.GetValues(typeof(ResultWriterType));
 
-            for (var i = 0; i < values.Length; i++)
+            for (int i = 0; i < values.Length; i++)
             {
-                var tableStyle = (ResultWriterType)values.GetValue(i);
-                var item = new ToolStripMenuItem();
-                item.Text = tableStyle.ToString();
-                item.Tag = tableStyle;
+                ResultWriterType tableStyle = (ResultWriterType)values.GetValue(i);
+                ToolStripMenuItem item = new ToolStripMenuItem
+                {
+                    Text = tableStyle.ToString(),
+                    Tag = tableStyle
+                };
                 item.Click += TableStyleMenuItem_Click;
                 contextMenu.Items.Add(item);
             }
 
-            var bounds = _sbPanelTableStyle.Bounds;
-            var location = e.Location;
+            Rectangle bounds = _sbPanelTableStyle.Bounds;
+            Point location = e.Location;
             contextMenu.Show(_statusBar, bounds.X + location.X, bounds.Y + location.Y);
         }
     }
@@ -797,11 +800,11 @@ Please wait...",
 
     private void textBox_SelectionChanged(object sender, EventArgs e)
     {
-        var richTextBox = (RichTextBox)sender;
-        var charIndex = richTextBox.SelectionStart;
-        var line = richTextBox.GetLineFromCharIndex(charIndex) + 1;
-        var lineIndex = QueryTextBox.GetLineIndex(richTextBox, -1);
-        var col = charIndex - lineIndex + 1;
+        RichTextBox richTextBox = (RichTextBox)sender;
+        int charIndex = richTextBox.SelectionStart;
+        int line = richTextBox.GetLineFromCharIndex(charIndex) + 1;
+        int lineIndex = QueryTextBox.GetLineIndex(richTextBox, -1);
+        int col = charIndex - lineIndex + 1;
         _sbPanelCaretPosition.Text = "Ln " + line + " Col " + col;
     }
 
@@ -811,17 +814,16 @@ Please wait...",
         {
             Cursor = Cursors.WaitCursor;
 
-            var oleDbConnection = Connection.Connection as OleDbConnection;
-            if (oleDbConnection != null && string.IsNullOrEmpty(Query))
+            if (Connection.Connection is OleDbConnection oleDbConnection && string.IsNullOrEmpty(Query))
             {
-                var dataSet = new DataSet();
+                DataSet dataSet = new DataSet();
                 AddTable(oleDbConnection, dataSet, OleDbSchemaGuid.Provider_Types, "Provider Types");
                 AddTable(oleDbConnection, dataSet, OleDbSchemaGuid.DbInfoLiterals, "DbInfoLiterals");
 
-                var adoDbConnection = new ConnectionClass();
+                ConnectionClass adoDbConnection = new ConnectionClass();
                 adoDbConnection.Open(_connectionInfo.ConnectionStringAndCredential.ConnectionString, null, null, 0);
-                var rs = adoDbConnection.OpenSchema(SchemaEnum.adSchemaDBInfoKeywords, Type.Missing, Type.Missing);
-                var dataTable = OleDbHelper.Convert(rs);
+                Recordset rs = adoDbConnection.OpenSchema(SchemaEnum.adSchemaDBInfoKeywords, Type.Missing, Type.Missing);
+                DataTable dataTable = OleDbHelper.Convert(rs);
                 adoDbConnection.Close();
                 dataSet.Tables.Add(dataTable);
 
@@ -836,7 +838,7 @@ Please wait...",
                 if (_command != null)
                 {
                     AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, _command.ToLogString()));
-                    var dataTable = Provider.GetParameterTable(_command.Parameters);
+                    DataTable dataTable = Provider.GetParameterTable(_command.Parameters);
 
                     if (dataTable != null)
                     {
@@ -844,15 +846,15 @@ Please wait...",
 
                         foreach (DataRow row in dataTable.Rows)
                         {
-                            var value = row["Value"];
-                            var type = value.GetType();
-                            var typeCode = Type.GetTypeCode(type);
+                            object value = row["Value"];
+                            Type type = value.GetType();
+                            TypeCode typeCode = Type.GetTypeCode(type);
 
                             switch (typeCode)
                             {
                                 case TypeCode.DateTime:
-                                    var dateTime = (DateTime)value;
-                                    var ticks = dateTime.Ticks;
+                                    DateTime dateTime = (DateTime)value;
+                                    long ticks = dateTime.Ticks;
 
                                     if (ticks % StopwatchConstants.TicksPerDay == 0)
                                         row["Value"] = dateTime.ToString("yyyy-MM-dd");
@@ -863,7 +865,7 @@ Please wait...",
                             }
                         }
 
-                        var dataSet = new DataSet();
+                        DataSet dataSet = new DataSet();
                         dataSet.Tables.Add(dataTable);
                         ShowDataSet(dataSet);
                     }
@@ -881,7 +883,7 @@ Please wait...",
 
     private void mnuCloseTabPage_Click(object sender, EventArgs e)
     {
-        var tabPage = _tabControl.SelectedTab;
+        TabPage? tabPage = _tabControl.SelectedTab;
 
         if (tabPage != null && tabPage != _messagesTabPage && tabPage != _resultSetsTabPage)
             CloseResultSetTabPage(tabPage);
@@ -908,20 +910,20 @@ Please wait...",
 
     private void tvObjectBrowser_DoubleClick(object sender, EventArgs e)
     {
-        var selectedNode = _tvObjectExplorer.SelectedNode;
+        TreeNode? selectedNode = _tvObjectExplorer.SelectedNode;
         if (selectedNode != null)
         {
-            var treeNode = (ITreeNode)selectedNode.Tag;
+            ITreeNode? treeNode = (ITreeNode)selectedNode.Tag;
 
             try
             {
                 Cursor = Cursors.WaitCursor;
-                var query = treeNode.Query;
+                string query = treeNode.Query;
                 if (query != null)
                 {
-                    var text0 = QueryTextBox.Text;
+                    string text0 = QueryTextBox.Text;
                     string append = null;
-                    var selectionStart = QueryTextBox.RichTextBox.TextLength;
+                    int selectionStart = QueryTextBox.RichTextBox.TextLength;
 
                     if (!string.IsNullOrEmpty(text0))
                     {
@@ -947,8 +949,8 @@ Please wait...",
 
     private void TableStyleMenuItem_Click(object sender, EventArgs e)
     {
-        var item = (ToolStripMenuItem)sender;
-        var tableStyle = (ResultWriterType)item.Tag;
+        ToolStripMenuItem item = (ToolStripMenuItem)sender;
+        ResultWriterType tableStyle = (ResultWriterType)item.Tag;
         SetResultWriterType(tableStyle);
     }
 
@@ -960,13 +962,13 @@ Please wait...",
 
     private void parseToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        var executor = Connection.Connection.CreateCommandExecutor();
-        var on = false;
+        IDbCommandExecutor executor = Connection.Connection.CreateCommandExecutor();
+        bool on = false;
         try
         {
             executor.ExecuteNonQuery(new CreateCommandRequest("SET PARSEONLY ON"));
             on = true;
-            var query = Query;
+            string query = Query;
             bool succeeded;
 
             try
@@ -977,7 +979,7 @@ Please wait...",
             catch (Exception exception)
             {
                 succeeded = false;
-                var infoMessages = Provider.ToInfoMessages(exception);
+                List<InfoMessage> infoMessages = Provider.ToInfoMessages(exception);
                 AddInfoMessages(infoMessages);
             }
 
@@ -986,7 +988,7 @@ Please wait...",
         }
         catch (Exception exception)
         {
-            var infoMessages = Provider.ToInfoMessages(exception);
+            List<InfoMessage> infoMessages = Provider.ToInfoMessages(exception);
             AddInfoMessages(infoMessages);
         }
 

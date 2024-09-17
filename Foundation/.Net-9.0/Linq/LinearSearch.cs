@@ -8,7 +8,7 @@ public static class LinearSearch
     {
         ArgumentNullException.ThrowIfNull(predicate);
 
-        var index = -1;
+        int index = -1;
 
         while (minIndex <= maxIndex)
         {
@@ -28,7 +28,7 @@ public static class LinearSearch
     {
         ArgumentNullException.ThrowIfNull(predicate);
 
-        var index = -1;
+        int index = -1;
 
         while (minIndex <= maxIndex)
         {
