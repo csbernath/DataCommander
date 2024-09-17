@@ -1152,7 +1152,7 @@ internal class DataTableEditor : UserControl
                         var dataRow = _dataTable.DefaultView[rowNumber].Row;
                     _columnName = _dataTable.Columns[columnNumber].ColumnName;
 
-                    if (_columnName.IndexOf('!') >= 0)
+                    if (_columnName.Contains('!'))
                     {
                         _columnName = $"[{_columnName}]";
                     }

@@ -716,7 +716,7 @@ Please wait...",
         }
     }
 
-    private void rollbackTransactionToolStripMenuItem_Click(object sender, EventArgs e)
+    private void RollbackTransactionToolStripMenuItem_Click(object sender, EventArgs e)
     {
         if (_transaction != null)
         {
@@ -740,7 +740,7 @@ Please wait...",
         }
     }
 
-    private void insertScriptFileToolStripMenuItem_Click(object sender, EventArgs e)
+    private void InsertScriptFileToolStripMenuItem_Click(object sender, EventArgs e)
     {
         SetResultWriterType(ResultWriterType.InsertScriptFile);
     }
@@ -773,11 +773,11 @@ Please wait...",
         if (e.Button == MouseButtons.Right)
         {
             var contextMenu = new ContextMenuStrip(components);
-            var values = Enum.GetValues(typeof(ResultWriterType));
+            var values = Enum.GetValues<ResultWriterType>();
 
             for (var i = 0; i < values.Length; i++)
             {
-                var tableStyle = (ResultWriterType)values.GetValue(i);
+                var tableStyle = values[i];
                 var item = new ToolStripMenuItem
                 {
                     Text = tableStyle.ToString(),
@@ -808,7 +808,7 @@ Please wait...",
         _sbPanelCaretPosition.Text = "Ln " + line + " Col " + col;
     }
 
-    private void mnuDescribeParameters_Click(object sender, EventArgs e)
+    private void MnuDescribeParameters_Click(object sender, EventArgs e)
     {
         try
         {
@@ -954,11 +954,11 @@ Please wait...",
         SetResultWriterType(tableStyle);
     }
 
-    private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e) => ExecuteQuery();
-    private void aToolStripMenuItem_Click(object sender, EventArgs e) => ExecuteQuery();
-    private void cancelExecutingQueryButton_Click(object sender, EventArgs e) => CancelCommandQuery();
-    private void toolStripMenuItem1_Click(object sender, EventArgs e) => ExecuteQuery();
-    private void editRowsToolStripMenuItem_Click(object sender, EventArgs e) => EditRows(Query);
+    private void ToolStripSplitButton1_ButtonClick(object sender, EventArgs e) => ExecuteQuery();
+    private void AToolStripMenuItem_Click(object sender, EventArgs e) => ExecuteQuery();
+    private void CancelExecutingQueryButton_Click(object sender, EventArgs e) => CancelCommandQuery();
+    private void ToolStripMenuItem1_Click(object sender, EventArgs e) => ExecuteQuery();
+    private void EditRowsToolStripMenuItem_Click(object sender, EventArgs e) => EditRows(Query);
 
     private void parseToolStripMenuItem_Click(object sender, EventArgs e)
     {

@@ -41,7 +41,7 @@ sealed class TableNode(SchemaNode schema, string? name) : ITreeNode
 
             if (name != null)
             {
-                var name2 = name.IndexOf(' ') >= 0
+                var name2 = name.Contains(' ')
                     ? "[" + name + "]"
                     : name;
                 query = "select * from " + name2;

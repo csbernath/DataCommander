@@ -227,7 +227,7 @@ public sealed class ConfigurationNode(string name)
 
                 var value = attribute.Value;
                 var valueString = value != null ? value.ToString() : null;
-                var multiline = valueString.IndexOf('\n') >= 0;
+                var multiline = valueString.Contains('\n');
 
                 if (multiline)
                 {

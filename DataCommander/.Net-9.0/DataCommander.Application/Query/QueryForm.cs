@@ -552,7 +552,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         this._mnuDescribeParameters.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
         this._mnuDescribeParameters.Size = new System.Drawing.Size(298, 22);
         this._mnuDescribeParameters.Text = "Describe &Parameters";
-        this._mnuDescribeParameters.Click += new System.EventHandler(this.mnuDescribeParameters_Click);
+        this._mnuDescribeParameters.Click += new System.EventHandler(this.MnuDescribeParameters_Click);
         // 
         // _toolStripSeparator2
         // 
@@ -573,7 +573,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         this._executeQueryToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
         this._executeQueryToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
         this._executeQueryToolStripMenuItem.Text = "Execute Query";
-        this._executeQueryToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+        this._executeQueryToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
         // 
         // _mnuExecuteQuerySingleRow
         // 
@@ -734,7 +734,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         this._insertScriptFileToolStripMenuItem.Name = "_insertScriptFileToolStripMenuItem";
         this._insertScriptFileToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
         this._insertScriptFileToolStripMenuItem.Text = "Insert Script File";
-        this._insertScriptFileToolStripMenuItem.Click += new System.EventHandler(this.insertScriptFileToolStripMenuItem_Click);
+        this._insertScriptFileToolStripMenuItem.Click += new System.EventHandler(this.InsertScriptFileToolStripMenuItem_Click);
         // 
         // _toolStripSeparator3
         // 
@@ -828,7 +828,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         this._rollbackTransactionToolStripMenuItem.Name = "_rollbackTransactionToolStripMenuItem";
         this._rollbackTransactionToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
         this._rollbackTransactionToolStripMenuItem.Text = "Rollback Transaction";
-        this._rollbackTransactionToolStripMenuItem.Click += new System.EventHandler(this.rollbackTransactionToolStripMenuItem_Click);
+        this._rollbackTransactionToolStripMenuItem.Click += new System.EventHandler(this.RollbackTransactionToolStripMenuItem_Click);
         // 
         // createCCommandQueryToolStripMenuItem
         // 
@@ -1005,7 +1005,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         this._executeQuerySplitButton.Name = "_executeQuerySplitButton";
         this._executeQuerySplitButton.Size = new System.Drawing.Size(32, 22);
         this._executeQuerySplitButton.Text = "Execute Query";
-        this._executeQuerySplitButton.ButtonClick += new System.EventHandler(this.toolStripSplitButton1_ButtonClick);
+        this._executeQuerySplitButton.ButtonClick += new System.EventHandler(this.ToolStripSplitButton1_ButtonClick);
         // 
         // _executeQueryMenuItem
         // 
@@ -1013,7 +1013,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         this._executeQueryMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
         this._executeQueryMenuItem.Size = new System.Drawing.Size(168, 22);
         this._executeQueryMenuItem.Text = "Execute Query";
-        this._executeQueryMenuItem.Click += new System.EventHandler(this.aToolStripMenuItem_Click);
+        this._executeQueryMenuItem.Click += new System.EventHandler(this.AToolStripMenuItem_Click);
         // 
         // _executeQuerySingleRowToolStripMenuItem
         // 
@@ -1033,7 +1033,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         this._openTableToolStripMenuItem.Name = "_openTableToolStripMenuItem";
         this._openTableToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
         this._openTableToolStripMenuItem.Text = "Edit Rows2";
-        this._openTableToolStripMenuItem.Click += new System.EventHandler(this.editRowsToolStripMenuItem_Click);
+        this._openTableToolStripMenuItem.Click += new System.EventHandler(this.EditRowsToolStripMenuItem_Click);
         // 
         // _cancelQueryButton
         // 
@@ -1044,7 +1044,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         this._cancelQueryButton.Name = "_cancelQueryButton";
         this._cancelQueryButton.Size = new System.Drawing.Size(23, 22);
         this._cancelQueryButton.Text = "Cancel Executing Query";
-        this._cancelQueryButton.Click += new System.EventHandler(this.cancelExecutingQueryButton_Click);
+        this._cancelQueryButton.Click += new System.EventHandler(this.CancelExecutingQueryButton_Click);
         // 
         // _queryTextBox
         // 

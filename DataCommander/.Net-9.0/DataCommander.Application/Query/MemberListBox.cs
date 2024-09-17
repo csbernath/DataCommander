@@ -285,7 +285,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
         {
             ListBoxItem<IObjectName> item = items[currentIndex];
             var name = item.Item.UnquotedName;
-            return name.IndexOf(_prefix) >= 0;
+            return name.Contains(_prefix, StringComparison.CurrentCulture);
         });
         if (index >= 0)
             ListBox.SelectedIndex = index;
@@ -298,7 +298,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
         {
             ListBoxItem<IObjectName> item = items[currentIndex];
             var name = item.Item.UnquotedName;
-            return name.IndexOf(_prefix) >= 0;
+            return name.Contains(_prefix, StringComparison.CurrentCulture);
         });
         if (index >= 0)
             ListBox.SelectedIndex = index;
