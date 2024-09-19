@@ -4,8 +4,8 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net9.0-windows7.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <Product>Data Commander</Product>
-    <Company>Data Commander</Company>
+    <Company>Data Commander</Company>    
+    <Product>Data Commander.Net-9.0</Product>    
     <ApplicationIcon>App.ico</ApplicationIcon>
     <Authors>Data Commander</Authors>
     <PackageId>Data Commander</PackageId>
