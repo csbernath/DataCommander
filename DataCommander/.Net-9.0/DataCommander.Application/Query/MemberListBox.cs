@@ -34,10 +34,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
         }
     }
 
-    private static string ToString(IObjectName objectName)
-    {
-        return objectName.UnquotedName;
-    }
+    private static string ToString(IObjectName objectName) => objectName.UnquotedName;
 
     private void LoadItems()
     {

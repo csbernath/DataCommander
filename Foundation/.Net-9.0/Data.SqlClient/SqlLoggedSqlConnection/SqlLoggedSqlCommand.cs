@@ -63,25 +63,13 @@ internal sealed class SqlLoggedSqlCommand : IDbCommand
         set => _command.UpdatedRowSource = value;
     }
 
-    public void Dispose()
-    {
-        _command.Dispose();
-    }
+    public void Dispose() => _command.Dispose();
 
-    public void Cancel()
-    {
-        _command.Cancel();
-    }
+    public void Cancel() => _command.Cancel();
 
-    public IDbDataParameter CreateParameter()
-    {
-        return _command.CreateParameter();
-    }
+    public IDbDataParameter CreateParameter() => _command.CreateParameter();
 
-    public int ExecuteNonQuery()
-    {
-        return _connection.ExecuteNonQuery(_command);
-    }
+    public int ExecuteNonQuery() => _connection.ExecuteNonQuery(_command);
 
     public IDataReader ExecuteReader()
     {
@@ -95,13 +83,7 @@ internal sealed class SqlLoggedSqlCommand : IDbCommand
         return loggedSqlDataReader.Execute(behavior);
     }
 
-    public object ExecuteScalar()
-    {
-        return _connection.ExecuteScalar(_command);
-    }
+    public object ExecuteScalar() => _connection.ExecuteScalar(_command);
 
-    public void Prepare()
-    {
-        _command.Prepare();
-    }
+    public void Prepare() => _command.Prepare();
 }

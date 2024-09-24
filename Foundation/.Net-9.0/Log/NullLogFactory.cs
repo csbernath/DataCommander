@@ -12,10 +12,7 @@ public sealed class NullLogFactory : ILogFactory
 
     string ILogFactory.FileName => null;
 
-    ILog ILogFactory.GetLog(string name)
-    {
-        return NullLog.Instance;
-    }
+    ILog ILogFactory.GetLog(string name) => NullLog.Instance;
 
     void IDisposable.Dispose()
     {

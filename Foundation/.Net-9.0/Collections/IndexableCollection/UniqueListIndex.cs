@@ -22,10 +22,7 @@ public class UniqueListIndex<TKey, T> : ICollectionIndex<T>
 
     public IEnumerator<T> GetEnumerator() => _list.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return _list.GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => _list.GetEnumerator();
 
     public void Add(T item)
     {

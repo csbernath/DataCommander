@@ -115,8 +115,5 @@ internal sealed class LogFile(
         }
     }
 
-    void IDisposable.Dispose()
-    {
-        Close();
-    }
+    void IDisposable.Dispose() => Close();
 }

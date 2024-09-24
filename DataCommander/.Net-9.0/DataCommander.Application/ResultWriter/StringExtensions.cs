@@ -2,10 +2,7 @@
 
 public static class StringExtensions
 {
-    public static string SingularOrPlural(int count, string singular, string plural)
-    {
-        return count == 1
+    public static string SingularOrPlural(int count, string singular, string plural) => count == 1
             ? $"{count} {singular}"
             : $"{count} {plural}";
-    }
 }

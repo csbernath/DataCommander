@@ -61,13 +61,10 @@ public sealed class Int64PerformanceCounter
     public long Min => _min;
     public long Max => _max;
 
-    public string ToLogString()
-    {
-        return $@"Int64PerformanceCounter '{_name}'
+    public string ToLogString() => $@"Int64PerformanceCounter '{_name}'
 count: {_count}
 min: {_toString(_min)}
 avg: {_toString((long)((double)Sum / Count))}
 max: {_toString(_max)}
 sum: {_toString(_sum)}";
-    }
 }

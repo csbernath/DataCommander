@@ -44,10 +44,7 @@ public sealed class ApplicationStartup(
         return Handle((dynamic)command);
     }
 
-    private static void DeleteUpdater(string updaterDirectory)
-    {
-        Directory.Delete(updaterDirectory, true);
-    }
+    private static void DeleteUpdater(string updaterDirectory) => Directory.Delete(updaterDirectory, true);
 
     private static async Task DownloadUpdater(Uri address, string updaterDirectory, string zipFileName,
         Action<DownloadProgressChangedEventArgs> eventHandler)

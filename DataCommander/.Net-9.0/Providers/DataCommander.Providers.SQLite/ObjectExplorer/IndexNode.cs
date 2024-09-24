@@ -17,10 +17,7 @@ internal sealed class IndexNode(TableNode tableNode, string? name) : ITreeNode
 
     bool ITreeNode.IsLeaf => true;
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
-    {
-        return null;
-    }
+    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) => null;
 
     bool ITreeNode.Sortable => false;
 
@@ -41,10 +38,7 @@ where
         }
     }
 
-    public ContextMenu? GetContextMenu()
-    {
-        throw new System.NotImplementedException();
-    }
+    public ContextMenu? GetContextMenu() => throw new System.NotImplementedException();
 
     #endregion
 }

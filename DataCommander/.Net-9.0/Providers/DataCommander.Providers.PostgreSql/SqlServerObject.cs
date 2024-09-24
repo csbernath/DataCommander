@@ -8,23 +8,16 @@ namespace DataCommander.Providers.PostgreSql;
 
 internal static class SqlServerObject
 {
-    public static string GetSchemas()
-    {
-        return @"select schema_name
+    public static string GetSchemas() => @"select schema_name
 from information_schema.schemata
 order by schema_name";
-    }
 
-    public static string GetTables(string schema, IEnumerable<string> tableTypes)
-    {
-        return
-            $@"select table_name
+    public static string GetTables(string schema, IEnumerable<string> tableTypes) => $@"select table_name
 from information_schema.tables
 where
     table_schema = '{schema}'
-    and table_type in({string.Join(",",tableTypes.Select(o => o.ToNullableVarChar()))})
+    and table_type in({string.Join(",", tableTypes.Select(o => o.ToNullableVarChar()))})
 order by table_name";
-    }
 
     public static string GetObjects(string schema, IEnumerable<string> objectTypes)
     {

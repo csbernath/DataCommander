@@ -16,10 +16,7 @@ public static class IReadOnlyListExtensions
     }
 
     [Pure]
-    public static TSource FirstOrDefault<TSource>(this IReadOnlyList<TSource> source)
-    {
-        return source != null && source.Count > 0
+    public static TSource FirstOrDefault<TSource>(this IReadOnlyList<TSource> source) => source != null && source.Count > 0
             ? source[0]
             : default;
-    }
 }

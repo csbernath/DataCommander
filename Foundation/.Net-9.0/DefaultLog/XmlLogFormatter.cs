@@ -39,10 +39,7 @@ internal sealed class XmlLogFormatter : ILogFormatter
         //xmlWriter.WriteRaw(Environment.NewLine);
     }
 
-    string ILogFormatter.Begin()
-    {
-        return "<logEntries>\r\n";
-    }
+    string ILogFormatter.Begin() => "<logEntries>\r\n";
 
     string ILogFormatter.Format(LogEntry entry)
     {
@@ -52,8 +49,5 @@ internal sealed class XmlLogFormatter : ILogFormatter
         return textWriter.ToString();
     }
 
-    string ILogFormatter.End()
-    {
-        return "</logEntries>\r\n";
-    }
+    string ILogFormatter.End() => "</logEntries>\r\n";
 }

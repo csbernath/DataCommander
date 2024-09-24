@@ -26,10 +26,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// <exception cref="T:System.ArgumentException">
     ///     <paramref name="reader"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Xml.XmlException"> The reader is not positioned on an element, attribute or XmlDeclaration node.</exception>
-    public override void WriteAttributes(XmlReader reader, bool defattr)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteAttributes(XmlReader reader, bool defattr) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, encodes the specified binary bytes as base64 and writes out
@@ -43,10 +40,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// <exception cref="T:System.ArgumentException">The buffer length minus <paramref name="index"/> is less than <paramref name="count"/>.</exception>
     /// <exception cref="T:System.ArgumentOutOfRangeException">
     /// <paramref name="index"/> or <paramref name="count"/> is less than zero.</exception>
-    public override void WriteBase64(byte[] buffer, int index, int count)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteBase64(byte[] buffer, int index, int count) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, encodes the specified binary bytes as binhex and writes out
@@ -60,10 +54,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// <exception cref="T:System.ArgumentException">The buffer length minus <paramref name="index"/> is less than <paramref name="count"/>.</exception>
     /// <exception cref="T:System.ArgumentOutOfRangeException">
     /// <paramref name="index"/> or <paramref name="count"/> is less than zero.</exception>
-    public override void WriteBinHex(byte[] buffer, int index, int count)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteBinHex(byte[] buffer, int index, int count) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, writes out a &lt;![CDATA[...]]&gt;block containing
@@ -71,10 +62,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// </summary>
     /// <param name="text">The text to place inside the CDATA block.</param>
     /// <exception cref="T:System.ArgumentException">The text would result in a non-well formed XML document.</exception>
-    public override void WriteCData(string text)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteCData(string text) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, forces the
@@ -82,10 +70,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// </summary>
     /// <param name="ch">The Unicode character for which to generate a character entity.</param>
     /// <exception cref="T:System.ArgumentException">The character is in the surrogate pair character range, <see langword="0xd800"/> - <see langword="0xdfff"/>. </exception>
-    public override void WriteCharEntity(char ch)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteCharEntity(char ch) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, writes text one buffer at a time.
@@ -98,10 +83,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// <exception cref="T:System.ArgumentException">The buffer length minus <paramref name="index"/> is less than <paramref name="count"/>;the call results in surrogate pair characters being split or an invalid surrogate pair being written.</exception>
     /// <exception cref="T:System.ArgumentOutOfRangeException">
     /// <paramref name="index"/> or <paramref name="count"/> is less than zero.</exception>
-    public override void WriteChars(char[] buffer, int index, int count)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteChars(char[] buffer, int index, int count) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, writes out a comment &lt;!--...--&gt;containing
@@ -109,10 +91,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// </summary>
     /// <param name="text">Text to place inside the comment.</param>
     /// <exception cref="T:System.ArgumentException">The text would result in a non-well formed XML document.</exception>
-    public override void WriteComment(string text)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteComment(string text) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, writes the DOCTYPE declaration with the specified name
@@ -124,29 +103,20 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// <param name="subset">If non-null it writes [subset] where subset is replaced with the value of this argument.</param>
     /// <exception cref="T:System.InvalidOperationException">This method was called outside the prolog (after the root element).</exception>
     /// <exception cref="T:System.ArgumentException">The value for <paramref name="name "/> would result in invalid XML.</exception>
-    public override void WriteDocType(string name, string pubid, string sysid, string subset)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteDocType(string name, string pubid, string sysid, string subset) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, closes the previous <see cref="M:System.Xml.XmlWriter.WriteStartAttribute(System.string,System.string)"/>
     /// call.
     /// </summary>
-    public override void WriteEndAttribute()
-    {
-        _textWriter.Indent--;
-    }
+    public override void WriteEndAttribute() => _textWriter.Indent--;
 
     /// <summary>
     /// When overridden in a derived class, closes any open elements or attributes and
     /// puts the writer back in the Start state.
     /// </summary>
     /// <exception cref="T:System.ArgumentException">The XML document is invalid.</exception>
-    public override void WriteEndDocument()
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteEndDocument() => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, closes one element and pops the corresponding namespace scope.
@@ -181,19 +151,13 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// <param name="name">The name of the entity reference.</param>
     /// <exception cref="T:System.ArgumentException">
     /// <paramref name="name"/> is either <see langword="null"/> or string.Empty.</exception>
-    public override void WriteEntityRef(string name)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteEntityRef(string name) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, closes one element and pops the
     /// corresponding namespace scope.
     /// </summary>
-    public override void WriteFullEndElement()
-    {
-        WriteEndElement();
-    }
+    public override void WriteFullEndElement() => WriteEndElement();
 
     /// <summary>
     /// When overridden in a derived class, writes out the specified name, ensuring it is a valid name according to
@@ -204,10 +168,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// <exception cref="T:System.ArgumentException">
     ///     <paramref name="name "/>is not a valid XML name;or <paramref name="name"/> is either <see langword="null"/> or string.Empty.
     /// </exception>
-    public override void WriteName(string name)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteName(string name) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, writes out the specified name, ensuring it is a valid NmToken according to
@@ -216,10 +177,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// <param name="name">The name to write.</param>
     /// <exception cref="T:System.ArgumentException">
     /// <paramref name="name "/>is not a valid NmToken;or <paramref name="name"/> is either <see langword="null"/> or string.Empty.</exception>
-    public override void WriteNmToken(string name)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteNmToken(string name) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, copies everything from the reader to the writer and
@@ -230,10 +188,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// <param name="defattr"><see langword="true"/> to copy the default attributes from the <see langword="XmlReader"/> ;otherwise, <see langword="false"/>.</param>
     /// <exception cref="T:System.ArgumentException">
     /// <paramref name="reader"/> is <see langword="null"/>.</exception>
-    public override void WriteNode(XmlReader reader, bool defattr)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteNode(XmlReader reader, bool defattr) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, writes out a processing instruction with a space between
@@ -247,10 +202,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     ///         <paramref name="name"/> is either <see langword="null"/> or string.Empty.</para>
     ///     <para>This method is being used to create an XML declaration after <see cref="M:System.Xml.XmlWriter.WriteStartDocument"/> has already been called. </para>
     /// </exception>
-    public override void WriteProcessingInstruction(string name, string text)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteProcessingInstruction(string name, string text) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, writes out the namespace-qualified name. This method looks up the prefix
@@ -264,10 +216,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     ///     <para>
     ///         <paramref name="localName"/> is not a valid name.</para>
     /// </exception>
-    public override void WriteQualifiedName(string localName, string ns)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteQualifiedName(string localName, string ns) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, writes raw markup manually from a character buffer.
@@ -280,19 +229,13 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// <exception cref="T:System.ArgumentException">The buffer length minus <paramref name="index"/> is less than <paramref name="count"/>.</exception>
     /// <exception cref="T:System.ArgumentOutOfRangeException">
     /// <paramref name="index"/> or <paramref name="count"/> is less than zero.</exception>
-    public override void WriteRaw(char[] buffer, int index, int count)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteRaw(char[] buffer, int index, int count) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, writes raw markup manually from a string.
     /// </summary>
     /// <param name="data">string containing the text to write.</param>
-    public override void WriteRaw(string data)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteRaw(string data) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, writes the start of an attribute.
@@ -325,10 +268,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// </summary>
     /// <param name="standalone">If <see langword="true"/>, it writes "standalone=yes";if <see langword="false"/>, it writes "standalone=no".</param>
     /// <exception cref="T:System.InvalidOperationException">This is not the first write method called after the constructor.</exception>
-    public override void WriteStartDocument(bool standalone)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteStartDocument(bool standalone) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, writes the specified start tag and
@@ -416,20 +356,14 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// <param name="lowChar">The low surrogate. This must be a value between 0xDC00 and 0xDFFF.</param>
     /// <param name="highChar"></param>
     /// <exception cref="T:System.Exception">An invalid surrogate character pair was passed.</exception>
-    public override void WriteSurrogateCharEntity(char lowChar, char highChar)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteSurrogateCharEntity(char lowChar, char highChar) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, writes out the given white space.
     /// </summary>
     /// <param name="ws">The string of white space characters.</param>
     /// <exception cref="T:System.ArgumentException">The string contains non-white space characters.</exception>
-    public override void WriteWhitespace(string ws)
-    {
-        throw new NotImplementedException();
-    }
+    public override void WriteWhitespace(string ws) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, gets the current xml:lang scope.

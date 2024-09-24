@@ -312,25 +312,13 @@ Please wait...",
         }
     }
 
-    private void mnuSave_Click(object sender, EventArgs e)
-    {
-        Save();
-    }
+    private void mnuSave_Click(object sender, EventArgs e) => Save();
 
-    private void mnuSaveAs_Click(object sender, EventArgs e)
-    {
-        ShowSaveFileDialog();
-    }
+    private void mnuSaveAs_Click(object sender, EventArgs e) => ShowSaveFileDialog();
 
-    private void mnuGotoQueryEditor_Click(object sender, EventArgs e)
-    {
-        QueryTextBox.Select();
-    }
+    private void mnuGotoQueryEditor_Click(object sender, EventArgs e) => QueryTextBox.Select();
 
-    private void mnuGotoMessageTabPage_Click(object sender, EventArgs e)
-    {
-        _tabControl.SelectedTab = _messagesTabPage;
-    }
+    private void mnuGotoMessageTabPage_Click(object sender, EventArgs e) => _tabControl.SelectedTab = _messagesTabPage;
 
     private void mnuListMembers_Click(object sender, EventArgs e)
     {
@@ -369,25 +357,13 @@ Please wait...",
         NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.Gdi.SetRedraw, 1, 0);
     }
 
-    private void mnuClearCache_Click(object sender, EventArgs e)
-    {
-        Provider.ClearCompletionCache();
-    }
+    private void mnuClearCache_Click(object sender, EventArgs e) => Provider.ClearCompletionCache();
 
-    private void mnuResultSchema_Click(object sender, EventArgs e)
-    {
-        ExecuteReader(CommandBehavior.SchemaOnly);
-    }
+    private void mnuResultSchema_Click(object sender, EventArgs e) => ExecuteReader(CommandBehavior.SchemaOnly);
 
-    private void mnuKeyInfo_Click(object sender, EventArgs e)
-    {
-        ExecuteReader(CommandBehavior.KeyInfo);
-    }
+    private void mnuKeyInfo_Click(object sender, EventArgs e) => ExecuteReader(CommandBehavior.KeyInfo);
 
-    private void mnuSingleRow_Click(object sender, EventArgs e)
-    {
-        ExecuteQuerySingleRow();
-    }
+    private void mnuSingleRow_Click(object sender, EventArgs e) => ExecuteQuerySingleRow();
 
     private void mnuShowShemaTable_Click(object sender, EventArgs e)
     {
@@ -674,10 +650,7 @@ Please wait...",
         QueryFormStaticMethods.AddInfoMessageToQueryForm(queryForm, elapsedTicks, _connectionInfo.ConnectionName, providerInfo.Name, connection);
     }
 
-    private void sQLiteDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        SetResultWriterType(ResultWriterType.SqLite);
-    }
+    private void sQLiteDatabaseToolStripMenuItem_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.SqLite);
 
     private void createSqlCeDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
     {
@@ -740,10 +713,7 @@ Please wait...",
         }
     }
 
-    private void InsertScriptFileToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        SetResultWriterType(ResultWriterType.InsertScriptFile);
-    }
+    private void InsertScriptFileToolStripMenuItem_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.InsertScriptFile);
 
     private void DataTableTabControl_MouseUp(object? sender, MouseEventArgs e)
     {
@@ -793,10 +763,7 @@ Please wait...",
         }
     }
 
-    private void bToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        ExecuteQuerySingleRow();
-    }
+    private void bToolStripMenuItem_Click(object sender, EventArgs e) => ExecuteQuerySingleRow();
 
     private void textBox_SelectionChanged(object sender, EventArgs e)
     {
@@ -1026,8 +993,7 @@ select
         AppendQueryText(text);
     }
 
-    private void undoToolStripMenuItem_Click(object sender, EventArgs e)
-    {
+    private void undoToolStripMenuItem_Click(object sender, EventArgs e) =>
         //var canUndo = _queryTextBox.RichTextBox.CanUndo;
         //if (canUndo)
         //{
@@ -1037,6 +1003,5 @@ select
         //    _queryTextBox.RichTextBox.ClearUndo();
         //}
 
-        _queryTextBox.Undo();
-    }
+        QueryTextBox.Undo();
 }

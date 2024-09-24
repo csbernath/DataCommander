@@ -30,10 +30,7 @@ internal sealed class Connection : ConnectionBase
 
     public override string ConnectionInformation => null;
 
-    public override Task<int> GetTransactionCountAsync(CancellationToken cancellationToken)
-    {
-        return Task.FromResult(0);
-    }
+    public override Task<int> GetTransactionCountAsync(CancellationToken cancellationToken) => Task.FromResult(0);
 
     private void CreateConnection()
     {

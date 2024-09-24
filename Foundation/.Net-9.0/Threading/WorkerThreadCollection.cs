@@ -62,20 +62,11 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
         }
     }
 
-    void ICollection<WorkerThread>.Clear()
-    {
-        throw new Exception("The method or operation is not implemented.");
-    }
+    void ICollection<WorkerThread>.Clear() => throw new Exception("The method or operation is not implemented.");
 
-    bool ICollection<WorkerThread>.Contains(WorkerThread item)
-    {
-        throw new Exception("The method or operation is not implemented.");
-    }
+    bool ICollection<WorkerThread>.Contains(WorkerThread item) => throw new Exception("The method or operation is not implemented.");
 
-    void ICollection<WorkerThread>.CopyTo(WorkerThread[] array, int arrayIndex)
-    {
-        throw new Exception("The method or operation is not implemented.");
-    }
+    void ICollection<WorkerThread>.CopyTo(WorkerThread[] array, int arrayIndex) => throw new Exception("The method or operation is not implemented.");
 
     /// <summary>
     /// 
@@ -84,20 +75,11 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
 
     bool ICollection<WorkerThread>.IsReadOnly => throw new Exception("The method or operation is not implemented.");
 
-    bool ICollection<WorkerThread>.Remove(WorkerThread item)
-    {
-        throw new Exception("The method or operation is not implemented.");
-    }
+    bool ICollection<WorkerThread>.Remove(WorkerThread item) => throw new Exception("The method or operation is not implemented.");
 
-    IEnumerator<WorkerThread> IEnumerable<WorkerThread>.GetEnumerator()
-    {
-        return _threads.GetEnumerator();
-    }
+    IEnumerator<WorkerThread> IEnumerable<WorkerThread>.GetEnumerator() => _threads.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        throw new Exception("The method or operation is not implemented.");
-    }
+    IEnumerator IEnumerable.GetEnumerator() => throw new Exception("The method or operation is not implemented.");
 
     /// <summary>
     /// 

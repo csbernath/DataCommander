@@ -121,14 +121,8 @@ public static class TypeNameCollection
 
         public static TypeEqualityComparer Instance { get; } = new();
 
-        public bool Equals(Type x, Type y)
-        {
-            return x == y;
-        }
+        public bool Equals(Type x, Type y) => x == y;
 
-        public int GetHashCode(Type obj)
-        {
-            return obj.GetHashCode();
-        }
+        public int GetHashCode(Type obj) => obj.GetHashCode();
     }
 }

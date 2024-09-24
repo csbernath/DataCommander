@@ -155,10 +155,7 @@ public static class TaskMonitor
         return result;
     }
 
-    private static string ToString(DateTime dateTime)
-    {
-        return dateTime.ToString("HH:mm:ss.fff");
-    }
+    private static string ToString(DateTime dateTime) => dateTime.ToString("HH:mm:ss.fff");
 
     private static string ToString(DateTime? dateTime)
     {

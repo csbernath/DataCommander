@@ -42,10 +42,7 @@ public sealed class SegmentedArrayBuilder<T>
         }
     }
 
-    public IReadOnlyList<T> ToReadOnlyCollection()
-    {
-        return new ReadOnlySegmentedList(_segments);
-    }
+    public IReadOnlyList<T> ToReadOnlyCollection() => new ReadOnlySegmentedList(_segments);
 
     private sealed class ReadOnlySegmentedList(T[][] segments) : IReadOnlyList<T>
     {
@@ -81,10 +78,7 @@ public sealed class SegmentedArrayBuilder<T>
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable<T>) this).GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<T>)this).GetEnumerator();
     }
 
     private readonly T[][] _segments;

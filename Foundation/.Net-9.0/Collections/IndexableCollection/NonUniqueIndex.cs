@@ -8,6 +8,10 @@ namespace Foundation.Collections.IndexableCollection;
 
 public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, ICollection<T>>
 {
+    private IDictionary<TKey, ICollection<T>> _dictionary;
+    private Func<T, GetKeyResponse<TKey>> _getKey;
+    private Func<ICollection<T>> _createCollection;
+
     public NonUniqueIndex(
         string name,
         Func<T, GetKeyResponse<TKey>> getKey,
@@ -76,10 +80,7 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
         return enumerable.GetEnumerator();
     }
 
-    IEnumerator<KeyValuePair<TKey, ICollection<T>>> IEnumerable<KeyValuePair<TKey, ICollection<T>>>.GetEnumerator()
-    {
-        return _dictionary.GetEnumerator();
-    }
+    IEnumerator<KeyValuePair<TKey, ICollection<T>>> IEnumerable<KeyValuePair<TKey, ICollection<T>>>.GetEnumerator() => _dictionary.GetEnumerator();
 
     public bool TryGetFirstValue(TKey key, out T value)
     {
@@ -113,10 +114,6 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
         _dictionary = dictionary;
         _createCollection = createCollection;
     }
-
-    private IDictionary<TKey, ICollection<T>> _dictionary;
-    private Func<T, GetKeyResponse<TKey>> _getKey;
-    private Func<ICollection<T>> _createCollection;
 
     public int Count => _dictionary.Count;
 

@@ -52,10 +52,7 @@ public sealed class TextDataParameter(string name, object value) : DbParameter
     /// <summary>
     /// 
     /// </summary>
-    public override void ResetDbType()
-    {
-        throw new NotImplementedException();
-    }
+    public override void ResetDbType() => throw new NotImplementedException();
 
     /// <summary>
     /// 

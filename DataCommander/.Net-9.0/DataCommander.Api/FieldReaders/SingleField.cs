@@ -4,8 +4,5 @@ public sealed class SingleField(float value)
 {
     public float Value { get; } = value;
 
-    public override string ToString()
-    {
-        return Value.ToString("N16");
-    }
+    public override string ToString() => Value.ToString("N16");
 }

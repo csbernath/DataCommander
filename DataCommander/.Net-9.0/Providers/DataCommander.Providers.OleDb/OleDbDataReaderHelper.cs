@@ -5,8 +5,5 @@ namespace DataCommander.Providers.OleDb;
 
 internal sealed class OleDbDataReaderHelper(OleDbDataReader dataReader) : IDataReaderHelper
 {
-    int IDataReaderHelper.GetValues(object[] values)
-    {
-        return dataReader.GetValues(values);
-    }
+    int IDataReaderHelper.GetValues(object[] values) => dataReader.GetValues(values);
 }

@@ -10,10 +10,7 @@ internal sealed class InternalLog(ILogWriter logWriter, IDateTimeProvider dateTi
     {
     }
 
-    bool ILog.IsEnabled(LogLevel logLevel)
-    {
-        throw new NotImplementedException();
-    }
+    bool ILog.IsEnabled(LogLevel logLevel) => throw new NotImplementedException();
 
     void ILog.Write(LogLevel logLevel, string message)
     {

@@ -39,23 +39,17 @@ public class AsyncDbCommand : IDbCommand
         set => _command.CommandType = value;
     }
 
-    public IDataReader ExecuteReader(CommandBehavior behavior)
-    {
+    public IDataReader ExecuteReader(CommandBehavior behavior) =>
         // TODO:  Add AsyncDbCommand.ExecuteReader implementation
-        return null;
-    }
+        null;
 
-    IDataReader IDbCommand.ExecuteReader()
-    {
+    IDataReader IDbCommand.ExecuteReader() =>
         // TODO:  Add AsyncDbCommand.System.Data.IDbCommand.ExecuteReader implementation
-        return null;
-    }
+        null;
 
-    public object ExecuteScalar()
-    {
+    public object ExecuteScalar() =>
         // TODO:  Add AsyncDbCommand.ExecuteScalar implementation
-        return null;
-    }
+        null;
 
     public int ExecuteNonQuery()
     {
@@ -73,11 +67,9 @@ public class AsyncDbCommand : IDbCommand
         }
     }
 
-    public IDbDataParameter CreateParameter()
-    {
+    public IDbDataParameter CreateParameter() =>
         // TODO:  Add AsyncDbCommand.CreateParameter implementation
-        return null;
-    }
+        null;
 
     public IDbConnection Connection
     {

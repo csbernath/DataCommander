@@ -11,15 +11,9 @@ internal sealed class MyDataObject(DataView dataView, int[] columnIndexes) : IDa
 {
     private readonly int[] _columnIndexes = columnIndexes;
 
-    object IDataObject.GetData(Type format)
-    {
-        throw new NotImplementedException();
-    }
+    object IDataObject.GetData(Type format) => throw new NotImplementedException();
 
-    object IDataObject.GetData(string format)
-    {
-        throw new NotImplementedException();
-    }
+    object IDataObject.GetData(string format) => throw new NotImplementedException();
 
     object IDataObject.GetData(string format, bool autoConvert)
     {
@@ -62,15 +56,9 @@ internal sealed class MyDataObject(DataView dataView, int[] columnIndexes) : IDa
         return data;
     }
 
-    bool IDataObject.GetDataPresent(Type format)
-    {
-        throw new NotImplementedException();
-    }
+    bool IDataObject.GetDataPresent(Type format) => throw new NotImplementedException();
 
-    bool IDataObject.GetDataPresent(string format)
-    {
-        throw new NotImplementedException();
-    }
+    bool IDataObject.GetDataPresent(string format) => throw new NotImplementedException();
 
     bool IDataObject.GetDataPresent(string format, bool autoConvert)
     {
@@ -91,15 +79,9 @@ internal sealed class MyDataObject(DataView dataView, int[] columnIndexes) : IDa
         return isDataPresent;
     }
 
-    string[] IDataObject.GetFormats()
-    {
-        throw new NotImplementedException();
-    }
+    string[] IDataObject.GetFormats() => throw new NotImplementedException();
 
-    string[] IDataObject.GetFormats(bool autoConvert)
-    {
-        return
-        [
+    string[] IDataObject.GetFormats(bool autoConvert) => [
             DataFormats.CommaSeparatedValue,
             DataFormats.Html,
             //DataFormats.StringFormat,
@@ -107,27 +89,14 @@ internal sealed class MyDataObject(DataView dataView, int[] columnIndexes) : IDa
             DataFormats.UnicodeText,
             "TabSeparatedValues" // TODO
         ];
-    }
 
-    void IDataObject.SetData(object data)
-    {
-        throw new NotImplementedException();
-    }
+    void IDataObject.SetData(object data) => throw new NotImplementedException();
 
-    void IDataObject.SetData(Type format, object data)
-    {
-        throw new NotImplementedException();
-    }
+    void IDataObject.SetData(Type format, object data) => throw new NotImplementedException();
 
-    void IDataObject.SetData(string format, object data)
-    {
-        throw new NotImplementedException();
-    }
+    void IDataObject.SetData(string format, object data) => throw new NotImplementedException();
 
-    void IDataObject.SetData(string format, bool autoConvert, object data)
-    {
-        throw new NotImplementedException();
-    }
+    void IDataObject.SetData(string format, bool autoConvert, object data) => throw new NotImplementedException();
 
     private static void WriteHtmlFragment(string htmlFragment, TextWriter textWriter)
     {

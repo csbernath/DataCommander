@@ -161,8 +161,5 @@ public sealed class ApplicationData
         Save(_fileName, _sectionName);
     }
 
-    public ConfigurationNode CreateNode(string nodeName)
-    {
-        return RootNode.CreateNode(nodeName);
-    }
+    public ConfigurationNode CreateNode(string nodeName) => RootNode.CreateNode(nodeName);
 }

@@ -40,39 +40,27 @@ public sealed class WorkerThreadPoolDequeuerCollection : IList<WorkerThreadPoolD
     /// 
     /// </summary>
     /// <param name="dequeuer"></param>
-    public void Remove(WorkerThreadPoolDequeuer dequeuer)
-    {
-        _list.Remove(dequeuer);
-    }
+    public void Remove(WorkerThreadPoolDequeuer dequeuer) => _list.Remove(dequeuer);
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="item"></param>
     /// <returns></returns>
-    public int IndexOf(WorkerThreadPoolDequeuer item)
-    {
-        return _list.IndexOf(item);
-    }
+    public int IndexOf(WorkerThreadPoolDequeuer item) => _list.IndexOf(item);
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="index"></param>
     /// <param name="item"></param>
-    public void Insert(int index, WorkerThreadPoolDequeuer item)
-    {
-        _list.Insert(index, item);
-    }
+    public void Insert(int index, WorkerThreadPoolDequeuer item) => _list.Insert(index, item);
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="index"></param>
-    public void RemoveAt(int index)
-    {
-        _list.RemoveAt(index);
-    }
+    public void RemoveAt(int index) => _list.RemoveAt(index);
 
     /// <summary>
     /// 
@@ -89,30 +77,21 @@ public sealed class WorkerThreadPoolDequeuerCollection : IList<WorkerThreadPoolD
     /// <summary>
     /// 
     /// </summary>
-    public void Clear()
-    {
-        throw new NotImplementedException();
-    }
+    public void Clear() => throw new NotImplementedException();
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="item"></param>
     /// <returns></returns>
-    public bool Contains(WorkerThreadPoolDequeuer item)
-    {
-        throw new NotImplementedException();
-    }
+    public bool Contains(WorkerThreadPoolDequeuer item) => throw new NotImplementedException();
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="array"></param>
     /// <param name="arrayIndex"></param>
-    public void CopyTo(WorkerThreadPoolDequeuer[] array, int arrayIndex)
-    {
-        throw new NotImplementedException();
-    }
+    public void CopyTo(WorkerThreadPoolDequeuer[] array, int arrayIndex) => throw new NotImplementedException();
 
     /// <summary>
     /// 
@@ -124,26 +103,17 @@ public sealed class WorkerThreadPoolDequeuerCollection : IList<WorkerThreadPoolD
     /// </summary>
     public bool IsReadOnly => throw new NotImplementedException();
 
-    bool ICollection<WorkerThreadPoolDequeuer>.Remove(WorkerThreadPoolDequeuer item)
-    {
-        throw new NotImplementedException();
-    }
+    bool ICollection<WorkerThreadPoolDequeuer>.Remove(WorkerThreadPoolDequeuer item) => throw new NotImplementedException();
 
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
-    public IEnumerator<WorkerThreadPoolDequeuer> GetEnumerator()
-    {
-        throw new NotImplementedException();
-    }
+    public IEnumerator<WorkerThreadPoolDequeuer> GetEnumerator() => throw new NotImplementedException();
 
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        throw new NotImplementedException();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => throw new NotImplementedException();
 }

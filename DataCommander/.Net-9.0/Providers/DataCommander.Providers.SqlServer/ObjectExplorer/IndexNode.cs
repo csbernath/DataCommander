@@ -43,10 +43,7 @@ internal sealed class IndexNode(DatabaseNode databaseNode, int parentId, int id,
 
     public bool IsLeaf => true;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
-    {
-        return null;
-    }
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => null;
 
     public bool Sortable => false;
 

@@ -39,8 +39,5 @@ internal sealed class IndexCollectionNode : ITreeNode
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;
 
-    public ContextMenu? GetContextMenu()
-    {
-        throw new System.NotImplementedException();
-    }
+    public ContextMenu? GetContextMenu() => throw new System.NotImplementedException();
 }

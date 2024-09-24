@@ -154,20 +154,11 @@ public sealed class CircularBuffer<T> : IList<T>
     private int _head;
     private int _tail;
 
-    int IList<T>.IndexOf(T item)
-    {
-        throw new NotImplementedException();
-    }
+    int IList<T>.IndexOf(T item) => throw new NotImplementedException();
 
-    void IList<T>.Insert(int index, T item)
-    {
-        throw new NotImplementedException();
-    }
+    void IList<T>.Insert(int index, T item) => throw new NotImplementedException();
 
-    void IList<T>.RemoveAt(int index)
-    {
-        throw new NotImplementedException();
-    }
+    void IList<T>.RemoveAt(int index) => throw new NotImplementedException();
 
     public T this[int index]
     {

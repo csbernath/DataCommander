@@ -47,10 +47,7 @@ internal sealed class SqlLogWriter : ILogWriter
         _commandTimeout = commandTimeout;
     }
 
-    void ILogWriter.Open()
-    {
-        _timer = new Timer(TimerCallback, null, 0, Period);
-    }
+    void ILogWriter.Open() => _timer = new Timer(TimerCallback, null, 0, Period);
 
     void ILogWriter.Write(LogEntry logEntry)
     {
@@ -60,15 +57,9 @@ internal sealed class SqlLogWriter : ILogWriter
         }
     }
 
-    private void Flush()
-    {
-        TimerCallback(null);
-    }
+    private void Flush() => TimerCallback(null);
 
-    void ILogWriter.Flush()
-    {
-        Flush();
-    }
+    void ILogWriter.Flush() => Flush();
 
     void ILogWriter.Close()
     {

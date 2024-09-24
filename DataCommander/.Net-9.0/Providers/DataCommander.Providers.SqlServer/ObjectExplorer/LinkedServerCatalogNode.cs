@@ -20,10 +20,7 @@ internal sealed class LinkedServerCatalogNode : ITreeNode
 
     bool ITreeNode.IsLeaf => true;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => throw new NotImplementedException();
 
     bool ITreeNode.Sortable => false;
 

@@ -15,10 +15,7 @@ internal sealed class ColumnNode(ColumnCollectionNode columnCollectionNode, stri
 
     bool ITreeNode.IsLeaf => true;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
-    {
-        return null;
-    }
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => null;
 
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;

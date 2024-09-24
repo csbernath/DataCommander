@@ -719,8 +719,7 @@ public sealed partial class QueryForm
             AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Please open a destination connection."));
     }
 
-    private void redoToolStripMenuItem_Click(object sender, EventArgs e)
-    {
+    private void redoToolStripMenuItem_Click(object sender, EventArgs e) =>
         //var canRedo = _queryTextBox.RichTextBox.CanRedo;
         //if (canRedo)
         //{
@@ -729,6 +728,5 @@ public sealed partial class QueryForm
         //    _queryTextBox.RichTextBox.Redo();
         //}
 
-        _queryTextBox.Redo();
-    }
+        QueryTextBox.Redo();
 }

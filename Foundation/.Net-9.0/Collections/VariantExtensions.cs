@@ -4,10 +4,7 @@ namespace Foundation.Collections;
 
 public static class VariantExtensions
 {
-    private static Action<object> ToAction<T>(Action<T> source)
-    {
-        return value => source((T) value);
-    }
+    private static Action<object> ToAction<T>(Action<T> source) => value => source((T)value);
 
     public static void Action<T1, T2, T3>(this Variant<T1, T2, T3> variant, Action<T1> action1, Action<T2> action2, Action<T3> action3)
     {

@@ -87,10 +87,7 @@ public sealed class SqlLoggedSqlConnection : IDbConnection
         IDbCommand command,
         DateTime startDate,
         long duration,
-        Exception exception)
-    {
-        _sqlLog.CommandExecute(_applicationId, _connectionNo, command, startDate, duration, exception);
-    }
+        Exception exception) => _sqlLog.CommandExecute(_applicationId, _connectionNo, command, startDate, duration, exception);
 
     internal int ExecuteNonQuery(IDbCommand command)
     {

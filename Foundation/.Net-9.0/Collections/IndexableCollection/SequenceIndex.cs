@@ -29,15 +29,9 @@ public class SequenceIndex<TKey, T> : ICollectionIndex<T>
 
     string ICollectionIndex<T>.Name => _name;
 
-    IEnumerator<T> IEnumerable<T>.GetEnumerator()
-    {
-        return _dictionary.Values.GetEnumerator();
-    }
+    IEnumerator<T> IEnumerable<T>.GetEnumerator() => _dictionary.Values.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return _dictionary.Values.GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => _dictionary.Values.GetEnumerator();
 
     void ICollection<T>.Add(T item)
     {

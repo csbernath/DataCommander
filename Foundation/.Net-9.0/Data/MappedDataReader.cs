@@ -48,25 +48,13 @@ public class MappedDataReader : DbDataReader
     /// </summary>
     /// <param name="ordinal"></param>
     /// <returns></returns>
-    public override double GetDouble(int ordinal)
-    {
-        throw new NotImplementedException();
-    }
+    public override double GetDouble(int ordinal) => throw new NotImplementedException();
 
-    public override IEnumerator GetEnumerator()
-    {
-        throw new NotImplementedException();
-    }
+    public override IEnumerator GetEnumerator() => throw new NotImplementedException();
 
-    public override Type GetFieldType(int ordinal)
-    {
-        return _dataReader.GetFieldType(ordinal);
-    }
+    public override Type GetFieldType(int ordinal) => _dataReader.GetFieldType(ordinal);
 
-    public override float GetFloat(int ordinal)
-    {
-        throw new NotImplementedException();
-    }
+    public override float GetFloat(int ordinal) => throw new NotImplementedException();
 
     public override Guid GetGuid(int ordinal) => throw new NotImplementedException();
     public override short GetInt16(int ordinal) => throw new NotImplementedException();

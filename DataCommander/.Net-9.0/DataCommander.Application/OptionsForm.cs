@@ -25,10 +25,7 @@ public partial class OptionsForm : Form
     public bool DarkColorTheme => _darkColorTheme;
     public Font SelectedFont => _font;
 
-    private void okButton_Click(object sender, System.EventArgs e)
-    {
-        _darkColorTheme = colorThemeComboBox.SelectedIndex != 0;
-    }
+    private void okButton_Click(object sender, System.EventArgs e) => _darkColorTheme = colorThemeComboBox.SelectedIndex != 0;
 
     private void changeFontButton_Click(object sender, System.EventArgs e)
     {

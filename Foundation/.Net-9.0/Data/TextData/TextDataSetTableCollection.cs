@@ -34,10 +34,7 @@ public sealed class TextDataSetTableCollection : IList<TextDataSetTable>
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public bool Contains(string name)
-    {
-        return _nameIndex.ContainsKey(name);
-    }
+    public bool Contains(string name) => _nameIndex.ContainsKey(name);
 
     /// <summary>
     /// 
@@ -53,20 +50,11 @@ public sealed class TextDataSetTableCollection : IList<TextDataSetTable>
     /// <returns></returns>
     public TextDataSetTable this[string name] => _nameIndex[name];
 
-    int IList<TextDataSetTable>.IndexOf(TextDataSetTable item)
-    {
-        throw new NotImplementedException();
-    }
+    int IList<TextDataSetTable>.IndexOf(TextDataSetTable item) => throw new NotImplementedException();
 
-    void IList<TextDataSetTable>.Insert(int index, TextDataSetTable item)
-    {
-        throw new NotImplementedException();
-    }
+    void IList<TextDataSetTable>.Insert(int index, TextDataSetTable item) => throw new NotImplementedException();
 
-    void IList<TextDataSetTable>.RemoveAt(int index)
-    {
-        throw new NotImplementedException();
-    }
+    void IList<TextDataSetTable>.RemoveAt(int index) => throw new NotImplementedException();
 
     TextDataSetTable IList<TextDataSetTable>.this[int index]
     {
@@ -86,20 +74,11 @@ public sealed class TextDataSetTableCollection : IList<TextDataSetTable>
         _collection.Add(item);
     }
 
-    void ICollection<TextDataSetTable>.Clear()
-    {
-        _collection.Clear();
-    }
+    void ICollection<TextDataSetTable>.Clear() => _collection.Clear();
 
-    bool ICollection<TextDataSetTable>.Contains(TextDataSetTable item)
-    {
-        throw new NotImplementedException();
-    }
+    bool ICollection<TextDataSetTable>.Contains(TextDataSetTable item) => throw new NotImplementedException();
 
-    void ICollection<TextDataSetTable>.CopyTo(TextDataSetTable[] array, int arrayIndex)
-    {
-        throw new NotImplementedException();
-    }
+    void ICollection<TextDataSetTable>.CopyTo(TextDataSetTable[] array, int arrayIndex) => throw new NotImplementedException();
 
     /// <summary>
     /// 
@@ -108,18 +87,9 @@ public sealed class TextDataSetTableCollection : IList<TextDataSetTable>
 
     bool ICollection<TextDataSetTable>.IsReadOnly => throw new NotImplementedException();
 
-    bool ICollection<TextDataSetTable>.Remove(TextDataSetTable item)
-    {
-        throw new NotImplementedException();
-    }
+    bool ICollection<TextDataSetTable>.Remove(TextDataSetTable item) => throw new NotImplementedException();
 
-    IEnumerator<TextDataSetTable> IEnumerable<TextDataSetTable>.GetEnumerator()
-    {
-        return _collection.GetEnumerator();
-    }
+    IEnumerator<TextDataSetTable> IEnumerable<TextDataSetTable>.GetEnumerator() => _collection.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return _collection.GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => _collection.GetEnumerator();
 }

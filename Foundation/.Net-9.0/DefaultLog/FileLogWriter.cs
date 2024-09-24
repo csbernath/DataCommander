@@ -88,8 +88,5 @@ public class FileLogWriter : ILogWriter
         }
     }
 
-    void IDisposable.Dispose()
-    {
-        _logFile.Dispose();
-    }
+    void IDisposable.Dispose() => _logFile.Dispose();
 }

@@ -38,11 +38,9 @@ internal sealed class PostgreSqlProvider : IProvider
     void IProvider.DeriveParameters(IDbCommand command) => throw new NotImplementedException();
     public Type GetColumnType(FoundationDbColumn dataColumnSchema) => throw new NotImplementedException();
 
-    Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
-    {
+    Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema) =>
         // TODO
-        return typeof(object);
-    }
+        typeof(object);
 
     string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName) => throw new NotImplementedException();
 
@@ -332,13 +330,9 @@ order by 1", name.Database);
     DataTable IProvider.GetParameterTable(IDataParameterCollection parameters) => throw new NotImplementedException();
     DataTable IProvider.GetSchemaTable(IDataReader dataReader) => throw new NotImplementedException();
 
-    List<Statement> IProvider.GetStatements(string commandText)
-    {
-        return
-        [
+    List<Statement> IProvider.GetStatements(string commandText) => [
             new(0, commandText)
         ];
-    }
 
     GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
 

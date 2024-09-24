@@ -28,10 +28,7 @@ public readonly struct SmallTime : IEquatable<SmallTime>, IComparable<SmallTime>
         return timeSpan.ToString();
     }
 
-    private static TimeSpan ToTimeSpan(short value)
-    {
-        return TimeSpan.FromSeconds(value);
-    }
+    private static TimeSpan ToTimeSpan(short value) => TimeSpan.FromSeconds(value);
 
     internal readonly string DebuggerDisplay
     {
@@ -43,10 +40,7 @@ public readonly struct SmallTime : IEquatable<SmallTime>, IComparable<SmallTime>
         }
     }
 
-    public readonly bool Equals(SmallTime other)
-    {
-        return _value == other._value;
-    }
+    public readonly bool Equals(SmallTime other) => _value == other._value;
 
     public override bool Equals(object obj)
     {
@@ -54,15 +48,9 @@ public readonly struct SmallTime : IEquatable<SmallTime>, IComparable<SmallTime>
         return obj is SmallTime smallTime && Equals(smallTime);
     }
 
-    public override readonly int GetHashCode()
-    {
-        return _value.GetHashCode();
-    }
+    public override readonly int GetHashCode() => _value.GetHashCode();
 
-    public readonly int CompareTo(SmallTime other)
-    {
-        return _value.CompareTo(other._value);
-    }
+    public readonly int CompareTo(SmallTime other) => _value.CompareTo(other._value);
 
     public static bool operator ==(SmallTime x, SmallTime y) => x.Equals(y);
     public static bool operator !=(SmallTime x, SmallTime y) => !(x == y);

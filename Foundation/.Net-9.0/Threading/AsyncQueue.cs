@@ -51,10 +51,7 @@ public class AsyncQueue
             }
         }
 
-        public void Consume(object item)
-        {
-            _consumer.Consume(item);
-        }
+        public void Consume(object item) => _consumer.Consume(item);
 
         public WorkerThread Thread { get; }
     }

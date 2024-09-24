@@ -37,10 +37,7 @@ public sealed class DateTimeField(DateTime value) : IComparable, IConvertible
         return dateTime.ToString(format);
     }
 
-    public override string ToString()
-    {
-        return ToString(Value);
-    }
+    public override string ToString() => ToString(Value);
 
     public int CompareTo(object? obj)
     {
@@ -77,50 +74,26 @@ public sealed class DateTimeField(DateTime value) : IComparable, IConvertible
         return result;
     }
 
-    TypeCode IConvertible.GetTypeCode()
-    {
-        return TypeCode.Object;
-    }
+    TypeCode IConvertible.GetTypeCode() => TypeCode.Object;
 
-    bool IConvertible.ToBoolean(IFormatProvider? provider)
-    {
-        throw new NotImplementedException();
-    }
+    bool IConvertible.ToBoolean(IFormatProvider? provider) => throw new NotImplementedException();
 
     byte IConvertible.ToByte(IFormatProvider? provider) => throw new NotImplementedException();
     char IConvertible.ToChar(IFormatProvider? provider) => throw new NotImplementedException();
     DateTime IConvertible.ToDateTime(IFormatProvider? provider) => Value;
     decimal IConvertible.ToDecimal(IFormatProvider? provider) => throw new NotImplementedException();
 
-    double IConvertible.ToDouble(IFormatProvider? provider)
-    {
-        throw new NotImplementedException();
-    }
+    double IConvertible.ToDouble(IFormatProvider? provider) => throw new NotImplementedException();
 
-    short IConvertible.ToInt16(IFormatProvider? provider)
-    {
-        throw new NotImplementedException();
-    }
+    short IConvertible.ToInt16(IFormatProvider? provider) => throw new NotImplementedException();
 
-    int IConvertible.ToInt32(IFormatProvider? provider)
-    {
-        throw new NotImplementedException();
-    }
+    int IConvertible.ToInt32(IFormatProvider? provider) => throw new NotImplementedException();
 
-    long IConvertible.ToInt64(IFormatProvider? provider)
-    {
-        throw new NotImplementedException();
-    }
+    long IConvertible.ToInt64(IFormatProvider? provider) => throw new NotImplementedException();
 
-    sbyte IConvertible.ToSByte(IFormatProvider? provider)
-    {
-        throw new NotImplementedException();
-    }
+    sbyte IConvertible.ToSByte(IFormatProvider? provider) => throw new NotImplementedException();
 
-    float IConvertible.ToSingle(IFormatProvider? provider)
-    {
-        throw new NotImplementedException();
-    }
+    float IConvertible.ToSingle(IFormatProvider? provider) => throw new NotImplementedException();
 
     string IConvertible.ToString(IFormatProvider? provider) => ToString();
     object IConvertible.ToType(Type conversionType, IFormatProvider? provider) => throw new NotImplementedException();

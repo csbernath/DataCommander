@@ -15,12 +15,9 @@ public static class DataRowExtensions
         return (T)dataRow[name];
     }
 
-    private static T? GetNullableValue<T>(object value) where T : struct
-    {
-        return value == DBNull.Value
+    private static T? GetNullableValue<T>(object value) where T : struct => value == DBNull.Value
             ? (T?)null
             : (T)value;
-    }
 
     public static T? GetNullableValueField<T>(this DataRow dataRow, string name) where T : struct
     {

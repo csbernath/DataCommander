@@ -14,10 +14,7 @@ internal sealed class SequenceNode(SequenceCollectionNode sequenceCollectionNode
 
     bool ITreeNode.IsLeaf => true;
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
-    {
-        return null;
-    }
+    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) => null;
 
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;

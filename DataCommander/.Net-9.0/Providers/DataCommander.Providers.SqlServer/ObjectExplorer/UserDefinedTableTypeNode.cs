@@ -16,13 +16,10 @@ internal sealed class UserDefinedTableTypeNode(DatabaseNode database, int id, st
     string? ITreeNode.Name => $"{schema}.{name}";
     bool ITreeNode.IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
-    {
-        return Task.FromResult<IEnumerable<ITreeNode>>(
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>(
         [
             new ColumnCollectionNode(database, id)
         ]);
-    }
 
     bool ITreeNode.Sortable => false;
     string ITreeNode.Query => null;

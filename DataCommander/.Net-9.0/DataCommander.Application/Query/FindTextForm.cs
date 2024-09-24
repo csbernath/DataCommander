@@ -195,8 +195,5 @@ public class FindTextForm : Form
         }
     }
 
-    private void FindTextForm_Closing(object sender, CancelEventArgs e)
-    {
-        _cbText.Focus();
-    }
+    private void FindTextForm_Closing(object sender, CancelEventArgs e) => _cbText.Focus();
 }

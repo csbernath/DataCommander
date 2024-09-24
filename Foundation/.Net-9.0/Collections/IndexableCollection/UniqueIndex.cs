@@ -45,10 +45,7 @@ public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey
 
     IEnumerator<T> IEnumerable<T>.GetEnumerator() => _dictionary.Values.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return _dictionary.Values.GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => _dictionary.Values.GetEnumerator();
 
     public T this[TKey key]
     {
@@ -57,10 +54,7 @@ public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey
     }
 
     [Pure]
-    public bool ContainsKey(TKey key)
-    {
-        return _dictionary.ContainsKey(key);
-    }
+    public bool ContainsKey(TKey key) => _dictionary.ContainsKey(key);
 
     private void Initialize(string name, Func<T, GetKeyResponse<TKey>> getKey, IDictionary<TKey, T> dictionary)
     {

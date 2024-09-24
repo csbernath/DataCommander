@@ -15,10 +15,7 @@ internal sealed class StoredProcedureNode(DatabaseNode database, string owner, s
     public string? Name => owner + '.' + name;
     public bool IsLeaf => true;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
-    {
-        return Task.FromResult<IEnumerable<ITreeNode>>([]);
-    }
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>([]);
 
     public bool Sortable => false;
 

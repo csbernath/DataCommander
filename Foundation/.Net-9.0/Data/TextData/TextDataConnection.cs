@@ -24,19 +24,13 @@ public sealed class TextDataConnection : DbConnection
     /// </summary>
     /// <param name="isolationLevel"></param>
     /// <returns></returns>
-    protected override DbTransaction BeginDbTransaction(IsolationLevel isolationLevel)
-    {
-        throw new NotImplementedException();
-    }
+    protected override DbTransaction BeginDbTransaction(IsolationLevel isolationLevel) => throw new NotImplementedException();
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="databaseName"></param>
-    public override void ChangeDatabase(string databaseName)
-    {
-        throw new NotImplementedException();
-    }
+    public override void ChangeDatabase(string databaseName) => throw new NotImplementedException();
 
     /// <summary>
     /// 
@@ -59,10 +53,7 @@ public sealed class TextDataConnection : DbConnection
     /// 
     /// </summary>
     /// <returns></returns>
-    protected override DbCommand CreateDbCommand()
-    {
-        throw new NotImplementedException();
-    }
+    protected override DbCommand CreateDbCommand() => throw new NotImplementedException();
 
     /// <summary>
     /// 

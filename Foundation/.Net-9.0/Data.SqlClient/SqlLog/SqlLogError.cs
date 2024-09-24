@@ -44,9 +44,7 @@ internal sealed class SqlLogError(
         }
     }
 
-    private void AppendError(StringBuilder sb, int errorNo, int error, byte severity, byte state, string procedure, int line, string message)
-    {
-        sb.AppendFormat(
+    private void AppendError(StringBuilder sb, int errorNo, int error, byte severity, byte state, string procedure, int line, string message) => sb.AppendFormat(
             "exec LogError {0},{1},{2},{3},{4},{5},{6},{7},{8},{9}\r\n",
             applicationId,
             connectionNo,
@@ -58,5 +56,4 @@ internal sealed class SqlLogError(
             state,
             procedure.ToNullableVarChar(),
             message.ToNullableVarChar());
-    }
 }

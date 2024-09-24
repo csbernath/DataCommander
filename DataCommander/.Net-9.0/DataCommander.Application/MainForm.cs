@@ -749,10 +749,7 @@ public class MainForm : Form
         }
     }
 
-    private void mnuOpen_Click(object sender, EventArgs e)
-    {
-        Open();
-    }
+    private void mnuOpen_Click(object sender, EventArgs e) => Open();
 
     public void LoadFiles(string[] fileNames)
     {

@@ -22,10 +22,7 @@ internal sealed class ProcedureNode(string name) : ITreeNode
 
     public bool IsLeaf => true;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
-    {
-        return null;
-    }
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => null;
 
     public bool Sortable => false;
 
@@ -44,8 +41,5 @@ internal sealed class ProcedureNode(string name) : ITreeNode
         }
     }
 
-    public ContextMenu? GetContextMenu()
-    {
-        throw new System.NotImplementedException();
-    }
+    public ContextMenu? GetContextMenu() => throw new System.NotImplementedException();
 }

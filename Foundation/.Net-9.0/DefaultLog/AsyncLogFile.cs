@@ -33,10 +33,7 @@ internal sealed class AsyncLogFile(
         _timer = new Timer(TimerCallback, null, timerPeriod, timerPeriod);
     }
 
-    public void Write(LogEntry entry)
-    {
-        _queue.Enqueue(entry);
-    }
+    public void Write(LogEntry entry) => _queue.Enqueue(entry);
 
     public void Flush()
     {
@@ -68,8 +65,5 @@ internal sealed class AsyncLogFile(
         Flush();
     }
 
-    void IDisposable.Dispose()
-    {
-        Close();
-    }
+    void IDisposable.Dispose() => Close();
 }

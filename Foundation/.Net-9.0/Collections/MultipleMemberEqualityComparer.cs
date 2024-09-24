@@ -18,10 +18,7 @@ public sealed class MultipleMemberEqualityComparer<T> : IEqualityComparer<T>
         _equalityComparers = equalityComparers;
     }
 
-    public bool Equals(T x, T y)
-    {
-        return _equalityComparers.All(c => c.Equals(x, y));
-    }
+    public bool Equals(T x, T y) => _equalityComparers.All(c => c.Equals(x, y));
 
     public int GetHashCode(T obj)
     {
@@ -30,8 +27,5 @@ public sealed class MultipleMemberEqualityComparer<T> : IEqualityComparer<T>
         return hashCode;
     }
 
-    private static int CombineHashCodes(int h1, int h2)
-    {
-        return ((h1 << 5) + h1) ^ h2;
-    }
+    private static int CombineHashCodes(int h1, int h2) => ((h1 << 5) + h1) ^ h2;
 }

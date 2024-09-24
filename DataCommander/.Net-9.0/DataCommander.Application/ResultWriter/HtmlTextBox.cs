@@ -56,10 +56,7 @@ internal sealed class HtmlTextBox : UserControl
         }
     }
 
-    public void Navigate(string path)
-    {
-        _webBrowser.Navigate(path);
-    }
+    public void Navigate(string path) => _webBrowser.Navigate(path);
 
     /// <summary> 
     /// Clean up any resources being used.

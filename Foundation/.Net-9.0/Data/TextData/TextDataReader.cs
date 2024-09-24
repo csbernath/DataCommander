@@ -62,20 +62,14 @@ public sealed class TextDataReader : DbDataReader
     /// </summary>
     /// <param name="ordinal"></param>
     /// <returns></returns>
-    public override bool GetBoolean(int ordinal)
-    {
-        return (bool)_values[ordinal];
-    }
+    public override bool GetBoolean(int ordinal) => (bool)_values[ordinal];
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="ordinal"></param>
     /// <returns></returns>
-    public override byte GetByte(int ordinal)
-    {
-        return (byte)_values[ordinal];
-    }
+    public override byte GetByte(int ordinal) => (byte)_values[ordinal];
 
     /// <summary>
     /// 
@@ -86,20 +80,14 @@ public sealed class TextDataReader : DbDataReader
     /// <param name="bufferOffset"></param>
     /// <param name="length"></param>
     /// <returns></returns>
-    public override long GetBytes(int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length)
-    {
-        throw new NotImplementedException();
-    }
+    public override long GetBytes(int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length) => throw new NotImplementedException();
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="ordinal"></param>
     /// <returns></returns>
-    public override char GetChar(int ordinal)
-    {
-        return (char)_values[ordinal];
-    }
+    public override char GetChar(int ordinal) => (char)_values[ordinal];
 
     /// <summary>
     /// 
@@ -110,10 +98,7 @@ public sealed class TextDataReader : DbDataReader
     /// <param name="bufferOffset"></param>
     /// <param name="length"></param>
     /// <returns></returns>
-    public override long GetChars(int ordinal, long dataOffset, char[] buffer, int bufferOffset, int length)
-    {
-        throw new NotImplementedException();
-    }
+    public override long GetChars(int ordinal, long dataOffset, char[] buffer, int bufferOffset, int length) => throw new NotImplementedException();
 
     public override string GetDataTypeName(int ordinal) => throw new NotImplementedException();
 
@@ -138,20 +123,14 @@ public sealed class TextDataReader : DbDataReader
     /// </summary>
     /// <param name="ordinal"></param>
     /// <returns></returns>
-    public override int GetInt32(int ordinal)
-    {
-        return (int)_values[ordinal];
-    }
+    public override int GetInt32(int ordinal) => (int)_values[ordinal];
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="ordinal"></param>
     /// <returns></returns>
-    public override long GetInt64(int ordinal)
-    {
-        return (long)_values[ordinal];
-    }
+    public override long GetInt64(int ordinal) => (long)_values[ordinal];
 
     /// <summary>
     /// 
@@ -169,10 +148,7 @@ public sealed class TextDataReader : DbDataReader
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public override int GetOrdinal(string name)
-    {
-        return _columns.IndexOf(name);
-    }
+    public override int GetOrdinal(string name) => _columns.IndexOf(name);
 
     /// <summary>
     /// 
@@ -211,20 +187,14 @@ public sealed class TextDataReader : DbDataReader
     /// </summary>
     /// <param name="ordinal"></param>
     /// <returns></returns>
-    public override string GetString(int ordinal)
-    {
-        return (string)_values[ordinal];
-    }
+    public override string GetString(int ordinal) => (string)_values[ordinal];
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="ordinal"></param>
     /// <returns></returns>
-    public override object GetValue(int ordinal)
-    {
-        return _values[ordinal];
-    }
+    public override object GetValue(int ordinal) => _values[ordinal];
 
     /// <summary>
     /// 
@@ -252,19 +222,13 @@ public sealed class TextDataReader : DbDataReader
     /// </summary>
     /// <param name="ordinal"></param>
     /// <returns></returns>
-    public override bool IsDBNull(int ordinal)
-    {
-        return _values[ordinal] == DBNull.Value;
-    }
+    public override bool IsDBNull(int ordinal) => _values[ordinal] == DBNull.Value;
 
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
-    public override bool NextResult()
-    {
-        throw new NotImplementedException();
-    }
+    public override bool NextResult() => throw new NotImplementedException();
 
     /// <summary>
     /// 

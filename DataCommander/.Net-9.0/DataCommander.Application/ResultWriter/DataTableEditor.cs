@@ -603,14 +603,10 @@ internal class DataTableEditor : UserControl
 
     private void CopyColumnName_Click(object sender, EventArgs e) => Clipboard.SetDataObject(_columnName, true, 5, 200);
 
-    private int[] GetColumnIndexes()
-    {
-        return
-            (from c in _dataGrid.Columns.Cast<DataGridViewColumn>()
-                where c.Visible
-                orderby c.DisplayIndex
-                select c.Index).ToArray();
-    }
+    private int[] GetColumnIndexes() => (from c in _dataGrid.Columns.Cast<DataGridViewColumn>()
+                                         where c.Visible
+                                         orderby c.DisplayIndex
+                                         select c.Index).ToArray();
 
     private void SaveTableAs_Click(object sender, EventArgs e)
     {
@@ -893,10 +889,7 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void RemoveRowFilter_Click(object sender, EventArgs e)
-    {
-        _dataTable.DefaultView.RowFilter = null;
-    }
+    private void RemoveRowFilter_Click(object sender, EventArgs e) => _dataTable.DefaultView.RowFilter = null;
 
     private void ApplyRowFilter(string rowFilter)
     {

@@ -5,8 +5,5 @@ namespace DataCommander.Providers.OleDb;
 
 internal sealed class DataParameterImp(OleDbParameter parameter) : DataParameterBase(parameter, parameter.Size, parameter.Precision, parameter.Scale)
 {
-    protected override void SetSize(int size)
-    {
-        parameter.Size = size;
-    }
+    protected override void SetSize(int size) => parameter.Size = size;
 }

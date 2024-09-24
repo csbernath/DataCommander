@@ -25,38 +25,23 @@ internal sealed class Connection : ConnectionBase
     {
     }
 
-    private void sqliteConnection_Trace(object sender, TraceEventArgs e)
-    {
-        Log.Write(LogLevel.Trace, e.Statement);
-    }
+    private void sqliteConnection_Trace(object sender, TraceEventArgs e) => Log.Write(LogLevel.Trace, e.Statement);
 
     public override string ConnectionName { get; set; }
 
-    public override Task OpenAsync(CancellationToken cancellationToken)
-    {
-        return _sqliteConnection.OpenAsync(cancellationToken);
-    }
+    public override Task OpenAsync(CancellationToken cancellationToken) => _sqliteConnection.OpenAsync(cancellationToken);
 
-    public override DbCommand CreateCommand()
-    {
-        return _sqliteConnection.CreateCommand();
-    }
+    public override DbCommand CreateCommand() => _sqliteConnection.CreateCommand();
 
     public override string Caption => _sqliteConnection.DataSource;
 
     public override string DataSource => _sqliteConnection.DataSource;
 
-    protected static void SetDatabase(string database)
-    {
-        throw new Exception("The method or operation is not implemented.");
-    }
+    protected static void SetDatabase(string database) => throw new Exception("The method or operation is not implemented.");
 
     public override string ServerVersion => _sqliteConnection.ServerVersion;
 
     public override string ConnectionInformation => null;
 
-    public override Task<int> GetTransactionCountAsync(CancellationToken cancellationToken)
-    {
-        return Task.FromResult(0);
-    }
+    public override Task<int> GetTransactionCountAsync(CancellationToken cancellationToken) => Task.FromResult(0);
 }

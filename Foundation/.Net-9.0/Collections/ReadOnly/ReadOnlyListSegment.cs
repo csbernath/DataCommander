@@ -32,10 +32,7 @@ internal sealed class ReadOnlyListSegment<T> : IReadOnlyList<T>
             yield return _list[i];
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     private readonly IReadOnlyList<T> _list;
     private readonly int _offset;

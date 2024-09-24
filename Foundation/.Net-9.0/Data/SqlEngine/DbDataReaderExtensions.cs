@@ -40,9 +40,7 @@ public static class DbDataReaderExtensions
         return table;
     }
 
-    private static ColumnSchema ToColumn(DbColumn dbColumn)
-    {
-        return new ColumnSchema(
+    private static ColumnSchema ToColumn(DbColumn dbColumn) => new ColumnSchema(
             dbColumn.ColumnName,
             dbColumn.DataType,
             dbColumn.DataTypeName,
@@ -50,7 +48,6 @@ public static class DbDataReaderExtensions
             dbColumn.NumericPrecision,
             dbColumn.NumericScale,
             dbColumn.AllowDBNull);
-    }
 
     private static async Task<List<object[]>> ReadRows(
         this DbDataReader dbDataReader,

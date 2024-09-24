@@ -7,8 +7,7 @@ public sealed class DateTimeOffsetField(DateTimeOffset value) : IComparable, ICo
 {
     public DateTimeOffset Value { get; } = value;
 
-    private static string ToString(DateTimeOffset value)
-    {
+    private static string ToString(DateTimeOffset value) =>
         //string format;
 
         //if (value.TimeOfDay.Ticks == 0)
@@ -27,91 +26,29 @@ public sealed class DateTimeOffsetField(DateTimeOffset value) : IComparable, ICo
         //return value.ToString(format);
 
         // TODO
-        return value.ToString(CultureInfo.InvariantCulture);
-    }
+        value.ToString(CultureInfo.InvariantCulture);
 
-    public override string ToString()
-    {
-        return ToString(Value);
-    }
+    public override string ToString() => ToString(Value);
 
-    public int CompareTo(object? obj)
-    {
+    public int CompareTo(object? obj) =>
         // TODO
-        return 0;
-        //int result;
-        //Type type = obj.GetType();
-        //TypeCode typeCode = Type.GetTypeCode(type);
+        0;//int result;//Type type = obj.GetType();//TypeCode typeCode = Type.GetTypeCode(type);//switch (typeCode)//{//    case TypeCode.String://        string s = (string)obj;//        DateTime dateTime;//        bool succeeded = TryParse(s, out dateTime);//        if (succeeded)//        {//            result = this.value.CompareTo(dateTime);//        }//        else//        {//            result = -1;//        }//        break;//    case TypeCode.Object://        DateTimeOffsetField dateTimeField = (DateTimeOffsetField)obj;//        result = this.value.CompareTo(dateTimeField.value);//        break;//    default://        throw new NotImplementedException();//}//return result;
 
-        //switch (typeCode)
-        //{
-        //    case TypeCode.String:
-        //        string s = (string)obj;
-        //        DateTime dateTime;
-        //        bool succeeded = TryParse(s, out dateTime);
+    TypeCode IConvertible.GetTypeCode() => TypeCode.Object;
 
-        //        if (succeeded)
-        //        {
-        //            result = this.value.CompareTo(dateTime);
-        //        }
-        //        else
-        //        {
-        //            result = -1;
-        //        }
+    bool IConvertible.ToBoolean(IFormatProvider? provider) => throw new NotImplementedException();
 
-        //        break;
+    byte IConvertible.ToByte(IFormatProvider? provider) => throw new NotImplementedException();
 
-        //    case TypeCode.Object:
-        //        DateTimeOffsetField dateTimeField = (DateTimeOffsetField)obj;
-        //        result = this.value.CompareTo(dateTimeField.value);
-        //        break;
+    char IConvertible.ToChar(IFormatProvider? provider) => throw new NotImplementedException();
 
-        //    default:
-        //        throw new NotImplementedException();
-        //}
+    DateTime IConvertible.ToDateTime(IFormatProvider? provider) => Value.LocalDateTime;
 
-        //return result;
-    }
+    decimal IConvertible.ToDecimal(IFormatProvider? provider) => throw new NotImplementedException();
 
-    TypeCode IConvertible.GetTypeCode()
-    {
-        return TypeCode.Object;
-    }
+    double IConvertible.ToDouble(IFormatProvider? provider) => throw new NotImplementedException();
 
-    bool IConvertible.ToBoolean(IFormatProvider? provider)
-    {
-        throw new NotImplementedException();
-    }
-
-    byte IConvertible.ToByte(IFormatProvider? provider)
-    {
-        throw new NotImplementedException();
-    }
-
-    char IConvertible.ToChar(IFormatProvider? provider)
-    {
-        throw new NotImplementedException();
-    }
-
-    DateTime IConvertible.ToDateTime(IFormatProvider? provider)
-    {
-        return Value.LocalDateTime;
-    }
-
-    decimal IConvertible.ToDecimal(IFormatProvider? provider)
-    {
-        throw new NotImplementedException();
-    }
-
-    double IConvertible.ToDouble(IFormatProvider? provider)
-    {
-        throw new NotImplementedException();
-    }
-
-    short IConvertible.ToInt16(IFormatProvider? provider)
-    {
-        throw new NotImplementedException();
-    }
+    short IConvertible.ToInt16(IFormatProvider? provider) => throw new NotImplementedException();
 
     int IConvertible.ToInt32(IFormatProvider? provider) => throw new NotImplementedException();
     long IConvertible.ToInt64(IFormatProvider? provider) => throw new NotImplementedException();

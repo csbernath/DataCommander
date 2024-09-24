@@ -21,10 +21,7 @@ internal sealed class ServerObjectCollectionNode : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
-    {
-        return Task.FromResult<IEnumerable<ITreeNode>>(new LinkedServerCollectionNode(_server).ItemToArray());
-    }
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>(new LinkedServerCollectionNode(_server).ItemToArray());
 
     bool ITreeNode.Sortable => false;
 

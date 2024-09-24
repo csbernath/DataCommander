@@ -16,10 +16,7 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
     private SqlCeConnection _connection;
     private SqlCeCommand _insertCommand;
 
-    void IResultWriter.Begin(IProvider provider)
-    {
-        _provider = provider;
-    }
+    void IResultWriter.Begin(IProvider provider) => _provider = provider;
 
     void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command)
     {

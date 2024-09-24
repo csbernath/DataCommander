@@ -48,10 +48,7 @@ public readonly struct SmallTimeInterval : IEquatable<SmallTimeInterval>, ICompa
         return intersects;
     }
 
-    public readonly bool Equals(SmallTimeInterval other)
-    {
-        return Start.Equals(other.Start) && End.Equals(other.End);
-    }
+    public readonly bool Equals(SmallTimeInterval other) => Start.Equals(other.Start) && End.Equals(other.End);
 
     public readonly int CompareTo(SmallTimeInterval other)
     {

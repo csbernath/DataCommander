@@ -8,20 +8,11 @@ public class StringTableColumnCollection : IList<StringTableColumn>
 {
     private readonly List<StringTableColumn> _columns = [];
 
-    public int IndexOf(StringTableColumn item)
-    {
-        return _columns.IndexOf(item);
-    }
+    public int IndexOf(StringTableColumn item) => _columns.IndexOf(item);
 
-    void IList<StringTableColumn>.Insert(int index, StringTableColumn item)
-    {
-        throw new Exception("The method or operation is not implemented.");
-    }
+    void IList<StringTableColumn>.Insert(int index, StringTableColumn item) => throw new Exception("The method or operation is not implemented.");
 
-    void IList<StringTableColumn>.RemoveAt(int index)
-    {
-        throw new Exception("The method or operation is not implemented.");
-    }
+    void IList<StringTableColumn>.RemoveAt(int index) => throw new Exception("The method or operation is not implemented.");
 
     public StringTableColumn this[int index]
     {
@@ -37,25 +28,13 @@ public class StringTableColumnCollection : IList<StringTableColumn>
         _columns.Add(item);
     }
 
-    void ICollection<StringTableColumn>.Add(StringTableColumn item)
-    {
-        throw new Exception("The method or operation is not implemented.");
-    }
+    void ICollection<StringTableColumn>.Add(StringTableColumn item) => throw new Exception("The method or operation is not implemented.");
 
-    void ICollection<StringTableColumn>.Clear()
-    {
-        throw new Exception("The method or operation is not implemented.");
-    }
+    void ICollection<StringTableColumn>.Clear() => throw new Exception("The method or operation is not implemented.");
 
-    public bool Contains(StringTableColumn item)
-    {
-        return _columns.Contains(item);
-    }
+    public bool Contains(StringTableColumn item) => _columns.Contains(item);
 
-    void ICollection<StringTableColumn>.CopyTo(StringTableColumn[] array, int arrayIndex)
-    {
-        throw new Exception("The method or operation is not implemented.");
-    }
+    void ICollection<StringTableColumn>.CopyTo(StringTableColumn[] array, int arrayIndex) => throw new Exception("The method or operation is not implemented.");
 
     /// <summary>
     /// 
@@ -67,22 +46,13 @@ public class StringTableColumnCollection : IList<StringTableColumn>
     /// </summary>
     public bool IsReadOnly => throw new Exception("The method or operation is not implemented.");
 
-    bool ICollection<StringTableColumn>.Remove(StringTableColumn item)
-    {
-        throw new Exception("The method or operation is not implemented.");
-    }
+    bool ICollection<StringTableColumn>.Remove(StringTableColumn item) => throw new Exception("The method or operation is not implemented.");
 
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
-    public IEnumerator<StringTableColumn> GetEnumerator()
-    {
-        return _columns.GetEnumerator();
-    }
+    public IEnumerator<StringTableColumn> GetEnumerator() => _columns.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

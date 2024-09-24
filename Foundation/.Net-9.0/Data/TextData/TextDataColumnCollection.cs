@@ -37,10 +37,7 @@ public sealed class TextDataColumnCollection : IList<TextDataColumn>
     }
 
     [Pure]
-    public bool Contains(string columnName)
-    {
-        return _nameIndex.ContainsKey(columnName);
-    }
+    public bool Contains(string columnName) => _nameIndex.ContainsKey(columnName);
 
     public int IndexOf(string columnName)
     {
@@ -97,25 +94,13 @@ public sealed class TextDataColumnCollection : IList<TextDataColumn>
     /// 
     /// </summary>
     /// <param name="item"></param>
-    public void Add(TextDataColumn item)
-    {
-        _collection.Add(item);
-    }
+    public void Add(TextDataColumn item) => _collection.Add(item);
 
-    void ICollection<TextDataColumn>.Clear()
-    {
-        throw new NotImplementedException();
-    }
+    void ICollection<TextDataColumn>.Clear() => throw new NotImplementedException();
 
-    bool ICollection<TextDataColumn>.Contains(TextDataColumn item)
-    {
-        throw new NotImplementedException();
-    }
+    bool ICollection<TextDataColumn>.Contains(TextDataColumn item) => throw new NotImplementedException();
 
-    void ICollection<TextDataColumn>.CopyTo(TextDataColumn[] array, int arrayIndex)
-    {
-        throw new NotImplementedException();
-    }
+    void ICollection<TextDataColumn>.CopyTo(TextDataColumn[] array, int arrayIndex) => throw new NotImplementedException();
 
     /// <summary>
     /// 
@@ -124,47 +109,29 @@ public sealed class TextDataColumnCollection : IList<TextDataColumn>
 
     bool ICollection<TextDataColumn>.IsReadOnly => throw new NotImplementedException();
 
-    bool ICollection<TextDataColumn>.Remove(TextDataColumn item)
-    {
-        throw new NotImplementedException();
-    }
+    bool ICollection<TextDataColumn>.Remove(TextDataColumn item) => throw new NotImplementedException();
 
-    IEnumerator<TextDataColumn> IEnumerable<TextDataColumn>.GetEnumerator()
-    {
-        return _collection.GetEnumerator();
-    }
+    IEnumerator<TextDataColumn> IEnumerable<TextDataColumn>.GetEnumerator() => _collection.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return _collection.GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => _collection.GetEnumerator();
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="item"></param>
     /// <returns></returns>
-    public int IndexOf(TextDataColumn item)
-    {
-        return _listIndex.IndexOf(item);
-    }
+    public int IndexOf(TextDataColumn item) => _listIndex.IndexOf(item);
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="index"></param>
     /// <param name="item"></param>
-    public void Insert(int index, TextDataColumn item)
-    {
-        throw new NotImplementedException();
-    }
+    public void Insert(int index, TextDataColumn item) => throw new NotImplementedException();
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="index"></param>
-    public void RemoveAt(int index)
-    {
-        throw new NotImplementedException();
-    }
+    public void RemoveAt(int index) => throw new NotImplementedException();
 }

@@ -13,9 +13,7 @@ public static class IDbCommandAsyncExecutorExtensions
     private static Task ExecuteAsync(
         this IDbCommandAsyncExecutor executor,
         IEnumerable<ExecuteCommandAsyncRequest> requests,
-        CancellationToken cancellationToken)
-    {
-        return executor.ExecuteAsync(
+        CancellationToken cancellationToken) => executor.ExecuteAsync(
             async (connection, _) =>
             {
                 foreach (var request in requests)
@@ -23,7 +21,6 @@ public static class IDbCommandAsyncExecutorExtensions
                         await request.Execute(command);
             },
             cancellationToken);
-    }
 
     public static Task ExecuteAsync(
         this IDbCommandAsyncExecutor executor,
@@ -74,9 +71,7 @@ public static class IDbCommandAsyncExecutorExtensions
         this IDbCommandAsyncExecutor executor,
         ExecuteReaderRequest executeReaderRequest,
         Func<DbDataReader, CancellationToken, Task> readResults,
-        CancellationToken cancellationToken)
-    {
-        return executor.ExecuteAsync(
+        CancellationToken cancellationToken) => executor.ExecuteAsync(
             async (connection, _) =>
             {
                 await using (var command = connection.CreateCommand(executeReaderRequest.CreateCommandRequest))
@@ -88,7 +83,6 @@ public static class IDbCommandAsyncExecutorExtensions
                 }
             },
             cancellationToken);
-    }
 
     public static async Task<ReadOnlySegmentLinkedList<T>> ExecuteReaderAsync<T>(
         this IDbCommandAsyncExecutor executor,

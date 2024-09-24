@@ -31,10 +31,7 @@ internal sealed class LoggedDbCommand : IDbCommand
         _afterRead = afterRead;
     }
 
-    void IDbCommand.Cancel()
-    {
-        _command.Cancel();
-    }
+    void IDbCommand.Cancel() => _command.Cancel();
 
     string IDbCommand.CommandText
     {
@@ -64,10 +61,7 @@ internal sealed class LoggedDbCommand : IDbCommand
         set => _command.Connection = value;
     }
 
-    IDbDataParameter IDbCommand.CreateParameter()
-    {
-        return _command.CreateParameter();
-    }
+    IDbDataParameter IDbCommand.CreateParameter() => _command.CreateParameter();
 
     int IDbCommand.ExecuteNonQuery()
     {
@@ -190,10 +184,7 @@ internal sealed class LoggedDbCommand : IDbCommand
 
     IDataParameterCollection IDbCommand.Parameters => _command.Parameters;
 
-    void IDbCommand.Prepare()
-    {
-        _command.Prepare();
-    }
+    void IDbCommand.Prepare() => _command.Prepare();
 
     IDbTransaction IDbCommand.Transaction
     {
@@ -209,10 +200,7 @@ internal sealed class LoggedDbCommand : IDbCommand
         set => _command.UpdatedRowSource = value;
     }
 
-    void IDisposable.Dispose()
-    {
-        _command.Dispose();
-    }
+    void IDisposable.Dispose() => _command.Dispose();
 
     private LoggedDbCommandInfo CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType executionType)
     {

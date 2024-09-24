@@ -30,10 +30,7 @@ public class ListIndex<T> : ICollectionIndex<T>, IList<T>
 
     public IEnumerator<T> GetEnumerator() => _list.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return _list.GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => _list.GetEnumerator();
 
     public T this[int index]
     {

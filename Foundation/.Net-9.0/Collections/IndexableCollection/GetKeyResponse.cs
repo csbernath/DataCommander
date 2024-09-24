@@ -9,8 +9,5 @@ public readonly struct GetKeyResponse<T>(bool hasKey, T key)
 
 public static class GetKeyResponse
 {
-    public static GetKeyResponse<T> Create<T>(bool hasKey, T key)
-    {
-        return new GetKeyResponse<T>(hasKey, key);
-    }
+    public static GetKeyResponse<T> Create<T>(bool hasKey, T key) => new GetKeyResponse<T>(hasKey, key);
 }

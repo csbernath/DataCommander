@@ -20,15 +20,12 @@ internal sealed class DatabaseSecurityNode : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
-    {
-        return Task.FromResult<IEnumerable<ITreeNode>>(
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>(
         [
             new UserCollectionNode(_databaseNode),
             new RoleCollectionNode(_databaseNode),
             new SchemaCollectionNode(_databaseNode)
         ]);
-    }
 
     bool ITreeNode.Sortable => false;
 

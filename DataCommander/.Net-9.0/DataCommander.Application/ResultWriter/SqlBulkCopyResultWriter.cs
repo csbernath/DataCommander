@@ -200,10 +200,7 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
         }
     }
 
-    void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
-    {
-        _logResultWriter.FirstRowReadEnd(dataTypeNames);
-    }
+    void IResultWriter.FirstRowReadEnd(string[] dataTypeNames) => _logResultWriter.FirstRowReadEnd(dataTypeNames);
 
     void IResultWriter.WriteRows(object[][] rows, int rowCount)
     {
@@ -235,10 +232,7 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
         }
     }
 
-    void IResultWriter.WriteTableEnd()
-    {
-        _logResultWriter.WriteTableEnd();
-    }
+    void IResultWriter.WriteTableEnd() => _logResultWriter.WriteTableEnd();
 
     void IResultWriter.WriteParameters(IDataParameterCollection parameters)
     {

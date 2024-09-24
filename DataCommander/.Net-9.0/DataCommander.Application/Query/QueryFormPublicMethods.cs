@@ -46,10 +46,7 @@ public sealed partial class QueryForm
         }
     }
 
-    public void AppendQueryText(string text)
-    {
-        QueryTextBox.RichTextBox.AppendText(text);
-    }
+    public void AppendQueryText(string text) => QueryTextBox.RichTextBox.AppendText(text);
 
     public void ShowXml(string tabPageName, string xml)
     {

@@ -34,10 +34,7 @@ public sealed class SqlLoggedSqlConnectionFactory : IDbConnectionFactory
     IDbConnection IDbConnectionFactory.CreateConnection(
         string connectionString,
         string userName,
-        string hostName)
-    {
-        return new SqlLoggedSqlConnection(_sqlLog, _applicationId, userName, hostName, connectionString, _filter);
-    }
+        string hostName) => new SqlLoggedSqlConnection(_sqlLog, _applicationId, userName, hostName, connectionString, _filter);
 
     IDbConnectionHelper IDbConnectionFactory.CreateConnectionHelper(IDbConnection connection)
     {

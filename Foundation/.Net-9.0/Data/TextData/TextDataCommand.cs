@@ -34,37 +34,25 @@ public sealed class TextDataCommand : DbCommand
     /// 
     /// </summary>
     /// <returns></returns>
-    public new TextDataReader ExecuteReader()
-    {
-        return new TextDataReader(this, CommandBehavior.Default);
-    }
+    public new TextDataReader ExecuteReader() => new TextDataReader(this, CommandBehavior.Default);
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="behavior"></param>
     /// <returns></returns>
-    public new TextDataReader ExecuteReader(CommandBehavior behavior)
-    {
-        return new TextDataReader(this, behavior);
-    }
+    public new TextDataReader ExecuteReader(CommandBehavior behavior) => new TextDataReader(this, behavior);
 
     /// <summary>
     /// 
     /// </summary>
-    public override void Cancel()
-    {
-        throw new NotImplementedException();
-    }
+    public override void Cancel() => throw new NotImplementedException();
 
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
-    protected override DbParameter CreateDbParameter()
-    {
-        throw new NotImplementedException();
-    }
+    protected override DbParameter CreateDbParameter() => throw new NotImplementedException();
 
     /// <summary>
     /// 
@@ -106,10 +94,7 @@ public sealed class TextDataCommand : DbCommand
     /// </summary>
     /// <param name="behavior"></param>
     /// <returns></returns>
-    protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
-    {
-        return new TextDataReader(this, behavior);
-    }
+    protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior) => new TextDataReader(this, behavior);
 
     /// <summary>
     /// 
@@ -138,18 +123,12 @@ public sealed class TextDataCommand : DbCommand
     /// 
     /// </summary>
     /// <returns></returns>
-    public override object ExecuteScalar()
-    {
-        throw new NotImplementedException();
-    }
+    public override object ExecuteScalar() => throw new NotImplementedException();
 
     /// <summary>
     /// 
     /// </summary>
-    public override void Prepare()
-    {
-        throw new NotImplementedException();
-    }
+    public override void Prepare() => throw new NotImplementedException();
 
     /// <summary>
     /// 

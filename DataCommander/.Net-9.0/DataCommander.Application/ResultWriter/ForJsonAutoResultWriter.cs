@@ -20,15 +20,9 @@ internal sealed class ForJsonAutoResultWriter(Action<InfoMessage> addInfoMessage
     private TextWriter _textWriter;
     private string _formattedPath;
 
-    void IResultWriter.Begin(IProvider provider)
-    {
-        _logResultWriter.Begin(provider);
-    }
+    void IResultWriter.Begin(IProvider provider) => _logResultWriter.Begin(provider);
 
-    void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand)
-    {
-        _logResultWriter.BeforeExecuteReader(asyncDataAdapterCommand);
-    }
+    void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand) => _logResultWriter.BeforeExecuteReader(asyncDataAdapterCommand);
 
     void IResultWriter.AfterExecuteReader() => _logResultWriter.AfterExecuteReader();
     void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);

@@ -86,10 +86,7 @@ public sealed class SegmentedListBuilder<T>
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable<T>) this).GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<T>)this).GetEnumerator();
     }
 
     private readonly int _segmentItemCapacity;

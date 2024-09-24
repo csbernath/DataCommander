@@ -66,10 +66,7 @@ internal sealed class SqlServerProvider : IProvider
         return ConnectionNameProvider.GetConnectionName(sqlConnection);
     }
 
-    ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential)
-    {
-        return new Connection(connectionStringAndCredential);
-    }
+    ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(connectionStringAndCredential);
 
     string[] IProvider.KeyWords
     {
@@ -262,7 +259,7 @@ internal sealed class SqlServerProvider : IProvider
         }
     }
 
-    public XmlReader ExecuteXmlReader(IDbCommand command)
+    public static XmlReader ExecuteXmlReader(IDbCommand command)
     {
         var sqlCommand = (SqlCommand)command;
         return sqlCommand.ExecuteXmlReader();

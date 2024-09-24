@@ -11,10 +11,7 @@ internal sealed class MethodCollection : IEnumerable<MethodBase>
     private int _idSequence;
     private readonly ConcurrentDictionary<MethodBase, int> _methods = new();
 
-    public bool TryGetValue(MethodBase method, out int methodId)
-    {
-        return _methods.TryGetValue(method, out methodId);
-    }
+    public bool TryGetValue(MethodBase method, out int methodId) => _methods.TryGetValue(method, out methodId);
 
     public int Add(MethodBase method)
     {
@@ -23,13 +20,7 @@ internal sealed class MethodCollection : IEnumerable<MethodBase>
         return id;
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return _methods.Values.GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => _methods.Values.GetEnumerator();
 
-    IEnumerator<MethodBase> IEnumerable<MethodBase>.GetEnumerator()
-    {
-        return _methods.Keys.GetEnumerator();
-    }
+    IEnumerator<MethodBase> IEnumerable<MethodBase>.GetEnumerator() => _methods.Keys.GetEnumerator();
 }

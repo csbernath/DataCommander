@@ -42,13 +42,13 @@ internal sealed class OleDbProvider : IProvider
     bool IProvider.CanConvertCommandToString => false;
     bool IProvider.IsCommandCancelable => false;
 
-    public void DeriveParameters(IDbCommand command)
+    public static void DeriveParameters(IDbCommand command)
     {
         var command2 = (OleDbCommand)command;
         OleDbCommandBuilder.DeriveParameters(command2);
     }
 
-    public DataParameterBase GetDataParameter(IDataParameter parameter)
+    public static DataParameterBase GetDataParameter(IDataParameter parameter)
     {
         var oleDbParameter = (OleDbParameter)parameter;
         return new DataParameterImp(oleDbParameter);
@@ -85,7 +85,7 @@ internal sealed class OleDbProvider : IProvider
         return dataTable;
     }
 
-    public DataTable GetSchemaTable(IDataReader dataReader)
+    public static DataTable GetSchemaTable(IDataReader dataReader)
     {
         //      DataTable dataTable = dataReader.GetSchemaTable();
         //      DataColumn providerType = dataTable.Columns["ProviderType"];
@@ -208,10 +208,7 @@ internal sealed class OleDbProvider : IProvider
         return table;
     }
 
-    public static XmlReader ExecuteXmlReader(IDbCommand command)
-    {
-        return null;
-    }
+    public static XmlReader ExecuteXmlReader(IDbCommand command) => null;
 
     Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
     {
@@ -231,7 +228,7 @@ internal sealed class OleDbProvider : IProvider
 
     public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer(this);
 
-    public void ClearCompletionCache()
+    public static void ClearCompletionCache()
     {
     }
 
@@ -239,34 +236,19 @@ internal sealed class OleDbProvider : IProvider
     List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
     public static string GetExceptionMessage(Exception e) => e.ToString();
 
-    public string? GetConnectionName(Func<IDbConnection> createConnection)
-    {
-        return null;
-    }
+    public static string? GetConnectionName(Func<IDbConnection> createConnection) => null;
 
     public string? GetConnectionName(IDbConnection connection) => throw new NotImplementedException();
 
-    ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential)
-    {
-        return new Connection(connectionStringAndCredential.ConnectionString);
-    }
+    ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(connectionStringAndCredential.ConnectionString);
 
     string[] IProvider.KeyWords => null;
 
-    void IProvider.DeriveParameters(IDbCommand command)
-    {
-        throw new NotImplementedException();
-    }
+    void IProvider.DeriveParameters(IDbCommand command) => throw new NotImplementedException();
 
-    DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
-    {
-        throw new NotImplementedException();
-    }
+    DataParameterBase IProvider.GetDataParameter(IDataParameter parameter) => throw new NotImplementedException();
 
-    DataTable IProvider.GetParameterTable(IDataParameterCollection parameters)
-    {
-        throw new NotImplementedException();
-    }
+    DataTable IProvider.GetParameterTable(IDataParameterCollection parameters) => throw new NotImplementedException();
 
     DataTable IProvider.GetSchemaTable(IDataReader dataReader) => throw new NotImplementedException();
 
@@ -277,16 +259,14 @@ internal sealed class OleDbProvider : IProvider
     {
     }
 
-    string IProvider.GetExceptionMessage(Exception e)
-    {
+    string IProvider.GetExceptionMessage(Exception e) =>
         //OleDbException oleDbException = e as OleDbException;
 
         //if (oleDbException != null)
         //{
         //}
 
-        return e.ToString();
-    }
+        e.ToString();
 
     string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName) => null;
 
@@ -304,10 +284,7 @@ internal sealed class OleDbProvider : IProvider
 
     string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
 
-    List<Statement> IProvider.GetStatements(string commandText)
-    {
-        return [new(0, commandText)];
-    }
+    List<Statement> IProvider.GetStatements(string commandText) => [new(0, commandText)];
 
     IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder() => new ConnectionStringBuilder();
 }

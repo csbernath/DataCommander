@@ -39,20 +39,11 @@ public sealed class SQLiteProvider : IProvider
     bool IProvider.CanConvertCommandToString => false;
     bool IProvider.IsCommandCancelable => true;
 
-    void IProvider.DeriveParameters(IDbCommand command)
-    {
-        throw new Exception("The method or operation is not implemented.");
-    }
+    void IProvider.DeriveParameters(IDbCommand command) => throw new Exception("The method or operation is not implemented.");
 
-    DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
-    {
-        throw new Exception("The method or operation is not implemented.");
-    }
+    DataParameterBase IProvider.GetDataParameter(IDataParameter parameter) => throw new Exception("The method or operation is not implemented.");
 
-    DataTable IProvider.GetParameterTable(IDataParameterCollection parameters)
-    {
-        throw new Exception("The method or operation is not implemented.");
-    }
+    DataTable IProvider.GetParameterTable(IDataParameterCollection parameters) => throw new Exception("The method or operation is not implemented.");
 
     DataTable IProvider.GetSchemaTable(IDataReader dataReader)
     {
@@ -113,18 +104,13 @@ public sealed class SQLiteProvider : IProvider
         return table;
     }
 
-    Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
-    {
+    Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema) =>
         // 11   INT     int
         // 12	BIGINT	long
         // 16	TEXT	string
-        return typeof(object);
-    }
+        typeof(object);
 
-    IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
-    {
-        return new SQLiteDataReaderHelper(dataReader);
-    }
+    IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader) => new SQLiteDataReaderHelper(dataReader);
 
     public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
 
@@ -202,10 +188,7 @@ order by name collate nocase";
         return Task.FromResult(new GetCompletionResult(startPosition, length, items, fromCache));
     }
 
-    void IProvider.ClearCompletionCache()
-    {
-        throw new Exception("The method or operation is not implemented.");
-    }
+    void IProvider.ClearCompletionCache() => throw new Exception("The method or operation is not implemented.");
 
     string IProvider.GetExceptionMessage(Exception e)
     {
@@ -392,10 +375,7 @@ order by name collate nocase";
         insertCommand.Prepare();
     }
 
-    string IProvider.CommandToString(IDbCommand command)
-    {
-        throw new NotImplementedException();
-    }
+    string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
 
     List<Statement> IProvider.GetStatements(string commandText) => [new(0, commandText)];
 

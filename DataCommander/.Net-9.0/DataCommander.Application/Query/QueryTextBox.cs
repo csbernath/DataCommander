@@ -177,15 +177,9 @@ public sealed class QueryTextBox : UserControl
         }
     }
 
-    public static int GetLineIndex(RichTextBox richTextBox, int i)
-    {
-        return NativeMethods.SendMessage(richTextBox.Handle.ToInt32(), (int)NativeMethods.Message.EditBox.LineIndex, i, 0);
-    }
+    public static int GetLineIndex(RichTextBox richTextBox, int i) => NativeMethods.SendMessage(richTextBox.Handle.ToInt32(), (int)NativeMethods.Message.EditBox.LineIndex, i, 0);
 
-    private int LineIndex(int i)
-    {
-        return GetLineIndex(RichTextBox, i);
-    }
+    private int LineIndex(int i) => GetLineIndex(RichTextBox, i);
 
     private void RichTextBox_SelectionChanged(object sender, EventArgs e)
     {
@@ -719,7 +713,7 @@ public sealed class QueryTextBox : UserControl
         }
     }
 
-    public void Undo()
+    public static void Undo()
     {
         //_undoRedoState.Undo(1, items =>
         //{
@@ -731,7 +725,7 @@ public sealed class QueryTextBox : UserControl
         //});
     }
 
-    public void Redo()
+    public static void Redo()
     {
         //_undoRedoState.Redo(1, items =>
         //{

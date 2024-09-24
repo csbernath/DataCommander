@@ -34,17 +34,13 @@ public sealed class AsyncDbConnection : IDbConnection
         // TODO:  Add AsyncSqlConnection.ChangeDatabase implementation
     }
 
-    public IDbTransaction BeginTransaction(IsolationLevel il)
-    {
+    public IDbTransaction BeginTransaction(IsolationLevel il) =>
         // TODO:  Add AsyncSqlConnection.BeginTransaction implementation
-        return null;
-    }
+        null;
 
-    IDbTransaction IDbConnection.BeginTransaction()
-    {
+    IDbTransaction IDbConnection.BeginTransaction() =>
         // TODO:  Add AsyncSqlConnection.System.Data.IDbConnection.BeginTransaction implementation
-        return null;
-    }
+        null;
 
     public ConnectionState State => _cloneableConnection.State;
 

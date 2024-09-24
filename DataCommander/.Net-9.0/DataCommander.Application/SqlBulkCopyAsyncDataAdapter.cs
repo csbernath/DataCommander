@@ -52,10 +52,7 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
     long IAsyncDataAdapter.RowCount => _rowCount;
     int IAsyncDataAdapter.TableCount => 1;
 
-    void IAsyncDataAdapter.Start(IEnumerable<AsyncDataAdapterCommand> commands)
-    {
-        Task.Factory.StartNew(Fill);
-    }
+    void IAsyncDataAdapter.Start(IEnumerable<AsyncDataAdapterCommand> commands) => Task.Factory.StartNew(Fill);
 
     void IAsyncDataAdapter.Cancel()
     {
@@ -91,8 +88,5 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
         _endFill(this, exception);
     }
 
-    private void CancelCommand()
-    {
-        _command.Cancel();
-    }
+    private void CancelCommand() => _command.Cancel();
 }

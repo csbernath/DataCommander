@@ -306,10 +306,7 @@ internal sealed class ConnectionListForm : Form
         }
     }
 
-    private void Delete_Click(object sender, EventArgs e)
-    {
-        Delete();
-    }
+    private void Delete_Click(object sender, EventArgs e) => Delete();
 
     private void Edit_Click(object sender, EventArgs e)
     {

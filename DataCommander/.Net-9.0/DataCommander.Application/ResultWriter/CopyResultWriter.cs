@@ -40,10 +40,7 @@ internal sealed class CopyResultWriter(
     private long _insertedRowCount;
     private long _waitMilliseconds;
 
-    void IResultWriter.Begin(IProvider provider)
-    {
-        _logResultWriter.Begin(provider);
-    }
+    void IResultWriter.Begin(IProvider provider) => _logResultWriter.Begin(provider);
 
     void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command) => _logResultWriter.BeforeExecuteReader(command);
     void IResultWriter.AfterExecuteReader() => _logResultWriter.AfterExecuteReader();
@@ -196,10 +193,7 @@ internal sealed class CopyResultWriter(
         }
     }
 
-    void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
-    {
-        _logResultWriter.FirstRowReadEnd(dataTypeNames);
-    }
+    void IResultWriter.FirstRowReadEnd(string[] dataTypeNames) => _logResultWriter.FirstRowReadEnd(dataTypeNames);
 
     void IResultWriter.WriteRows(object[][] rows, int rowCount)
     {
@@ -236,10 +230,7 @@ internal sealed class CopyResultWriter(
         }
     }
 
-    void IResultWriter.WriteTableEnd()
-    {
-        _logResultWriter.WriteTableEnd();
-    }
+    void IResultWriter.WriteTableEnd() => _logResultWriter.WriteTableEnd();
 
     void IResultWriter.WriteParameters(IDataParameterCollection parameters)
     {

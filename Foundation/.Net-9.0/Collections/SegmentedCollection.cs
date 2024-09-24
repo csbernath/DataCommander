@@ -81,22 +81,13 @@ public class SegmentedCollection<T> : ICollection<T>
         _last = null;
     }
 
-    public bool Contains(T item)
-    {
-        throw new NotSupportedException();
-    }
+    public bool Contains(T item) => throw new NotSupportedException();
 
-    void ICollection<T>.CopyTo(T[] array, int arrayIndex)
-    {
-        throw new NotImplementedException();
-    }
+    void ICollection<T>.CopyTo(T[] array, int arrayIndex) => throw new NotImplementedException();
 
     public int Count { get; private set; }
 
     bool ICollection<T>.IsReadOnly => false;
 
-    bool ICollection<T>.Remove(T item)
-    {
-        throw new NotSupportedException();
-    }
+    bool ICollection<T>.Remove(T item) => throw new NotSupportedException();
 }

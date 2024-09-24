@@ -14,15 +14,12 @@ internal sealed class ViewNode(DatabaseNode database, int id, string? schema, st
     public string? Name => $"{schema}.{name}";
     public bool IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
-    {
-        return Task.FromResult<IEnumerable<ITreeNode>>(
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>(
         [
             new ColumnCollectionNode(database, id),
             new TriggerCollectionNode(database, id),
             new IndexCollectionNode(database, id)
         ]);
-    }
 
     public bool Sortable => false;
 

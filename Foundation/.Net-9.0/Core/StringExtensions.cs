@@ -142,20 +142,11 @@ public static class StringExtensions
 
     private sealed class StringAsList(string source) : IList<char>
     {
-        int IList<char>.IndexOf(char item)
-        {
-            throw new NotImplementedException();
-        }
+        int IList<char>.IndexOf(char item) => throw new NotImplementedException();
 
-        void IList<char>.Insert(int index, char item)
-        {
-            throw new NotImplementedException();
-        }
+        void IList<char>.Insert(int index, char item) => throw new NotImplementedException();
 
-        void IList<char>.RemoveAt(int index)
-        {
-            throw new NotImplementedException();
-        }
+        void IList<char>.RemoveAt(int index) => throw new NotImplementedException();
 
         char IList<char>.this[int index]
         {
@@ -163,43 +154,22 @@ public static class StringExtensions
             set => throw new NotImplementedException();
         }
 
-        void ICollection<char>.Add(char item)
-        {
-            throw new NotImplementedException();
-        }
+        void ICollection<char>.Add(char item) => throw new NotImplementedException();
 
-        void ICollection<char>.Clear()
-        {
-            throw new NotImplementedException();
-        }
+        void ICollection<char>.Clear() => throw new NotImplementedException();
 
-        bool ICollection<char>.Contains(char item)
-        {
-            throw new NotImplementedException();
-        }
+        bool ICollection<char>.Contains(char item) => throw new NotImplementedException();
 
-        void ICollection<char>.CopyTo(char[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
+        void ICollection<char>.CopyTo(char[] array, int arrayIndex) => throw new NotImplementedException();
 
         int ICollection<char>.Count => source.Length;
 
         bool ICollection<char>.IsReadOnly => true;
 
-        bool ICollection<char>.Remove(char item)
-        {
-            throw new NotImplementedException();
-        }
+        bool ICollection<char>.Remove(char item) => throw new NotImplementedException();
 
-        IEnumerator<char> IEnumerable<char>.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        IEnumerator<char> IEnumerable<char>.GetEnumerator() => throw new NotImplementedException();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => throw new NotImplementedException();
     }
 }

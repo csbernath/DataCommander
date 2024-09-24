@@ -39,8 +39,5 @@ sealed class SchemaNode(CatalogNode catalog, string name) : ITreeNode
     public CatalogNode Catalog { get; } = catalog;
     public string Name { get; } = name;
 
-    public ContextMenu? GetContextMenu()
-    {
-        throw new System.NotImplementedException();
-    }
+    public ContextMenu? GetContextMenu() => throw new System.NotImplementedException();
 }

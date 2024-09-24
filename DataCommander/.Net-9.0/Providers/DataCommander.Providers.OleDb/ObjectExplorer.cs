@@ -15,10 +15,7 @@ internal sealed class ObjectExplorer(IProvider provider) : IObjectExplorer
 
     private OleDbConnection _connection;
 
-    void IObjectExplorer.SetConnection(ConnectionStringAndCredential connectionStringAndCredential)
-    {
-        _connection = (OleDbConnection)_provider.CreateConnection(connectionStringAndCredential).Connection;
-    }
+    void IObjectExplorer.SetConnection(ConnectionStringAndCredential connectionStringAndCredential) => _connection = (OleDbConnection)_provider.CreateConnection(connectionStringAndCredential).Connection;
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {

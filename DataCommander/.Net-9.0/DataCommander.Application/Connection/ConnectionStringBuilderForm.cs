@@ -388,10 +388,7 @@ Provider name: {providerInfo.Name}
         passwordTextBox.Enabled = !integratedSecurity;
     }
 
-    private void passwordTextBox_TextChanged(object sender, EventArgs e)
-    {
-        _passwordChanged = true;
-    }
+    private void passwordTextBox_TextChanged(object sender, EventArgs e) => _passwordChanged = true;
 
     private sealed class OleDbProviderInfo(string name)
     {

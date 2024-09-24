@@ -518,14 +518,11 @@ namespace {_request.Namespace}
         return stringBuilder.ToString();
     }
 
-    private string GetToCreateCommandRequestMethod()
-    {
-        return $@"private CreateCommandRequest ToCreateCommandRequest({_request.Name}Db{GetRequestType()} {GetRequestType().ToCamelCase()})
+    private string GetToCreateCommandRequestMethod() => $@"private CreateCommandRequest ToCreateCommandRequest({_request.Name}Db{GetRequestType()} {GetRequestType().ToCamelCase()})
 {{
     var parameters = ToParameters({GetRequestType().ToCamelCase()});
     return new CreateCommandRequest(CommandText, parameters, CommandType.Text, CommandTimeout, _transaction);
 }}";
-    }
 
     private string GetToExecuteReaderRequestMethod()
     {

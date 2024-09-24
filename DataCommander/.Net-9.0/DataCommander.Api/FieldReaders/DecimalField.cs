@@ -16,10 +16,7 @@ public sealed class DecimalField(
 
     public string StringValue { get; } = stringValue;
 
-    public override string ToString()
-    {
-        return DecimalValue.ToString("N", numberFormatInfo);
-    }
+    public override string ToString() => DecimalValue.ToString("N", numberFormatInfo);
 
     int IComparable.CompareTo(object? obj)
     {

@@ -22,10 +22,7 @@ public class DynamicArray<T>(int initialSize, int maxSize) : IList<T>
             yield return _array[i];
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     public int IndexOf(T item) => _array.IndexOf(item);
     void IList<T>.Insert(int index, T item) => throw new NotSupportedException();
