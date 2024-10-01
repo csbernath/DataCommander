@@ -765,11 +765,9 @@ internal class DataTableEditor : UserControl
             var binaryField = (BinaryField)_cellValue;
             var path = saveFileDialog.FileName;
 
-            using (var fileStream = File.Create(path))
-            {
-                var bytes = binaryField.Value;
-                fileStream.Write(bytes, 0, bytes.Length);
-            }
+            using var fileStream = File.Create(path);
+            var bytes = binaryField.Value;
+            fileStream.Write(bytes, 0, bytes.Length);
         }
     }
 
@@ -803,21 +801,19 @@ internal class DataTableEditor : UserControl
             var path = saveFileDialog.FileName;
             var source = streamField.Stream;
 
-            using (var target = File.Create(path))
+            using var target = File.Create(path);
+            var buffer = new byte[4096];
+
+            while (true)
             {
-                var buffer = new byte[4096];
+                var readCount = source.Read(buffer, 0, buffer.Length);
 
-                while (true)
+                if (readCount == 0)
                 {
-                    var readCount = source.Read(buffer, 0, buffer.Length);
-
-                    if (readCount == 0)
-                    {
-                        break;
-                    }
-
-                    target.Write(buffer, 0, readCount);
+                    break;
                 }
+
+                target.Write(buffer, 0, readCount);
             }
         }
     }
@@ -882,10 +878,8 @@ internal class DataTableEditor : UserControl
         if (saveFileDialog.ShowDialog() == DialogResult.OK)
         {
             var path = saveFileDialog.FileName;
-            using (var streamWriter = new StreamWriter(path, false, encoding))
-            {
-                streamWriter.Write(value);
-            }
+            using var streamWriter = new StreamWriter(path, false, encoding);
+            streamWriter.Write(value);
         }
     }
 

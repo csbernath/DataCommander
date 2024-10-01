@@ -21,16 +21,14 @@ public static class StringExtensions
 
     public static IEnumerable<string> GetLines(this string source)
     {
-        using (var stringReader = new StringReader(source))
+        using var stringReader = new StringReader(source);
+        while (true)
         {
-            while (true)
-            {
-                var line = stringReader.ReadLine();
-                if (line == null)
-                    break;
+            var line = stringReader.ReadLine();
+            if (line == null)
+                break;
 
-                yield return line;
-            }
+            yield return line;
         }
     }
 

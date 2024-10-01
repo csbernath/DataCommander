@@ -129,63 +129,61 @@ public sealed partial class QueryForm
 
     public void ShowDataSet(DataSet dataSet)
     {
-        using (var log = LogFactory.Instance.GetCurrentMethodLog())
+        using var log = LogFactory.Instance.GetCurrentMethodLog();
+        if (dataSet != null && dataSet.Tables.Count > 0)
         {
-            if (dataSet != null && dataSet.Tables.Count > 0)
+            GetTableSchemaResult getTableSchemaResult = null;
+            string? text;
+            if (_openTableMode)
             {
-                GetTableSchemaResult getTableSchemaResult = null;
-                string? text;
-                if (_openTableMode)
-                {
-                    var tableName = _sqlStatement.FindTableName();
-                    text = tableName;
-                    dataSet.Tables[0].TableName = tableName;
-                    getTableSchemaResult = Provider.GetTableSchema(Connection.Connection, tableName);
-                }
-                else
-                {
-                    ResultSetCount++;
-                    text = $"Set {ResultSetCount}";
-                }
+                var tableName = _sqlStatement.FindTableName();
+                text = tableName;
+                dataSet.Tables[0].TableName = tableName;
+                getTableSchemaResult = Provider.GetTableSchema(Connection.Connection, tableName);
+            }
+            else
+            {
+                ResultSetCount++;
+                text = $"Set {ResultSetCount}";
+            }
 
-                var resultSetTabPage = new TabPage(text);
-                GarbageMonitor.Default.Add("resultSetTabPage", resultSetTabPage);
-                resultSetTabPage.ToolTipText = null; // TODO
-                _resultSetsTabControl.TabPages.Add(resultSetTabPage);
-                _resultSetsTabControl.SelectedTab = resultSetTabPage;
-                if (dataSet.Tables.Count > 1)
-                {
-                    var tabControl = new TabControl { Dock = DockStyle.Fill };
-                    tabControl.MouseUp += DataTableTabControl_MouseUp;
+            var resultSetTabPage = new TabPage(text);
+            GarbageMonitor.Default.Add("resultSetTabPage", resultSetTabPage);
+            resultSetTabPage.ToolTipText = null; // TODO
+            _resultSetsTabControl.TabPages.Add(resultSetTabPage);
+            _resultSetsTabControl.SelectedTab = resultSetTabPage;
+            if (dataSet.Tables.Count > 1)
+            {
+                var tabControl = new TabControl { Dock = DockStyle.Fill };
+                tabControl.MouseUp += DataTableTabControl_MouseUp;
 
-                    var index = 0;
-                    foreach (DataTable dataTable in dataSet.Tables)
-                    {
-                        var commandBuilder = Provider.DbProviderFactory.CreateCommandBuilder();
-                        var control = QueryFormStaticMethods.CreateControlFromDataTable(this, commandBuilder, dataTable, getTableSchemaResult, TableStyle,
-                            !_openTableMode, _colorTheme);
-                        control.Dock = DockStyle.Fill;
-                        var rowCount = StringExtensions.SingularOrPlural(dataTable.Rows.Count, "row", "rows");
-                        text = $"{dataTable.TableName} ({rowCount})";
-                        var tabPage = new TabPage(text)
-                        {
-                            ToolTipText = null // TODO
-                        };
-                        tabPage.Controls.Add(control);
-                        tabControl.TabPages.Add(tabPage);
-                        index++;
-                    }
-
-                    resultSetTabPage.Controls.Add(tabControl);
-                }
-                else
+                var index = 0;
+                foreach (DataTable dataTable in dataSet.Tables)
                 {
                     var commandBuilder = Provider.DbProviderFactory.CreateCommandBuilder();
-                    var control = QueryFormStaticMethods.CreateControlFromDataTable(this, commandBuilder, dataSet.Tables[0], getTableSchemaResult, TableStyle,
+                    var control = QueryFormStaticMethods.CreateControlFromDataTable(this, commandBuilder, dataTable, getTableSchemaResult, TableStyle,
                         !_openTableMode, _colorTheme);
                     control.Dock = DockStyle.Fill;
-                    resultSetTabPage.Controls.Add(control);
+                    var rowCount = StringExtensions.SingularOrPlural(dataTable.Rows.Count, "row", "rows");
+                    text = $"{dataTable.TableName} ({rowCount})";
+                    var tabPage = new TabPage(text)
+                    {
+                        ToolTipText = null // TODO
+                    };
+                    tabPage.Controls.Add(control);
+                    tabControl.TabPages.Add(tabPage);
+                    index++;
                 }
+
+                resultSetTabPage.Controls.Add(tabControl);
+            }
+            else
+            {
+                var commandBuilder = Provider.DbProviderFactory.CreateCommandBuilder();
+                var control = QueryFormStaticMethods.CreateControlFromDataTable(this, commandBuilder, dataSet.Tables[0], getTableSchemaResult, TableStyle,
+                    !_openTableMode, _colorTheme);
+                control.Dock = DockStyle.Fill;
+                resultSetTabPage.Controls.Add(control);
             }
         }
     }

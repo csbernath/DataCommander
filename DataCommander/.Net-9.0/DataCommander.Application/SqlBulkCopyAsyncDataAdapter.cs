@@ -73,10 +73,8 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
                 }
 
                 _command = command.Command;
-                using (var dataReader = _command.ExecuteReader())
-                {
-                    _sqlBulkCopy.WriteToServer(dataReader);
-                }
+                using var dataReader = _command.ExecuteReader();
+                _sqlBulkCopy.WriteToServer(dataReader);
             }
         }
         catch (Exception e)

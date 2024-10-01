@@ -378,63 +378,61 @@ Please wait...",
             _sqlStatement = new SqlParser(Query);
             _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
 
-            using (var dataReader = _command.ExecuteReader())
+            using var dataReader = _command.ExecuteReader();
+            while (true)
             {
-                while (true)
+                var writer = new StringWriter();
+                var read = false;
+
+                while (dataReader.Read())
                 {
-                    var writer = new StringWriter();
-                    var read = false;
-
-                    while (dataReader.Read())
+                    if (!read)
                     {
-                        if (!read)
-                        {
-                            read = true;
-                        }
-
-                        var fragment = (string)dataReader[0];
-                        writer.Write(fragment);
+                        read = true;
                     }
 
-                    if (read)
+                    var fragment = (string)dataReader[0];
+                    writer.Write(fragment);
+                }
+
+                if (read)
+                {
+                    var xml = writer.ToString();
+                    var xmlDocument = new XmlDocument();
+                    var path = Path.GetTempFileName() + ".xml";
+
+                    try
                     {
-                        var xml = writer.ToString();
-                        var xmlDocument = new XmlDocument();
-                        var path = Path.GetTempFileName() + ".xml";
-
-                        try
-                        {
-                            xmlDocument.LoadXml(xml);
-                            xmlDocument.Save(path);
-                        }
-                        catch
-                        {
-                            var xmlWriter = new XmlTextWriter(path, Encoding.UTF8);
-                            xmlWriter.WriteStartElement("DataCommanderRoot");
-                            xmlWriter.WriteRaw(xml);
-                            xmlWriter.WriteEndElement();
-                            xmlWriter.Close();
-                        }
-
-                        var resultSetTabPage = new TabPage("Xml");
-                        _resultSetsTabControl.TabPages.Add(resultSetTabPage);
-
-                        var htmlTextBox = new HtmlTextBox
-                        {
-                            Dock = DockStyle.Fill
-                        };
-
-                        resultSetTabPage.Controls.Add(htmlTextBox);
-
-                        htmlTextBox.Navigate(path);
-                        _resultSetsTabControl.SelectedTab = resultSetTabPage;
-                        _tabControl.SelectedTab = _resultSetsTabPage;
+                        xmlDocument.LoadXml(xml);
+                        xmlDocument.Save(path);
+                    }
+                    catch
+                    {
+                        var xmlWriter = new XmlTextWriter(path, Encoding.UTF8);
+                        xmlWriter.WriteStartElement("DataCommanderRoot");
+                        xmlWriter.WriteRaw(xml);
+                        xmlWriter.WriteEndElement();
+                        xmlWriter.Close();
                     }
 
-                    if (!dataReader.NextResult())
+                    var resultSetTabPage = new TabPage("Xml");
+                    _resultSetsTabControl.TabPages.Add(resultSetTabPage);
+
+                    var htmlTextBox = new HtmlTextBox
                     {
-                        break;
-                    }
+                        Dock = DockStyle.Fill
+                    };
+
+                    resultSetTabPage.Controls.Add(htmlTextBox);
+
+                    htmlTextBox.Navigate(path);
+                    _resultSetsTabControl.SelectedTab = resultSetTabPage;
+                    _tabControl.SelectedTab = _resultSetsTabPage;
+                }
+
+                if (!dataReader.NextResult())
+                {
+                    break;
                 }
             }
         }
@@ -560,47 +558,45 @@ Please wait...",
 
             if (tableName != null)
             {
-                using (var dataReader = _command.ExecuteReader())
-                {
-                    var dataReaderHelper = Provider.CreateDataReaderHelper(dataReader);
-                    var schemaTable = dataReader.GetSchemaTable();
-                    var schemaRows = schemaTable.Rows;
-                    var columnCount = schemaRows.Count;
-                    var sb = new StringBuilder();
-                    sb.AppendFormat("insert into {0}(", tableName);
+                using var dataReader = _command.ExecuteReader();
+                var dataReaderHelper = Provider.CreateDataReaderHelper(dataReader);
+                var schemaTable = dataReader.GetSchemaTable();
+                var schemaRows = schemaTable.Rows;
+                var columnCount = schemaRows.Count;
+                var sb = new StringBuilder();
+                sb.AppendFormat("insert into {0}(", tableName);
 
-                    for (var i = 0; i < columnCount; ++i)
+                for (var i = 0; i < columnCount; ++i)
+                {
+                    if (i > 0)
+                        sb.Append(',');
+
+                    var schemaRow = schemaRows[i];
+                    var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
+                    sb.Append(columnName);
+                }
+
+                sb.Append(")\r\nselect\r\n");
+                var insertInto = sb.ToString();
+                var fieldCount = dataReader.FieldCount;
+
+                while (dataReader.Read())
+                {
+                    object[] values = new object[fieldCount];
+                    dataReaderHelper.GetValues(values);
+                    sb = new StringBuilder();
+                    sb.Append(insertInto);
+
+                    for (var i = 0; i < fieldCount; i++)
                     {
                         if (i > 0)
-                            sb.Append(',');
+                            sb.Append(",\r\n");
 
-                        var schemaRow = schemaRows[i];
-                        var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
-                        sb.Append(columnName);
+                        var s = InsertScriptFileWriter.ToString(values[i]);
+                        sb.AppendFormat("    {0} as {1}", s, dataReader.GetName(i));
                     }
 
-                    sb.Append(")\r\nselect\r\n");
-                    var insertInto = sb.ToString();
-                    var fieldCount = dataReader.FieldCount;
-
-                    while (dataReader.Read())
-                    {
-                        object[] values = new object[fieldCount];
-                        dataReaderHelper.GetValues(values);
-                        sb = new StringBuilder();
-                        sb.Append(insertInto);
-
-                        for (var i = 0; i < fieldCount; i++)
-                        {
-                            if (i > 0)
-                                sb.Append(",\r\n");
-
-                            var s = InsertScriptFileWriter.ToString(values[i]);
-                            sb.AppendFormat("    {0} as {1}", s, dataReader.GetName(i));
-                        }
-
-                        _standardOutput.WriteLine(sb);
-                    }
+                    _standardOutput.WriteLine(sb);
                 }
             }
         }

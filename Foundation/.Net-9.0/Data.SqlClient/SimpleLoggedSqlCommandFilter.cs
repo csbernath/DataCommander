@@ -25,64 +25,62 @@ internal sealed class SimpleLoggedSqlCommandFilter : ISqlLoggedSqlCommandFilter
 
     private void SettingsChanged(object sender, EventArgs e)
     {
-        using (var log = LogFactory.Instance.GetCurrentMethodLog())
+        using var log = LogFactory.Instance.GetCurrentMethodLog();
+        var node = _section.SelectNode(_nodeName, false);
+        if (node != null)
         {
-            var node = _section.SelectNode(_nodeName, false);
-            if (node != null)
+            List<SimpleLoggedSqlCommandFilterRule> list = [];
+
+            foreach (var childNode in node.ChildNodes)
             {
-                List<SimpleLoggedSqlCommandFilterRule> list = [];
+                var attributes = childNode.Attributes;
+                var include = attributes["Include"].GetValue<bool>();
+                var userName = attributes["UserName"].GetValue<string>();
 
-                foreach (var childNode in node.ChildNodes)
+                if (userName == "*")
                 {
-                    var attributes = childNode.Attributes;
-                    var include = attributes["Include"].GetValue<bool>();
-                    var userName = attributes["UserName"].GetValue<string>();
-
-                    if (userName == "*")
-                    {
-                        userName = null;
-                    }
-
-                    var hostName = attributes["HostName"].GetValue<string>();
-
-                    if (hostName == "*")
-                    {
-                        hostName = null;
-                    }
-
-                    var database = attributes["Database"].GetValue<string>();
-
-                    if (database == "*")
-                    {
-                        database = null;
-                    }
-
-                    var commandText = attributes["CommandText"].GetValue<string>();
-
-                    if (commandText == "*")
-                    {
-                        commandText = null;
-                    }
-
-                    var rule = new SimpleLoggedSqlCommandFilterRule(include, userName, hostName, database, commandText);
-                    list.Add(rule);
+                    userName = null;
                 }
 
-                var count = list.Count;
-                SimpleLoggedSqlCommandFilterRule[] rules;
+                var hostName = attributes["HostName"].GetValue<string>();
 
-                if (count > 0)
+                if (hostName == "*")
                 {
-                    rules = new SimpleLoggedSqlCommandFilterRule[count];
-                    list.CopyTo(rules);
-                }
-                else
-                {
-                    rules = null;
+                    hostName = null;
                 }
 
-                _rules = rules;
+                var database = attributes["Database"].GetValue<string>();
+
+                if (database == "*")
+                {
+                    database = null;
+                }
+
+                var commandText = attributes["CommandText"].GetValue<string>();
+
+                if (commandText == "*")
+                {
+                    commandText = null;
+                }
+
+                var rule = new SimpleLoggedSqlCommandFilterRule(include, userName, hostName, database, commandText);
+                list.Add(rule);
             }
+
+            var count = list.Count;
+            SimpleLoggedSqlCommandFilterRule[] rules;
+
+            if (count > 0)
+            {
+                rules = new SimpleLoggedSqlCommandFilterRule[count];
+                list.CopyTo(rules);
+            }
+            else
+            {
+                rules = null;
+            }
+
+            _rules = rules;
         }
     }
 

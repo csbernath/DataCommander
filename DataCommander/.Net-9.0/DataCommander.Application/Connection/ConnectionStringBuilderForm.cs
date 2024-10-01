@@ -93,19 +93,17 @@ internal partial class ConnectionStringBuilderForm : Form
         oleDbProvidersComboBox.Visible = true;
         _oleDbProviders = [];
 
-        using (IDataReader dataReader = OleDbEnumerator.GetRootEnumerator())
-        {
-            var sourceName = dataReader.GetOrdinal("SOURCES_NAME");
-            var sourceDescription = dataReader.GetOrdinal("SOURCES_DESCRIPTION");
+        using IDataReader dataReader = OleDbEnumerator.GetRootEnumerator();
+        var sourceName = dataReader.GetOrdinal("SOURCES_NAME");
+        var sourceDescription = dataReader.GetOrdinal("SOURCES_DESCRIPTION");
 
-            while (dataReader.Read())
-            {
-                var name = dataReader.GetString(sourceName);
-                var description = dataReader.GetString(sourceDescription);
-                var item = new OleDbProviderInfo(name);
-                _oleDbProviders.Add(item);
-                oleDbProvidersComboBox.Items.Add(description);
-            }
+        while (dataReader.Read())
+        {
+            var name = dataReader.GetString(sourceName);
+            var description = dataReader.GetString(sourceDescription);
+            var item = new OleDbProviderInfo(name);
+            _oleDbProviders.Add(item);
+            oleDbProvidersComboBox.Items.Add(description);
         }
     }
 
@@ -239,23 +237,21 @@ internal partial class ConnectionStringBuilderForm : Form
         {
             try
             {
-                using (var connection = CreateConnection().Connection)
+                using var connection = CreateConnection().Connection;
+                connection.Open();
+                var schema = connection.GetSchema("Databases");
+                _initialCatalogs = [];
+
+                foreach (DataRow row in schema.Rows)
                 {
-                    connection.Open();
-                    var schema = connection.GetSchema("Databases");
-                    _initialCatalogs = [];
-
-                    foreach (DataRow row in schema.Rows)
-                    {
-                        var database = (string)row["database_name"];
-                        _initialCatalogs.Add(database);
-                    }
-
-                    _initialCatalogs.Sort();
-
-                    foreach (var database in _initialCatalogs) 
-                        initialCatalogComboBox.Items.Add(database);
+                    var database = (string)row["database_name"];
+                    _initialCatalogs.Add(database);
                 }
+
+                _initialCatalogs.Sort();
+
+                foreach (var database in _initialCatalogs)
+                    initialCatalogComboBox.Items.Add(database);
             }
             catch (Exception ex)
             {

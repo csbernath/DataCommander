@@ -127,14 +127,12 @@ internal sealed class SqlServerProvider : IProvider
             command.CommandText = $"select {string.Join(",", sourceColumnNames)} from {destinationTableName}";
             command.CommandType = CommandType.Text;
 
-            using (var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
-            {
-                schemaTable = dataReader.GetSchemaTable();
-                count = dataReader.FieldCount;
-                dataTypeNames = new string[count];
+            using var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly);
+            schemaTable = dataReader.GetSchemaTable();
+            count = dataReader.FieldCount;
+            dataTypeNames = new string[count];
 
-                for (var i = 0; i < count; i++) dataTypeNames[i] = dataReader.GetDataTypeName(i);
-            }
+            for (var i = 0; i < count; i++) dataTypeNames[i] = dataReader.GetDataTypeName(i);
         }
 
         var insertInto = new StringBuilder();

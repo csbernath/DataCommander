@@ -39,14 +39,12 @@ public static class ConnectionInfoRepository
         IEnumerable<ConnectionDto> connectionDtos = connectionInfos
             .Select(connectionProperties => connectionProperties.ToConnectionDto());
         var path = GetPath();
-        using (var streamWriter = new StreamWriter(path, false, Encoding.UTF8))
+        using var streamWriter = new StreamWriter(path, false, Encoding.UTF8);
+        var serializer = new JsonSerializer
         {
-            var serializer = new JsonSerializer
-            {
-                Formatting = Formatting.Indented
-            };
-            serializer.Serialize(streamWriter, connectionDtos);
-        }
+            Formatting = Formatting.Indented
+        };
+        serializer.Serialize(streamWriter, connectionDtos);
     }
 
     private static string GetPath()

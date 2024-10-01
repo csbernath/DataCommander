@@ -36,7 +36,7 @@ public partial class AboutForm : Form
     a {{text-decoration:none}}
 </style>
 <div style=""font-family:verdana;font-size:9pt"">
-Build date: {lastWriteTime.ToString("yyyy-MM-dd")}
+Build date: {lastWriteTime:yyyy-MM-dd}
 <br/><br/>
 Version: {assembly.GetName().Version}
 <br/><br/>
@@ -46,7 +46,7 @@ This program is freeware and released under the <a href=""https://www.gnu.org/li
 <br/><br/>
 <a href=""https://github.com/csbernath/DataCommander"">GitHub repository</a>
 <br/><br/>
-Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.Net-8.0/README.md"">Foundation Class Library</a>
+Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.Net-9.0/README.md"">Foundation Class Library</a>
 <br/><br/>
 <a href=""applicationdatafile://"">Application Data file</a>
 <br/>

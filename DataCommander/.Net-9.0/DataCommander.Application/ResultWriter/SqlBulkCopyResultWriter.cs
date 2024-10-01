@@ -141,43 +141,41 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
     {
         try
         {
-            using (var methodLog = LogFactory.Instance.GetCurrentMethodLog())
+            using var methodLog = LogFactory.Instance.GetCurrentMethodLog();
+            while (true)
             {
-                while (true)
+                methodLog.Write(LogLevel.Trace, "this.queue.Count: {0}", _queue.Count);
+                if (!_queue.IsEmpty)
                 {
-                    methodLog.Write(LogLevel.Trace, "this.queue.Count: {0}", _queue.Count);
-                    if (!_queue.IsEmpty)
+                    List<QueueItem> items = new List<QueueItem>(_queue.Count);
+                    while (true)
                     {
-                        List<QueueItem> items = new List<QueueItem>(_queue.Count);
-                        while (true)
+                        var succeeded = _queue.TryDequeue(out var item);
+                        if (succeeded)
                         {
-                            var succeeded = _queue.TryDequeue(out var item);
-                            if (succeeded)
-                            {
-                                items.Add(item);
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-
-                        InsertItems(items);
-                    }
-
-                    if (_queue.IsEmpty)
-                    {
-                        methodLog.Write(LogLevel.Trace, "this.writeEnded: {0}", _writeEnded);
-                        if (_writeEnded)
-                        {
-                            break;
+                            items.Add(item);
                         }
                         else
                         {
-                            methodLog.Write(LogLevel.Trace, "this.enqueueEvent.WaitOne( 1000 );...");
-                            _enqueueEvent.WaitOne(1000);
-                            methodLog.Write(LogLevel.Trace, "this.enqueueEvent.WaitOne( 1000 ); finished.");
+                            break;
                         }
+                    }
+
+                    InsertItems(items);
+                }
+
+                if (_queue.IsEmpty)
+                {
+                    methodLog.Write(LogLevel.Trace, "this.writeEnded: {0}", _writeEnded);
+                    if (_writeEnded)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        methodLog.Write(LogLevel.Trace, "this.enqueueEvent.WaitOne( 1000 );...");
+                        _enqueueEvent.WaitOne(1000);
+                        methodLog.Write(LogLevel.Trace, "this.enqueueEvent.WaitOne( 1000 ); finished.");
                     }
                 }
             }
@@ -241,14 +239,12 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
     void IResultWriter.End()
     {
         _logResultWriter.End();
-        using (var methodLog = LogFactory.Instance.GetCurrentMethodLog())
+        using var methodLog = LogFactory.Instance.GetCurrentMethodLog();
+        _writeEnded = true;
+        if (_task != null && !_task.IsCompleted)
         {
-            _writeEnded = true;
-            if (_task != null && !_task.IsCompleted)
-            {
-                methodLog.Write(LogLevel.Trace, "Waiting 500 ms for task...");
-                _task.Wait(500);
-            }
+            methodLog.Write(LogLevel.Trace, "Waiting 500 ms for task...");
+            _task.Wait(500);
         }
     }
 

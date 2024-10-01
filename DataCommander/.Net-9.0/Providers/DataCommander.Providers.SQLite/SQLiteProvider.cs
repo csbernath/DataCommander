@@ -301,23 +301,21 @@ order by name collate nocase";
             command.CommandText = $"select * from {destinationTableName}";
             command.CommandType = CommandType.Text;
 
-            using (var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
+            using var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly);
+            schemaTable = dataReader.GetSchemaTable();
+            count = dataReader.FieldCount;
+            dataTypeNames = new string[count];
+
+            for (var i = 0; i < count; i++)
             {
-                schemaTable = dataReader.GetSchemaTable();
-                count = dataReader.FieldCount;
-                dataTypeNames = new string[count];
-
-                for (var i = 0; i < count; i++)
+                var dataTypeName = dataReader.GetDataTypeName(i);
+                var index = dataTypeName.IndexOf('(');
+                if (index >= 0)
                 {
-                    var dataTypeName = dataReader.GetDataTypeName(i);
-                    var index = dataTypeName.IndexOf('(');
-                    if (index >= 0)
-                    {
-                        dataTypeName = dataTypeName[..index];
-                    }
-
-                    dataTypeNames[i] = dataTypeName;
+                    dataTypeName = dataTypeName[..index];
                 }
+
+                dataTypeNames[i] = dataTypeName;
             }
         }
 

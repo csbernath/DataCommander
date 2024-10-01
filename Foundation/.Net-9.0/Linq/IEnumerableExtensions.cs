@@ -63,28 +63,26 @@ public static partial class IEnumerableExtensions
         var partitionSize = count / partitionCount;
         var remainder = count % partitionCount;
 
-        using (var enumerator = source.GetEnumerator())
+        using var enumerator = source.GetEnumerator();
+        for (var partitionIndex = 0; partitionIndex < partitionCount; partitionIndex++)
         {
-            for (var partitionIndex = 0; partitionIndex < partitionCount; partitionIndex++)
+            var currentPartitionSize = partitionSize;
+            if (remainder > 0)
             {
-                var currentPartitionSize = partitionSize;
-                if (remainder > 0)
-                {
-                    currentPartitionSize++;
-                    remainder--;
-                }
+                currentPartitionSize++;
+                remainder--;
+            }
 
-                if (currentPartitionSize > 0)
-                {
-                    var partition = enumerator.TakeRange(currentPartitionSize);
-                    if (partition.Count > 0)
-                        yield return partition;
-                    else
-                        break;
-                }
+            if (currentPartitionSize > 0)
+            {
+                var partition = enumerator.TakeRange(currentPartitionSize);
+                if (partition.Count > 0)
+                    yield return partition;
                 else
                     break;
             }
+            else
+                break;
         }
     }
 
@@ -231,15 +229,13 @@ public static partial class IEnumerableExtensions
     [Pure]
     public static IEnumerable<List<TSource>> TakeRanges<TSource>(this IEnumerable<TSource> source, int rangeSize)
     {
-        using (var enumerator = source.GetEnumerator())
+        using var enumerator = source.GetEnumerator();
+        while (true)
         {
-            while (true)
-            {
-                var range = enumerator.TakeRange(rangeSize);
-                if (range.Count == 0)
-                    break;
-                yield return range;
-            }
+            var range = enumerator.TakeRange(rangeSize);
+            if (range.Count == 0)
+                break;
+            yield return range;
         }
     }
 

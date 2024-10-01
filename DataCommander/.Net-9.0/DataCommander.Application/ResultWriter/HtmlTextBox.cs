@@ -45,11 +45,9 @@ internal sealed class HtmlTextBox : UserControl
 
             using (var fileStream = new FileStream(_fileName, FileMode.OpenOrCreate))
             {
-                using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
-                {
-                    streamWriter.Write(value);
-                    streamWriter.Close();
-                }
+                using var streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
+                streamWriter.Write(value);
+                streamWriter.Close();
             }
 
             _webBrowser.Navigate(_fileName);

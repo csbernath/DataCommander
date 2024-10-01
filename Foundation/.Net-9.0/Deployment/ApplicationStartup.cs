@@ -54,28 +54,26 @@ public sealed class ApplicationStartup(
         var sequence = new Sequence();
         var previousEventTimestamp = 0;
 
-        using (var webClient = new WebClient())
+        using var webClient = new WebClient();
+        webClient.DownloadProgressChanged += (sender, args) =>
         {
-            webClient.DownloadProgressChanged += (sender, args) =>
+            if (sequence.Next() == 0)
             {
-                if (sequence.Next() == 0)
+                previousEventTimestamp = Environment.TickCount;
+                eventHandler(args);
+            }
+            else
+            {
+                var current = Environment.TickCount;
+                var elapsed = current - previousEventTimestamp;
+                if (elapsed >= 1000)
                 {
-                    previousEventTimestamp = Environment.TickCount;
+                    previousEventTimestamp = current;
                     eventHandler(args);
                 }
-                else
-                {
-                    var current = Environment.TickCount;
-                    var elapsed = current - previousEventTimestamp;
-                    if (elapsed >= 1000)
-                    {
-                        previousEventTimestamp = current;
-                        eventHandler(args);
-                    }
-                }
-            };
-            await webClient.DownloadFileTaskAsync(address, zipFileName);
-        }
+            }
+        };
+        await webClient.DownloadFileTaskAsync(address, zipFileName);
     }
 
     private static void ExtractZip(string sourceArchiveFileName, string destinationDirectoryName)

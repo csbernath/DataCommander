@@ -54,12 +54,10 @@ public static class Db
         Func<DbDataReader, CancellationToken, Task> readResults,
         CancellationToken cancellationToken)
     {
-        await using (var connection = createConnection())
-        {
-            await connection.OpenAsync(cancellationToken);
-            var executor = connection.CreateCommandAsyncExecutor();
-            await executor.ExecuteReaderAsync(executeReaderRequest, readResults, cancellationToken);
-        }
+        await using var connection = createConnection();
+        await connection.OpenAsync(cancellationToken);
+        var executor = connection.CreateCommandAsyncExecutor();
+        await executor.ExecuteReaderAsync(executeReaderRequest, readResults, cancellationToken);
     }
 
     public static object ExecuteScalar(Func<DbConnection> createConnection, CreateCommandRequest createCommandRequest)

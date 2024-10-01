@@ -73,54 +73,50 @@ public static class IDbCommandExtensions
         {
             var connection = command.Connection;
 
-            using (var connectionStateManager = new ConnectionStateManager(connection))
+            using var connectionStateManager = new ConnectionStateManager(connection);
+            connectionStateManager.Open();
+
+            using var reader = command.ExecuteReader();
+            while (true)
             {
-                connectionStateManager.Open();
+                var fieldCount = reader.FieldCount;
 
-                using (var reader = command.ExecuteReader())
+                if (fieldCount > 0)
                 {
-                    while (true)
+                    DataTable table;
+
+                    if (resultIndex < dataTables.Count)
                     {
-                        var fieldCount = reader.FieldCount;
-
-                        if (fieldCount > 0)
+                        table = dataTables[resultIndex];
+                    }
+                    else
+                    {
+                        table = new DataTable
                         {
-                            DataTable table;
+                            Locale = CultureInfo.InvariantCulture
+                        };
+                        dataSet.Tables.Add(table);
+                    }
 
-                            if (resultIndex < dataTables.Count)
-                            {
-                                table = dataTables[resultIndex];
-                            }
-                            else
-                            {
-                                table = new DataTable
-                                {
-                                    Locale = CultureInfo.InvariantCulture
-                                };
-                                dataSet.Tables.Add(table);
-                            }
+                    var count = reader.Fill(table, cancellationToken);
+                    rowCount += count;
+                }
 
-                            var count = reader.Fill(table, cancellationToken);
-                            rowCount += count;
-                        }
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    var nextResult = reader.NextResult();
 
-                        if (!cancellationToken.IsCancellationRequested)
-                        {
-                            var nextResult = reader.NextResult();
-
-                            if (!nextResult)
-                            {
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            break;
-                        }
-
-                        resultIndex++;
+                    if (!nextResult)
+                    {
+                        break;
                     }
                 }
+                else
+                {
+                    break;
+                }
+
+                resultIndex++;
             }
         }
 
@@ -137,19 +133,17 @@ public static class IDbCommandExtensions
         {
             var connection = command.Connection;
 
-            using (var connectionStateManager = new ConnectionStateManager(connection))
-            {
-                connectionStateManager.Open();
+            using var connectionStateManager = new ConnectionStateManager(connection);
+            connectionStateManager.Open();
 
-                try
-                {
-                    using (var dataReader = command.ExecuteReader())
-                        rowCount = dataReader.Fill(dataTable, cancellationToken);
-                }
-                catch (Exception exception)
-                {
-                    throw new DbCommandExecutionException("IDbCommandExtensions.Fill failed.", exception, command);
-                }
+            try
+            {
+                using var dataReader = command.ExecuteReader();
+                rowCount = dataReader.Fill(dataTable, cancellationToken);
+            }
+            catch (Exception exception)
+            {
+                throw new DbCommandExecutionException("IDbCommandExtensions.Fill failed.", exception, command);
             }
         }
 

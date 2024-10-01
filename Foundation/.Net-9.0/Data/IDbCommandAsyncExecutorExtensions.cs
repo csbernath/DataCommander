@@ -44,8 +44,8 @@ public static class IDbCommandAsyncExecutorExtensions
         await executor.ExecuteAsync(
             async (connection, _) =>
             {
-                await using (var command = connection.CreateCommand(createCommandRequest))
-                    affectedRows = await command.ExecuteNonQueryAsync(cancellationToken);
+                await using var command = connection.CreateCommand(createCommandRequest);
+                affectedRows = await command.ExecuteNonQueryAsync(cancellationToken);
             },
             cancellationToken);
         return affectedRows;
@@ -60,8 +60,8 @@ public static class IDbCommandAsyncExecutorExtensions
         await executor.ExecuteAsync(
             async (connection, _) =>
             {
-                await using (var command = connection.CreateCommand(createCommandRequest))
-                    scalar = await command.ExecuteScalarAsync(cancellationToken);
+                await using var command = connection.CreateCommand(createCommandRequest);
+                scalar = await command.ExecuteScalarAsync(cancellationToken);
             },
             cancellationToken);
         return scalar;
@@ -74,13 +74,11 @@ public static class IDbCommandAsyncExecutorExtensions
         CancellationToken cancellationToken) => executor.ExecuteAsync(
             async (connection, _) =>
             {
-                await using (var command = connection.CreateCommand(executeReaderRequest.CreateCommandRequest))
-                {
-                    await using (var dataReader =
-                                 await command.ExecuteReaderAsync(executeReaderRequest.CommandBehavior,
-                                     cancellationToken))
-                        await readResults(dataReader, cancellationToken);
-                }
+                await using var command = connection.CreateCommand(executeReaderRequest.CreateCommandRequest);
+                await using var dataReader =
+                             await command.ExecuteReaderAsync(executeReaderRequest.CommandBehavior,
+                                 cancellationToken);
+                await readResults(dataReader, cancellationToken);
             },
             cancellationToken);
 

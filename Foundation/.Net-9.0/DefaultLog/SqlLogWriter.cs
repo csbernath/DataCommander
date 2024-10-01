@@ -120,15 +120,13 @@ internal sealed class SqlLogWriter : ILogWriter
 
             commandText = sb.ToString();
 
-            using (var connection = _createConnection())
-            {
-                connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandType = CommandType.Text;
-                command.CommandText = commandText;
-                command.CommandTimeout = _commandTimeout;
-                command.ExecuteNonQuery();
-            }
+            using var connection = _createConnection();
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+            command.CommandText = commandText;
+            command.CommandTimeout = _commandTimeout;
+            command.ExecuteNonQuery();
         }
         catch (Exception e)
         {

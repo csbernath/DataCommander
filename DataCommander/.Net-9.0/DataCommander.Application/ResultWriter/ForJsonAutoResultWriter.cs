@@ -81,88 +81,82 @@ internal sealed class ForJsonAutoResultWriter(Action<InfoMessage> addInfoMessage
             _textWriter.Close();
             _textWriter = null;
 
-            using (var streamReader = new StreamReader(_path))
+            using var streamReader = new StreamReader(_path);
+            using var jsonTextReader = new JsonTextReader(streamReader);
+            using var jsonTextWriter = new JsonTextWriter(new StreamWriter(_formattedPath));
+            jsonTextWriter.Formatting = Formatting.Indented;
+            while (true)
             {
-                using (var jsonTextReader = new JsonTextReader(streamReader))
-                {
-                    using (var jsonTextWriter = new JsonTextWriter(new StreamWriter(_formattedPath)))
-                    {
-                        jsonTextWriter.Formatting = Formatting.Indented;
-                        while (true)
-                        {
-                            var read = jsonTextReader.Read();
-                            if (!read)
-                                break;
+                var read = jsonTextReader.Read();
+                if (!read)
+                    break;
 
-                            switch (jsonTextReader.TokenType)
-                            {
-                                case JsonToken.None:
-                                    break;
-                                case JsonToken.StartObject:
-                                    jsonTextWriter.WriteStartObject();
-                                    break;
-                                case JsonToken.StartArray:
-                                    jsonTextWriter.WriteStartArray();
-                                    break;
-                                case JsonToken.StartConstructor:
-                                    break;
-                                case JsonToken.PropertyName:
-                                    var propertyName = (string)jsonTextReader.Value;
-                                    jsonTextWriter.WritePropertyName(propertyName);
-                                    break;
-                                case JsonToken.Comment:
-                                    break;
-                                case JsonToken.Raw:
-                                    break;
-                                case JsonToken.Integer:
-                                {
-                                        var value = jsonTextReader.Value;
-                                    jsonTextWriter.WriteValue(value);
-                                }
-                                    break;
-                                case JsonToken.Float:
-                                {
-                                        var value = jsonTextReader.Value;
-                                    jsonTextWriter.WriteValue(value);
-                                }
-                                    break;
-                                case JsonToken.String:
-                                {
-                                        var value = jsonTextReader.Value;
-                                    jsonTextWriter.WriteValue(value);
-                                }
-                                    break;
-                                case JsonToken.Boolean:
-                                {
-                                        var value = jsonTextReader.Value;
-                                    jsonTextWriter.WriteValue(value);
-                                }
-                                    break;
-                                case JsonToken.Null:
-                                    break;
-                                case JsonToken.Undefined:
-                                    break;
-                                case JsonToken.EndObject:
-                                    jsonTextWriter.WriteEndObject();
-                                    break;
-                                case JsonToken.EndArray:
-                                    jsonTextWriter.WriteEndArray();
-                                    break;
-                                case JsonToken.EndConstructor:
-                                    break;
-                                case JsonToken.Date:
-                                {
-                                        var value = jsonTextReader.Value;
-                                    jsonTextWriter.WriteValue(value);
-                                }
-                                    break;
-                                case JsonToken.Bytes:
-                                    break;
-                                default:
-                                    throw new ArgumentOutOfRangeException();
-                            }
+                switch (jsonTextReader.TokenType)
+                {
+                    case JsonToken.None:
+                        break;
+                    case JsonToken.StartObject:
+                        jsonTextWriter.WriteStartObject();
+                        break;
+                    case JsonToken.StartArray:
+                        jsonTextWriter.WriteStartArray();
+                        break;
+                    case JsonToken.StartConstructor:
+                        break;
+                    case JsonToken.PropertyName:
+                        var propertyName = (string)jsonTextReader.Value;
+                        jsonTextWriter.WritePropertyName(propertyName);
+                        break;
+                    case JsonToken.Comment:
+                        break;
+                    case JsonToken.Raw:
+                        break;
+                    case JsonToken.Integer:
+                        {
+                            var value = jsonTextReader.Value;
+                            jsonTextWriter.WriteValue(value);
                         }
-                    }
+                        break;
+                    case JsonToken.Float:
+                        {
+                            var value = jsonTextReader.Value;
+                            jsonTextWriter.WriteValue(value);
+                        }
+                        break;
+                    case JsonToken.String:
+                        {
+                            var value = jsonTextReader.Value;
+                            jsonTextWriter.WriteValue(value);
+                        }
+                        break;
+                    case JsonToken.Boolean:
+                        {
+                            var value = jsonTextReader.Value;
+                            jsonTextWriter.WriteValue(value);
+                        }
+                        break;
+                    case JsonToken.Null:
+                        break;
+                    case JsonToken.Undefined:
+                        break;
+                    case JsonToken.EndObject:
+                        jsonTextWriter.WriteEndObject();
+                        break;
+                    case JsonToken.EndArray:
+                        jsonTextWriter.WriteEndArray();
+                        break;
+                    case JsonToken.EndConstructor:
+                        break;
+                    case JsonToken.Date:
+                        {
+                            var value = jsonTextReader.Value;
+                            jsonTextWriter.WriteValue(value);
+                        }
+                        break;
+                    case JsonToken.Bytes:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
         }

@@ -139,16 +139,14 @@ public sealed class ApplicationData
         var directoryName = Path.GetDirectoryName(fileName);
         Directory.CreateDirectory(directoryName);
 
-        using (var xmlTextWriter = new XmlTextWriter(fileName, Encoding.UTF8))
-        {
-            xmlTextWriter.Formatting = Formatting.Indented;
-            xmlTextWriter.Indentation = 2;
-            xmlTextWriter.IndentChar = ' ';
-            xmlTextWriter.WriteStartDocument();
-            Save(xmlTextWriter, sectionName);
-            xmlTextWriter.WriteEndDocument();
-            xmlTextWriter.Close();
-        }
+        using var xmlTextWriter = new XmlTextWriter(fileName, Encoding.UTF8);
+        xmlTextWriter.Formatting = Formatting.Indented;
+        xmlTextWriter.Indentation = 2;
+        xmlTextWriter.IndentChar = ' ';
+        xmlTextWriter.WriteStartDocument();
+        Save(xmlTextWriter, sectionName);
+        xmlTextWriter.WriteEndDocument();
+        xmlTextWriter.Close();
     }
 
     public void Save()

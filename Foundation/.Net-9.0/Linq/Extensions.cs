@@ -36,17 +36,15 @@ public static class Extensions
             {
                 var xmlSerializer = new XmlSerializer(source.GetType());
 
-                using (var stringWriter = new StringWriter())
+                using var stringWriter = new StringWriter();
+                var xmlTextWriter = new XmlTextWriter(stringWriter)
                 {
-                    var xmlTextWriter = new XmlTextWriter(stringWriter)
-                    {
-                        Formatting = Formatting.Indented,
-                        Indentation = 2,
-                        IndentChar = ' '
-                    };
-                    xmlSerializer.Serialize(xmlTextWriter, source);
-                    logXmlString = stringWriter.ToString();
-                }
+                    Formatting = Formatting.Indented,
+                    Indentation = 2,
+                    IndentChar = ' '
+                };
+                xmlSerializer.Serialize(xmlTextWriter, source);
+                logXmlString = stringWriter.ToString();
             }
             catch (Exception e)
             {
