@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Foundation.Assertions;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
@@ -12,8 +12,7 @@ internal sealed class DatabaseCollectionNode : ITreeNode
 {
     public DatabaseCollectionNode(ServerNode server)
     {
-        Assert.IsTrue(server != null);
-
+        ArgumentNullException.ThrowIfNull(server);
         Server = server;
     }
 

@@ -85,14 +85,14 @@ order by ic.index_column_id",
             fourPartName.Name.ToNullableNVarChar());
 
         var executor = DbCommandExecutorFactory.Create(connection);
-        GetTableSchemaResult getTableSchemaResult;
+        GetTableSchemaResult? getTableSchemaResult = null;
         executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
         {
             var columns = dataReader.ReadResult(128, ReadColumn).ToReadOnlyCollection();
             var uniqueIndexColumns = dataReader.ReadNextResult(128, ReadUniqueIndexColumn).ToReadOnlyCollection();
             getTableSchemaResult = new GetTableSchemaResult(columns, uniqueIndexColumns);
         });
-        return getTableSchemaResult;
+        return getTableSchemaResult!;
     }
 
     private static Column ReadColumn(IDataRecord dataRecord)
