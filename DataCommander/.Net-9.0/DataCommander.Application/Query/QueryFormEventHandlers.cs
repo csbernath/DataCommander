@@ -98,7 +98,7 @@ public sealed partial class QueryForm
 
         if (treeNode.Nodes.Count > 0)
         {
-            var treeNode2 = (ITreeNode)treeNode.Nodes[0].Tag;
+            var treeNode2 = (ITreeNode)treeNode.Nodes[0].Tag!;
 
             if (treeNode2 == null)
             {

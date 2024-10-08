@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,7 +45,7 @@ internal sealed class IndexNode(DatabaseNode databaseNode, int parentId, int id,
 
     public bool IsLeaf => true;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => null;
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => Task.FromResult(Enumerable.Empty<ITreeNode>());
 
     public bool Sortable => false;
 

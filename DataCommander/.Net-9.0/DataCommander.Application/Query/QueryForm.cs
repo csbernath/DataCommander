@@ -1399,7 +1399,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         var succeeded = false;
         Api.QueryConfiguration.Query query = null;
         ReadOnlyCollection<DbRequestParameter> parameters = null;
-        string resultCommandText = null;
+        string? resultCommandText = null;
 
         var configurationStart = commandText.IndexOf("/* Query Configuration");
         if (configurationStart >= 0)

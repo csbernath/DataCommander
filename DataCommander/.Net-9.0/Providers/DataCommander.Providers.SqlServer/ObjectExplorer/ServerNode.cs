@@ -39,7 +39,7 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
     }
 
     bool ITreeNode.Sortable => false;
-    string ITreeNode.Query => null;
+    string? ITreeNode.Query => null;
 
     public ContextMenu? GetContextMenu()
     {

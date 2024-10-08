@@ -12,7 +12,7 @@ internal sealed class ExtendedStoreProcedureCollectionNode(DatabaseNode database
     string? ITreeNode.Name => "Extended Stored Procedures";
     bool ITreeNode.IsLeaf => false;
     bool ITreeNode.Sortable => false;
-    string ITreeNode.Query => null;
+    string? ITreeNode.Query => null;
     public ContextMenu? GetContextMenu() => null;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)

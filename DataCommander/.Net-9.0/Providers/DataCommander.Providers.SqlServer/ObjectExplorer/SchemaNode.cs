@@ -17,7 +17,7 @@ internal sealed class SchemaNode(DatabaseNode database, string? name) : ITreeNod
         Task.FromResult<IEnumerable<ITreeNode>>([]);
 
     public bool Sortable => false;
-    public string Query => null;
+    public string? Query => null;
 
     public ContextMenu? GetContextMenu() => null;
 }
