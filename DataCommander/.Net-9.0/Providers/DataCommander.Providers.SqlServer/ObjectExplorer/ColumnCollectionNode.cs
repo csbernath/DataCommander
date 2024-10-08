@@ -36,7 +36,7 @@ internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
-        SortedDictionary<int, ColumnNode> columnNodes = null;
+        SortedDictionary<int, ColumnNode>? columnNodes = null;
         await Db.ExecuteReaderAsync(
             databaseNode.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),

@@ -95,7 +95,7 @@ Credits:
         }
         else
         {
-            string url = null;
+            string? url = null;
             var exists = false;
 
             if (e.Url.Scheme == "applicationdatafile")

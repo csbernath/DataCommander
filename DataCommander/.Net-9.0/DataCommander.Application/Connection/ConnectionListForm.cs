@@ -432,7 +432,7 @@ internal sealed class ConnectionListForm : Form
 
             foreach (DataGridViewRow dataGridViewRow in _dataGrid.SelectedRows)
             {
-                var dataRowView = (DataRowView)dataGridViewRow.DataBoundItem;
+                var dataRowView = (DataRowView)dataGridViewRow.DataBoundItem!;
                 var row = dataRowView.Row;
                 var index = _dataTable.Rows.IndexOf(row);
                 selectedCount++;

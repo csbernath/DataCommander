@@ -84,7 +84,7 @@ select
 	convert(decimal(15,2),(f.size-fileproperty(name, 'SpaceUsed')) * 8096.0 / 1000000000)	as [Free (GB)]
 from	[{0}].sys.database_files f", name);
         var queryForm = (IQueryForm)sender;
-        DataSet dataSet = null;
+        DataSet? dataSet = null;
         using (var connection = Databases.Server.CreateConnection())
         {
             var executor = connection.CreateCommandExecutor();
@@ -130,7 +130,7 @@ from	[{0}].sys.database_files f", name);
         textBuilder.Add($"ALTER DATABASE [{databaseName}] SET MULTI_USER WITH NO_WAIT");
 
         var text = textBuilder.ToLines().ToIndentedString("  ");
-        var queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm?)sender;
         queryForm.SetClipboardText(text);
     }
 

@@ -482,15 +482,14 @@ public sealed class SqlParser
                         }
                         catch
                         {
-                            string[] formats = new[]
-                            {
+                            string[] formats =
+                            [
                                 "yyyyMMdd",
                                 "yyyyMMdd HH:mm:ss"
-                            };
+                            ];
 
-                            IFormatProvider formatProvider = CultureInfo.InvariantCulture;
-                            value2 = DateTime.ParseExact(value.ToString(), formats, formatProvider,
-                                DateTimeStyles.None);
+                            var formatProvider = CultureInfo.InvariantCulture;
+                            value2 = DateTime.ParseExact(value.ToString(), formats, formatProvider, DateTimeStyles.None);
                         }
 
                         break;
@@ -630,7 +629,7 @@ public sealed class SqlParser
     private SqlObject? GetSqlObject(string? value)
     {
         SqlObject? sqlObject = null;
-        string?[] items = value.Split('.');
+        string[] items = value.Split('.');
         if (items.Length > 1)
         {
             var alias = items[0];

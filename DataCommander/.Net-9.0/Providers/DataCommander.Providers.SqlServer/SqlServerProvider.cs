@@ -387,7 +387,7 @@ internal sealed class SqlServerProvider : IProvider
         if (array == null)
         {
             var sqlObject = sqlStatement.FindSqlObject(previousToken, currentToken);
-            string commandText = null;
+            string? commandText = null;
 
             if (sqlObject != null)
             {
@@ -532,7 +532,7 @@ end", name.Database, ownersString, name.Name);
                                 if (tokenIndex < tokens.Count)
                                 {
                                     var token = tokens[tokenIndex];
-                                    var tokenValue = token.Value;
+                                    var tokenValue = token.Value!;
                                     var indexofAny = tokenValue.IndexOfAny(['\r', '\n']);
                                     if (indexofAny >= 0) tokenValue = tokenValue[..indexofAny];
 

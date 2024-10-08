@@ -54,7 +54,7 @@ internal sealed class JobNode : ITreeNode
             dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText), CancellationToken.None);
         }
 
-        var queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender!;
         queryForm.ShowDataSet(dataSet);
     }
 }

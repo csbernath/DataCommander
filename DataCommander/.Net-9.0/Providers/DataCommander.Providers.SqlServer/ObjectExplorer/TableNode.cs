@@ -382,7 +382,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
             selectStatement = GetSelectStatement(connection, name1);
         }
 
-        var queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm?)sender;
         queryForm.SetClipboardText(selectStatement);
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
@@ -522,7 +522,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
 
         stringBuilder.Append(stringTable.ToString(4));
 
-        var queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender!;
         queryForm.SetClipboardText(stringBuilder.ToString());            
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
@@ -582,7 +582,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
     {
         var script = CreateUpdateScript();
 
-        var queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender!;
         queryForm.SetClipboardText(script);
 
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
@@ -682,7 +682,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
         {
             connection.Open();
 
-            var databaseName = DatabaseNode.Name.Contains('.')
+            var databaseName = DatabaseNode.Name!.Contains('.')
                 ? $"[{DatabaseNode.Name}]"
                 : DatabaseNode.Name;
 
@@ -707,7 +707,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
 
         var classWithProperties = DataTransferObjectWithPropertiesFactory.Create(name, dataTransferObjectFields).ToIndentedString("    ");
 
-        var queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender!;
         queryForm.SetClipboardText(classWithProperties);
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
