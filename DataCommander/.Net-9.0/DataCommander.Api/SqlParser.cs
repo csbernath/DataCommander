@@ -106,12 +106,12 @@ public sealed class SqlParser
                             case ParameterDirection.Input:
                             case ParameterDirection.InputOutput:
                                 var dataParameter = provider.GetDataParameter(parameter);
-                                var first = parameters.FirstOrDefault(
+                                var first = parameters.Find(
                                     p => string.Compare(p.Name, parameter.ParameterName,
                                         StringComparison.InvariantCultureIgnoreCase) == 0);
                                 if (first == null)
                                 {
-                                    first = parameters.FirstOrDefault(p => p.Name == null);
+                                    first = parameters.Find(p => p.Name == null);
                                     if (first != null)
                                         parameters.Remove(first);
                                 }
@@ -298,7 +298,6 @@ public sealed class SqlParser
                         break;
 
                     case "where":
-                        //
                         if (currentToken != null)
                             sqlObject = GetSqlObject(currentToken.Value);
 
@@ -359,9 +358,8 @@ public sealed class SqlParser
         for (i = 0; i < Tokens.Count; i++)
         {
             var token = Tokens[i];
-            if (token.Type == TokenType.KeyWord)
-                if (string.Compare(token.Value, "from", true) == 0)
-                    break;
+            if (token.Type == TokenType.KeyWord && string.Compare(token.Value, "from", true) == 0)
+                break;
         }
 
         i++;
@@ -406,7 +404,7 @@ public sealed class SqlParser
         return index;
     }
 
-    public void FindToken(int position, out Token previousToken, out Token currentToken)
+    public void FindToken(int position, out Token? previousToken, out Token? currentToken)
     {
         previousToken = null;
         currentToken = null;
@@ -587,7 +585,7 @@ public sealed class SqlParser
 
     private static Dictionary<string, string?> FindTables(List<Token> tokens, out Table[] allTables)
     {
-        Dictionary<string, string?> tables = new Dictionary<string, string?>(StringComparer.InvariantCultureIgnoreCase);
+        var tables = new Dictionary<string, string?>(StringComparer.InvariantCultureIgnoreCase);
         List<Table> tableList = [];
 
         for (var i = 0; i < tokens.Count; i++)
