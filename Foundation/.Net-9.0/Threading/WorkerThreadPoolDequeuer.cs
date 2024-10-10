@@ -3,18 +3,11 @@ using System.Threading;
 
 namespace Foundation.Threading;
 
-/// <summary>
-/// 
-/// </summary>
 public class WorkerThreadPoolDequeuer
 {
-    private WorkerThreadPool _pool;
+    private WorkerThreadPool? _pool;
     private readonly WaitCallback _callback;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="callback"></param>
     public WorkerThreadPoolDequeuer(WaitCallback callback)
     {
         _callback = callback;
@@ -23,7 +16,7 @@ public class WorkerThreadPoolDequeuer
 
     private void Start()
     {
-        WaitHandle[] waitHandles = [Thread.StopRequest, _pool.EnqueueEvent];
+        WaitHandle[] waitHandles = [Thread.StopRequest, _pool!.EnqueueEvent];
 
         while (!Thread.IsStopRequested)
         {
@@ -36,9 +29,6 @@ public class WorkerThreadPoolDequeuer
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public WorkerThread Thread { get; }
 
     internal WorkerThreadPool Pool

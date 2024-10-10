@@ -10,8 +10,8 @@ namespace Foundation.Threading;
 /// </summary>
 public class AsyncQueue
 {
-    private string _name;
-    private IAsyncQueue _asyncQueue;
+    private string? _name;
+    private IAsyncQueue? _asyncQueue;
     private readonly Queue _queue = new();
     private readonly AutoResetEvent _queueEvent = new(false);
 
@@ -31,7 +31,7 @@ public class AsyncQueue
                 Name = $"Consumer({queue._name},{id})",
                 Priority = priority
             };
-            _consumer = _queue._asyncQueue.CreateConsumer(Thread, id);
+            _consumer = _queue._asyncQueue!.CreateConsumer(Thread, id);
         }
 
         private void ThreadStart()
@@ -56,9 +56,6 @@ public class AsyncQueue
         public WorkerThread Thread { get; }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     protected AsyncQueue()
     {
     }
@@ -118,9 +115,9 @@ public class AsyncQueue
         _queueEvent.Set();
     }
 
-    private object Dequeue()
+    private object? Dequeue()
     {
-        object item = null;
+        object? item = null;
 
         if (_queue.Count > 0)
         {
@@ -141,7 +138,7 @@ public class AsyncQueue
         ArgumentNullException.ThrowIfNull(consumerThread);
 
         var args = new AsyncQueueConsumeEventArgs(item);
-        var eventHandler = _asyncQueue.BeforeConsume;
+        var eventHandler = _asyncQueue!.BeforeConsume;
 
         if (eventHandler != null)
             eventHandler(this, args);

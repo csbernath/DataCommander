@@ -2,8 +2,8 @@
 
 namespace Foundation.Threading.Tasks;
 
-public sealed class CreateTaskResponse<TResult>
+public sealed class CreateTaskResponse<TResult>(Task<TResult> task, TaskInfo taskInfo)
 {
-    public Task<TResult> Task;
-    public TaskInfo TaskInfo;
+    public readonly Task<TResult> Task = task;
+    public readonly TaskInfo TaskInfo = taskInfo;
 }

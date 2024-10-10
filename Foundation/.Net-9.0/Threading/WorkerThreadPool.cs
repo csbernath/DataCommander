@@ -43,7 +43,7 @@ public class WorkerThreadPool
     internal bool Dequeue(WaitCallback callback, WaitHandle[] waitHandles)
     {
         bool dequeued;
-        object item = null;
+        object? item = null;
 
         if (_queue.Count > 0)
         {

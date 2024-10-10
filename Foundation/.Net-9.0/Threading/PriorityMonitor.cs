@@ -26,7 +26,7 @@ public sealed class PriorityMonitor<T>
 
     public T MonitoredObject { get; }
 
-    public LockRequest CurrentLockRequest { get; private set; }
+    public LockRequest? CurrentLockRequest { get; private set; }
 
     public LockRequest Enter(int priority)
     {
@@ -53,9 +53,9 @@ public sealed class PriorityMonitor<T>
         return lockRequest;
     }
 
-    public LockRequest TryEnter(int priority)
+    public LockRequest? TryEnter(int priority)
     {
-        LockRequest lockRequest;
+        LockRequest? lockRequest;
 
         lock (_lockRequests)
         {
@@ -100,7 +100,7 @@ public sealed class PriorityMonitor<T>
 
     public sealed class LockRequest : IDisposable
     {
-        private EventWaitHandle _asyncWaitHandle;
+        private EventWaitHandle? _asyncWaitHandle;
 
         internal LockRequest(PriorityMonitor<T> monitor, int priority)
         {
@@ -110,17 +110,17 @@ public sealed class PriorityMonitor<T>
             Priority = priority;
         }
 
-        public PriorityMonitor<T> Monitor { get; private set; }
+        public PriorityMonitor<T>? Monitor { get; private set; }
 
         public int Priority { get; }
 
-        public WaitHandle AsyncWaitHandle => _asyncWaitHandle;
+        public WaitHandle? AsyncWaitHandle => _asyncWaitHandle;
 
         public bool IsCompleted { get; private set; }
 
         internal void Initialize(bool isCompleted)
         {
-            Log.Trace("Initializing lockRequest... monitoredObject: {0}, priority: {1}, isCompleted: {2}", Monitor.MonitoredObject, Priority,
+            Log.Trace("Initializing lockRequest... monitoredObject: {0}, priority: {1}, isCompleted: {2}", Monitor!.MonitoredObject, Priority,
                 isCompleted);
 
             if (isCompleted)
@@ -131,7 +131,7 @@ public sealed class PriorityMonitor<T>
 
         internal void Complete()
         {
-            Log.Trace("Completing lockRequest... monitoredObject: {0}, priority:{1}, asyncWaitHandle != null: {2}", Monitor.MonitoredObject,
+            Log.Trace("Completing lockRequest... monitoredObject: {0}, priority:{1}, asyncWaitHandle != null: {2}", Monitor!.MonitoredObject,
                 Priority, _asyncWaitHandle != null);
 
             IsCompleted = true;

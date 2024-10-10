@@ -130,7 +130,7 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
             {
                 foreach (var thread in threads)
                 {
-                    thread.Stopped += Thread_Stopped;
+                    thread.Stopped += Thread_Stopped!;
                     thread.Stop();
                 }
             }

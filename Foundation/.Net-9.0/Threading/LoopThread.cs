@@ -24,7 +24,7 @@ namespace Foundation.Threading;
 public class LoopThread
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-    private ILoopable _loopable;
+    private ILoopable? _loopable;
 
     /// <summary>
     /// Inherited class must call this constructor.
@@ -45,7 +45,7 @@ public class LoopThread
     /// <summary>
     /// Gets the underlying <see cref="WorkerThread"/>.
     /// </summary>
-    public WorkerThread Thread { get; private set; }
+    public WorkerThread? Thread { get; private set; }
 
     /// <summary>
     /// Inherited class must initialize the base class with this method.
@@ -59,15 +59,15 @@ public class LoopThread
 
     private void Start()
     {
-        Exception exception = null;
+        Exception? exception = null;
 
-        while (!Thread.IsStopRequested)
+        while (!Thread!.IsStopRequested)
         {
             try
             {
                 if (!Thread.IsStopRequested)
                 {
-                    _loopable.First(exception);
+                    _loopable!.First(exception);
                     exception = null;
 
                     while (!Thread.IsStopRequested)
@@ -86,7 +86,7 @@ public class LoopThread
 
         try
         {
-            _loopable.Last();
+            _loopable!.Last();
         }
         catch (Exception e)
         {

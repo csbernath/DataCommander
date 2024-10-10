@@ -90,7 +90,7 @@ public static class ThreadMonitor
                     Threads.Remove(thread.ManagedThreadId);
     }
 
-    private static string ToString(DateTime dateTime)
+    private static string? ToString(DateTime dateTime)
     {
         var s = dateTime == DateTime.MinValue
             ? null
@@ -98,9 +98,9 @@ public static class ThreadMonitor
         return s;
     }
 
-    private static string GetPriority(Thread thread)
+    private static string? GetPriority(Thread thread)
     {
-        string priority = null;
+        string? priority = null;
         if (thread.IsAlive)
         {
             try
@@ -115,9 +115,9 @@ public static class ThreadMonitor
         return priority;
     }
 
-    private static string IsBackground(Thread thread)
+    private static string? IsBackground(Thread thread)
     {
-        string isBackground = null;
+        string? isBackground = null;
         if (thread.IsAlive)
         {
             try

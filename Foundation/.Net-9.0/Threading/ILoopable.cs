@@ -10,7 +10,7 @@ public interface ILoopable
     /// <summary>
     /// This method is called before starting the loop.
     /// </summary>
-    void First(Exception exception);
+    void First(Exception? exception);
 
     /// <summary>thread.IsRunning
     /// This method is called in a loop.

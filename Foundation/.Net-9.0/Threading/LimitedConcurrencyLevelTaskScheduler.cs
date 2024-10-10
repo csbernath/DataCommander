@@ -77,7 +77,7 @@ public class LimitedConcurrencyLevelTaskScheduler : TaskScheduler
                                                                          }
 
                                                                          // Get the next item from the queue
-                                                                         item = _tasks.First.Value;
+                                                                         item = _tasks.First!.Value;
                                                                          _tasks.RemoveFirst();
                                                                      }
 

@@ -41,18 +41,16 @@ public sealed class TaskInfo
 
     public bool IsAlive => _taskWeakReference.IsAlive;
 
-    public Task Task
+    public Task? Task
     {
         get
         {
-            Task task = null;
+            Task? task = null;
 
             try
             {
                 if (_taskWeakReference.IsAlive)
-                {
-                    task = (Task)_taskWeakReference.Target;
-                }
+                    task = (Task?)_taskWeakReference.Target;
             }
             catch
             {

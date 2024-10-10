@@ -14,13 +14,13 @@ public sealed class WorkerThreadPoolManager(
 
     private readonly IWaitCallbackFactory _waitCallbackFactory = waitCallbackFactory;
 
-    private Timer _timer;
+    private Timer? _timer;
 
     public void Start() => _timer = new Timer(ManagePoolDequeuers, null, 10000, 10000);
 
-    public void Stop() => _timer.Dispose();
+    public void Stop() => _timer!.Dispose();
 
-    private void ManagePoolDequeuers(object state)
+    private void ManagePoolDequeuers(object? state)
     {
         if (_pool.QueuedItemCount > 0)
         {

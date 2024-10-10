@@ -19,7 +19,7 @@ public sealed class FileSystemMonitor : LoopThread, ILoopable
     private readonly string _path;
     private readonly string _searchPattern;
     private readonly int _period;
-    private string[] _last;
+    private string[]? _last;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FileSystemMonitor"/> class.
@@ -46,15 +46,15 @@ public sealed class FileSystemMonitor : LoopThread, ILoopable
 
         Initialize(this);
         var name = string.Format(CultureInfo.InvariantCulture, "FileSystemMonitor({0},{1})", path, searchPattern);
-        Thread.Name = name;
+        Thread!.Name = name;
     }
 
     /// <summary>
     /// Occurs when a file or directory in the specified path is created.
     /// </summary>
-    public FileSystemEventHandler Created { get; set; }
+    public FileSystemEventHandler? Created { get; set; }
 
-    void ILoopable.First(Exception exception)
+    void ILoopable.First(Exception? exception)
     {
     }
 
@@ -75,7 +75,7 @@ public sealed class FileSystemMonitor : LoopThread, ILoopable
                     if (index < 0 && Created != null)
                     {
                         var message = string.Format(CultureInfo.InvariantCulture,
-                            "FileSystemMonitor({0}).Created: {1}", Thread.ManagedThreadId, file);
+                            "FileSystemMonitor({0}).Created: {1}", Thread!.ManagedThreadId, file);
                         Log.Trace(message);
 
                         var fileName = Path.GetFileName(file);
@@ -92,7 +92,7 @@ public sealed class FileSystemMonitor : LoopThread, ILoopable
 
                     if (index < 0)
                     {
-                        Log.Trace("{0}.Deleted: {1}", Thread.Name, file);
+                        Log.Trace("{0}.Deleted: {1}", Thread!.Name, file);
                     }
                 }
             }
@@ -111,7 +111,7 @@ public sealed class FileSystemMonitor : LoopThread, ILoopable
             Log.Write(LogLevel.Error, e.ToString());
         }
 
-        Thread.WaitForStop(_period);
+        Thread!.WaitForStop(_period);
     }
 
     void ILoopable.Last()

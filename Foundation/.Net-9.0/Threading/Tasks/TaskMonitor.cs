@@ -51,11 +51,7 @@ public static class TaskMonitor
             Tasks.Add(taskInfo);
         }
 
-        return new CreateTaskResponse
-        {
-            Task = task,
-            TaskInfo = taskInfo
-        };
+        return new CreateTaskResponse(task, taskInfo);
     }
 
     public static CreateTaskResponse<TResult> CreateTask<TResult>(
@@ -80,11 +76,7 @@ public static class TaskMonitor
             Tasks.Add(taskInfo);
         }
 
-        return new CreateTaskResponse<TResult>
-        {
-            Task = task,
-            TaskInfo = taskInfo
-        };
+        return new CreateTaskResponse<TResult>(task, taskInfo);
     }
 
     public static string ToStringTableString()
@@ -111,10 +103,10 @@ public static class TaskMonitor
         return count;
     }
 
-    private static void ExecuteAction(object state)
+    private static void ExecuteAction(object? state)
     {
-        var monitoredTaskState = (MonitoredTaskActionState)state;
-        var taskInfo = monitoredTaskState.TaskInfo;
+        var monitoredTaskState = (MonitoredTaskActionState)state!;
+        var taskInfo = monitoredTaskState.TaskInfo!;
         taskInfo.StartTime = LocalTime.Default.Now;
         var thread = Thread.CurrentThread;
         taskInfo.ManagedThreadId = thread.ManagedThreadId;
@@ -122,7 +114,7 @@ public static class TaskMonitor
 
         try
         {
-            monitoredTaskState.Action(monitoredTaskState.State);
+            monitoredTaskState.Action!(monitoredTaskState.State!);
         }
         finally
         {
@@ -131,10 +123,10 @@ public static class TaskMonitor
         }
     }
 
-    private static TResult ExecuteFunction<TResult>(object state)
+    private static TResult ExecuteFunction<TResult>(object? state)
     {
-        var monitoredTaskState = (MonitoredTaskFunctionState<TResult>)state;
-        var taskInfo = monitoredTaskState.TaskInfo;
+        var monitoredTaskState = (MonitoredTaskFunctionState<TResult>)state!;
+        var taskInfo = monitoredTaskState.TaskInfo!;
         taskInfo.StartTime = LocalTime.Default.Now;
         var thread = Thread.CurrentThread;
         taskInfo.ManagedThreadId = thread.ManagedThreadId;
@@ -144,7 +136,7 @@ public static class TaskMonitor
 
         try
         {
-            result = monitoredTaskState.Function(monitoredTaskState.State);
+            result = monitoredTaskState.Function!(monitoredTaskState.State!);
         }
         finally
         {
@@ -157,19 +149,11 @@ public static class TaskMonitor
 
     private static string ToString(DateTime dateTime) => dateTime.ToString("HH:mm:ss.fff");
 
-    private static string ToString(DateTime? dateTime)
+    private static string? ToString(DateTime? dateTime)
     {
-        string s;
-
-        if (dateTime != null)
-        {
-            s = ToString(dateTime.Value);
-        }
-        else
-        {
-            s = null;
-        }
-
+        var s = dateTime != null
+            ? ToString(dateTime.Value)
+            : null;
         return s;
     }
 }

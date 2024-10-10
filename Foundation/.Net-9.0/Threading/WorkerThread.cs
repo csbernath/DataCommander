@@ -12,13 +12,13 @@ public class WorkerThread
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private readonly Thread _thread;
-    private ThreadStart _start;
+    private ThreadStart? _start;
     private readonly WorkerEvent _stopRequest = new(WorkerEventState.NonSignaled);
     private bool _isStopAccepted;
     private readonly WorkerEvent _pauseRequest = new(WorkerEventState.NonSignaled);
     private readonly WorkerEvent _continueRequest = new(WorkerEventState.NonSignaled);
-    private EventHandler _started;
-    private EventHandler _stopped;
+    private EventHandler? _started;
+    private EventHandler? _stopped;
 
     public WorkerThread(ThreadStart start)
     {
@@ -71,7 +71,7 @@ public class WorkerThread
     public WaitHandle StopRequest => _stopRequest;
     public int ManagedThreadId => Thread.ManagedThreadId;
 
-    public string Name
+    public string? Name
     {
         get => Thread.Name;
         set => Thread.Name = value;
@@ -164,11 +164,11 @@ public class WorkerThread
         Thread.CurrentUICulture = CultureInfo.InvariantCulture;
 
         if (_started != null)
-            _started(this, null);
+            _started(this, EventArgs.Empty);
 
         try
         {
-            _start();
+            _start!();
         }
         catch (Exception e)
         {
@@ -186,7 +186,7 @@ public class WorkerThread
         Log.Trace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) stopped in {elapsed} seconds.");
 
         if (_stopped != null)
-            _stopped(this, null);
+            _stopped(this, EventArgs.Empty);
 
         _start = null;
     }

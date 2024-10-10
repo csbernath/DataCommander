@@ -2,6 +2,6 @@
 
 internal class MonitoredTaskState
 {
-    public object State = null;
-    public TaskInfo TaskInfo = null;
+    public object? State = null;
+    public TaskInfo? TaskInfo = null;
 }

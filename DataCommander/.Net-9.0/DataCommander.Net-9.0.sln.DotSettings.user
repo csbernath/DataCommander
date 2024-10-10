@@ -10,6 +10,7 @@
   &lt;Assembly Path="C:\Users\Csabi\.nuget\packages\microsoft.data.sqlclient\5.1.1\ref\net6.0\Microsoft.Data.SqlClient.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Users\csaba\.nuget\packages\microsoft.data.sqlclient\5.1.2\ref\net6.0\Microsoft.Data.SqlClient.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\8.0.1\System.Windows.Forms.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Program Files\dotnet\shared\Microsoft.NETCore.App\9.0.0-rc.2.24473.5\System.Private.CoreLib.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:Boolean x:Key="/Default/Environment/InlayHints/GeneralInlayHintsOptions/EnableInlayHints/@EntryValue">False</s:Boolean>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=afd5894f_002Db21e_002D43eb_002D8785_002Daf8d82b23721/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Test1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
