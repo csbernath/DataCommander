@@ -6,7 +6,7 @@ namespace Foundation.Diagnostics;
 
 public class DebugWriter : TextWriter
 {
-    private static DebugWriter _instance;
+    private static DebugWriter? _instance;
 
     public static DebugWriter Instance
     {
@@ -19,7 +19,7 @@ public class DebugWriter : TextWriter
         }
     }
 
-    public override Encoding Encoding => null;
+    public override Encoding Encoding => Encoding.Default;
 
     public override void Write(char[] buffer, int index, int count)
     {

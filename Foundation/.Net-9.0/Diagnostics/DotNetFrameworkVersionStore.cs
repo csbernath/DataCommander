@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Foundation.Collections.ReadOnly;
 
 namespace Foundation.Diagnostics;
@@ -32,5 +33,5 @@ public static class DotNetFrameworkVersionStore
         Items = new ReadOnlySortedList<int, string>(items, Comparer<int>.Default.Compare);
     }
 
-    public static bool TryGet(int release, out string version) => Items.TryGetValue(release, out version);
+    public static bool TryGet(int release, [MaybeNullWhen(false)] out string version) => Items.TryGetValue(release, out version);
 }

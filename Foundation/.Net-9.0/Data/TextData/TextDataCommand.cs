@@ -34,14 +34,14 @@ public sealed class TextDataCommand : DbCommand
     /// 
     /// </summary>
     /// <returns></returns>
-    public new TextDataReader ExecuteReader() => new TextDataReader(this, CommandBehavior.Default);
+    public new TextDataReader ExecuteReader() => new(this, CommandBehavior.Default);
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="behavior"></param>
     /// <returns></returns>
-    public new TextDataReader ExecuteReader(CommandBehavior behavior) => new TextDataReader(this, behavior);
+    public new TextDataReader ExecuteReader(CommandBehavior behavior) => new(this, behavior);
 
     /// <summary>
     /// 

@@ -11,8 +11,8 @@ internal static class StackFrameExtensions
         ArgumentNullException.ThrowIfNull(frame);
 
         var stringBuilder = new StringBuilder();
-        var method = frame.GetMethod();
-        var type = method.DeclaringType;
+        var method = frame.GetMethod()!;
+        var type = method.DeclaringType!;
         var typeName = type.FullName;
         var name = method.Name;
         stringBuilder.AppendFormat("   at {0}.{1}(", typeName, name);

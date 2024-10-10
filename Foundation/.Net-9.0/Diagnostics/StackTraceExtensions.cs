@@ -14,7 +14,7 @@ public static class StackTraceExtensions
         var count = trace.FrameCount;
         for (var i = 0; i < count; ++i)
         {
-            var frame = trace.GetFrame(i);
+            var frame = trace.GetFrame(i)!;
             stringBuilder.AppendLine(frame.ToLogString());
         }
 

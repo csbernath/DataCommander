@@ -2,11 +2,11 @@
 
 namespace Foundation.Diagnostics;
 
-internal sealed class MonitoredObject(long id, string name, string typeName, int size, DateTime time, long timestamp, WeakReference weakReference)
+internal sealed class MonitoredObject(long id, string name, string? typeName, int size, DateTime time, long timestamp, WeakReference weakReference)
 {
     public readonly long Id = id;
     public readonly string Name = name;
-    public readonly string TypeName = typeName;
+    public readonly string? TypeName = typeName;
     public readonly int Size = size;
     public readonly DateTime Time = time;
     public readonly long Timestamp = timestamp;

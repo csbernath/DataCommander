@@ -40,7 +40,7 @@ public static class DbDataReaderExtensions
         return table;
     }
 
-    private static ColumnSchema ToColumn(DbColumn dbColumn) => new ColumnSchema(
+    private static ColumnSchema ToColumn(DbColumn dbColumn) => new(
             dbColumn.ColumnName,
             dbColumn.DataType,
             dbColumn.DataTypeName,

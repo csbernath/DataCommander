@@ -75,7 +75,7 @@ public sealed class GarbageMonitor(string garbageMonitorName)
         Add(name, typeName, size, target);
     }
 
-    public void Add(string name, string typeName, int size, object target)
+    public void Add(string name, string? typeName, int size, object target)
     {
         ArgumentNullException.ThrowIfNull(target);
 

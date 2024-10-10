@@ -8,8 +8,8 @@ namespace Foundation.Collections;
 
 public static class IEnumerableExtensions
 {
-    public static SortedArray<TKey, TValue> AsSortedArray<TKey, TValue>(this TValue[] values, Func<TValue, TKey> keySelector)
-        where TKey : IComparable<TKey> => new SortedArray<TKey, TValue>(values, keySelector, (i, j) => i.CompareTo(j));
+    public static SortedArray<TKey, TValue> AsSortedArray<TKey, TValue>(this TValue[] values, Func<TValue, TKey> keySelector) where TKey : IComparable<TKey> =>
+        new(values, keySelector, (i, j) => i.CompareTo(j));
 
     [Pure]
     public static IEnumerable<PreviousAndCurrent<TSource>> SelectPreviousAndCurrent<TSource>(this IEnumerable<TSource> source)

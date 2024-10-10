@@ -273,7 +273,7 @@ internal sealed class LogResultWriter : IResultWriter
         return new DbQueryResult(name, fieldName, sql.Fields);
     }
 
-    private static DbQueryResultField ToField(FoundationDbColumn column) => new DbQueryResultField(column.ColumnName, column.DataType, column.AllowDbNull == true);
+    private static DbQueryResultField ToField(FoundationDbColumn column) => new(column.ColumnName, column.DataType, column.AllowDbNull == true);
 
     private class Result(ReadOnlyCollection<DbQueryResultField> fields)
     {

@@ -18,8 +18,8 @@ public static class AppDomainMonitor
     private static readonly StringTableColumnInfo<AssemblyInfo>[] Columns =
     [
         new("Name", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Name),
-        StringTableColumnInfo.Create<AssemblyInfo, Version>("FileVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.FileVersion),
-        StringTableColumnInfo.Create<AssemblyInfo, Version>("Version", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Version),
+        StringTableColumnInfo.Create<AssemblyInfo, Version?>("FileVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.FileVersion),
+        StringTableColumnInfo.Create<AssemblyInfo, Version?>("Version", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Version),
         new("Date", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Date?.ToString("yyyy-MM-dd HH:mm:ss")),
         new("PublicKeyToken", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.PublicKeyToken),
         new("ImageRuntimeVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.ImageRuntimeVersion),
@@ -116,8 +116,8 @@ TempPath:               {Path.GetTempPath()}";
     private static AssemblyInfo GetAssemblyInfo(Assembly assembly)
     {
         var isDynamic = assembly.IsDynamic;
-        string location = null;
-        Version fileVersion = null;
+        string? location = null;
+        Version? fileVersion = null;
         DateTime? date = null;
 
         if (!isDynamic)
@@ -134,9 +134,9 @@ TempPath:               {Path.GetTempPath()}";
         return new AssemblyInfo(name.Name, fileVersion, name.Version, date, publicKeyTokenString, assembly.ImageRuntimeVersion, location, isDynamic);
     }
 
-    private static Version GetFileVersion(string fileName)
+    private static Version? GetFileVersion(string fileName)
     {
-        Version fileVersion = null;
+        Version? fileVersion = null;
 
         try
         {
@@ -157,22 +157,22 @@ TempPath:               {Path.GetTempPath()}";
     }
 
     private sealed class AssemblyInfo(
-        string name,
-        Version fileVersion,
-        Version version,
+        string? name,
+        Version? fileVersion,
+        Version? version,
         DateTime? date,
-        string publicKeyToken,
+        string? publicKeyToken,
         string imageRuntimeVersion,
-        string location,
+        string? location,
         bool isDynamic)
     {
-        public readonly string Name = name;
-        public readonly Version FileVersion = fileVersion;
-        public readonly Version Version = version;
+        public readonly string? Name = name;
+        public readonly Version? FileVersion = fileVersion;
+        public readonly Version? Version = version;
         public readonly DateTime? Date = date;
-        public readonly string PublicKeyToken = publicKeyToken;
+        public readonly string? PublicKeyToken = publicKeyToken;
         public readonly string ImageRuntimeVersion = imageRuntimeVersion;
-        public readonly string Location = location;
+        public readonly string? Location = location;
         public readonly bool IsDynamic = isDynamic;
     }
 }
