@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using Foundation.Assertions;
 using Foundation.Configuration;
@@ -26,8 +27,8 @@ public static class FormPosition
 
     public static void Load(ApplicationData applicationData, Form form)
     {
-        Assert.IsTrue(applicationData != null);
-        Assert.IsTrue(form != null);
+        ArgumentNullException.ThrowIfNull(applicationData);
+        ArgumentNullException.ThrowIfNull(form);
 
         var type = form.GetType();
         var nodeName = ConfigurationNodeName.FromType(type);

@@ -5,15 +5,15 @@ namespace Foundation.Windows.Forms;
 
 public sealed class CursorManager : IDisposable
 {
-    private readonly Cursor originalCursor;
+    private readonly Cursor? _originalCursor;
 
     public CursorManager(Cursor cursor)
     {
         ArgumentNullException.ThrowIfNull(cursor);
 
-        originalCursor = Cursor.Current;
+        _originalCursor = Cursor.Current;
         Cursor.Current = cursor;
     }
 
-    void IDisposable.Dispose() => Cursor.Current = originalCursor;
+    void IDisposable.Dispose() => Cursor.Current = _originalCursor;
 }
