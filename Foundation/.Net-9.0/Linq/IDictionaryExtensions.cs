@@ -35,7 +35,7 @@ public static class IDictionaryExtensions
         return value;
     }
 
-    public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
+    public static TValue? GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
     {
         ArgumentNullException.ThrowIfNull(dictionary);
 

@@ -13,7 +13,7 @@ public static class Extensions
         var target = source as TTarget;
         var selected = target != null;
         if (selected)
-            action(target);
+            action(target!);
 
         return selected;
     }
@@ -27,9 +27,9 @@ public static class Extensions
     public static T[] ItemToArray<T>(this T item) => [item];
     public static IEnumerable<T> ItemAsEnumerable<T>(this T item) => item.ItemToArray();
 
-    public static string ToLogXmlString(this object source)
+    public static string? ToLogXmlString(this object source)
     {
-        string logXmlString;
+        string? logXmlString;
         if (source != null)
         {
             try

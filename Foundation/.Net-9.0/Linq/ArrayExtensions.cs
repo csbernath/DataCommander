@@ -6,9 +6,9 @@ namespace Foundation.Linq;
 
 public static class ArrayExtensions
 {
-    public static T[] Concat<T>(this IEnumerable<T[]> arrays)
+    public static T[]? Concat<T>(this IEnumerable<T[]> arrays)
     {
-        T[] result;
+        T[]? result;
 
         if (arrays != null)
         {
@@ -30,7 +30,7 @@ public static class ArrayExtensions
         return result;
     }
 
-    public static T[] Concat<T>(params T[][] arrays)
+    public static T[]? Concat<T>(params T[][] arrays)
     {
         IEnumerable<T[]> enumerable = arrays;
         return enumerable.Concat();

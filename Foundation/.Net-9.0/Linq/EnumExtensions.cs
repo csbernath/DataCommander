@@ -48,7 +48,7 @@ public static class EnumExtensions
         return (T) Enum.ToObject(type, containerUInt64);
     }
 
-    public static IEnumerable<Tuple<string, T>> GetPublicStaticFields<T>(Type type)
+    public static IEnumerable<Tuple<string, T?>> GetPublicStaticFields<T>(Type type)
     {
         var typeCode = Type.GetTypeCode(typeof(T));
         var fields = type.GetFields(BindingFlags.Public | BindingFlags.Static);
@@ -61,7 +61,7 @@ public static class EnumExtensions
 
             if (fieldTypeCode == typeCode)
             {
-                var value = (T) field.GetValue(type);
+                var value = (T?)field.GetValue(type);
                 yield return Tuple.Create(name, value);
             }
         }

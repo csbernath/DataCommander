@@ -28,6 +28,7 @@ public static class IEnumerableExtensionsTo
 
     [Pure]
     public static ReadOnlyDictionary<TKey, TSource> ToReadOnlyDictionary<TKey, TSource>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        where TKey : notnull
     {
         var dictionary = source.ToDictionary(keySelector);
         return new ReadOnlyDictionary<TKey, TSource>(dictionary);
@@ -35,7 +36,7 @@ public static class IEnumerableExtensionsTo
 
     [Pure]
     public static ReadOnlyDictionary<TKey, TElement> ToReadOnlyDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source,
-        Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
+        Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector) where TKey : notnull
     {
         var dictionary = source.ToDictionary(keySelector, elementSelector);
         return new ReadOnlyDictionary<TKey, TElement>(dictionary);
@@ -43,6 +44,7 @@ public static class IEnumerableExtensionsTo
 
     [Pure]
     public static SortedDictionary<TKey, TValue> ToSortedDictionary<TKey, TValue>(this IEnumerable<TValue> source, Func<TValue, TKey> keySelector)
+        where TKey : notnull
     {
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(keySelector);
@@ -56,7 +58,7 @@ public static class IEnumerableExtensionsTo
 
     [Pure]
     public static SortedDictionary<TKey, TElement> ToSortedDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source,
-        Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
+        Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector) where TKey : notnull
     {
         SortedDictionary<TKey, TElement> dictionary = [];
         foreach (var sourceItem in source)
@@ -70,7 +72,7 @@ public static class IEnumerableExtensionsTo
     }
 
     [Pure]
-    public static SortedList<TKey, TValue> ToSortedList<TKey, TValue>(this IEnumerable<TValue> source, Func<TValue, TKey> keySelector)
+    public static SortedList<TKey, TValue> ToSortedList<TKey, TValue>(this IEnumerable<TValue> source, Func<TValue, TKey> keySelector) where TKey : notnull
     {
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(keySelector);

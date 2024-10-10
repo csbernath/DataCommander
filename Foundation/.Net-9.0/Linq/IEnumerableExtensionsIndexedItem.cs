@@ -7,7 +7,7 @@ namespace Foundation.Linq;
 public static class IEnumerableExtensionsIndexedItem
 {
     [Pure]
-    public static IndexedItem<TSource> FirstIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+    public static IndexedItem<TSource?> FirstIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
     {
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(predicate);
@@ -29,7 +29,7 @@ public static class IEnumerableExtensionsIndexedItem
     }
 
     [Pure]
-    public static IndexedItem<TSource> ExtremumIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, TSource, bool> firstArgumentIsExtremum)
+    public static IndexedItem<TSource?> ExtremumIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, TSource?, bool> firstArgumentIsExtremum)
     {
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(firstArgumentIsExtremum);
@@ -52,7 +52,7 @@ public static class IEnumerableExtensionsIndexedItem
         return IndexedItemFactory.Create(extremumIndex, extremumItem);
     }
 
-    public static IndexedItem<TSource> MinIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, int> selector)
+    public static IndexedItem<TSource?> MinIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, int> selector)
     {
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(selector);

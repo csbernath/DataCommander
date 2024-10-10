@@ -16,7 +16,7 @@ public static class ProducerConsumerCollectionExtensions
             var succeeded = collection.TryTake(out var item);
             if (succeeded)
             {
-                target[i] = item;
+                target[i] = item!;
                 i++;
             }
             else

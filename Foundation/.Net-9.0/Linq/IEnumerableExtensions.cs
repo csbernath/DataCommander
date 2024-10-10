@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
@@ -87,7 +88,7 @@ public static partial class IEnumerableExtensions
     }
 
     [Pure]
-    public static LinerSearchResult<TSource, TResult> LinearSearch<TSource, TResult>(
+    public static LinerSearchResult<TSource?, TResult?> LinearSearch<TSource, TResult>(
         this IEnumerable<TSource> source,
         Func<TSource, TResult> selector,
         Func<TResult, bool> breaker,
@@ -112,7 +113,7 @@ public static partial class IEnumerableExtensions
                 if (breaker(currentResult))
                     break;
 
-                var comparisonResult = comparer(currentResult, selectedResult);
+                var comparisonResult = comparer(currentResult, selectedResult!);
                 if (comparisonResult)
                 {
                     selectedIndex = currentIndex;
@@ -124,15 +125,15 @@ public static partial class IEnumerableExtensions
             ++currentIndex;
         }
 
-        return new LinerSearchResult<TSource, TResult>(selectedIndex, selectedSource, selectedResult);
+        return new LinerSearchResult<TSource?, TResult?>(selectedIndex, selectedSource, selectedResult);
     }
 
     [Pure]
-    public static string ToString<T>(this IEnumerable<T> source, string separator, Func<T, string> toString)
+    public static string? ToString<T>(this IEnumerable<T>? source, string separator, Func<T, string> toString)
     {
         ArgumentNullException.ThrowIfNull(toString);
 
-        string result;
+        string? result;
         if (source != null)
         {
             var stringBuilder = new StringBuilder();
@@ -156,7 +157,7 @@ public static partial class IEnumerableExtensions
     [Pure]
     public static bool IsNullOrEmpty<TSource>(this IEnumerable<TSource> source) => source == null || !source.Any();
 
-    public static TSource MinOrDefault<TSource>(this IEnumerable<TSource> source) where TSource : IComparable<TSource>
+    public static TSource? MinOrDefault<TSource>(this IEnumerable<TSource> source) where TSource : IComparable<TSource>
     {
         var minItem = default(TSource);
         var first = true;
@@ -205,7 +206,7 @@ public static partial class IEnumerableExtensions
     }
 
     [Pure]
-    public static IEnumerable<IndexedItem<T>> SelectIndexed<T>(this IEnumerable<T> source) => source.Select((item, i) => IndexedItemFactory.Create(i, item));
+    public static IEnumerable<IndexedItem<T?>> SelectIndexed<T>(this IEnumerable<T> source) => source.Select((item, i) => IndexedItemFactory.Create(i, item));
 
     [Pure]
     public static IEnumerable<TSource[]> Split<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> isSeparator)
@@ -240,7 +241,7 @@ public static partial class IEnumerableExtensions
     }
 
     [Pure]
-    public static bool TryGetFirst<T>(this IEnumerable<T> source, Func<T, bool> predicate, out T first)
+    public static bool TryGetFirst<T>(this IEnumerable<T> source, Func<T, bool> predicate, [MaybeNullWhen(false)] out T first)
     {
         var succeeded = false;
         first = default;

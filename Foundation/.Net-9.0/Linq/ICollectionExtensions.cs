@@ -24,9 +24,9 @@ public static class ICollectionExtensions
         return new ReadOnlyCollection<T>(collection.ToList());
     }
 
-    public static ICollection<TResult> Cast<TResult>(this ICollection source)
+    public static ICollection<TResult>? Cast<TResult>(this ICollection? source)
     {
-        ICollection<TResult> collection = source != null ? new CastedCollection<TResult>(source) : null;
+        var collection = source != null ? new CastedCollection<TResult>(source) : null;
         return collection;
     }
 
@@ -44,7 +44,7 @@ public static class ICollectionExtensions
 
     public static bool IsNullOrAny<T>(this ICollection<T> source) => source != null && source.Count > 0;
 
-    public static int Remove<T>(this ICollection<T> collection, IEnumerable<T> items)
+    public static int Remove<T>(this ICollection<T>? collection, IEnumerable<T>? items)
     {
         Assert.IsTrue(collection != null || items == null);
 
@@ -53,7 +53,7 @@ public static class ICollectionExtensions
         if (items != null)
             foreach (var item in items)
             {
-                var removed = collection.Remove(item);
+                var removed = collection!.Remove(item);
                 if (removed)
                     count++;
             }
@@ -73,7 +73,7 @@ public static class ICollectionExtensions
     private sealed class CastedCollection<TResult> : ICollection<TResult>
     {
         private readonly ICollection _source;
-        private readonly IList _sourceAsList;
+        private readonly IList? _sourceAsList;
 
         public CastedCollection(ICollection source)
         {
@@ -83,23 +83,16 @@ public static class ICollectionExtensions
             _sourceAsList = source as IList;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
         void ICollection<TResult>.Add(TResult item)
         {
-            Assert.IsTrue(_sourceAsList != null);
-
+            ArgumentNullException.ThrowIfNull(_sourceAsList);
+            
             _sourceAsList.Add(item);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         void ICollection<TResult>.Clear()
         {
-            Assert.IsTrue(_sourceAsList != null);
+            ArgumentNullException.ThrowIfNull(_sourceAsList);
 
             _sourceAsList.Clear();
         }
