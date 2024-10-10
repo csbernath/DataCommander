@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace Foundation.Xml.XmlSpreadsheet;
 
-public sealed class XmlSpreadsheetCell(XmlSpreadsheetDataType dataType, string value)
+public sealed class XmlSpreadsheetCell(XmlSpreadsheetDataType dataType, string? value)
 {
     private readonly XmlSpreadsheetAttributeCollection _attributes = [];
 

@@ -57,9 +57,9 @@ public class XmlElementReader(XmlReader xmlReader)
     /// 
     /// </summary>
     /// <returns></returns>
-    public XmlElement ReadStartElement()
+    public XmlElement? ReadStartElement()
     {
-        XmlElement xmlElement = null;
+        XmlElement? xmlElement = null;
         var found = MoveToElement(_xmlReader);
 
         if (found)
@@ -152,11 +152,7 @@ public class XmlElementReader(XmlReader xmlReader)
         return xmlElement;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    public XmlElement ReadElement()
+    public XmlElement? ReadElement()
     {
 #if DEBUG
         var xmlLineInfo = _xmlReader as IXmlLineInfo;
@@ -167,7 +163,7 @@ public class XmlElementReader(XmlReader xmlReader)
         }
 #endif
 
-        XmlElement xmlElement = null;
+        XmlElement? xmlElement = null;
 
         while (_xmlReader.Read())
         {

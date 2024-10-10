@@ -62,7 +62,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// </summary>
     /// <param name="text">The text to place inside the CDATA block.</param>
     /// <exception cref="T:System.ArgumentException">The text would result in a non-well formed XML document.</exception>
-    public override void WriteCData(string text) => throw new NotImplementedException();
+    public override void WriteCData(string? text) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, forces the
@@ -91,7 +91,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// </summary>
     /// <param name="text">Text to place inside the comment.</param>
     /// <exception cref="T:System.ArgumentException">The text would result in a non-well formed XML document.</exception>
-    public override void WriteComment(string text) => throw new NotImplementedException();
+    public override void WriteComment(string? text) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, writes the DOCTYPE declaration with the specified name
@@ -103,7 +103,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// <param name="subset">If non-null it writes [subset] where subset is replaced with the value of this argument.</param>
     /// <exception cref="T:System.InvalidOperationException">This method was called outside the prolog (after the root element).</exception>
     /// <exception cref="T:System.ArgumentException">The value for <paramref name="name "/> would result in invalid XML.</exception>
-    public override void WriteDocType(string name, string pubid, string sysid, string subset) => throw new NotImplementedException();
+    public override void WriteDocType(string name, string? pubid, string? sysid, string? subset) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, closes the previous <see cref="M:System.Xml.XmlWriter.WriteStartAttribute(System.string,System.string)"/>
@@ -202,7 +202,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     ///         <paramref name="name"/> is either <see langword="null"/> or string.Empty.</para>
     ///     <para>This method is being used to create an XML declaration after <see cref="M:System.Xml.XmlWriter.WriteStartDocument"/> has already been called. </para>
     /// </exception>
-    public override void WriteProcessingInstruction(string name, string text) => throw new NotImplementedException();
+    public override void WriteProcessingInstruction(string name, string? text) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, writes out the namespace-qualified name. This method looks up the prefix
@@ -216,7 +216,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     ///     <para>
     ///         <paramref name="localName"/> is not a valid name.</para>
     /// </exception>
-    public override void WriteQualifiedName(string localName, string ns) => throw new NotImplementedException();
+    public override void WriteQualifiedName(string localName, string? ns) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, writes raw markup manually from a character buffer.
@@ -243,7 +243,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// <param name="prefix">The namespace prefix of the attribute.</param>
     /// <param name="localName"></param>
     /// <param name="ns"></param>
-    public override void WriteStartAttribute(string prefix, string localName, string ns)
+    public override void WriteStartAttribute(string? prefix, string localName, string? ns)
     {
         var stackItem = _stack.Peek();
         stackItem.HasAttributes = true;
@@ -278,7 +278,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// <param name="localName">The local name of the element.</param>
     /// <param name="ns">The namespace URI to associate with the element.</param>
     /// <exception cref="T:System.InvalidOperationException">The writer is closed.</exception>
-    public override void WriteStartElement(string prefix, string localName, string ns)
+    public override void WriteStartElement(string? prefix, string localName, string? ns)
     {
         var parent = _stack.Count > 0 ? _stack.Peek() : null;
 
@@ -323,11 +323,11 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// </summary>
     /// <param name="text">The text to write.</param>
     /// <exception cref="T:System.ArgumentException">The text string contains an invalid surrogate pair.</exception>
-    public override void WriteString(string text)
+    public override void WriteString(string? text)
     {
         _textWriter.Write('"');
 
-        for (var i = 0; i < text.Length; i++)
+        for (var i = 0; i < text!.Length; i++)
         {
             var c = text[i];
 
@@ -363,7 +363,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
     /// </summary>
     /// <param name="ws">The string of white space characters.</param>
     /// <exception cref="T:System.ArgumentException">The string contains non-white space characters.</exception>
-    public override void WriteWhitespace(string ws) => throw new NotImplementedException();
+    public override void WriteWhitespace(string? ws) => throw new NotImplementedException();
 
     /// <summary>
     /// When overridden in a derived class, gets the current xml:lang scope.

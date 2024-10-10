@@ -7,7 +7,7 @@ namespace Foundation.Xml;
 
 public static class XmlSerialization
 {
-    public static object Deserialize(string xml, Type type)
+    public static object? Deserialize(string xml, Type type)
     {
         ArgumentNullException.ThrowIfNull(type);
 
@@ -17,7 +17,7 @@ public static class XmlSerialization
         return obj;
     }
 
-    public static object Deserialize(XmlReader xmlReader, Type type)
+    public static object? Deserialize(XmlReader xmlReader, Type type)
     {
         ArgumentNullException.ThrowIfNull(xmlReader);
         ArgumentNullException.ThrowIfNull(type);
@@ -27,16 +27,16 @@ public static class XmlSerialization
         return obj;
     }
 
-    public static T Deserialize<T>(string xml)
+    public static T? Deserialize<T>(string xml)
     {
         var obj = Deserialize(xml, typeof(T));
-        return (T) obj;
+        return (T?)obj;
     }
 
-    public static T Deserialize<T>(XmlReader xmlReader)
+    public static T? Deserialize<T>(XmlReader xmlReader)
     {
         var obj = Deserialize(xmlReader, typeof(T));
-        return (T) obj;
+        return (T?)obj;
     }
 
     public static string Serialize(object source)

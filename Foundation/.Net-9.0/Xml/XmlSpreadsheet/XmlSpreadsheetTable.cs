@@ -4,6 +4,6 @@ namespace Foundation.Xml.XmlSpreadsheet;
 
 public sealed class XmlSpreadsheetTable
 {
-    public string TableName;
+    public string? TableName;
     public List<XmlSpreadsheetColumn> Columns = [];
 }

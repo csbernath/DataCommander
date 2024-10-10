@@ -6,7 +6,7 @@ namespace Foundation.Xml.XmlSpreadsheet;
 
 public sealed class XmlSpreadsheetWriter
 {
-    private XmlSpreadsheetTable _table;
+    private XmlSpreadsheetTable? _table;
     private int _tableIndex = -1;
 
     public XmlSpreadsheetWriter(XmlWriter xmlWriter)
@@ -158,7 +158,7 @@ public sealed class XmlSpreadsheetWriter
         {
             var value = values[columnIndex];
             XmlSpreadsheetDataType type;
-            string xmlValue;
+            string? xmlValue;
 
             if (value == DBNull.Value)
             {
@@ -167,9 +167,9 @@ public sealed class XmlSpreadsheetWriter
             }
             else
             {
-                var column = _table.Columns[columnIndex];
+                var column = _table!.Columns[columnIndex];
                 type = column.DataType;
-                xmlValue = column.Convert(value);
+                xmlValue = column.Convert!(value);
             }
 
             var cell = new XmlSpreadsheetCell(type, xmlValue)
