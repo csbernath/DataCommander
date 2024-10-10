@@ -8,7 +8,7 @@ public sealed class InternalLogFactory : ILogFactory
 {
     public static readonly InternalLogFactory Instance = new();
 
-    private static TextLogWriter _textLogWriter;
+    private static TextLogWriter? _textLogWriter;
 
     private InternalLogFactory() => _textLogWriter = new TextLogWriter(TraceWriter.Instance, new TextLogFormatter());
 
@@ -16,7 +16,7 @@ public sealed class InternalLogFactory : ILogFactory
     {
     }
 
-    string ILogFactory.FileName => null;
+    string? ILogFactory.FileName => null;
 
-    ILog ILogFactory.GetLog(string name) => new InternalLog(_textLogWriter, LocalTime.Default, name);
+    ILog ILogFactory.GetLog(string? name) => new InternalLog(_textLogWriter!, LocalTime.Default, name);
 }

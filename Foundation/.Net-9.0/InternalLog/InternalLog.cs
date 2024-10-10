@@ -4,7 +4,7 @@ using Foundation.Log;
 
 namespace Foundation.InternalLog;
 
-internal sealed class InternalLog(ILogWriter logWriter, IDateTimeProvider dateTimeProvider, string name) : ILog
+internal sealed class InternalLog(ILogWriter logWriter, IDateTimeProvider dateTimeProvider, string? logName) : ILog
 {
     void IDisposable.Dispose()
     {
@@ -15,7 +15,7 @@ internal sealed class InternalLog(ILogWriter logWriter, IDateTimeProvider dateTi
     void ILog.Write(LogLevel logLevel, string message)
     {
         var now = dateTimeProvider.Now;
-        var logEntry = LogEntryFactory.Create(name, now, message, logLevel);
+        var logEntry = LogEntryFactory.Create(logName, now, message, logLevel);
         logWriter.Write(logEntry);
     }
 }

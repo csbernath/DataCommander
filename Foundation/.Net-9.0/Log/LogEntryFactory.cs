@@ -7,7 +7,7 @@ public static class LogEntryFactory
 {
     private static long _id;
 
-    public static LogEntry Create(string logName, DateTime creationTime, string message, LogLevel logLevel)
+    public static LogEntry Create(string? logName, DateTime creationTime, string message, LogLevel logLevel)
     {
         var id = Interlocked.Increment(ref _id);
         var thread = Thread.CurrentThread;

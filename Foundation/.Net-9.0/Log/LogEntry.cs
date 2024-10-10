@@ -4,7 +4,7 @@ namespace Foundation.Log;
 
 public sealed class LogEntry(
     long id,
-    string logName,
+    string? logName,
     DateTime creationTime,
     int managedThreadId,
     string? threadName,
@@ -14,7 +14,7 @@ public sealed class LogEntry(
     LogLevel logLevel)
 {
     public readonly long Id = id;
-    public readonly string LogName = logName;
+    public readonly string? LogName = logName;
     public readonly DateTime CreationTime = creationTime;
     public readonly int ManagedThreadId = managedThreadId;
     public readonly string? ThreadName = threadName;
