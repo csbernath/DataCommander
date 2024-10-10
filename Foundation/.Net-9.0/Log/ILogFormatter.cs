@@ -2,7 +2,7 @@
 
 public interface ILogFormatter
 {
-    string Begin();
+    string? Begin();
     string Format(LogEntry entry);
-    string End();
+    string? End();
 }

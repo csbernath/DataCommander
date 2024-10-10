@@ -10,9 +10,9 @@ public sealed class TextLogFormatter : ILogFormatter
         return result;
     }
 
-    string ILogFormatter.Begin() => null;
+    string? ILogFormatter.Begin() => null;
     string ILogFormatter.Format(LogEntry entry) => Format(entry);
-    string ILogFormatter.End() => null;
+    string? ILogFormatter.End() => null;
 
     private static char GetLogLevelChar(LogEntry entry)
     {

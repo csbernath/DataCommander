@@ -25,13 +25,13 @@ public static class LogExtensions
 
     public static void Trace(this ILog log, string message)
     {
-        ArgumentNullException.ThrowIfNull(log, nameof(log));
+        ArgumentNullException.ThrowIfNull(log);
         log.Write(LogLevel.Trace, message);
     }
 
-    public static void Trace(this ILog log, string format, params object[] args)
+    public static void Trace(this ILog log, string format, params object?[] args)
     {
-        ArgumentNullException.ThrowIfNull(log, nameof(log));
+        ArgumentNullException.ThrowIfNull(log);
         var message = string.Format(format, args);
         log.Trace(message);
     }
@@ -55,9 +55,9 @@ public static class LogExtensions
         log.Trace(callerInformation, message);
     }
 
-    public static void Write(this ILog log, LogLevel logLevel, string format, params object[] args)
+    public static void Write(this ILog log, LogLevel logLevel, string format, params object?[] args)
     {
-        ArgumentNullException.ThrowIfNull(log, nameof(log));
+        ArgumentNullException.ThrowIfNull(log);
         var message = string.Format(format, args);
         log.Write(logLevel, message);
     }

@@ -6,7 +6,7 @@ namespace Foundation.Log;
 
 public static class LogFactoryExtensions
 {
-    public static ILog GetTypeLog(this ILogFactory logFactory, Type type)
+    public static ILog GetTypeLog(this ILogFactory logFactory, Type? type)
     {
         ArgumentNullException.ThrowIfNull(logFactory);
         ArgumentNullException.ThrowIfNull(type);
@@ -23,14 +23,14 @@ public static class LogFactoryExtensions
     public static ILog GetCurrentTypeLog(this ILogFactory applicationLog)
     {
         var stackFrame = new StackFrame(1, false);
-        var type = stackFrame.GetMethod().DeclaringType;
+        var type = stackFrame.GetMethod()!.DeclaringType;
         return applicationLog.GetTypeLog(type);
     }
 
     public static ILog GetCurrentTypeSectionLog(this ILogFactory applicationLog, string sectionName)
     {
         var stackFrame = new StackFrame(1, false);
-        var type = stackFrame.GetMethod().DeclaringType;
+        var type = stackFrame.GetMethod()!.DeclaringType!;
         var name = $"{type.FullName}.{sectionName}";
         var log = applicationLog.GetLog(name);
         //if (log is DefaultLog.Log foundationLog)
@@ -42,8 +42,8 @@ public static class LogFactoryExtensions
     public static ILog GetCurrentMethodLog(this ILogFactory applicationLog, params object[] parameters)
     {
         var stackFrame = new StackFrame(1, false);
-        var method = stackFrame.GetMethod();
-        var type = method.DeclaringType;
+        var method = stackFrame.GetMethod()!;
+        var type = method.DeclaringType!;
         var name = $"{type.FullName}.{method.Name}";
         var log = applicationLog.GetLog(name);
         //if (log is DefaultLog.Log foundationLog)
@@ -81,9 +81,9 @@ public static class LogFactoryExtensions
         return log;
     }
 
-    private static string ParameterValueToString(object value)
+    private static string? ParameterValueToString(object value)
     {
-        string parameterString;
+        string? parameterString;
         if (value != null)
         {
             parameterString = value as string;

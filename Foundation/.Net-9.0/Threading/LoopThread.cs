@@ -79,7 +79,7 @@ public class LoopThread
             catch (Exception e)
             {
                 exception = e;
-                Log.Write(LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", Thread.Name,
+                Log.Write(LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", Thread!.Name,
                     Thread.ManagedThreadId, e.ToString());
             }
         }

@@ -13,8 +13,8 @@ public static class LogEntryFactory
         var thread = Thread.CurrentThread;
         var threadId = thread.ManagedThreadId;
         var threadName = thread.Name;
-        string userName = null;
-        string hostName = null;
+        string? userName = null;
+        string? hostName = null;
 
         return new LogEntry(id, logName, creationTime, threadId, threadName, userName, hostName, message, logLevel);
     }
