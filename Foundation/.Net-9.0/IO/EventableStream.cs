@@ -6,6 +6,7 @@ namespace Foundation.IO;
 public class EventableStream : Stream
 {
     private readonly Stream _stream;
+    private EventHandler? _beforeRead;    
 
     public EventableStream(Stream stream)
     {
@@ -25,8 +26,6 @@ public class EventableStream : Stream
         set => _stream.Position = value;
     }
 
-    private EventHandler _beforeRead;
-
     public event EventHandler BeforeRead
     {
         add => _beforeRead += value;
@@ -36,7 +35,7 @@ public class EventableStream : Stream
     public override int Read(byte[] buffer, int offset, int count)
     {
         if (_beforeRead != null)
-            _beforeRead(this, null);
+            _beforeRead(this, EventArgs.Empty);
 
         return _stream.Read(buffer, offset, count);
     }

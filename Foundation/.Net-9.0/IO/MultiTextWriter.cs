@@ -25,7 +25,7 @@ public class MultiTextWriter : TextWriter
         Write(value);
     }
 
-    public override void Write(string value)
+    public override void Write(string? value)
     {
         foreach (var textWriter in _textWriters)
         {

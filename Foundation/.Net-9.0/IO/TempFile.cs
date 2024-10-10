@@ -5,7 +5,7 @@ namespace Foundation.IO;
 
 public sealed class TempFile : IDisposable
 {
-    private string _filename;
+    private string? _filename;
     private bool _deleted;
 
     public TempFile()
@@ -28,7 +28,7 @@ public sealed class TempFile : IDisposable
     public void Delete()
     {
         _deleted = true;
-        File.Delete(_filename);
+        File.Delete(_filename!);
     }
 
     void IDisposable.Dispose()

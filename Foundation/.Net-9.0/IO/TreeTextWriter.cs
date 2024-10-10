@@ -103,9 +103,9 @@ public sealed class TreeTextWriter
         WriteElement(value);
     }
 
-    public void WriteElement(object value)
+    public void WriteElement(object? value)
     {
         var s = value != null ? value.ToString() : null;
-        WriteElement(s);
+        WriteElement(s!);
     }
 }

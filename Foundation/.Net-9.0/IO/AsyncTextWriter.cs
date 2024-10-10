@@ -12,7 +12,7 @@ public class AsyncTextWriter
     private readonly List<AsyncTextWriterListItem> _list = [];
     private readonly object _syncObject = new();
     private readonly ManualResetEvent _waitHandle = new(false);
-    private RegisteredWaitHandle _registeredWaitHandle;
+    private RegisteredWaitHandle? _registeredWaitHandle;
 
     public AsyncTextWriter(TextWriter textWriter)
     {
@@ -57,7 +57,7 @@ public class AsyncTextWriter
         }
     }
 
-    private void Callback(object state, bool timedOut)
+    private void Callback(object? state, bool timedOut)
     {
         if (_list.Count > 0)
             Flush();
