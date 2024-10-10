@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using Foundation.Assertions;
 
 namespace Foundation.Collections.IndexableCollection;
 
-public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, T>
+public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, T> where TKey : notnull
 {
-    private IDictionary<TKey, T> _dictionary;
-    private Func<T, GetKeyResponse<TKey>> _getKey;
+    private IDictionary<TKey, T>? _dictionary;
+    private Func<T, GetKeyResponse<TKey>>? _getKey;
 
     public UniqueIndex(string name, Func<T, GetKeyResponse<TKey>> getKey, IDictionary<TKey, T> dictionary)
     {
@@ -41,20 +42,20 @@ public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey
         Initialize(name, getKey, dictionary);
     }
 
-    public string Name { get; private set; }
+    public string? Name { get; private set; }
 
-    IEnumerator<T> IEnumerable<T>.GetEnumerator() => _dictionary.Values.GetEnumerator();
+    IEnumerator<T> IEnumerable<T>.GetEnumerator() => _dictionary!.Values.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator() => _dictionary.Values.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => _dictionary!.Values.GetEnumerator();
 
     public T this[TKey key]
     {
-        get => _dictionary[key];
+        get => _dictionary![key];
         set => throw new NotSupportedException();
     }
 
     [Pure]
-    public bool ContainsKey(TKey key) => _dictionary.ContainsKey(key);
+    public bool ContainsKey(TKey key) => _dictionary!.ContainsKey(key);
 
     private void Initialize(string name, Func<T, GetKeyResponse<TKey>> getKey, IDictionary<TKey, T> dictionary)
     {
@@ -67,34 +68,34 @@ public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey
         _dictionary = dictionary;
     }
 
-    public bool IsReadOnly => _dictionary.IsReadOnly;
-    public int Count => _dictionary.Count;
-    public void CopyTo(T[] array, int arrayIndex) => _dictionary.Values.CopyTo(array, arrayIndex);
-    public bool TryGetValue(TKey key, out T item) => _dictionary.TryGetValue(key, out item);
-    public IEnumerator<KeyValuePair<TKey, T>> GetEnumerator() => _dictionary.GetEnumerator();
+    public bool IsReadOnly => _dictionary!.IsReadOnly;
+    public int Count => _dictionary!.Count;
+    public void CopyTo(T[] array, int arrayIndex) => _dictionary!.Values.CopyTo(array, arrayIndex);
+    public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out T item) => _dictionary!.TryGetValue(key, out item);
+    public IEnumerator<KeyValuePair<TKey, T>> GetEnumerator() => _dictionary!.GetEnumerator();
 
     void ICollection<T>.Add(T item)
     {
-        var response = _getKey(item);
+        var response = _getKey!(item);
 
         if (response.HasKey)
         {
             var key = response.Key;
 
-            Assert.IsTrue(!_dictionary.ContainsKey(key));
+            Assert.IsTrue(!_dictionary!.ContainsKey(key));
 
             _dictionary.Add(key, item);
         }
     }
 
-    void ICollection<T>.Clear() => _dictionary.Clear();
+    void ICollection<T>.Clear() => _dictionary!.Clear();
 
     public bool Contains(T item)
     {
         ArgumentNullException.ThrowIfNull(item);
 
-        var response = _getKey(item);
-        var contains = response.HasKey && _dictionary.ContainsKey(response.Key);
+        var response = _getKey!(item);
+        var contains = response.HasKey && _dictionary!.ContainsKey(response.Key);
         return contains;
     }
 
@@ -102,19 +103,19 @@ public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey
     {
         ArgumentNullException.ThrowIfNull(item);
 
-        var response = _getKey(item);
-        var succeeded = response.HasKey && _dictionary.Remove(response.Key);
+        var response = _getKey!(item);
+        var succeeded = response.HasKey && _dictionary!.Remove(response.Key);
         return succeeded;
     }
 
     void IDictionary<TKey, T>.Add(TKey key, T value) => throw new NotSupportedException();
-    public ICollection<TKey> Keys => _dictionary.Keys;
+    public ICollection<TKey> Keys => _dictionary!.Keys;
     bool IDictionary<TKey, T>.Remove(TKey key) => throw new NotSupportedException();
-    public ICollection<T> Values => _dictionary.Values;
+    public ICollection<T> Values => _dictionary!.Values;
 
     void ICollection<KeyValuePair<TKey, T>>.Add(KeyValuePair<TKey, T> item) => throw new NotSupportedException();
     bool ICollection<KeyValuePair<TKey, T>>.Contains(KeyValuePair<TKey, T> item) => throw new NotSupportedException();
-    void ICollection<KeyValuePair<TKey, T>>.Clear() => _dictionary.Clear();
+    void ICollection<KeyValuePair<TKey, T>>.Clear() => _dictionary!.Clear();
     void ICollection<KeyValuePair<TKey, T>>.CopyTo(KeyValuePair<TKey, T>[] array, int arrayIndex) => throw new NotSupportedException();
     public bool Remove(KeyValuePair<TKey, T> item) => throw new NotSupportedException();
 }

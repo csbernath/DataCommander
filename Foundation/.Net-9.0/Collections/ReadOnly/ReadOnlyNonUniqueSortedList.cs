@@ -11,7 +11,7 @@ public sealed class ReadOnlyNonUniqueSortedList<TKey, TValue>
     private readonly IReadOnlyList<TValue> _values;
     private readonly Func<TValue, TKey> _keySelector;
     private readonly Comparison<TKey> _comparison;
-    private IReadOnlyList<int> _groups;
+    private IReadOnlyList<int>? _groups;
 
     public ReadOnlyNonUniqueSortedList(IReadOnlyList<TValue> values, Func<TValue, TKey> keySelector, Comparison<TKey> comparison)
     {
@@ -46,7 +46,7 @@ public sealed class ReadOnlyNonUniqueSortedList<TKey, TValue>
             var index = IndexOf(key);
             if (index >= 0)
             {
-                var currentGroupIndex = _groups[index];
+                var currentGroupIndex = _groups![index];
                 var nextGroupIndex = index < _groups.Count - 1 ? _groups[index + 1] : _values.Count;
                 var count = nextGroupIndex - currentGroupIndex;
 
@@ -65,7 +65,7 @@ public sealed class ReadOnlyNonUniqueSortedList<TKey, TValue>
 
     public IEnumerable<IReadOnlyList<TValue>> GetGroups()
     {
-        var lastGroupIndex = _groups.Count - 1;
+        var lastGroupIndex = _groups!.Count - 1;
         for (var groupIndex = 0; groupIndex <= lastGroupIndex; ++groupIndex)
         {
             var valueStartIndex = _groups[groupIndex];

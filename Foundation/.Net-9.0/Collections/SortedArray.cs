@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Foundation.Assertions;
 
 namespace Foundation.Collections;
@@ -39,7 +40,7 @@ public class SortedArray<TKey, TValue>(TValue[] values, Func<TValue, TKey> keySe
     public IEnumerable<TValue> Values => values;
     public bool ContainsKey(TKey key) => IndexOfKey(key) >= 0;
 
-    public bool TryGetValue(TKey key, out TValue value)
+    public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
     {
         bool succeeded;
         var index = IndexOfKey(key);

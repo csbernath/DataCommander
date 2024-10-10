@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Foundation.Collections.IndexableCollection;
 
@@ -13,7 +14,7 @@ public class IndexCollection<T> : ICollection<ICollectionIndex<T>>
     public void Add(ICollectionIndex<T> item)
     {
         ArgumentNullException.ThrowIfNull(item);
-        _dictionary.Add(item.Name, item);
+        _dictionary.Add(item.Name!, item);
     }
 
     public void Clear() => _dictionary.Clear();
@@ -26,7 +27,7 @@ public class IndexCollection<T> : ICollection<ICollectionIndex<T>>
     {
         bool succeeded;
         var contains = _dictionary.ContainsValue(item);
-        succeeded = contains && _dictionary.Remove(item.Name);
+        succeeded = contains && _dictionary.Remove(item.Name!);
         return succeeded;
     }
 
@@ -34,5 +35,5 @@ public class IndexCollection<T> : ICollection<ICollectionIndex<T>>
 
     IEnumerator IEnumerable.GetEnumerator() => _dictionary.Values.GetEnumerator();
 
-    public bool TryGetValue(string name, out ICollectionIndex<T> item) => _dictionary.TryGetValue(name, out item);
+    public bool TryGetValue(string name, [MaybeNullWhen(false)] out ICollectionIndex<T> item) => _dictionary.TryGetValue(name, out item);
 }

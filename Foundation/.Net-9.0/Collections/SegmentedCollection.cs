@@ -7,6 +7,10 @@ namespace Foundation.Collections;
 
 public class SegmentedCollection<T> : ICollection<T>
 {
+    private readonly int _segmentLength;
+    private Segment? _first;
+    private Segment? _last;
+    
     public SegmentedCollection(int segmentLength)
     {
         Assert.IsInRange(segmentLength > 0);
@@ -25,7 +29,7 @@ public class SegmentedCollection<T> : ICollection<T>
             else
                 count = Count <= _segmentLength ? Count : Count % _segmentLength;
 
-            for (var i = 0; i < count; i++) yield return segment.Items[i];
+            for (var i = 0; i < count; i++) yield return segment.Items![i];
 
             segment = segment.Next;
         }
@@ -39,13 +43,9 @@ public class SegmentedCollection<T> : ICollection<T>
 
     private sealed class Segment
     {
-        public T[] Items;
-        public Segment Next;
+        public T[]? Items;
+        public Segment? Next;
     }
-
-    private readonly int _segmentLength;
-    private Segment _first;
-    private Segment _last;
 
     public void Add(T item)
     {
@@ -65,12 +65,12 @@ public class SegmentedCollection<T> : ICollection<T>
             }
             else
             {
-                _last.Next = newSegment;
+                _last!.Next = newSegment;
                 _last = newSegment;
             }
         }
 
-        _last.Items[index] = item;
+        _last!.Items![index] = item;
         Count++;
     }
 

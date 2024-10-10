@@ -1,11 +1,11 @@
 ﻿namespace Foundation.Collections;
 
 /// <summary>
-///     Discrete union
+/// Discrete union
 /// </summary>
 public readonly struct Variant<T1, T2, T3>
 {
-    private Variant(object value, byte type)
+    private Variant(object? value, byte type)
     {
         Value = value;
         Type = type;
@@ -28,6 +28,6 @@ public readonly struct Variant<T1, T2, T3>
         return new Variant<T1, T2, T3>(value, 0);
     }
 
-    public object Value { get; }
+    public object? Value { get; }
     public byte Type { get; }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Foundation.Assertions;
 
@@ -18,9 +19,9 @@ public sealed class MultipleMemberEqualityComparer<T> : IEqualityComparer<T>
         _equalityComparers = equalityComparers;
     }
 
-    public bool Equals(T x, T y) => _equalityComparers.All(c => c.Equals(x, y));
+    public bool Equals(T? x, T? y) => _equalityComparers.All(c => c.Equals(x, y));
 
-    public int GetHashCode(T obj)
+    public int GetHashCode([DisallowNull] T obj)
     {
         var hashCodes = _equalityComparers.Select(c => c.GetHashCode(obj));
         var hashCode = hashCodes.Aggregate(CombineHashCodes);

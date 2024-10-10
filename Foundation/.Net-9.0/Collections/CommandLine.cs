@@ -20,7 +20,9 @@ public sealed class CommandLine
         var dictionary = new Dictionary<string, ICollection<CommandLineArgument>>(StringComparer.InvariantCultureIgnoreCase);
         NameIndex = new NonUniqueIndex<string, CommandLineArgument>(
             "nameIndex",
-            argument => GetKeyResponse.Create(argument.Name != null, argument.Name),
+            argument => argument.Name != null
+                ? GetKeyResponse.Create(true, argument.Name!)
+                : GetKeyResponse.Create(false, string.Empty),
             dictionary,
             () => []);
         _arguments.Indexes.Add(NameIndex);
@@ -57,7 +59,7 @@ public sealed class CommandLine
         return value;
     }
 
-    private static string ReadName(TextReader textReader)
+    private static string? ReadName(TextReader textReader)
     {
         var read = textReader.Read();
         var c = (char)read;
@@ -109,10 +111,10 @@ public sealed class CommandLine
         return value;
     }
 
-    private static Tuple<string, string> ReadNameValue(TextReader textReader)
+    private static (string? name, string? value) ReadNameValue(TextReader textReader)
     {
         var name = ReadName(textReader);
-        string value;
+        string? value;
         var peek = textReader.Peek();
 
         if (peek >= 0)
@@ -133,7 +135,7 @@ public sealed class CommandLine
         else
             value = null;
 
-        return Tuple.Create(name, value);
+        return (name, value);
     }
 
     private static IEnumerable<CommandLineArgument> Parse(TextReader textReader)
@@ -157,8 +159,8 @@ public sealed class CommandLine
             }
             else if (c == '/' || c == '-')
             {
-                var nameValue = ReadNameValue(textReader);
-                var argument = new CommandLineArgument(index, nameValue.Item1, nameValue.Item2);
+                var (name, value) = ReadNameValue(textReader);
+                var argument = new CommandLineArgument(index, name, value);
                 index++;
                 yield return argument;
             }

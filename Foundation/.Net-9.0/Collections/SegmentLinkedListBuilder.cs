@@ -26,7 +26,7 @@ public class SegmentLinkedListBuilder<T>
             _linkedList.AddLast(segment);
         }
         else
-            segment = _linkedList.Last.Value;
+            segment = _linkedList.Last!.Value;
 
         segment[index] = item;
         ++_count;

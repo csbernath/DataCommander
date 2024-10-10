@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Foundation.Assertions;
 
@@ -39,7 +40,7 @@ public sealed class ReadOnlySortedList<TKey, TValue> : IReadOnlyDictionary<TKey,
     public IEnumerable<TValue> Values => _items.Select(i => i.Value);
     public bool ContainsKey(TKey key) => IndexOfKey(key) >= 0;
 
-    public bool TryGetValue(TKey key, out TValue value)
+    public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
     {
         bool succeeded;
         var index = IndexOfKey(key);

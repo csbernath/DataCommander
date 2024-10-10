@@ -16,13 +16,13 @@ public static class PreOrderTreeTraversal
             ForEach(childNode, getChildNodes, action);
     }
 
-    public static T FirstOrDefault<T>(T rootNode, Func<T, IEnumerable<T>> getChildNodes, Func<T, bool> predicate) where T : class
+    public static T? FirstOrDefault<T>(T rootNode, Func<T, IEnumerable<T>> getChildNodes, Func<T, bool> predicate) where T : class
     {
         ArgumentNullException.ThrowIfNull(rootNode);
         ArgumentNullException.ThrowIfNull(getChildNodes);
         ArgumentNullException.ThrowIfNull(predicate);
 
-        T firstOrDefault = null;
+        T? firstOrDefault = null;
 
         if (predicate(rootNode))
             firstOrDefault = rootNode;

@@ -6,7 +6,7 @@ public sealed class MultipleMemberComparer<T>(params IComparer<T>[] comparers) :
 {
     private readonly IComparer<T>[] _comparers = comparers;
 
-    int IComparer<T>.Compare(T x, T y)
+    int IComparer<T>.Compare(T? x, T? y)
     {
         var result = 0;
 

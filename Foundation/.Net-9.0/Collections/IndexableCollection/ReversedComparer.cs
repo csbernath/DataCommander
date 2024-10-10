@@ -13,7 +13,7 @@ public sealed class ReverseComparer<T> : IComparer<T>
 
     public static IComparer<T> Default => Instance.Value;
 
-    public int Compare(T x, T y) => _comparer.Compare(y, x);
+    public int Compare(T? x, T? y) => _comparer.Compare(y, x);
 
     private static ReverseComparer<T> CreateReversedComparer()
     {

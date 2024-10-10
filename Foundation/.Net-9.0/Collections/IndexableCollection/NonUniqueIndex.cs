@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Foundation.Assertions;
 
 namespace Foundation.Collections.IndexableCollection;
 
-public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, ICollection<T>>
+public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, ICollection<T>> where TKey : notnull
 {
-    private IDictionary<TKey, ICollection<T>> _dictionary;
-    private Func<T, GetKeyResponse<TKey>> _getKey;
-    private Func<ICollection<T>> _createCollection;
+    private IDictionary<TKey, ICollection<T>>? _dictionary;
+    private Func<T, GetKeyResponse<TKey>>? _getKey;
+    private Func<ICollection<T>>? _createCollection;
 
     public NonUniqueIndex(
         string name,
@@ -57,21 +58,15 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
             () => []);
     }
 
-    /// <summary>
-    /// </summary>
-    /// <param name="key"></param>
-    /// <returns></returns>
-    public ICollection<T> this[TKey key] => _dictionary[key];
+    public ICollection<T> this[TKey key] => _dictionary![key];
 
-    /// <summary>
-    /// </summary>
-    public string Name { get; private set; }
+    public string? Name { get; private set; }
 
     public IEnumerator<T> GetEnumerator()
     {
-        foreach (var collection in _dictionary.Values)
+        foreach (var collection in _dictionary!.Values)
         foreach (var item in collection)
-                yield return item;
+            yield return item;
     }
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -80,11 +75,11 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
         return enumerable.GetEnumerator();
     }
 
-    IEnumerator<KeyValuePair<TKey, ICollection<T>>> IEnumerable<KeyValuePair<TKey, ICollection<T>>>.GetEnumerator() => _dictionary.GetEnumerator();
+    IEnumerator<KeyValuePair<TKey, ICollection<T>>> IEnumerable<KeyValuePair<TKey, ICollection<T>>>.GetEnumerator() => _dictionary!.GetEnumerator();
 
-    public bool TryGetFirstValue(TKey key, out T value)
+    public bool TryGetFirstValue(TKey key, [MaybeNullWhen(false)] out T value)
     {
-        var contains = _dictionary.TryGetValue(key, out var collection);
+        var contains = _dictionary!.TryGetValue(key, out var collection);
 
         if (contains)
         {
@@ -115,43 +110,43 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
         _createCollection = createCollection;
     }
 
-    public int Count => _dictionary.Count;
+    public int Count => _dictionary!.Count;
 
     bool ICollection<T>.IsReadOnly => false;
 
     public void Add(T item)
     {
-        var response = _getKey(item);
+        var response = _getKey!(item);
 
         if (response.HasKey)
         {
             var key = response.Key;
-            var contains = _dictionary.TryGetValue(key, out var collection);
+            var contains = _dictionary!.TryGetValue(key, out var collection);
 
             if (!contains)
             {
-                collection = _createCollection();
+                collection = _createCollection!();
                 _dictionary.Add(key, collection);
             }
 
-            collection.Add(item);
+            collection!.Add(item);
         }
     }
 
-    void ICollection<T>.Clear() => _dictionary.Clear();
+    void ICollection<T>.Clear() => _dictionary!.Clear();
 
     public bool Contains(T item)
     {
-        var response = _getKey(item);
+        var response = _getKey!(item);
         bool contains;
 
         if (response.HasKey)
         {
             var key = response.Key;
-            contains = _dictionary.TryGetValue(key, out var collection);
+            contains = _dictionary!.TryGetValue(key, out var collection);
 
             if (contains)
-                contains = collection.Contains(item);
+                contains = collection!.Contains(item);
         }
         else
             contains = false;
@@ -163,17 +158,17 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
 
     public bool Remove(T item)
     {
-        var response = _getKey(item);
+        var response = _getKey!(item);
         var removed = false;
 
         if (response.HasKey)
         {
             var key = response.Key;
-            var contains = _dictionary.TryGetValue(key, out var collection);
+            var contains = _dictionary!.TryGetValue(key, out var collection);
 
             if (contains)
             {
-                var succeeded = collection.Remove(item);
+                var succeeded = collection!.Remove(item);
                 Assert.IsTrue(succeeded);
 
                 if (collection.Count == 0)
@@ -190,15 +185,15 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
     }
 
     void IDictionary<TKey, ICollection<T>>.Add(TKey key, ICollection<T> value) => throw new NotSupportedException();
-    public bool ContainsKey(TKey key) => _dictionary.ContainsKey(key);
-    ICollection<TKey> IDictionary<TKey, ICollection<T>>.Keys => _dictionary.Keys;
+    public bool ContainsKey(TKey key) => _dictionary!.ContainsKey(key);
+    ICollection<TKey> IDictionary<TKey, ICollection<T>>.Keys => _dictionary!.Keys;
     bool IDictionary<TKey, ICollection<T>>.Remove(TKey key) => throw new NotSupportedException();
-    public bool TryGetValue(TKey key, out ICollection<T> value) => _dictionary.TryGetValue(key, out value);
-    ICollection<ICollection<T>> IDictionary<TKey, ICollection<T>>.Values => _dictionary.Values;
+    public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out ICollection<T> value) => _dictionary!.TryGetValue(key, out value);
+    ICollection<ICollection<T>> IDictionary<TKey, ICollection<T>>.Values => _dictionary!.Values;
 
     ICollection<T> IDictionary<TKey, ICollection<T>>.this[TKey key]
     {
-        get => _dictionary[key];
+        get => _dictionary![key];
         set => throw new NotSupportedException();
     }
 
@@ -209,7 +204,7 @@ public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, IC
     void ICollection<KeyValuePair<TKey, ICollection<T>>>.CopyTo(KeyValuePair<TKey, ICollection<T>>[] array, int arrayIndex) =>
         throw new NotSupportedException();
 
-    int ICollection<KeyValuePair<TKey, ICollection<T>>>.Count => _dictionary.Count;
-    bool ICollection<KeyValuePair<TKey, ICollection<T>>>.IsReadOnly => _dictionary.IsReadOnly;
+    int ICollection<KeyValuePair<TKey, ICollection<T>>>.Count => _dictionary!.Count;
+    bool ICollection<KeyValuePair<TKey, ICollection<T>>>.IsReadOnly => _dictionary!.IsReadOnly;
     bool ICollection<KeyValuePair<TKey, ICollection<T>>>.Remove(KeyValuePair<TKey, ICollection<T>> item) => throw new NotSupportedException();
 }

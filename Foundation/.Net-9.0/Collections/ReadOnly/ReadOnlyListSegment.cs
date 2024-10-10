@@ -10,8 +10,8 @@ internal sealed class ReadOnlyListSegment<T> : IReadOnlyList<T>
     public ReadOnlyListSegment(IReadOnlyList<T> list, int offset, int count)
     {
         ArgumentNullException.ThrowIfNull(list);
-        Assert.IsInRange(offset >= 0);
-        Assert.IsInRange(count >= 0);
+        Assert.IsGreaterOrEqual(offset, 0);
+        Assert.IsGreaterOrEqual(count, 0);
         Assert.IsInRange(0 <= offset && offset < list.Count);
         Assert.IsInRange(0 <= offset + count && offset + count <= list.Count);
 

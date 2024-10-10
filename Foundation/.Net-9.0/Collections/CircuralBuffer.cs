@@ -11,12 +11,16 @@ namespace Foundation.Collections;
 /// <typeparam name="T"></typeparam>
 public sealed class CircularBuffer<T> : IList<T>
 {
+    private T[]? _array;
+    private int _head;
+    private int _tail;
+    
     public CircularBuffer(int capacity)
     {
         SetCapacity(capacity);
     }
 
-    public int Capacity => _array.Length;
+    public int Capacity => _array!.Length;
 
     IEnumerator<T> IEnumerable<T>.GetEnumerator()
     {
@@ -25,7 +29,7 @@ public sealed class CircularBuffer<T> : IList<T>
             var current = _head;
             while (true)
             {
-                var item = _array[current];
+                var item = _array![current];
                 yield return item;
                 if (current == _tail) break;
 
@@ -51,16 +55,16 @@ public sealed class CircularBuffer<T> : IList<T>
         }
         else
         {
-            _head = (_head - 1) % _array.Length;
+            _head = (_head - 1) % _array!.Length;
         }
 
-        _array[_head] = item;
+        _array![_head] = item;
         Count++;
     }
 
     private void AddTail(T item)
     {
-        Assert.IsTrue(Count < _array.Length);
+        Assert.IsTrue(Count < _array!.Length);
 
         if (_head == -1)
         {
@@ -84,18 +88,18 @@ public sealed class CircularBuffer<T> : IList<T>
             AddTail(item);
     }
 
-    public T PeekHead()
+    public T? PeekHead()
     {
         Assert.IsValidOperation(Count > 0);
-        return _array[_head];
+        return _array![_head];
     }
 
-    public T RemoveHead()
+    public T? RemoveHead()
     {
         Assert.IsValidOperation(Count > 0);
 
-        var item = _array[_head];
-        _array[_head] = default;
+        var item = _array![_head];
+        _array[_head] = default!;
         _head = (_head + 1) % _array.Length;
         Count--;
 
@@ -106,15 +110,15 @@ public sealed class CircularBuffer<T> : IList<T>
     {
         Assert.IsValidOperation(Count > 0);
 
-        return _array[_tail];
+        return _array![_tail];
     }
 
     public T RemoveTail()
     {
         Assert.IsValidOperation(Count > 0);
 
-        var item = _array[_tail];
-        _array[_tail] = default;
+        var item = _array![_tail];
+        _array[_tail] = default!;
         _tail = (_tail - 1) % _array.Length;
         Count--;
         return item;
@@ -122,18 +126,18 @@ public sealed class CircularBuffer<T> : IList<T>
 
     public void SetCapacity(int capacity)
     {
-        Assert.IsValidOperation(capacity >= Count);
+        Assert.IsGreaterOrEqual(capacity, Count);
 
         var target = new T[capacity];
         if (Count > 0)
         {
             if (_head <= _tail)
             {
-                Array.Copy(_array, _head, target, 0, Count);
+                Array.Copy(_array!, _head, target, 0, Count);
             }
             else
             {
-                var headCount = _array.Length - _head;
+                var headCount = _array!.Length - _head;
                 Array.Copy(_array, _head, target, 0, headCount);
                 Array.Copy(_array, 0, target, headCount, _tail + 1);
             }
@@ -150,10 +154,6 @@ public sealed class CircularBuffer<T> : IList<T>
         _array = target;
     }
 
-    private T[] _array;
-    private int _head;
-    private int _tail;
-
     int IList<T>.IndexOf(T item) => throw new NotImplementedException();
 
     void IList<T>.Insert(int index, T item) => throw new NotImplementedException();
@@ -164,13 +164,13 @@ public sealed class CircularBuffer<T> : IList<T>
     {
         get
         {
-            index = (_head + index) % _array.Length;
+            index = (_head + index) % _array!.Length;
             return _array[index];
         }
 
         set
         {
-            index = (_head + index) % _array.Length;
+            index = (_head + index) % _array!.Length;
             _array[index] = value;
         }
     }

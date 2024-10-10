@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Foundation.Collections.ReadOnly;
 
@@ -23,7 +24,7 @@ public class ReadOnlySortedArray<TKey, TValue>(TValue[] values, Func<TValue, TKe
     public IEnumerable<TValue> Values => values;
     public bool ContainsKey(TKey key) => IndexOfKey(key) >= 0;
 
-    public bool TryGetValue(TKey key, out TValue value)
+    public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
     {
         bool succeeded;
         var index = IndexOfKey(key);

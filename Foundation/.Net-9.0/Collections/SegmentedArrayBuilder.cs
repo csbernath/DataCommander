@@ -6,6 +6,10 @@ namespace Foundation.Collections;
 
 public sealed class SegmentedArrayBuilder<T>
 {
+    private readonly T[][]? _segments;
+    private int _currentSegmentArrayIndex;
+    private int _currentSegmentIndex;
+    
     public SegmentedArrayBuilder(
         int length,
         int segmentLength)
@@ -28,7 +32,7 @@ public sealed class SegmentedArrayBuilder<T>
 
     public void Add(T item)
     {
-        var currentSegment = _segments[_currentSegmentArrayIndex];
+        var currentSegment = _segments![_currentSegmentArrayIndex];
         currentSegment[_currentSegmentIndex] = item;
 
         if (_currentSegmentIndex < currentSegment.Length - 1)
@@ -42,7 +46,7 @@ public sealed class SegmentedArrayBuilder<T>
         }
     }
 
-    public IReadOnlyList<T> ToReadOnlyCollection() => new ReadOnlySegmentedList(_segments);
+    public IReadOnlyList<T> ToReadOnlyCollection() => new ReadOnlySegmentedList(_segments!);
 
     private sealed class ReadOnlySegmentedList(T[][] segments) : IReadOnlyList<T>
     {
@@ -80,8 +84,4 @@ public sealed class SegmentedArrayBuilder<T>
 
         IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<T>)this).GetEnumerator();
     }
-
-    private readonly T[][] _segments;
-    private int _currentSegmentArrayIndex;
-    private int _currentSegmentIndex;
 }

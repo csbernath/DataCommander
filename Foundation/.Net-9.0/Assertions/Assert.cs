@@ -32,11 +32,12 @@ public static class Assert
             throw new ArgumentOutOfRangeException(conditionString);
     }
 
+    public static void IsGreaterOrEqual<T>(T value, T other, [CallerArgumentExpression(nameof(value))] string? paramName = null) where T : IComparable<T> =>
+        ArgumentOutOfRangeException.ThrowIfLessThan(value, other, paramName);
+
     public static void IsValidOperation(bool condition, [CallerArgumentExpression(nameof(condition))] string? conditionString = null)
     {
         if (!condition)
-        {
             throw new InvalidOperationException(conditionString);
-        }
     }
 }

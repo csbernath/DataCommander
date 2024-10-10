@@ -4,5 +4,5 @@ namespace Foundation.Collections.IndexableCollection;
 
 public interface ICollectionIndex<T> : ICollection<T>
 {
-    string Name { get; }
+    string? Name { get; }
 }

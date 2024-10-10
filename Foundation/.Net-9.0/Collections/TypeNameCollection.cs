@@ -11,7 +11,7 @@ public static class TypeNameCollection
     private static readonly IndexableCollection<TypeCollectionItem> Collection;
     private static readonly UniqueIndex<string, TypeCollectionItem> NameIndex;
     private static readonly UniqueIndex<Type, TypeCollectionItem> TypeIndex;
-    private static readonly Assembly SystemAssembly;
+    private static readonly Assembly? SystemAssembly;
 
     static TypeNameCollection()
     {
@@ -58,13 +58,13 @@ public static class TypeNameCollection
         Collection.Add(item);
     }
 
-    public static Type GetType(string typeName)
+    public static Type? GetType(string typeName)
     {
         var length = typeName.Length - 2;
-        var isArray = typeName != null && typeName.IndexOf("[]") == length;
+        var isArray = typeName.IndexOf("[]") == length;
         var typeName2 = isArray ? typeName[..length] : typeName;
         var contains = NameIndex.TryGetValue(typeName2, out var item);
-        var type = contains ? item.Type : Type.GetType(typeName2);
+        var type = contains ? item!.Type : Type.GetType(typeName2);
         if (type != null && isArray)
         {
             typeName2 = type.FullName + "[], " + type.Assembly.FullName;
@@ -74,14 +74,16 @@ public static class TypeNameCollection
         return type;
     }
 
-    public static string GetTypeName(Type type)
+    public static string? GetTypeName(Type type)
     {
-        string typeName;
+        ArgumentNullException.ThrowIfNull(type);
+        
+        string? typeName;
 
         if (type.IsArray)
         {
             var elementType = type.GetElementType();
-            typeName = GetTypeName(elementType) + "[]";
+            typeName = GetTypeName(elementType!) + "[]";
         }
         else if (type.IsEnum)
         {
@@ -95,7 +97,7 @@ public static class TypeNameCollection
         else
         {
             var contains = TypeIndex.TryGetValue(type, out var item);
-            typeName = contains ? item.Name : type.FullName;
+            typeName = contains ? item!.Name : type.FullName;
         }
 
         return typeName;
@@ -121,7 +123,7 @@ public static class TypeNameCollection
 
         public static TypeEqualityComparer Instance { get; } = new();
 
-        public bool Equals(Type x, Type y) => x == y;
+        public bool Equals(Type? x, Type? y) => x == y;
 
         public int GetHashCode(Type obj) => obj.GetHashCode();
     }

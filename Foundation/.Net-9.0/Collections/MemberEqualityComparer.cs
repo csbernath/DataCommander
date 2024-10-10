@@ -22,10 +22,10 @@ public sealed class MemberEqualityComparer<T, T1> : IEqualityComparer<T>
         _equalityComparer = equalityComparer;
     }
 
-    bool IEqualityComparer<T>.Equals(T x, T y)
+    bool IEqualityComparer<T>.Equals(T? x, T? y)
     {
-        var x1 = _get(x);
-        var y1 = _get(y);
+        var x1 = _get(x!);
+        var y1 = _get(y!);
         var equals = _equalityComparer.Equals(x1, y1);
         return equals;
     }
@@ -33,6 +33,6 @@ public sealed class MemberEqualityComparer<T, T1> : IEqualityComparer<T>
     int IEqualityComparer<T>.GetHashCode(T obj)
     {
         var obj1 = _get(obj);
-        return _equalityComparer.GetHashCode(obj1);
+        return _equalityComparer.GetHashCode(obj1!);
     }
 }
