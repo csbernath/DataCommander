@@ -4,7 +4,7 @@ namespace Foundation.Core;
 
 public sealed class Disposer : IDisposable
 {
-    private Action _dispose;
+    private Action? _dispose;
     private bool _disposed;
 
     public Disposer(Action dispose)

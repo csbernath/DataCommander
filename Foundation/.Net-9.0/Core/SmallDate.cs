@@ -95,7 +95,7 @@ public readonly struct SmallDate : IComparable<SmallDate>, IEquatable<SmallDate>
         return new SmallDate(result);
     }
 
-    public override readonly bool Equals(object value) => value is SmallDate smallDate && smallDate._value == _value; 
+    public override readonly bool Equals(object? value) => value is SmallDate smallDate && smallDate._value == _value; 
 
     public override readonly int GetHashCode() => _value;
 

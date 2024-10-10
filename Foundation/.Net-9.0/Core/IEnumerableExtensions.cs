@@ -7,7 +7,7 @@ namespace Foundation.Core;
 public static class IEnumerableExtensions
 {
     [Pure]
-    public static Option<TSource> FirstOrOptionNone<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) where TSource : struct
+    public static Option<TSource>? FirstOrOptionNone<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) where TSource : struct
     {
         var result = Option<TSource>.None;
 

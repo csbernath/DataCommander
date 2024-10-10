@@ -92,7 +92,7 @@ public readonly struct Date : IComparable<Date>, IEquatable<Date>
         }
     }
 
-    public override bool Equals(object obj) => throw new NotImplementedException();
+    public override bool Equals(object? obj) => throw new NotImplementedException();
 
     public override int GetHashCode() => throw new NotImplementedException();
 }

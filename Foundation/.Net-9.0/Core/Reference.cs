@@ -4,7 +4,7 @@ namespace Foundation.Core
 {
     public sealed class Reference : IDisposable
     {
-        private ReferenceCounter _referenceCounter;
+        private ReferenceCounter? _referenceCounter;
 
         private Reference(ReferenceCounter referenceCounter)
         {
@@ -15,7 +15,7 @@ namespace Foundation.Core
 
         public static Reference Add(ReferenceCounter referenceCounter)
         {
-            Reference reference = new Reference(referenceCounter);
+            var reference = new Reference(referenceCounter);
             referenceCounter.Add();
             return reference;
         }

@@ -5,7 +5,7 @@ namespace Foundation.Core.ClockAggregate;
 
 public static class ClockAggregateRepositoryUpdater
 {
-    private static Timer _timer;
+    private static Timer? _timer;
 
     internal static void Start()
     {
@@ -15,7 +15,7 @@ public static class ClockAggregateRepositoryUpdater
         _timer = new Timer(TimerCallback, null, period, period);
     }
 
-    public static void Stop() => _timer.Dispose();
+    public static void Stop() => _timer!.Dispose();
 
     private static void Update()
     {
@@ -23,5 +23,5 @@ public static class ClockAggregateRepositoryUpdater
         ClockAggregateRepository.Singleton.Save(clock);
     }
 
-    private static void TimerCallback(object state) => Update();
+    private static void TimerCallback(object? state) => Update();
 }

@@ -6,7 +6,7 @@ namespace Foundation.Core;
 
 public class TraceWriter : TextWriter
 {
-    private static TraceWriter _instance;
+    private static TraceWriter? _instance;
 
     public static TraceWriter Instance
     {
@@ -18,8 +18,8 @@ public class TraceWriter : TextWriter
         }
     }
 
-    public override Encoding Encoding => null;
+    public override Encoding Encoding => Encoding.Default;
     public override void Write(char c) => Trace.Write(c);
-    public override void Write(string str) => Trace.Write(str);
-    public override void WriteLine(string str) => Trace.WriteLine(str);
+    public override void Write(string? str) => Trace.Write(str);
+    public override void WriteLine(string? str) => Trace.WriteLine(str);
 }

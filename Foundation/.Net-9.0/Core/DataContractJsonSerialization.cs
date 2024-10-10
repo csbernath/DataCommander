@@ -19,12 +19,12 @@ public static class DataContractJsonSerialization
         return json;
     }
 
-    public static T Deserialize<T>(string json)
+    public static T? Deserialize<T>(string json)
     {
         var serializer = new DataContractJsonSerializer(typeof(T));
-        object objectGraph;
+        object? objectGraph;
         using (var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(json)))
             objectGraph = serializer.ReadObject(memoryStream);
-        return (T) objectGraph;
+        return (T?)objectGraph;
     }
 }

@@ -67,7 +67,7 @@ public struct StopwatchTimeSpan(long ticks)
             totalSeconds++;
         }
 
-        string fractionString = null;
+        string? fractionString = null;
         if (scale > 0)
             fractionString = $".{fractionInt64.ToString().PadLeft(scale, '0')}";
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Foundation.Core;
 
@@ -13,15 +14,15 @@ public sealed class TypeDictionary<TValue>
         _selections.Add(type, value);
     }
 
-    public bool TryGetValue<T>(out TValue value)
+    public bool TryGetValue<T>([MaybeNullWhen(false)] out TValue value)
     {
         var type = typeof(T);
         return _selections.TryGetValue(type, out value);
     }
 
-    public TValue GetValueOrDefault(Type type) => _selections.GetValueOrDefault(type);
+    public TValue? GetValueOrDefault(Type type) => _selections.GetValueOrDefault(type);
 
-    public TValue GetValueOrDefault<T>()
+    public TValue? GetValueOrDefault<T>()
     {
         var type = typeof(T);
         return GetValueOrDefault(type);

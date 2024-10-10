@@ -42,7 +42,7 @@ public readonly struct SmallTime : IEquatable<SmallTime>, IComparable<SmallTime>
 
     public readonly bool Equals(SmallTime other) => _value == other._value;
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj)) return false;
         return obj is SmallTime smallTime && Equals(smallTime);

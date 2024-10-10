@@ -44,7 +44,7 @@ public readonly struct MinuteSpan(int value) : IComparable<MinuteSpan>
         }
     }
 
-    public override bool Equals(object value) => value is MinuteSpan minuteSpan && minuteSpan._value == _value; 
+    public override bool Equals(object? value) => value is MinuteSpan minuteSpan && minuteSpan._value == _value; 
 
     public bool Equals(MinuteSpan other) => _value == other._value;
     public override int GetHashCode() => _value;

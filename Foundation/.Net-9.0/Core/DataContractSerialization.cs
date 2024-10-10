@@ -33,12 +33,12 @@ public static class DataContractSerialization
         return xml;
     }
 
-    public static T Deserialize<T>(string xml)
+    public static T? Deserialize<T>(string xml)
     {
         var serializer = new DataContractSerializer(typeof(T));
-        T objectGraph;
+        T? objectGraph;
         using (var xmlReader = XmlReader.Create(new StringReader(xml)))
-            objectGraph = (T) serializer.ReadObject(xmlReader);
+            objectGraph = (T?)serializer.ReadObject(xmlReader);
         return objectGraph;
     }
 }
