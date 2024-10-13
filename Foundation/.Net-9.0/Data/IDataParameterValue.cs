@@ -3,5 +3,5 @@ namespace Foundation.Data;
 
 public interface IDataParameterValue
 {
-    object ValueObject { get; }
+    object? ValueObject { get; }
 }

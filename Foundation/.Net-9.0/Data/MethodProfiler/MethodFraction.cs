@@ -6,7 +6,7 @@ namespace Foundation.Data.MethodProfiler;
 
 internal sealed class MethodFraction(MethodBase method, string name) : MethodBase
 {
-    public override Type DeclaringType => method.DeclaringType;
+    public override Type? DeclaringType => method.DeclaringType;
 
     public static string GetKey(MethodBase method, string name)
     {
@@ -24,7 +24,7 @@ internal sealed class MethodFraction(MethodBase method, string name) : MethodBas
 
     public override string Name => method.Name + "[" + name + "]";
 
-    public override Type ReflectedType => method.ReflectedType;
+    public override Type? ReflectedType => method.ReflectedType;
 
     public override MethodAttributes Attributes => method.Attributes;
 
@@ -32,7 +32,8 @@ internal sealed class MethodFraction(MethodBase method, string name) : MethodBas
 
     public override ParameterInfo[] GetParameters() => method.GetParameters();
 
-    public override object Invoke(object obj, BindingFlags invokeAttr, Binder binder, object[] parameters, CultureInfo culture) => throw new InvalidOperationException();
+    public override object Invoke(object? obj, BindingFlags invokeAttr, Binder? binder, object?[]? parameters, CultureInfo? culture) =>
+        throw new InvalidOperationException();
 
     public override RuntimeMethodHandle MethodHandle => throw new InvalidOperationException();
 }

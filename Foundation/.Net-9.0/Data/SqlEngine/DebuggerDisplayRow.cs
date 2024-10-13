@@ -31,7 +31,7 @@ public class DebuggerDisplayRow(ColumnCollection columns, object[] values)
             {
                 var value = _values[column.ColumnIndex];
 
-                string stringValue;
+                string? stringValue;
                 if (value != null)
                 {
                     if (value == DBNull.Value)

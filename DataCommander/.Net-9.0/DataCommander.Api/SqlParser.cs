@@ -47,7 +47,7 @@ public sealed class SqlParser
 
             if (firstToken.Type == TokenType.KeyWord)
             {
-                var keyWord = firstToken.Value.ToLower();
+                var keyWord = firstToken.Value!.ToLower();
 
                 switch (keyWord)
                 {
@@ -149,7 +149,7 @@ public sealed class SqlParser
 
             if (prev.Type == TokenType.KeyWord)
             {
-                var value = prev.Value.ToLower();
+                var value = prev.Value!.ToLower();
                 string? name = null;
 
                 if (index < Tokens.Count)
@@ -227,7 +227,7 @@ public sealed class SqlParser
                 var tokenAfterOperator = index < Tokens.Count
                     ? Tokens[index]
                     : null;
-                if (tokenAfterOperator != null && tokenAfterOperator.Value.Contains('.'))
+                if (tokenAfterOperator != null && tokenAfterOperator.Value!.Contains('.'))
                     sqlObject = GetSqlObject(tokenAfterOperator.Value);
                 else if (prev.Value == "=" && index >= 2)
                 {

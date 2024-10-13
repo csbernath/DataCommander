@@ -42,7 +42,7 @@ public sealed class DateTimeField(DateTime value) : IComparable, IConvertible
     public int CompareTo(object? obj)
     {
         int result;
-        var type = obj.GetType();
+        var type = obj!.GetType();
         var typeCode = Type.GetTypeCode(type);
 
         switch (typeCode)

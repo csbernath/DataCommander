@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Foundation.Data.TextData;
 
@@ -39,13 +40,10 @@ public sealed class TextDataConnection : DbConnection
     {
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+    [AllowNull]
     public override string ConnectionString
     {
         get => throw new NotImplementedException();
-
         set => throw new NotImplementedException();
     }
 

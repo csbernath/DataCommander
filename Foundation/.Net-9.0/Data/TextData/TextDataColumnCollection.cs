@@ -45,7 +45,7 @@ public sealed class TextDataColumnCollection : IList<TextDataColumn>
         int index;
 
         if (contains)
-            index = _listIndex.IndexOf(column);
+            index = _listIndex.IndexOf(column!);
         else
             index = -1;
 

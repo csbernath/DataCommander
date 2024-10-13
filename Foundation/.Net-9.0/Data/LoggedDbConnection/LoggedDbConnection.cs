@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Foundation.Data.LoggedDbConnection;
 
 public sealed class LoggedDbConnection : IDbConnection
 {
     private readonly IDbConnection _connection;
-    private EventHandler<BeforeOpenDbConnectionEventArgs> _beforeOpen;
-    private EventHandler<AfterOpenDbConnectionEventArgs> _afterOpen;
-    private EventHandler<BeforeExecuteCommandEventArgs> _beforeExecuteCommand;
-    private EventHandler<AfterExecuteCommandEventArgs> _afterExecuteCommand;
-    private EventHandler<AfterReadEventArgs> _afterRead;
+    private EventHandler<BeforeOpenDbConnectionEventArgs>? _beforeOpen;
+    private EventHandler<AfterOpenDbConnectionEventArgs>? _afterOpen;
+    private EventHandler<BeforeExecuteCommandEventArgs>? _beforeExecuteCommand;
+    private EventHandler<AfterExecuteCommandEventArgs>? _afterExecuteCommand;
+    private EventHandler<AfterReadEventArgs>? _afterRead;
 
     public LoggedDbConnection(IDbConnection connection)
     {
@@ -56,6 +57,7 @@ public sealed class LoggedDbConnection : IDbConnection
     void IDbConnection.ChangeDatabase(string databaseName) => _connection.ChangeDatabase(databaseName);
     void IDbConnection.Close() => _connection.Close();
 
+    [AllowNull]
     string IDbConnection.ConnectionString
     {
         get => _connection.ConnectionString;
@@ -67,7 +69,7 @@ public sealed class LoggedDbConnection : IDbConnection
     IDbCommand IDbConnection.CreateCommand()
     {
         var command = _connection.CreateCommand();
-        return new LoggedDbCommand(command, _beforeExecuteCommand, _afterExecuteCommand, _afterRead);
+        return new LoggedDbCommand(command, _beforeExecuteCommand!, _afterExecuteCommand!, _afterRead!);
     }
 
     string IDbConnection.Database => _connection.Database;
@@ -82,7 +84,7 @@ public sealed class LoggedDbConnection : IDbConnection
 
         if (_afterOpen != null)
         {
-            Exception exception = null;
+            Exception? exception = null;
             try
             {
                 _connection.Open();

@@ -33,13 +33,9 @@ public sealed class TextDataStreamReader
         _converters = converters;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    public object[] ReadRow()
+    public object[]? ReadRow()
     {
-        object[] values = null;
+        object[]? values = null;
         var index = 0;
 
         foreach (var column in _columns)
@@ -53,7 +49,7 @@ public sealed class TextDataStreamReader
                 break;
             }
 
-            Assert.IsTrue(count == maxLength);
+            Assert.AreEqual(count, maxLength);
 
             if (index == 0)
                 values = new object[_columns.Count];
@@ -61,7 +57,7 @@ public sealed class TextDataStreamReader
             var source = new string(buffer);
             var converter = _converters[index];
 
-            Assert.IsTrue(converter != null);
+            ArgumentNullException.ThrowIfNull(converter);
 
             object value;
 
@@ -74,7 +70,7 @@ public sealed class TextDataStreamReader
                 throw new TextDataFormatException(column, converter, source, e);
             }
 
-            values[index] = value;
+            values![index] = value;
             index++;
         }
 

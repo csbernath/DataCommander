@@ -4,7 +4,7 @@ namespace Foundation.Data;
 
 public readonly struct DataParameterValue<T> : IDataParameterValue<T>
 {
-    private readonly T _value;
+    private readonly T? _value;
 
     public DataParameterValue(T value)
     {
@@ -22,10 +22,10 @@ public readonly struct DataParameterValue<T> : IDataParameterValue<T>
     public static DataParameterValue<T> Null { get; } = new(DataParameterValueType.Null);
     public static DataParameterValue<T> Void { get; } = new(DataParameterValueType.Void);
     public static implicit operator DataParameterValue<T>(T value) => new(value);
-    public static explicit operator T(DataParameterValue<T> value) => value.Value;
+    public static explicit operator T?(DataParameterValue<T> value) => value.Value;
     public DataParameterValueType Type { get; }
 
-    public readonly T Value
+    public T? Value
     {
         get
         {
@@ -34,5 +34,5 @@ public readonly struct DataParameterValue<T> : IDataParameterValue<T>
         }
     }
 
-    object IDataParameterValue.ValueObject => Value;
+    object? IDataParameterValue.ValueObject => Value;
 }

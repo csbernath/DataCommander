@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Foundation.Core;
 using Foundation.Log;
 
@@ -12,12 +13,13 @@ namespace Foundation.Data;
 public class SafeDbConnection : IDbConnection
 {
     private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(SafeDbConnection));
-    private ISafeDbConnection _safeDbConnection;
+    private ISafeDbConnection? _safeDbConnection;
 
     protected SafeDbConnection()
     {
     }
 
+    [AllowNull]
     public IDbConnection Connection { get; private set; }
 
     protected void Initialize(IDbConnection connection, ISafeDbConnection safeDbConnection)
@@ -60,7 +62,7 @@ public class SafeDbConnection : IDbConnection
     {
         var count = 0;
 
-        while (!_safeDbConnection.CancellationToken.IsCancellationRequested)
+        while (!_safeDbConnection!.CancellationToken.IsCancellationRequested)
         {
             count++;
             var stopwatch = new Stopwatch();
@@ -85,10 +87,10 @@ public class SafeDbConnection : IDbConnection
         }
     }
 
+    [AllowNull]
     public string ConnectionString
     {
         get => Connection.ConnectionString;
-
         set => Connection.ConnectionString = value;
     }
 
@@ -103,9 +105,9 @@ public class SafeDbConnection : IDbConnection
         if (Connection.State != ConnectionState.Open)
             Open();
 
-        IDataReader reader = null;
+        IDataReader? reader = null;
 
-        while (!_safeDbConnection.CancellationToken.IsCancellationRequested)
+        while (!_safeDbConnection!.CancellationToken.IsCancellationRequested)
         {
             var ticks = Stopwatch.GetTimestamp();
 
@@ -145,21 +147,21 @@ public class SafeDbConnection : IDbConnection
             }
         }
 
-        return reader;
+        return reader!;
     }
 
-    internal object ExecuteScalar(IDbCommand command)
+    internal object? ExecuteScalar(IDbCommand command)
     {
         ArgumentNullException.ThrowIfNull(command);
 
-        object scalar = null;
+        object? scalar = null;
 
         if (Connection.State != ConnectionState.Open)
         {
             Open();
         }
 
-        while (!_safeDbConnection.CancellationToken.IsCancellationRequested)
+        while (!_safeDbConnection!.CancellationToken.IsCancellationRequested)
         {
             try
             {
@@ -192,7 +194,7 @@ public class SafeDbConnection : IDbConnection
         var count = 0;
         var tryCount = 0;
 
-        while (tryCount == 0 || !_safeDbConnection.CancellationToken.IsCancellationRequested)
+        while (tryCount == 0 || !_safeDbConnection!.CancellationToken.IsCancellationRequested)
         {
             try
             {
@@ -204,13 +206,9 @@ public class SafeDbConnection : IDbConnection
                 Log.Write(LogLevel.Error, e.ToLogString());
 
                 if (Connection.State == ConnectionState.Open)
-                {
-                    _safeDbConnection.HandleException(e, command);
-                }
+                    _safeDbConnection!.HandleException(e, command);
                 else
-                {
                     Open();
-                }
             }
 
             tryCount++;

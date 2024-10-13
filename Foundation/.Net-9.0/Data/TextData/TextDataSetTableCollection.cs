@@ -1,23 +1,18 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Foundation.Assertions;
 using Foundation.Collections.IndexableCollection;
 
 namespace Foundation.Data.TextData;
 
-/// <summary>
-/// 
-/// </summary>
 public sealed class TextDataSetTableCollection : IList<TextDataSetTable>
 {
     private readonly IndexableCollection<TextDataSetTable> _collection;
     private readonly ListIndex<TextDataSetTable> _listIndex;
     private readonly UniqueIndex<string, TextDataSetTable> _nameIndex;
 
-    /// <summary>
-    /// 
-    /// </summary>
     public TextDataSetTableCollection()
     {
         _listIndex = new ListIndex<TextDataSetTable>("List");
@@ -29,25 +24,10 @@ public sealed class TextDataSetTableCollection : IList<TextDataSetTable>
         _collection.Indexes.Add(_nameIndex);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
     public bool Contains(string name) => _nameIndex.ContainsKey(name);
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="index"></param>
-    /// <returns></returns>
     public TextDataSetTable this[int index] => _listIndex[index];
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
     public TextDataSetTable this[string name] => _nameIndex[name];
 
     int IList<TextDataSetTable>.IndexOf(TextDataSetTable item) => throw new NotImplementedException();
@@ -63,13 +43,9 @@ public sealed class TextDataSetTableCollection : IList<TextDataSetTable>
         set => throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="item"></param>
     public void Add(TextDataSetTable item)
     {
-        Assert.IsTrue(item != null);
+        ArgumentNullException.ThrowIfNull(item);
 
         _collection.Add(item);
     }
@@ -80,9 +56,6 @@ public sealed class TextDataSetTableCollection : IList<TextDataSetTable>
 
     void ICollection<TextDataSetTable>.CopyTo(TextDataSetTable[] array, int arrayIndex) => throw new NotImplementedException();
 
-    /// <summary>
-    /// 
-    /// </summary>
     public int Count => _collection.Count;
 
     bool ICollection<TextDataSetTable>.IsReadOnly => throw new NotImplementedException();

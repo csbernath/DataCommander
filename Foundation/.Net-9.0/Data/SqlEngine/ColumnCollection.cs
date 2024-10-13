@@ -33,7 +33,7 @@ public class ColumnCollection : IReadOnlyList<Column>
 
     private Column GetColumn(string columnName)
     {
-        Column result = null;
+        Column? result = null;
         var count = 0;
 
         foreach (var column in _columnsByColumnName[columnName])
@@ -55,6 +55,6 @@ public class ColumnCollection : IReadOnlyList<Column>
                 $"The column '{columnName}' was specified multiple times.");
         }
 
-        return result;
+        return result!;
     }
 }

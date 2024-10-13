@@ -85,7 +85,7 @@ public static class IDataRecordExtensions
             : dataRecord.GetInt64(fieldIndex);
     }
 
-    public static string GetStringOrDefault(this IDataRecord dataRecord, int fieldIndex)
+    public static string? GetStringOrDefault(this IDataRecord dataRecord, int fieldIndex)
     {
         ArgumentNullException.ThrowIfNull(dataRecord);
         return dataRecord.IsDBNull(fieldIndex)

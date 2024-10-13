@@ -8,7 +8,7 @@ public static class SchemaFiller
 {
     public static DataTable FillSchema(IDataReader dataReader, DataTable dataTable)
     {
-        var schemaTable = dataReader.GetSchemaTable();
+        var schemaTable = dataReader.GetSchemaTable()!;
         FillSchema(schemaTable, dataTable);
         return schemaTable;
     }

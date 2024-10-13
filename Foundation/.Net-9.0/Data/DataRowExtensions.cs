@@ -34,16 +34,16 @@ public static class DataRowExtensions
         return GetNullableValue<T>(value);
     }
 
-    public static T GetReferenceField<T>(this DataRow dataRow, string name) where T : class
+    public static T? GetReferenceField<T>(this DataRow dataRow, string name) where T : class
     {
         ArgumentNullException.ThrowIfNull(dataRow);
         var value = dataRow[name];
         return value == DBNull.Value
             ? default
-            : (T)value;
+            : (T?)value;
     }
 
-    public static T GetReferenceField<T>(this DataRow dataRow, int columnIndex) where T : class
+    public static T? GetReferenceField<T>(this DataRow dataRow, int columnIndex) where T : class
     {
         ArgumentNullException.ThrowIfNull(dataRow, nameof(dataRow));
         var value = dataRow[columnIndex];
@@ -60,21 +60,21 @@ public static class DataRowExtensions
         return (T)valueObject;
     }
 
-    public static T GetValue<T>(this DataRow dataRow, string name, T outputNullValue)
+    public static T? GetValue<T>(this DataRow dataRow, string name, T outputNullValue)
     {
         ArgumentNullException.ThrowIfNull(dataRow, nameof(dataRow));
         var valueObject = dataRow[name];
         return ValueReader.GetValue(valueObject, outputNullValue);
     }
 
-    public static T GetValueOrDefault<T>(this DataRow dataRow, int columnIndex)
+    public static T? GetValueOrDefault<T>(this DataRow dataRow, int columnIndex)
     {
         ArgumentNullException.ThrowIfNull(dataRow, nameof(dataRow));
         var value = dataRow[columnIndex];
         return ValueReader.GetValueOrDefault<T>(value);
     }
 
-    public static T GetValueOrDefault<T>(this DataRow dataRow, string name)
+    public static T? GetValueOrDefault<T>(this DataRow dataRow, string name)
     {
         ArgumentNullException.ThrowIfNull(dataRow, nameof(dataRow));
         var value = dataRow[name];
@@ -93,7 +93,7 @@ public static class DataRowExtensions
         {
             var row = stringTable.NewRow();
             row[0] = dataTable.Columns[i].ColumnName;
-            row[1] = itemArray[i].ToString();
+            row[1] = itemArray[i]!.ToString()!;
             stringTable.Rows.Add(row);
         }
 

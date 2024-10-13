@@ -43,16 +43,16 @@ public static class IDbCommandExtensions
         return dataTable;
     }
 
-    public static T ExecuteScalarValue<T>(this IDbCommand command)
+    public static T? ExecuteScalarValue<T>(this IDbCommand command)
     {
         ArgumentNullException.ThrowIfNull(command);
 
         var scalar = command.ExecuteScalar();
         Assert.IsTrue(scalar is T);
-        return (T)scalar;
+        return (T?)scalar;
     }
 
-    public static T ExecuteScalarValueOrDefault<T>(this IDbCommand command)
+    public static T? ExecuteScalarValueOrDefault<T>(this IDbCommand command)
     {
         ArgumentNullException.ThrowIfNull(command);
 
@@ -71,7 +71,7 @@ public static class IDbCommandExtensions
 
         if (!cancellationToken.IsCancellationRequested)
         {
-            var connection = command.Connection;
+            var connection = command.Connection!;
 
             using var connectionStateManager = new ConnectionStateManager(connection);
             connectionStateManager.Open();
@@ -131,7 +131,7 @@ public static class IDbCommandExtensions
 
         if (!cancellationToken.IsCancellationRequested)
         {
-            var connection = command.Connection;
+            var connection = command.Connection!;
 
             using var connectionStateManager = new ConnectionStateManager(connection);
             connectionStateManager.Open();

@@ -31,11 +31,11 @@ public class MappedDataReader : DbDataReader
 
     public override byte GetByte(int ordinal) => throw new NotImplementedException();
 
-    public override long GetBytes(int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length) => throw new NotImplementedException();
+    public override long GetBytes(int ordinal, long dataOffset, byte[]? buffer, int bufferOffset, int length) => throw new NotImplementedException();
 
     public override char GetChar(int ordinal) => throw new NotImplementedException();
 
-    public override long GetChars(int ordinal, long dataOffset, char[] buffer, int bufferOffset, int length) => throw new NotImplementedException();
+    public override long GetChars(int ordinal, long dataOffset, char[]? buffer, int bufferOffset, int length) => throw new NotImplementedException();
 
     public override string GetDataTypeName(int ordinal) => throw new NotImplementedException();
 
@@ -62,7 +62,7 @@ public class MappedDataReader : DbDataReader
     public override long GetInt64(int ordinal) => throw new NotImplementedException();
     public override string GetName(int ordinal) => _dataReader.GetName(ordinal);
     public override int GetOrdinal(string name) => _dataReader.GetOrdinal(name);
-    public override DataTable GetSchemaTable() => _dataReader.GetSchemaTable();
+    public override DataTable? GetSchemaTable() => _dataReader.GetSchemaTable();
     public override string GetString(int ordinal) => throw new NotImplementedException();
     public override object GetValue(int ordinal) => throw new NotImplementedException();
     public override int GetValues(object[] values) => _getValues(values);

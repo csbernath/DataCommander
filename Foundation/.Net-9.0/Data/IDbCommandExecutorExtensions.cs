@@ -36,10 +36,10 @@ public static class IDbCommandExecutorExtensions
         return affectedRows;
     }
 
-    public static object ExecuteScalar(this IDbCommandExecutor executor, CreateCommandRequest request)
+    public static object? ExecuteScalar(this IDbCommandExecutor executor, CreateCommandRequest request)
     {
         ArgumentNullException.ThrowIfNull(executor);
-        object scalar = null;
+        object? scalar = null;
         executor.Execute(request, command => scalar = command.ExecuteScalar());
         return scalar;
     }
@@ -57,33 +57,33 @@ public static class IDbCommandExecutorExtensions
         });
     }
 
-    public static ReadOnlySegmentLinkedList<T> ExecuteReader<T>(this IDbCommandExecutor executor, ExecuteReaderRequest request, int segmentLength,
+    public static ReadOnlySegmentLinkedList<T>? ExecuteReader<T>(this IDbCommandExecutor executor, ExecuteReaderRequest request, int segmentLength,
         Func<IDataRecord, T> readRecord)
     {
         ArgumentNullException.ThrowIfNull(executor);
-        ReadOnlySegmentLinkedList<T> rows = null;
+        ReadOnlySegmentLinkedList<T>? rows = null;
         executor.ExecuteReader(request, dataReader => rows = dataReader.ReadResult(segmentLength, readRecord));
         return rows;
     }
 
-    public static DataTable ExecuteDataTable(this IDbCommandExecutor executor, ExecuteReaderRequest request, CancellationToken cancellationToken)
+    public static DataTable? ExecuteDataTable(this IDbCommandExecutor executor, ExecuteReaderRequest request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(executor);
-        DataTable dataTable = null;
+        DataTable? dataTable = null;
         executor.Execute(
             request.CreateCommandRequest,
             command => { dataTable = command.ExecuteDataTable(cancellationToken); });
         return dataTable;
     }
 
-    public static DataSet ExecuteDataSet(
+    public static DataSet? ExecuteDataSet(
         this IDbCommandExecutor executor,
         ExecuteReaderRequest request,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(executor);
         ArgumentNullException.ThrowIfNull(request);
-        DataSet dataSet = null;
+        DataSet? dataSet = null;
         executor.Execute(
             request.CreateCommandRequest,
             command => { dataSet = command.ExecuteDataSet(cancellationToken); });

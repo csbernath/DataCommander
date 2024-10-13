@@ -29,7 +29,7 @@ public static class DbDataReaderExtensions
 
     private static async Task<Table> ReadTable(
         this DbDataReader dbDataReader,
-        string tableName,
+        string? tableName,
         CancellationToken cancellationToken)
     {
         var dbColumns = dbDataReader.GetColumnSchema();
@@ -42,8 +42,8 @@ public static class DbDataReaderExtensions
 
     private static ColumnSchema ToColumn(DbColumn dbColumn) => new(
             dbColumn.ColumnName,
-            dbColumn.DataType,
-            dbColumn.DataTypeName,
+            dbColumn.DataType!,
+            dbColumn.DataTypeName!,
             dbColumn.ColumnSize,
             dbColumn.NumericPrecision,
             dbColumn.NumericScale,

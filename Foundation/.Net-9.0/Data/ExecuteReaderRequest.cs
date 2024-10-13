@@ -22,12 +22,12 @@ public sealed class ExecuteReaderRequest
     {
     }
 
-    public ExecuteReaderRequest(string commandText, ReadOnlyCollection<object> parameters, IDbTransaction transaction)
+    public ExecuteReaderRequest(string commandText, ReadOnlyCollection<object>? parameters, IDbTransaction? transaction)
         : this(new CreateCommandRequest(commandText, parameters, CommandType.Text, null, transaction), CommandBehavior.Default)
     {
     }
 
-    public ExecuteReaderRequest(string commandText, ReadOnlyCollection<object> parameters)
+    public ExecuteReaderRequest(string commandText, ReadOnlyCollection<object>? parameters)
         : this(commandText, parameters, null)
     {
     }

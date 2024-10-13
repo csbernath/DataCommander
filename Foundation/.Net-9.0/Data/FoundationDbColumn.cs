@@ -4,13 +4,13 @@ namespace Foundation.Data;
 
 public sealed class FoundationDbColumn(
     bool? allowDbNull,
-    string baseColumnName,
-    string baseSchemaName,
-    string baseTableName,
-    string columnName,
+    string? baseColumnName,
+    string? baseSchemaName,
+    string? baseTableName,
+    string? columnName,
     int columnOrdinal,
     int columnSize,
-    Type dataType,
+    Type? dataType,
     bool? isAliased,
     bool? isExpression,
     bool? isKey,
@@ -23,13 +23,13 @@ public sealed class FoundationDbColumn(
     int providerType)
 {
     public readonly bool? AllowDbNull = allowDbNull;
-    public readonly string BaseColumnName = baseColumnName;
-    public readonly string BaseSchemaName = baseSchemaName;
-    public readonly string BaseTableName = baseTableName;
-    public readonly string ColumnName = columnName;
+    public readonly string? BaseColumnName = baseColumnName;
+    public readonly string? BaseSchemaName = baseSchemaName;
+    public readonly string? BaseTableName = baseTableName;
+    public readonly string? ColumnName = columnName;
     public readonly int ColumnOrdinal = columnOrdinal;
     public readonly int ColumnSize = columnSize;
-    public readonly Type DataType = dataType;
+    public readonly Type? DataType = dataType;
     public readonly bool? IsAliased = isAliased;
     public readonly bool? IsExpression = isExpression;
     public readonly bool? IsKey = isKey;

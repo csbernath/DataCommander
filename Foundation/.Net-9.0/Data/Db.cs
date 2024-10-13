@@ -9,13 +9,13 @@ namespace Foundation.Data;
 
 public static class Db
 {
-    public static ReadOnlySegmentLinkedList<T> ExecuteReader<T>(
+    public static ReadOnlySegmentLinkedList<T>? ExecuteReader<T>(
         Func<DbConnection> createConnection,
         ExecuteReaderRequest request,
         int segmentLength,
         Func<IDataRecord, T> readRecord)
     {
-        ReadOnlySegmentLinkedList<T> rows = null;
+        ReadOnlySegmentLinkedList<T>? rows = null;
         ExecuteReader(createConnection, request, dataReader => rows = dataReader.ReadResult(segmentLength, readRecord));
         return rows;
     }
@@ -31,14 +31,14 @@ public static class Db
         executor.ExecuteReader(request, readResults);
     }
 
-    public static async Task<ReadOnlySegmentLinkedList<T>> ExecuteReaderAsync<T>(
+    public static async Task<ReadOnlySegmentLinkedList<T>?> ExecuteReaderAsync<T>(
         Func<DbConnection> createConnection,
         ExecuteReaderRequest request,
         int segmentLength,
         Func<IDataRecord, T> readRecord,
         CancellationToken cancellationToken)
     {
-        ReadOnlySegmentLinkedList<T> rows = null;
+        ReadOnlySegmentLinkedList<T>? rows = null;
         await ExecuteReaderAsync(
             createConnection,
             request,
@@ -60,7 +60,7 @@ public static class Db
         await executor.ExecuteReaderAsync(executeReaderRequest, readResults, cancellationToken);
     }
 
-    public static object ExecuteScalar(Func<DbConnection> createConnection, CreateCommandRequest createCommandRequest)
+    public static object? ExecuteScalar(Func<DbConnection> createConnection, CreateCommandRequest createCommandRequest)
     {
         using var connection = createConnection();
         var executor = connection.CreateCommandExecutor();
@@ -68,19 +68,15 @@ public static class Db
         return scalar;
     }
 
-    public static async Task<object> ExecuteScalarAsync(
+    public static async Task<object?> ExecuteScalarAsync(
         Func<DbConnection> createConnection,
         CreateCommandRequest createCommandRequest,
         CancellationToken cancellationToken)
     {
-        object scalar;
-        await using (var connection = createConnection())
-        {
-            await connection.OpenAsync(cancellationToken);
-            var executor = connection.CreateCommandAsyncExecutor();
-            scalar = await executor.ExecuteScalarAsync(createCommandRequest, cancellationToken);
-        }
-
+        await using var connection = createConnection();
+        await connection.OpenAsync(cancellationToken);
+        var executor = connection.CreateCommandAsyncExecutor();
+        var scalar = await executor.ExecuteScalarAsync(createCommandRequest, cancellationToken);
         return scalar;
     }
 }

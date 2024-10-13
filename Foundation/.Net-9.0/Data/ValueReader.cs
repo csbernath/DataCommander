@@ -4,9 +4,9 @@ namespace Foundation.Data;
 
 public static class ValueReader
 {
-    public static TResult GetValue<TResult>(object value, object inputNullValue, TResult outputNullValue)
+    public static TResult? GetValue<TResult>(object? value, object? inputNullValue, TResult? outputNullValue)
     {
-        TResult returnValue;
+        TResult? returnValue;
 
         if (value == null || value == inputNullValue)
             returnValue = outputNullValue;
@@ -16,13 +16,13 @@ public static class ValueReader
         return returnValue;
     }
 
-    public static TResult GetValue<TResult>(object value, TResult outputNullValue)
+    public static TResult? GetValue<TResult>(object? value, TResult outputNullValue)
     {
         object inputNullValue = DBNull.Value;
         return GetValue(value, inputNullValue, outputNullValue);
     }
 
-    public static TResult GetValueOrDefault<TResult>(object value)
+    public static TResult? GetValueOrDefault<TResult>(object? value)
     {
         object inputNullValue = DBNull.Value;
         var outputNullValue = default(TResult);

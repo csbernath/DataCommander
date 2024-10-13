@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using Foundation.Assertions;
 using Foundation.Collections.IndexableCollection;
@@ -38,7 +39,7 @@ public sealed class TextDataParameterCollection : DbParameterCollection, IList<T
 
     public TextDataParameter Add(TextDataParameter parameter)
     {
-        Assert.IsTrue(parameter != null);
+        ArgumentNullException.ThrowIfNull(parameter);
 
         _collection.Add(parameter);
         return parameter;
@@ -87,7 +88,7 @@ public sealed class TextDataParameterCollection : DbParameterCollection, IList<T
 
     public override object SyncRoot => throw new NotImplementedException();
 
-    public TResult GetParameterValue<TResult>(string parameterName)
+    public TResult? GetParameterValue<TResult>(string parameterName)
     {
         Assert.IsTrue(Contains(parameterName));
 
@@ -95,14 +96,15 @@ public sealed class TextDataParameterCollection : DbParameterCollection, IList<T
         var value = parameter.Value;
 
         Assert.IsTrue(value is TResult);
-        return (TResult)value;
+        return (TResult?)value;
     }
 
-    public bool TryGetValue(string parameterName, out TextDataParameter parameter) => _nameIndex.TryGetValue(parameterName, out parameter);
+    public bool TryGetValue(string parameterName, [MaybeNullWhen(false)] out TextDataParameter parameter) =>
+        _nameIndex.TryGetValue(parameterName, out parameter);
 
     int IList<TextDataParameter>.IndexOf(TextDataParameter item)
     {
-        Assert.IsTrue(item != null);
+        ArgumentNullException.ThrowIfNull(item);
 
         return _listIndex.IndexOf(item);
     }
@@ -125,7 +127,6 @@ public sealed class TextDataParameterCollection : DbParameterCollection, IList<T
     void ICollection<TextDataParameter>.Add(TextDataParameter item)
     {
         ArgumentNullException.ThrowIfNull(item);
-        Assert.IsTrue(item != null);
 
         _collection.Add(item);
     }
@@ -142,7 +143,7 @@ public sealed class TextDataParameterCollection : DbParameterCollection, IList<T
 
     bool ICollection<TextDataParameter>.Remove(TextDataParameter item)
     {
-        Assert.IsTrue(item != null);
+        ArgumentNullException.ThrowIfNull(item);
 
         return _collection.Remove(item);
     }

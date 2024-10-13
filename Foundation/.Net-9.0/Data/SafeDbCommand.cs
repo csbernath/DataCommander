@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Foundation.Data;
 
@@ -21,9 +22,10 @@ public class SafeDbCommand : IDbCommand
     public int ExecuteNonQuery() => _connection.ExecuteNonQuery(Command);
     public IDataReader ExecuteReader() => _connection.ExecuteReader(Command, CommandBehavior.Default);
     public IDataReader ExecuteReader(CommandBehavior behavior) => _connection.ExecuteReader(Command, behavior);
-    public object ExecuteScalar() => _connection.ExecuteScalar(Command);
+    public object? ExecuteScalar() => _connection.ExecuteScalar(Command);
     public void Prepare() => Command.Prepare();
 
+    [AllowNull]
     public string CommandText
     {
         get => Command.CommandText;
@@ -42,7 +44,7 @@ public class SafeDbCommand : IDbCommand
         set => Command.CommandType = value;
     }
 
-    public IDbConnection Connection
+    public IDbConnection? Connection
     {
         get => _connection;
         set => throw new NotImplementedException();
@@ -50,7 +52,7 @@ public class SafeDbCommand : IDbCommand
 
     public IDataParameterCollection Parameters => Command.Parameters;
 
-    public IDbTransaction Transaction
+    public IDbTransaction? Transaction
     {
         get => Command.Transaction;
         set => Command.Transaction = value;

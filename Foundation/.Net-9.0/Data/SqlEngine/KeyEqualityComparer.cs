@@ -6,7 +6,7 @@ namespace Foundation.Data.SqlEngine;
 
 public class KeyEqualityComparer : IEqualityComparer<Key>
 {
-    public bool Equals(Key x, Key y) => x.Values.SequenceEqual(y.Values);
+    public bool Equals(Key? x, Key? y) => x!.Values.SequenceEqual(y!.Values);
 
     public int GetHashCode(Key key)
     {

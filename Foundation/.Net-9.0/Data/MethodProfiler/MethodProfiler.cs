@@ -63,8 +63,8 @@ exec MethodProfilerApplication_Add {0},{1}",
         var beginTime = Stopwatch.GetTimestamp();
         var threadId = Environment.CurrentManagedThreadId;
         var trace = new StackTrace(1);
-        var frame = trace.GetFrame(0);
-        var method = frame.GetMethod();
+        var frame = trace.GetFrame(0)!;
+        var method = frame.GetMethod()!;
         int methodId;
         var added = false;
 
@@ -91,10 +91,10 @@ exec MethodProfilerApplication_Add {0},{1}",
         var beginTime = Stopwatch.GetTimestamp();
         var threadId = Environment.CurrentManagedThreadId;
         var trace = new StackTrace(1);
-        var frame = trace.GetFrame(0);
-        var method = frame.GetMethod();
+        var frame = trace.GetFrame(0)!;
+        var method = frame.GetMethod()!;
         var key = MethodFraction.GetKey(method, name);
-        MethodFraction methodFraction;
+        MethodFraction? methodFraction;
         int methodId;
         var added = false;
 
@@ -123,8 +123,8 @@ exec MethodProfilerApplication_Add {0},{1}",
         var endTime = Stopwatch.GetTimestamp();
         var threadId = Environment.CurrentManagedThreadId;
         var trace = new StackTrace(1);
-        var frame = trace.GetFrame(0);
-        var method = frame.GetMethod();
+        var frame = trace.GetFrame(0)!;
+        var method = frame.GetMethod()!;
         Methods.TryGetValue(method, out var methodId);
         var item = Stacks.Pop(threadId);
 

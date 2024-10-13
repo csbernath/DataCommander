@@ -32,7 +32,7 @@ public static class DbProviderFactoryExtensions
         return ExecuteDataTable(dbProviderFactory, connection, commandText);
     }
 
-    public static object ExecuteScalar(this DbProviderFactory dbProviderFactory, string connectionString, CreateCommandRequest request)
+    public static object? ExecuteScalar(this DbProviderFactory dbProviderFactory, string connectionString, CreateCommandRequest request)
     {
         using var connection = dbProviderFactory.CreateConnection();
         connection!.ConnectionString = connectionString;
@@ -43,7 +43,7 @@ public static class DbProviderFactoryExtensions
 
     public static void ExecuteTransaction(this DbProviderFactory dbProviderFactory, string connectionString, Action<IDbTransaction> action)
     {
-        using var connection = dbProviderFactory.CreateConnection();
+        using var connection = dbProviderFactory.CreateConnection()!;
         connection.ConnectionString = connectionString;
         connection.Open();
         using var transaction = connection.BeginTransaction();

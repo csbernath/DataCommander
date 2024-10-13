@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace Foundation.Data.LoggedDbConnection;
@@ -9,9 +10,9 @@ internal sealed class LoggedDbCommand : IDbCommand
     private static int _commandIdCounter;
     private readonly int _commandId;
     private readonly IDbCommand _command;
-    private readonly EventHandler<BeforeExecuteCommandEventArgs> _beforeExecuteCommand;
-    private readonly EventHandler<AfterExecuteCommandEventArgs> _afterExecuteCommand;
-    private readonly EventHandler<AfterReadEventArgs> _afterRead;
+    private readonly EventHandler<BeforeExecuteCommandEventArgs>? _beforeExecuteCommand;
+    private readonly EventHandler<AfterExecuteCommandEventArgs>? _afterExecuteCommand;
+    private readonly EventHandler<AfterReadEventArgs>? _afterRead;
 
     public LoggedDbCommand(
         IDbCommand command,
@@ -20,9 +21,6 @@ internal sealed class LoggedDbCommand : IDbCommand
         EventHandler<AfterReadEventArgs> afterRead)
     {
         ArgumentNullException.ThrowIfNull(command);
-        ArgumentNullException.ThrowIfNull(beforeExecuteCommand);
-        ArgumentNullException.ThrowIfNull(afterExecuteCommand);
-        ArgumentNullException.ThrowIfNull(afterRead);
 
         _commandId = Interlocked.Increment(ref _commandIdCounter);
         _command = command;
@@ -33,6 +31,7 @@ internal sealed class LoggedDbCommand : IDbCommand
 
     void IDbCommand.Cancel() => _command.Cancel();
 
+    [AllowNull]
     string IDbCommand.CommandText
     {
         get => _command.CommandText;
@@ -54,10 +53,9 @@ internal sealed class LoggedDbCommand : IDbCommand
         set => _command.CommandType = value;
     }
 
-    IDbConnection IDbCommand.Connection
+    IDbConnection? IDbCommand.Connection
     {
         get => _command.Connection;
-
         set => _command.Connection = value;
     }
 
@@ -77,7 +75,7 @@ internal sealed class LoggedDbCommand : IDbCommand
 
         if (_afterExecuteCommand != null)
         {
-            Exception exception = null;
+            Exception? exception = null;
             try
             {
                 rowCount = _command.ExecuteNonQuery();
@@ -89,7 +87,7 @@ internal sealed class LoggedDbCommand : IDbCommand
             }
             finally
             {
-                var eventArgs = new AfterExecuteCommandEventArgs(commandInfo.Value, exception);
+                var eventArgs = new AfterExecuteCommandEventArgs(commandInfo.Value, exception!);
                 _afterExecuteCommand(this, eventArgs);
             }
         }
@@ -115,7 +113,7 @@ internal sealed class LoggedDbCommand : IDbCommand
 
         if (_afterExecuteCommand != null)
         {
-            Exception exception = null;
+            Exception? exception = null;
             try
             {
                 dataReader = _command.ExecuteReader();
@@ -145,7 +143,7 @@ internal sealed class LoggedDbCommand : IDbCommand
         return dbCommand.ExecuteReader(CommandBehavior.Default);
     }
 
-    object IDbCommand.ExecuteScalar()
+    object? IDbCommand.ExecuteScalar()
     {
         var commandInfo = new Lazy<LoggedDbCommandInfo>(() => CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.Scalar));
         if (_beforeExecuteCommand != null)
@@ -154,11 +152,11 @@ internal sealed class LoggedDbCommand : IDbCommand
             _beforeExecuteCommand(this, eventArgs);
         }
 
-        object scalar;
+        object? scalar;
 
         if (_afterExecuteCommand != null)
         {
-            Exception exception = null;
+            Exception? exception = null;
             try
             {
                 scalar = _command.ExecuteScalar();
@@ -186,10 +184,9 @@ internal sealed class LoggedDbCommand : IDbCommand
 
     void IDbCommand.Prepare() => _command.Prepare();
 
-    IDbTransaction IDbCommand.Transaction
+    IDbTransaction? IDbCommand.Transaction
     {
         get => _command.Transaction;
-
         set => _command.Transaction = value;
     }
 
@@ -208,7 +205,7 @@ internal sealed class LoggedDbCommand : IDbCommand
 
         return new LoggedDbCommandInfo(
             _commandId,
-            connection.State,
+            connection!.State,
             connection.Database,
             executionType,
             _command.CommandType,

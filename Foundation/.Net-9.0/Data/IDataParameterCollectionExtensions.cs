@@ -29,7 +29,7 @@ public static class IDataParameterCollectionExtensions
 
                 if (value != null)
                 {
-                    string valueString;
+                    string? valueString;
 
                     if (value == DBNull.Value)
                     {
@@ -51,7 +51,7 @@ public static class IDataParameterCollectionExtensions
                                 break;
 
                             case DbType.String:
-                                valueString = "'" + value.ToString().Replace("'", "''") + "'";
+                                valueString = "'" + value.ToString()!.Replace("'", "''") + "'";
                                 break;
 
                             default:

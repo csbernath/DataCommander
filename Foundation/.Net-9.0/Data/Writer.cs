@@ -58,7 +58,7 @@ public static class Writer
         if (dataView != null)
         {
             var rowCount = dataView.Count;
-            var dataTable = dataView.Table;
+            var dataTable = dataView.Table!;
             var last = dataTable.Columns.Count - 1;
 
             for (var i = 0; i <= last; i++)

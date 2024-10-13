@@ -31,7 +31,7 @@ public static class InsertSqlStatementFactory
                 if (indexedRow.Index > 0)
                     textBuilder.AddToLastLine(",");
 
-                var values = indexedRow.Value.Join(",");
+                var values = indexedRow.Value!.Join(",");
                 textBuilder.Add($"({values})");
             }
         }

@@ -6,13 +6,12 @@ namespace Foundation.Data.LoggedDbConnection;
 internal sealed class LoggedDataReader : IDataReader
 {
     private readonly IDataReader _dataReader;
-    private readonly EventHandler<AfterReadEventArgs> _afterRead;
+    private readonly EventHandler<AfterReadEventArgs>? _afterRead;
     private int _rowCount;
 
-    public LoggedDataReader(IDataReader dataReader, EventHandler<AfterReadEventArgs> afterRead)
+    public LoggedDataReader(IDataReader dataReader, EventHandler<AfterReadEventArgs>? afterRead)
     {
         ArgumentNullException.ThrowIfNull(dataReader);
-        ArgumentNullException.ThrowIfNull(afterRead);
 
         _dataReader = dataReader;
         _afterRead = afterRead;
@@ -20,7 +19,7 @@ internal sealed class LoggedDataReader : IDataReader
 
     void IDataReader.Close() => _dataReader.Close();
     int IDataReader.Depth => _dataReader.Depth;
-    DataTable IDataReader.GetSchemaTable() => _dataReader.GetSchemaTable();
+    DataTable? IDataReader.GetSchemaTable() => _dataReader.GetSchemaTable();
     bool IDataReader.IsClosed => _dataReader.IsClosed;
     bool IDataReader.NextResult() => _dataReader.NextResult();
 
@@ -47,9 +46,15 @@ internal sealed class LoggedDataReader : IDataReader
     int IDataRecord.FieldCount => _dataReader.FieldCount;
     bool IDataRecord.GetBoolean(int i) => _dataReader.GetBoolean(i);
     byte IDataRecord.GetByte(int i) => _dataReader.GetByte(i);
-    long IDataRecord.GetBytes(int i, long fieldOffset, byte[] buffer, int bufferoffset, int length) => _dataReader.GetBytes(i, fieldOffset, buffer, bufferoffset, length);
+
+    long IDataRecord.GetBytes(int i, long fieldOffset, byte[]? buffer, int bufferoffset, int length) =>
+        _dataReader.GetBytes(i, fieldOffset, buffer, bufferoffset, length);
+
     char IDataRecord.GetChar(int i) => _dataReader.GetChar(i);
-    long IDataRecord.GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length) => _dataReader.GetChars(i, fieldoffset, buffer, bufferoffset, length);
+
+    long IDataRecord.GetChars(int i, long fieldoffset, char[]? buffer, int bufferoffset, int length) =>
+        _dataReader.GetChars(i, fieldoffset, buffer, bufferoffset, length);
+
     IDataReader IDataRecord.GetData(int i) => _dataReader.GetData(i);
     string IDataRecord.GetDataTypeName(int i) => _dataReader.GetDataTypeName(i);
     DateTime IDataRecord.GetDateTime(int i) => _dataReader.GetDateTime(i);

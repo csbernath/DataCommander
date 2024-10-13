@@ -51,12 +51,12 @@ public static class IDbCommandAsyncExecutorExtensions
         return affectedRows;
     }
 
-    public static async Task<object> ExecuteScalarAsync(
+    public static async Task<object?> ExecuteScalarAsync(
         this IDbCommandAsyncExecutor executor,
         CreateCommandRequest createCommandRequest,
         CancellationToken cancellationToken)
     {
-        object scalar = null;
+        object? scalar = null;
         await executor.ExecuteAsync(
             async (connection, _) =>
             {
@@ -82,14 +82,14 @@ public static class IDbCommandAsyncExecutorExtensions
             },
             cancellationToken);
 
-    public static async Task<ReadOnlySegmentLinkedList<T>> ExecuteReaderAsync<T>(
+    public static async Task<ReadOnlySegmentLinkedList<T>?> ExecuteReaderAsync<T>(
         this IDbCommandAsyncExecutor executor,
         ExecuteReaderRequest executeReaderRequest,
         int segmentLength,
         Func<IDataRecord, T> readDataRecord,
         CancellationToken cancellationToken)
     {
-        ReadOnlySegmentLinkedList<T> records = null;
+        ReadOnlySegmentLinkedList<T>? records = null;
         await executor.ExecuteReaderAsync(
             executeReaderRequest,
             async (dataReader, _) => records =
