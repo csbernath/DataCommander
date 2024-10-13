@@ -15,9 +15,9 @@ public static class LogFactoryReader
         var node = Settings.SelectCurrentType();
         if (node != null)
         {
-            var typeName = node.Attributes["TypeName"].GetValue<string>();
-            var type = Type.GetType(typeName, true);
-            var instance = Activator.CreateInstance(type);
+            var typeName = node.Attributes["TypeName"].GetValue<string>()!;
+            var type = Type.GetType(typeName, true)!;
+            var instance = Activator.CreateInstance(type)!;
 
             Assert.IsTrue(instance is ILogFactory);
             var applicationLog = (ILogFactory) instance;

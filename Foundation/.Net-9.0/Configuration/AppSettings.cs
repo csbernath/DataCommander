@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Foundation.Configuration;
 
@@ -22,9 +23,9 @@ public static class AppSettings
             var nameValueCollection = ConfigurationManager.AppSettings;
 
             var stackTrace = new StackTrace(1);
-            var stackFrame = stackTrace.GetFrame(0);
-            var methodBase = stackFrame.GetMethod();
-            var typeName = methodBase.DeclaringType.FullName;
+            var stackFrame = stackTrace.GetFrame(0)!;
+            var methodBase = stackFrame.GetMethod()!;
+            var typeName = methodBase.DeclaringType!.FullName;
             var prefix = typeName + Type.Delimiter;
 
             var reader = new PrefixedReader(nameValueCollection, prefix);
@@ -43,9 +44,9 @@ public static class AppSettings
             _nameValueCollection = nameValueCollection;
         }
 
-        public bool TryGetValue(string name, out string value)
+        public bool TryGetValue(string name, [MaybeNullWhen(false)] out string value)
         {
-            value = _nameValueCollection[name];
+            value = _nameValueCollection[name]!;
             var contains = value != null;
             return contains;
         }
@@ -65,7 +66,7 @@ public static class AppSettings
             _prefix = prefix;
         }
 
-        public bool TryGetValue(string name, out string value)
+        public bool TryGetValue(string name, [MaybeNullWhen(false)] out string value)
         {
             var prefixedName = _prefix != null ? _prefix + name : name;
             value = _nameValueCollection[prefixedName];

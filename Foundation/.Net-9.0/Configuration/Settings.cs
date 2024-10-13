@@ -14,14 +14,14 @@ public static class Settings
     /// <summary>
     /// The config file name.
     /// </summary>
-    private static string _configFileName;
+    private static string? _configFileName;
 
-    private static string _sectionName;
+    private static string? _sectionName;
 
     /// <summary>
     /// The ConfigurationSection instance.
     /// </summary>
-    private static ConfigurationSection _section;
+    private static ConfigurationSection? _section;
 
     public static event EventHandler Changed
     {
@@ -38,7 +38,7 @@ public static class Settings
         {
             if (_configFileName == null)
             {
-                var location = Assembly.GetEntryAssembly().Location;
+                var location = Assembly.GetEntryAssembly()!.Location;
                 _configFileName = $"{location}.config";
             }
 
@@ -48,7 +48,7 @@ public static class Settings
         set => _configFileName = value;
     }
 
-    public static ConfigurationNode RootNode => Section.RootNode;
+    public static ConfigurationNode? RootNode => Section.RootNode;
 
     /// <summary>
     /// Gets the <see cref="ConfigurationSection" /> instance.
@@ -69,9 +69,6 @@ public static class Settings
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public static string SectionName
     {
         get
@@ -85,7 +82,7 @@ public static class Settings
         set => _sectionName = value;
     }
 
-    public static ConfigurationNode CurrentMethod
+    public static ConfigurationNode? CurrentMethod
     {
         [MethodImpl(MethodImplOptions.NoInlining)]
         get
@@ -100,7 +97,7 @@ public static class Settings
     /// <summary>
     /// Gets the config node of the calling method's type.
     /// </summary>
-    public static ConfigurationNode CurrentType
+    public static ConfigurationNode? CurrentType
     {
         [MethodImpl(MethodImplOptions.NoInlining)]
         get
@@ -112,7 +109,7 @@ public static class Settings
         }
     }
 
-    public static ConfigurationNode CurrentNamespace
+    public static ConfigurationNode? CurrentNamespace
     {
         [MethodImpl(MethodImplOptions.NoInlining)]
         get
@@ -142,9 +139,9 @@ public static class Settings
         return configFilename;
     }
 
-    public static ConfigurationNode SelectNode(string nodeName, bool throwOnError) => Section.SelectNode(nodeName, throwOnError);
+    public static ConfigurationNode? SelectNode(string nodeName, bool throwOnError) => Section.SelectNode(nodeName, throwOnError);
 
-    internal static ConfigurationNode SelectNode(Type type, bool throwOnError)
+    internal static ConfigurationNode? SelectNode(Type type, bool throwOnError)
     {
         var nodeName = ConfigurationNodeName.FromType(type);
         var node = Section.SelectNode(nodeName, throwOnError);
@@ -156,7 +153,7 @@ public static class Settings
     /// </summary>
     /// <returns>null, if not found and no exception is thrown.</returns>
     [MethodImpl(MethodImplOptions.NoInlining)]
-    public static ConfigurationNode SelectCurrentType()
+    public static ConfigurationNode? SelectCurrentType()
     {
         var trace = new StackTrace(1);
         var nodeName = ConfigurationNodeName.FromType(trace, 0);

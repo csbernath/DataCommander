@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using Foundation.Assertions;
 using Foundation.Collections.IndexableCollection;
@@ -55,7 +56,7 @@ public class ConfigurationAttributeCollection : IList<ConfigurationAttribute>
         }
     }
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     public void Add(string name, object value, string description)
     {
@@ -83,7 +84,7 @@ public class ConfigurationAttributeCollection : IList<ConfigurationAttribute>
         bool succeeded;
 
         if (contains)
-            succeeded = _collection.Remove(attribute);
+            succeeded = _collection.Remove(attribute!);
         else
             succeeded = false;
 
@@ -98,21 +99,21 @@ public class ConfigurationAttributeCollection : IList<ConfigurationAttribute>
         collection.Remove(item);
     }
 
-    public bool TryGetValue(string name, out ConfigurationAttribute attribute) => _nameIndex.TryGetValue(name, out attribute);
-    public bool TryGetAttributeValue<T>(string name, out T value) => TryGetAttributeValue(name, default, out value);
+    public bool TryGetValue(string name, [MaybeNullWhen(false)] out ConfigurationAttribute attribute) => _nameIndex.TryGetValue(name, out attribute);
+    public bool TryGetAttributeValue<T>(string name, [MaybeNullWhen(false)] out T value) => TryGetAttributeValue(name, default, out value);
 
-    public bool TryGetAttributeValue<T>(string name, T defaultValue, out T value)
+    public bool TryGetAttributeValue<T>(string name, T defaultValue, [MaybeNullWhen(false)] out T value)
     {
         var contains = _nameIndex.TryGetValue(name, out var attribute);
-        value = contains ? attribute.GetValue<T>() : defaultValue;
+        value = contains ? attribute!.GetValue<T>() : defaultValue;
         return contains;
     }
 
-    public void SetAttributeValue(string name, object value)
+    public void SetAttributeValue(string name, object? value)
     {
         var contains = _nameIndex.TryGetValue(name, out var attribute);
         if (contains)
-            attribute.Value = value;
+            attribute!.Value = value;
         else
         {
             attribute = new ConfigurationAttribute(name, value, null);

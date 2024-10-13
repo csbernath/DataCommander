@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using Foundation.Assertions;
 using Foundation.Collections.IndexableCollection;
 
@@ -15,7 +18,7 @@ public sealed class ConfigurationNodeCollection : ICollection<ConfigurationNode>
     public ConfigurationNodeCollection()
     {
         _listIndex = new ListIndex<ConfigurationNode>("List");
-        _nameIndex = new UniqueIndex<string, ConfigurationNode>("Name", node => GetKeyResponse.Create(true, node.Name), SortOrder.Ascending);
+        _nameIndex = new UniqueIndex<string, ConfigurationNode>("Name", node => GetKeyResponse.Create(true, node.Name!), SortOrder.Ascending);
 
         _collection = new IndexableCollection<ConfigurationNode>(_listIndex);
         _collection.Indexes.Add(_nameIndex);
@@ -23,11 +26,12 @@ public sealed class ConfigurationNodeCollection : ICollection<ConfigurationNode>
 
     public ConfigurationNode this[string name] => _nameIndex[name];
     public ConfigurationNode this[int index] => _listIndex[index];
-    public bool TryGetValue(string name, out ConfigurationNode item) => _nameIndex.TryGetValue(name, out item);
+    public bool TryGetValue(string name, [MaybeNullWhen(false)] out ConfigurationNode item) => _nameIndex.TryGetValue(name, out item);
 
     public void Add(ConfigurationNode item)
     {
-        Assert.IsTrue(item != null);
+        Assert.IsNotNull(item);
+        
         _collection.Add(item);
     }
 

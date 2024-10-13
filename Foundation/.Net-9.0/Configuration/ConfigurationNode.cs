@@ -5,7 +5,7 @@ using Foundation.Assertions;
 
 namespace Foundation.Configuration;
 
-public sealed class ConfigurationNode(string name)
+public sealed class ConfigurationNode(string? name)
 {
     /// <summary>
     /// The path delimiter in the nodeName. E.g.: Node1/Node2/Node3.
@@ -19,26 +19,26 @@ public sealed class ConfigurationNode(string name)
     /// <summary>
     /// Gets the name of the node.
     /// </summary>
-    public string Name { get; private set; } = name;
+    public string? Name { get; private set; } = name;
 
     /// <summary>
     /// Gets/sets the description of the node.
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// Gets the parent node.
     /// </summary>
-    public ConfigurationNode Parent { get; private set; }
+    public ConfigurationNode? Parent { get; private set; }
 
     /// <summary>
     /// Gets the full path of the node.
     /// </summary>
-    public string FullName
+    public string? FullName
     {
         get
         {
-            string fullName;
+            string? fullName;
 
             if (Parent != null)
             {
@@ -121,7 +121,7 @@ public sealed class ConfigurationNode(string name)
 
         for (var i = 0; i < nodeNames.Length; i++)
         {
-            var contains = node.ChildNodes.TryGetValue(nodeNames[i], out var childNode);
+            var contains = node!.ChildNodes.TryGetValue(nodeNames[i], out var childNode);
             if (!contains)
             {
                 childNode = new ConfigurationNode(nodeNames[i]);
@@ -131,7 +131,7 @@ public sealed class ConfigurationNode(string name)
             node = childNode;
         }
 
-        return node;
+        return node!;
     }
 
     /// <summary>
@@ -141,7 +141,7 @@ public sealed class ConfigurationNode(string name)
     /// The name can contains path delimiters.</param>
     /// <returns>Return the child node is found.
     /// Returns null if no child node found.</returns>
-    public ConfigurationNode SelectNode(string path)
+    public ConfigurationNode? SelectNode(string path)
     {
         var node = this;
 
@@ -152,7 +152,7 @@ public sealed class ConfigurationNode(string name)
 
             foreach (var childNodeName in childNodeNames)
             {
-                var contains = node.ChildNodes.TryGetValue(childNodeName, out var childNode);
+                var contains = node!.ChildNodes.TryGetValue(childNodeName, out var childNode);
 
                 if (contains)
                 {
@@ -227,7 +227,7 @@ public sealed class ConfigurationNode(string name)
 
                 var value = attribute.Value;
                 var valueString = value != null ? value.ToString() : null;
-                var multiline = valueString.Contains('\n');
+                var multiline = valueString!.Contains('\n');
 
                 if (multiline)
                 {

@@ -10,10 +10,10 @@ namespace Foundation.Configuration;
 
 public sealed class ApplicationData
 {
-    private string _fileName;
-    private string _sectionName;
+    private string? _fileName;
+    private string? _sectionName;
 
-    public ConfigurationNode RootNode { get; private set; }
+    public ConfigurationNode? RootNode { get; private set; }
 
     public ConfigurationNode CurrentNamespace
     {
@@ -42,12 +42,11 @@ public sealed class ApplicationData
         var sb = new StringBuilder();
         sb.Append(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
 
-        string company;
-        string product;
+        string? company;
+        string? product;
 
-        var assembly = Assembly.GetEntryAssembly();
-        var companyAttribute =
-            (AssemblyCompanyAttribute) Attribute.GetCustomAttribute(assembly, typeof(AssemblyCompanyAttribute));
+        var assembly = Assembly.GetEntryAssembly()!;
+        var companyAttribute = (AssemblyCompanyAttribute?)Attribute.GetCustomAttribute(assembly, typeof(AssemblyCompanyAttribute));
 
         if (companyAttribute != null)
         {
@@ -59,8 +58,7 @@ public sealed class ApplicationData
         else
             company = null;
 
-        var productAttribute =
-            (AssemblyProductAttribute) Attribute.GetCustomAttribute(assembly, typeof(AssemblyProductAttribute));
+        var productAttribute = (AssemblyProductAttribute?)Attribute.GetCustomAttribute(assembly, typeof(AssemblyProductAttribute));
 
         if (productAttribute != null)
         {
@@ -126,7 +124,7 @@ public sealed class ApplicationData
         ArgumentNullException.ThrowIfNull(sectionName);
 
         xmlWriter.WriteStartElement(sectionName);
-        ConfigurationWriter.Write(xmlWriter, RootNode.Attributes);
+        ConfigurationWriter.Write(xmlWriter, RootNode!.Attributes);
 
         foreach (var childNode in RootNode.ChildNodes)
             ConfigurationWriter.WriteNode(xmlWriter, childNode);
@@ -136,7 +134,7 @@ public sealed class ApplicationData
 
     public void Save(string fileName, string sectionName)
     {
-        var directoryName = Path.GetDirectoryName(fileName);
+        var directoryName = Path.GetDirectoryName(fileName)!;
         Directory.CreateDirectory(directoryName);
 
         using var xmlTextWriter = new XmlTextWriter(fileName, Encoding.UTF8);
@@ -151,13 +149,13 @@ public sealed class ApplicationData
 
     public void Save()
     {
-        var directoryName = Path.GetDirectoryName(_fileName);
+        var directoryName = Path.GetDirectoryName(_fileName)!;
 
         if (!Directory.Exists(directoryName))
             Directory.CreateDirectory(directoryName);
 
-        Save(_fileName, _sectionName);
+        Save(_fileName!, _sectionName!);
     }
 
-    public ConfigurationNode CreateNode(string nodeName) => RootNode.CreateNode(nodeName);
+    public ConfigurationNode CreateNode(string nodeName) => RootNode!.CreateNode(nodeName);
 }

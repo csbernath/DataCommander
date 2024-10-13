@@ -113,7 +113,7 @@ public sealed class ConfigurationSection
     {
         get
         {
-            var sectionName = typeof(ConfigurationSection).Namespace;
+            var sectionName = typeof(ConfigurationSection).Namespace!;
             return sectionName;
         }
     }
@@ -121,11 +121,11 @@ public sealed class ConfigurationSection
     /// <summary>
     /// RootNode can inform the caller about config file changes here.
     /// </summary>
-    public event EventHandler Changed;
+    public event EventHandler? Changed;
 
-    public ConfigurationNode RootNode { get; private set; }
+    public ConfigurationNode? RootNode { get; private set; }
 
-    public ConfigurationNode CurrentNamespace
+    public ConfigurationNode? CurrentNamespace
     {
         get
         {
@@ -139,7 +139,7 @@ public sealed class ConfigurationSection
     /// <summary>
     /// Gets the node corresponding to the caller's type.
     /// </summary>
-    public ConfigurationNode CurrentType
+    public ConfigurationNode? CurrentType
     {
         get
         {
@@ -153,7 +153,7 @@ public sealed class ConfigurationSection
     /// <summary>
     /// Gets the node corresponding to the caller's method.
     /// </summary>
-    public ConfigurationNode CurrentMethod
+    public ConfigurationNode? CurrentMethod
     {
         get
         {
@@ -173,7 +173,7 @@ public sealed class ConfigurationSection
 
     public bool IsFileSystemWatcherEnabled { get; private set; }
 
-    private void Check(string nodeName, ConfigurationNode node)
+    private void Check(string nodeName, ConfigurationNode? node)
     {
         if (node == null)
         {
@@ -188,7 +188,7 @@ public sealed class ConfigurationSection
         }
     }
 
-    public ConfigurationNode SelectNode(string nodeName, bool throwOnError)
+    public ConfigurationNode? SelectNode(string nodeName, bool throwOnError)
     {
         if (_changed != 0)
         {
@@ -211,7 +211,7 @@ public sealed class ConfigurationSection
 
     private void Initialize()
     {
-        StringCollection fileNames = null;
+        StringCollection? fileNames = null;
 
         try
         {
@@ -229,7 +229,7 @@ public sealed class ConfigurationSection
             {
                 foreach (var fileName in fileNames)
                 {
-                    var watcher = new FileSystemWatcher(fileName)
+                    var watcher = new FileSystemWatcher(fileName!)
                     {
                         NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime
                     };

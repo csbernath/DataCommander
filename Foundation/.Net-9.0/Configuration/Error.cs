@@ -2,7 +2,7 @@
 
 namespace Foundation.Configuration;
 
-internal sealed class Error(ErrorType type, string message, Exception exception)
+internal sealed class Error(ErrorType type, string message, Exception? exception)
 {
     public ErrorType Type { get; } = type;
 

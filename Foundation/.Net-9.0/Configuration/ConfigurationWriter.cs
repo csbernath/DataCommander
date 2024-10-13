@@ -11,11 +11,11 @@ public static class ConfigurationWriter
     public static void WriteNode(XmlWriter xmlWriter, ConfigurationNode node)
     {
         string xmlElementName;
-        string xmlAttributeValue;
+        string? xmlAttributeValue;
 
         if (node.HasName)
         {
-            var nodeName = node.Name;
+            var nodeName = node.Name!;
             var encodedName = XmlConvert.EncodeName(nodeName);
 
             if (nodeName == encodedName)
@@ -80,14 +80,14 @@ public static class ConfigurationWriter
                             }
                             else if (type.IsArray)
                             {
-                                var array = (Array) value;
+                                var array = (Array)value;
 
                                 for (var j = 0; j < array.Length; j++)
                                 {
                                     using (xmlWriter.WriteElement("a"))
                                     {
-                                        value = array.GetValue(j);
-                                        strValue = value.ToString();
+                                        value = array.GetValue(j)!;
+                                        strValue = value.ToString()!;
                                         xmlWriter.WriteAttributeString("value", strValue);
                                     }
                                 }
@@ -101,7 +101,7 @@ public static class ConfigurationWriter
                             break;
 
                         default:
-                            strValue = value.ToString();
+                            strValue = value.ToString()!;
                             xmlWriter.WriteAttributeString("value", strValue);
                             break;
                     }

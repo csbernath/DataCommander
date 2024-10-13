@@ -8,6 +8,9 @@ public static class Assert
     public static void AreEqual<T>(T value, T other, [CallerArgumentExpression(nameof(value))] string? paramName = null) where T : IEquatable<T>? =>
         ArgumentOutOfRangeException.ThrowIfNotEqual(value, other, paramName);
 
+    public static void IsNotNull(object? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null) =>
+        ArgumentNullException.ThrowIfNull(argument, paramName);
+
     public static void IsTrue(bool condition)
     {
         if (!condition)

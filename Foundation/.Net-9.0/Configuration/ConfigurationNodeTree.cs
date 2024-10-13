@@ -48,7 +48,7 @@ public sealed class ConfigurationNodeTree
         return s;
     }
 
-    public ConfigurationNode SelectNode(string path)
+    public ConfigurationNode? SelectNode(string path)
     {
         if (_rootNode == null)
             _rootNode = new ConfigurationNode(null);
@@ -62,7 +62,7 @@ public sealed class ConfigurationNodeTree
             for (var i = 0; i < nodeNames.Length; i++)
             {
                 var childNodeName = nodeNames[i];
-                var contains = node.ChildNodes.TryGetValue(childNodeName, out var childNode);
+                var contains = node!.ChildNodes.TryGetValue(childNodeName, out var childNode);
 
                 if (!contains)
                 {

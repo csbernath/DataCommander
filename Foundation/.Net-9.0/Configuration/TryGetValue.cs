@@ -1,3 +1,5 @@
-﻿namespace Foundation.Configuration;
+﻿using System.Diagnostics.CodeAnalysis;
 
-public delegate bool TryGetValue<in TKey, TValue>(TKey key, out TValue value);
+namespace Foundation.Configuration;
+
+public delegate bool TryGetValue<in TKey, TValue>(TKey key, [MaybeNullWhen(false)] out TValue value);

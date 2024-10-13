@@ -2,16 +2,8 @@
 
 namespace Foundation.Configuration;
 
-/// <summary>
-/// 
-/// </summary>
 public static class IniReader
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="reader"></param>
-    /// <returns></returns>
     public static ConfigurationNode Read(TextReader reader)
     {
         var node = new ConfigurationNode(null);

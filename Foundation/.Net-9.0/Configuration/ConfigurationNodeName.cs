@@ -10,7 +10,7 @@ public static class ConfigurationNodeName
     {
         ArgumentNullException.ThrowIfNull(type);
 
-        var name = type.FullName;
+        var name = type.FullName!;
         var nodeName = FromTypeDelimitedName(name);
         return nodeName;
     }
@@ -19,8 +19,8 @@ public static class ConfigurationNodeName
     {
         ArgumentNullException.ThrowIfNull(trace);
 
-        var frame = trace.GetFrame(frameIndex);
-        var method = frame.GetMethod();
+        var frame = trace.GetFrame(frameIndex)!;
+        var method = frame.GetMethod()!;
         return method;
     }
 
@@ -28,7 +28,7 @@ public static class ConfigurationNodeName
     {
         ArgumentNullException.ThrowIfNull(method);
 
-        var name = method.DeclaringType.FullName + Type.Delimiter + method.Name;
+        var name = method.DeclaringType!.FullName + Type.Delimiter + method.Name;
         var nodeName = FromTypeDelimitedName(name);
         return nodeName;
     }
@@ -47,7 +47,7 @@ public static class ConfigurationNodeName
         ArgumentNullException.ThrowIfNull(trace);
 
         var method = GetMethod(trace, frameIndex);
-        var name = method.DeclaringType.Namespace;
+        var name = method.DeclaringType!.Namespace!;
         var nodeName = FromTypeDelimitedName(name);
         return nodeName;
     }
@@ -57,7 +57,7 @@ public static class ConfigurationNodeName
         ArgumentNullException.ThrowIfNull(trace);
 
         var method = GetMethod(trace, frameIndex);
-        var type = method.DeclaringType;
+        var type = method.DeclaringType!;
         var nodeName = FromType(type);
         return nodeName;
     }

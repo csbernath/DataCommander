@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Foundation.Assertions;
 
@@ -16,7 +17,7 @@ public class NameValueCollectionReader
         _tryGetValue = tryGetValue;
     }
 
-    public T GetValue<T>(string name, TryParse<T> tryParse, T defaultValue)
+    public T? GetValue<T>(string name, TryParse<T> tryParse, T defaultValue)
     {
         var contains = TryGetValue(name, tryParse, out var value);
         if (!contains)
@@ -29,7 +30,7 @@ public class NameValueCollectionReader
     public double GetDouble(string name, double defaultValue) => GetValue(name, double.TryParse, defaultValue);
     public int GetInt32(string name, int defaultValue) => GetValue(name, int.TryParse, defaultValue);
 
-    public string GetString(string name)
+    public string? GetString(string name)
     {
         _tryGetValue(name, out var value);
         return value;
@@ -86,15 +87,15 @@ public class NameValueCollectionReader
         return contains;
     }
 
-    public bool TryGetEnum<T>(string name, out T value)
+    public bool TryGetEnum<T>(string name, [MaybeNullWhen(false)] out T value)
     {
         var contains = _tryGetValue(name, out var s);
 
         if (contains)
         {
             var enumType = typeof(T);
-            var valueObject = Enum.Parse(enumType, s);
-            value = (T) valueObject;
+            var valueObject = Enum.Parse(enumType, s!);
+            value = (T)valueObject;
         }
         else
             value = default;
@@ -135,29 +136,29 @@ public class NameValueCollectionReader
         return contains;
     }
 
-    public bool TryGetString(string name, out string value)
+    public bool TryGetString(string name, [MaybeNullWhen(false)] out string value)
     {
         var contains = _tryGetValue(name, out var s);
 
         value = contains
-            ? s
+            ? s!
             : null;
 
         return contains;
     }
 
-    public bool TryGetTimeSpan(string name, out TimeSpan value)
+    public bool TryGetTimeSpan(string name, out TimeSpan? value)
     {
         var contains = _tryGetValue(name, out var s);
 
         value = contains
-            ? TimeSpan.Parse(s)
-            : default;
+            ? TimeSpan.Parse(s!)
+            : null;
 
         return contains;
     }
 
-    public bool TryGetValue<T>(string name, TryParse<T> tryParse, out T value)
+    public bool TryGetValue<T>(string name, TryParse<T> tryParse, [MaybeNullWhen(false)] out T value)
     {
         ArgumentNullException.ThrowIfNull(tryParse);
 
@@ -165,7 +166,7 @@ public class NameValueCollectionReader
 
         if (contains)
         {
-            var succeeded = tryParse(s, out value);
+            var succeeded = tryParse(s!, out value);
             Assert.IsTrue(succeeded);
         }
         else
