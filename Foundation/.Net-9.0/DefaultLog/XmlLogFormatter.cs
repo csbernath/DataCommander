@@ -6,15 +6,10 @@ namespace Foundation.DefaultLog;
 
 internal sealed class XmlLogFormatter : ILogFormatter
 {
-    private static void WriteElement(
-        XmlWriter xmlWriter,
-        string name,
-        string value)
+    private static void WriteElement(XmlWriter xmlWriter, string name, string? value)
     {
         if (value != null)
-        {
             xmlWriter.WriteElementString(name, value);
-        }
     }
 
     private static void WriteTo(

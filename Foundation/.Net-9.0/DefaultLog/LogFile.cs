@@ -19,18 +19,20 @@ internal sealed class LogFile(
 {
     private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(LogFile));
     private DateTime _date;
-    private FileStream _fileStream;
+    private FileStream? _fileStream;
+    private string? _fileName;
     private readonly DateTimeKind _dateTimeKind = dateTimeKind;
 
     private FileStream Open(string fileName, DateTime dateTime)
     {
         _date = dateTime.Date;
 
-        FileName = fileName.Replace("{date}", dateTime.ToString("yyyy.MM.dd"));
-        FileName = FileName.Replace("{time}", dateTime.ToString("HH.mm.ss.fff"));
-        FileName = FileName.Replace("{guid}", Guid.NewGuid().ToString());
+        fileName = fileName.Replace("{date}", dateTime.ToString("yyyy.MM.dd"));
+        fileName = fileName.Replace("{time}", dateTime.ToString("HH.mm.ss.fff"));
+        fileName = fileName.Replace("{guid}", Guid.NewGuid().ToString());
+        _fileName = fileName;
 
-        return new FileStream(FileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read, bufferSize);
+        return new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read, bufferSize);
     }
 
     private void Open(DateTime dateTime)
@@ -69,13 +71,13 @@ internal sealed class LogFile(
         }
 
         var array = encoding.GetBytes(text);
-        _fileStream.Write(array, 0, array.Length);
+        _fileStream!.Write(array, 0, array.Length);
 
         if (autoFlush)
             _fileStream.Flush();
     }
 
-    public string FileName { get; private set; }
+    public string? FileName => _fileName;
 
     void ILogFile.Open()
     {
@@ -91,7 +93,7 @@ internal sealed class LogFile(
         Write(entry.CreationTime, text);
     }
 
-    void ILogFile.Flush() => _fileStream.Flush();
+    void ILogFile.Flush() => _fileStream!.Flush();
 
     public void Close()
     {

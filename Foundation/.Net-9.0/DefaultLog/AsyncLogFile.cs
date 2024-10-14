@@ -20,9 +20,9 @@ internal sealed class AsyncLogFile(
 {
     private readonly LogFile _logFile = new(path, encoding, bufferSize, true, formatter, fileAttributes, dateTimeKind);
     private readonly ConcurrentQueue<LogEntry> _queue = new();
-    private Timer _timer;
+    private Timer? _timer;
 
-    string ILogFile.FileName => _logFile.FileName;
+    string? ILogFile.FileName => _logFile.FileName;
 
     void ILogFile.Open()
     {
@@ -55,7 +55,7 @@ internal sealed class AsyncLogFile(
         _logFile.Close();
     }
 
-    private void TimerCallback(object state)
+    private void TimerCallback(object? state)
     {
         var thread = Thread.CurrentThread;
         thread.Priority = ThreadPriority.Lowest;

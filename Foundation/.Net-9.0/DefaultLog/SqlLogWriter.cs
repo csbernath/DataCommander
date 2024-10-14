@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Threading;
+using Foundation.Assertions;
 using Foundation.InternalLog;
 using Foundation.Log;
 using Foundation.Threading;
 
 namespace Foundation.DefaultLog;
 
-/// <summary>
-/// 
-/// </summary>
 internal sealed class SqlLogWriter : ILogWriter
 {
     private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(SqlLogWriter));
@@ -22,24 +20,17 @@ internal sealed class SqlLogWriter : ILogWriter
     private readonly SingleThreadPool _singleThreadPool;
     private readonly List<LogEntry> _entryQueue = [];
     private readonly object _lockObject = new();
-    private Timer _timer;
+    private Timer? _timer;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="createConnection"></param>
-    /// <param name="logEntryToCommandText"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="singleThreadPool"></param>
     public SqlLogWriter(
         Func<IDbConnection> createConnection,
         Func<LogEntry, string> logEntryToCommandText,
         int commandTimeout,
         SingleThreadPool singleThreadPool)
     {
-        ArgumentNullException.ThrowIfNull(createConnection);
-        ArgumentNullException.ThrowIfNull(logEntryToCommandText);
-        ArgumentNullException.ThrowIfNull(singleThreadPool);
+        Assert.IsNotNull(createConnection);
+        Assert.IsNotNull(logEntryToCommandText);
+        Assert.IsNotNull(singleThreadPool);
 
         _createConnection = createConnection;
         _logEntryToCommandText = logEntryToCommandText;
@@ -77,7 +68,7 @@ internal sealed class SqlLogWriter : ILogWriter
         // TODO
     }
 
-    private void TimerCallback(object state)
+    private void TimerCallback(object? state)
     {
         lock (_lockObject)
         {
@@ -104,11 +95,11 @@ internal sealed class SqlLogWriter : ILogWriter
         }
     }
 
-    private void WaitCallback(object state)
+    private void WaitCallback(object? state)
     {
         try
         {
-            var array = (LogEntry[])state;
+            var array = (LogEntry[]?)state!;
             var sb = new StringBuilder();
             string commandText;
 

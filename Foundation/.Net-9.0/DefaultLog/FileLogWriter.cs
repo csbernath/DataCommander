@@ -28,7 +28,7 @@ public class FileLogWriter : ILogWriter
             _logFile = new LogFile(path, encoding, bufferSize, autoFlush, formatter, fileAttributes, dateTimeKind);
     }
 
-    public string FileName => _logFile.FileName;
+    public string? FileName => _logFile.FileName;
 
     void ILogWriter.Open()
     {
