@@ -180,13 +180,12 @@ namespace DataCommander.Application.Connection
             // integratedSecurityCheckBox
             // 
             integratedSecurityCheckBox.AutoSize = true;
-            integratedSecurityCheckBox.CheckAlign = System.Drawing.ContentAlignment.TopRight;
-            integratedSecurityCheckBox.Location = new System.Drawing.Point(1, 143);
+            integratedSecurityCheckBox.Location = new System.Drawing.Point(4, 143);
             integratedSecurityCheckBox.Margin = new Padding(4, 3, 4, 3);
             integratedSecurityCheckBox.Name = "integratedSecurityCheckBox";
-            integratedSecurityCheckBox.Size = new System.Drawing.Size(146, 21);
+            integratedSecurityCheckBox.Size = new System.Drawing.Size(135, 21);
             integratedSecurityCheckBox.TabIndex = 5;
-            integratedSecurityCheckBox.Text = "Integrated security:  ";
+            integratedSecurityCheckBox.Text = "Integrated security";
             integratedSecurityCheckBox.UseVisualStyleBackColor = true;
             integratedSecurityCheckBox.CheckedChanged += integratedSecurityCheckBox_CheckedChanged;
             // 
@@ -247,20 +246,19 @@ namespace DataCommander.Application.Connection
             oleDbProviderLabel.Location = new System.Drawing.Point(2, 75);
             oleDbProviderLabel.Margin = new Padding(4, 0, 4, 0);
             oleDbProviderLabel.Name = "oleDbProviderLabel";
-            oleDbProviderLabel.Size = new System.Drawing.Size(102, 17);
+            oleDbProviderLabel.Size = new System.Drawing.Size(108, 17);
             oleDbProviderLabel.TabIndex = 18;
-            oleDbProviderLabel.Text = "OleDb provider:";
+            oleDbProviderLabel.Text = "OLE DB provider:";
             // 
             // trustServerCertificateCheckBox
             // 
             trustServerCertificateCheckBox.AutoSize = true;
-            trustServerCertificateCheckBox.CheckAlign = System.Drawing.ContentAlignment.TopRight;
-            trustServerCertificateCheckBox.Location = new System.Drawing.Point(1, 273);
+            trustServerCertificateCheckBox.Location = new System.Drawing.Point(5, 273);
             trustServerCertificateCheckBox.Margin = new Padding(4, 3, 4, 3);
             trustServerCertificateCheckBox.Name = "trustServerCertificateCheckBox";
-            trustServerCertificateCheckBox.Size = new System.Drawing.Size(166, 21);
+            trustServerCertificateCheckBox.Size = new System.Drawing.Size(155, 21);
             trustServerCertificateCheckBox.TabIndex = 19;
-            trustServerCertificateCheckBox.Text = "Trust server certificate:  ";
+            trustServerCertificateCheckBox.Text = "Trust server certificate";
             trustServerCertificateCheckBox.UseVisualStyleBackColor = true;
             // 
             // ConnectionStringBuilderForm
