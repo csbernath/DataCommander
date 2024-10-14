@@ -6,7 +6,7 @@ namespace Foundation.Data.SqlClient;
 
 public class NativeSqlCommandFactory : IDbConnectionFactory
 {
-    WorkerThread IDbConnectionFactory.Thread => null;
+    WorkerThread? IDbConnectionFactory.Thread => null;
 
     public IDbConnection CreateConnection(string connectionString, string userName, string hostName) => new SqlConnection(connectionString);
 

@@ -51,11 +51,11 @@ public struct PMoney : INullable
         return sp;
     }
 
-    public override readonly bool Equals(object y)
+    public readonly override bool Equals(object? y)
     {
         var equals = y is PMoney;
         if (equals)
-            equals = this == (PMoney)y;
+            equals = this == (PMoney)y!;
         return equals;
     }
 

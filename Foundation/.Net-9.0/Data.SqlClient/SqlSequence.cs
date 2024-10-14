@@ -63,7 +63,7 @@ end";
         command.CommandText = "GetNextSequenceValue";
         var parameter = new SqlParameter("@id", SqlDbType.Int) { Value = _id };
         command.Parameters.Add(parameter);
-        var scalar = command.ExecuteScalar();
+        var scalar = command.ExecuteScalar()!;
         var value = (int)scalar;
         return value;
     }

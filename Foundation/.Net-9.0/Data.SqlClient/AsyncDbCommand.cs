@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using Foundation.Assertions;
 
 namespace Foundation.Data.SqlClient;
@@ -32,28 +33,22 @@ public class AsyncDbCommand : IDbCommand
     {
         get
         {
-            Assert.IsTrue(_command != null);
-            return _command.CommandType;
+            Assert.IsNotNull(_command);
+            return _command!.CommandType;
         }
 
         set => _command.CommandType = value;
     }
 
-    public IDataReader ExecuteReader(CommandBehavior behavior) =>
-        // TODO:  Add AsyncDbCommand.ExecuteReader implementation
-        null;
+    public IDataReader ExecuteReader(CommandBehavior behavior) => throw new NotImplementedException();
 
-    IDataReader IDbCommand.ExecuteReader() =>
-        // TODO:  Add AsyncDbCommand.System.Data.IDbCommand.ExecuteReader implementation
-        null;
+    IDataReader IDbCommand.ExecuteReader() => throw new NotImplementedException();
 
-    public object ExecuteScalar() =>
-        // TODO:  Add AsyncDbCommand.ExecuteScalar implementation
-        null;
+    public object ExecuteScalar() => throw new NotImplementedException();
 
     public int ExecuteNonQuery()
     {
-        Assert.IsTrue(_connection != null);
+        Assert.IsNotNull(_connection);
         return _connection.ExecuteNonQuery(this);
     }
 
@@ -67,11 +62,9 @@ public class AsyncDbCommand : IDbCommand
         }
     }
 
-    public IDbDataParameter CreateParameter() =>
-        // TODO:  Add AsyncDbCommand.CreateParameter implementation
-        null;
+    public IDbDataParameter CreateParameter() => throw new NotImplementedException();
 
-    public IDbConnection Connection
+    public IDbConnection? Connection
     {
         get => null;
 
@@ -91,17 +84,18 @@ public class AsyncDbCommand : IDbCommand
         }
     }
 
+    [AllowNull]
     public string CommandText
     {
         get
         {
-            Assert.IsTrue(_command != null);
+            Assert.IsNotNull(_command);
             return _command.CommandText;
         }
 
         set
         {
-            Assert.IsTrue(_command != null);
+            Assert.IsNotNull(_command);
             _command.CommandText = value;
         }
     }
@@ -110,24 +104,22 @@ public class AsyncDbCommand : IDbCommand
     {
         get
         {
-            Assert.IsTrue(_command != null);
+            Assert.IsNotNull(_command);
             return _command.Parameters;
         }
     }
 
-    public IDbTransaction Transaction
+    public IDbTransaction? Transaction
     {
         get
         {
-            Assert.IsTrue(_command != null);
-
+            Assert.IsNotNull(_command);
             return _command.Transaction;
         }
 
         set
         {
-            Assert.IsTrue(_command != null);
-
+            Assert.IsNotNull(_command);
             _command.Transaction = value;
         }
     }

@@ -73,7 +73,7 @@ public struct PInt32 : INullable
         return sp;
     }
 
-    public override readonly bool Equals(object obj)
+    public readonly override bool Equals(object? obj)
     {
         var equals = obj is PInt32;
         if (equals)

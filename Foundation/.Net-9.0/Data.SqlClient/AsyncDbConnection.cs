@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
 using Foundation.Log;
@@ -34,16 +35,12 @@ public sealed class AsyncDbConnection : IDbConnection
         // TODO:  Add AsyncSqlConnection.ChangeDatabase implementation
     }
 
-    public IDbTransaction BeginTransaction(IsolationLevel il) =>
-        // TODO:  Add AsyncSqlConnection.BeginTransaction implementation
-        null;
-
-    IDbTransaction IDbConnection.BeginTransaction() =>
-        // TODO:  Add AsyncSqlConnection.System.Data.IDbConnection.BeginTransaction implementation
-        null;
+    public IDbTransaction BeginTransaction() => throw new NotImplementedException();
+    public IDbTransaction BeginTransaction(IsolationLevel il) => throw new NotImplementedException();
 
     public ConnectionState State => _cloneableConnection.State;
 
+    [AllowNull]
     public string ConnectionString
     {
         get => _cloneableConnection.ConnectionString;
@@ -165,7 +162,7 @@ public sealed class AsyncDbConnection : IDbConnection
                 }
 
                 var commandText = sb.ToString();
-                Exception exception = null;
+                Exception? exception = null;
 
                 using (var connection = (IDbConnection)_cloneable.Clone())
                 {

@@ -5,7 +5,7 @@ namespace Foundation.Data.SqlClient.PTypes;
 
 public struct PVariant : INullable
 {
-    private object _sql;
+    private object? _sql;
 
     public static readonly PVariant Null = new(PValueType.Null);
     public static readonly PVariant Default = new(PValueType.Default);
@@ -34,7 +34,7 @@ public struct PVariant : INullable
     public readonly bool IsValue => ValueType == PValueType.Value;
     public readonly bool IsEmpty => ValueType == PValueType.Empty;
 
-    public object Value
+    public object? Value
     {
         readonly get
         {
@@ -66,5 +66,5 @@ public struct PVariant : INullable
     }
 
     public static implicit operator PVariant(string s) => new(s);
-    public override readonly string ToString() => _sql.ToString();
+    public readonly override string ToString() => _sql!.ToString()!;
 }

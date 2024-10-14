@@ -36,7 +36,7 @@ public static class CreateInsertSqlStatementMethodFactory
                     if (indexedColumn.Index > 0)
                         textBuilder.AddToLastLine(",");
                     var column = indexedColumn.Value;
-                    textBuilder.Add($"\"{column.ColumnName}\"");
+                    textBuilder.Add($"\"{column!.ColumnName}\"");
                 }
             }
 
@@ -49,7 +49,7 @@ public static class CreateInsertSqlStatementMethodFactory
                     if (indexedColumn.Index > 0)
                         textBuilder.AddToLastLine(",");
                     var column = indexedColumn.Value;
-                    var methodName = MethodName.GetToSqlConstantMethodName(column.SqlDataTypeName, column.IsNullable);
+                    var methodName = MethodName.GetToSqlConstantMethodName(column!.SqlDataTypeName, column.IsNullable);
                     textBuilder.Add($"record.{column.ColumnName}.{methodName}()");
                 }
             }

@@ -8,7 +8,7 @@ internal sealed class SqlConnectionFactory : IDbConnectionHelper
 {
     private readonly IDbConnection _connection;
 
-    public event EventHandler InfoMessage;
+    public event EventHandler? InfoMessage;
 
     public SqlConnectionFactory(SqlConnection sqlConnection, IDbConnection connection)
     {

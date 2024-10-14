@@ -59,14 +59,12 @@ public readonly struct PDecimal : INullable
             ? new PDecimal(type)
             : SqlDecimal.Parse(s);
 
-    public override readonly bool Equals(object y)
+    public readonly override bool Equals(object? y)
     {
         var equals = y is PDecimal;
 
         if (equals)
-        {
-            equals = this == (PDecimal)y;
-        }
+            equals = this == (PDecimal)y!;
 
         return equals;
     }
@@ -79,11 +77,11 @@ public readonly struct PDecimal : INullable
     public readonly bool IsValue => ValueType == PValueType.Value;
     public readonly bool IsEmpty => ValueType == PValueType.Empty;
 
-    public readonly object Value
+    public readonly object? Value
     {
         get
         {
-            object value = ValueType switch
+            object? value = ValueType switch
             {
                 PValueType.Null => DBNull.Value,
                 PValueType.Value => _sql,

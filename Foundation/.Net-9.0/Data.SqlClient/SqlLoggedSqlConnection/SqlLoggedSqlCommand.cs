@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection;
 
@@ -19,6 +20,7 @@ internal sealed class SqlLoggedSqlCommand : IDbCommand
         _command = command;
     }
 
+    [AllowNull]
     public string CommandText
     {
         get => _command.CommandText;
@@ -40,7 +42,7 @@ internal sealed class SqlLoggedSqlCommand : IDbCommand
         set => _command.CommandType = value;
     }
 
-    public IDbConnection Connection
+    public IDbConnection? Connection
     {
         get => _connection;
 
@@ -49,17 +51,15 @@ internal sealed class SqlLoggedSqlCommand : IDbCommand
 
     public IDataParameterCollection Parameters => _command.Parameters;
 
-    public IDbTransaction Transaction
+    public IDbTransaction? Transaction
     {
         get => _command.Transaction;
-
         set => _command.Transaction = value;
     }
 
     public UpdateRowSource UpdatedRowSource
     {
         get => _command.UpdatedRowSource;
-
         set => _command.UpdatedRowSource = value;
     }
 

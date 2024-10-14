@@ -23,7 +23,7 @@ public struct PBinary : INullable
     }
 
     public static implicit operator PBinary(byte[] value) => new(value);
-    public static implicit operator byte[](PBinary value) => (byte[])value._sql;
+    public static implicit operator byte[]?(PBinary value) => (byte[]?)value._sql;
 
     public static bool operator ==(PBinary x, PBinary y)
     {
@@ -36,11 +36,11 @@ public struct PBinary : INullable
 
     public static bool operator !=(PBinary x, PBinary y) => !(x == y);
 
-    public override readonly bool Equals(object y)
+    public readonly override bool Equals(object? y)
     {
         var equals = y is PBinary;
         if (equals)
-            equals = this == (PBinary)y;
+            equals = this == (PBinary)y!;
         return equals;
     }
 
@@ -52,7 +52,7 @@ public struct PBinary : INullable
     public readonly bool IsValue => ValueType == PValueType.Value;
     public readonly bool IsEmpty => ValueType == PValueType.Empty;
 
-    public readonly object Value
+    public readonly object? Value
     {
         get
         {

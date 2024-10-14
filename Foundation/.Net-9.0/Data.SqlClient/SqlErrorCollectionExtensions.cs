@@ -5,9 +5,9 @@ namespace Foundation.Data.SqlClient;
 
 public static class SqlErrorCollectionExtensions
 {
-    public static string ToLogString(this SqlErrorCollection errors)
+    public static string? ToLogString(this SqlErrorCollection errors)
     {
-        string message = null;
+        string? message = null;
 
         if (errors != null)
         {

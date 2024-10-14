@@ -69,11 +69,11 @@ public struct PString : INullable
         return sp;
     }
 
-    public override readonly bool Equals(object obj)
+    public readonly override bool Equals(object? obj)
     {
         var equals = obj is PString;
         if (equals)
-            equals = this == (PString)obj;
+            equals = this == (PString)obj!;
         return equals;
     }
 

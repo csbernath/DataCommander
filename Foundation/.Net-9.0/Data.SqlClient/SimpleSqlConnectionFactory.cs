@@ -16,8 +16,8 @@ public sealed class SimpleSqlConnectionFactory
     {
         ArgumentNullException.ThrowIfNull(section);
 
-        var node = section.SelectNode(nodeName, true);
-        _connectionString = node.Attributes["ConnectionString"].GetValue<string>();
+        var node = section.SelectNode(nodeName, true)!;
+        _connectionString = node.Attributes["ConnectionString"].GetValue<string>()!;
 
         var contains = node.Attributes.TryGetAttributeValue("CommandTimeout", out TimeSpan timeSpan);
 
@@ -38,7 +38,7 @@ public sealed class SimpleSqlConnectionFactory
 
             if (!contains)
             {
-                contains = sqlLogNode.Attributes.TryGetAttributeValue("Data Source", null, out string dataSource);
+                contains = sqlLogNode.Attributes.TryGetAttributeValue("Data Source", null, out string? dataSource);
 
                 if (!contains)
                     dataSource = sqlConnectionStringBuilder.DataSource;
@@ -65,7 +65,7 @@ public sealed class SimpleSqlConnectionFactory
             else
                 Factory = new SqlLoggedSqlConnectionFactory(logConnectionString, applicationName, filter);
 
-            var thread = Factory.Thread;
+            var thread = Factory.Thread!;
             thread.Start();
         }
         else

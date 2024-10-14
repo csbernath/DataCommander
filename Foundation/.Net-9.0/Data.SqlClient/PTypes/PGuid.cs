@@ -50,11 +50,11 @@ public readonly struct PGuid : INullable
         return sp;
     }
 
-    public override readonly bool Equals(object y)
+    public readonly override bool Equals(object? y)
     {
         var equals = y is PGuid;
         if (equals)
-            equals = this == (PGuid)y;
+            equals = this == (PGuid)y!;
         return equals;
     }
 

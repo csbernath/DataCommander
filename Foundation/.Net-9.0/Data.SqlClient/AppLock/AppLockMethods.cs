@@ -17,7 +17,7 @@ public sealed class AppLockMethods
         builder.Add("LockMode", lockMode.ToString());
 
         if (lockOwner != null)
-            builder.Add("LockOwner", lockOwner.ToString());
+            builder.Add("LockOwner", lockOwner.ToString()!);
 
         if (lockTimeout != null)
             builder.Add("LockTimeout", (int)lockTimeout.Value.TotalMilliseconds);

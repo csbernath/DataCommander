@@ -10,7 +10,7 @@ public class SqlCommandHelper : IDbCommandHelper
     {
         var sqlCommand = (SqlCommand)command;
         var xmlDocument = new XmlDocument();
-        XmlReader xmlReader = null;
+        XmlReader? xmlReader = null;
 
         try
         {

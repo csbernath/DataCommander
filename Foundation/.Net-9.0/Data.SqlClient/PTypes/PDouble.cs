@@ -49,11 +49,11 @@ public struct PDouble : INullable
         return sp;
     }
 
-    public override readonly bool Equals(object y)
+    public readonly override bool Equals(object? y)
     {
         var equals = y is PDouble;
         if (equals)
-            equals = this == (PDouble)y;
+            equals = this == (PDouble)y!;
         return equals;
     }
 

@@ -5,7 +5,7 @@ namespace Foundation.Data;
 
 public interface IDbConnectionFactory
 {
-    WorkerThread Thread { get; }
+    WorkerThread? Thread { get; }
     IDbConnection CreateConnection(string connectionString, string userName, string hostName);
     IDbConnectionHelper CreateConnectionHelper(IDbConnection connection);
 }

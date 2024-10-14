@@ -52,12 +52,12 @@ public struct PSingle : INullable
         return sp;
     }
 
-    public override readonly bool Equals(object y)
+    public readonly override bool Equals(object? y)
     {
         var equals = y is PSingle;
 
         if (equals)
-            equals = this == (PSingle)y;
+            equals = this == (PSingle)y!;
 
         return equals;
     }

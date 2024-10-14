@@ -73,11 +73,11 @@ public struct PDateTime : INullable
         return sp;
     }
 
-    public override readonly bool Equals(object y)
+    public readonly override bool Equals(object? y)
     {
         var equals = y is PDateTime;
         if (equals)
-            equals = this == (PDateTime)y;
+            equals = this == (PDateTime)y!;
 
         return equals;
     }
@@ -94,7 +94,7 @@ public struct PDateTime : INullable
     {
         get
         {
-            object value = ValueType switch
+            object? value = ValueType switch
             {
                 PValueType.Value or PValueType.Null => _sql,
                 _ => null,

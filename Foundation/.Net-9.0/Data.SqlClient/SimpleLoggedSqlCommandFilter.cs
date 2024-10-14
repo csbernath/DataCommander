@@ -11,7 +11,7 @@ internal sealed class SimpleLoggedSqlCommandFilter : ISqlLoggedSqlCommandFilter
 {
     private readonly ConfigurationSection _section;
     private readonly string _nodeName;
-    private SimpleLoggedSqlCommandFilterRule[] _rules;
+    private SimpleLoggedSqlCommandFilterRule[]? _rules;
 
     public SimpleLoggedSqlCommandFilter(
         ConfigurationSection section,
@@ -20,10 +20,10 @@ internal sealed class SimpleLoggedSqlCommandFilter : ISqlLoggedSqlCommandFilter
         _section = section;
         _nodeName = nodeName;
         _section.Changed += SettingsChanged;
-        SettingsChanged(null, null);
+        SettingsChanged(null, EventArgs.Empty);
     }
 
-    private void SettingsChanged(object sender, EventArgs e)
+    private void SettingsChanged(object? sender, EventArgs e)
     {
         using var log = LogFactory.Instance.GetCurrentMethodLog();
         var node = _section.SelectNode(_nodeName, false);
@@ -68,7 +68,7 @@ internal sealed class SimpleLoggedSqlCommandFilter : ISqlLoggedSqlCommandFilter
             }
 
             var count = list.Count;
-            SimpleLoggedSqlCommandFilterRule[] rules;
+            SimpleLoggedSqlCommandFilterRule[]? rules;
 
             if (count > 0)
             {

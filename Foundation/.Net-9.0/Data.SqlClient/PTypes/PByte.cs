@@ -56,12 +56,12 @@ public struct PByte : INullable
         return sp;
     }
 
-    public override readonly bool Equals(object y)
+    public readonly override bool Equals(object? y)
     {
         var equals = y is PByte;
 
         if (equals)
-            equals = this == (PByte)y;
+            equals = this == (PByte)y!;
 
         return equals;
     }
@@ -78,11 +78,11 @@ public struct PByte : INullable
     public readonly bool IsValue => ValueType == PValueType.Value;
     public readonly bool IsEmpty => ValueType == PValueType.Empty;
 
-    public object Value
+    public object? Value
     {
         readonly get
         {
-            object value = ValueType switch
+            object? value = ValueType switch
             {
                 PValueType.Value or PValueType.Null => _sql,
                 _ => null,

@@ -40,7 +40,7 @@ public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
 
         try
         {
-            id = (short)executor.ExecuteScalar(new CreateCommandRequest("select @@spid"));
+            id = (short)executor.ExecuteScalar(new CreateCommandRequest("select @@spid"))!;
         }
         catch (Exception e)
         {
@@ -132,7 +132,7 @@ public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
         sb.AppendLine("SafeSqlConnection.HandleException(command):\r\n");
         var parameters = (SqlParameterCollection)command.Parameters;
         var p = parameters.ToLogString();
-        var database = command.Connection.Database;
+        var database = command.Connection!.Database;
 
         sb.AppendFormat("Database: {0}\r\n", database);
         sb.AppendFormat("Command: {0}\r\n{1}\r\n{2}\r\n", command.CommandText, p, separator);

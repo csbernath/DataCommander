@@ -32,7 +32,7 @@ public static class CreateUpdateSqlStatementMethodFactory
                     if (item.Index > 0)
                         textBuilder.AddToLastLine(",");
                     var column = item.Value;
-                    var method = MethodName.GetToSqlConstantMethodName(column.SqlDataTypeName, column.IsNullable);
+                    var method = MethodName.GetToSqlConstantMethodName(column!.SqlDataTypeName, column.IsNullable);
                     textBuilder.Add($"new ColumnNameValue(\"{column.ColumnName}\", record.{column.ColumnName}.{method}())");
                 }
 

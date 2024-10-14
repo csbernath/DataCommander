@@ -53,12 +53,12 @@ public struct PInt16 : INullable
         return sp;
     }
 
-    public override readonly bool Equals(object y)
+    public readonly override bool Equals(object? y)
     {
         var equals = y is PInt16;
 
         if (equals)
-            equals = this == (PInt16)y;
+            equals = this == (PInt16)y!;
 
         return equals;
     }

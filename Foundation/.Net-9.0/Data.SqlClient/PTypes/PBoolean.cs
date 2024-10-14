@@ -66,11 +66,11 @@ public struct PBoolean : INullable
 
     public static PBoolean Parse(string s, PValueType type) => string.IsNullOrEmpty(s) ? new PBoolean(type) : SqlBoolean.Parse(s);
 
-    public override readonly bool Equals(object y)
+    public readonly override bool Equals(object? y)
     {
         var equals = y is PBoolean;
         if (equals)
-            equals = this == (PBoolean)y;
+            equals = this == (PBoolean)y!;
         return equals;
     }
 
@@ -82,11 +82,11 @@ public struct PBoolean : INullable
     public readonly bool IsValue => ValueType == PValueType.Value;
     public readonly bool IsEmpty => ValueType == PValueType.Empty;
 
-    public readonly object Value
+    public readonly object? Value
     {
         get
         {
-            object value = ValueType switch
+            object? value = ValueType switch
             {
                 PValueType.Value or PValueType.Null => _sql,
                 _ => null,

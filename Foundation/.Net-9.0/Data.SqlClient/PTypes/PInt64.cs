@@ -79,7 +79,7 @@ public struct PInt64 : INullable
         return sp;
     }
 
-    public override readonly bool Equals(object y)
+    public readonly override bool Equals(object? y)
     {
         var equals = y is PInt64;
         if (equals)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Foundation.Core;
 using Microsoft.Data.SqlClient;
 
@@ -73,6 +74,7 @@ public sealed class SqlLoggedSqlConnection : IDbConnection
         }
     }
 
+    [AllowNull]
     public string ConnectionString
     {
         get => Connection.ConnectionString;

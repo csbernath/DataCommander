@@ -9,7 +9,7 @@ namespace DataCommander.Api.Connection;
 
 public abstract class ConnectionBase : IDisposable, IAsyncDisposable
 {
-    public DbConnection Connection { get; protected set; }
+    public DbConnection? Connection { get; protected set; }
     public abstract Task OpenAsync(CancellationToken cancellationToken);
 
     public void Close()
@@ -20,7 +20,7 @@ public abstract class ConnectionBase : IDisposable, IAsyncDisposable
 
     public abstract DbCommand CreateCommand();
     public abstract string ConnectionName { get; set; }
-    public string ConnectionString => Connection.ConnectionString;
+    public string ConnectionString => Connection!.ConnectionString;
     public abstract string Caption { get; }
     public abstract string DataSource { get; }
 
