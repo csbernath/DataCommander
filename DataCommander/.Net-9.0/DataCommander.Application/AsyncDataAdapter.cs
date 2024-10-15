@@ -33,7 +33,7 @@ internal sealed class AsyncDataAdapter(
     long IAsyncDataAdapter.RowCount => _rowCount;
     int IAsyncDataAdapter.TableCount => _tableCount;
 
-    public void Start(IEnumerable<AsyncDataAdapterCommand> commands)
+    public void Start(IEnumerable<AsyncDataAdapterCommand>? commands)
     {
         if (commands != null)
         {
@@ -67,10 +67,10 @@ internal sealed class AsyncDataAdapter(
 
         using (LogFactory.Instance.GetCurrentMethodLog())
         {
-            Exception exception = null;
+            Exception? exception = null;
             var dataReaderHelper = provider.CreateDataReaderHelper(dataReader);
             var schemaRows = schemaTable.Rows;
-            var count = schemaRows.Count;
+            var columnCount = schemaRows.Count;
 
             resultWriter.WriteTableBegin(schemaTable);
 
@@ -98,29 +98,10 @@ internal sealed class AsyncDataAdapter(
                 if (first)
                 {
                     first = false;
-                    resultWriter.FirstRowReadBegin();
-                    read = await dataReader.ReadAsync(cancellationToken);
-
-                    string[] dataTypeNames = new string[count];
-
-                    if (read)
-                        for (var j = 0; j < count; ++j)
-                            dataTypeNames[j] = dataReader.GetDataTypeName(j);
-
-                    resultWriter.FirstRowReadEnd(dataTypeNames);
+                    read = await ReadFirstRow(dataReader, columnCount, cancellationToken);
                 }
                 else
-                {
-                    try
-                    {
-                        read = await dataReader.ReadAsync(cancellationToken);
-                    }
-                    catch (Exception e)
-                    {
-                        read = false;
-                        exception = e;
-                    }
-                }
+                    (read, exception) = await ReadRow(dataReader, cancellationToken, exception);
 
                 if (read)
                 {
@@ -137,7 +118,7 @@ internal sealed class AsyncDataAdapter(
 
                     if (_rowCount == maxRecords)
                     {
-                        CancelWaitCallback(null);
+                        CancelWaitCallback();
                         break;
                     }
                 }
@@ -162,9 +143,38 @@ internal sealed class AsyncDataAdapter(
         }
     }
 
+    private static async Task<(bool read, Exception? exception)> ReadRow(DbDataReader dataReader, CancellationToken cancellationToken, Exception? exception)
+    {
+        bool read;
+        try
+        {
+            read = await dataReader.ReadAsync(cancellationToken);
+        }
+        catch (Exception e)
+        {
+            read = false;
+            exception = e;
+        }
+
+        return (read, exception);
+    }
+
+    private async Task<bool> ReadFirstRow(DbDataReader dataReader, int columnCount, CancellationToken cancellationToken)
+    {
+        resultWriter.FirstRowReadBegin();
+        var dataTypeNames = new string[columnCount];
+        var read = await dataReader.ReadAsync(cancellationToken);
+        if (read)
+            for (var j = 0; j < columnCount; ++j)
+                dataTypeNames[j] = dataReader.GetDataTypeName(j);
+        resultWriter.FirstRowReadEnd(dataTypeNames);
+        return read;
+    }
+
     private async Task Fill(AsyncDataAdapterCommand asyncDataAdapterCommand, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(asyncDataAdapterCommand);
+        Assert.IsNotNull(asyncDataAdapterCommand);
+        
         Exception? exception = null;
         var command = asyncDataAdapterCommand.Command;
 
@@ -251,7 +261,7 @@ internal sealed class AsyncDataAdapter(
         }
     }
 
-    private void CancelWaitCallback(object state)
+    private void CancelWaitCallback()
     {
         using (LogFactory.Instance.GetCurrentMethodLog())
             _command.Command.Cancel();

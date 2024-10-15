@@ -8,6 +8,6 @@ internal interface IAsyncDataAdapter
     long RowCount { get; }
     int TableCount { get; }
 
-    void Start(IEnumerable<AsyncDataAdapterCommand> commands);
+    void Start(IEnumerable<AsyncDataAdapterCommand>? commands);
     void Cancel();
 }
