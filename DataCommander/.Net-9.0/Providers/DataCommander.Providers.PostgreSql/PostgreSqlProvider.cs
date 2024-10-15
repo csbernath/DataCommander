@@ -326,7 +326,7 @@ order by 1", name.Database);
     }
 
     DataParameterBase IProvider.GetDataParameter(IDataParameter parameter) => throw new NotImplementedException();
-    string IProvider.GetExceptionMessage(Exception exception) => exception.ToString();
+    public string GetExceptionMessage(Exception exception) => exception.ToString();
     DataTable IProvider.GetParameterTable(IDataParameterCollection parameters) => throw new NotImplementedException();
     DataTable IProvider.GetSchemaTable(IDataReader dataReader) => throw new NotImplementedException();
 

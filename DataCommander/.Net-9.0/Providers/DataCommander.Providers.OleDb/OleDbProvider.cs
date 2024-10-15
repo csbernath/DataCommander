@@ -259,15 +259,6 @@ internal sealed class OleDbProvider : IProvider
     {
     }
 
-    string IProvider.GetExceptionMessage(Exception e) =>
-        //OleDbException oleDbException = e as OleDbException;
-
-        //if (oleDbException != null)
-        //{
-        //}
-
-        e.ToString();
-
     string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName) => null;
 
     void IProvider.CreateInsertCommand(

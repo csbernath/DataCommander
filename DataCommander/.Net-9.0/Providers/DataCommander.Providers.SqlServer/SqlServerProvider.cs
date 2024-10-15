@@ -624,7 +624,7 @@ from
         return new SqlDataParameter(sqlParameter);
     }
 
-    string IProvider.GetExceptionMessage(Exception exception)
+    public string GetExceptionMessage(Exception exception)
     {
         var message = exception is SqlException sqlException
             ? sqlException.Errors.ToLogString()

@@ -190,7 +190,7 @@ order by name collate nocase";
 
     void IProvider.ClearCompletionCache() => throw new Exception("The method or operation is not implemented.");
 
-    string IProvider.GetExceptionMessage(Exception e)
+    public string GetExceptionMessage(Exception e)
     {
         var message = e switch
         {

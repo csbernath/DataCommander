@@ -38,7 +38,6 @@ public interface IProvider
     
     DataParameterBase GetDataParameter(IDataParameter parameter);
 
-    string GetExceptionMessage(Exception exception);
     DataTable GetParameterTable(IDataParameterCollection parameters);
     DataTable GetSchemaTable(IDataReader dataReader);
     List<Statement> GetStatements(string commandText);
