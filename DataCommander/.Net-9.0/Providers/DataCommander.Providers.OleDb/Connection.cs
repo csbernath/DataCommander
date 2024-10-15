@@ -17,9 +17,7 @@ internal sealed class Connection : ConnectionBase
         oledbConnection.InfoMessage += OnInfoMessage;
     }
 
-    public override string ConnectionName { get; set; }
     public override Task OpenAsync(CancellationToken cancellationToken) => oledbConnection.OpenAsync(cancellationToken);
-    public override string Caption => oledbConnection.ConnectionString;
 
     void OnInfoMessage(object sender, OleDbInfoMessageEventArgs e)
     {

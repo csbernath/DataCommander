@@ -19,8 +19,6 @@ internal sealed class Connection : ConnectionBase
 
     public override Task OpenAsync(CancellationToken cancellationToken) => _npgsqlConnection.OpenAsync(cancellationToken);
     public override DbCommand CreateCommand() => _npgsqlConnection.CreateCommand();
-    public override string ConnectionName { get; set; }
-    public override string Caption => _npgsqlConnection.Database;
     public override string DataSource => _npgsqlConnection.DataSource;
     public override string ServerVersion => _npgsqlConnection.ServerVersion;
 

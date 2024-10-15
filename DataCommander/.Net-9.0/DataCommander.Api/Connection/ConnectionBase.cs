@@ -19,9 +19,6 @@ public abstract class ConnectionBase : IDisposable, IAsyncDisposable
     }
 
     public abstract DbCommand CreateCommand();
-    public abstract string ConnectionName { get; set; }
-    public string ConnectionString => Connection!.ConnectionString;
-    public abstract string Caption { get; }
     public abstract string DataSource { get; }
 
     public string? Database

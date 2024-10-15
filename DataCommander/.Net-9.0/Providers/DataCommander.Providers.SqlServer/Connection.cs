@@ -28,21 +28,6 @@ internal sealed class Connection : ConnectionBase
         CreateConnection();
     }
 
-    public override string ConnectionName { get; set; }
-
-    public override string Caption
-    {
-        get
-        {
-            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_sqlConnection.ConnectionString);
-            var userName = sqlConnectionStringBuilder.IntegratedSecurity
-                ? WindowsIdentity.GetCurrent().Name
-                : sqlConnectionStringBuilder.UserID;
-            var caption = $"{_sqlConnection.DataSource}.{_sqlConnection.Database} ({userName} ({_serverProcessId}))";
-            return caption;
-        }
-    }
-
     public override string DataSource => _sqlConnection.DataSource;
     public override string ServerVersion => _sqlConnection.ServerVersion;
 
