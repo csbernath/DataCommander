@@ -10,7 +10,7 @@ namespace Foundation.Data.SqlClient;
 
 public sealed class SimpleSqlConnectionFactory
 {
-    private readonly string _connectionString;
+    private readonly string? _connectionString;
 
     public SimpleSqlConnectionFactory(ConfigurationSection section, string nodeName)
     {
@@ -34,7 +34,7 @@ public sealed class SimpleSqlConnectionFactory
         {
             var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_connectionString);
             var applicationName = sqlConnectionStringBuilder.ApplicationName;
-            contains = sqlLogNode.Attributes.TryGetAttributeValue("ConnectionString", null, out string logConnectionString);
+            contains = sqlLogNode.Attributes.TryGetAttributeValue("ConnectionString", null, out string? logConnectionString);
 
             if (!contains)
             {
@@ -83,8 +83,8 @@ public sealed class SimpleSqlConnectionFactory
 
     public IDbConnection CreateConnection(string name)
     {
-        string userName = null;
-        string hostName = null;
+        string? userName = null;
+        string? hostName = null;
 #if FOUNDATION_3_5
             HttpContext context = HttpContext.Current;
 
@@ -124,7 +124,7 @@ public sealed class SimpleSqlConnectionFactory
         hostName = Environment.MachineName;
 #endif
 
-        string connectionString;
+        string? connectionString;
 
         if (name != null)
         {

@@ -12,7 +12,7 @@ public class SafeLoggedSqlConnectionFactory : IDbConnectionFactory
     private readonly int _applicationId;
     private readonly ISqlLoggedSqlCommandFilter _filter;
 
-    public SafeLoggedSqlConnectionFactory(string connectionString, string applicationName, ISqlLoggedSqlCommandFilter filter)
+    public SafeLoggedSqlConnectionFactory(string? connectionString, string applicationName, ISqlLoggedSqlCommandFilter filter)
     {
         _sqlLog = new SqlLog.SqlLog(connectionString);
         _applicationId = _sqlLog.ApplicationStart(applicationName, LocalTime.Default.Now, true);
@@ -21,7 +21,7 @@ public class SafeLoggedSqlConnectionFactory : IDbConnectionFactory
 
     public WorkerThread Thread => _sqlLog.Thread;
 
-    public IDbConnection CreateConnection(string connectionString, string userName, string hostName) =>
+    public IDbConnection CreateConnection(string? connectionString, string userName, string hostName) =>
         new SafeLoggedSqlConnection(_sqlLog, _applicationId, userName, hostName, connectionString, _filter, CancellationToken.None);
 
     public IDbConnectionHelper CreateConnectionHelper(IDbConnection connection)

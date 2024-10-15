@@ -64,11 +64,11 @@ public struct PDouble : INullable
     public readonly bool IsValue => ValueType == PValueType.Value;
     public readonly bool IsEmpty => ValueType == PValueType.Empty;
 
-    public readonly object Value
+    public readonly object? Value
     {
         get
         {
-            object value = ValueType switch
+            object? value = ValueType switch
             {
                 PValueType.Value or PValueType.Null => _sql,
                 _ => null,

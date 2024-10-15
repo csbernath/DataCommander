@@ -17,7 +17,7 @@ internal sealed class SqlLoggedSqlDataReader(
 
     public IDataReader Execute()
     {
-        Exception exception = null;
+        Exception? exception = null;
         _startDate = LocalTime.Default.Now;
         _startTick = Stopwatch.GetTimestamp();
 
@@ -83,7 +83,7 @@ internal sealed class SqlLoggedSqlDataReader(
 
     public void Dispose()
     {
-        _reader.Dispose();
+        _reader!.Dispose();
 
         if (_contains && !_logged)
         {
@@ -92,25 +92,25 @@ internal sealed class SqlLoggedSqlDataReader(
         }
     }
 
-    public bool GetBoolean(int i) => _reader.GetBoolean(i);
+    public bool GetBoolean(int i) => _reader!.GetBoolean(i);
 
-    public byte GetByte(int i) => _reader.GetByte(i);
+    public byte GetByte(int i) => _reader!.GetByte(i);
 
-    public long GetBytes(int i, long fieldOffset, byte[]? buffer, int bufferoffset, int length) => _reader.GetBytes(i, fieldOffset, buffer, bufferoffset, length);
+    public long GetBytes(int i, long fieldOffset, byte[]? buffer, int bufferoffset, int length) => _reader!.GetBytes(i, fieldOffset, buffer, bufferoffset, length);
 
-    public char GetChar(int i) => _reader.GetChar(i);
+    public char GetChar(int i) => _reader!.GetChar(i);
 
-    public long GetChars(int i, long fieldoffset, char[]? buffer, int bufferoffset, int length) => _reader.GetChars(i, fieldoffset, buffer, bufferoffset, length);
+    public long GetChars(int i, long fieldoffset, char[]? buffer, int bufferoffset, int length) => _reader!.GetChars(i, fieldoffset, buffer, bufferoffset, length);
 
-    public IDataReader GetData(int i) => _reader.GetData(i);
+    public IDataReader GetData(int i) => _reader!.GetData(i);
 
-    public string GetDataTypeName(int i) => _reader.GetDataTypeName(i);
+    public string GetDataTypeName(int i) => _reader!.GetDataTypeName(i);
 
-    public DateTime GetDateTime(int i) => _reader.GetDateTime(i);
+    public DateTime GetDateTime(int i) => _reader!.GetDateTime(i);
 
-    public decimal GetDecimal(int i) => _reader.GetDecimal(i);
+    public decimal GetDecimal(int i) => _reader!.GetDecimal(i);
 
-    public double GetDouble(int i) => _reader.GetDouble(i);
+    public double GetDouble(int i) => _reader!.GetDouble(i);
 
     public Type GetFieldType(int i) => _reader.GetFieldType(i);
 

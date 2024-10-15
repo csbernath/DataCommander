@@ -80,10 +80,10 @@ namespace {_request.Namespace}
         return csharpTypeName;
     }
 
-    private static string GetDataRecordMethodName(DbQueryResultField field)
+    private static string? GetDataRecordMethodName(DbQueryResultField field)
     {
         var typeCode = Type.GetTypeCode(field.DataType);
-        string methodName = null;
+        string? methodName = null;
         switch (typeCode)
         {
             case TypeCode.Empty:

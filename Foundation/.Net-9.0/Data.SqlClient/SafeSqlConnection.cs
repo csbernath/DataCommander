@@ -18,7 +18,7 @@ public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
     private readonly CancellationToken _cancellationToken = CancellationToken.None;
     private short _id;
 
-    public SafeSqlConnection(string connectionString)
+    public SafeSqlConnection(string? connectionString)
     {
         var connection = new SqlConnection(connectionString);
         Initialize(connection, this);

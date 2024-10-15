@@ -86,12 +86,12 @@ public static class SqlConstantMapper
     public static string ToSqlConstant(this Guid source) => $"'{source}'";
 
     [Pure]
-    public static string ToNullableNVarChar(this string source) => source != null
+    public static string ToNullableNVarChar(this string? source) => source != null
         ? source.ToNVarChar()
         : SqlNull.NullString;
 
     [Pure]
-    public static string ToNullableVarChar(this string source) => source != null
+    public static string ToNullableVarChar(this string? source) => source != null
         ? source.ToVarChar()
         : SqlNull.NullString;
 

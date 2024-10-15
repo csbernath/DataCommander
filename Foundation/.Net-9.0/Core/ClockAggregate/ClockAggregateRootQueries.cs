@@ -14,14 +14,14 @@ public static class ClockAggregateRootQueries
         localTime = clockState.LocalTime;
     }
 
-    public static DateTime GetLocalTimeFromCurrentEnvironmentTickCount(this ClockAggregateRoot clock)
+    public static DateTime GetLocalTimeFromCurrentEnvironmentTickCount64(this ClockAggregateRoot clock)
     {
-        var universalTime = clock.GetUniversalTimeFromCurrentEnvironmentTickCount();
+        var universalTime = clock.GetUniversalTimeFromCurrentEnvironmentTickCount64();
         var localTime = universalTime.ToLocalTime();
         return localTime;
     }
 
-    public static DateTime GetUniversalTimeFromCurrentEnvironmentTickCount(this ClockAggregateRoot clock) =>
+    public static DateTime GetUniversalTimeFromCurrentEnvironmentTickCount64(this ClockAggregateRoot clock) =>
         clock.GetUniversalTimeFromEnvironmentTickCount64(Environment.TickCount64);
 
     public static DateTime GetUniversalTimeFromStopwatchTimestamp(this ClockAggregateRoot clock, long stopwatchTimestamp)

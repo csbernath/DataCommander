@@ -88,7 +88,7 @@ public struct PString : INullable
     public readonly bool IsValue => ValueType == PValueType.Value;
     public readonly bool IsEmpty => ValueType == PValueType.Empty;
 
-    public readonly object Value
+    public readonly object? Value
     {
         get
         {

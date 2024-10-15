@@ -8,12 +8,8 @@ namespace DataCommander.Providers.PostgreSql;
 
 internal sealed class Connection : ConnectionBase
 {
-    #region Private Fields
-
     private readonly ConnectionStringAndCredential _connectionStringAndCredential;
     private NpgsqlConnection _npgsqlConnection;
-
-    #endregion
 
     public Connection(ConnectionStringAndCredential connectionStringAndCredential)
     {
@@ -47,12 +43,7 @@ internal sealed class Connection : ConnectionBase
             npgsqlConnectionStringBuilder.Password = PasswordFactory.Unprotect(credential.Password.Protected);
         }
 
-        //sqlCredential = new SqlCredential(credential.UserId, credential.Password.SecureString);
-        
         _npgsqlConnection = new NpgsqlConnection(npgsqlConnectionStringBuilder.ConnectionString);
         Connection = _npgsqlConnection;
-        // _sqlConnection.FireInfoMessageEventOnUserErrors = true;
-        // _sqlConnection.InfoMessage += OnInfoMessage;
-        // _sqlConnection.StateChange += OnStateChange;
     }
 }

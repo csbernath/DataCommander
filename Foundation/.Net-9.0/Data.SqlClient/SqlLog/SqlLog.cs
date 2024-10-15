@@ -89,7 +89,7 @@ public sealed class SqlLog
     /// Initializes a new instance of the <see cref="SqlLog"/> class.
     /// </summary>
     /// <param name="connectionString"></param>
-    public SqlLog(string connectionString)
+    public SqlLog(string? connectionString)
     {
         Thread = new WorkerThread(Start)
         {
@@ -405,7 +405,7 @@ public sealed class SqlLog
         IDbCommand command,
         DateTime startDate,
         long duration,
-        Exception exception)
+        Exception? exception)
     {
         var commands = _applications[applicationId];
         var item = new SqlLogCommand(applicationId, commands, connectionNo, command, startDate, duration, exception);

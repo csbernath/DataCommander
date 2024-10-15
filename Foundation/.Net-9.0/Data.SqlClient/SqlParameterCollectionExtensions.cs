@@ -73,7 +73,7 @@ public static class SqlParameterCollectionExtensions
                                         case SqlDbType.NChar:
                                         case SqlDbType.NVarChar:
                                         case SqlDbType.NText:
-                                            s = value.ToString();
+                                            s = value.ToString()!;
                                             s = s.Replace("\'", "''");
                                             s = $"'{s}'";
                                             break;
@@ -120,7 +120,7 @@ public static class SqlParameterCollectionExtensions
                                             break;
 
                                         default:
-                                            s = value.ToString();
+                                            s = value.ToString()!;
                                             break;
                                     }
                                 }

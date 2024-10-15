@@ -8,7 +8,7 @@ public class NativeSqlCommandFactory : IDbConnectionFactory
 {
     WorkerThread? IDbConnectionFactory.Thread => null;
 
-    public IDbConnection CreateConnection(string connectionString, string userName, string hostName) => new SqlConnection(connectionString);
+    public IDbConnection CreateConnection(string? connectionString, string userName, string hostName) => new SqlConnection(connectionString);
 
     public IDbConnectionHelper CreateConnectionHelper(IDbConnection connection)
     {

@@ -20,7 +20,7 @@ public sealed class SqlLoggedSqlConnectionFactory : IDbConnectionFactory
     /// <param name="applicationName"></param>
     /// <param name="filter"></param>
     public SqlLoggedSqlConnectionFactory(
-        string connectionString,
+        string? connectionString,
         string applicationName,
         ISqlLoggedSqlCommandFilter filter)
     {
@@ -32,7 +32,7 @@ public sealed class SqlLoggedSqlConnectionFactory : IDbConnectionFactory
     WorkerThread IDbConnectionFactory.Thread => _sqlLog.Thread;
 
     IDbConnection IDbConnectionFactory.CreateConnection(
-        string connectionString,
+        string? connectionString,
         string userName,
         string hostName) => new SqlLoggedSqlConnection(_sqlLog, _applicationId, userName, hostName, connectionString, _filter);
 

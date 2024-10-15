@@ -16,7 +16,7 @@ public sealed class LocalTime : IDateTimeProvider
         get
         {
             var clock = ClockAggregateRepository.Singleton.Get();
-            var localTime = clock.GetLocalTimeFromCurrentEnvironmentTickCount();
+            var localTime = clock.GetLocalTimeFromCurrentEnvironmentTickCount64();
             return localTime;
         }
     }

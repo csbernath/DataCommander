@@ -16,7 +16,7 @@ public sealed class SqlLoggedSqlConnection : IDbConnection
     private int _connectionNo;
     private readonly SqlLog.SqlLog _sqlLog;
 
-    public SqlLoggedSqlConnection(SqlLog.SqlLog sqlLog, int applicationId, string userName, string hostName, string connectionString,
+    public SqlLoggedSqlConnection(SqlLog.SqlLog sqlLog, int applicationId, string userName, string hostName, string? connectionString,
         ISqlLoggedSqlCommandFilter filter)
     {
         ArgumentNullException.ThrowIfNull(sqlLog);
@@ -89,7 +89,7 @@ public sealed class SqlLoggedSqlConnection : IDbConnection
         IDbCommand command,
         DateTime startDate,
         long duration,
-        Exception exception) => _sqlLog.CommandExecute(_applicationId, _connectionNo, command, startDate, duration, exception);
+        Exception? exception) => _sqlLog.CommandExecute(_applicationId, _connectionNo, command, startDate, duration, exception);
 
     internal int ExecuteNonQuery(IDbCommand command)
     {
