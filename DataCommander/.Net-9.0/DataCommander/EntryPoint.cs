@@ -64,7 +64,7 @@ internal static class EntryPoint
     {
         using var methodLog = LogFactory.Instance.GetCurrentMethodLog();
         var applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(false);
-        var fileName = applicationDataFolderPath + Path.DirectorySeparatorChar + "ApplicationData.Net-9.0.xml";
+        var fileName = Path.Combine(applicationDataFolderPath, "ApplicationData.xml");
         methodLog.Write(LogLevel.Trace, "fileName: {0}", fileName);
         var sectionName = Settings.SectionName;
         var dataCommanderApplication = DataCommanderApplication.Instance;

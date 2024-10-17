@@ -39,25 +39,39 @@ public sealed class ApplicationData
 
     public static string GetApplicationDataFolderPath(bool versioned)
     {
-        var sb = new StringBuilder();
-        sb.Append(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
-
-        string? company;
-        string? product;
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
 
         var assembly = Assembly.GetEntryAssembly()!;
-        var companyAttribute = (AssemblyCompanyAttribute?)Attribute.GetCustomAttribute(assembly, typeof(AssemblyCompanyAttribute));
+        var company = GetCompany(assembly);
+        var product = GetProduct(assembly);
+        var name = assembly.GetName();
 
-        if (companyAttribute != null)
+        if (product == null)
+            product = name.Name;
+
+        if (company != null)
         {
-            company = companyAttribute.Company;
-
-            if (company.Length == 0)
-                company = null;
+            stringBuilder.Append(Path.DirectorySeparatorChar);
+            stringBuilder.Append(company);
         }
-        else
-            company = null;
 
+        stringBuilder.Append(Path.DirectorySeparatorChar);
+        stringBuilder.Append(product);
+
+        if (versioned)
+        {
+            stringBuilder.Append(" (");
+            stringBuilder.Append(name.Version);
+            stringBuilder.Append(')');
+        }
+
+        return stringBuilder.ToString();
+    }
+
+    private static string? GetProduct(Assembly assembly)
+    {
+        string? product;
         var productAttribute = (AssemblyProductAttribute?)Attribute.GetCustomAttribute(assembly, typeof(AssemblyProductAttribute));
 
         if (productAttribute != null)
@@ -70,28 +84,25 @@ public sealed class ApplicationData
         else
             product = null;
 
-        var name = assembly.GetName();
+        return product;
+    }
 
-        if (product == null)
-            product = name.Name;
+    private static string? GetCompany(Assembly assembly)
+    {
+        string? company;
+        var companyAttribute = (AssemblyCompanyAttribute?)Attribute.GetCustomAttribute(assembly, typeof(AssemblyCompanyAttribute));
 
-        if (company != null)
+        if (companyAttribute != null)
         {
-            sb.Append(Path.DirectorySeparatorChar);
-            sb.Append(company);
+            company = companyAttribute.Company;
+
+            if (company.Length == 0)
+                company = null;
         }
+        else
+            company = null;
 
-        sb.Append(Path.DirectorySeparatorChar);
-        sb.Append(product);
-
-        if (versioned)
-        {
-            sb.Append(" (");
-            sb.Append(name.Version);
-            sb.Append(')');
-        }
-
-        return sb.ToString();
+        return company;
     }
 
     public void Load(XmlReader xmlReader)
