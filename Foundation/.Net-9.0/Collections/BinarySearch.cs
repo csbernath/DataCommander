@@ -11,7 +11,7 @@ public static class BinarySearch
         int maxIndex,
         Func<int, int> compareTo)
     {
-        Assert.IsGreaterOrEqual(minIndex, 0);
+        Assert.IsGreaterThanOrEqual(minIndex, 0);
         
         Assert.IsInRange(minIndex <= maxIndex);
         ArgumentNullException.ThrowIfNull(compareTo);

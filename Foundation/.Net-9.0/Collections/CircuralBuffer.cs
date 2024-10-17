@@ -126,7 +126,7 @@ public sealed class CircularBuffer<T> : IList<T>
 
     public void SetCapacity(int capacity)
     {
-        Assert.IsGreaterOrEqual(capacity, Count);
+        Assert.IsGreaterThanOrEqual(capacity, Count);
 
         var target = new T[capacity];
         if (Count > 0)
