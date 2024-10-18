@@ -101,7 +101,7 @@ internal sealed class AsyncDataAdapter(
                     read = await ReadFirstRow(dataReader, columnCount, cancellationToken);
                 }
                 else
-                    (read, exception) = await ReadRow(dataReader, cancellationToken, exception);
+                    (read, exception) = await ReadRow(dataReader, exception, cancellationToken);
 
                 if (read)
                 {
@@ -143,7 +143,7 @@ internal sealed class AsyncDataAdapter(
         }
     }
 
-    private static async Task<(bool read, Exception? exception)> ReadRow(DbDataReader dataReader, CancellationToken cancellationToken, Exception? exception)
+    private static async Task<(bool read, Exception? exception)> ReadRow(DbDataReader dataReader, Exception? exception, CancellationToken cancellationToken)
     {
         bool read;
         try

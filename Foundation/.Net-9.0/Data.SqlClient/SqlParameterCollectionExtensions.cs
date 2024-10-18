@@ -140,7 +140,7 @@ public static class SqlParameterCollectionExtensions
                                             break;
 
                                         default:
-                                            s = value.ToString();
+                                            s = value.ToString()!;
                                             break;
                                     }
                                 }

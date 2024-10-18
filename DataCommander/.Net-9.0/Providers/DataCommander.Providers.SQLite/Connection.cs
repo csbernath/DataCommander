@@ -25,7 +25,7 @@ internal sealed class Connection : ConnectionBase
     {
     }
 
-    private void sqliteConnection_Trace(object sender, TraceEventArgs e) => Log.Write(LogLevel.Trace, e.Statement);
+    private void SqliteConnection_Trace(object sender, TraceEventArgs e) => Log.Write(LogLevel.Trace, e.Statement);
 
     public override Task OpenAsync(CancellationToken cancellationToken) => _sqliteConnection.OpenAsync(cancellationToken);
 

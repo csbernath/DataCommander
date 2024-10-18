@@ -32,9 +32,9 @@ public static class TaskMonitor
     public static CreateTaskResponse CreateTask(
         Action<object> action,
         object state,
-        CancellationToken cancellationToken,
         TaskCreationOptions taskCreationOptions,
-        string name)
+        string name,
+        CancellationToken cancellationToken)
     {
         var monitoredTaskState = new MonitoredTaskActionState
         {
@@ -57,9 +57,9 @@ public static class TaskMonitor
     public static CreateTaskResponse<TResult> CreateTask<TResult>(
         Func<object, TResult> function,
         object state,
-        CancellationToken cancellationToken,
         TaskCreationOptions taskCreationOptions,
-        string name)
+        string name,
+        CancellationToken cancellationToken)
     {
         var monitoredTaskState = new MonitoredTaskFunctionState<TResult>
         {

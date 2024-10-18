@@ -32,11 +32,11 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
             DestinationTableName = destinationTableName,
             NotifyAfter = 100000
         };
-        _sqlBulkCopy.SqlRowsCopied += sqlBulkCopy_SqlRowsCopied;
+        _sqlBulkCopy.SqlRowsCopied += SqlBulkCopy_SqlRowsCopied;
         _addInfoMessage = addInfoMessage;
     }
 
-    private void sqlBulkCopy_SqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
+    private void SqlBulkCopy_SqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
     {
         _rowCount += e.RowsCopied;
         var message = $"{_rowCount} rows copied.";

@@ -49,19 +49,19 @@ public static class NativeMethods
     }
 
     [DllImport("kernel32")]
-    public static extern short FreeLibrary(int hModule);
+    private static extern short FreeLibrary(int hModule);
 
-    [DllImport("kernel32", CharSet = CharSet.Auto)]
-    public static extern uint GetShortPathName(
-        string lpszLongPath,
-        StringBuilder lpszShortPath,
-        uint cchBuffer);
+    //[DllImport("kernel32", CharSet = CharSet.Auto)]
+    //private static extern uint GetShortPathName(
+    //    string lpszLongPath,
+    //    StringBuilder lpszShortPath,
+    //    uint cchBuffer);
 
-    [DllImport("kernel32")]
-    public static extern int LoadLibrary(string fileName);
+    //[DllImport("kernel32")]
+    //private static extern int LoadLibrary(string fileName);
 
     [DllImport("user32")]
-    public static extern int LoadString(int hInstance, int id, byte[] buf, int buflen);
+    private static extern int LoadString(int hInstance, int id, byte[] buf, int buflen);
 
     /// <summary>
     /// 
@@ -71,7 +71,7 @@ public static class NativeMethods
     /// <param name="flags"></param>
     /// <returns></returns>
     [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
-    public static extern bool MoveFileEx(
+    internal static extern bool MoveFileEx(
         string lpExistingFileName,
         string lpNewFileName,
         MoveFileExFlags flags);

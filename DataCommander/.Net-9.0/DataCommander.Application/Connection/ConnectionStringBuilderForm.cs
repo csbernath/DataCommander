@@ -342,7 +342,7 @@ internal partial class ConnectionStringBuilderForm : Form
                 ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString
             };
             dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
-            var dataSource = (string)dataSourceObject;
+            var dataSource = (string)dataSourceObject!;
             var containsIntegratedSecurity = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
             var stringBuilder = new StringBuilder();
             var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);            

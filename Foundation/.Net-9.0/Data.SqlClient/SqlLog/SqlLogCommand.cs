@@ -133,7 +133,7 @@ internal sealed class SqlLogCommand : ISqlLogItem
         {
             if (_commands.TryGetValue(key, out command))
             {
-                command.ExecutionNo++;
+                command!.ExecutionNo++;
             }
             else
             {

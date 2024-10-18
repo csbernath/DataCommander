@@ -107,9 +107,8 @@ internal sealed class ConnectionListForm : Form
 
     protected override void Dispose(bool disposing)
     {
-        if (disposing)
-            if (_components != null)
-                _components.Dispose();
+        if (disposing && _components != null)
+            _components.Dispose();
 
         base.Dispose(disposing);
     }
@@ -150,7 +149,7 @@ internal sealed class ConnectionListForm : Form
         // newButton
         // 
         this._newButton.Anchor =
-            ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left));
         this._newButton.Location = new System.Drawing.Point(12, 637);
         this._newButton.Name = "_newButton";
         this._newButton.Size = new System.Drawing.Size(75, 24);
@@ -161,9 +160,9 @@ internal sealed class ConnectionListForm : Form
         // dataGrid
         // 
         this._dataGrid.AllowUserToAddRows = false;
-        this._dataGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+        this._dataGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                                                                        | System.Windows.Forms.AnchorStyles.Left)
-                                                                      | System.Windows.Forms.AnchorStyles.Right)));
+                                                                      | System.Windows.Forms.AnchorStyles.Right));
         this._dataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
         this._dataGrid.Location = new System.Drawing.Point(8, 8);
         this._dataGrid.Name = "_dataGrid";
@@ -311,7 +310,7 @@ internal sealed class ConnectionListForm : Form
     private void Edit_Click(object sender, EventArgs e)
     {
         var form = new ConnectionStringBuilderForm(_colorTheme);
-        var connectionInfo = SelectedConnectionInfo;
+        var connectionInfo = SelectedConnectionInfo!;
         form.ConnectionInfo = connectionInfo;
         var dialogResult = form.ShowDialog();
         if (dialogResult == DialogResult.OK)

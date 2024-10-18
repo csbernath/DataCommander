@@ -177,11 +177,8 @@ public class MainForm : Form
     /// </summary>
     protected override void Dispose(bool disposing)
     {
-        if (disposing)
-        {
-            if (components != null)
-                components.Dispose();
-        }
+        if (disposing && components != null)
+            components.Dispose();
 
         base.Dispose(disposing);
     }
@@ -567,13 +564,10 @@ public class MainForm : Form
 
     private void queryForm_FormClosing(object sender, FormClosingEventArgs e)
     {
-        if (!e.Cancel)
+        if (!e.Cancel && _queryFormToolStrip != null)
         {
-            if (_queryFormToolStrip != null)
-            {
-                _toolStripPanel.Controls.Remove(_queryFormToolStrip);
-                _queryFormToolStrip = null;
-            }
+            _toolStripPanel.Controls.Remove(_queryFormToolStrip);
+            _queryFormToolStrip = null;
         }
     }
 

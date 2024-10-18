@@ -80,9 +80,8 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
     /// </summary>
     protected override void Dispose(bool disposing)
     {
-        if (disposing)
-            if (_components != null)
-                _components.Dispose();
+        if (disposing && _components != null)
+            _components.Dispose();
 
         base.Dispose(disposing);
     }

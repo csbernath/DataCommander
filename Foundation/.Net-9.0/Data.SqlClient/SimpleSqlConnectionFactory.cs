@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Globalization;
+using System.Runtime.Versioning;
 using System.Security.Principal;
 using Foundation.Configuration;
 using Foundation.Data.SqlClient.SqlLoggedSqlConnection;
@@ -81,6 +82,7 @@ public sealed class SimpleSqlConnectionFactory
 
     public IDbConnectionFactory Factory { get; }
 
+    [SupportedOSPlatform("windows")]
     public IDbConnection CreateConnection(string name)
     {
         string? userName = null;

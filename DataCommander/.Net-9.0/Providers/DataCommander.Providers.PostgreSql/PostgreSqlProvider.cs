@@ -77,9 +77,8 @@ internal sealed class PostgreSqlProvider : IProvider
                         var token = tokens[i];
                         var keyWord = token.Value;
 
-                        if (keyWord != null && keyWord.Length >= 2 && keyWord.StartsWith(value) && keyWord != value)
-                            if (!list.ContainsKey(token.Value))
-                                list.Add(token.Value, null);
+                        if (keyWord != null && keyWord.Length >= 2 && keyWord.StartsWith(value) && keyWord != value && !list.ContainsKey(token.Value))
+                            list.Add(token.Value, null);
                     }
 
                     array = list.Keys.Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
@@ -216,7 +215,7 @@ order by 1", name.Database);
                         string[] items = sqlObject.ParentName.Split('.');
                         i = items.Length - 1;
                         var columnName = items[i];
-                        string tableNameOrAlias = null;
+                        string? tableNameOrAlias = null;
                         if (i > 0)
                         {
                             i--;

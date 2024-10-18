@@ -54,7 +54,7 @@ public sealed class SqlLoggedSqlConnection : IDbConnection
 
     public void Open()
     {
-        Exception exception = null;
+        Exception? exception = null;
         var startDate = LocalTime.Default.Now;
         var duration = Stopwatch.GetTimestamp();
 

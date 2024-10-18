@@ -33,7 +33,7 @@ public sealed partial class QueryForm
     private void CloseResultSetTabPage_Click(object sender, EventArgs e)
     {
         var toolStripMenuItem = (ToolStripMenuItem)sender;
-        var tabPage = (TabPage)toolStripMenuItem.Tag;
+        var tabPage = (TabPage)toolStripMenuItem.Tag!;
         CloseResultSetTabPage(tabPage);
         toolStripMenuItem.Tag = null;
     }
@@ -111,7 +111,7 @@ public sealed partial class QueryForm
                         var startTimestamp = Stopwatch.GetTimestamp();
                         var cancellationTokenSource = new CancellationTokenSource();
                         var cancellationToken = cancellationTokenSource.Token;
-                        treeNode2 = (ITreeNode)treeNode.Tag;
+                        treeNode2 = (ITreeNode)treeNode.Tag!;
                         var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
                             "Getting tree node children...",
                             $@"Parent node type: {treeNode2.GetType().Name}
@@ -213,7 +213,7 @@ Please wait...",
                 var treeNodeV = _tvObjectExplorer.SelectedNode;
                 if (treeNodeV != null)
                 {
-                    var treeNode = (ITreeNode)treeNodeV.Tag;
+                    var treeNode = (ITreeNode)treeNodeV.Tag!;
                     var contextMenu = GetContextMenu(treeNode);
 
                     if (!treeNode.IsLeaf)
@@ -451,7 +451,7 @@ Please wait...",
     {
         try
         {
-            string[] sqlKeyWords = Settings.CurrentType.Attributes["SqlReservedWords"].GetValue<string[]>();
+            string[] sqlKeyWords = Settings.CurrentType.Attributes["SqlReservedWords"].GetValue<string[]>()!;
             string[] providerKeyWords = Provider.KeyWords;
             HashSet<string> keyWordHashSet = sqlKeyWords.Concat(providerKeyWords)
                 .Select(keyWord => keyWord.ToUpper())
@@ -613,7 +613,7 @@ Please wait...",
 
     private void tvObjectBrowser_ItemDrag(object sender, ItemDragEventArgs e)
     {
-        var treeNode = (TreeNode)e.Item;
+        var treeNode = (TreeNode)e.Item!;
         var text = treeNode.Text;
         _tvObjectExplorer.DoDragDrop(text, DragDropEffects.All);
     }
@@ -729,8 +729,8 @@ Please wait...",
 
                 if (tabControl.TabPages.Count == 0)
                 {
-                    var tabPage = (TabPage)tabControl.Parent;
-                    tabControl = (TabControl)tabPage.Parent;
+                    var tabPage = (TabPage)tabControl.Parent!;
+                    tabControl = (TabControl)tabPage.Parent!;
                     tabControl.TabPages.Remove(tabPage);
                 }
             }
@@ -874,14 +874,14 @@ Please wait...",
         this.Invoke(() => FocusControl(QueryTextBox));
     }
 
-    private void mnuCancel_Click(object sender, EventArgs e) => CancelCommandQuery();
+    private void MnuCancel_Click(object sender, EventArgs e) => CancelCommandQuery();
 
     private void tvObjectBrowser_DoubleClick(object sender, EventArgs e)
     {
         var selectedNode = _tvObjectExplorer.SelectedNode;
         if (selectedNode != null)
         {
-            var treeNode = (ITreeNode)selectedNode.Tag;
+            var treeNode = (ITreeNode)selectedNode.Tag!;
 
             try
             {
@@ -928,7 +928,7 @@ Please wait...",
     private void ToolStripMenuItem1_Click(object sender, EventArgs e) => ExecuteQuery();
     private void EditRowsToolStripMenuItem_Click(object sender, EventArgs e) => EditRows(Query);
 
-    private void parseToolStripMenuItem_Click(object sender, EventArgs e)
+    private void ParseToolStripMenuItem_Click(object sender, EventArgs e)
     {
         var executor = Connection.Connection.CreateCommandExecutor();
         var on = false;
@@ -994,7 +994,7 @@ select
         AppendQueryText(text);
     }
 
-    private void undoToolStripMenuItem_Click(object sender, EventArgs e) =>
+    private void UndoToolStripMenuItem_Click(object sender, EventArgs e) =>
         //var canUndo = _queryTextBox.RichTextBox.CanUndo;
         //if (canUndo)
         //{

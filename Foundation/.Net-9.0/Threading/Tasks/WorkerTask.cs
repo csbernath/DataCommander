@@ -9,9 +9,9 @@ public class WorkerTask
     private readonly Task _task;
     private readonly TaskInfo _taskInfo;
 
-    public WorkerTask(Action<object> action, object state, CancellationToken cancellationToken, TaskCreationOptions taskCreationOptions, string name)
+    public WorkerTask(Action<object> action, object state, TaskCreationOptions taskCreationOptions, string name, CancellationToken cancellationToken)
     {
-        var response = TaskMonitor.CreateTask(action, state, cancellationToken, taskCreationOptions, name);
+        var response = TaskMonitor.CreateTask(action, state, taskCreationOptions, name, cancellationToken);
         _task = response.Task;
         _taskInfo = response.TaskInfo;
     }

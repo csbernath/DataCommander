@@ -467,7 +467,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
         this.undoToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
         this.undoToolStripMenuItem.Text = "Undo";
-        this.undoToolStripMenuItem.Click += new System.EventHandler(this.undoToolStripMenuItem_Click);
+        this.undoToolStripMenuItem.Click += new System.EventHandler(this.UndoToolStripMenuItem_Click);
         // 
         // redoToolStripMenuItem
         // 
@@ -630,7 +630,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         this._mnuCancel.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Pause)));
         this._mnuCancel.Size = new System.Drawing.Size(298, 22);
         this._mnuCancel.Text = "&Cancel Executing Query";
-        this._mnuCancel.Click += new System.EventHandler(this.mnuCancel_Click);
+        this._mnuCancel.Click += new System.EventHandler(this.MnuCancel_Click);
         // 
         // _parseToolStripMenuItem
         // 
@@ -638,7 +638,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         this._parseToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
         this._parseToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
         this._parseToolStripMenuItem.Text = "Parse";
-        this._parseToolStripMenuItem.Click += new System.EventHandler(this.parseToolStripMenuItem_Click);
+        this._parseToolStripMenuItem.Click += new System.EventHandler(this.ParseToolStripMenuItem_Click);
         // 
         // _toolStripSeparator1
         // 

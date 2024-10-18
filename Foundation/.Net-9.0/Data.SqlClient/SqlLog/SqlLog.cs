@@ -314,7 +314,7 @@ public sealed class SqlLog
         Exception exception)
     {
         var internalConnection = InternalConnectionHelper.GetInternalConnection(connection);
-        SqlLogConnection sqlLogConnection = null;
+        SqlLogConnection? sqlLogConnection = null;
 
         if (internalConnection != null)
             _connections.TryGetValue(internalConnection, out sqlLogConnection);

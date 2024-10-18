@@ -49,16 +49,13 @@ public class WorkerThread
         {
             var isStopRequested = _stopRequest.State == WorkerEventState.Signaled;
 
-            if (isStopRequested)
+            if (isStopRequested && !_isStopAccepted)
             {
-                if (!_isStopAccepted)
+                _isStopAccepted = true;
+                if (Log.IsTraceEnabled())
                 {
-                    _isStopAccepted = true;
-                    if (Log.IsTraceEnabled())
-                    {
-                        var stackTrace = new StackTrace(1, true);
-                        Log.Trace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) accepted stop request.\r\n{stackTrace}");
-                    }
+                    var stackTrace = new StackTrace(1, true);
+                    Log.Trace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) accepted stop request.\r\n{stackTrace}");
                 }
             }
 
@@ -157,9 +154,8 @@ public class WorkerThread
     {
         var now = LocalTime.Default.Now;
         var elapsed = now - StartTime;
-        var win32ThreadId = NativeMethods.GetCurrentThreadId();
 
-        Log.Trace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) started in {elapsed} seconds. Win32ThreadId: {win32ThreadId}");
+        Log.Trace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) started in {elapsed} seconds.");
 
         Thread.CurrentUICulture = CultureInfo.InvariantCulture;
 

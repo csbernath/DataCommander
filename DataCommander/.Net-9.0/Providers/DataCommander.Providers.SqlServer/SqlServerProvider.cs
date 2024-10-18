@@ -75,7 +75,7 @@ internal sealed class SqlServerProvider : IProvider
             if (_keyWords == null)
             {
                 var folder = Settings.CurrentType;
-                _keyWords = folder.Attributes["TSqlKeyWords"].GetValue<string[]>();
+                _keyWords = folder.Attributes["TSqlKeyWords"].GetValue<string[]>()!;
             }
 
             return _keyWords;
@@ -369,9 +369,8 @@ internal sealed class SqlServerProvider : IProvider
                         var token = tokens[i];
                         var keyWord = token.Value;
 
-                        if (keyWord != null && keyWord.Length >= 2 && keyWord.StartsWith(value) && keyWord != value)
-                            if (!list.ContainsKey(token.Value))
-                                list.Add(token.Value, null);
+                        if (keyWord != null && keyWord.Length >= 2 && keyWord.StartsWith(value) && keyWord != value && !list.ContainsKey(token.Value))
+                            list.Add(token.Value, null);
                     }
 
                     array = list.Keys.Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
@@ -585,7 +584,7 @@ from
                             var fieldCount = dataReader.FieldCount;
                             while (await dataReader.ReadAsync(cancellationToken2))
                             {
-                                string schemaName;
+                                string? schemaName;
                                 string objectName;
 
                                 if (fieldCount == 1)
