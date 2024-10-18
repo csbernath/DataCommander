@@ -31,7 +31,7 @@ internal sealed class Connection : ConnectionBase
     public override string DataSource => _sqlConnection.DataSource;
     public override string ServerVersion => _sqlConnection.ServerVersion;
 
-    public override string ConnectionInformation
+    public override string? ConnectionInformation
     {
         get
         {

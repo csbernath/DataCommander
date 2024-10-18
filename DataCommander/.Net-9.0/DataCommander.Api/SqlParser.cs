@@ -240,14 +240,14 @@ public sealed class SqlParser
         return sqlObject;
     }
 
-    public SqlObject? FindSqlObject(Token previousToken, Token currentToken)
+    public SqlObject? FindSqlObject(Token previousToken, Token? currentToken)
     {
         SqlObject? sqlObject = null;
         if (previousToken != null)
         {
             if (previousToken.Type == TokenType.KeyWord)
             {
-                var value = previousToken.Value.ToLower();
+                var value = previousToken.Value!.ToLower();
                 var name = currentToken != null
                     ? currentToken.Value
                     : null;

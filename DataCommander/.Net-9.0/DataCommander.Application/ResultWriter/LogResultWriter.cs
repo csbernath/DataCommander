@@ -231,7 +231,7 @@ internal sealed class LogResultWriter : IResultWriter
         var stringBuilder = new StringBuilder();
         stringBuilder.Append(cSharpType.Name);
 
-        if (dbColumn.AllowDbNull == true && cSharpType.Type != typeof(string))
+        if (dbColumn.AllowDbNull == true && cSharpType == CSharpTypeArray.String)
             stringBuilder.Append('?');
 
         var type = stringBuilder.ToString();

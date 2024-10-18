@@ -29,7 +29,7 @@ public static class SqlParameterCollectionExtensions
 
         var stringBuilder = new StringBuilder();
         var first = true;
-        string s;
+        string? s;
         var numberFormatInfo = NumberFormatInfo.InvariantInfo;
 
         foreach (SqlParameter parameter in parameters)
@@ -172,7 +172,7 @@ public static class SqlParameterCollectionExtensions
                                             break;
 
                                         default:
-                                            s = value.ToString();
+                                            s = value.ToString()!;
                                             break;
                                     }
                                 }

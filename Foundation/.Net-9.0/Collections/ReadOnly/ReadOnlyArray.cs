@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Foundation.Assertions;
 
 namespace Foundation.Collections.ReadOnly;
 
@@ -11,7 +12,7 @@ public class ReadOnlyArray<T> : IReadOnlyList<T>
 
     public ReadOnlyArray(T[] items)
     {
-        ArgumentNullException.ThrowIfNull(items);
+        Assert.IsNotNull(items);
         _items = items;
     }
 

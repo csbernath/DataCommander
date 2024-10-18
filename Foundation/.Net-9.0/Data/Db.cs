@@ -31,7 +31,7 @@ public static class Db
         executor.ExecuteReader(request, readResults);
     }
 
-    public static async Task<ReadOnlySegmentLinkedList<T>?> ExecuteReaderAsync<T>(
+    public static async Task<ReadOnlySegmentLinkedList<T>> ExecuteReaderAsync<T>(
         Func<DbConnection> createConnection,
         ExecuteReaderRequest request,
         int segmentLength,
@@ -45,7 +45,7 @@ public static class Db
             async (dataReader, _) =>
                 rows = await dataReader.ReadResultAsync(segmentLength, readRecord, cancellationToken),
             cancellationToken);
-        return rows;
+        return rows!;
     }
 
     public static async Task ExecuteReaderAsync(

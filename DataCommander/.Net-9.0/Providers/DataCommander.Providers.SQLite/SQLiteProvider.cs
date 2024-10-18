@@ -30,7 +30,7 @@ public sealed class SQLiteProvider : IProvider
     {
         get
         {
-            var node = Settings.CurrentType;
+            var node = Settings.CurrentType!;
             var keyWords = node.Attributes["SQLiteKeyWords"].GetValue<string[]>()!;
             return keyWords;
         }

@@ -32,7 +32,7 @@ public abstract class ConnectionBase : IDisposable, IAsyncDisposable
 
     public abstract string ServerVersion { get; }
     
-    public abstract string ConnectionInformation { get; }
+    public abstract string? ConnectionInformation { get; }
 
     public ConnectionState State
     {
@@ -48,7 +48,7 @@ public abstract class ConnectionBase : IDisposable, IAsyncDisposable
     public event InfoMessageEventHandler InfoMessage;
     public event EventHandler<DatabaseChangedEventArgs> DatabaseChanged;
 
-    public void Dispose() => Connection.Dispose();
+    public void Dispose() => Connection!.Dispose();
 
-    public async ValueTask DisposeAsync() => await Connection.DisposeAsync();
+    public async ValueTask DisposeAsync() => await Connection!.DisposeAsync();
 }

@@ -5,6 +5,8 @@ namespace Foundation.Collections;
 
 public static class CSharpTypeArray
 {
+    public static readonly CSharpType String = new(CSharpTypeName.String, typeof(string));
+
     public static readonly ReadOnlyArray<CSharpType> CSharpTypes = new(
     [
         new CSharpType(CSharpTypeName.Boolean, typeof(bool)),
@@ -21,6 +23,6 @@ public static class CSharpTypeArray
         new CSharpType(CSharpTypeName.Int64, typeof(long)),
         new CSharpType(CSharpTypeName.Object, typeof(object)),
         new CSharpType(CSharpTypeName.Single, typeof(float)),
-        new CSharpType(CSharpTypeName.String, typeof(string))
+        String
     ]);
 }

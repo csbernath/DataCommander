@@ -41,7 +41,7 @@ from	{databaseName}.sqlite_master
 where	name	= '{name}'";
         var executor = DbCommandExecutorFactory.Create(connection);
         var scalar = executor.ExecuteScalar(new CreateCommandRequest(commandText));
-        var script = (string) scalar;
+        var script = (string) scalar!;
         return script;
     }
 

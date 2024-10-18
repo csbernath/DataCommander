@@ -37,7 +37,7 @@ internal sealed class Connection : ConnectionBase
 
     public override string ServerVersion => _sqliteConnection.ServerVersion;
 
-    public override string ConnectionInformation => null;
+    public override string? ConnectionInformation => null;
 
     public override Task<int> GetTransactionCountAsync(CancellationToken cancellationToken) => Task.FromResult(0);
 }

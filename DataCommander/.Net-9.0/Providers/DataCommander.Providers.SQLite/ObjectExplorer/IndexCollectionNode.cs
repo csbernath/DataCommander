@@ -33,7 +33,7 @@ internal sealed class IndexCollectionNode : ITreeNode
                 return new IndexNode(_tableNode, name);
             },
             cancellationToken);
-        return list;
+        return list!;
     }
 
     bool ITreeNode.Sortable => false;
