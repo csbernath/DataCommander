@@ -19,7 +19,7 @@ internal sealed class ObjectExplorer(IProvider provider) : IObjectExplorer
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        ITreeNode[] treeNodes = new ITreeNode[]
+        var treeNodes = new ITreeNode[]
         {
             new CatalogsNode(_connection)
         };

@@ -44,7 +44,7 @@ from	{database.Name}.{owner}.[{name}]()",
     public ContextMenu? GetContextMenu()
     {
         var scriptObjectMenuItem = new MenuItem("Script Object", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> menuItems = new[] { scriptObjectMenuItem }.ToReadOnlyCollection();
+        var menuItems = new[] { scriptObjectMenuItem }.ToReadOnlyCollection();
         var contextMenu = new ContextMenu(menuItems);
         return contextMenu;
     }

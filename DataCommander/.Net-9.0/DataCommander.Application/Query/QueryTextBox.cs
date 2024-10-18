@@ -640,7 +640,7 @@ public sealed class QueryTextBox : UserControl
         }
         else if (GetDataPresent(dataObject, DataFormats.FileDrop))
         {
-            string[]? fileNames = (string[])dataObject.GetData(DataFormats.FileDrop);
+            var fileNames = (string[])dataObject.GetData(DataFormats.FileDrop);
             var fileName = fileNames[0];
             var extension = Path.GetExtension(fileName);
             if (extension.In(".sql", ".txt"))
@@ -695,7 +695,7 @@ public sealed class QueryTextBox : UserControl
             menuItem = new ToolStripMenuItem("Copy table", null, CopyTable_Click);
             items.Add(menuItem);
 
-            Form[] forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
+            var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
             var index = Array.IndexOf(forms, (QueryForm)Parent);
             if (index < forms.Length - 1)
             {

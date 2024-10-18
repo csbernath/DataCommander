@@ -20,7 +20,7 @@ internal sealed class TriggerNode(DatabaseNode databaseNode, int id, string? nam
     public ContextMenu? GetContextMenu()
     {
         var menuItemScriptObject = new MenuItem("Script Object", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> items = new[] { menuItemScriptObject }.ToReadOnlyCollection();
+        var items = new[] { menuItemScriptObject }.ToReadOnlyCollection();
         var contextMenu = new ContextMenu(items);
         return contextMenu;
     }

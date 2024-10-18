@@ -43,7 +43,7 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
 
     public ContextMenu? GetContextMenu()
     {
-        System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> menuItems = new MenuItem[]
+        var menuItems = new MenuItem[]
         {
             new("Properties", Properties_OnClick, EmptyReadOnlyCollection<MenuItem>.Value)
         }.ToReadOnlyCollection();

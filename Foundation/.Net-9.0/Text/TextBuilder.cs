@@ -33,7 +33,7 @@ public sealed class TextBuilder
     {
         ArgumentNullException.ThrowIfNull(lines);
 
-        IEnumerable<Line> modifiedLines = lines.Select(line => line.Indent(_indentation));
+        var modifiedLines = lines.Select(line => line.Indent(_indentation));
         _lines.AddRange(modifiedLines);
     }
 

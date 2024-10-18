@@ -20,7 +20,7 @@ public static class IEnumerableExtensions
 
         var row = table.NewRow();
         var columnIndex = 0;
-        foreach (StringTableColumnInfo<TSource> column in columns)
+        foreach (var column in columns)
         {
             row[columnIndex] = column.ColumnName;
             table.Columns[columnIndex].Align = column.Align;
@@ -36,7 +36,7 @@ public static class IEnumerableExtensions
         {
             row = table.NewRow();
             columnIndex = 0;
-            foreach (StringTableColumnInfo<TSource> column in columns)
+            foreach (var column in columns)
             {
                 row[columnIndex] = column.ToStringFunction(item)!;
                 ++columnIndex;

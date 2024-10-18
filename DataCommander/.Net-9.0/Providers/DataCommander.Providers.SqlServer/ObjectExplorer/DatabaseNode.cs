@@ -37,7 +37,7 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        ITreeNode[] children = new ITreeNode[]
+        var children = new ITreeNode[]
         {
             new TableCollectionNode(this),
             new ViewCollectionNode(this),
@@ -56,7 +56,7 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
         var getInformationMenuItem = new MenuItem("Get information", GetInformationMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
         var createDatabaseSnapshotMenuItem =
             new MenuItem("Create database snapshot script to clipboard", CreateDatabaseSnapshotScriptToClipboardMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> menuItems = new[] { getInformationMenuItem, createDatabaseSnapshotMenuItem }.ToReadOnlyCollection();
+        var menuItems = new[] { getInformationMenuItem, createDatabaseSnapshotMenuItem }.ToReadOnlyCollection();
         var contextMenu = new ContextMenu(menuItems);
         return contextMenu;
     }

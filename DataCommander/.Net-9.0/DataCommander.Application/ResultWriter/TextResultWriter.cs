@@ -14,7 +14,7 @@ namespace DataCommander.Application.ResultWriter;
 
 internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextWriter textWriter, QueryForm queryForm) : IResultWriter
 {
-    private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage);
+    private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage, false);
     private int[] _columnSize;
     private int _rowIndex;
     private IProvider _provider;
@@ -237,7 +237,7 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
 
             for (var i = 0; i < rowCount; i++)
             {
-                object[] row = rows[i];
+                var row = rows[i];
                 var last = row.Length - 1;
 
                 for (var j = 0; j < last; j++)

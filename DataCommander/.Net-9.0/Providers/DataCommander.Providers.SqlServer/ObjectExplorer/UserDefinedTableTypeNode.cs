@@ -26,7 +26,7 @@ internal sealed class UserDefinedTableTypeNode(DatabaseNode database, int id, st
 
     public ContextMenu? GetContextMenu()
     {
-        System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> menuItems = new MenuItem[]
+        var menuItems = new MenuItem[]
         {
             new("Script", Script_OnClick, EmptyReadOnlyCollection<MenuItem>.Value)
         }.ToReadOnlyCollection();

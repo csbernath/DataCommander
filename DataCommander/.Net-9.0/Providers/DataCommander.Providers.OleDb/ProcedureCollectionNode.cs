@@ -18,7 +18,7 @@ internal sealed class ProcedureCollectionNode(SchemaNode schema) : ITreeNode
 
         try
         {
-            object[] restrictions = new object[] { schema.Catalog.Name, schema.Name };
+            var restrictions = new object[] { schema.Catalog.Name, schema.Name };
             var dataTable = schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Procedures,
                 restrictions);
             var count = dataTable.Rows.Count;

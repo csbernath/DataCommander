@@ -17,8 +17,8 @@ internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        ReadOnlySegmentLinkedList<TableNode> tableNodes = await GetTableNodes(cancellationToken);
-        IEnumerable<ITreeNode> childNodes = new ITreeNode[] { new SystemTableCollectionNode(DatabaseNode) }
+        var tableNodes = await GetTableNodes(cancellationToken);
+        var childNodes = new ITreeNode[] { new SystemTableCollectionNode(DatabaseNode) }
             .Concat(tableNodes);
         return childNodes;
     }
@@ -26,7 +26,7 @@ internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
     private async Task<ReadOnlySegmentLinkedList<TableNode>> GetTableNodes(CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
-        ReadOnlySegmentLinkedList<TableNode> tableNodes = await Db.ExecuteReaderAsync(
+        var tableNodes = await Db.ExecuteReaderAsync(
             DatabaseNode.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,

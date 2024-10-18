@@ -110,7 +110,7 @@ where
     {
         var editRows = new MenuItem("Edit Rows", EditRows, EmptyReadOnlyCollection<MenuItem>.Value);
 
-        ReadOnlyCollection<MenuItem> dropdownItems = new[]
+        var dropdownItems = new[]
         {
             new MenuItem("CREATE to clipboard", CreateTableScriptToClipboard, EmptyReadOnlyCollection<MenuItem>.Value),
             new MenuItem("SELECT to clipboard", SelectScript_Click, EmptyReadOnlyCollection<MenuItem>.Value),
@@ -124,7 +124,7 @@ where
         var schema = new MenuItem("Schema", Schema_Click, EmptyReadOnlyCollection<MenuItem>.Value);
         var indexes = new MenuItem("Indexes", Indexes_Click, EmptyReadOnlyCollection<MenuItem>.Value);
 
-        ReadOnlyCollection<MenuItem> items = new[] { editRows, scriptTableAs, schema, indexes }.ToReadOnlyCollection();
+        var items = new[] { editRows, scriptTableAs, schema, indexes }.ToReadOnlyCollection();
         var menu = new ContextMenu(items);
 
         return menu;
@@ -430,7 +430,7 @@ where
 	and o.name = '{2}'
 order by c.column_id", DatabaseNode.Name, owner, name);
         Log.Write(LogLevel.Trace, commandText);
-        ReadOnlySegmentLinkedList<Column> columns = Db.ExecuteReader(
+        var columns = Db.ExecuteReader(
             DatabaseNode.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
@@ -544,7 +544,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
         using (textBuilder.Indent(1))
         {
             var last = getTableSchemaResult.Columns.Count - 1;
-            foreach (IndexedItem<Api.Column> item in getTableSchemaResult.Columns.SelectIndexed())
+            foreach (var item in getTableSchemaResult.Columns.SelectIndexed())
             {
                 var column = item.Value;
                 var line = new StringBuilder();
@@ -561,7 +561,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
             using (textBuilder.Indent(1))
             {
                 var last = getTableSchemaResult.UniqueIndexColumns.Count - 1;
-                foreach (IndexedItem<UniqueIndexColumn> item in getTableSchemaResult.UniqueIndexColumns.SelectIndexed())
+                foreach (var item in getTableSchemaResult.UniqueIndexColumns.SelectIndexed())
                 {
                     var columnId = item.Value.ColumnId;
                     var column = getTableSchemaResult.Columns.First(i => i.ColumnId == columnId);
@@ -603,7 +603,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
             getTableSchemaResult = TableSchema.GetTableSchema(connection, tableName);
         }
 
-        ReadOnlyCollection<DataTransferObjectField> dataTransferObjectFields = getTableSchemaResult.Columns
+        var dataTransferObjectFields = getTableSchemaResult.Columns
             .Select(column =>
             {
                 var name = column.ColumnName;
@@ -619,10 +619,10 @@ order by c.column_id", DatabaseNode.Name, owner, name);
             .ToReadOnlyCollection();
         var dataTransferObject = DataTransferObjectFactory.CreateDataTransferObject(name, dataTransferObjectFields).ToIndentedString("    ");
 
-        ReadOnlyCollection<Foundation.Data.SqlClient.DbQueryBuilding.Column> columns = getTableSchemaResult.Columns
+        var columns = getTableSchemaResult.Columns
             .Select(i => new Foundation.Data.SqlClient.DbQueryBuilding.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
             .ToReadOnlyCollection();
-        ReadOnlyCollection<Line> createInsertSqlSqlStatementMethod = CreateInsertSqlStatementMethodFactory.Create(owner, name, columns);
+        var createInsertSqlSqlStatementMethod = CreateInsertSqlStatementMethodFactory.Create(owner, name, columns);
 
         var identifierColumn = getTableSchemaResult.UniqueIndexColumns
             .Select(i => getTableSchemaResult.Columns.First(j => j.ColumnId == i.ColumnId))
@@ -690,7 +690,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
             getTableSchemaResult = TableSchema.GetTableSchema(connection, tableName);
         }
 
-        ReadOnlyCollection<DataTransferObjectField> dataTransferObjectFields = getTableSchemaResult.Columns
+        var dataTransferObjectFields = getTableSchemaResult.Columns
             .Select(column =>
             {
                 var name = column.ColumnName;

@@ -31,7 +31,7 @@ internal class CatalogNode(OleDbConnection connection, string? name) : ITreeNode
 
         try
         {
-            object[] restrictions = new object[] { Name };
+            var restrictions = new object[] { Name };
             var dataTable = Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Schemata, restrictions);
             var count = dataTable.Rows.Count;
             var nameColumn = dataTable.Columns["SCHEMA_NAME"];

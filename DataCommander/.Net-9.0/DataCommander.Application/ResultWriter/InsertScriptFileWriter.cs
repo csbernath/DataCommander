@@ -287,7 +287,7 @@ internal sealed class InsertScriptFileWriter : IResultWriter
                 sb.AppendLine();
             }
 
-            object[] values = rows[rowIndex];
+            var values = rows[rowIndex];
             sb.Append(_sqlStatementPrefix);
 
             for (var i = 0; i < fieldCount; i++)

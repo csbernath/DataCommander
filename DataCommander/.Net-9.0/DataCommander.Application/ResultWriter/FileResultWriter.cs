@@ -161,7 +161,7 @@ internal sealed class FileResultWriter : IResultWriter
         var stringBuilder = new StringBuilder();
         for (var i = 0; i < rowCount; i++)
         {
-            object[] row = rows[i];
+            var row = rows[i];
             for (var j = 0; j < row.Length; j++)
             {
                 var s = _dataWriters[j].ToString(row[j]);

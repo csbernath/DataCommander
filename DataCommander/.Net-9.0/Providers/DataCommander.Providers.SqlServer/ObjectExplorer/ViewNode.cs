@@ -38,14 +38,14 @@ internal sealed class ViewNode(DatabaseNode database, int id, string? schema, st
     public ContextMenu? GetContextMenu()
     {
         var menuItemScriptObject = new MenuItem("Script View as CREATE to clipboard", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> items = new[] { menuItemScriptObject }.ToReadOnlyCollection();
+        var items = new[] { menuItemScriptObject }.ToReadOnlyCollection();
         var contextMenu = new ContextMenu(items);
         return contextMenu;
     }
 
     private void menuItemScriptObject_Click(object sender, EventArgs e)
     {
-        Task<string> task = new Task<string>(() => menuItemScriptObject_ClickAsync(sender).Result);
+        var task = new Task<string>(() => menuItemScriptObject_ClickAsync(sender).Result);
         task.Start();
         var queryForm = (IQueryForm)sender;
         queryForm.SetClipboardText(task.Result);

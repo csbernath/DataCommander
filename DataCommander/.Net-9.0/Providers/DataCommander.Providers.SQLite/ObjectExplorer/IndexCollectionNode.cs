@@ -23,7 +23,7 @@ internal sealed class IndexCollectionNode : ITreeNode
     public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var commandText = $"PRAGMA index_list({_tableNode.Name});";
-        Foundation.Collections.ReadOnly.ReadOnlySegmentLinkedList<IndexNode> list = await Db.ExecuteReaderAsync(
+        var list = await Db.ExecuteReaderAsync(
             () => ConnectionFactory.CreateConnection(_tableNode.DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
             new ExecuteReaderRequest(commandText),
             128,

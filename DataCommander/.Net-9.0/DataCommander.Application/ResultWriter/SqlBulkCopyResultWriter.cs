@@ -52,7 +52,7 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
 
         _destinationSqlConnection = (SqlConnection)destinationConnection.Connection;
 
-        _logResultWriter = new LogResultWriter(addInfoMessage);
+        _logResultWriter = new LogResultWriter(addInfoMessage, false);
         _addInfoMessage = addInfoMessage;
         _destinationProvider = destinationProvider;
         _canConvertCommandToString = destinationProvider.CanConvertCommandToString;
@@ -101,17 +101,17 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
     {
         foreach (var item in items)
         {
-            object[][] rows = item.Rows;
+            var rows = item.Rows;
             var dataTable = new DataTable();
 
             for (var rowIndex = 0; rowIndex < rows.Length; rowIndex++)
             {
-                object[] row = rows[rowIndex];
+                var row = rows[rowIndex];
                 var dataRow = dataTable.NewRow();
                 for (var columnIndex = 0; columnIndex < row.Length; columnIndex++)
                 {
                     var sourceValue = row[columnIndex];
-                    Converter<object, object> converter = _converters[columnIndex];
+                    var converter = _converters[columnIndex];
                     object destinationValue;
 
                     if (converter != null)
@@ -147,7 +147,7 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
                 methodLog.Write(LogLevel.Trace, "this.queue.Count: {0}", _queue.Count);
                 if (!_queue.IsEmpty)
                 {
-                    List<QueueItem> items = new List<QueueItem>(_queue.Count);
+                    var items = new List<QueueItem>(_queue.Count);
                     while (true)
                     {
                         var succeeded = _queue.TryDequeue(out var item);
@@ -206,12 +206,12 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
         _readRowCount += rowCount;
         var message = $"{_readRowCount} row(s) read.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
-        object[][] targetRows = new object[rowCount][];
+        var targetRows = new object[rowCount][];
         for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
         {
-            object[] sourceRow = rows[rowIndex];
+            var sourceRow = rows[rowIndex];
             var columnCount = sourceRow.Length;
-            object[] targetRow = new object[columnCount];
+            var targetRow = new object[columnCount];
             Array.Copy(sourceRow, targetRow, columnCount);
             targetRows[rowIndex] = targetRow;
         }

@@ -21,7 +21,7 @@ internal sealed class TableNode(DatabaseNode databaseNode, string? name) : ITree
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        ITreeNode[] treeNodes = new ITreeNode[1];
+        var treeNodes = new ITreeNode[1];
         treeNodes[0] = new IndexCollectionNode(this);
         return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
     }
@@ -65,7 +65,7 @@ where	name	= '{name}'";
         if (Name != "sqlite_master")
         {
             var item = new MenuItem("Script", Script_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-            System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> items = new[] { item }.ToReadOnlyCollection();
+            var items = new[] { item }.ToReadOnlyCollection();
             contextMenu = new ContextMenu(items);
         }
 

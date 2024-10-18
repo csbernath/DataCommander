@@ -118,7 +118,7 @@ public sealed partial class QueryForm
 Parent node name: {treeNode2.Name}
 Please wait...",
                             _colorTheme);
-                        IEnumerable<ITreeNode> children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() =>
+                        var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() =>
                             treeNode2.GetChildren(false, cancellationToken).Result));
                         treeNode.Nodes.Clear();
                         AddNodes(treeNode.Nodes, children, treeNode2.Sortable, startTimestamp);
@@ -178,7 +178,7 @@ Please wait...",
             var cancellationToken = cancellationTokenSource.Token;
             var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
                 "Getting tree node children...", "Please wait...", _colorTheme);
-            IEnumerable<ITreeNode> children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => treeNode.GetChildren(true, cancellationToken).Result));
+            var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => treeNode.GetChildren(true, cancellationToken).Result));
             AddNodes(treeNodeV.Nodes, children, treeNode.Sortable, startTimestamp);
         }
     }
@@ -451,9 +451,9 @@ Please wait...",
     {
         try
         {
-            string[] sqlKeyWords = Settings.CurrentType.Attributes["SqlReservedWords"].GetValue<string[]>()!;
-            string[] providerKeyWords = Provider.KeyWords;
-            HashSet<string> keyWordHashSet = sqlKeyWords.Concat(providerKeyWords)
+            var sqlKeyWords = Settings.CurrentType.Attributes["SqlReservedWords"].GetValue<string[]>()!;
+            var providerKeyWords = Provider.KeyWords;
+            var keyWordHashSet = sqlKeyWords.Concat(providerKeyWords)
                 .Select(keyWord => keyWord.ToUpper())
                 .ToHashSet();
 
@@ -510,7 +510,7 @@ Please wait...",
 
                     while (dataReader.Read())
                     {
-                        object[] values = new object[fieldCount];
+                        var values = new object[fieldCount];
                         dataReaderHelper.GetValues(values);
                         sb.Append(insertInto);
 
@@ -587,7 +587,7 @@ Please wait...",
 
                 while (dataReader.Read())
                 {
-                    object[] values = new object[fieldCount];
+                    var values = new object[fieldCount];
                     dataReaderHelper.GetValues(values);
                     sb = new StringBuilder();
                     sb.Append(insertInto);

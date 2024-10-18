@@ -586,7 +586,7 @@ public class MainForm : Form
         var applicationData = DataCommanderApplication.Instance.ApplicationData;
         FormPosition.Save(this, applicationData);
         var folder = applicationData.CurrentType;
-        string[] array = new string[_recentFileList.Count];
+        var array = new string[_recentFileList.Count];
         _recentFileList.CopyTo(array, 0);
         folder.Attributes.SetAttributeValue("RecentFileList", array);
     }
@@ -723,7 +723,7 @@ public class MainForm : Form
                     await connection.OpenAsync(CancellationToken.None);
                     var connectionInfo = new ConnectionInfo(null, provider.Identifier, connectionStringAndCredential);
 
-                    List<ConnectionInfo> connectionInfos = ConnectionInfoRepository.Get().ToList();
+                    var connectionInfos = ConnectionInfoRepository.Get().ToList();
                     connectionInfos.Add(connectionInfo);
                     ConnectionInfoRepository.Save(connectionInfos);
 
@@ -894,7 +894,7 @@ public class MainForm : Form
     {
         while (true)
         {
-            Form[] mdiChildren = MdiChildren;
+            var mdiChildren = MdiChildren;
             var length = mdiChildren.Length;
             if (length == 0)
                 break;

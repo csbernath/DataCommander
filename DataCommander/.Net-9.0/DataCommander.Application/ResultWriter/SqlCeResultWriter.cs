@@ -216,7 +216,7 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
     {
         for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
         {
-            object[] row = rows[rowIndex];
+            var row = rows[rowIndex];
 
             for (var columnIndex = 0; columnIndex < row.Length; columnIndex++)
             {

@@ -26,7 +26,7 @@ public static class UpdateSqlStatementFactory
         using (textBuilder.Indent(1))
             textBuilder.Add(setColumns.Join(","));
 
-        textBuilder.Add($"where");
+        textBuilder.Add("where");
         using (textBuilder.Indent(1))
             textBuilder.Add(whereColumns.Join(" and"));
 

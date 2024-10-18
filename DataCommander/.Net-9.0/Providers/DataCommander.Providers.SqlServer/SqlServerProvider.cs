@@ -38,7 +38,7 @@ internal sealed class SqlServerProvider : IProvider
     {
         ArgumentNullException.ThrowIfNull(sqlErrors);
 
-        List<InfoMessage> messages = new List<InfoMessage>(sqlErrors.Count);
+        var messages = new List<InfoMessage>(sqlErrors.Count);
 
         foreach (SqlError sqlError in sqlErrors)
         {
@@ -118,7 +118,7 @@ internal sealed class SqlServerProvider : IProvider
         string[] dataTypeNames;
         int count;
 
-        EnumerableRowCollection<string> sourceColumnNames =
+        var sourceColumnNames =
             from sourceSchemaRow in sourceSchemaTable.AsEnumerable()
             select FoundationDbColumnFactory.Create(sourceSchemaRow).ColumnName;
 
@@ -344,7 +344,7 @@ internal sealed class SqlServerProvider : IProvider
 
         if (currentToken != null)
         {
-            List<string> parts = new IdentifierParser(new StringReader(currentToken.Value)).Parse().ToList();
+            var parts = new IdentifierParser(new StringReader(currentToken.Value)).Parse().ToList();
             var lastPart = parts.Count > 0
                 ? parts.Last()
                 : null;
@@ -406,7 +406,7 @@ internal sealed class SqlServerProvider : IProvider
                     case SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function:
                     {
                         name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
-                            List<string>? nameParts = sqlObject.Name != null
+                            var nameParts = sqlObject.Name != null
                             ? new IdentifierParser(new StringReader(sqlObject.Name)).Parse().ToList()
                             : null;
                             var namePartsCount = nameParts != null
@@ -422,7 +422,7 @@ internal sealed class SqlServerProvider : IProvider
                                 statements.Add(SqlServerObject.GetDatabases());
                                 statements.Add(SqlServerObject.GetSchemas());
 
-                                        List<string> objectTypes = sqlObject.Type.ToObjectTypes();
+                                        var objectTypes = sqlObject.Type.ToObjectTypes();
                                 statements.Add(SqlServerObject.GetObjects("dbo", objectTypes));
                             }
                                 break;
@@ -432,7 +432,7 @@ internal sealed class SqlServerProvider : IProvider
                                 {
                                     statements.Add(SqlServerObject.GetSchemas(nameParts[0]));
 
-                                        List<string> objectTypes = sqlObject.Type.ToObjectTypes();
+                                        var objectTypes = sqlObject.Type.ToObjectTypes();
                                     statements.Add(SqlServerObject.GetObjects(nameParts[0], objectTypes));
                                 }
 
@@ -442,7 +442,7 @@ internal sealed class SqlServerProvider : IProvider
                             {
                                 if (nameParts[0] != null && nameParts[1] != null)
                                 {
-                                            List<string> objectTypes = sqlObject.Type.ToObjectTypes();
+                                            var objectTypes = sqlObject.Type.ToObjectTypes();
                                     statements.Add(SqlServerObject.GetObjects(nameParts[0], nameParts[1], objectTypes));
                                 }
                             }
@@ -511,7 +511,7 @@ end", name.Database, ownersString, name.Name);
                         break;
 
                     case SqlObjectTypes.Value:
-                        string[] items = sqlObject.ParentName.Split('.');
+                        var items = sqlObject.ParentName.Split('.');
                         i = items.Length - 1;
                         var columnName = items[i];
                         string tableNameOrAlias = null;
@@ -810,9 +810,9 @@ from
         var tokens = sqlStatement.Tokens;
         List<Statement> statements = [];
 
-        IEnumerable<Token[]> statementTokenArrays = tokens.Split(token => IsBatchSeparator(commandText, token)).Where(statementTokens => statementTokens.Length > 0);
+        var statementTokenArrays = tokens.Split(token => IsBatchSeparator(commandText, token)).Where(statementTokens => statementTokens.Length > 0);
 
-        foreach (Token[]? statementTokens in statementTokenArrays)
+        foreach (var statementTokens in statementTokenArrays)
         {
             var startIndex = statementTokens[0].StartPosition;
             var endIndex = statementTokens.Last().EndPosition;

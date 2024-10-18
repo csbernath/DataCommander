@@ -12,7 +12,7 @@ namespace DataCommander.Application.ResultWriter;
 
 public class HtmlResultWriter(Action<InfoMessage> addInfoMessage) : IResultWriter
 {
-    private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage);
+    private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage, false);
     private HtmlTextWriter _htmlTextWriter;
 
     void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);
@@ -33,7 +33,7 @@ public class HtmlResultWriter(Action<InfoMessage> addInfoMessage) : IResultWrite
 
         for (var rowIndex = 0; rowIndex < rowCount; ++rowIndex)
         {
-            object[] row = rows[rowIndex];
+            var row = rows[rowIndex];
 
             _htmlTextWriter.WriteLine();
             _htmlTextWriter.WriteFullBeginTag("tr");
@@ -70,7 +70,7 @@ public class HtmlResultWriter(Action<InfoMessage> addInfoMessage) : IResultWrite
         _htmlTextWriter.WriteLine();
         ++_htmlTextWriter.Indent;
 
-        System.Collections.Generic.List<FoundationDbColumn> columns = schemaTable.Rows.Cast<DataRow>().Select(FoundationDbColumnFactory.Create).ToList();
+        var columns = schemaTable.Rows.Cast<DataRow>().Select(FoundationDbColumnFactory.Create).ToList();
 
         _htmlTextWriter.WriteFullBeginTag("tr");
         _htmlTextWriter.WriteLine();

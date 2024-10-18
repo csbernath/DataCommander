@@ -79,8 +79,8 @@ public sealed partial class QueryForm : Form, IQueryForm
         _mnuGoTo.Click += mnuGoTo_Click;
         _mnuClearCache.Click += mnuClearCache_Click;
 
-        string[] sqlKeyWords = Settings.CurrentType.Attributes["SqlReservedWords"].GetValue<string[]>();
-        string[] providerKeyWords = provider.KeyWords;
+        var sqlKeyWords = Settings.CurrentType.Attributes["SqlReservedWords"].GetValue<string[]>();
+        var providerKeyWords = provider.KeyWords;
 
         _queryTextBox.SetColorTheme(colorTheme);
         _queryTextBox.AddKeyWords(["exec"], colorTheme != null
@@ -121,7 +121,7 @@ public sealed partial class QueryForm : Form, IQueryForm
             var cancelableOperationForm = new CancelableOperationForm(mainForm, cancellationTokenSource, TimeSpan.FromSeconds(1), "Getting children...",
                 "Please wait...", colorTheme);
             var cancellationToken = cancellationTokenSource.Token;
-            IEnumerable<ITreeNode> children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result));
+            var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result));
             AddNodes(_tvObjectExplorer.Nodes, children, objectExplorer.Sortable, startTimestamp);
         }
         else
@@ -1321,7 +1321,7 @@ public sealed partial class QueryForm : Form, IQueryForm
 
                 case ResultWriterType.Log:
                     maxRecords = int.MaxValue;
-                    resultWriter = new LogResultWriter(AddInfoMessage);
+                    resultWriter = new LogResultWriter(AddInfoMessage, _showSchemaTable);
                     _tabControl.SelectedTab = _messagesTabPage;
                     break;
 
@@ -1483,7 +1483,7 @@ public sealed partial class QueryForm : Form, IQueryForm
 
     private static ReadOnlyCollection<DbRequestParameter> ToDbQueryParameters(List<Token> tokens)
     {
-        List<List<Token>> declarations = GetDeclarations(tokens);
+        var declarations = GetDeclarations(tokens);
         return declarations.Select(ToDbRequestParameter).ToReadOnlyCollection();
     }
 
@@ -1580,7 +1580,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         for (var i = 0; i < dataTable.Rows.Count; i++)
         {
             var dataRow = dataTable.Rows[i];
-            object[] values = new object[colCount];
+            var values = new object[colCount];
 
             for (var j = 0; j < colCount; j++)
             {
@@ -1707,7 +1707,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         }
 
         var count = dataTable.Columns.Count;
-        string[] items = new string[count];
+        var items = new string[count];
 
         foreach (DataRow dataRow in dataTable.Rows)
         {
@@ -1948,7 +1948,7 @@ public sealed partial class QueryForm : Form, IQueryForm
 
     private void ConsumeInfoMessages()
     {
-        WaitHandle[] waitHandles = new[]
+        var waitHandles = new[]
         {
             _enqueueEvent,
             _cancellationTokenSource.Token.WaitHandle
@@ -1960,7 +1960,7 @@ public sealed partial class QueryForm : Form, IQueryForm
             while (!_infoMessages.IsEmpty && IsHandleCreated)
             {
                 hasElements = true;
-                InfoMessage[] infoMessages = new InfoMessage[_infoMessages.Count];
+                var infoMessages = new InfoMessage[_infoMessages.Count];
                 var count = _infoMessages.Take(infoMessages);
                 try
                 {

@@ -34,7 +34,7 @@ internal sealed class JobNode : ITreeNode
 
     public ContextMenu? GetContextMenu()
     {
-        System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> menuItems = new[]
+        var menuItems = new[]
         {
             new MenuItem("HelpJob", OnHelpJobClick, EmptyReadOnlyCollection<MenuItem>.Value)
         }.ToReadOnlyCollection();

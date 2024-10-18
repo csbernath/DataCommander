@@ -25,7 +25,7 @@ internal sealed class ExcelResultWriter : IResultWriter
 
         _provider = provider;
         _addInfoMessage = addInfoMessage;
-        _logResultWriter = new LogResultWriter(addInfoMessage);
+        _logResultWriter = new LogResultWriter(addInfoMessage, false);
     }
 
     void IResultWriter.Begin(IProvider provider)
@@ -63,7 +63,7 @@ internal sealed class ExcelResultWriter : IResultWriter
 
         for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
         {
-            object[] row = rows[rowIndex];
+            var row = rows[rowIndex];
 
             for (var columnIndex = 0; columnIndex < row.Length; columnIndex++)
             {

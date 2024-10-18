@@ -97,7 +97,7 @@ internal static class QueryFormStaticMethods
         }
 
         var count = dataTable.Columns.Count;
-        string[] items = new string[count];
+        var items = new string[count];
 
         foreach (DataRow dataRow in dataTable.Rows)
         {

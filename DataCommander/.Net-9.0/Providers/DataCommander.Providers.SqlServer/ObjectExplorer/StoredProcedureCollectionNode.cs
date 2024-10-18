@@ -21,7 +21,7 @@ internal sealed class StoredProcedureCollectionNode(DatabaseNode database, bool 
             treeNodes.Add(new StoredProcedureCollectionNode(database, true));
 
         var commandText = GetCommandText();
-        Foundation.Collections.ReadOnly.ReadOnlySegmentLinkedList<StoredProcedureNode> rows = await Db.ExecuteReaderAsync(
+        var rows = await Db.ExecuteReaderAsync(
             database.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,

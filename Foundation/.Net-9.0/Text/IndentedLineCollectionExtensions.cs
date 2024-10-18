@@ -37,7 +37,7 @@ public static class IndentedLineCollectionExtensions
         ArgumentNullException.ThrowIfNull(separator);
 
         var first = true;
-        foreach (IEnumerable<Line> lineGroup in lineGroups)
+        foreach (var lineGroup in lineGroups)
         {
             if (!first)
                 yield return separator;

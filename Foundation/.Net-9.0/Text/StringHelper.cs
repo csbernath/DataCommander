@@ -77,7 +77,7 @@ public static class StringHelper
 
         var type = obj.GetType();
         var methodInfo = type.GetMethod(methodName);
-        System.Reflection.ParameterInfo[] parameterInfos = methodInfo!.GetParameters();
+        var parameterInfos = methodInfo!.GetParameters();
         var typeName = TypeNameCollection.GetTypeName(methodInfo.ReturnType);
         var line = typeName + " " + methodName + "(" + Environment.NewLine;
         var length = Math.Min(parameters.Length, parameterInfos.Length);

@@ -56,7 +56,7 @@ internal sealed class PostgreSqlProvider : IProvider
         int length;
         if (currentToken != null)
         {
-            List<string> parts = new IdentifierParser(new StringReader(currentToken.Value)).Parse().ToList();
+            var parts = new IdentifierParser(new StringReader(currentToken.Value)).Parse().ToList();
             var lastPart = parts.Count > 0 ? parts.Last() : null;
             var lastPartLength = lastPart != null ? lastPart.Length : 0;
             startPosition = currentToken.EndPosition - lastPartLength + 1;
@@ -114,7 +114,7 @@ internal sealed class PostgreSqlProvider : IProvider
                     case SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function:
                     {
                         name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
-                            List<string>? nameParts = sqlObject.Name != null
+                            var nameParts = sqlObject.Name != null
                             ? new IdentifierParser(new StringReader(sqlObject.Name)).Parse().ToList()
                             : null;
                             var namePartsCount = nameParts != null ? nameParts.Count : 0;
@@ -138,7 +138,7 @@ internal sealed class PostgreSqlProvider : IProvider
                                 {
                                         // TODO statements.Add(SqlServerObject.GetSchemas(database: nameParts[0]));
 
-                                        List<string> objectTypes = sqlObject.Type.ToTableTypes();
+                                        var objectTypes = sqlObject.Type.ToTableTypes();
                                     statements.Add(SqlServerObject.GetTables(schema: nameParts[0], tableTypes: objectTypes));
                                 }
 
@@ -148,7 +148,7 @@ internal sealed class PostgreSqlProvider : IProvider
                             {
                                 if (nameParts[0] != null && nameParts[1] != null)
                                 {
-                                            List<string> objectTypes = sqlObject.Type.ToObjectTypes();
+                                            var objectTypes = sqlObject.Type.ToObjectTypes();
                                     statements.Add(SqlServerObject.GetObjects(database: nameParts[0], schema: nameParts[1], objectTypes: objectTypes));
                                 }
                             }
@@ -212,7 +212,7 @@ order by 1", name.Database);
                         break;
 
                     case SqlObjectTypes.Value:
-                        string[] items = sqlObject.ParentName.Split('.');
+                        var items = sqlObject.ParentName.Split('.');
                         i = items.Length - 1;
                         var columnName = items[i];
                         string? tableNameOrAlias = null;

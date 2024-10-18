@@ -24,7 +24,7 @@ internal sealed class UserCollectionNode(DatabaseNode database) : ITreeNode
 
         var dataRows = dataTable.Rows;
         var count = dataRows.Count;
-        ITreeNode[] treeNodes = new ITreeNode[count];
+        var treeNodes = new ITreeNode[count];
 
         for (var i = 0; i < count; ++i)
         {

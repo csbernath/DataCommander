@@ -16,7 +16,7 @@ internal sealed class SchemaCollectionNode(DatabaseNode database) : ITreeNode
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
-        Foundation.Collections.ReadOnly.ReadOnlySegmentLinkedList<SchemaNode> treeNodes = await Db.ExecuteReaderAsync(
+        var treeNodes = await Db.ExecuteReaderAsync(
             database.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,

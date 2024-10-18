@@ -79,7 +79,7 @@ internal sealed class AsyncDataAdapter(
             if (fieldCount < 0)
                 fieldCount = 0;
 
-            object[][] rows = new object[rowBlockSize][];
+            var rows = new object[rowBlockSize][];
             int i;
 
             for (i = 0; i < rowBlockSize; i++)

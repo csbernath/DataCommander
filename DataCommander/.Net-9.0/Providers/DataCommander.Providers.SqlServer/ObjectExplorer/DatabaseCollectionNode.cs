@@ -31,7 +31,7 @@ internal sealed class DatabaseCollectionNode : ITreeNode
         ];
 
         var commandText = CreateCommandText();
-        Foundation.Collections.ReadOnly.ReadOnlySegmentLinkedList<DatabaseNode> databaseNodes = await Db.ExecuteReaderAsync(
+        var databaseNodes = await Db.ExecuteReaderAsync(
             Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,

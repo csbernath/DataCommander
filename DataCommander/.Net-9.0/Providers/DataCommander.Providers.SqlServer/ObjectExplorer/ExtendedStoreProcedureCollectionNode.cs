@@ -27,7 +27,7 @@ join sys.schemas s
 where o.type = 'X'
 order by 1,2";
         var request = new ExecuteReaderRequest(commandText);
-        Foundation.Collections.ReadOnly.ReadOnlySegmentLinkedList<ExtendedStoreProcedureNode> childNodes = executor.ExecuteReader(request, 128, dataRecord =>
+        var childNodes = executor.ExecuteReader(request, 128, dataRecord =>
         {
             var schema = dataRecord.GetString(0);
             var name = dataRecord.GetString(1);

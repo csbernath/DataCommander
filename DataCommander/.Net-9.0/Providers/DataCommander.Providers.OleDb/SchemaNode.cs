@@ -27,7 +27,7 @@ sealed class SchemaNode(CatalogNode catalog, string name) : ITreeNode
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        ITreeNode[] treeNodes = new ITreeNode[2];
+        var treeNodes = new ITreeNode[2];
         treeNodes[0] = new TableCollectionNode(this);
         treeNodes[1] = new ProcedureCollectionNode(this);
 

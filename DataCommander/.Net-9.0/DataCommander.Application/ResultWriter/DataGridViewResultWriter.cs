@@ -51,7 +51,7 @@ internal sealed class DataGridViewResultWriter : IResultWriter
             AutoSize = false
         };
 
-        DataGridViewColumn[] columns =
+        var columns =
             (from schemaRow in schemaTable.AsEnumerable()
                 select ToDataGridViewColumn(schemaRow)).ToArray();
         dataGridView.Columns.AddRange(columns);
@@ -72,7 +72,7 @@ internal sealed class DataGridViewResultWriter : IResultWriter
         var targetRows = dataGridView.Rows;
         for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
         {
-            object[] sourceRow = rows[rowIndex];
+            var sourceRow = rows[rowIndex];
             var targetRow = new DataGridViewRow();
             var cells = targetRow.Cells;
             foreach (var sourceValue in sourceRow)

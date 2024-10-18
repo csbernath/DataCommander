@@ -42,7 +42,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
 
         foreach (var item in _result.Items)
         {
-            ListBoxItem<IObjectName> listBoxItem = new ListBoxItem<IObjectName>(item, ToString);
+            var listBoxItem = new ListBoxItem<IObjectName>(item, ToString);
             ListBox.Items.Add(listBoxItem);
         }
     }
@@ -58,7 +58,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
             _prefix = _textBox.Text.Substring(result.StartPosition, result.Length);
             if (_prefix.Length > 0)
             {
-                string[] items = _prefix.Split('.');
+                var items = _prefix.Split('.');
 
                 var count = result.Items[0].UnquotedName.Count(c => c == '.') + 1;
                 var stringBuilder = new StringBuilder();
@@ -127,7 +127,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
 
     private void SelectItem()
     {
-        ListBoxItem<IObjectName>? listBoxItem = (ListBoxItem<IObjectName>)ListBox.SelectedItem;
+        var listBoxItem = (ListBoxItem<IObjectName>)ListBox.SelectedItem;
 
         if (listBoxItem != null)
         {
@@ -142,8 +142,8 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
                 length = 0;
 
             var originalText = _textBox.Text.Substring(startIndex, length);
-            string[] originalItems = originalText.Split('.');
-            string[] newItems = selectedItem.Split('.');
+            var originalItems = originalText.Split('.');
+            var newItems = selectedItem.Split('.');
             var sb = new StringBuilder();
             for (var i = 0; i < originalItems.Length - newItems.Length; i++)
             {
@@ -196,7 +196,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
         else if (e.KeyCode.In(Keys.Subtract, Keys.OemMinus) && e.Control)
         {
             handled = true;
-            ListBoxItem<IObjectName>[] filteredItems = ListBox.Items.Cast<ListBoxItem<IObjectName>>()
+            var filteredItems = ListBox.Items.Cast<ListBoxItem<IObjectName>>()
                 .Where(item => IndexOf(item.Item.UnquotedName, _prefix) >= 0)
                 .ToArray();
             ListBox.Items.Clear();
@@ -276,10 +276,10 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
 
     private void FindNext(int startIndex)
     {
-        System.Collections.Generic.List<ListBoxItem<IObjectName>> items = ListBox.Items.Cast<ListBoxItem<IObjectName>>().ToList();
+        var items = ListBox.Items.Cast<ListBoxItem<IObjectName>>().ToList();
         var index = LinearSearch.IndexOf(startIndex, items.Count - 1, currentIndex =>
         {
-            ListBoxItem<IObjectName> item = items[currentIndex];
+            var item = items[currentIndex];
             var name = item.Item.UnquotedName;
             return name.Contains(_prefix, StringComparison.CurrentCulture);
         });
@@ -289,10 +289,10 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
 
     private void FindPrevious(int startIndex)
     {
-        System.Collections.Generic.List<ListBoxItem<IObjectName>> items = ListBox.Items.Cast<ListBoxItem<IObjectName>>().ToList();
+        var items = ListBox.Items.Cast<ListBoxItem<IObjectName>>().ToList();
         var index = LinearSearch.LastIndexOf(startIndex, items.Count - 1, currentIndex =>
         {
-            ListBoxItem<IObjectName> item = items[currentIndex];
+            var item = items[currentIndex];
             var name = item.Item.UnquotedName;
             return name.Contains(_prefix, StringComparison.CurrentCulture);
         });

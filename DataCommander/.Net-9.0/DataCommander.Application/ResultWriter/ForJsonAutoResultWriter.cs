@@ -14,7 +14,7 @@ namespace DataCommander.Application.ResultWriter;
 
 internal sealed class ForJsonAutoResultWriter(Action<InfoMessage> addInfoMessage) : IResultWriter
 {
-    private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage);
+    private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage, false);
     private bool _isJsonAuto;
     private string _path;
     private TextWriter _textWriter;
@@ -64,7 +64,7 @@ internal sealed class ForJsonAutoResultWriter(Action<InfoMessage> addInfoMessage
         {
             for (var rowIndex = 0; rowIndex < rowCount; ++rowIndex)
             {
-                object[] row = rows[rowIndex];
+                var row = rows[rowIndex];
                 var stringField = (StringField)row[0];
                 var fragment = stringField.Value;
                 _textWriter.Write(fragment);

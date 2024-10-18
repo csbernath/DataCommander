@@ -9,6 +9,7 @@ using System.Text;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.QueryConfiguration;
+using Foundation.Assertions;
 using Foundation.Collections;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
@@ -25,6 +26,7 @@ internal sealed class LogResultWriter : IResultWriter
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private readonly Action<InfoMessage> _addInfoMessage;
+    private readonly bool _showSchemaTable;
     private IProvider _provider;
     private int _commandCount;
     private int _tableCount;
@@ -34,16 +36,17 @@ internal sealed class LogResultWriter : IResultWriter
     private long _writeTableBeginTimestamp;
     private long _firstRowReadBeginTimestamp;
 
-    private string _fileName;
-    private Api.QueryConfiguration.Query _query;
+    private string? _fileName;
+    private Api.QueryConfiguration.Query? _query;
     private ReadOnlyCollection<DbRequestParameter> _parameters;
     private string _commandText;
     private List<Result> _results;
 
-    public LogResultWriter(Action<InfoMessage> addInfoMessage)
+    public LogResultWriter(Action<InfoMessage> addInfoMessage, bool showSchemaTable)
     {
-        ArgumentNullException.ThrowIfNull(addInfoMessage);
+        Assert.IsNotNull(addInfoMessage);
         _addInfoMessage = addInfoMessage;
+        _showSchemaTable = showSchemaTable;
     }
 
     void IResultWriter.Begin(IProvider provider)
@@ -92,7 +95,7 @@ internal sealed class LogResultWriter : IResultWriter
         var duration = Stopwatch.GetTimestamp() - _beforeExecuteReaderTimestamp;
         var header = $"{StopwatchTimeSpan.ToString(duration, 3)} Command[{_commandCount-1}]";
         var stringBuilder = new StringBuilder();
-        stringBuilder.Append($"Reader closed.");
+        stringBuilder.Append("Reader closed.");
         if (affectedRows >= 0)
             stringBuilder.Append($" {StringExtensions.SingularOrPlural(affectedRows, "row", "rows")} affected.");
         var message = stringBuilder.ToString();
@@ -101,7 +104,7 @@ internal sealed class LogResultWriter : IResultWriter
         if (_query != null)
         {
             var directory = _fileName != null ? Path.GetDirectoryName(_fileName) : Path.GetTempPath();
-            ReadOnlyCollection<DbQueryResult> results = _query.Results.EmptyIfNull().Zip(_results, ToResult).ToReadOnlyCollection();
+            var results = _query.Results.EmptyIfNull().Zip(_results, ToResult).ToReadOnlyCollection();
             var query = new DbRequest(directory, _query.Name, _query.Using, _query.Namespace, _commandText, 0, _parameters, results);
 
             var queryBuilder = new DbRequestBuilder(query);
@@ -128,26 +131,28 @@ internal sealed class LogResultWriter : IResultWriter
         var message =
             $"Result[{_tableCount - 1}] has {StringExtensions.SingularOrPlural(schemaTable.Rows.Count, "column", "columns")}.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
+        var dbColumns = schemaTable.Rows.Cast<DataRow>()!.Select(FoundationDbColumnFactory.Create).ToArray();        
 
-        Log.Trace($"SchemaTable of table[{_tableCount - 1}], {schemaTable.TableName}:\r\n{schemaTable.ToStringTableString()}");
-
-        FoundationDbColumn[] dbColumns = schemaTable.Rows.Cast<DataRow>().Select(FoundationDbColumnFactory.Create).ToArray();
-
-        if (_provider.Identifier == ProviderIdentifier.SqlServer)
+        if (_showSchemaTable)
         {
-            var declareTableScript = ToDeclareTableScript(schemaTable.TableName, dbColumns);
-            message = $"\r\n{declareTableScript.ToLines().ToIndentedString("    ")}";
+            Log.Trace($"SchemaTable of table[{_tableCount - 1}], {schemaTable.TableName}:\r\n{schemaTable.ToStringTableString()}");
+
+            if (_provider.Identifier == ProviderIdentifier.SqlServer)
+            {
+                var declareTableScript = ToDeclareTableScript(schemaTable.TableName, dbColumns);
+                message = $"\r\n{declareTableScript.ToLines().ToIndentedString("    ")}";
+                _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, message));
+            }
+
+            var dataTransferObjectFields = dbColumns.Select(ToDataTransferObjectField).ToArray();
+            var dataTransferObject = DataTransferObjectWithPropertiesFactory.Create(schemaTable.TableName, dataTransferObjectFields);
+            message = $"\r\n{dataTransferObject.ToIndentedString("    ")}";
             _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, message));
         }
 
-        List<DataTransferObjectField> dataTransferObjectFields = dbColumns.Select(ToDataTransferObjectField).ToList();
-        ReadOnlyCollection<Line> dataTransferObject = DataTransferObjectWithPropertiesFactory.Create(schemaTable.TableName, dataTransferObjectFields);
-        message = $"\r\n{dataTransferObject.ToIndentedString("    ")}";
-        _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, message));
-        
         if (_query != null)
         {
-            ReadOnlyCollection<DbQueryResultField> fields = dbColumns.Select(ToField).ToReadOnlyCollection();
+            var fields = dbColumns.Select(ToField).ToReadOnlyCollection();
             var result = new Result(fields);
             _results.Add(result);
         }
@@ -155,7 +160,7 @@ internal sealed class LogResultWriter : IResultWriter
 
     private static TextBuilder ToDeclareTableScript(string tableName, IReadOnlyList<FoundationDbColumn> dbColumns)
     {
-        Dictionary<SqlDbType, SqlDataType> sqlDataTypes = SqlDataTypeRepository.SqlDataTypes.ToDictionary(t => t.SqlDbType);
+        var sqlDataTypes = SqlDataTypeRepository.SqlDataTypes.ToDictionary(t => t.SqlDbType);
         var textBuilder = new TextBuilder();
         textBuilder.Add($"declare @{tableName} table");
         using (textBuilder.AddBlock("(", ")"))

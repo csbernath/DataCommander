@@ -263,7 +263,7 @@ internal sealed class ConnectionListForm : Form
 
     private void Copy_Click(object sender, EventArgs e)
     {
-        IEnumerable<ConnectionDto> connectionPropertiesArray = SelectedIndexes
+        var connectionPropertiesArray = SelectedIndexes
             .Select(index => _connectionInfos[index].ToConnectionDto());
         var json = JsonConvert.SerializeObject(connectionPropertiesArray);
         Clipboard.SetText(json);
@@ -281,8 +281,8 @@ internal sealed class ConnectionListForm : Form
         try
         {
             var s = Clipboard.GetText();
-            ConnectionDto[]? connectionDtos = JsonConvert.DeserializeObject<ConnectionDto[]>(s);
-            IEnumerable<ConnectionInfo> connectionPropertiesList = connectionDtos
+            var connectionDtos = JsonConvert.DeserializeObject<ConnectionDto[]>(s);
+            var connectionPropertiesList = connectionDtos
                 .Select(connectionDto => connectionDto.ToConnectionProperties());
             foreach (var connectionProperties in connectionPropertiesList)
                 Add(connectionProperties);

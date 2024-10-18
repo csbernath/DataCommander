@@ -9,7 +9,7 @@ public sealed class DateTimeField(DateTime value) : IComparable, IConvertible
 
     public static bool TryParse(string s, out DateTime dateTime)
     {
-        string[] formats = new[]
+        var formats = new[]
         {
             "yyyyMMdd",
             "yyyy-MM-dd",

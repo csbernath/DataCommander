@@ -218,7 +218,7 @@ internal class DataTableEditor : UserControl
 
             if (_tableSchema != null)
             {
-                Column[] uniqueIndexColumns = UniqueIndexColumns.ToArray();
+                var uniqueIndexColumns = UniqueIndexColumns.ToArray();
                 string message;
 
                 if (uniqueIndexColumns.Length > 0)
@@ -372,7 +372,7 @@ internal class DataTableEditor : UserControl
         var columns = _tableSchema.Columns;
         var stringBuilder = new StringBuilder();
         var first = true;
-        System.Collections.ObjectModel.ReadOnlyCollection<Column> uniqueIndexColumns = UniqueIndexColumns.ToReadOnlyCollection();
+        var uniqueIndexColumns = UniqueIndexColumns.ToReadOnlyCollection();
         if (uniqueIndexColumns.Count == 0)
             uniqueIndexColumns = columns.ToReadOnlyCollection();
 
@@ -592,7 +592,7 @@ internal class DataTableEditor : UserControl
 
     private void CopyColumnNames_Click(object sender, EventArgs e)
     {
-        IEnumerable<string> columnNames =
+        var columnNames =
             (from c in _dataGrid.Columns.Cast<DataGridViewColumn>()
                 where c.Visible
                 orderby c.DisplayIndex

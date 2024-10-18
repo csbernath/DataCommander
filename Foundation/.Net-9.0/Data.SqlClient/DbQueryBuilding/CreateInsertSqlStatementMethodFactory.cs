@@ -41,7 +41,7 @@ public static class CreateInsertSqlStatementMethodFactory
             }
 
             textBuilder.AddToLastLine(";");
-            textBuilder.Add($"var rows = records.Select(record => new[]");
+            textBuilder.Add("var rows = records.Select(record => new[]");
             using (textBuilder.AddCSharpBlock())
             {
                 foreach (var indexedColumn in columns.SelectIndexed())

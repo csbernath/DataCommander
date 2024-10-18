@@ -31,7 +31,7 @@ internal sealed class StoredProcedureNode(DatabaseNode database, string owner, s
     public ContextMenu? GetContextMenu()
     {
         var scriptObjectMenuItem = new MenuItem("Script Object", ScriptObjectMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> menuItems = new[] { scriptObjectMenuItem }.ToReadOnlyCollection();
+        var menuItems = new[] { scriptObjectMenuItem }.ToReadOnlyCollection();
         var contextMenu = new ContextMenu(menuItems);
         return contextMenu;
     }

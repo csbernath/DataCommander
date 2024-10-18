@@ -19,7 +19,7 @@ internal sealed class PostgreSqlConnectionStringBuilder : IDbConnectionStringBui
 
     bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
     {
-        string[] supportedKeywords = new[]
+        var supportedKeywords = new[]
         {
             ConnectionStringKeyword.Host
         };

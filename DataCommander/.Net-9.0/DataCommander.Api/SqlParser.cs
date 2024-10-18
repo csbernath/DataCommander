@@ -94,9 +94,9 @@ public sealed class SqlParser
                     startTokenIndex++;
                     provider.DeriveParameters(command);
 
-                    List<Token> tokens = Tokens.GetRange(startTokenIndex, Tokens.Count - startTokenIndex);
-                    List<Token[]> parameterTokens = tokens.Split(t => t.Type == TokenType.OperatorOrPunctuator && t.Value == ",").ToList();
-                    List<Parameter> parameters = parameterTokens.Select(t => ToParameter([.. t])).ToList();
+                    var tokens = Tokens.GetRange(startTokenIndex, Tokens.Count - startTokenIndex);
+                    var parameterTokens = tokens.Split(t => t.Type == TokenType.OperatorOrPunctuator && t.Value == ",").ToList();
+                    var parameters = parameterTokens.Select(t => ToParameter([.. t])).ToList();
 
                     List<IDataParameter> defaultValues = [];
                     foreach (IDataParameter parameter in command.Parameters)
@@ -629,7 +629,7 @@ public sealed class SqlParser
     private SqlObject? GetSqlObject(string? value)
     {
         SqlObject? sqlObject = null;
-        string[] items = value.Split('.');
+        var items = value.Split('.');
         if (items.Length > 1)
         {
             var alias = items[0];

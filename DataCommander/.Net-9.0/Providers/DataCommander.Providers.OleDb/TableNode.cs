@@ -53,14 +53,14 @@ sealed class TableNode(SchemaNode schema, string? name) : ITreeNode
     public ContextMenu? GetContextMenu()
     {
         var menuItem = new MenuItem("Columns", Columns_Click, []);
-        System.Collections.ObjectModel.ReadOnlyCollection<MenuItem> items = new[] { menuItem }.ToReadOnlyCollection();
+        var items = new[] { menuItem }.ToReadOnlyCollection();
         var contextMenu = new ContextMenu(items);
         return contextMenu;
     }
 
     private void Columns_Click(object sender, EventArgs e)
     {
-        object[] restrictions = new object[] { schema.Catalog.Name, schema.Name, name };
+        var restrictions = new object[] { schema.Catalog.Name, schema.Name, name };
         var dataTable = schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, restrictions);
         var dataSet = new DataSet();
         dataSet.Tables.Add(dataTable);

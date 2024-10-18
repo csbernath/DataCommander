@@ -193,7 +193,7 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
     {
         for (var i = 0; i < rowCount; i++)
         {
-            object[] row = rows[i];
+            var row = rows[i];
 
             for (var j = 0; j < row.Length; j++)
             {

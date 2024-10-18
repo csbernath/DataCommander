@@ -110,7 +110,7 @@ set arithabort on";
     {
         var clock = ClockAggregateRepository.Singleton.Get();
         var localTime = clock.GetLocalTimeFromCurrentEnvironmentTickCount64();
-        System.Collections.Generic.List<InfoMessage> infoMessages = SqlServerProvider.ToInfoMessages(e.Errors, localTime);
+        var infoMessages = SqlServerProvider.ToInfoMessages(e.Errors, localTime);
 
         if (e.Errors.Count > 0)
         {

@@ -9,7 +9,7 @@ namespace DataCommander.Application.ResultWriter;
 
 internal sealed class DataSetResultWriter(Action<InfoMessage> addInfoMessage, bool showShemaTable) : IResultWriter
 {
-    private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage);
+    private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage, showShemaTable);
     private IProvider _provider;
     private DataTable _dataTable;
     private int _tableIndex = -1;

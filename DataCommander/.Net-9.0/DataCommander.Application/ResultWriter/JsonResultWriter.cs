@@ -15,7 +15,7 @@ namespace DataCommander.Application.ResultWriter;
 public class JsonResultWriter(Action<InfoMessage> addInfoMessage) : IResultWriter
 {
     private readonly Action<InfoMessage> _addInfoMessage = addInfoMessage;
-    private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage);
+    private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage, false);
     private Guid? _guid;
     private int _tableIndex;    
     private List<FoundationDbColumn> _columns;
@@ -57,7 +57,7 @@ public class JsonResultWriter(Action<InfoMessage> addInfoMessage) : IResultWrite
 
         for (var rowIndex = 0; rowIndex < rowCount; ++rowIndex)
         {
-            object[] row = rows[rowIndex];
+            var row = rows[rowIndex];
 
             _jsonTextWriter.WriteStartObject();
 

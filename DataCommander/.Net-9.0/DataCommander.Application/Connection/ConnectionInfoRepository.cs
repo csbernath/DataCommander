@@ -36,7 +36,7 @@ public static class ConnectionInfoRepository
 
     public static void Save(IEnumerable<ConnectionInfo> connectionInfos)
     {
-        IEnumerable<ConnectionDto> connectionDtos = connectionInfos
+        var connectionDtos = connectionInfos
             .Select(connectionProperties => connectionProperties.ToConnectionDto());
         var path = GetPath();
         using var streamWriter = new StreamWriter(path, false, Encoding.UTF8);

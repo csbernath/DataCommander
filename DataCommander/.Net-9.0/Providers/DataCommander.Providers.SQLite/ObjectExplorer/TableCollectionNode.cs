@@ -29,7 +29,7 @@ from
 ) t
 order by name collate nocase";
 
-        Foundation.Collections.ReadOnly.ReadOnlySegmentLinkedList<ITreeNode> list = await Db.ExecuteReaderAsync(
+        var list = await Db.ExecuteReaderAsync(
             () => ConnectionFactory.CreateConnection(_databaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
             new ExecuteReaderRequest(commandText),
             128,

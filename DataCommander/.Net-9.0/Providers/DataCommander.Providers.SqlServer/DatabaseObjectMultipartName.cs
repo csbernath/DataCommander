@@ -25,7 +25,7 @@ internal sealed class DatabaseObjectMultipartName
         if (name != null)
         {
             var parser = new IdentifierParser(new StringReader(name));
-            string?[] parts = parser.Parse().ToArray();
+            var parts = parser.Parse().ToArray();
 
             var i = parts.Length - 1;
             var commandBuilder = new SqlCommandBuilder();

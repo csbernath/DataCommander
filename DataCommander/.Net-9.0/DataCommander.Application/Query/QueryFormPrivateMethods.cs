@@ -38,7 +38,7 @@ public sealed partial class QueryForm
         var control = tabPage.Controls[0];
         if (control is TabControl tabControl)
         {
-            System.Collections.Generic.List<TabPage> tabPages = tabControl.TabPages.Cast<TabPage>().ToList();
+            var tabPages = tabControl.TabPages.Cast<TabPage>().ToList();
             foreach (var subTabPage in tabPages)
             {
                 tabControl.TabPages.Remove(subTabPage);
@@ -192,7 +192,7 @@ public sealed partial class QueryForm
 
     private void CloseResultSetTabPages()
     {
-        TabPage[] tabPages = _resultSetsTabControl.TabPages.Cast<TabPage>().ToArray();
+        var tabPages = _resultSetsTabControl.TabPages.Cast<TabPage>().ToArray();
 
         foreach (var tabPage in tabPages)
             CloseResultSetTabPage(tabPage);
@@ -268,7 +268,7 @@ public sealed partial class QueryForm
                 MessageBox.Show(exception.Message);
             }
         });
-        ToolStripItem[] dropdownItems = source.DropDownItems
+        var dropdownItems = source.DropDownItems
             .Select(ToToolStripMenuItem)
             .Cast<ToolStripItem>()
             .ToArray();
@@ -565,7 +565,7 @@ public sealed partial class QueryForm
 
                     while (dataReader.Read())
                     {
-                        object[] values = new object[dataReader.FieldCount];
+                        var values = new object[dataReader.FieldCount];
                         dataReaderHelper.GetValues(values);
 
                         var dataTable = new DataTable($"Table[{tableIndex}].Rows[{rowIndex}]");
@@ -630,7 +630,7 @@ public sealed partial class QueryForm
         var sqlStatement = new SqlParser(Query);
         var command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
 
-        Form[] forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
+        var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
         var index = Array.IndexOf(forms, this);
         IProvider destinationProvider;
 
@@ -688,7 +688,7 @@ public sealed partial class QueryForm
 
     internal void CopyTable()
     {
-        Form[] forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
+        var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
         var index = Array.IndexOf(forms, this);
         if (index < forms.Length - 1)
         {
