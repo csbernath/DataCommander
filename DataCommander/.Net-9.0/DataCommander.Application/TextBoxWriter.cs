@@ -7,7 +7,7 @@ namespace DataCommander.Application;
 
 public class TextBoxWriter(TextBoxBase textBox) : TextWriter
 {
-    public override Encoding Encoding => null;
+    public override Encoding Encoding => Encoding.Default;
 
     private void AppendText(string text)
     {

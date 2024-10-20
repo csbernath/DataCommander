@@ -90,13 +90,10 @@ internal sealed class MyDataObject(DataView dataView, int[] columnIndexes) : IDa
             "TabSeparatedValues" // TODO
         ];
 
-    void IDataObject.SetData(object data) => throw new NotImplementedException();
-
-    void IDataObject.SetData(Type format, object data) => throw new NotImplementedException();
-
-    void IDataObject.SetData(string format, object data) => throw new NotImplementedException();
-
-    void IDataObject.SetData(string format, bool autoConvert, object data) => throw new NotImplementedException();
+    void IDataObject.SetData(object? data) => throw new NotImplementedException();
+    void IDataObject.SetData(Type format, object? data) => throw new NotImplementedException();
+    void IDataObject.SetData(string format, object? data) => throw new NotImplementedException();
+    void IDataObject.SetData(string format, bool autoConvert, object? data) => throw new NotImplementedException();
 
     private static void WriteHtmlFragment(string htmlFragment, TextWriter textWriter)
     {

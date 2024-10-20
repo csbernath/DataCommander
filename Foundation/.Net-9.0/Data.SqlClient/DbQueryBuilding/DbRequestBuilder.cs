@@ -225,7 +225,7 @@ namespace {_request.Namespace}
         foreach (var result in _request.Results)
         {
             var index = sequence.Next();
-            string next = null;
+            string? next = null;
             if (index > 0)
             {
                 stringBuilder.Append("\r\n");

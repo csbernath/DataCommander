@@ -29,7 +29,7 @@ public sealed class SqlParser
             Log.Write(LogLevel.Trace, value);
     }
 
-    public IDictionary<string, string?> Tables { get; }
+    public IDictionary<string, string> Tables { get; }
     public List<Token> Tokens { get; }
 
     public DbCommand CreateCommand(IProvider provider, ConnectionBase connection, CommandType commandType, int commandTimeout)
@@ -219,7 +219,7 @@ public sealed class SqlParser
                 if (sqlObject == null && index >= 0 && index < Tokens.Count)
                 {
                     var token = Tokens[index];
-                    sqlObject = GetSqlObject(token.Value);
+                    sqlObject = GetSqlObject(token.Value!);
                 }
             }
             else if (prev.Type == TokenType.OperatorOrPunctuator)
@@ -299,7 +299,7 @@ public sealed class SqlParser
 
                     case "where":
                         if (currentToken != null)
-                            sqlObject = GetSqlObject(currentToken.Value);
+                            sqlObject = GetSqlObject(currentToken.Value!);
 
                         if (sqlObject == null)
                         {
@@ -318,7 +318,7 @@ public sealed class SqlParser
                 }
 
                 if (sqlObject == null && currentToken != null)
-                    sqlObject = GetSqlObject(currentToken.Value);
+                    sqlObject = GetSqlObject(currentToken.Value!);
             }
             else if (previousToken.Type == TokenType.OperatorOrPunctuator)
             {
@@ -328,15 +328,15 @@ public sealed class SqlParser
                     {
                         sqlObject = currentToken.Type switch
                         {
-                            TokenType.KeyWord => GetSqlObject(currentToken.Value),
+                            TokenType.KeyWord => GetSqlObject(currentToken.Value!),
                             _ => GetValue(previousToken),
                         };
                     }
                     else
                         sqlObject = GetValue(previousToken);
                 }
-                else if (currentToken != null && currentToken.Type == TokenType.KeyWord &&
-                         currentToken.Value.Contains('.'))
+                else if (currentToken is { Type: TokenType.KeyWord } &&
+                         currentToken.Value!.Contains('.'))
                     sqlObject = GetSqlObject(currentToken.Value);
             }
         }
@@ -460,7 +460,7 @@ public sealed class SqlParser
                     case DbType.AnsiStringFixedLength:
                     case DbType.String:
                     case DbType.StringFixedLength:
-                        var valueStr = Convert.ToString(value);
+                        var valueStr = Convert.ToString(value)!;
 
                         if (dataParameter.Size > 0 && valueStr.Length > dataParameter.Size)
                             throw new Exception("Length exceeds size of parameter");
@@ -489,7 +489,7 @@ public sealed class SqlParser
                             ];
 
                             var formatProvider = CultureInfo.InvariantCulture;
-                            value2 = DateTime.ParseExact(value.ToString(), formats, formatProvider, DateTimeStyles.None);
+                            value2 = DateTime.ParseExact(value.ToString()!, formats, formatProvider, DateTimeStyles.None);
                         }
 
                         break;
@@ -497,7 +497,7 @@ public sealed class SqlParser
                     case DbType.Decimal:
                     case DbType.VarNumeric:
                         valueStr = value.ToString();
-                        var decimalString = new DecimalString(value.ToString());
+                        var decimalString = new DecimalString(value.ToString()!);
 
                         if (dataParameter.Precision != 0 && decimalString.Precision > dataParameter.Precision)
                             throw new Exception("Invalid precision");
@@ -582,9 +582,9 @@ public sealed class SqlParser
         return new Parameter(name, value);
     }
 
-    private static Dictionary<string, string?> FindTables(List<Token> tokens, out Table[] allTables)
+    private static Dictionary<string, string> FindTables(List<Token> tokens, out Table[] allTables)
     {
-        var tables = new Dictionary<string, string?>(StringComparer.InvariantCultureIgnoreCase);
+        var tables = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
         List<Table> tableList = [];
 
         for (var i = 0; i < tokens.Count; i++)
@@ -602,7 +602,7 @@ public sealed class SqlParser
 
                         if (token.Type == TokenType.KeyWord)
                         {
-                            var tableName = token.Value;
+                            var tableName = token.Value!;
 
                             if (i < tokens.Count - 2)
                             {
@@ -610,7 +610,7 @@ public sealed class SqlParser
 
                                 if (token.Type == TokenType.KeyWord)
                                 {
-                                    var alias = token.Value;
+                                    var alias = token.Value!;
                                     tableList.Add(new Table(i, tableName, alias));
                                     tables.TryAdd(alias, tableName);
                                 }
@@ -626,7 +626,7 @@ public sealed class SqlParser
         return tables;
     }
 
-    private SqlObject? GetSqlObject(string? value)
+    private SqlObject? GetSqlObject(string value)
     {
         SqlObject? sqlObject = null;
         var items = value.Split('.');
@@ -647,12 +647,12 @@ public sealed class SqlParser
         return sqlObject;
     }
 
-    private sealed class Table(int index, string? name, string? alias)
+    private sealed class Table(int index, string name, string? alias)
     {
         private readonly string? _alias = alias;
 
         public readonly int Index = index;
-        public readonly string? Name = name;
+        public readonly string Name = name;
     }
 
     private sealed class Parameter(string? name, object? value)

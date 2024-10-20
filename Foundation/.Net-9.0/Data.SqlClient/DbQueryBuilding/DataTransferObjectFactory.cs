@@ -28,7 +28,7 @@ public static class DataTransferObjectFactory
     {
         var textBuilder = new TextBuilder();
 
-        var parameters = fields.Select(field => $"{field.Type} {field.Name.ToCamelCase()}").Join(", ");
+        var parameters = fields.Select(field => $"{field.Type} {field.Name!.ToCamelCase()}").Join(", ");
         textBuilder.Add($"public {name}({parameters})");
         using (textBuilder.AddCSharpBlock())
         {

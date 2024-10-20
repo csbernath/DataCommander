@@ -173,22 +173,18 @@ public sealed class ConfigurationSection
 
     public bool IsFileSystemWatcherEnabled { get; private set; }
 
-    private void Check(string nodeName, ConfigurationNode? node)
+    private void Check(string? nodeName, ConfigurationNode? node)
     {
         if (node == null)
         {
             if (!File.Exists(ConfigFileName))
-            {
                 throw new FileNotFoundException("Configuration file not found.", ConfigFileName);
-            }
             else
-            {
                 throw new ArgumentException($"Configuration node not found.\r\nNodeName: {nodeName}\r\nConfigFileName: {ConfigFileName}");
-            }
         }
     }
 
-    public ConfigurationNode? SelectNode(string nodeName, bool throwOnError)
+    public ConfigurationNode? SelectNode(string? nodeName, bool throwOnError)
     {
         if (_changed != 0)
         {

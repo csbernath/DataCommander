@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Linq;
 using Foundation.Collections.ReadOnly;
-using Foundation.Linq;
 using Microsoft.Data.SqlClient;
 using Microsoft.Data.SqlClient.Server;
 

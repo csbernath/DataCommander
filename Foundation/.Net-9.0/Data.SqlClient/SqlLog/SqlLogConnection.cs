@@ -12,7 +12,7 @@ internal sealed class SqlLogConnection(
     string hostName,
     DateTime startDate,
     long duration,
-    Exception exception)
+    Exception? exception)
     : ISqlLogItem
 {
     string ISqlLogItem.CommandText

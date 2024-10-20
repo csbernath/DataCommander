@@ -216,7 +216,7 @@ public sealed class SqlLog
         }
 
         var executor = _connection.CreateCommandExecutor();
-        var applicationId = (int)executor.ExecuteScalar(new CreateCommandRequest(commandText));
+        var applicationId = (int)executor.ExecuteScalar(new CreateCommandRequest(commandText))!;
         Log.Trace("SqlLog.ApplicationStart({0})", applicationId);
         Dictionary<string, SqLoglCommandExecution> commands = [];
 
@@ -311,7 +311,7 @@ public sealed class SqlLog
         string hostName,
         DateTime startDate,
         long duration,
-        Exception exception)
+        Exception? exception)
     {
         var internalConnection = InternalConnectionHelper.GetInternalConnection(connection);
         SqlLogConnection? sqlLogConnection = null;

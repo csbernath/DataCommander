@@ -16,10 +16,10 @@ internal sealed class SqlLogCommand : ISqlLogItem
     private readonly string _database;
     private readonly CommandType _commandType;
     private string _commandText;
-    private string _parameters;
+    private string? _parameters;
     private readonly DateTime _startDate;
     private readonly long _duration;
-    private readonly Exception _exception;
+    private readonly Exception? _exception;
 
     public SqlLogCommand(
         int applicationId,
@@ -28,12 +28,12 @@ internal sealed class SqlLogCommand : ISqlLogItem
         IDbCommand command,
         DateTime startDate,
         long duration,
-        Exception exception)
+        Exception? exception)
     {
         _applicationId = applicationId;
         _commands = commands;
         _connectionNo = connectionNo;
-        _database = command.Connection.Database;
+        _database = command.Connection!.Database;
         _commandType = command.CommandType;
         _commandText = command.CommandText;
         var parameters = (SqlParameterCollection)command.Parameters;
@@ -125,7 +125,7 @@ internal sealed class SqlLogCommand : ISqlLogItem
         string commandText,
         out bool isNew)
     {
-        SqLoglCommandExecution command;
+        SqLoglCommandExecution? command;
         isNew = false;
         var key = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", database, commandText);
 
@@ -133,7 +133,7 @@ internal sealed class SqlLogCommand : ISqlLogItem
         {
             if (_commands.TryGetValue(key, out command))
             {
-                command!.ExecutionNo++;
+                command.ExecutionNo++;
             }
             else
             {

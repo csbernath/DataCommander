@@ -9,7 +9,7 @@ namespace DataCommander.Providers.SQLite;
 internal sealed class SQLiteDataReaderHelper : IDataReaderHelper
 {
     private readonly SQLiteDataReader _sqLiteDataReader;
-    private readonly IDataFieldReader[] _dataFieldReaders;
+    private readonly IDataFieldReader[]? _dataFieldReaders;
 
     public SQLiteDataReaderHelper( IDataReader dataReader )
     {
@@ -20,12 +20,10 @@ internal sealed class SQLiteDataReaderHelper : IDataReaderHelper
         {
             var rows = schemaTable.Rows;
             var count = rows.Count;
-            _dataFieldReaders = new IDataFieldReader[ count ];
+            _dataFieldReaders = new IDataFieldReader[count];
 
             for (var i = 0; i < count; i++)
-            {
-                _dataFieldReaders[ i ] = CreateDataFieldReader( dataReader, rows[ i ] );
-            }
+                _dataFieldReaders[i] = CreateDataFieldReader(dataReader, rows[i]);
         }
     }
 

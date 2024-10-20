@@ -12,20 +12,20 @@ internal sealed class InternalConnectionHelper2 : IInternalConnectionHelper
     {
         InternalConnectionField = typeof(SqlConnection).GetField(
             "_innerConnection",
-            BindingFlags.Instance | BindingFlags.NonPublic);
+            BindingFlags.Instance | BindingFlags.NonPublic)!;
     }
 
     object IInternalConnectionHelper.GetInternalConnection(IDbConnection connection)
     {
         var internalConnection = InternalConnectionField.GetValue(connection);
-        return internalConnection;
+        return internalConnection!;
     }
 
     bool IInternalConnectionHelper.IsOpen(object internalConnection)
     {
         var type = internalConnection.GetType();
-        var isOpenField = type.GetField("_fConnectionOpen", BindingFlags.Instance | BindingFlags.NonPublic);
-        var value = isOpenField.GetValue(internalConnection);
+        var isOpenField = type.GetField("_fConnectionOpen", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        var value = isOpenField.GetValue(internalConnection)!;
         var isOpen = (bool)value;
         return isOpen;
     }

@@ -20,10 +20,10 @@ public sealed class DataCommanderApplication
     {
         AssemblyLoadContext.Default.Resolving += Default_Resolving;
 
-        var entryAssembly = Assembly.GetEntryAssembly();
+        var entryAssembly = Assembly.GetEntryAssembly()!;
         var fileName = entryAssembly.Location;
         var versionInfo = FileVersionInfo.GetVersionInfo(fileName);
-        Name = versionInfo.ProductName;
+        Name = versionInfo.ProductName!;
 
         Settings.Section.SelectNode(null, true);
 

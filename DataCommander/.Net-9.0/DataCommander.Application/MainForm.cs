@@ -63,7 +63,7 @@ public class MainForm : Form
     private ToolStripStatusLabel _managedMemoryToolStripStatusLabel;
     private ToolStrip _queryFormToolStrip;
     private readonly System.Windows.Forms.Timer _timer;
-    private ColorTheme _colorTheme;
+    private ColorTheme? _colorTheme;
 
     private void SetColorTheme(bool darkColorTheme)
     {

@@ -1,7 +1,7 @@
 ﻿namespace DataCommander.Api.ResultWriter;
 
-public sealed class DataViewProperties
+public sealed class DataViewProperties(string? rowFilter, string? sort)
 {
-    public string RowFilter { get; set; }
-    public string Sort { get; set; }
+    public readonly string? RowFilter = rowFilter;
+    public readonly string? Sort = sort;
 }

@@ -94,7 +94,7 @@ public sealed class SqlLoggedSqlConnection : IDbConnection
     internal int ExecuteNonQuery(IDbCommand command)
     {
         int count;
-        Exception exception = null;
+        Exception? exception = null;
         var startDate = LocalTime.Default.Now;
         var duration = Stopwatch.GetTimestamp();
 
@@ -121,11 +121,10 @@ public sealed class SqlLoggedSqlConnection : IDbConnection
         return count;
     }
 
-    internal object ExecuteScalar(IDbCommand command)
+    internal object? ExecuteScalar(IDbCommand command)
     {
-        object scalar = null;
-
-        Exception exception = null;
+        object? scalar = null;
+        Exception? exception = null;
         var startDate = LocalTime.Default.Now;
         var duration = Stopwatch.GetTimestamp();
 

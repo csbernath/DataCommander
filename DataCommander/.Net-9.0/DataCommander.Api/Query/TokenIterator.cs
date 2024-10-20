@@ -27,9 +27,9 @@ public sealed class TokenIterator
             _length = 0;
     }
 
-    public Token Next()
+    public Token? Next()
     {
-        Token token = null;
+        Token? token = null;
 
         while (_index < _length)
         {
@@ -46,15 +46,13 @@ public sealed class TokenIterator
                     _index++;
                     value = ReadString();
                     endPosition = _index;
-                    token = new Token(_tokenIndex, startPosition, endPosition - 1, _lineIndex, TokenType.String,
-                        value);
+                    token = new Token(_tokenIndex, startPosition, endPosition - 1, _lineIndex, TokenType.String, value);
                 }
                 else
                 {
                     value = ReadKeyWord();
                     endPosition = _index;
-                    token = new Token(_tokenIndex, startPosition, endPosition - 1, _lineIndex, TokenType.KeyWord,
-                        value);
+                    token = new Token(_tokenIndex, startPosition, endPosition - 1, _lineIndex, TokenType.KeyWord, value);
                 }
 
                 break;
@@ -109,9 +107,9 @@ public sealed class TokenIterator
         return token;
     }
 
-    private string? ReadKeyWord()
+    private string ReadKeyWord()
     {
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         while (_index < _length)
         {
@@ -122,16 +120,16 @@ public sealed class TokenIterator
             else
                 _index++;
 
-            sb.Append(c);
+            stringBuilder.Append(c);
         }
 
-        var keyWord = sb.ToString();
+        var keyWord = stringBuilder.ToString();
         return keyWord;
     }
 
-    private string? ReadString()
+    private string ReadString()
     {
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         _index++;
         var escape = false;
 
@@ -149,7 +147,7 @@ public sealed class TokenIterator
                 else if (c == 't')
                     c = '\t';
 
-                sb.Append(c);
+                stringBuilder.Append(c);
 
                 escape = false;
             }
@@ -158,13 +156,13 @@ public sealed class TokenIterator
             else if (c == '\\')
                 escape = true;
             else
-                sb.Append(c);
+                stringBuilder.Append(c);
         }
 
-        return sb.ToString();
+        return stringBuilder.ToString();
     }
 
-    private string? ReadDigit()
+    private string ReadDigit()
     {
         var sb = new StringBuilder();
 

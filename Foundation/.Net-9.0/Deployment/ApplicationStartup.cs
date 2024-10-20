@@ -24,7 +24,7 @@ public sealed class ApplicationStartup(
 
     public Task Update()
     {
-        var entryAssembly = Assembly.GetEntryAssembly();
+        var entryAssembly = Assembly.GetEntryAssembly()!;
         var title = GetTitle(entryAssembly);
         var applicationName = title;
 
@@ -101,7 +101,7 @@ public sealed class ApplicationStartup(
     {
         if (checkForUpdates.When <= UniversalTime.Default.Now)
         {
-            var entryAssembly = Assembly.GetEntryAssembly();
+            var entryAssembly = Assembly.GetEntryAssembly()!;
             var localVersion = entryAssembly.GetName().Version;
             eventHandler(new CheckForUpdatesStarted());
             var remoteVersion = await GetRemoteVersion(remoteVersionUri);
@@ -138,7 +138,7 @@ public sealed class ApplicationStartup(
 
     private void ScheduleCheckForUpdates()
     {
-        var entryAssembly = Assembly.GetEntryAssembly();
+        var entryAssembly = Assembly.GetEntryAssembly()!;
         var title = GetTitle(entryAssembly);
         var applicationName = title;
         var now = UniversalTime.Default.Now;

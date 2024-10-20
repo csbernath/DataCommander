@@ -1741,7 +1741,7 @@ public sealed partial class QueryForm : Form, IQueryForm
     {
         if (InvokeRequired)
         {
-            this.Invoke(() => Connection_DatabaseChanged(sender, args));
+            Invoke(() => Connection_DatabaseChanged(sender, args));
         }
         else
         {

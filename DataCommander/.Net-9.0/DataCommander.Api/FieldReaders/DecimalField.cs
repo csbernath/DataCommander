@@ -3,18 +3,14 @@ using System.Globalization;
 
 namespace DataCommander.Api.FieldReaders;
 
-/// <summary>
-/// Summary description for DecimalField.
-/// </summary>
 public sealed class DecimalField(
-    NumberFormatInfo numberFormatInfo,
+    NumberFormatInfo? numberFormatInfo,
     decimal decimalValue,
-    string stringValue)
+    string? stringValue)
     : IComparable
 {
-    public decimal DecimalValue { get; } = decimalValue;
-
-    public string StringValue { get; } = stringValue;
+    public readonly decimal DecimalValue = decimalValue;
+    public readonly string? StringValue = stringValue;
 
     public override string ToString() => DecimalValue.ToString("N", numberFormatInfo);
 

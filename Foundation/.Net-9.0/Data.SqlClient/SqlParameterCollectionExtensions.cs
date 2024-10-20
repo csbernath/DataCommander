@@ -23,7 +23,7 @@ public static class SqlParameterCollectionExtensions
         parameters.Add(parameter);
     }
 
-    public static string ToLogString(this SqlParameterCollection parameters)
+    public static string? ToLogString(this SqlParameterCollection parameters)
     {
         ArgumentNullException.ThrowIfNull(parameters);
 

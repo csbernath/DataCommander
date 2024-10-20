@@ -83,7 +83,7 @@ internal sealed class SqlLoggedSqlCommand : IDbCommand
         return loggedSqlDataReader.Execute(behavior);
     }
 
-    public object ExecuteScalar() => _connection.ExecuteScalar(_command);
+    public object? ExecuteScalar() => _connection.ExecuteScalar(_command);
 
     public void Prepare() => _command.Prepare();
 }

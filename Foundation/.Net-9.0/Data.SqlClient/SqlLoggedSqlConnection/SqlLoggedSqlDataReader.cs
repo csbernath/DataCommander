@@ -148,7 +148,7 @@ internal sealed class SqlLoggedSqlDataReader(
 
         try
         {
-            _reader.Close();
+            _reader!.Close();
         }
         catch (Exception e)
         {
@@ -168,7 +168,7 @@ internal sealed class SqlLoggedSqlDataReader(
         }
     }
 
-    public DataTable GetSchemaTable() => _reader.GetSchemaTable();
+    public DataTable? GetSchemaTable() => _reader!.GetSchemaTable();
 
     public bool NextResult()
     {
@@ -178,7 +178,7 @@ internal sealed class SqlLoggedSqlDataReader(
         {
             try
             {
-                nextResult = _reader.NextResult();
+                nextResult = _reader!.NextResult();
             }
             catch (Exception e)
             {
@@ -190,7 +190,7 @@ internal sealed class SqlLoggedSqlDataReader(
         }
         else
         {
-            nextResult = _reader.NextResult();
+            nextResult = _reader!.NextResult();
         }
 
         return nextResult;
@@ -198,11 +198,11 @@ internal sealed class SqlLoggedSqlDataReader(
 
     public bool Read()
     {
-        var read = false;
+        bool read;
 
         try
         {
-            read = _reader.Read();
+            read = _reader!.Read();
         }
         catch (Exception e)
         {
@@ -215,9 +215,9 @@ internal sealed class SqlLoggedSqlDataReader(
         return read;
     }
 
-    public int Depth => _reader.Depth;
+    public int Depth => _reader!.Depth;
 
-    public bool IsClosed => _reader.IsClosed;
+    public bool IsClosed => _reader!.IsClosed;
 
-    public int RecordsAffected => _reader.RecordsAffected;
+    public int RecordsAffected => _reader!.RecordsAffected;
 }

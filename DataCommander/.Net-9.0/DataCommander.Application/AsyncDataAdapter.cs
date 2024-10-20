@@ -24,7 +24,7 @@ internal sealed class AsyncDataAdapter(
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
 
-    private AsyncDataAdapterCommand _command;
+    private AsyncDataAdapterCommand? _command;
     private long _rowCount;
     private CancellationTokenSource _cancellationTokenSource;
     private int _tableCount;

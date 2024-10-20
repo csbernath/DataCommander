@@ -18,7 +18,7 @@ public sealed class UpdaterStartup
 
     public void Update(string applicationName, string updaterDirectory, string applicationExeFileName)
     {
-        var applicationDirectory = Path.GetDirectoryName(applicationExeFileName);
+        var applicationDirectory = Path.GetDirectoryName(applicationExeFileName)!;
 
         var backupDirectory = Path.Combine(updaterDirectory, $"{applicationName}.Backup");
         CopyDirectory(applicationDirectory, backupDirectory);

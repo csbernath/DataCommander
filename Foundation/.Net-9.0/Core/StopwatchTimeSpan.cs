@@ -32,24 +32,24 @@ public struct StopwatchTimeSpan(long ticks)
 
     public readonly long Ticks => ticks;
     public TimeSpan Elapsed => ToTimeSpan(Ticks);
-    public double TotalHours => (double) Ticks / StopwatchConstants.TicksPerHour;
-    public double TotalMinutes => (double) Ticks / StopwatchConstants.TicksPerMinute;
-    public double TotalSeconds => (double) Ticks / StopwatchConstants.TicksPerSecond;
+    public double TotalHours => (double)Ticks / StopwatchConstants.TicksPerHour;
+    public double TotalMinutes => (double)Ticks / StopwatchConstants.TicksPerMinute;
+    public double TotalSeconds => (double)Ticks / StopwatchConstants.TicksPerSecond;
     public double TotalMilliseconds => Ticks * StopwatchConstants.TicksPerMillisecond;
     public double TotalMicroseconds => Ticks * StopwatchConstants.TicksPerMicrosecond;
     public double TotalNanoseconds => Ticks * StopwatchConstants.TicksPerNanosecond;
 
     public static int ToInt32(long ticks, int multiplier)
     {
-        var d = (double) multiplier * ticks / StopwatchConstants.TicksPerSecond;
-        var int32 = (int) Math.Round(d);
+        var d = (double)multiplier * ticks / StopwatchConstants.TicksPerSecond;
+        var int32 = (int)Math.Round(d);
         return int32;
     }
 
     public static long ToInt64(long ticks, long multiplier)
     {
-        var d = (double) multiplier * ticks / Stopwatch.Frequency;
-        var int64 = (long) Math.Round(d);
+        var d = (double)multiplier * ticks / Stopwatch.Frequency;
+        var int64 = (long)Math.Round(d);
         return int64;
     }
 
@@ -58,9 +58,9 @@ public struct StopwatchTimeSpan(long ticks)
         var totalSeconds = ticks / StopwatchConstants.TicksPerSecond;
         var fractionTicks = ticks - totalSeconds * StopwatchConstants.TicksPerSecond;
         var multiplier = Pow10(scale);
-        var fraction = (double) multiplier * fractionTicks / StopwatchConstants.TicksPerSecond;
+        var fraction = (double)multiplier * fractionTicks / StopwatchConstants.TicksPerSecond;
         fraction = Math.Round(fraction);
-        var fractionInt64 = (long) fraction;
+        var fractionInt64 = (long)fraction;
         if (fractionInt64 == multiplier)
         {
             fractionInt64 = 0;
@@ -83,7 +83,7 @@ public struct StopwatchTimeSpan(long ticks)
         }
 
         var hours = totalSeconds / 3600;
-        var seconds = (int) (totalSeconds - (hours * 3600));
+        var seconds = (int)(totalSeconds - (hours * 3600));
         var minutes = seconds / 60;
         seconds -= minutes * 60;
 
@@ -101,11 +101,11 @@ public struct StopwatchTimeSpan(long ticks)
         return s;
     }
 
-    public static long ToTicks(TimeSpan timeSpan) => (long) (timeSpan.TotalSeconds * Stopwatch.Frequency);
+    public static long ToTicks(TimeSpan timeSpan) => (long)(timeSpan.TotalSeconds * Stopwatch.Frequency);
 
     public static TimeSpan ToTimeSpan(long stopwatchTicks)
     {
-        var dateTimeTicks = (long) (stopwatchTicks * StopwatchConstants.TimeSpanTicksPerStopwatchTick);
+        var dateTimeTicks = (long)(stopwatchTicks * StopwatchConstants.TimeSpanTicksPerStopwatchTick);
         return new TimeSpan(dateTimeTicks);
     }
 

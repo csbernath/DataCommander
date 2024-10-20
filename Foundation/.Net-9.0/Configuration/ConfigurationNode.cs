@@ -141,7 +141,7 @@ public sealed class ConfigurationNode(string? name)
     /// The name can contains path delimiters.</param>
     /// <returns>Return the child node is found.
     /// Returns null if no child node found.</returns>
-    public ConfigurationNode? SelectNode(string path)
+    public ConfigurationNode? SelectNode(string? path)
     {
         var node = this;
 
