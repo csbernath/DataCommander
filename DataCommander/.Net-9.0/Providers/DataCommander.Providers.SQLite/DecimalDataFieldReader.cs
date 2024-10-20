@@ -36,7 +36,7 @@ internal sealed class DecimalDataFieldReader(SQLiteDataReader dataReader, int co
                 //}
 
                 var decimalValue = _dataReader.GetDecimal(_columnOrdinal);
-                value = new DecimalField(null, decimalValue, null);
+                value = new DecimalField(null, decimalValue);
             }
 
             return value;

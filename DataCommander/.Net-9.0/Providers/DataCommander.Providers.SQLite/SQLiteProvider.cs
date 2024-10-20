@@ -45,9 +45,9 @@ public sealed class SQLiteProvider : IProvider
 
     DataTable IProvider.GetParameterTable(IDataParameterCollection parameters) => throw new Exception("The method or operation is not implemented.");
 
-    DataTable IProvider.GetSchemaTable(IDataReader dataReader)
+    DataTable? IProvider.GetSchemaTable(IDataReader dataReader)
     {
-        DataTable table = null;
+        DataTable? table = null;
         var schemaTable = dataReader.GetSchemaTable();
 
         if (schemaTable != null)
@@ -78,15 +78,13 @@ public sealed class SQLiteProvider : IProvider
                 var columnSize = dataColumnSchema.ColumnSize;
                 var dbType = (DbType)row["ProviderType"];
                 var allowDbNull = (bool)row["AllowDBNull"];
-                var sb = new StringBuilder();
+                var stringBuilder = new StringBuilder();
 
                 var dataTypeName = dataReader.GetDataTypeName(i);
-                sb.Append(dataTypeName);
+                stringBuilder.Append(dataTypeName);
 
                 if (!allowDbNull)
-                {
-                    sb.Append(" NOT NULL");
-                }
+                    stringBuilder.Append(" NOT NULL");
 
                 table.Rows.Add(
                 [
@@ -94,7 +92,7 @@ public sealed class SQLiteProvider : IProvider
                     pk,
                     row[SchemaTableColumn.ColumnName],
                     columnSize,
-                    sb.ToString(),
+                    stringBuilder.ToString(),
                     dbType,
                     row["DataType"]
                 ]);
@@ -122,7 +120,7 @@ public sealed class SQLiteProvider : IProvider
         sqlStatement.FindToken(position, out var previousToken, out var currentToken);
         int startPosition;
         int length;
-        List<IObjectName> items = null;
+        List<IObjectName>? items = null;
         var fromCache = false;
 
         if (currentToken != null)

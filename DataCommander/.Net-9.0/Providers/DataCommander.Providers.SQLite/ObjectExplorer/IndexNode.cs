@@ -22,7 +22,7 @@ internal sealed class IndexNode(TableNode tableNode, string? name) : ITreeNode
 
     bool ITreeNode.Sortable => false;
 
-    string ITreeNode.Query
+    string? ITreeNode.Query
     {
         get
         {
@@ -34,7 +34,7 @@ where
             var scalar = Db.ExecuteScalar(
                 () => ConnectionFactory.CreateConnection(_tableNode.DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
                 new CreateCommandRequest(commandText));
-            var sql = (string)scalar;
+            var sql = (string?)scalar;
             return sql;
         }
     }

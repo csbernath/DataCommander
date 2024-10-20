@@ -60,7 +60,7 @@ where	name	= '{name}'";
 
     public ContextMenu? GetContextMenu()
     {
-        ContextMenu contextMenu = null;
+        ContextMenu? contextMenu = null;
 
         if (Name != "sqlite_master")
         {

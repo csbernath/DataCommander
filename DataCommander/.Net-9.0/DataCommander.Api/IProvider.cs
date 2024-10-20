@@ -39,7 +39,7 @@ public interface IProvider
     DataParameterBase GetDataParameter(IDataParameter parameter);
 
     DataTable GetParameterTable(IDataParameterCollection parameters);
-    DataTable GetSchemaTable(IDataReader dataReader);
+    DataTable? GetSchemaTable(IDataReader dataReader);
     List<Statement> GetStatements(string commandText);
     GetTableSchemaResult GetTableSchema(IDbConnection connection, string? tableName);
     List<InfoMessage> ToInfoMessages(Exception e);
