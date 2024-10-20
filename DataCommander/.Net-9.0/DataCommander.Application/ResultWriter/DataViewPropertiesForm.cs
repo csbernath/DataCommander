@@ -6,7 +6,7 @@ namespace DataCommander.Application.ResultWriter;
 
 internal partial class DataViewPropertiesForm : Form
 {
-    private readonly DataViewProperties _properties = new();
+    private DataViewProperties? _properties;
 
     public DataViewPropertiesForm(DataViewProperties properties)
     {
@@ -21,8 +21,7 @@ internal partial class DataViewPropertiesForm : Form
 
     private void okButton_Click(object sender, EventArgs e)
     {
-        _properties.RowFilter = rowFilterTextBox.Text;
-        _properties.Sort = sortTextBox.Text;
+        _properties = new DataViewProperties(rowFilterTextBox.Text, sortTextBox.Text);
         DialogResult = DialogResult.OK;
     }
 }

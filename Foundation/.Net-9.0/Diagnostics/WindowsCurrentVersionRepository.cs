@@ -13,8 +13,8 @@ public static class WindowsCurrentVersionRepository
         var editionId = (string?)key.GetValue("EditionID");
         var releaseId = (string?)key.GetValue("ReleaseId");
         var currentBuild = (string?)key.GetValue("CurrentBuild");
+#pragma warning restore CA1416
 
         return new WindowsCurrentVersion(productName, displayVersion, editionId, releaseId, currentBuild);
-#pragma warning restore CA1416
     }
 }

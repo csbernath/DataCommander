@@ -116,7 +116,7 @@ internal class DataTableEditor : UserControl
 
                     if (type == null)
                     {
-                        type = (Type)dataColumn.DataType;
+                        type = dataColumn.DataType;
                     }
 
                     var typeCode = Type.GetTypeCode(type);
@@ -480,7 +480,7 @@ internal class DataTableEditor : UserControl
             stringBuilder.Append(')');
         }
 
-        var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+        var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild!;
         queryForm.AppendQueryText(stringBuilder.ToString());
     }
 
@@ -549,7 +549,7 @@ internal class DataTableEditor : UserControl
         {
             var where = GetWhere(dataRow);
             sb.Append(@where);
-            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild!;
             var text = sb.ToString();
             queryForm.AppendQueryText(text);
         }
@@ -583,14 +583,14 @@ internal class DataTableEditor : UserControl
 
         if (_dataGrid.SelectedRows.Count == 1)
         {
-            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild!;
             var text = _statementStringBuilder.ToString();
             _statementStringBuilder = null;
             queryForm.AppendQueryText(text);
         }
     }
 
-    private void CopyColumnNames_Click(object sender, EventArgs e)
+    private void CopyColumnNames_Click(object? sender, EventArgs e)
     {
         var columnNames =
             (from c in _dataGrid.Columns.Cast<DataGridViewColumn>()
@@ -601,14 +601,14 @@ internal class DataTableEditor : UserControl
         Clipboard.SetDataObject(s, true, 5, 200);
     }
 
-    private void CopyColumnName_Click(object sender, EventArgs e) => Clipboard.SetDataObject(_columnName, true, 5, 200);
+    private void CopyColumnName_Click(object? sender, EventArgs e) => Clipboard.SetDataObject(_columnName, true, 5, 200);
 
     private int[] GetColumnIndexes() => (from c in _dataGrid.Columns.Cast<DataGridViewColumn>()
                                          where c.Visible
                                          orderby c.DisplayIndex
                                          select c.Index).ToArray();
 
-    private void SaveTableAs_Click(object sender, EventArgs e)
+    private void SaveTableAs_Click(object? sender, EventArgs e)
     {
         var saveFileDialog = new SaveFileDialog
         {
@@ -735,10 +735,8 @@ internal class DataTableEditor : UserControl
 
     private void EditDataViewProperties_Click(object sender, EventArgs e)
     {
-        var properties = new DataViewProperties();
         var dataView = _dataTable.DefaultView;
-        properties.RowFilter = dataView.RowFilter;
-        properties.Sort = dataView.Sort;
+        var properties = new DataViewProperties(dataView.RowFilter, dataView.Sort);
         var form = new DataViewPropertiesForm(properties);
         if (form.ShowDialog(this) == DialogResult.OK)
         {
@@ -838,8 +836,8 @@ internal class DataTableEditor : UserControl
             OverwritePrompt = true
         };
 
-        string value = null;
-        Encoding encoding = null;
+        string? value = null;
+        Encoding? encoding = null;
 
         if (_cellValue.IfAsNotNull(delegate(StringField stringField)
             {
@@ -920,7 +918,7 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void CopyArrayField_Click(object sender, EventArgs e)
+    private void CopyArrayField_Click(object? sender, EventArgs e)
     {
         var sb = new StringBuilder();
         var array = (Array)_cellValue;
@@ -940,7 +938,7 @@ internal class DataTableEditor : UserControl
         column.Visible = false;
     }
 
-    private void UnhideAllColumns_Click(object sender, EventArgs e)
+    private void UnhideAllColumns_Click(object? sender, EventArgs e)
     {
         foreach (var column in _dataGrid.Columns.Cast<DataGridViewColumn>().Where(c => !c.Visible))
         {
@@ -948,7 +946,7 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void CopyTableAsXml_Click(object sender, EventArgs e)
+    private void CopyTableAsXml_Click(object? sender, EventArgs e)
     {
         using (new CursorManager(Cursors.WaitCursor))
         {
@@ -973,7 +971,7 @@ internal class DataTableEditor : UserControl
                     if (_dataGrid.Columns[_columnIndex].Visible)
                     {
                         var column = columns[columnIndex];
-                        var dataRowView = (DataRowView)row.DataBoundItem;
+                        var dataRowView = (DataRowView)row.DataBoundItem!;
                         var value = dataRowView[columnIndex];
                         if (value != DBNull.Value)
                         {
@@ -1039,9 +1037,9 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void HideRows_Click(object sender, EventArgs e)
+    private void HideRows_Click(object? sender, EventArgs e)
     {
-        DataGridViewRow currentRow = null;
+        DataGridViewRow? currentRow = null;
 
         foreach (DataGridViewRow row in _dataGrid.SelectedRows)
         {
@@ -1191,14 +1189,14 @@ internal class DataTableEditor : UserControl
                                         }
                                         else
                                         {
-                                            valueStr = _cellValue.ToString();
+                                            valueStr = _cellValue.ToString()!;
                                         }
 
                                         rowFilter = $"[{_columnName}] = {valueStr}";
                                         break;
 
                                     default:
-                                        valueStr = _cellValue.ToString();
+                                        valueStr = _cellValue.ToString()!;
                                         rowFilter = $"[{_columnName}] = {valueStr}";
                                         break;
                                 }

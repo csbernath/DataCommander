@@ -25,7 +25,7 @@ where table_schema = '{_schemaNode.Name}'
 order by table_name"), 128, dataReader =>
         {
             var name = dataReader.GetString(0);
-            return new ViewNode(this, name);
+            return new ViewNode(name);
         }));
     }
 
