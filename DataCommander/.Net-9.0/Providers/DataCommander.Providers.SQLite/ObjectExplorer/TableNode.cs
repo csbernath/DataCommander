@@ -45,7 +45,7 @@ where	name	= '{name}'";
         return script;
     }
 
-    private void Script_Click(object sender, EventArgs e)
+    private void Script_Click(object? sender, EventArgs e)
     {
         string script;
         using (var connection = ConnectionFactory.CreateConnection(DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential))
@@ -54,7 +54,7 @@ where	name	= '{name}'";
             script = GetScript(connection, DatabaseNode.Name, Name);
         }
 
-        var queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender!;
         queryForm.ShowText(script);
     }
 

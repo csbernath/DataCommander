@@ -26,7 +26,7 @@ internal sealed class AsyncDataAdapter(
 
     private AsyncDataAdapterCommand? _command;
     private long _rowCount;
-    private CancellationTokenSource _cancellationTokenSource;
+    private CancellationTokenSource? _cancellationTokenSource;
     private int _tableCount;
 
     IResultWriter IAsyncDataAdapter.ResultWriter => resultWriter;

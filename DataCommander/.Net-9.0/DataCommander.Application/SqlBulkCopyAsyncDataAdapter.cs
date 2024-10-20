@@ -52,7 +52,7 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
     long IAsyncDataAdapter.RowCount => _rowCount;
     int IAsyncDataAdapter.TableCount => 1;
 
-    void IAsyncDataAdapter.Start(IEnumerable<AsyncDataAdapterCommand> commands) => Task.Factory.StartNew(Fill);
+    void IAsyncDataAdapter.Start(IEnumerable<AsyncDataAdapterCommand>? commands) => Task.Factory.StartNew(Fill);
 
     void IAsyncDataAdapter.Cancel()
     {

@@ -23,7 +23,7 @@ public static class ConnectionInfoRepository
             {
                 var serializer = new JsonSerializer();
                 var jsonReader = new JsonTextReader(streamReader);
-                connectionDtos = serializer.Deserialize<ConnectionDto[]>(jsonReader);
+                connectionDtos = serializer.Deserialize<ConnectionDto[]>(jsonReader)!;
             }
 
             connectionInfos = connectionDtos.Select(connectionDto => connectionDto.ToConnectionProperties());

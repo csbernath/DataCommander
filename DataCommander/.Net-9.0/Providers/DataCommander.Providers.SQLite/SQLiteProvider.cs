@@ -116,7 +116,6 @@ public sealed class SQLiteProvider : IProvider
         CancellationToken cancellationToken)
     {
         var sqlStatement = new SqlParser(text);
-        var tokens = sqlStatement.Tokens;
         sqlStatement.FindToken(position, out var previousToken, out var currentToken);
         int startPosition;
         int length;
@@ -135,27 +134,27 @@ public sealed class SQLiteProvider : IProvider
             length = 0;
         }
 
-        var sqlObject = sqlStatement.FindSqlObject(previousToken, currentToken);
+        var sqlObject = sqlStatement.FindSqlObject(previousToken!, currentToken);
         if (sqlObject != null)
         {
-            string commandText = null;
+            string? commandText = null;
             fromCache = false;
 
             switch (sqlObject.Type)
             {
                 case SqlObjectTypes.Table:
                     commandText = @"
-select	name
-from	sqlite_master
-where   type    = 'table'
+select name
+from sqlite_master
+where type = 'table'
 order by name collate nocase";
                     break;
 
                 case SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function:
                     commandText = @"
 select	name
-from	sqlite_master
-where   type    = 'table'
+from sqlite_master
+where type = 'table'
 order by name collate nocase";
                     break;
 
@@ -174,10 +173,10 @@ order by name collate nocase";
 
             if (commandText != null)
             {
-                var executor = DbCommandExecutorFactory.Create(connection.Connection);
+                var executor = DbCommandExecutorFactory.Create(connection.Connection!);
                 items = executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataRecord =>
                 {
-                    var name = dataRecord.GetStringOrDefault(0);
+                    var name = dataRecord.GetString(0);
                     return (IObjectName)new ObjectName(name);
                 }).ToList();
             }
@@ -219,17 +218,11 @@ order by name collate nocase";
                 break;
 
             case SqlDataTypeName.Decimal:
-                var precision = schemaRow.NumericPrecision.Value;
-                var scale = schemaRow.NumericScale.Value;
-                if (scale == 0)
-                {
-                    typeName = $"decimal({precision})";
-                }
-                else
-                {
-                    typeName = $"decimal({precision},{scale})";
-                }
-
+                var precision = schemaRow.NumericPrecision!.Value;
+                var scale = schemaRow.NumericScale!.Value;
+                typeName = scale == 0
+                    ? $"decimal({precision})"
+                    : $"decimal({precision},{scale})";
                 break;
 
             case SqlDataTypeName.Xml:

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -89,10 +90,11 @@ public sealed class QueryTextBox : UserControl
         set => _sbPanel = value;
     }
 
+    [AllowNull]
     public override string Text
     {
         get => RichTextBox.Text;
-
+        
         set
         {
             _changeEventEnabled = false;

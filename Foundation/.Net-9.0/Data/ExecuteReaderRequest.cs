@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Data;
+using Foundation.Assertions;
 
 namespace Foundation.Data;
 
@@ -11,8 +12,7 @@ public sealed class ExecuteReaderRequest
 
     public ExecuteReaderRequest(CreateCommandRequest createCommandRequest, CommandBehavior commandBehavior)
     {
-        ArgumentNullException.ThrowIfNull(createCommandRequest);
-
+        Assert.IsNotNull(createCommandRequest);
         CreateCommandRequest = createCommandRequest;
         CommandBehavior = commandBehavior;
     }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data.Common;
+﻿using System.Data.Common;
 using System.Data.SQLite;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,19 +20,11 @@ internal sealed class Connection : ConnectionBase
         Connection = _sqliteConnection;
     }
 
-    void SQLiteLog_Log(object sender, LogEventArgs e)
-    {
-    }
-
-    private void SqliteConnection_Trace(object sender, TraceEventArgs e) => Log.Write(LogLevel.Trace, e.Statement);
-
     public override Task OpenAsync(CancellationToken cancellationToken) => _sqliteConnection.OpenAsync(cancellationToken);
 
     public override DbCommand CreateCommand() => _sqliteConnection.CreateCommand();
 
     public override string DataSource => _sqliteConnection.DataSource;
-
-    protected static void SetDatabase(string database) => throw new Exception("The method or operation is not implemented.");
 
     public override string ServerVersion => _sqliteConnection.ServerVersion;
 

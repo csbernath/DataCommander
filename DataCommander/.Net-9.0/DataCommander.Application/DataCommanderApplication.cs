@@ -46,10 +46,8 @@ public sealed class DataCommanderApplication
         {
             MainForm = new MainForm();
 
-            Task.Delay(1000).ContinueWith(task =>
-            {
-                Log.Write(LogLevel.Trace, "{0}\r\n{1}", AppDomainMonitor.GetEnvironmentInfo(), AppDomainMonitor.GetCurrentDomainState());
-            });
+            Task.Delay(1000).ContinueWith(_ =>
+                Log.Write(LogLevel.Trace, "{0}\r\n{1}", AppDomainMonitor.GetEnvironmentInfo(), AppDomainMonitor.GetCurrentDomainState()));
 
             System.Windows.Forms.Application.Run(MainForm);
         }

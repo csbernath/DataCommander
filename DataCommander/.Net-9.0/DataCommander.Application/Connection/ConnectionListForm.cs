@@ -30,9 +30,9 @@ internal sealed class ConnectionListForm : Form
     private readonly DataTable _dataTable = new();
     private bool _isDirty;
     private readonly Container _components = new();
-    private readonly ColorTheme _colorTheme;
+    private readonly ColorTheme? _colorTheme;
 
-    public ConnectionListForm(StatusStrip statusBar, ColorTheme colorTheme)
+    public ConnectionListForm(StatusStrip statusBar, ColorTheme? colorTheme)
     {
         _colorTheme = colorTheme;
 

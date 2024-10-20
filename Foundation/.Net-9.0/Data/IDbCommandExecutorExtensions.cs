@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Threading;
+using Foundation.Assertions;
 using Foundation.Collections.ReadOnly;
 using Foundation.Linq;
 
@@ -23,7 +24,7 @@ public static class IDbCommandExecutorExtensions
 
     public static void Execute(this IDbCommandExecutor executor, CreateCommandRequest request, Action<IDbCommand> execute)
     {
-        ArgumentNullException.ThrowIfNull(executor);
+        Assert.IsNotNull(executor);
         var requests = new ExecuteCommandRequest(request, execute).ItemToArray();
         executor.Execute(requests);
     }
@@ -44,11 +45,10 @@ public static class IDbCommandExecutorExtensions
         return scalar;
     }
 
-    public static void ExecuteReader(this IDbCommandExecutor executor, ExecuteReaderRequest request,
-        Action<IDataReader> readResults)
+    public static void ExecuteReader(this IDbCommandExecutor executor, ExecuteReaderRequest request, Action<IDataReader> readResults)
     {
-        ArgumentNullException.ThrowIfNull(executor);
-        ArgumentNullException.ThrowIfNull(request);
+        Assert.IsNotNull(executor);
+        Assert.IsNotNull(request);
 
         executor.Execute(request.CreateCommandRequest, command =>
         {
@@ -66,14 +66,14 @@ public static class IDbCommandExecutorExtensions
         return rows;
     }
 
-    public static DataTable? ExecuteDataTable(this IDbCommandExecutor executor, ExecuteReaderRequest request, CancellationToken cancellationToken)
+    public static DataTable ExecuteDataTable(this IDbCommandExecutor executor, ExecuteReaderRequest request, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(executor);
+        Assert.IsNotNull(executor);
         DataTable? dataTable = null;
         executor.Execute(
             request.CreateCommandRequest,
             command => { dataTable = command.ExecuteDataTable(cancellationToken); });
-        return dataTable;
+        return dataTable!;
     }
 
     public static DataSet? ExecuteDataSet(
