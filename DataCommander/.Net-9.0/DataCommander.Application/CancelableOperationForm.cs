@@ -98,7 +98,7 @@ public sealed partial class CancelableOperationForm : Form, ICancelableOperation
     protected override void OnFormClosing(FormClosingEventArgs e)
     {
         base.OnFormClosing(e);
-        _elapsedTimeTimer.Dispose();
+        _elapsedTimeTimer!.Dispose();
     }
 
     private void ElapsedTimeTimerCallback(object? state)

@@ -16,11 +16,11 @@ public partial class AboutForm : Form
 
     public AboutForm(ColorTheme colorTheme)
     {
-        var assembly = Assembly.GetEntryAssembly();
+        var assembly = Assembly.GetEntryAssembly()!;
         var path = assembly.Location;
         var lastWriteTime = File.GetLastWriteTime(path);
         var windowsCurrentVersion = WindowsCurrentVersionRepository.Get();
-        var buildNumber = int.Parse(windowsCurrentVersion.CurrentBuild);
+        var buildNumber = int.Parse(windowsCurrentVersion.CurrentBuild!);
         var windowsName =
             WindowsNameCalculator.GetWindowsNameFromBuildNumber(buildNumber, windowsCurrentVersion.EditionId, windowsCurrentVersion.DisplayVersion);
         var brightness = colorTheme?.BackColor.GetBrightness();
@@ -100,7 +100,7 @@ Credits:
 
             if (e.Url.Scheme == "applicationdatafile")
             {
-                var applicationDataFileName = DataCommanderApplication.Instance.FileName;
+                var applicationDataFileName = DataCommanderApplication.Instance.ApplicationDataFileName;
                 exists = true;
                 url = applicationDataFileName;
             }

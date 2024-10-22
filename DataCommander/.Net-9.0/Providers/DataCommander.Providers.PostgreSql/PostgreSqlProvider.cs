@@ -21,7 +21,7 @@ internal sealed class PostgreSqlProvider : IProvider
 
     string IProvider.Identifier => "PostgreSql";
     DbProviderFactory IProvider.DbProviderFactory => NpgsqlFactory.Instance;
-    string[] IProvider.KeyWords => null;
+    string[]? IProvider.KeyWords => null;
     bool IProvider.CanConvertCommandToString => throw new NotImplementedException();
     bool IProvider.IsCommandCancelable => true;
     public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
@@ -47,7 +47,7 @@ internal sealed class PostgreSqlProvider : IProvider
     public async Task<GetCompletionResult> GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position,
         CancellationToken cancellationToken)
     {
-        List<IObjectName> array = null;
+        List<IObjectName>? array = null;
         var sqlStatement = new SqlParser(text);
         var tokens = sqlStatement.Tokens;
         sqlStatement.FindToken(position, out var previousToken, out var currentToken);
@@ -70,7 +70,7 @@ internal sealed class PostgreSqlProvider : IProvider
                 }
                 else
                 {
-                    SortedList<string, object> list = [];
+                    SortedList<string, object?> list = [];
 
                     for (var i = 0; i < tokens.Count; i++)
                     {
@@ -94,7 +94,7 @@ internal sealed class PostgreSqlProvider : IProvider
         if (array == null)
         {
             var sqlObject = sqlStatement.FindSqlObject(previousToken, currentToken);
-            string commandText = null;
+            string? commandText = null;
 
             if (sqlObject != null)
             {
@@ -212,7 +212,7 @@ order by 1", name.Database);
                         break;
 
                     case SqlObjectTypes.Value:
-                        var items = sqlObject.ParentName.Split('.');
+                        var items = sqlObject.ParentName!.Split('.');
                         i = items.Length - 1;
                         var columnName = items[i];
                         string? tableNameOrAlias = null;
@@ -227,7 +227,7 @@ order by 1", name.Database);
                             var contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out var tableName);
                             if (contains)
                             {
-                                string where;
+                                string? where;
                                 var tokenIndex = previousToken.Index + 1;
                                 if (tokenIndex < tokens.Count)
                                 {
@@ -282,7 +282,7 @@ order by 1", name.Database);
                         connection.OpenAsync(CancellationToken.None).Wait();
                     }
 
-                    var executor = connection.Connection.CreateCommandExecutor();
+                    var executor = connection.Connection!.CreateCommandExecutor();
                     //new DbTransactionScope(connection.Connection, transaction);
                     executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
                     {
@@ -291,7 +291,7 @@ order by 1", name.Database);
                             var fieldCount = dataReader.FieldCount;
                             while (dataReader.Read())
                             {
-                                string schemaName;
+                                string? schemaName;
                                 string objectName;
 
                                 if (fieldCount == 1)

@@ -24,9 +24,9 @@ public static class ProviderFactory
         return provider;
     }
 
-    public static string[] GetKeyWords(string connectionString)
+    public static string[]? GetKeyWords(string connectionString)
     {
-        string[] keyWords = null;
+        string[]? keyWords = null;
 
         try
         {

@@ -24,7 +24,7 @@ internal sealed class ConnectionListForm : Form
     private readonly List<ConnectionInfo> _connectionInfos;
     private ConnectionBase _connection;
     private Button _btnOk;
-    private DoubleBufferedDataGridView _dataGrid;
+    private DoubleBufferedDataGridView? _dataGrid;
     private Button _btnCancel;
     private Button _newButton;
     private readonly DataTable _dataTable = new();
@@ -92,7 +92,7 @@ internal sealed class ConnectionListForm : Form
             }
         }
 
-        _dataGrid.DataSource = _dataTable;
+        _dataGrid!.DataSource = _dataTable;
         if (colorTheme != null)
         {
             BackColor = colorTheme.BackColor;

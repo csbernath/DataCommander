@@ -101,7 +101,7 @@ public class MainForm : Form
         var elapsed = end - start;
 
         var message = $"Application loaded in {new StopwatchTimeSpan(elapsed).ToString(3)} seconds.";
-        _toolStripStatusLabel.Text = message;
+        _toolStripStatusLabel!.Text = message;
         Log.Trace(message);
 
         if (!DataCommanderApplication.Instance.ApplicationData.CurrentType.Attributes.TryGetAttributeValue<bool>("DarkColorTheme", out var darkColorTheme))

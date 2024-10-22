@@ -8,7 +8,7 @@ internal sealed class IdentifierParser(TextReader textReader)
 {
     private readonly TextReader _textReader = textReader;
 
-    public IEnumerable<string> Parse()
+    public IEnumerable<string?> Parse()
     {
         var peekChar = default(char);
 

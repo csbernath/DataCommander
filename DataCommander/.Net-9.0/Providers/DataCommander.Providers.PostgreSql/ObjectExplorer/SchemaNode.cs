@@ -23,6 +23,6 @@ internal sealed class SchemaNode(SchemaCollectionNode schemaCollectionNode, stri
 
     bool ITreeNode.Sortable => false;
 
-    string ITreeNode.Query => null;
+    string? ITreeNode.Query => null;
     public ContextMenu? GetContextMenu() => null;
 }

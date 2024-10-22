@@ -32,7 +32,7 @@ internal class DataTableEditor : UserControl
 {
     private readonly IQueryForm _queryForm;
     private readonly DbCommandBuilder _commandBuilder;
-    private DoubleBufferedDataGridView _dataGrid;
+    private DoubleBufferedDataGridView? _dataGrid;
     private string? _tableName;
     private GetTableSchemaResult _tableSchema;
     private DataTable _dataTable;

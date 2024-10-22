@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using System.Text;
@@ -103,6 +104,7 @@ public sealed partial class QueryForm
         SetStatusbarPanelText(text, color);
     }
 
+    [AllowNull]
     public override Font Font
     {
         set

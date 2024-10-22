@@ -36,7 +36,7 @@ public sealed class DataCommanderApplication
 
     public ApplicationData ApplicationData { get; } = new();
 
-    public string FileName { get; private set; }
+    public string? ApplicationDataFileName { get; private set; }
 
     public MainForm MainForm { get; private set; }
 
@@ -55,9 +55,9 @@ public sealed class DataCommanderApplication
 
     public void SaveApplicationData()
     {
-        var tempFileName = FileName + ".temp";
+        var tempFileName = ApplicationDataFileName + ".temp";
         ApplicationData.Save(tempFileName, _sectionName);
-        var succeeded = NativeMethods.MoveFileEx(tempFileName, FileName,
+        var succeeded = NativeMethods.MoveFileEx(tempFileName, ApplicationDataFileName,
             NativeMethods.MoveFileExFlags.ReplaceExisiting);
         Log.Write(LogLevel.Trace, "MoveFileEx succeeded: {0}", succeeded);
     }
@@ -65,7 +65,7 @@ public sealed class DataCommanderApplication
     public void LoadApplicationData(string fileName, string sectionName)
     {
         ApplicationData.Load(fileName, sectionName);
-        FileName = fileName;
+        ApplicationDataFileName = fileName;
         _sectionName = sectionName;
     }
 

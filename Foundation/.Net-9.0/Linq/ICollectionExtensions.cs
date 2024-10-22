@@ -24,11 +24,11 @@ public static class ICollectionExtensions
         return new ReadOnlyCollection<T>(collection.ToList());
     }
 
-    public static ICollection<TResult>? Cast<TResult>(this ICollection? source)
-    {
-        var collection = source != null ? new CastedCollection<TResult>(source) : null;
-        return collection;
-    }
+    // public static ICollection<TResult>? Cast<TResult>(this ICollection? source)
+    // {
+    //     var collection = source != null ? new CastedCollection<TResult>(source) : null;
+    //     return collection;
+    // }
 
     public static bool IsNullOrEmpty(this ICollection collection)
     {

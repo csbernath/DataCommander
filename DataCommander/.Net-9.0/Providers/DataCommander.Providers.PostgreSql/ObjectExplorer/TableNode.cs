@@ -20,6 +20,6 @@ internal sealed class TableNode(TableCollectionNode tableCollectionNode, string?
         ]);
 
     bool ITreeNode.Sortable => false;
-    string ITreeNode.Query => null;
+    string? ITreeNode.Query => null;
     public ContextMenu? GetContextMenu() => null;
 }

@@ -30,6 +30,6 @@ order by table_name"), 128, dataReader =>
     }
 
     bool ITreeNode.Sortable => false;
-    string ITreeNode.Query => null;
+    string? ITreeNode.Query => null;
     public ContextMenu? GetContextMenu() => null;
 }

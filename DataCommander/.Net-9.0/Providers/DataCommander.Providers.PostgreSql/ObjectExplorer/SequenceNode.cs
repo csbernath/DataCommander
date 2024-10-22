@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -14,9 +15,10 @@ internal sealed class SequenceNode(SequenceCollectionNode sequenceCollectionNode
 
     bool ITreeNode.IsLeaf => true;
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) => null;
+    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) =>
+        Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
 
     bool ITreeNode.Sortable => false;
-    string ITreeNode.Query => null;
+    string? ITreeNode.Query => null;
     public ContextMenu? GetContextMenu() => null;
 }

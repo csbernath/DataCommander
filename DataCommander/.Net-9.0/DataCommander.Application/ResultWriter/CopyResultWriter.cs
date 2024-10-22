@@ -27,13 +27,13 @@ internal sealed class CopyResultWriter(
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage, false);
-    private DbTransaction _transaction;
-    private IDbCommand _insertCommand;
-    private Converter<object, object>[] _converters;
-    private IDbDataParameter[] _parameters;
-    private ConcurrentQueue<QueueItem> _queue;
-    private Task _task;
-    private EventWaitHandle _enqueueEvent;
+    private DbTransaction? _transaction;
+    private IDbCommand? _insertCommand;
+    private Converter<object, object>[]? _converters;
+    private IDbDataParameter[]? _parameters;
+    private ConcurrentQueue<QueueItem>? _queue;
+    private Task? _task;
+    private EventWaitHandle? _enqueueEvent;
     private bool _writeEnded;
     private readonly bool _canConvertCommandToString = destinationProvider.CanConvertCommandToString;
     private long _readRowCount;

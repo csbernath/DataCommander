@@ -50,10 +50,10 @@ internal sealed class AsyncDataAdapter(
     {
         using (LogFactory.Instance.GetCurrentMethodLog())
         {
-            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource!.Cancel();
             if (provider.IsCommandCancelable)
             {
-                var task = new Task(() => { _command.Command.Cancel(); });
+                var task = new Task(() => { _command!.Command.Cancel(); });
                 task.Start();
             }
         }
