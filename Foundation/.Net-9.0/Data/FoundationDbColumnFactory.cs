@@ -43,7 +43,9 @@ public static class FoundationDbColumnFactory
             ? (Type)dataTypeObject
             : null;
         var allowDbNull = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.AllowDBNull);
-        var providerType = schemaTableRow.GetValueField<int>(SchemaTableColumn.ProviderType);
+        var providerType = schemaTableRow.Table.Columns.Contains(SchemaTableColumn.ProviderType)
+            ? schemaTableRow.GetValueField<int>(SchemaTableColumn.ProviderType)
+            : default;
 
         bool? isAliased = null;
         column = columns[SchemaTableColumn.IsAliased];

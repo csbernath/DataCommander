@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Data.SQLite;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
+using Microsoft.Data.Sqlite;
 
 namespace DataCommander.Providers.SQLite;
 
 internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
 {
-    private readonly SQLiteConnectionStringBuilder _sqLiteConnectionStringBuilder = [];
+    private readonly SqliteConnectionStringBuilder _sqLiteConnectionStringBuilder = [];
 
     string IDbConnectionStringBuilder.ConnectionString
     {

@@ -1,13 +1,13 @@
-﻿using System.Data.SQLite;
-using DataCommander.Api.Connection;
+﻿using DataCommander.Api.Connection;
+using Microsoft.Data.Sqlite;
 
 namespace DataCommander.Providers.SQLite;
 
 public static class ConnectionFactory
 {
-    public static SQLiteConnection CreateConnection(ConnectionStringAndCredential connectionStringAndCredential)
+    public static SqliteConnection CreateConnection(ConnectionStringAndCredential connectionStringAndCredential)
     {
-        var sqliteConnectionStringBuilder = new SQLiteConnectionStringBuilder(connectionStringAndCredential.ConnectionString)
+        var sqliteConnectionStringBuilder = new SqliteConnectionStringBuilder(connectionStringAndCredential.ConnectionString)
         {
             Pooling = false
         };
@@ -16,6 +16,6 @@ public static class ConnectionFactory
         if (credential != null)
             sqliteConnectionStringBuilder.Password = PasswordFactory.Unprotect(credential.Password.Protected);
 
-        return new SQLiteConnection(sqliteConnectionStringBuilder.ConnectionString);
+        return new SqliteConnection(sqliteConnectionStringBuilder.ConnectionString);
     }
 }

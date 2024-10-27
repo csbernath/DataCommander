@@ -10,6 +10,7 @@ using DataCommander.Api.Connection;
 using Foundation.Assertions;
 using Foundation.Data;
 using Foundation.Log;
+using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Application.ResultWriter;
 

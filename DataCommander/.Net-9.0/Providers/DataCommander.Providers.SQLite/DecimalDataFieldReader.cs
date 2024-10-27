@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Data.SQLite;
 using DataCommander.Api.FieldReaders;
+using Microsoft.Data.Sqlite;
 
 namespace DataCommander.Providers.SQLite;
 
-internal sealed class DecimalDataFieldReader(SQLiteDataReader dataReader, int columnOrdinal) : IDataFieldReader
+internal sealed class DecimalDataFieldReader(SqliteDataReader dataReader, int columnOrdinal) : IDataFieldReader
 {
-    readonly SQLiteDataReader _dataReader = dataReader;
+    readonly SqliteDataReader _dataReader = dataReader;
     readonly int _columnOrdinal = columnOrdinal;
 
     #region IDataFieldReader Members

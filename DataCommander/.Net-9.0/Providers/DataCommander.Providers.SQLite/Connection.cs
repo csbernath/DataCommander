@@ -1,5 +1,5 @@
 ﻿using System.Data.Common;
-using System.Data.SQLite;
+using Microsoft.Data.Sqlite;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api.Connection;
@@ -10,11 +10,11 @@ namespace DataCommander.Providers.SQLite;
 internal sealed class Connection : ConnectionBase
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-    private readonly SQLiteConnection _sqliteConnection;
+    private readonly SqliteConnection _sqliteConnection;
 
     public Connection(ConnectionStringAndCredential connectionStringAndCredential)
     {
-        _sqliteConnection = new SQLiteConnection(connectionStringAndCredential.ConnectionString);
+        _sqliteConnection = new SqliteConnection(connectionStringAndCredential.ConnectionString);
         // this.sqliteConnection.Flags = SQLiteConnectionFlags.LogAll;
         // this.sqliteConnection.Trace += this.sqliteConnection_Trace;
         Connection = _sqliteConnection;

@@ -1,8 +1,9 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.Common;
-using System.Data.SQLite;
 using DataCommander.Api;
 using DataCommander.Api.FieldReaders;
+using Microsoft.Data.Sqlite;
 
 namespace DataCommander.Providers.SQLite;
 
@@ -29,13 +30,13 @@ internal sealed class SQLiteDataReaderHelper : IDataReaderHelper
         IDataRecord dataRecord,
         DataRow schemaRow)
     {
-        var sqLiteDataReader = (SQLiteDataReader)dataRecord;
+        var sqLiteDataReader = (SqliteDataReader)dataRecord;
         var columnOrdinal = (int)schemaRow["ColumnOrdinal"];
-        var dbType = (DbType)schemaRow[SchemaTableColumn.ProviderType];
-        IDataFieldReader dataFieldReader = dbType switch
+        var dataType = (Type)schemaRow["DataType"];
+        IDataFieldReader dataFieldReader = dataType switch
         {
-            DbType.Decimal => new DecimalDataFieldReader(sqLiteDataReader, columnOrdinal),
-            DbType.Binary => new BinaryDataFieldReader(sqLiteDataReader, columnOrdinal),
+            //DbType.Decimal => new DecimalDataFieldReader(sqLiteDataReader, columnOrdinal),
+            //DbType.Binary => new BinaryDataFieldReader(sqLiteDataReader, columnOrdinal),
             _ => new DefaultDataFieldReader(sqLiteDataReader, columnOrdinal),
         };
         return dataFieldReader;

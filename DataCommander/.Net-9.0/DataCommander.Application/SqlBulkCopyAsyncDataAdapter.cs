@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
+using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Application;
 

@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Data;
-using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using DataCommander.Api;
 using Foundation.Data;
 using Foundation.Text;
+using Microsoft.Data.Sqlite;
 
 namespace DataCommander.Application.ResultWriter;
 
 internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name) : IResultWriter
 {
-    private SQLiteConnection _connection;
-    private SQLiteTransaction _transaction;
-    private SQLiteCommand _insertCommand;
+    private SqliteConnection _connection;
+    private SqliteTransaction _transaction;
+    private SqliteCommand _insertCommand;
 
     void IResultWriter.Begin(IProvider provider)
     {
@@ -28,12 +28,12 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
     {
         var fileName = Path.GetTempFileName() + ".sqlite";
         messageWriter.WriteLine(fileName);
-        var sb = new SQLiteConnectionStringBuilder
+        var sb = new SqliteConnectionStringBuilder
         {
             DataSource = fileName,
-            DateTimeFormat = SQLiteDateFormats.ISO8601
+            //DateTimeFormat = SQLiteDateFormats.ISO8601
         };
-        _connection = new SQLiteConnection(sb.ConnectionString);
+        _connection = new SqliteConnection(sb.ConnectionString);
         _connection.Open();
     }
 
@@ -49,7 +49,7 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
         var schemaRowCount = schemaRows.Count;
         string insertStatement = null;
         var insertValues = new StringBuilder();
-        _insertCommand = new SQLiteCommand();
+        _insertCommand = new SqliteCommand();
         var st = new StringTable(3);
 
         for (var i = 0; i < schemaRowCount; i++)
@@ -162,7 +162,10 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
                 stringTableRow[2] += ',';
             }
 
-            var parameter = new SQLiteParameter(dbType);
+            var parameter = new SqliteParameter
+            {
+                DbType = dbType
+            };
             _insertCommand.Parameters.Add(parameter);
         }
 

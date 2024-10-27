@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SQLite;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
+using Microsoft.Data.Sqlite;
 
 namespace DataCommander.Providers.SQLite.ObjectExplorer;
 
@@ -31,7 +31,7 @@ internal sealed class TableNode(DatabaseNode databaseNode, string? name) : ITree
     string ITreeNode.Query => $"select\t*\r\nfrom\t{DatabaseNode.Name}.{Name}";
 
     private static string GetScript(
-        SQLiteConnection connection,
+        SqliteConnection connection,
         string? databaseName,
         string? name)
     {

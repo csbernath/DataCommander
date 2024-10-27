@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -13,6 +12,7 @@ using DataCommander.Api.FieldReaders;
 using Foundation.Configuration;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 
 namespace DataCommander.Providers.SQLite;
 
@@ -59,7 +59,6 @@ public sealed class SQLiteProvider : IProvider
             columns.Add("Name", typeof(string));
             columns.Add("Size", typeof(int));
             columns.Add("DbType", typeof(string));
-            columns.Add("ProviderType", typeof(DbType));
             columns.Add("DataType", typeof(Type));
 
             for (var i = 0; i < schemaTable.Rows.Count; i++)
@@ -71,12 +70,9 @@ public sealed class SQLiteProvider : IProvider
                 var pk = string.Empty;
 
                 if (isKey)
-                {
                     pk = "PKEY";
-                }
 
                 var columnSize = dataColumnSchema.ColumnSize;
-                var dbType = (DbType)row["ProviderType"];
                 var allowDbNull = (bool)row["AllowDBNull"];
                 var stringBuilder = new StringBuilder();
 
@@ -93,7 +89,6 @@ public sealed class SQLiteProvider : IProvider
                     row[SchemaTableColumn.ColumnName],
                     columnSize,
                     stringBuilder.ToString(),
-                    dbType,
                     row["DataType"]
                 ]);
             }
@@ -191,16 +186,23 @@ order by name collate nocase";
     {
         var message = e switch
         {
-            SQLiteException sqliteException => $"ErrorCode: {sqliteException.ErrorCode}\r\nMessage: {sqliteException.Message}",
+            SqliteException sqliteException => $"ErrorCode: {sqliteException.ErrorCode}\r\nMessage: {sqliteException.Message}",
             _ => e.ToString(),
         };
         return message;
     }
 
     GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string? tableName) => throw new NotImplementedException();
-    List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
 
-    DbProviderFactory IProvider.DbProviderFactory => SQLiteFactory.Instance;
+    List<InfoMessage> IProvider.ToInfoMessages(Exception e)
+    {
+        return new List<InfoMessage>
+        {
+            InfoMessageFactory.Create(InfoMessageSeverity.Error, string.Empty, e.ToString())
+        };
+    }
+
+    DbProviderFactory IProvider.DbProviderFactory => SqliteFactory.Instance;
 
     string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
     {
@@ -334,7 +336,10 @@ order by name collate nocase";
             var columnSize = columnSchema.ColumnSize;
             var providerType = columnSchema.ProviderType;
             var dbType = (DbType)providerType;
-            var parameter = new SQLiteParameter(dbType);
+            var parameter = new SqliteParameter
+            {
+                DbType = dbType
+            };
             insertCommand.Parameters.Add(parameter);
 
             switch (dataTypeNames[i].ToLower())

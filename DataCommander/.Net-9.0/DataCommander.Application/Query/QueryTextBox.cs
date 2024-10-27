@@ -15,6 +15,7 @@ using Foundation.Core;
 using Foundation.Data.MethodProfiler;
 using Foundation.Linq;
 using Foundation.Text;
+using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Application.Query;
 
