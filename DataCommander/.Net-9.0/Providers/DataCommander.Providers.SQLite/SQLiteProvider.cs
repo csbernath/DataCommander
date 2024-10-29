@@ -295,7 +295,7 @@ order by name collate nocase";
             command.CommandType = CommandType.Text;
 
             using var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly);
-            schemaTable = dataReader.GetSchemaTable();
+            schemaTable = dataReader.GetSchemaTable()!;
             count = dataReader.FieldCount;
             dataTypeNames = new string[count];
 

@@ -9,6 +9,6 @@ public interface IDbConnectionStringBuilder
     bool IsKeywordSupported(string keyword);
 
     void SetValue(string keyword, object? value);
-    bool TryGetValue(string keyword, [MaybeNullWhen(false)] out object value);
+    bool TryGetValue(string keyword, out object? value);
     bool Remove(string keyword);
 }

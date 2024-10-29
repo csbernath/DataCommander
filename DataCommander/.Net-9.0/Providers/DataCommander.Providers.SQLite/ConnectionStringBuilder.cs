@@ -18,7 +18,7 @@ internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
     bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword) => true;
     void IDbConnectionStringBuilder.SetValue(string keyword, object? value) => _sqLiteConnectionStringBuilder[keyword] = value;
 
-    bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value)
+    bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object? value)
     {
         bool contains;
         switch (keyword)
@@ -26,7 +26,7 @@ internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
             case ConnectionStringKeyword.IntegratedSecurity:
                 contains = _sqLiteConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out value);
                 if (contains)
-                    value = bool.Parse((string) value);
+                    value = bool.Parse((string) value!);
 
                 break;
 
