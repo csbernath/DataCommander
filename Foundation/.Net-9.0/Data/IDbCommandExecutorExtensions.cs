@@ -57,13 +57,13 @@ public static class IDbCommandExecutorExtensions
         });
     }
 
-    public static ReadOnlySegmentLinkedList<T>? ExecuteReader<T>(this IDbCommandExecutor executor, ExecuteReaderRequest request, int segmentLength,
+    public static ReadOnlySegmentLinkedList<T> ExecuteReader<T>(this IDbCommandExecutor executor, ExecuteReaderRequest request, int segmentLength,
         Func<IDataRecord, T> readRecord)
     {
-        ArgumentNullException.ThrowIfNull(executor);
+        Assert.IsNotNull(executor);
         ReadOnlySegmentLinkedList<T>? rows = null;
         executor.ExecuteReader(request, dataReader => rows = dataReader.ReadResult(segmentLength, readRecord));
-        return rows;
+        return rows!;
     }
 
     public static DataTable ExecuteDataTable(this IDbCommandExecutor executor, ExecuteReaderRequest request, CancellationToken cancellationToken)
