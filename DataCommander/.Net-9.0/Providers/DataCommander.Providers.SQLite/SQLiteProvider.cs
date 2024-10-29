@@ -177,6 +177,9 @@ order by name collate nocase";
             }
         }
 
+        if (items == null)
+            items = new List<IObjectName>();
+
         return Task.FromResult(new GetCompletionResult(startPosition, length, items, fromCache));
     }
 

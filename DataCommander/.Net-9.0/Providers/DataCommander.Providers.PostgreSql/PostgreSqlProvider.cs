@@ -21,7 +21,7 @@ internal sealed class PostgreSqlProvider : IProvider
 
     string IProvider.Identifier => "PostgreSql";
     DbProviderFactory IProvider.DbProviderFactory => NpgsqlFactory.Instance;
-    string[]? IProvider.KeyWords => null;
+    string[] IProvider.KeyWords => [];
     bool IProvider.CanConvertCommandToString => throw new NotImplementedException();
     bool IProvider.IsCommandCancelable => true;
     public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
@@ -33,10 +33,9 @@ internal sealed class PostgreSqlProvider : IProvider
     IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader) => new PostgreSqlDataReaderHelper((NpgsqlDataReader)dataReader);
 
     void IProvider.CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationconnection,
-        string destinationTableName, out IDbCommand insertCommand, out Converter<object, object>[] converters) => throw new NotImplementedException();
+        string? destinationTableName, out IDbCommand insertCommand, out Converter<object, object>[] converters) => throw new NotImplementedException();
 
     void IProvider.DeriveParameters(IDbCommand command) => throw new NotImplementedException();
-    public Type GetColumnType(FoundationDbColumn dataColumnSchema) => throw new NotImplementedException();
 
     Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema) =>
         // TODO
@@ -333,7 +332,7 @@ order by 1", name.Database);
             new(0, commandText)
         ];
 
-    GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
+    GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string? tableName) => throw new NotImplementedException();
 
     List<InfoMessage> IProvider.ToInfoMessages(Exception e)
     {

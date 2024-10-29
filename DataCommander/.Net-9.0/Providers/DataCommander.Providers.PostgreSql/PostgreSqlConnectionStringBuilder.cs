@@ -26,7 +26,7 @@ internal sealed class PostgreSqlConnectionStringBuilder : IDbConnectionStringBui
         return supportedKeywords.Contains(keyword);
     }
 
-    bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value) => _npgsqlConnectionStringBuilder.TryGetValue(keyword, out value);
+    bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object? value) => _npgsqlConnectionStringBuilder.TryGetValue(keyword, out value);
 
     void IDbConnectionStringBuilder.SetValue(string keyword, object? value) => _npgsqlConnectionStringBuilder[keyword] = value;
 

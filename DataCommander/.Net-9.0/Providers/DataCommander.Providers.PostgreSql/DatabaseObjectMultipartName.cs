@@ -12,7 +12,7 @@ internal sealed class DatabaseObjectMultipartName
 {
     private readonly string? _server;
 
-    public DatabaseObjectMultipartName(string server, string database, string schema, string name)
+    public DatabaseObjectMultipartName(string? server, string? database, string? schema, string? name)
     {
         _server = server;
         Database = database;
@@ -20,7 +20,7 @@ internal sealed class DatabaseObjectMultipartName
         Name = name;
     }
 
-    public DatabaseObjectMultipartName(string currentDatabase, string name)
+    public DatabaseObjectMultipartName(string currentDatabase, string? name)
     {
         if (name != null)
         {

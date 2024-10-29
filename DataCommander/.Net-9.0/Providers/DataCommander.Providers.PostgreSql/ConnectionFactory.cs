@@ -1,10 +1,12 @@
-﻿using DataCommander.Api.Connection;
+﻿using System;
+using DataCommander.Api.Connection;
 using Npgsql;
 
 namespace DataCommander.Providers.PostgreSql;
 
 public static class ConnectionFactory
 {
+    [CLSCompliant(false)]
     public static NpgsqlConnection CreateConnection(ConnectionStringAndCredential connectionStringAndCredential)
     {
         var npgsqlConnectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionStringAndCredential.ConnectionString)
