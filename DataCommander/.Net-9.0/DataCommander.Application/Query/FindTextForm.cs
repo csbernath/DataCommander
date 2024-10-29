@@ -4,13 +4,10 @@ using System.Windows.Forms;
 
 namespace DataCommander.Application.Query;
 
-/// <summary>
-/// Summary description for FindForm.
-/// </summary>
 public class FindTextForm : Form
 {
-    private ComboBox _cbText;
-    private Button _btnOk;
+    private ComboBox? _cbText;
+    private Button? _btnOk;
     private Button _btnCancel;
     private Label _label1;
     private CheckBox _cbMatchCase;
@@ -19,11 +16,8 @@ public class FindTextForm : Form
     /// <summary>
     /// Required designer variable.
     /// </summary>
-    private readonly Container _components = null;
+    private readonly Container? _components = null;
 
-    /// <summary>
-    /// 
-    /// </summary>
     public FindTextForm()
     {
         //

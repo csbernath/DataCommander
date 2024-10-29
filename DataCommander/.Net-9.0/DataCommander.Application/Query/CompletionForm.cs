@@ -11,10 +11,10 @@ internal sealed class CompletionForm : Form
     /// <summary>
     /// Required designer variable.
     /// </summary>
-    private readonly Container _components = null;
+    private readonly Container? _components = null;
 
     private readonly QueryForm _queryForm;
-    private EventHandler<ItemSelectedEventArgs> _itemSelectedEvent;
+    private EventHandler<ItemSelectedEventArgs>? _itemSelectedEvent;
 
     public CompletionForm(QueryForm queryForm)
     {

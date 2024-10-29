@@ -43,7 +43,7 @@ internal sealed class PostgreSqlProvider : IProvider
 
     string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName) => throw new NotImplementedException();
 
-    public async Task<GetCompletionResult> GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position,
+    public Task<GetCompletionResult> GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position,
         CancellationToken cancellationToken)
     {
         List<IObjectName>? array = null;
@@ -112,12 +112,12 @@ internal sealed class PostgreSqlProvider : IProvider
                     case SqlObjectTypes.Table | SqlObjectTypes.View:
                     case SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function:
                     {
-                        name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
-                            var nameParts = sqlObject.Name != null
+                        name = new DatabaseObjectMultipartName(connection.Database!, sqlObject.Name);
+                        var nameParts = sqlObject.Name != null
                             ? new IdentifierParser(new StringReader(sqlObject.Name)).Parse().ToList()
                             : null;
-                            var namePartsCount = nameParts != null ? nameParts.Count : 0;
-                            List<string> statements = [];
+                        var namePartsCount = nameParts != null ? nameParts.Count : 0;
+                        List<string> statements = [];
 
                         switch (namePartsCount)
                         {
@@ -133,22 +133,22 @@ internal sealed class PostgreSqlProvider : IProvider
                                 break;
 
                             case 2:
-                                if (nameParts[0] != null)
+                                if (nameParts![0] != null)
                                 {
-                                        // TODO statements.Add(SqlServerObject.GetSchemas(database: nameParts[0]));
+                                    // TODO statements.Add(SqlServerObject.GetSchemas(database: nameParts[0]));
 
-                                        var objectTypes = sqlObject.Type.ToTableTypes();
-                                    statements.Add(SqlServerObject.GetTables(schema: nameParts[0], tableTypes: objectTypes));
+                                    var objectTypes = sqlObject.Type.ToTableTypes();
+                                    statements.Add(SqlServerObject.GetTables(schema: nameParts[0]!, tableTypes: objectTypes));
                                 }
 
                                 break;
 
                             case 3:
                             {
-                                if (nameParts[0] != null && nameParts[1] != null)
+                                if (nameParts![0] != null && nameParts[1] != null)
                                 {
-                                            var objectTypes = sqlObject.Type.ToObjectTypes();
-                                    statements.Add(SqlServerObject.GetObjects(database: nameParts[0], schema: nameParts[1], objectTypes: objectTypes));
+                                    var objectTypes = sqlObject.Type.ToObjectTypes();
+                                    statements.Add(SqlServerObject.GetObjects(database: nameParts[0]!, schema: nameParts[1]!, objectTypes: objectTypes));
                                 }
                             }
                                 break;
@@ -159,7 +159,7 @@ internal sealed class PostgreSqlProvider : IProvider
                         break;
 
                     case SqlObjectTypes.Column:
-                        name = new DatabaseObjectMultipartName(connection.Database, sqlObject.ParentName);
+                        name = new DatabaseObjectMultipartName(connection.Database!, sqlObject.ParentName);
                         string[] owners;
 
                         if (name.Schema != null)
@@ -191,7 +191,7 @@ order by c.ordinal_position";
                         break;
 
                     case SqlObjectTypes.Procedure:
-                        name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
+                        name = new DatabaseObjectMultipartName(connection.Database!, sqlObject.Name);
 
                         if (name.Schema == null)
                             name.Schema = "dbo";
@@ -227,7 +227,7 @@ order by 1", name.Database);
                             if (contains)
                             {
                                 string? where;
-                                var tokenIndex = previousToken.Index + 1;
+                                var tokenIndex = previousToken!.Index + 1;
                                 if (tokenIndex < tokens.Count)
                                 {
                                     var token = tokens[tokenIndex];
@@ -304,7 +304,7 @@ order by 1", name.Database);
                                     objectName = dataReader.GetString(1);
                                 }
 
-                                list.Add(new ObjectName(sqlObject, schemaName, objectName));
+                                list.Add(new ObjectName(sqlObject!, schemaName!, objectName));
                             }
 
                             if (!dataReader.NextResult())
@@ -320,7 +320,7 @@ order by 1", name.Database);
             }
         }
 
-        return new GetCompletionResult(startPosition, length, array, false);
+        return Task.FromResult(new GetCompletionResult(startPosition, length, array, false));
     }
 
     DataParameterBase IProvider.GetDataParameter(IDataParameter parameter) => throw new NotImplementedException();
@@ -328,9 +328,10 @@ order by 1", name.Database);
     DataTable IProvider.GetParameterTable(IDataParameterCollection parameters) => throw new NotImplementedException();
     DataTable IProvider.GetSchemaTable(IDataReader dataReader) => throw new NotImplementedException();
 
-    List<Statement> IProvider.GetStatements(string commandText) => [
-            new(0, commandText)
-        ];
+    List<Statement> IProvider.GetStatements(string commandText) =>
+    [
+        new(0, commandText)
+    ];
 
     GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string? tableName) => throw new NotImplementedException();
 

@@ -17,7 +17,7 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
     private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage, false);
     private int[]? _columnSize;
     private int _rowIndex;
-    private IProvider _provider;
+    private IProvider? _provider;
 
     void IResultWriter.Begin(IProvider provider)
     {

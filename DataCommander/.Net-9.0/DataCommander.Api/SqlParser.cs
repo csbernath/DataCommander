@@ -240,7 +240,7 @@ public sealed class SqlParser
         return sqlObject;
     }
 
-    public SqlObject? FindSqlObject(Token previousToken, Token? currentToken)
+    public SqlObject? FindSqlObject(Token? previousToken, Token? currentToken)
     {
         SqlObject? sqlObject = null;
         if (previousToken != null)

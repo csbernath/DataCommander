@@ -20,14 +20,14 @@ namespace DataCommander.Application.Connection;
 
 internal partial class ConnectionStringBuilderForm : Form
 {
-    private string _selectedProviderName;
-    private ConnectionInfo _connectionInfo;
+    private string? _selectedProviderName;
+    private ConnectionInfo? _connectionInfo;
     private bool _passwordChanged;
     private readonly ReadOnlyCollection<ProviderInfo> _providers;
-    private DbProviderFactory _dbProviderFactory;
-    private DataTable _dataSources;
+    private DbProviderFactory? _dbProviderFactory;
+    private DataTable? _dataSources;
     private List<string>? _initialCatalogs;
-    private List<OleDbProviderInfo> _oleDbProviders;
+    private List<OleDbProviderInfo>? _oleDbProviders;
     private readonly ColorTheme _colorTheme;
 
     public ConnectionStringBuilderForm(ColorTheme colorTheme)
@@ -50,7 +50,7 @@ internal partial class ConnectionStringBuilderForm : Form
             providersComboBox.Items.Add(provider.Name);
     }
 
-    public ConnectionInfo ConnectionInfo
+    public ConnectionInfo? ConnectionInfo
     {
         get => _connectionInfo;
 

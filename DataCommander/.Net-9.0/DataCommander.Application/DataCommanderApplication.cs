@@ -13,7 +13,7 @@ namespace DataCommander.Application;
 public sealed class DataCommanderApplication
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-    private string _sectionName;
+    private string? _sectionName;
     private readonly bool _updaterStarted = false;
 
     private DataCommanderApplication()
@@ -38,7 +38,7 @@ public sealed class DataCommanderApplication
 
     public string? ApplicationDataFileName { get; private set; }
 
-    public MainForm MainForm { get; private set; }
+    public MainForm? MainForm { get; private set; }
 
     public void Run()
     {
@@ -56,9 +56,8 @@ public sealed class DataCommanderApplication
     public void SaveApplicationData()
     {
         var tempFileName = ApplicationDataFileName + ".temp";
-        ApplicationData.Save(tempFileName, _sectionName);
-        var succeeded = NativeMethods.MoveFileEx(tempFileName, ApplicationDataFileName,
-            NativeMethods.MoveFileExFlags.ReplaceExisiting);
+        ApplicationData.Save(tempFileName, _sectionName!);
+        var succeeded = NativeMethods.MoveFileEx(tempFileName, ApplicationDataFileName!, NativeMethods.MoveFileExFlags.ReplaceExisiting);
         Log.Write(LogLevel.Trace, "MoveFileEx succeeded: {0}", succeeded);
     }
 
@@ -71,8 +70,8 @@ public sealed class DataCommanderApplication
 
     private static Assembly Default_Resolving(AssemblyLoadContext assemblyLoadContext, AssemblyName assemblyName)
     {
-        var location = Assembly.GetEntryAssembly().Location;
-        var directory = Path.GetDirectoryName(location);
+        var location = Assembly.GetEntryAssembly()!.Location;
+        var directory = Path.GetDirectoryName(location)!;
         //var assemblyPath = Path.Combine(Environment.CurrentDirectory, $"{assemblyName.Name}.dll");
         var assemblyPath = Path.Combine(directory, $"{assemblyName.Name}.dll");
         var assembly = assemblyLoadContext.LoadFromAssemblyPath(assemblyPath);
@@ -82,7 +81,7 @@ public sealed class DataCommanderApplication
     private static void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
     {
         Log.Write(LogLevel.Trace, "Reason: {0}", e.Reason);
-        var mainForm = Instance.MainForm;
+        var mainForm = Instance.MainForm!;
         mainForm.SaveAll();
     }
 }

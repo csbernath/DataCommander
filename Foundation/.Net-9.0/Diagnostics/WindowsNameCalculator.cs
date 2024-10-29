@@ -2,7 +2,7 @@
 
 public static class WindowsNameCalculator
 {
-    public static string GetWindowsNameFromBuildNumber(int buildNumber, string editionId, string displayVersion)
+    public static string GetWindowsNameFromBuildNumber(int buildNumber, string? editionId, string? displayVersion)
     {
         var productName = GetProductName(buildNumber);
         var windowsName = $"Windows {productName} {editionId} version {displayVersion}";

@@ -22,9 +22,9 @@ internal sealed class ConnectionListForm : Form
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private readonly List<ConnectionInfo> _connectionInfos;
-    private ConnectionBase _connection;
-    private Button _btnOk;
+    private ConnectionBase? _connection;
     private DoubleBufferedDataGridView? _dataGrid;
+    private Button? _btnOk;    
     private Button _btnCancel;
     private Button _newButton;
     private readonly DataTable _dataTable = new();

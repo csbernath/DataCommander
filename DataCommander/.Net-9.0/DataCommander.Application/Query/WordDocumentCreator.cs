@@ -26,7 +26,7 @@ internal static class WordDocumentCreator
         var numOfRows = dataTable.Rows.Count + 1;
         var numOfColumns = Math.Min(dataTable.Columns.Count, 63);
 
-        string text = null;
+        string? text = null;
         const string separator = "\t";
 
         for (var i = 0; i < numOfColumns - 1; i++)

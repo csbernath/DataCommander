@@ -98,25 +98,32 @@ Credits:
             string? url = null;
             var exists = false;
 
-            if (e.Url.Scheme == "applicationdatafile")
+            switch (e.Url!.Scheme)
             {
-                var applicationDataFileName = DataCommanderApplication.Instance.ApplicationDataFileName;
-                exists = true;
-                url = applicationDataFileName;
-            }
-            else if (e.Url.Scheme == "logfile")
-            {
-                var logFileName = LogFactory.Instance.FileName;
-                if (logFileName != null)
+                case "applicationdatafile":
+                {
+                    var applicationDataFileName = DataCommanderApplication.Instance.ApplicationDataFileName;
+                    exists = true;
+                    url = applicationDataFileName;
+                    break;
+                }
+                case "logfile":
+                {
+                    var logFileName = LogFactory.Instance.FileName;
+                    if (logFileName != null)
+                    {
+                        exists = true;
+                        url = logFileName;
+                    }
+
+                    break;
+                }
+                default:
                 {
                     exists = true;
-                    url = logFileName;
+                    url = e.Url.ToString();
+                    break;
                 }
-            }
-            else
-            {
-                exists = true;
-                url = e.Url.ToString();
             }
 
             if (exists)

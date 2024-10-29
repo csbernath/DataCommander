@@ -3,15 +3,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
+using Foundation.Assertions;
 using Npgsql;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
 internal sealed class ObjectExplorer : IObjectExplorer
 {
-    private ConnectionStringAndCredential _connectionStringAndCredential;
+    private ConnectionStringAndCredential? _connectionStringAndCredential;
     
-    public NpgsqlConnection CreateConnection() => ConnectionFactory.CreateConnection(_connectionStringAndCredential);    
+    public NpgsqlConnection CreateConnection() => ConnectionFactory.CreateConnection(_connectionStringAndCredential!);
 
     public void SetConnection(ConnectionStringAndCredential connectionStringAndCredential) =>
         _connectionStringAndCredential = connectionStringAndCredential;

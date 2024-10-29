@@ -11,11 +11,11 @@ public static class ProviderFactory
     public static IProvider CreateProvider(string providerIdentifier)
     {
         ArgumentNullException.ThrowIfNull(providerIdentifier);
-        var folder = Settings.SelectNode("DataCommander/Providers", true);
+        var folder = Settings.SelectNode("DataCommander/Providers", true)!;
         folder = folder.ChildNodes[providerIdentifier];
         var attributes = folder.Attributes;
-        var typeName = attributes["TypeName"].GetValue<string>();
-        var type = Type.GetType(typeName, true);
+        var typeName = attributes["TypeName"].GetValue<string>()!;
+        var type = Type.GetType(typeName, true)!;
         var instance = Activator.CreateInstance(type);
         ArgumentNullException.ThrowIfNull(instance);
         Assert.IsTrue(instance is IProvider);

@@ -21,9 +21,10 @@ order by table_name";
 
     public static string GetObjects(string schema, IEnumerable<string> objectTypes)
     {
-        Assert.IsTrue(!schema.IsNullOrWhiteSpace());
-        Assert.IsTrue(objectTypes != null && objectTypes.Any());
-            
+        Assert.IsNotWhiteSpace(schema);
+        Assert.IsNotNull(objectTypes);
+        Assert.IsTrue(objectTypes.Any());
+        var enumerable = objectTypes.Select(o => o.ToNullableVarChar());
         return
             $@"declare @schema_id int
 
@@ -38,8 +39,7 @@ begin
     from sys.all_objects o (nolock)
     where
         o.schema_id = @schema_id
-        and o.type in({
-            string.Join(",", objectTypes.Select(o => o.ToNullableVarChar()))})
+        and o.type in({string.Join(",", enumerable)})
     order by o.name
 end";
     }
@@ -51,7 +51,8 @@ end";
     {
         Assert.IsTrue(!database.IsNullOrWhiteSpace());
         Assert.IsTrue(!schema.IsNullOrWhiteSpace());
-        Assert.IsTrue(objectTypes != null && objectTypes.Any());
+        Assert.IsNotNull(objectTypes);
+        Assert.IsTrue(objectTypes.Any());
 
         return string.Format(@"if exists(select * from sys.databases (nolock) where name = '{0}')
 begin

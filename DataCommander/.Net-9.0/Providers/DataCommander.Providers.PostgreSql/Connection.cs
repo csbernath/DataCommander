@@ -9,7 +9,7 @@ namespace DataCommander.Providers.PostgreSql;
 internal sealed class Connection : ConnectionBase
 {
     private readonly ConnectionStringAndCredential _connectionStringAndCredential;
-    private NpgsqlConnection _npgsqlConnection;
+    private NpgsqlConnection? _npgsqlConnection;
 
     public Connection(ConnectionStringAndCredential connectionStringAndCredential)
     {
@@ -17,10 +17,10 @@ internal sealed class Connection : ConnectionBase
         CreateConnection();
     }
 
-    public override Task OpenAsync(CancellationToken cancellationToken) => _npgsqlConnection.OpenAsync(cancellationToken);
-    public override DbCommand CreateCommand() => _npgsqlConnection.CreateCommand();
-    public override string DataSource => _npgsqlConnection.DataSource;
-    public override string ServerVersion => _npgsqlConnection.ServerVersion;
+    public override Task OpenAsync(CancellationToken cancellationToken) => _npgsqlConnection!.OpenAsync(cancellationToken);
+    public override DbCommand CreateCommand() => _npgsqlConnection!.CreateCommand();
+    public override string DataSource => _npgsqlConnection!.DataSource;
+    public override string ServerVersion => _npgsqlConnection!.ServerVersion;
 
     public override string? ConnectionInformation => null;
 

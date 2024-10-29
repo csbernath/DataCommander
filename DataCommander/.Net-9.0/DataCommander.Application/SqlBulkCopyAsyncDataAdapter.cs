@@ -15,13 +15,13 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
     private readonly SqlBulkCopy _sqlBulkCopy;
     private long _rowCount;
     private bool _cancelRequested;
-    private IDbCommand _command;
-    private readonly IProvider _provider;
-    private readonly IEnumerable<AsyncDataAdapterCommand> _commands;
+    private IDbCommand? _command;
+    private readonly IProvider? _provider;
+    private readonly IEnumerable<AsyncDataAdapterCommand>? _commands;
     private readonly int _maxRecords;
     private readonly int _rowBlockSize;
-    private readonly IResultWriter _resultWriter;
-    private readonly Action<IAsyncDataAdapter, Exception> _endFill;
+    private readonly IResultWriter? _resultWriter;
+    private readonly Action<IAsyncDataAdapter, Exception>? _endFill;
     private readonly Action<IAsyncDataAdapter> _writeEnd;
 
     public SqlBulkCopyAsyncDataAdapter(SqlConnection destinationConnection, SqlTransaction destionationTransaction, string destinationTableName,
