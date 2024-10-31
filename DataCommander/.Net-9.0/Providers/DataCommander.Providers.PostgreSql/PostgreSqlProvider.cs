@@ -160,16 +160,9 @@ internal sealed class PostgreSqlProvider : IProvider
 
                     case SqlObjectTypes.Column:
                         name = new DatabaseObjectMultipartName(connection.Database!, sqlObject.ParentName);
-                        string[] owners;
-
-                        if (name.Schema != null)
-                        {
-                            owners = [name.Schema];
-                        }
-                        else
-                        {
-                            owners = ["dbo", "sys"];
-                        }
+                        string[] owners = name.Schema != null
+                            ? [name.Schema]
+                            : ["dbo", "sys"];
 
                         var sb = new StringBuilder();
                         for (i = 0; i < owners.Length; i++)
@@ -320,7 +313,7 @@ order by 1", name.Database);
             }
         }
 
-        return Task.FromResult(new GetCompletionResult(startPosition, length, array, false));
+        return Task.FromResult(new GetCompletionResult(startPosition, length, array!, false));
     }
 
     DataParameterBase IProvider.GetDataParameter(IDataParameter parameter) => throw new NotImplementedException();

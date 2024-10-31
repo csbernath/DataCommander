@@ -28,7 +28,7 @@ internal sealed class TableNode(DatabaseNode databaseNode, string? name) : ITree
     
     bool ITreeNode.Sortable => false;
 
-    string ITreeNode.Query => $"select\t*\r\nfrom\t{DatabaseNode.Name}.{Name}";
+    string? ITreeNode.Query => $"select\t*\r\nfrom\t{DatabaseNode.Name}.{Name}";
 
     private static string GetScript(
         SqliteConnection connection,

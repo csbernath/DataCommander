@@ -13,7 +13,7 @@ internal sealed class ExtendedStoreProcedureNode(DatabaseNode database, string s
     string? ITreeNode.Name => $"{schema}.{name}";
     bool ITreeNode.IsLeaf => true;
     bool ITreeNode.Sortable => false;
-    string ITreeNode.Query => null;
+    string? ITreeNode.Query => null;
     public ContextMenu? GetContextMenu() => null;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => throw new NotSupportedException();

@@ -49,7 +49,7 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
     }
 
     public bool Sortable => false;
-    string ITreeNode.Query => null;
+    string? ITreeNode.Query => null;
 
     public ContextMenu? GetContextMenu()
     {

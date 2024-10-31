@@ -61,7 +61,7 @@ internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : 
                 }
             },
             cancellationToken);
-        return columnNodes.Values;
+        return columnNodes!.Values;
     }
 
     private string CreateCommandText()
@@ -104,6 +104,6 @@ order by fkc.parent_column_id";
     }
 
     bool ITreeNode.Sortable => false;
-    string ITreeNode.Query => null;
+    string? ITreeNode.Query => null;
     public ContextMenu? GetContextMenu() => null;
 }

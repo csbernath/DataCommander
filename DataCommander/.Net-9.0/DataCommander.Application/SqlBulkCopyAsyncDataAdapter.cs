@@ -66,7 +66,7 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
         Exception exception = null;
         try
         {
-            foreach (var command in _commands)
+            foreach (var command in _commands!)
             {
                 if (_cancelRequested)
                 {
@@ -84,7 +84,7 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
         }
 
         _writeEnd(this);
-        _endFill(this, exception);
+        _endFill!(this, exception!);
     }
 
     private void CancelCommand() => _command.Cancel();

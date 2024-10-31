@@ -6,7 +6,7 @@ namespace DataCommander.Providers.SqlServer;
 
 internal sealed class IdentifierParser(TextReader textReader)
 {
-    public IEnumerable<string> Parse()
+    public IEnumerable<string?> Parse()
     {
         var peekChar = default(char);
 

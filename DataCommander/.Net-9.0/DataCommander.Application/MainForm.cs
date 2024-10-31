@@ -88,8 +88,8 @@ public class MainForm : Form
 
         Text = "Data Commander";
 
-        _helpButton.Click += HelpButton_Click;
-        _mnuAbout.Click += mnuAbout_Click;
+        _helpButton!.Click += HelpButton_Click;
+        _mnuAbout!.Click += mnuAbout_Click;
 
         //
         // TODO: Add any constructor code after InitializeComponent call

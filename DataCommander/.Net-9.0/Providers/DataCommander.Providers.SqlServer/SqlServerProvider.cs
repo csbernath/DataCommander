@@ -26,9 +26,12 @@ namespace DataCommander.Providers.SqlServer;
 
 internal sealed class SqlServerProvider : IProvider
 {
+    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static string[]? _keyWords;
+    
     static SqlServerProvider()
     {
-        var configurationNode = Settings.CurrentType;
+        var configurationNode = Settings.CurrentType!;
         ShortStringSize = configurationNode.Attributes["ShortStringSize"].GetValue<int>();
     }
 
@@ -53,9 +56,6 @@ internal sealed class SqlServerProvider : IProvider
 
         return messages;
     }
-
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-    private static string[] _keyWords;
 
     string IProvider.Identifier => ProviderIdentifier.SqlServer;
     DbProviderFactory IProvider.DbProviderFactory => SqlClientFactory.Instance;

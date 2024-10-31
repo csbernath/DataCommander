@@ -62,7 +62,7 @@ order by d.name";
     }
 
     bool ITreeNode.Sortable => false;
-    string ITreeNode.Query => null;
+    string? ITreeNode.Query => null;
 
     public ContextMenu? GetContextMenu() => null;
 }

@@ -7,19 +7,21 @@ using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api.Connection;
+using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Core.ClockAggregate;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 using Microsoft.Data.SqlClient;
+using Microsoft.Identity.Client;
 
 namespace DataCommander.Providers.SqlServer;
 
 internal sealed class Connection : ConnectionBase
 {
     private readonly ConnectionStringAndCredential _connectionStringAndCredential;
-    private SqlConnection _sqlConnection;
-    private string _serverName;
+    private SqlConnection? _sqlConnection;
+    private string? _serverName;
     private short _serverProcessId;
 
     public Connection(ConnectionStringAndCredential connectionStringAndCredential)
@@ -28,19 +30,20 @@ internal sealed class Connection : ConnectionBase
         CreateConnection();
     }
 
-    public override string DataSource => _sqlConnection.DataSource;
-    public override string ServerVersion => _sqlConnection.ServerVersion;
+    public override string DataSource => _sqlConnection!.DataSource!;
+    public override string ServerVersion => _sqlConnection!.ServerVersion!;
 
-    public override string? ConnectionInformation
+    public override string ConnectionInformation
     {
         get
         {
+            Assert.IsNotNull(_sqlConnection);
             var executor = _sqlConnection.CreateCommandExecutor();
             var commandText = "select @@version";
-            var version = (string)executor.ExecuteScalar(new CreateCommandRequest(commandText));
+            var version = (string)executor.ExecuteScalar(new CreateCommandRequest(commandText))!;
             var serverVersion = _sqlConnection.ServerVersion;
             var contains = SqlServerVersionInfoRepository.TryGetByVersion(serverVersion, out var sqlServerVersionInfo);
-            var description = contains ? sqlServerVersionInfo.Name : null;
+            var description = contains ? sqlServerVersionInfo!.Name : null;
             return @$"Server name: {_serverName}
 {version}
 {description}";
@@ -49,9 +52,9 @@ internal sealed class Connection : ConnectionBase
 
     public override async Task<int> GetTransactionCountAsync(CancellationToken cancellationToken)
     {
-        var executor = _sqlConnection.CreateCommandAsyncExecutor();
+        var executor = _sqlConnection!.CreateCommandAsyncExecutor();
         var scalar = await executor.ExecuteScalarAsync(new CreateCommandRequest("select @@trancount"), cancellationToken);
-        var transactionCount = (int)scalar;
+        var transactionCount = (int)scalar!;
         return transactionCount;
     }
 
@@ -84,6 +87,7 @@ internal sealed class Connection : ConnectionBase
 
     public override async Task OpenAsync(CancellationToken cancellationToken)
     {
+        Assert.IsNotNull(_sqlConnection);
         await _sqlConnection.OpenAsync(cancellationToken);
 
         if (!cancellationToken.IsCancellationRequested)
