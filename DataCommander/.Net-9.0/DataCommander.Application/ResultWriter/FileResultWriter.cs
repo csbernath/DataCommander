@@ -164,19 +164,19 @@ internal sealed class FileResultWriter : IResultWriter
             var row = rows[i];
             for (var j = 0; j < row.Length; j++)
             {
-                var s = _dataWriters[j].ToString(row[j]);
+                var s = _dataWriters![j].ToString(row[j]);
                 stringBuilder.Append(s);
             }
 
             stringBuilder.Append("\r\n");
         }
 
-        _streamWriter.Write(stringBuilder);
+        _streamWriter!.Write(stringBuilder);
     }
 
     public void WriteTableEnd()
     {
-        _streamWriter.Close();
+        _streamWriter!.Close();
         _streamWriter = null;
         _dataWriters = null;
     }

@@ -16,5 +16,5 @@ internal sealed class SqlConnectionFactory : IDbConnectionHelper
         _connection = connection;
     }
 
-    private void InfoMessageEvent(object sender, SqlInfoMessageEventArgs e) => InfoMessage?.Invoke(_connection, e);
+    private void InfoMessageEvent(object? sender, SqlInfoMessageEventArgs e) => InfoMessage?.Invoke(_connection, e);
 }

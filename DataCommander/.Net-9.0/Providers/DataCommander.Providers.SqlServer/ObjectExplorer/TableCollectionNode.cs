@@ -78,7 +78,7 @@ order by 1,2";
     }
 
     public bool Sortable => false;
-    public string Query => null;
+    public string? Query => null;
 
     public ContextMenu? GetContextMenu() => null;
 }

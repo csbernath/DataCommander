@@ -117,7 +117,7 @@ public sealed partial class CancelableOperationForm : Form, ICancelableOperation
         return text;
     }
 
-    private void CancelButton_Click(object sender, EventArgs e)
+    private void CancelButton_Click(object? sender, EventArgs e)
     {
         cancelButton.Enabled = false;
         textBox.AppendText("\r\nCanceling operation...");

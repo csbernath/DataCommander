@@ -29,7 +29,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
 
         if (colorTheme != null)
         {
-            ListBox.ForeColor = colorTheme.ForeColor;
+            ListBox!.ForeColor = colorTheme.ForeColor;
             ListBox.BackColor = colorTheme.BackColor;
         }
     }
@@ -92,18 +92,18 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
     /// </summary>
     private void InitializeComponent()
     {
-        ListBox = new System.Windows.Forms.ListBox();
+        ListBox = new ListBox();
         SuspendLayout();
         // 
         // listBox
         // 
-        ListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+        ListBox.Dock = DockStyle.Fill;
         ListBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point,
-            ((System.Byte)(238)));
+            ((Byte)(238)));
         ListBox.Name = "ListBox";
         ListBox.Size = new System.Drawing.Size(180, 134);
         ListBox.TabIndex = 0;
-        ListBox.DoubleClick += new System.EventHandler(ListBox_DoubleClick);
+        ListBox.DoubleClick += new EventHandler(ListBox_DoubleClick);
         // 
         // MemberListBox
         // 
@@ -120,7 +120,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
     private void Close()
     {
         _textBox.KeyboardHandler = null;
-        var form = (Form)Parent;
+        var form = (Form)Parent!;
         form.Controls.Remove(this);
         form.Close();
     }
@@ -163,7 +163,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
         }
     }
 
-    private void ListBox_DoubleClick(object sender, EventArgs e)
+    private void ListBox_DoubleClick(object? sender, EventArgs e)
     {
         SelectItem();
         Close();

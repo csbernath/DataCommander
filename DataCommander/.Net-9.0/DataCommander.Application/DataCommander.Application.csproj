@@ -8,6 +8,10 @@
     <NoWarn>$(NoWarn);WFO1000</NoWarn>    
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <WarningsAsErrors>;NU1605;SYSLIB0011;CS8602</WarningsAsErrors>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="ADODB" Version="7.10.3077" />
     <PackageReference Include="EPPlus" Version="7.3.1" />

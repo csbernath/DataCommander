@@ -57,7 +57,7 @@ internal partial class ConnectionStringBuilderForm : Form
         set
         {
             _connectionInfo = value;
-            connectionNameTextBox.Text = _connectionInfo.ConnectionName;
+            connectionNameTextBox.Text = _connectionInfo!.ConnectionName;
             var providerIdentifier = _connectionInfo.ProviderIdentifier;
             var index = _providers.IndexOf(i => i.Identifier == providerIdentifier);
             providersComboBox.SelectedIndex = index;
@@ -107,7 +107,7 @@ internal partial class ConnectionStringBuilderForm : Form
         }
     }
 
-    private void providersComboBox_SelectedIndexChanged(object sender, EventArgs e)
+    private void providersComboBox_SelectedIndexChanged(object? sender, EventArgs e)
     {
         try
         {
@@ -153,7 +153,7 @@ internal partial class ConnectionStringBuilderForm : Form
         if (!contains || refresh)
         {
             Cursor = Cursors.WaitCursor;
-            var dbDataSourceEnumerator = _dbProviderFactory.CreateDataSourceEnumerator();
+            var dbDataSourceEnumerator = _dbProviderFactory!.CreateDataSourceEnumerator();
 
             if (dbDataSourceEnumerator != null)
             {
@@ -197,12 +197,12 @@ internal partial class ConnectionStringBuilderForm : Form
         }
     }
 
-    private void dataSourcesComboBox_SelectedIndexChanged(object sender, EventArgs e)
+    private void dataSourcesComboBox_SelectedIndexChanged(object? sender, EventArgs e)
     {
         var dataSource = dataSourcesComboBox.Text;
     }
 
-    private void refreshButton_Click(object sender, EventArgs e)
+    private void refreshButton_Click(object? sender, EventArgs e)
     {
         var provider = providersComboBox.Text;
 
@@ -210,7 +210,7 @@ internal partial class ConnectionStringBuilderForm : Form
             GetDataSources(true);
     }
 
-    private void dataSourcesComboBox_DropDown(object sender, EventArgs e)
+    private void dataSourcesComboBox_DropDown(object? sender, EventArgs e)
     {
         if (_dataSources == null)
         {
@@ -229,7 +229,7 @@ internal partial class ConnectionStringBuilderForm : Form
         return connection;
     }
 
-    private void initialCatalogComboBox_DropDown(object sender, EventArgs e)
+    private void initialCatalogComboBox_DropDown(object? sender, EventArgs e)
     {
         var dataSource = dataSourcesComboBox.Text;
 
@@ -237,7 +237,7 @@ internal partial class ConnectionStringBuilderForm : Form
         {
             try
             {
-                using var connection = CreateConnection().Connection;
+                using var connection = CreateConnection().Connection!;
                 connection.Open();
                 var schema = connection.GetSchema("Databases");
                 _initialCatalogs = [];
@@ -255,7 +255,7 @@ internal partial class ConnectionStringBuilderForm : Form
             }
             catch (Exception ex)
             {
-                DataCommanderApplication.Instance.MainForm.StatusBar.Items[0].Text = ex.Message;
+                DataCommanderApplication.Instance.MainForm!.StatusBar.Items[0].Text = ex.Message;
             }
             finally
             {
@@ -264,7 +264,7 @@ internal partial class ConnectionStringBuilderForm : Form
         }
     }
 
-    private void OK_Click(object sender, EventArgs e)
+    private void OK_Click(object? sender, EventArgs e)
     {
         _connectionInfo = SaveDialogToConnectionInfo();
         DialogResult = DialogResult.OK;
@@ -330,7 +330,7 @@ internal partial class ConnectionStringBuilderForm : Form
         return new ConnectionStringAndCredential(dbConnectionStringBuilder.ConnectionString, credential);
     }
 
-    private void testButton_Click(object sender, EventArgs e)
+    private void testButton_Click(object? sender, EventArgs e)
     {
         try
         {
@@ -377,14 +377,14 @@ Provider name: {providerInfo.Name}
         }
     }
 
-    private void integratedSecurityCheckBox_CheckedChanged(object sender, EventArgs e)
+    private void integratedSecurityCheckBox_CheckedChanged(object? sender, EventArgs e)
     {
         var integratedSecurity = integratedSecurityCheckBox.Checked;
         userIdTextBox.Enabled = !integratedSecurity;
         passwordTextBox.Enabled = !integratedSecurity;
     }
 
-    private void passwordTextBox_TextChanged(object sender, EventArgs e) => _passwordChanged = true;
+    private void passwordTextBox_TextChanged(object? sender, EventArgs e) => _passwordChanged = true;
 
     private sealed class OleDbProviderInfo(string name)
     {

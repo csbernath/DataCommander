@@ -30,7 +30,7 @@ namespace DataCommander.Application.Query;
 
 public sealed partial class QueryForm
 {
-    private void CloseResultSetTabPage_Click(object sender, EventArgs e)
+    private void CloseResultSetTabPage_Click(object? sender, EventArgs e)
     {
         var toolStripMenuItem = (ToolStripMenuItem)sender;
         var tabPage = (TabPage)toolStripMenuItem.Tag!;
@@ -38,7 +38,7 @@ public sealed partial class QueryForm
         toolStripMenuItem.Tag = null;
     }
 
-    private void EditRows_Click(object sender, EventArgs e) => EditRows(Query);
+    private void EditRows_Click(object? sender, EventArgs e) => EditRows(Query);
     private void Timer_Tick(object o, EventArgs e) => Invoke(ShowTimer);
 
     protected override void OnFormClosing(FormClosingEventArgs formClosingEventArgs)
@@ -63,36 +63,36 @@ public sealed partial class QueryForm
         }
     }
 
-    private void mnuText_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.Text);
-    private void mnuDataGrid_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.DataGrid);
-    private void mnuHtml_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.Html);
-    private void mnuRtf_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.Rtf);
-    private void mnuListView_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.ListView);
-    private void mnuExcel_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.Excel);
-    private void menuResultModeFile_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.File);
+    private void mnuText_Click(object? sender, EventArgs e) => SetResultWriterType(ResultWriterType.Text);
+    private void mnuDataGrid_Click(object? sender, EventArgs e) => SetResultWriterType(ResultWriterType.DataGrid);
+    private void mnuHtml_Click(object? sender, EventArgs e) => SetResultWriterType(ResultWriterType.Html);
+    private void mnuRtf_Click(object? sender, EventArgs e) => SetResultWriterType(ResultWriterType.Rtf);
+    private void mnuListView_Click(object? sender, EventArgs e) => SetResultWriterType(ResultWriterType.ListView);
+    private void mnuExcel_Click(object? sender, EventArgs e) => SetResultWriterType(ResultWriterType.Excel);
+    private void menuResultModeFile_Click(object? sender, EventArgs e) => SetResultWriterType(ResultWriterType.File);
 
-    private void mnuCommandTypeText_Click(object sender, EventArgs e)
+    private void mnuCommandTypeText_Click(object? sender, EventArgs e)
     {
         _mnuCommandTypeText.Checked = true;
         _mnuCommandTypeStoredProcedure.Checked = false;
         _commandType = CommandType.Text;
     }
 
-    private void mnuCommandTypeStoredProcedure_Click(object sender, EventArgs e)
+    private void mnuCommandTypeStoredProcedure_Click(object? sender, EventArgs e)
     {
         _mnuCommandTypeText.Checked = false;
         _mnuCommandTypeStoredProcedure.Checked = true;
         _commandType = CommandType.StoredProcedure;
     }
 
-    private void menuObjectExplorer_Click(object sender, EventArgs e)
+    private void menuObjectExplorer_Click(object? sender, EventArgs e)
     {
         var visible = !_tvObjectExplorer.Visible;
         _tvObjectExplorer.Visible = visible;
         _splitterObjectExplorer.Visible = visible;
     }
 
-    private void tvObjectBrowser_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+    private void tvObjectBrowser_BeforeExpand(object? sender, TreeViewCancelEventArgs e)
     {
         var treeNode = e.Node;
 
@@ -141,7 +141,7 @@ Please wait...",
         }
     }
 
-    private void TvObjectBrowser_MouseDown(object sender, MouseEventArgs e)
+    private void TvObjectBrowser_MouseDown(object? sender, MouseEventArgs e)
     {
         switch (e.Button)
         {
@@ -165,7 +165,7 @@ Please wait...",
         }
     }
 
-    private void MnuRefresh_Click(object sender, EventArgs e)
+    private void MnuRefresh_Click(object? sender, EventArgs e)
     {
         var treeNodeV = _tvObjectExplorer.SelectedNode;
         if (treeNodeV != null)
@@ -183,7 +183,7 @@ Please wait...",
         }
     }
 
-    private void MnuRefreshObjectExplorer_Click(object sender, EventArgs e)
+    private void MnuRefreshObjectExplorer_Click(object? sender, EventArgs e)
     {
         var objectExplorer = Provider.CreateObjectExplorer();
         if (objectExplorer != null)
@@ -204,7 +204,7 @@ Please wait...",
         }
     }
 
-    private void tvObjectExplorer_MouseUp(object sender, MouseEventArgs e)
+    private void tvObjectExplorer_MouseUp(object? sender, MouseEventArgs e)
     {
         try
         {
@@ -251,9 +251,9 @@ Please wait...",
         }
     }
 
-    private void mnuPaste_Click(object sender, EventArgs e) => QueryTextBox.Paste();
+    private void mnuPaste_Click(object? sender, EventArgs e) => QueryTextBox.Paste();
 
-    private void mnuGoTo_Click(object sender, EventArgs e)
+    private void mnuGoTo_Click(object? sender, EventArgs e)
     {
         var control = ActiveControl;
         if (control is not RichTextBox richTextBox)
@@ -273,7 +273,7 @@ Please wait...",
         }
     }
 
-    private void mnuFind_Click(object sender, EventArgs e)
+    private void mnuFind_Click(object? sender, EventArgs e)
     {
         try
         {
@@ -307,7 +307,7 @@ Please wait...",
         }
     }
 
-    private void mnuFindNext_Click(object sender, EventArgs e)
+    private void mnuFindNext_Click(object? sender, EventArgs e)
     {
         if (_findTextForm != null)
         {
@@ -317,15 +317,15 @@ Please wait...",
         }
     }
 
-    private void mnuSave_Click(object sender, EventArgs e) => Save();
+    private void mnuSave_Click(object? sender, EventArgs e) => Save();
 
-    private void mnuSaveAs_Click(object sender, EventArgs e) => ShowSaveFileDialog();
+    private void mnuSaveAs_Click(object? sender, EventArgs e) => ShowSaveFileDialog();
 
-    private void mnuGotoQueryEditor_Click(object sender, EventArgs e) => QueryTextBox.Select();
+    private void mnuGotoQueryEditor_Click(object? sender, EventArgs e) => QueryTextBox.Select();
 
-    private void mnuGotoMessageTabPage_Click(object sender, EventArgs e) => _tabControl.SelectedTab = _messagesTabPage;
+    private void mnuGotoMessageTabPage_Click(object? sender, EventArgs e) => _tabControl.SelectedTab = _messagesTabPage;
 
-    private void mnuListMembers_Click(object sender, EventArgs e)
+    private void mnuListMembers_Click(object? sender, EventArgs e)
     {
         if (QueryTextBox.KeyboardHandler == null)
         {
@@ -344,7 +344,7 @@ Please wait...",
         }
     }
 
-    private void completionForm_ItemSelected(object sender, ItemSelectedEventArgs e)
+    private void completionForm_ItemSelected(object? sender, ItemSelectedEventArgs e)
     {
         var textBox = QueryTextBox;
 
@@ -362,21 +362,21 @@ Please wait...",
         NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.Gdi.SetRedraw, 1, 0);
     }
 
-    private void mnuClearCache_Click(object sender, EventArgs e) => Provider.ClearCompletionCache();
+    private void mnuClearCache_Click(object? sender, EventArgs e) => Provider.ClearCompletionCache();
 
-    private void mnuResultSchema_Click(object sender, EventArgs e) => ExecuteReader(CommandBehavior.SchemaOnly);
+    private void mnuResultSchema_Click(object? sender, EventArgs e) => ExecuteReader(CommandBehavior.SchemaOnly);
 
-    private void mnuKeyInfo_Click(object sender, EventArgs e) => ExecuteReader(CommandBehavior.KeyInfo);
+    private void mnuKeyInfo_Click(object? sender, EventArgs e) => ExecuteReader(CommandBehavior.KeyInfo);
 
-    private void mnuSingleRow_Click(object sender, EventArgs e) => ExecuteQuerySingleRow();
+    private void mnuSingleRow_Click(object? sender, EventArgs e) => ExecuteQuerySingleRow();
 
-    private void mnuShowShemaTable_Click(object sender, EventArgs e)
+    private void mnuShowShemaTable_Click(object? sender, EventArgs e)
     {
         _mnuShowShemaTable.Checked = !_mnuShowShemaTable.Checked;
         _showSchemaTable = !_showSchemaTable;
     }
 
-    private void mnuXml_Click(object sender, EventArgs e)
+    private void mnuXml_Click(object? sender, EventArgs e)
     {
         try
         {
@@ -447,7 +447,7 @@ Please wait...",
         }
     }
 
-    private void mnuCreateInsert_Click(object sender, EventArgs e)
+    private void mnuCreateInsert_Click(object? sender, EventArgs e)
     {
         try
         {
@@ -553,7 +553,7 @@ Please wait...",
         }
     }
 
-    private void mnuCreateInsertSelect_Click(object sender, EventArgs e)
+    private void mnuCreateInsertSelect_Click(object? sender, EventArgs e)
     {
         try
         {
@@ -611,14 +611,14 @@ Please wait...",
         }
     }
 
-    private void tvObjectBrowser_ItemDrag(object sender, ItemDragEventArgs e)
+    private void tvObjectBrowser_ItemDrag(object? sender, ItemDragEventArgs e)
     {
         var treeNode = (TreeNode)e.Item!;
         var text = treeNode.Text;
         _tvObjectExplorer.DoDragDrop(text, DragDropEffects.All);
     }
 
-    private async void mnuDuplicateConnection_Click(object sender, EventArgs e)
+    private async void mnuDuplicateConnection_Click(object? sender, EventArgs e)
     {
         var mainForm = DataCommanderApplication.Instance.MainForm;
         var index = mainForm.MdiChildren.Length;
@@ -651,9 +651,9 @@ Please wait...",
         QueryFormStaticMethods.AddInfoMessageToQueryForm(queryForm, elapsedTicks, _connectionInfo.ConnectionName, providerInfo.Name, connection);
     }
 
-    private void sQLiteDatabaseToolStripMenuItem_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.SqLite);
+    private void sQLiteDatabaseToolStripMenuItem_Click(object? sender, EventArgs e) => SetResultWriterType(ResultWriterType.SqLite);
 
-    private void createSqlCeDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+    private void createSqlCeDatabaseToolStripMenuItem_Click(object? sender, EventArgs e)
     {
         var sqlStatement = new SqlParser(Query);
         _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
@@ -664,7 +664,7 @@ Please wait...",
         asyncDataAdatper.Start(new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray());
     }
 
-    private void beginTransactionToolStripMenuItem_Click(object sender, EventArgs e)
+    private void beginTransactionToolStripMenuItem_Click(object? sender, EventArgs e)
     {
         if (_transaction == null)
         {
@@ -673,7 +673,7 @@ Please wait...",
         }
     }
 
-    private void commitTransactionToolStripMenuItem_Click(object sender, EventArgs e)
+    private void commitTransactionToolStripMenuItem_Click(object? sender, EventArgs e)
     {
         if (_transaction != null)
         {
@@ -690,7 +690,7 @@ Please wait...",
         }
     }
 
-    private void RollbackTransactionToolStripMenuItem_Click(object sender, EventArgs e)
+    private void RollbackTransactionToolStripMenuItem_Click(object? sender, EventArgs e)
     {
         if (_transaction != null)
         {
@@ -714,7 +714,7 @@ Please wait...",
         }
     }
 
-    private void InsertScriptFileToolStripMenuItem_Click(object sender, EventArgs e) => SetResultWriterType(ResultWriterType.InsertScriptFile);
+    private void InsertScriptFileToolStripMenuItem_Click(object? sender, EventArgs e) => SetResultWriterType(ResultWriterType.InsertScriptFile);
 
     private void DataTableTabControl_MouseUp(object? sender, MouseEventArgs e)
     {
@@ -739,7 +739,7 @@ Please wait...",
 
     private void Connection_InfoMessage(IReadOnlyCollection<InfoMessage> messages) => AddInfoMessages(messages);
 
-    private void sbPanelTableStyle_MouseUp(object sender, MouseEventArgs e)
+    private void sbPanelTableStyle_MouseUp(object? sender, MouseEventArgs e)
     {
         if (e.Button == MouseButtons.Right)
         {
@@ -764,9 +764,9 @@ Please wait...",
         }
     }
 
-    private void bToolStripMenuItem_Click(object sender, EventArgs e) => ExecuteQuerySingleRow();
+    private void bToolStripMenuItem_Click(object? sender, EventArgs e) => ExecuteQuerySingleRow();
 
-    private void textBox_SelectionChanged(object sender, EventArgs e)
+    private void textBox_SelectionChanged(object? sender, EventArgs e)
     {
         var richTextBox = (RichTextBox)sender;
         var charIndex = richTextBox.SelectionStart;
@@ -776,7 +776,7 @@ Please wait...",
         _sbPanelCaretPosition.Text = "Ln " + line + " Col " + col;
     }
 
-    private void MnuDescribeParameters_Click(object sender, EventArgs e)
+    private void MnuDescribeParameters_Click(object? sender, EventArgs e)
     {
         try
         {
@@ -849,7 +849,7 @@ Please wait...",
         }
     }
 
-    private void mnuCloseTabPage_Click(object sender, EventArgs e)
+    private void mnuCloseTabPage_Click(object? sender, EventArgs e)
     {
         var tabPage = _tabControl.SelectedTab;
 
@@ -857,7 +857,7 @@ Please wait...",
             CloseResultSetTabPage(tabPage);
     }
 
-    private void mnuCloseAllTabPages_Click(object sender, EventArgs e)
+    private void mnuCloseAllTabPages_Click(object? sender, EventArgs e)
     {
         CloseResultSetTabPages();
 
@@ -871,12 +871,12 @@ Please wait...",
             _sbPanelTimer.Text = null;
         }
 
-        this.Invoke(() => FocusControl(QueryTextBox));
+        Invoke(() => FocusControl(QueryTextBox));
     }
 
-    private void MnuCancel_Click(object sender, EventArgs e) => CancelCommandQuery();
+    private void MnuCancel_Click(object? sender, EventArgs e) => CancelCommandQuery();
 
-    private void tvObjectBrowser_DoubleClick(object sender, EventArgs e)
+    private void tvObjectBrowser_DoubleClick(object? sender, EventArgs e)
     {
         var selectedNode = _tvObjectExplorer.SelectedNode;
         if (selectedNode != null)
@@ -915,20 +915,20 @@ Please wait...",
         }
     }
 
-    private void TableStyleMenuItem_Click(object sender, EventArgs e)
+    private void TableStyleMenuItem_Click(object? sender, EventArgs e)
     {
-        var item = (ToolStripMenuItem)sender;
-        var tableStyle = (ResultWriterType)item.Tag;
+        var item = (ToolStripMenuItem)sender!;
+        var tableStyle = (ResultWriterType)item.Tag!;
         SetResultWriterType(tableStyle);
     }
 
-    private void ToolStripSplitButton1_ButtonClick(object sender, EventArgs e) => ExecuteQuery();
-    private void AToolStripMenuItem_Click(object sender, EventArgs e) => ExecuteQuery();
-    private void CancelExecutingQueryButton_Click(object sender, EventArgs e) => CancelCommandQuery();
-    private void ToolStripMenuItem1_Click(object sender, EventArgs e) => ExecuteQuery();
-    private void EditRowsToolStripMenuItem_Click(object sender, EventArgs e) => EditRows(Query);
+    private void ToolStripSplitButton1_ButtonClick(object? sender, EventArgs e) => ExecuteQuery();
+    private void AToolStripMenuItem_Click(object? sender, EventArgs e) => ExecuteQuery();
+    private void CancelExecutingQueryButton_Click(object? sender, EventArgs e) => CancelCommandQuery();
+    private void ToolStripMenuItem1_Click(object? sender, EventArgs e) => ExecuteQuery();
+    private void EditRowsToolStripMenuItem_Click(object? sender, EventArgs e) => EditRows(Query);
 
-    private void ParseToolStripMenuItem_Click(object sender, EventArgs e)
+    private void ParseToolStripMenuItem_Click(object? sender, EventArgs e)
     {
         var executor = Connection.Connection.CreateCommandExecutor();
         var on = false;
@@ -964,7 +964,7 @@ Please wait...",
             executor.ExecuteNonQuery(new CreateCommandRequest("SET PARSEONLY OFF"));
     }
 
-    private void createCCommandQueryToolStripMenuItem_Click(object sender, EventArgs e)
+    private void createCCommandQueryToolStripMenuItem_Click(object? sender, EventArgs e)
     {
         const string text = @"/* Query Configuration
 {
@@ -994,7 +994,7 @@ select
         AppendQueryText(text);
     }
 
-    private void UndoToolStripMenuItem_Click(object sender, EventArgs e) =>
+    private void UndoToolStripMenuItem_Click(object? sender, EventArgs e) =>
         //var canUndo = _queryTextBox.RichTextBox.CanUndo;
         //if (canUndo)
         //{

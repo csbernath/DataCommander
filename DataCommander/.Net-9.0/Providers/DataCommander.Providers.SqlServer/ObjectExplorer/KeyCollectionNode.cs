@@ -44,7 +44,7 @@ order by
     private KeyNode ReadRecord(IDataRecord dataRecord)
     {
         var name = dataRecord.GetString(0);
-        return new KeyNode(databaseNode, id, name);
+        return new KeyNode(id, name);
     }
 
     public bool Sortable => false;

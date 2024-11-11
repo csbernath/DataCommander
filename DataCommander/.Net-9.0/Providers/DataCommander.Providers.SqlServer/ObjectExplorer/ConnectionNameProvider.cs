@@ -27,7 +27,7 @@ internal static class ConnectionNameProvider
             const string commandText = "select suser_sname()";
             var createCommandRequest = new CreateCommandRequest(commandText);
             var scalar = commanExecutor.ExecuteScalar(createCommandRequest);
-            userId = (string)scalar;
+            userId = (string)scalar!;
         }
 
         return $"{dataSource}(SQL Server {serverVersion} - {userId})";

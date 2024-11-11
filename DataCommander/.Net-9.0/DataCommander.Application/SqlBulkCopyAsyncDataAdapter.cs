@@ -22,7 +22,7 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
     private readonly int _rowBlockSize;
     private readonly IResultWriter? _resultWriter;
     private readonly Action<IAsyncDataAdapter, Exception>? _endFill;
-    private readonly Action<IAsyncDataAdapter> _writeEnd;
+    private readonly Action<IAsyncDataAdapter>? _writeEnd;
 
     public SqlBulkCopyAsyncDataAdapter(SqlConnection destinationConnection, SqlTransaction destionationTransaction, string destinationTableName,
         Action<InfoMessage> addInfoMessage)
@@ -37,7 +37,7 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
         _addInfoMessage = addInfoMessage;
     }
 
-    private void SqlBulkCopy_SqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
+    private void SqlBulkCopy_SqlRowsCopied(object? sender, SqlRowsCopiedEventArgs e)
     {
         _rowCount += e.RowsCopied;
         var message = $"{_rowCount} rows copied.";
@@ -83,9 +83,9 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
             exception = e;
         }
 
-        _writeEnd(this);
+        _writeEnd!(this);
         _endFill!(this, exception!);
     }
 
-    private void CancelCommand() => _command.Cancel();
+    private void CancelCommand() => _command!.Cancel();
 }

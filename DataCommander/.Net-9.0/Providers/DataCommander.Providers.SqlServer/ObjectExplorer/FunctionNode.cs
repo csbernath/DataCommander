@@ -50,7 +50,7 @@ from	{database.Name}.{owner}.[{name}]()",
         return contextMenu;
     }
 
-    private void menuItemScriptObject_Click(object sender, EventArgs e)
+    private void menuItemScriptObject_Click(object? sender, EventArgs e)
     {
         string text;
         using (var connection = database.Databases.Server.CreateConnection())
@@ -59,7 +59,7 @@ from	{database.Name}.{owner}.[{name}]()",
             text = SqlDatabase.GetSysComments(connection, database.Name, owner, name, CancellationToken.None).Result;
         }
 
-        var queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender!;
         queryForm.ShowText(text);
     }
 }

@@ -87,7 +87,7 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
         _sqlBulkCopy.SqlRowsCopied += sqlBulkCopy_SqlRowsCopied;
     }
 
-    private void sqlBulkCopy_SqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
+    private void sqlBulkCopy_SqlRowsCopied(object? sender, SqlRowsCopiedEventArgs e)
     {
         var message = $"{e.RowsCopied} rows copied to destination.";
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));

@@ -52,7 +52,7 @@ internal static class WordDocumentCreator
         table.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitContent);
         table.Columns.AutoFit();
 
-        foreach (Microsoft.Office.Interop.Word.Column column in table.Columns)
+        foreach (Column column in table.Columns)
         {
             column.Select();
             column.AutoFit();

@@ -54,7 +54,7 @@ internal class DataTableEditor : UserControl
         // This call is required by the Windows.Forms Form Designer.
         InitializeComponent();
 
-        _dataGrid.Font = new Font("Microsoft Sans Serif", 7);
+        _dataGrid!.Font = new Font("Microsoft Sans Serif", 7);
 
         // TODO: Add any initialization after the InitForm call
         GarbageMonitor.Default.Add("DataTableEditor", this);
@@ -74,7 +74,7 @@ internal class DataTableEditor : UserControl
 
             if (_dataTable != null)
             {
-                if (!_dataGrid.ReadOnly)
+                if (!_dataGrid!.ReadOnly)
                 {
                     _dataTable.RowDeleting += dataTable_RowDeleting;
                     _dataTable.RowChanging += dataTable_RowChanging;
@@ -146,7 +146,7 @@ internal class DataTableEditor : UserControl
 
                         foreach (DataRow dataRow in _dataTable.Rows)
                         {
-                            var s = dataRow[dataColumn].ToString();
+                            var s = dataRow[dataColumn].ToString()!;
                             var length = s.Length;
 
                             if (length <= 256)
@@ -185,7 +185,7 @@ internal class DataTableEditor : UserControl
             }
             else
             {
-                _dataGrid.DataSource = null;
+                _dataGrid!.DataSource = null;
                 _dataGrid.Rows.Clear();
                 _dataGrid.Columns.Clear();
                 _dataGrid.Dispose();
@@ -195,11 +195,11 @@ internal class DataTableEditor : UserControl
 
     public bool ReadOnly
     {
-        get => _dataGrid.ReadOnly;
+        get => _dataGrid!.ReadOnly;
 
         set
         {
-            _dataGrid.ReadOnly = value;
+            _dataGrid!.ReadOnly = value;
             _dataGrid.AllowUserToAddRows = !value;
             _dataGrid.AllowUserToDeleteRows = !value;
         }
@@ -227,7 +227,7 @@ internal class DataTableEditor : UserControl
                 else
                     message = "WARNING: The table has no primary key/unique index.";
 
-                var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+                var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm!.ActiveMdiChild!;
                 queryForm.AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, message));
             }
         }
@@ -244,7 +244,7 @@ internal class DataTableEditor : UserControl
     {
         get
         {
-            var cell = _dataGrid.CurrentCell;
+            var cell = _dataGrid!.CurrentCell;
             var rowNumber = cell.RowIndex;
             var columnNumber = cell.ColumnIndex;
             var dataRow = _dataTable.DefaultView[rowNumber].Row;
@@ -279,38 +279,38 @@ internal class DataTableEditor : UserControl
     /// </summary>
     private void InitializeComponent()
     {
-        var dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-        this._dataGrid = new DoubleBufferedDataGridView();
-        GarbageMonitor.Default.Add("dataGrid", "DoubleBufferedDataGridView", 0, this._dataGrid);
-        this._dataGrid.PublicDoubleBuffered = true;
-        this._dataGrid.AllowUserToOrderColumns = true;
-        ((System.ComponentModel.ISupportInitialize)(this._dataGrid)).BeginInit();
-        this.SuspendLayout();
+        var dataGridViewCellStyle1 = new DataGridViewCellStyle();
+        _dataGrid = new DoubleBufferedDataGridView();
+        GarbageMonitor.Default.Add("dataGrid", "DoubleBufferedDataGridView", 0, _dataGrid);
+        _dataGrid.PublicDoubleBuffered = true;
+        _dataGrid.AllowUserToOrderColumns = true;
+        ((ISupportInitialize)(_dataGrid)).BeginInit();
+        SuspendLayout();
         // 
         // dataGrid
         // 
-        this._dataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-        this._dataGrid.Location = new System.Drawing.Point(0, 0);
-        this._dataGrid.Name = "_dataGrid";
+        _dataGrid.Dock = DockStyle.Fill;
+        _dataGrid.Location = new Point(0, 0);
+        _dataGrid.Name = "_dataGrid";
         dataGridViewCellStyle1.NullValue = "(null)";
-        this._dataGrid.RowsDefaultCellStyle = dataGridViewCellStyle1;
-        this._dataGrid.Size = new System.Drawing.Size(424, 208);
-        this._dataGrid.TabIndex = 0;
-        this._dataGrid.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DataGrid_MouseDown);
+        _dataGrid.RowsDefaultCellStyle = dataGridViewCellStyle1;
+        _dataGrid.Size = new Size(424, 208);
+        _dataGrid.TabIndex = 0;
+        _dataGrid.MouseDown += new MouseEventHandler(DataGrid_MouseDown);
         // 
         // DataTableViewer
         // 
-        this.Controls.Add(this._dataGrid);
-        this.Name = "DataTableViewer";
-        this.Size = new System.Drawing.Size(424, 208);
-        ((System.ComponentModel.ISupportInitialize)(this._dataGrid)).EndInit();
-        this.ResumeLayout(false);
+        Controls.Add(_dataGrid);
+        Name = "DataTableViewer";
+        Size = new Size(424, 208);
+        ((ISupportInitialize)(_dataGrid)).EndInit();
+        ResumeLayout(false);
 
     }
 
-    private void DataGrid_DataError(object sender, DataGridViewDataErrorEventArgs e)
+    private void DataGrid_DataError(object? sender, DataGridViewDataErrorEventArgs e)
     {
-        MessageBox.Show(e.Exception.ToString());
+        MessageBox.Show(e.Exception!.ToString());
         e.ThrowException = false;
         e.Cancel = true;
     }
@@ -480,7 +480,7 @@ internal class DataTableEditor : UserControl
             stringBuilder.Append(')');
         }
 
-        var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild!;
+        var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm!.ActiveMdiChild!;
         queryForm.AppendQueryText(stringBuilder.ToString());
     }
 
@@ -555,7 +555,7 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void dataTable_RowChanging(object sender, DataRowChangeEventArgs e)
+    private void dataTable_RowChanging(object? sender, DataRowChangeEventArgs e)
     {
         switch (e.Action)
         {
@@ -572,7 +572,7 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void dataTable_RowDeleting(object sender, DataRowChangeEventArgs e)
+    private void dataTable_RowDeleting(object? sender, DataRowChangeEventArgs e)
     {
         if (_statementStringBuilder == null)
             _statementStringBuilder = new StringBuilder();
@@ -593,7 +593,7 @@ internal class DataTableEditor : UserControl
     private void CopyColumnNames_Click(object? sender, EventArgs e)
     {
         var columnNames =
-            (from c in _dataGrid.Columns.Cast<DataGridViewColumn>()
+            (from c in _dataGrid!.Columns.Cast<DataGridViewColumn>()
                 where c.Visible
                 orderby c.DisplayIndex
                 select c.DataPropertyName);
@@ -718,7 +718,7 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void CopyTable_Click(object sender, EventArgs e)
+    private void CopyTable_Click(object? sender, EventArgs e)
     {
         try
         {
@@ -733,7 +733,7 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void EditDataViewProperties_Click(object sender, EventArgs e)
+    private void EditDataViewProperties_Click(object? sender, EventArgs e)
     {
         var dataView = _dataTable.DefaultView;
         var properties = new DataViewProperties(dataView.RowFilter, dataView.Sort);
@@ -746,7 +746,7 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void SaveBinaryField_Click(object sender, EventArgs e)
+    private void SaveBinaryField_Click(object? sender, EventArgs e)
     {
         var saveFileDialog = new SaveFileDialog
         {
@@ -769,7 +769,7 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void OpenAsExcelFile_Click(object sender, EventArgs e)
+    private void OpenAsExcelFile_Click(object? sender, EventArgs e)
     {
         var binaryField = (BinaryField)_cellValue;
         var path = Path.Combine(Path.GetTempPath(), Path.GetTempFileName() + ".zip");
@@ -782,7 +782,7 @@ internal class DataTableEditor : UserControl
         Process.Start(processStartInfo);
     }
 
-    private void SaveStreamField_Click(object sender, EventArgs e)
+    private void SaveStreamField_Click(object? sender, EventArgs e)
     {
         var saveFileDialog = new SaveFileDialog
         {
@@ -816,7 +816,7 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void CopyStringField_Click(object sender, EventArgs e)
+    private void CopyStringField_Click(object? sender, EventArgs e)
     {
         if (_cellValue is not string s)
         {
@@ -827,7 +827,7 @@ internal class DataTableEditor : UserControl
         Clipboard.SetText(s);
     }
 
-    private void SaveStringField_Click(object sender, EventArgs e)
+    private void SaveStringField_Click(object? sender, EventArgs e)
     {
         var saveFileDialog = new SaveFileDialog
         {
@@ -881,7 +881,7 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void RemoveRowFilter_Click(object sender, EventArgs e) => _dataTable.DefaultView.RowFilter = null;
+    private void RemoveRowFilter_Click(object? sender, EventArgs e) => _dataTable.DefaultView.RowFilter = null;
 
     private void ApplyRowFilter(string rowFilter)
     {
@@ -897,14 +897,14 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void RowFilter_Click(object sender, EventArgs e)
+    private void RowFilter_Click(object? sender, EventArgs e)
     {
         var menuItem = (ToolStripMenuItem)sender;
         var rowFilter = menuItem.Text;
         ApplyRowFilter(rowFilter);
     }
 
-    private void Find_Click(object sender, EventArgs e)
+    private void Find_Click(object? sender, EventArgs e)
     {
         var form = new FindTextForm
         {
@@ -932,7 +932,7 @@ internal class DataTableEditor : UserControl
         Clipboard.SetText(sb.ToString());
     }
 
-    private void HideColumn_Click(object sender, EventArgs e)
+    private void HideColumn_Click(object? sender, EventArgs e)
     {
         var column = _dataGrid.Columns[_columnIndex];
         column.Visible = false;
@@ -1060,15 +1060,13 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void UnhideRows_Click(object sender, EventArgs e)
+    private void UnhideRows_Click(object? sender, EventArgs e)
     {
-        foreach (var row in _dataGrid.Rows.Cast<DataGridViewRow>().Where(r => !r.Visible))
-        {
+        foreach (var row in _dataGrid!.Rows.Cast<DataGridViewRow>().Where(r => !r.Visible)) 
             row.Visible = true;
-        }
     }
 
-    private void DataGrid_MouseDown(object sender, MouseEventArgs e)
+    private void DataGrid_MouseDown(object? sender, MouseEventArgs e)
     {
         if (e.Button == MouseButtons.Right)
         {

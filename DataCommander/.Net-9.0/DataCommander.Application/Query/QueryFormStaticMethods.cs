@@ -138,17 +138,17 @@ internal static class QueryFormStaticMethods
         var found = false;
         var dataTable = dataView.Table;
         var rowCount = dataView.Count;
-        var columnCount = dataTable.Columns.Count;
+        var columnCount = dataTable!.Columns.Count;
         var currentValueObject = dataTable.DefaultView[rowIndex][columnIndex];
         string currentValue;
         if (currentValueObject is StringField)
         {
             var stringField = currentValueObject as StringField;
-            currentValue = stringField.Value;
+            currentValue = stringField!.Value;
         }
         else
         {
-            currentValue = currentValueObject.ToString();
+            currentValue = currentValueObject.ToString()!;
         }
 
         if (matcher.IsMatch(currentValue))

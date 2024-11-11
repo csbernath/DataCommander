@@ -29,7 +29,7 @@ internal sealed class CopyResultWriter(
     private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage, false);
     private DbTransaction? _transaction;
     private IDbCommand? _insertCommand;
-    private Converter<object, object>[]? _converters;
+    private Converter<object, object>?[]? _converters;
     private IDbDataParameter[]? _parameters;
     private ConcurrentQueue<QueueItem>? _queue;
     private Task? _task;
@@ -74,7 +74,7 @@ internal sealed class CopyResultWriter(
                 for (var columnIndex = 0; columnIndex < row.Length; columnIndex++)
                 {
                     var sourceValue = row[columnIndex];
-                    var converter = _converters[columnIndex];
+                    var converter = _converters![columnIndex];
                     object destinationValue;
 
                     if (converter != null)
@@ -86,7 +86,7 @@ internal sealed class CopyResultWriter(
                         destinationValue = sourceValue;
                     }
 
-                    _parameters[columnIndex].Value = destinationValue;
+                    _parameters![columnIndex].Value = destinationValue;
                 }
 
                 if (_canConvertCommandToString)
@@ -101,7 +101,7 @@ internal sealed class CopyResultWriter(
                 }
                 else
                 {
-                    _insertCommand.ExecuteNonQuery();
+                    _insertCommand!.ExecuteNonQuery();
                 }
 
                 _insertedRowCount++;
@@ -110,12 +110,11 @@ internal sealed class CopyResultWriter(
 
         if (sb.Length > 0)
         {
-            var stopwatch = new Stopwatch();
             var commandText = sb.ToString();
             try
             {
                 var executor = destinationConnection.Connection.CreateCommandExecutor();
-                executor.ExecuteNonQuery(new CreateCommandRequest(commandText, null, CommandType.Text, 3600, _insertCommand.Transaction));
+                executor.ExecuteNonQuery(new CreateCommandRequest(commandText, null, CommandType.Text, 3600, _insertCommand!.Transaction));
             }
             catch (Exception e)
             {
@@ -137,7 +136,7 @@ internal sealed class CopyResultWriter(
             using var methodLog = LogFactory.Instance.GetCurrentMethodLog();
             while (true)
             {
-                methodLog.Write(LogLevel.Trace, "this.queue.Count: {0}", _queue.Count);
+                methodLog.Write(LogLevel.Trace, "this.queue.Count: {0}", _queue!.Count);
                 if (!_queue.IsEmpty)
                 {
                     var items = new List<QueueItem>(_queue.Count);
@@ -167,7 +166,7 @@ internal sealed class CopyResultWriter(
                     else
                     {
                         methodLog.Write(LogLevel.Trace, "this.enqueueEvent.WaitOne( 1000 );...");
-                        _enqueueEvent.WaitOne(1000);
+                        _enqueueEvent!.WaitOne(1000);
                         methodLog.Write(LogLevel.Trace, "this.enqueueEvent.WaitOne( 1000 ); finished.");
                     }
                 }
@@ -216,8 +215,8 @@ internal sealed class CopyResultWriter(
             Rows = targetRows
         };
 
-        _queue.Enqueue(queueItem);
-        _enqueueEvent.Set();
+        _queue!.Enqueue(queueItem);
+        _enqueueEvent!.Set();
 
         while (!cancellationToken.IsCancellationRequested && _queue.Count > 5)
         {

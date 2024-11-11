@@ -78,7 +78,7 @@ public sealed class DataCommanderApplication
         return assembly;
     }
 
-    private static void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
+    private static void SystemEvents_SessionEnding(object? sender, SessionEndingEventArgs e)
     {
         Log.Write(LogLevel.Trace, "Reason: {0}", e.Reason);
         var mainForm = Instance.MainForm!;

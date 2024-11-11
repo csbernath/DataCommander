@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using Microsoft.Data.SqlClient;
 using DataCommander.Api;
 using DataCommander.Api.FieldReaders;
 using Foundation.Data;
@@ -9,12 +8,10 @@ namespace DataCommander.Providers.SqlServer.FieldReader;
 
 internal sealed class SqlDataReaderHelper : IDataReaderHelper
 {
-    private readonly IDataFieldReader[] _dataFieldReaders;
-    private readonly SqlDataReader _sqlDataReader;
+    private readonly IDataFieldReader[]? _dataFieldReaders;
 
     public SqlDataReaderHelper(IDataReader dataReader)
     {
-        _sqlDataReader = (SqlDataReader) dataReader;
         var schemaTable = dataReader.GetSchemaTable();
 
         if (schemaTable != null)
@@ -30,7 +27,8 @@ internal sealed class SqlDataReaderHelper : IDataReaderHelper
 
     int IDataReaderHelper.GetValues(object[] values)
     {
-        for (var i = 0; i < _dataFieldReaders.Length; i++) values[i] = _dataFieldReaders[i].Value;
+        for (var i = 0; i < _dataFieldReaders!.Length; i++)
+            values[i] = _dataFieldReaders[i].Value;
 
         return _dataFieldReaders.Length;
     }

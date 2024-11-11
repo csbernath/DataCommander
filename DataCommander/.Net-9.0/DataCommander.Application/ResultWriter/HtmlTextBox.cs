@@ -91,35 +91,35 @@ internal sealed class HtmlTextBox : UserControl
     private void InitializeComponent()
     {
         var resources = new System.Resources.ResourceManager(typeof(HtmlTextBox));
-        this._webBrowser = new WebBrowser();
-        GarbageMonitor.Default.Add("webBrowser", this._webBrowser);
+        _webBrowser = new WebBrowser();
+        GarbageMonitor.Default.Add("webBrowser", _webBrowser);
         // ((System.ComponentModel.ISupportInitialize)(this.webBrowser)).BeginInit();
-        this.SuspendLayout();
+        SuspendLayout();
         // 
         // webBrowser
         // 
-        this._webBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+        _webBrowser.Dock = DockStyle.Fill;
         //this.webBrowser.Enabled = true;
         //this.webBrowser.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("webBrowser.OcxState")));
-        this._webBrowser.Size = new System.Drawing.Size(464, 184);
-        this._webBrowser.TabIndex = 0;
-        this._webBrowser.DocumentCompleted += this.webBrowser_DocumentCompleted;
+        _webBrowser.Size = new System.Drawing.Size(464, 184);
+        _webBrowser.TabIndex = 0;
+        _webBrowser.DocumentCompleted += webBrowser_DocumentCompleted;
 
         // 
         // HtmlTextBox
         // 
-        this.Controls.AddRange(
+        Controls.AddRange(
         [
-            this._webBrowser
+            _webBrowser
         ]);
-        this.Name = "HtmlTextBox";
-        this.Size = new System.Drawing.Size(464, 184);
+        Name = "HtmlTextBox";
+        Size = new System.Drawing.Size(464, 184);
         // ((System.ComponentModel.ISupportInitialize)(this.webBrowser)).EndInit();
-        this.ResumeLayout(false);
+        ResumeLayout(false);
 
     }
 
-    private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+    private void webBrowser_DocumentCompleted(object? sender, WebBrowserDocumentCompletedEventArgs e)
     {
         if (_fileName != null)
         {

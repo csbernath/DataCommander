@@ -87,7 +87,7 @@ Credits:
         return base.ProcessCmdKey(ref msg, keyData);
     }
 
-    private void webBrowser1_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+    private void webBrowser1_Navigating(object? sender, WebBrowserNavigatingEventArgs e)
     {
         if (_first)
         {

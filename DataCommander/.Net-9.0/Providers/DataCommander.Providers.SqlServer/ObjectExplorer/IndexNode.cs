@@ -48,9 +48,9 @@ internal sealed class IndexNode(DatabaseNode databaseNode, int parentId, int id,
 
     public bool Sortable => false;
 
-    public string Query => null;
+    public string? Query => null;
 
-    //private void menuItemScriptObject_Click(object sender, EventArgs e)
+    //private void menuItemScriptObject_Click(object? sender, EventArgs e)
     //{
     //    string connectionString = this.tableNode.
     //        .database.Databases.Server.ConnectionString;

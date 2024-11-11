@@ -58,7 +58,7 @@ order by s.name,o.name", database.Name, isMsShipped
     }
 
     public bool Sortable => false;
-    public string Query => null;
+    public string? Query => null;
 
     public ContextMenu? GetContextMenu() => null;
 }

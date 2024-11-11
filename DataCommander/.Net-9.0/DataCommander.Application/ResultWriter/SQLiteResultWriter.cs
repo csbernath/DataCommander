@@ -66,7 +66,7 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
                     name = tableName;
                 }
 
-                name = name.Replace('.', '_');
+                name = name!.Replace('.', '_');
                 name = name.Replace('[', '_');
                 name = name.Replace(']', '_');
 

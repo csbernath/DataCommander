@@ -51,7 +51,8 @@ end";
     {
         Assert.IsTrue(!database.IsNullOrWhiteSpace());
         Assert.IsTrue(!schema.IsNullOrWhiteSpace());
-        Assert.IsTrue(objectTypes != null && objectTypes.Any());
+        Assert.IsNotNull(objectTypes);
+        Assert.IsTrue(objectTypes.Any());
 
         return $@"if exists(select * from sys.databases (nolock) where name = '{database}')
 begin

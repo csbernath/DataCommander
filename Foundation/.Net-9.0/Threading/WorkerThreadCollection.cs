@@ -136,7 +136,7 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
             }
         }
 
-        private void Thread_Stopped(object sender, EventArgs e)
+        private void Thread_Stopped(object? sender, EventArgs e)
         {
             Interlocked.Increment(ref _count);
 

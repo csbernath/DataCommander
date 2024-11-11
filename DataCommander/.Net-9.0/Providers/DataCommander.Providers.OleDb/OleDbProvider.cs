@@ -17,18 +17,18 @@ namespace DataCommander.Providers.OleDb;
 internal sealed class OleDbProvider : IProvider
 {
     private string _connectionString;
-    private static string[] _keyWords;
+    private static string[]? _keyWords;
 
     string IProvider.Identifier => ProviderIdentifier.OleDb;
     DbProviderFactory IProvider.DbProviderFactory => OleDbFactory.Instance;
 
     public ConnectionBase CreateConnection(string connectionString)
     {
-        this._connectionString = connectionString;
+        _connectionString = connectionString;
         return new Connection(connectionString);
     }
 
-    public string[] KeyWords
+    public string[]? KeyWords
     {
         get
         {

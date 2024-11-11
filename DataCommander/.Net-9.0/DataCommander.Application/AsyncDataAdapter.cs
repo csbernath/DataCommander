@@ -264,6 +264,6 @@ internal sealed class AsyncDataAdapter(
     private void CancelWaitCallback()
     {
         using (LogFactory.Instance.GetCurrentMethodLog())
-            _command.Command.Cancel();
+            _command!.Command.Cancel();
     }
 }

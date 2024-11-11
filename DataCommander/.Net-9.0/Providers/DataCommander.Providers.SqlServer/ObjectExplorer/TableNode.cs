@@ -176,7 +176,7 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
         return query;
     }
 
-    private void EditRows(object sender, EventArgs e)
+    private void EditRows(object? sender, EventArgs e)
     {
         var name1 = DatabaseNode.Name + "." + owner + "." + name;
         var query = "select * from " + name1;
@@ -184,7 +184,7 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
         queryForm.EditRows(query);
     }
 
-    private void Schema_Click(object sender, EventArgs e)
+    private void Schema_Click(object? sender, EventArgs e)
     {
         var commandText = string.Format(
             @"use [{0}]
@@ -354,7 +354,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
         return stringBuilder.ToString();
     }
 
-    private void Indexes_Click(object sender, EventArgs e)
+    private void Indexes_Click(object? sender, EventArgs e)
     {
         var commandText = $"use [{DatabaseNode.Name}] exec sp_helpindex [{owner}.{name}]";
         DataTable dataTable;

@@ -61,7 +61,7 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
         return contextMenu;
     }
 
-    private void GetInformationMenuItem_Click(object sender, EventArgs e)
+    private void GetInformationMenuItem_Click(object? sender, EventArgs e)
     {
         var commandText = string.Format(@"select
     d.dbid,
@@ -83,7 +83,7 @@ select
 	convert(decimal(15,2),convert(float,fileproperty(name, 'SpaceUsed')) * 100.0 / size)	as [Used%],
 	convert(decimal(15,2),(f.size-fileproperty(name, 'SpaceUsed')) * 8096.0 / 1000000000)	as [Free (GB)]
 from	[{0}].sys.database_files f", name);
-        var queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender!;
         DataSet? dataSet = null;
         using (var connection = Databases.Server.CreateConnection())
         {
@@ -136,22 +136,17 @@ from	[{0}].sys.database_files f", name);
 
     private string GetLogicalFileName(string? database)
     {
-        string logicalFileName;
-
         var commandText = @$"select
     f.name
 from [{database}].sys.database_files f
 where
     f.type = 0";
-        using (var connection = Databases.Server.CreateConnection())
-        {
-            connection.Open();
-            var executor = connection.CreateCommandExecutor();
-            var createCommandRequest = new CreateCommandRequest(commandText);
-            var scalar = executor.ExecuteScalar(createCommandRequest);
-            logicalFileName = (string)scalar;
-        }
-
+        using var connection = Databases.Server.CreateConnection();
+        connection.Open();
+        var executor = connection.CreateCommandExecutor();
+        var createCommandRequest = new CreateCommandRequest(commandText);
+        var scalar = executor.ExecuteScalar(createCommandRequest);
+        var logicalFileName = (string)scalar!;
         return logicalFileName;
     }
 }

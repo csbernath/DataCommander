@@ -204,7 +204,7 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
                 switch (typeCode)
                 {
                     case TypeCode.Int32:
-                        stringValue = value.ToString().PadLeft(columnSize);
+                        stringValue = value!.ToString()!.PadLeft(columnSize);
                         break;
 
                     case TypeCode.DateTime:
@@ -214,7 +214,7 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
 
                     default:
                         stringValue = value.ToString();
-                        stringValue = stringValue.Replace("\x00", null);
+                        stringValue = stringValue!.Replace("\x00", null);
                         break;
                 }
             }
@@ -242,11 +242,11 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
 
                 for (var j = 0; j < last; j++)
                 {
-                    Write(sb, StringValue(row[j], _columnSize[j]), _columnSize[j]);
+                    Write(sb, StringValue(row[j], _columnSize![j]), _columnSize[j]);
                     sb.Append(' ');
                 }
 
-                sb.Append(StringValue(row[last], _columnSize[last]));
+                sb.Append(StringValue(row[last], _columnSize![last]));
                 sb.Append(Environment.NewLine);
             }
 

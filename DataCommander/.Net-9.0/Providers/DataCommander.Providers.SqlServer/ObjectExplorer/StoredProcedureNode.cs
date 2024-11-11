@@ -36,7 +36,7 @@ internal sealed class StoredProcedureNode(DatabaseNode database, string owner, s
         return contextMenu;
     }
 
-    private void ScriptObjectMenuItem_Click(object sender, EventArgs e)
+    private void ScriptObjectMenuItem_Click(object? sender, EventArgs e)
     {
         var stopwatch = Stopwatch.StartNew();
         var queryForm = (IQueryForm)sender;

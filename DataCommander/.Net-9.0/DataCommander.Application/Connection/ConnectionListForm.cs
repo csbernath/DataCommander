@@ -25,8 +25,8 @@ internal sealed class ConnectionListForm : Form
     private ConnectionBase? _connection;
     private DoubleBufferedDataGridView? _dataGrid;
     private Button? _btnOk;    
-    private Button _btnCancel;
-    private Button _newButton;
+    private Button? _btnCancel;
+    private Button? _newButton;
     private readonly DataTable _dataTable = new();
     private bool _isDirty;
     private readonly Container _components = new();
@@ -103,7 +103,7 @@ internal sealed class ConnectionListForm : Form
     }
 
     public ConnectionInfo ConnectionInfo { get; private set; }
-    public ConnectionBase Connection => _connection;
+    public ConnectionBase? Connection => _connection;
 
     protected override void Dispose(bool disposing)
     {
@@ -119,81 +119,81 @@ internal sealed class ConnectionListForm : Form
     /// </summary>
     private void InitializeComponent()
     {
-        this._btnOk = new System.Windows.Forms.Button();
-        this._btnCancel = new System.Windows.Forms.Button();
-        this._newButton = new System.Windows.Forms.Button();
-        this._dataGrid = new DoubleBufferedDataGridView();
-        ((System.ComponentModel.ISupportInitialize)(this._dataGrid)).BeginInit();
-        this.SuspendLayout();
+        _btnOk = new Button();
+        _btnCancel = new Button();
+        _newButton = new Button();
+        _dataGrid = new DoubleBufferedDataGridView();
+        ((ISupportInitialize)(_dataGrid)).BeginInit();
+        SuspendLayout();
         // 
         // btnOK
         // 
-        this._btnOk.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-        this._btnOk.Location = new System.Drawing.Point(402, 637);
-        this._btnOk.Name = "_btnOk";
-        this._btnOk.Size = new System.Drawing.Size(75, 24);
-        this._btnOk.TabIndex = 0;
-        this._btnOk.Text = "&Connect";
-        this._btnOk.Click += new System.EventHandler(this.BtnOK_Click);
+        _btnOk.Anchor = AnchorStyles.Bottom;
+        _btnOk.Location = new System.Drawing.Point(402, 637);
+        _btnOk.Name = "_btnOk";
+        _btnOk.Size = new System.Drawing.Size(75, 24);
+        _btnOk.TabIndex = 0;
+        _btnOk.Text = "&Connect";
+        _btnOk.Click += new EventHandler(BtnOK_Click);
         // 
         // btnCancel
         // 
-        this._btnCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-        this._btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-        this._btnCancel.Location = new System.Drawing.Point(490, 637);
-        this._btnCancel.Name = "_btnCancel";
-        this._btnCancel.Size = new System.Drawing.Size(75, 24);
-        this._btnCancel.TabIndex = 7;
-        this._btnCancel.Text = "Cancel";
+        _btnCancel.Anchor = AnchorStyles.Bottom;
+        _btnCancel.DialogResult = DialogResult.Cancel;
+        _btnCancel.Location = new System.Drawing.Point(490, 637);
+        _btnCancel.Name = "_btnCancel";
+        _btnCancel.Size = new System.Drawing.Size(75, 24);
+        _btnCancel.TabIndex = 7;
+        _btnCancel.Text = "Cancel";
         // 
         // newButton
         // 
-        this._newButton.Anchor =
-            ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left));
-        this._newButton.Location = new System.Drawing.Point(12, 637);
-        this._newButton.Name = "_newButton";
-        this._newButton.Size = new System.Drawing.Size(75, 24);
-        this._newButton.TabIndex = 8;
-        this._newButton.Text = "&New";
-        this._newButton.Click += new System.EventHandler(this.NewButton_Click);
+        _newButton.Anchor =
+            ((AnchorStyles)(AnchorStyles.Bottom | AnchorStyles.Left));
+        _newButton.Location = new System.Drawing.Point(12, 637);
+        _newButton.Name = "_newButton";
+        _newButton.Size = new System.Drawing.Size(75, 24);
+        _newButton.TabIndex = 8;
+        _newButton.Text = "&New";
+        _newButton.Click += new EventHandler(NewButton_Click);
         // 
         // dataGrid
         // 
-        this._dataGrid.AllowUserToAddRows = false;
-        this._dataGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                                                                       | System.Windows.Forms.AnchorStyles.Left)
-                                                                      | System.Windows.Forms.AnchorStyles.Right));
-        this._dataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-        this._dataGrid.Location = new System.Drawing.Point(8, 8);
-        this._dataGrid.Name = "_dataGrid";
-        this._dataGrid.PublicDoubleBuffered = true;
-        this._dataGrid.ReadOnly = true;
-        this._dataGrid.Size = new System.Drawing.Size(944, 621);
-        this._dataGrid.TabIndex = 6;
-        this._dataGrid.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.DataGrid_UserDeletingRow);
-        this._dataGrid.DoubleClick += new System.EventHandler(this.DataGrid_DoubleClick);
-        this._dataGrid.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGrid_KeyDown);
-        this._dataGrid.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGrid_MouseClick);
+        _dataGrid.AllowUserToAddRows = false;
+        _dataGrid.Anchor = ((AnchorStyles)(((AnchorStyles.Top | AnchorStyles.Bottom)
+                                                                       | AnchorStyles.Left)
+                                                                      | AnchorStyles.Right));
+        _dataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+        _dataGrid.Location = new System.Drawing.Point(8, 8);
+        _dataGrid.Name = "_dataGrid";
+        _dataGrid.PublicDoubleBuffered = true;
+        _dataGrid.ReadOnly = true;
+        _dataGrid.Size = new System.Drawing.Size(944, 621);
+        _dataGrid.TabIndex = 6;
+        _dataGrid.UserDeletingRow += new DataGridViewRowCancelEventHandler(DataGrid_UserDeletingRow);
+        _dataGrid.DoubleClick += new EventHandler(DataGrid_DoubleClick);
+        _dataGrid.KeyDown += new KeyEventHandler(dataGrid_KeyDown);
+        _dataGrid.MouseClick += new MouseEventHandler(dataGrid_MouseClick);
         // 
         // ConnectionListForm
         // 
-        this.AcceptButton = this._btnOk;
-        this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-        this.CancelButton = this._btnCancel;
-        this.ClientSize = new System.Drawing.Size(954, 668);
-        this.Controls.Add(this._newButton);
-        this.Controls.Add(this._btnCancel);
-        this.Controls.Add(this._dataGrid);
-        this.Controls.Add(this._btnOk);
-        this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-        this.MaximizeBox = false;
-        this.MinimizeBox = false;
-        this.Name = "ConnectionListForm";
-        this.ShowInTaskbar = false;
-        this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-        this.Text = "Connect to database";
-        ((System.ComponentModel.ISupportInitialize)(this._dataGrid)).EndInit();
-        this.ResumeLayout(false);
+        AcceptButton = _btnOk;
+        AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+        CancelButton = _btnCancel;
+        ClientSize = new System.Drawing.Size(954, 668);
+        Controls.Add(_newButton);
+        Controls.Add(_btnCancel);
+        Controls.Add(_dataGrid);
+        Controls.Add(_btnOk);
+        Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+        MaximizeBox = false;
+        MinimizeBox = false;
+        Name = "ConnectionListForm";
+        ShowInTaskbar = false;
+        StartPosition = FormStartPosition.CenterParent;
+        Text = "Connect to database";
+        ((ISupportInitialize)(_dataGrid)).EndInit();
+        ResumeLayout(false);
 
     }
 
@@ -249,19 +249,19 @@ internal sealed class ConnectionListForm : Form
             row[ConnectionStringKeyword.UserId] = (string)value;
     }
 
-    private void BtnOK_Click(object sender, EventArgs e)
+    private void BtnOK_Click(object? sender, EventArgs e)
     {
         var connectionInfo = SelectedConnectionInfo;
         Connect(connectionInfo);
     }
 
-    private void Connect_Click(object sender, EventArgs e)
+    private void Connect_Click(object? sender, EventArgs e)
     {
         var connectionInfo = SelectedConnectionInfo;
         Connect(connectionInfo);
     }
 
-    private void Copy_Click(object sender, EventArgs e)
+    private void Copy_Click(object? sender, EventArgs e)
     {
         var connectionPropertiesArray = SelectedIndexes
             .Select(index => _connectionInfos[index].ToConnectionDto());
@@ -269,14 +269,14 @@ internal sealed class ConnectionListForm : Form
         Clipboard.SetText(json);
     }
 
-    private void CopyConnectionString_Click(object sender, EventArgs e)
+    private void CopyConnectionString_Click(object? sender, EventArgs e)
     {
         var connectionProperties = SelectedConnectionInfo;
-        var connectionString = connectionProperties.ConnectionStringAndCredential.ConnectionString;
+        var connectionString = connectionProperties!.ConnectionStringAndCredential.ConnectionString;
         Clipboard.SetText(connectionString);
     }
 
-    private void Paste_Click(object sender, EventArgs e)
+    private void Paste_Click(object? sender, EventArgs e)
     {
         try
         {
@@ -305,9 +305,9 @@ internal sealed class ConnectionListForm : Form
         }
     }
 
-    private void Delete_Click(object sender, EventArgs e) => Delete();
+    private void Delete_Click(object? sender, EventArgs e) => Delete();
 
-    private void Edit_Click(object sender, EventArgs e)
+    private void Edit_Click(object? sender, EventArgs e)
     {
         var form = new ConnectionStringBuilderForm(_colorTheme);
         var connectionInfo = SelectedConnectionInfo!;
@@ -317,7 +317,7 @@ internal sealed class ConnectionListForm : Form
         {
             _connectionInfos[SelectedIndex] = form.ConnectionInfo;
             _isDirty = true;
-            var row = _dataTable.DefaultView[_dataGrid.CurrentCell.RowIndex].Row;
+            var row = _dataTable.DefaultView[_dataGrid!.CurrentCell!.RowIndex].Row;
             LoadConnection(connectionInfo, row);
         }
     }
@@ -335,11 +335,11 @@ internal sealed class ConnectionListForm : Form
             var row = _dataTable.NewRow();
             LoadConnection(connectionInfo, row);
             _dataTable.Rows.InsertAt(row, index + 1);
-            _dataGrid.CurrentCell = _dataGrid[0, index + 1];
+            _dataGrid!.CurrentCell = _dataGrid[0, index + 1];
         }
     }
 
-    private void MoveDown_Click(object sender, EventArgs e) => MoveDown();
+    private void MoveDown_Click(object? sender, EventArgs e) => MoveDown();
 
     private void MoveUp()
     {
@@ -354,18 +354,18 @@ internal sealed class ConnectionListForm : Form
             var row = _dataTable.NewRow();
             LoadConnection(connectionInfo, row);
             _dataTable.Rows.InsertAt(row, index - 1);
-            _dataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            _dataGrid!.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             _dataGrid.CurrentCell = _dataGrid[0, index - 1];
         }
     }
 
-    private void MoveUp_Click(object sender, EventArgs e) => MoveUp();
+    private void MoveUp_Click(object? sender, EventArgs e) => MoveUp();
 
-    private void dataGrid_MouseClick(object sender, MouseEventArgs e)
+    private void dataGrid_MouseClick(object? sender, MouseEventArgs e)
     {
         if (e.Button == MouseButtons.Right)
         {
-            var hitTestInfo = _dataGrid.HitTest(e.X, e.Y);
+            var hitTestInfo = _dataGrid!.HitTest(e.X, e.Y);
             var rowIndex = hitTestInfo.RowIndex;
             var contextMenu = new ContextMenuStrip(_components);
             ToolStripMenuItem menuItem;
@@ -513,7 +513,7 @@ Provider name: {providerInfo.Name}");
         }
     }
 
-    private void DataGrid_DoubleClick(object sender, EventArgs e)
+    private void DataGrid_DoubleClick(object? sender, EventArgs e)
     {
         var position = _dataGrid.PointToClient(Cursor.Position);
         var hitTestInfo = _dataGrid.HitTest(position.X, position.Y);
@@ -535,7 +535,7 @@ Provider name: {providerInfo.Name}");
         }
     }
 
-    private void dataGrid_KeyDown(object sender, KeyEventArgs e)
+    private void dataGrid_KeyDown(object? sender, KeyEventArgs e)
     {
         Log.Write(LogLevel.Trace, "e.KeyCode: {0}\r\ne.KeyData: {1}", e.KeyCode, e.KeyData);
 
@@ -586,7 +586,7 @@ Provider name: {providerInfo.Name}");
         _isDirty = true;
     }
 
-    private void NewButton_Click(object sender, EventArgs e)
+    private void NewButton_Click(object? sender, EventArgs e)
     {
         var form = new ConnectionStringBuilderForm(_colorTheme);
 
@@ -597,7 +597,7 @@ Provider name: {providerInfo.Name}");
         }
     }
 
-    private void DataGrid_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+    private void DataGrid_UserDeletingRow(object? sender, DataGridViewRowCancelEventArgs e)
     {
         Delete();
         e.Cancel = true;

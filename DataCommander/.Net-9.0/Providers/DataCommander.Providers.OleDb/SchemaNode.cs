@@ -35,7 +35,7 @@ sealed class SchemaNode(CatalogNode catalog, string name) : ITreeNode
     }
 
     public bool Sortable => false;
-    public string Query => null;
+    public string? Query => null;
     public CatalogNode Catalog { get; } = catalog;
     public string Name { get; } = name;
 

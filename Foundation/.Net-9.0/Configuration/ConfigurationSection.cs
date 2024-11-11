@@ -242,7 +242,7 @@ public sealed class ConfigurationSection
         }
     }
 
-    private void OnChanged(object sender, FileSystemEventArgs e)
+    private void OnChanged(object? sender, FileSystemEventArgs e)
     {
         Log.Trace("Settings.OnChanged. FileName: " + e.FullPath);
         Interlocked.Increment(ref _changed);

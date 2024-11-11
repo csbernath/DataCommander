@@ -47,7 +47,7 @@ public sealed class QueryTextBox : UserControl
         InitializeComponent();
 
         // TODO: Add any initialization after the InitForm call
-        RichTextBox.SelectionChanged += RichTextBox_SelectionChanged;
+        RichTextBox!.SelectionChanged += RichTextBox_SelectionChanged;
         RichTextBox.DragEnter += richTextBox_DragEnter;
         RichTextBox.DragDrop += RichTextBox_DragDrop;
     }
@@ -137,32 +137,32 @@ public sealed class QueryTextBox : UserControl
     /// </summary>
     private void InitializeComponent()
     {
-        this.RichTextBox = new System.Windows.Forms.RichTextBox();
-        this.SuspendLayout();
+        RichTextBox = new RichTextBox();
+        SuspendLayout();
         // 
         // richTextBox
         // 
-        this.RichTextBox.AcceptsTab = true;
-        this.RichTextBox.AllowDrop = true;
-        this.RichTextBox.AutoWordSelection = true;
-        this.RichTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.RichTextBox.Location = new System.Drawing.Point(0, 0);
-        this.RichTextBox.Name = "RichTextBox";
-        this.RichTextBox.Size = new System.Drawing.Size(408, 150);
-        this.RichTextBox.TabIndex = 0;
-        this.RichTextBox.Text = "";
-        this.RichTextBox.WordWrap = false;
-        this.RichTextBox.TextChanged += new System.EventHandler(this.richTextBox_TextChanged);
-        this.RichTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.richTextBox_KeyDown);
-        this.RichTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.RichTextBox_KeyPress);
-        this.RichTextBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.richTextBox_MouseUp);
+        RichTextBox.AcceptsTab = true;
+        RichTextBox.AllowDrop = true;
+        RichTextBox.AutoWordSelection = true;
+        RichTextBox.Dock = DockStyle.Fill;
+        RichTextBox.Location = new Point(0, 0);
+        RichTextBox.Name = "RichTextBox";
+        RichTextBox.Size = new Size(408, 150);
+        RichTextBox.TabIndex = 0;
+        RichTextBox.Text = "";
+        RichTextBox.WordWrap = false;
+        RichTextBox.TextChanged += new EventHandler(richTextBox_TextChanged);
+        RichTextBox.KeyDown += new KeyEventHandler(richTextBox_KeyDown);
+        RichTextBox.KeyPress += new KeyPressEventHandler(RichTextBox_KeyPress);
+        RichTextBox.MouseUp += new MouseEventHandler(richTextBox_MouseUp);
         // 
         // QueryTextBox
         // 
-        this.Controls.Add(this.RichTextBox);
-        this.Name = "QueryTextBox";
-        this.Size = new System.Drawing.Size(408, 150);
-        this.ResumeLayout(false);
+        Controls.Add(RichTextBox);
+        Name = "QueryTextBox";
+        Size = new Size(408, 150);
+        ResumeLayout(false);
     }
 
     private void SetColor(int startWord, int length, Color color)
@@ -184,7 +184,7 @@ public sealed class QueryTextBox : UserControl
 
     private int LineIndex(int i) => GetLineIndex(RichTextBox, i);
 
-    private void RichTextBox_SelectionChanged(object sender, EventArgs e)
+    private void RichTextBox_SelectionChanged(object? sender, EventArgs e)
     {
         MethodProfiler.BeginMethod();
 
@@ -403,7 +403,7 @@ public sealed class QueryTextBox : UserControl
         }
     }
 
-    private void richTextBox_TextChanged(object sender, EventArgs e)
+    private void richTextBox_TextChanged(object? sender, EventArgs e)
     {
         MethodProfiler.BeginMethod();
 
@@ -499,7 +499,7 @@ public sealed class QueryTextBox : UserControl
         return isSeparator;
     }
 
-    private void richTextBox_KeyDown(object sender, KeyEventArgs e)
+    private void richTextBox_KeyDown(object? sender, KeyEventArgs e)
     {
         MethodProfiler.BeginMethod();
 
@@ -589,7 +589,7 @@ public sealed class QueryTextBox : UserControl
         }
     }
 
-    private void RichTextBox_KeyPress(object sender, KeyPressEventArgs e)
+    private void RichTextBox_KeyPress(object? sender, KeyPressEventArgs e)
     {
         if (KeyboardHandler != null)
             e.Handled = KeyboardHandler.HandleKeyPress(e);
@@ -611,9 +611,9 @@ public sealed class QueryTextBox : UserControl
         return dataObject.GetData(name);
     }
 
-    private void richTextBox_DragEnter(object sender, DragEventArgs e) => e.Effect = DragDropEffects.All;
+    private void richTextBox_DragEnter(object? sender, DragEventArgs e) => e.Effect = DragDropEffects.All;
 
-    private void RichTextBox_DragDrop(object sender, DragEventArgs e)
+    private void RichTextBox_DragDrop(object? sender, DragEventArgs e)
     {
         var dataObject = e.Data;
 
@@ -629,7 +629,7 @@ public sealed class QueryTextBox : UserControl
                 if (uri.Scheme == "file")
                 {
                     path = uri.LocalPath;
-                    DataCommanderApplication.Instance.MainForm.LoadFiles(path.ItemToArray());
+                    DataCommanderApplication.Instance.MainForm!.LoadFiles(path.ItemToArray());
                 }
             }
             else
@@ -644,10 +644,10 @@ public sealed class QueryTextBox : UserControl
         else if (GetDataPresent(dataObject, DataFormats.FileDrop))
         {
             var fileNames = (string[])dataObject.GetData(DataFormats.FileDrop);
-            var fileName = fileNames[0];
+            var fileName = fileNames![0];
             var extension = Path.GetExtension(fileName);
             if (extension.In(".sql", ".txt"))
-                DataCommanderApplication.Instance.MainForm.LoadFiles(fileNames);
+                DataCommanderApplication.Instance.MainForm!.LoadFiles(fileNames);
             else
             {
                 var bytes = File.ReadAllBytes(fileNames[0]);
@@ -665,29 +665,29 @@ public sealed class QueryTextBox : UserControl
         }
     }
 
-    internal IKeyboardHandler KeyboardHandler { get; set; }
+    internal IKeyboardHandler? KeyboardHandler { get; set; }
 
     public int TabSize { get; set; } = 4;
 
-    private void CreateTable_Click(object sender, EventArgs e)
+    private void CreateTable_Click(object? sender, EventArgs e)
     {
         if (Parent is QueryForm queryForm)
             queryForm.ScriptQueryAsCreateTable();
     }
 
-    private void CopyTable_Click(object sender, EventArgs e)
+    private void CopyTable_Click(object? sender, EventArgs e)
     {
         if (Parent is QueryForm queryForm)
             queryForm.CopyTable();
     }
 
-    private void CopyTableWithSqlBulkCopy_Click(object sender, EventArgs e)
+    private void CopyTableWithSqlBulkCopy_Click(object? sender, EventArgs e)
     {
         var queryForm = (QueryForm)Parent;
         QueryForm.CopyTableWithSqlBulkCopy();
     }
 
-    private void richTextBox_MouseUp(object sender, MouseEventArgs e)
+    private void richTextBox_MouseUp(object? sender, MouseEventArgs e)
     {
         if (e.Button == MouseButtons.Right)
         {
@@ -698,7 +698,7 @@ public sealed class QueryTextBox : UserControl
             menuItem = new ToolStripMenuItem("Copy table", null, CopyTable_Click);
             items.Add(menuItem);
 
-            var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
+            var forms = DataCommanderApplication.Instance.MainForm!.MdiChildren;
             var index = Array.IndexOf(forms, (QueryForm)Parent);
             if (index < forms.Length - 1)
             {

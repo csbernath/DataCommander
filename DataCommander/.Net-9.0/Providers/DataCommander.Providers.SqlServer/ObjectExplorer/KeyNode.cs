@@ -5,7 +5,7 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal class KeyNode(DatabaseNode databaseNode, int id, string? name) : ITreeNode
+internal class KeyNode(int id, string? name) : ITreeNode
 {
     private readonly string? _name = name;
 
@@ -16,6 +16,6 @@ internal class KeyNode(DatabaseNode databaseNode, int id, string? name) : ITreeN
         Task.FromResult<IEnumerable<ITreeNode>>([]);
 
     public bool Sortable => false;
-    public string Query => null;
+    public string? Query => null;
     public ContextMenu? GetContextMenu() => null;
 }

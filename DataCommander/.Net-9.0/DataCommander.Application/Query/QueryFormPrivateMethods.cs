@@ -371,7 +371,7 @@ public sealed partial class QueryForm
                         {
                             var dataGrid = dataTableEditor.DataGrid;
                             var cell = dataGrid.CurrentCell;
-                            var rowIndex = cell.RowIndex;
+                            var rowIndex = cell!.RowIndex;
                             var columnIndex = cell.ColumnIndex;
                             found = QueryFormStaticMethods.FindText(dataTable.DefaultView, matcher, ref rowIndex, ref columnIndex);
 
@@ -572,7 +572,7 @@ public sealed partial class QueryForm
                         dataTable.Columns.Add(" ", typeof(int));
                         dataTable.Columns.Add("Name", typeof(string));
                         dataTable.Columns.Add("Value");
-                        var count = schemaTable.Rows.Count;
+                        var count = schemaTable!.Rows.Count;
 
                         for (var i = 0; i < count; ++i)
                         {
@@ -630,7 +630,7 @@ public sealed partial class QueryForm
         var sqlStatement = new SqlParser(Query);
         var command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
 
-        var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
+        var forms = DataCommanderApplication.Instance.MainForm!.MdiChildren;
         var index = Array.IndexOf(forms, this);
         IProvider destinationProvider;
 
@@ -688,7 +688,7 @@ public sealed partial class QueryForm
 
     internal void CopyTable()
     {
-        var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
+        var forms = DataCommanderApplication.Instance.MainForm!.MdiChildren;
         var index = Array.IndexOf(forms, this);
         if (index < forms.Length - 1)
         {
@@ -719,7 +719,7 @@ public sealed partial class QueryForm
             AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Please open a destination connection."));
     }
 
-    private void redoToolStripMenuItem_Click(object sender, EventArgs e) =>
+    private void redoToolStripMenuItem_Click(object? sender, EventArgs e) =>
         //var canRedo = _queryTextBox.RichTextBox.CanRedo;
         //if (canRedo)
         //{

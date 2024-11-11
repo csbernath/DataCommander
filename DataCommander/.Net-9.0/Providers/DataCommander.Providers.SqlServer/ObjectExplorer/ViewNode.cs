@@ -43,23 +43,19 @@ internal sealed class ViewNode(DatabaseNode database, int id, string? schema, st
         return contextMenu;
     }
 
-    private void menuItemScriptObject_Click(object sender, EventArgs e)
+    private void menuItemScriptObject_Click(object? sender, EventArgs e)
     {
         var task = new Task<string>(() => menuItemScriptObject_ClickAsync(sender).Result);
         task.Start();
-        var queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender!;
         queryForm.SetClipboardText(task.Result);
     }
 
-    private async Task<string> menuItemScriptObject_ClickAsync(object sender)
+    private async Task<string> menuItemScriptObject_ClickAsync(object? sender)
     {
-        string text;
-        await using (var connection = database.Databases.Server.CreateConnection())
-        {
-            await connection.OpenAsync();
-            text = await SqlDatabase.GetSysComments(connection, database.Name, schema, name, CancellationToken.None);
-        }
-
+        await using var connection = database.Databases.Server.CreateConnection();
+        await connection.OpenAsync();
+        var text = await SqlDatabase.GetSysComments(connection, database.Name!, schema!, name!, CancellationToken.None);
         return text;
     }
 }

@@ -32,36 +32,36 @@ public class MainForm : Form
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private readonly StringCollection _recentFileList = [];
 
-    private MenuStrip _mainMenu;
-    private ToolStripMenuItem _menuItem1;
-    private ToolStripMenuItem _mnuConnect;
-    private ImageList _imageList;
-    private StatusStrip _statusBar;
-    private ToolStrip _toolStrip;
-    private ToolStripMenuItem _mnuExit;
-    private ToolStripMenuItem _mnuHelp;
-    private ToolStripMenuItem _mnuAbout;
-    private ToolStripMenuItem _mnuOpen;
-    private ToolStripButton _btnConnect;
-    private ToolStripMenuItem _mnuWindow;
-    private ToolStripMenuItem _mnuRecentFileList;
-    private ToolStripMenuItem optionsMenuItem;
-    private ToolStripButton _openButton;
-    private ToolStripButton _saveButton;
-    private ToolStripSeparator _toolStripSeparator1;
-    private ToolStripButton _helpButton;
-    private ToolStripMenuItem _newToolStripMenuItem;
-    private ToolStripMenuItem _contentsToolStripMenuItem;
-    private ToolStripSeparator _toolStripSeparator2;
-    private ToolStripPanel _toolStripPanel;
-    private ToolStripMenuItem _closeAllDocumentsMenuItem;
-    private IContainer components;
-    private ToolStripStatusLabel _toolStripStatusLabel;
-    private ToolStripMenuItem _saveAllToolStripMenuItem;
-    private ToolStripMenuItem _recentConnectionsToolStripMenuItem;
-    private ToolStripMenuItem _checkForToolStripMenuItem;
-    private ToolStripStatusLabel _managedMemoryToolStripStatusLabel;
-    private ToolStrip _queryFormToolStrip;
+    private MenuStrip? _mainMenu;
+    private ToolStripMenuItem? _menuItem1;
+    private ToolStripMenuItem? _mnuConnect;
+    private ImageList? _imageList;
+    private StatusStrip? _statusBar;
+    private ToolStrip? _toolStrip;
+    private ToolStripMenuItem? _mnuExit;
+    private ToolStripMenuItem? _mnuHelp;
+    private ToolStripMenuItem? _mnuAbout;
+    private ToolStripMenuItem? _mnuOpen;
+    private ToolStripButton? _btnConnect;
+    private ToolStripMenuItem? _mnuWindow;
+    private ToolStripMenuItem? _mnuRecentFileList;
+    private ToolStripMenuItem? optionsMenuItem;
+    private ToolStripButton? _openButton;
+    private ToolStripButton? _saveButton;
+    private ToolStripSeparator? _toolStripSeparator1;
+    private ToolStripButton? _helpButton;
+    private ToolStripMenuItem? _newToolStripMenuItem;
+    private ToolStripMenuItem? _contentsToolStripMenuItem;
+    private ToolStripSeparator? _toolStripSeparator2;
+    private ToolStripPanel? _toolStripPanel;
+    private ToolStripMenuItem? _closeAllDocumentsMenuItem;
+    private IContainer? components;
+    private ToolStripStatusLabel? _toolStripStatusLabel;
+    private ToolStripMenuItem? _saveAllToolStripMenuItem;
+    private ToolStripMenuItem? _recentConnectionsToolStripMenuItem;
+    private ToolStripMenuItem? _checkForToolStripMenuItem;
+    private ToolStripStatusLabel? _managedMemoryToolStripStatusLabel;
+    private ToolStrip? _queryFormToolStrip;
     private readonly System.Windows.Forms.Timer _timer;
     private ColorTheme? _colorTheme;
 
@@ -120,28 +120,28 @@ public class MainForm : Form
                 control.BackColor = _colorTheme.BackColor;
             }
 
-            _toolStripPanel.BackColor = _colorTheme.BackColor;
+            _toolStripPanel!.BackColor = _colorTheme.BackColor;
 
-            _mainMenu.ForeColor = _colorTheme.ForeColor;
+            _mainMenu!.ForeColor = _colorTheme.ForeColor;
             _mainMenu.BackColor = _colorTheme.BackColor;
 
             foreach (var menuItem in _mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
             foreach (ToolStripItem x in menuItem.DropDownItems)
                 _colorTheme.Apply(x);
 
-            _toolStrip.BackColor = _colorTheme.BackColor;
+            _toolStrip!.BackColor = _colorTheme.BackColor;
             _toolStrip.ForeColor = _colorTheme.ForeColor;
 
             foreach (ToolStripItem item in _toolStrip.Items)
                 _colorTheme.Apply(item);
 
-            foreach (ToolStripItem item in _statusBar.Items)
+            foreach (ToolStripItem item in _statusBar!.Items)
                 _colorTheme.Apply(item);
         }
 
         UpdateTotalMemory();
 
-        _timer = new System.Windows.Forms.Timer(components)
+        _timer = new System.Windows.Forms.Timer(components!)
         {
             Interval = 5000, // 10 seconds
         };
@@ -161,7 +161,7 @@ public class MainForm : Form
         var totalMemory = GC.GetTotalMemory(false);
         var workingSet = Environment.WorkingSet;
 
-        _managedMemoryToolStripStatusLabel.Text = $"{BytesToText(totalMemory)} / {BytesToText(workingSet)} MB";
+        _managedMemoryToolStripStatusLabel!.Text = $"{BytesToText(totalMemory)} / {BytesToText(workingSet)} MB";
 
         _managedMemoryToolStripStatusLabel.ForeColor = totalMemory <= 256 * 1024 * 1024
             ? _colorTheme != null
@@ -170,7 +170,7 @@ public class MainForm : Form
             : Color.Red;
     }
 
-    private void Timer_Tick(object sender, EventArgs e) => UpdateTotalMemory();
+    private void Timer_Tick(object? sender, EventArgs e) => UpdateTotalMemory();
 
     /// <summary>
     /// Clean up any resources being used.
@@ -493,7 +493,7 @@ public class MainForm : Form
         PerformLayout();
     }
 
-    private void optionsMenuItem_Click(object sender, EventArgs e)
+    private void optionsMenuItem_Click(object? sender, EventArgs e)
     {
         var optionsForm = new OptionsForm(_colorTheme != null, SelectedFont, _colorTheme);
         if (optionsForm.ShowDialog() == DialogResult.OK)
@@ -562,7 +562,7 @@ public class MainForm : Form
         }
     }
 
-    private void queryForm_FormClosing(object sender, FormClosingEventArgs e)
+    private void queryForm_FormClosing(object? sender, FormClosingEventArgs e)
     {
         if (!e.Cancel && _queryFormToolStrip != null)
         {
@@ -571,11 +571,11 @@ public class MainForm : Form
         }
     }
 
-    private void mnuConnect_Click(object sender, EventArgs e) => Connect();
+    private void mnuConnect_Click(object? sender, EventArgs e) => Connect();
 
-    private void mnuExit_Click(object sender, EventArgs e) => Close();
+    private void mnuExit_Click(object? sender, EventArgs e) => Close();
 
-    private void mnuAbout_Click(object sender, EventArgs e)
+    private void mnuAbout_Click(object? sender, EventArgs e)
     {
         var aboutForm = new AboutForm(_colorTheme);
         aboutForm.ShowDialog();
@@ -591,7 +591,7 @@ public class MainForm : Form
         folder.Attributes.SetAttributeValue("RecentFileList", array);
     }
 
-    private void mnuRecentFile_Click(object sender, EventArgs e)
+    private void mnuRecentFile_Click(object? sender, EventArgs e)
     {
         var menuItem = (ToolStripMenuItem)sender;
         var index = _mnuRecentFileList.DropDownItems.IndexOf(menuItem);
@@ -743,13 +743,13 @@ public class MainForm : Form
         }
     }
 
-    private void mnuOpen_Click(object sender, EventArgs e) => Open();
+    private void mnuOpen_Click(object? sender, EventArgs e) => Open();
 
     public void LoadFiles(string[] fileNames)
     {
         var i = fileNames.Length - 1;
         var path = fileNames[i];
-        var queryForm = (QueryForm)ActiveMdiChild;
+        var queryForm = (QueryForm)ActiveMdiChild!;
         queryForm.LoadFile(path);
 
         var index = _recentFileList.IndexOf(path);
@@ -779,11 +779,11 @@ public class MainForm : Form
 
     public Font SelectedFont { get; private set; }
 
-    private void btnConnect_Click(object sender, EventArgs e) => Connect();
+    private void btnConnect_Click(object? sender, EventArgs e) => Connect();
 
-    private void openButton_Click(object sender, EventArgs e) => Open();
+    private void openButton_Click(object? sender, EventArgs e) => Open();
 
-    private void saveButton_Click(object sender, EventArgs e)
+    private void saveButton_Click(object? sender, EventArgs e)
     {
         var queryForm = (QueryForm)ActiveMdiChild;
 
@@ -791,9 +791,9 @@ public class MainForm : Form
             queryForm.Save();
     }
 
-    private void HelpButton_Click(object sender, EventArgs e) => ShowContents();
+    private void HelpButton_Click(object? sender, EventArgs e) => ShowContents();
 
-    private async void CreateMenuItem_Click(object sender, EventArgs e)
+    private async void CreateMenuItem_Click(object? sender, EventArgs e)
     {
         var dialog = new SaveFileDialog
         {
@@ -857,18 +857,18 @@ public class MainForm : Form
         Process.Start(processStartInfo);
     }
 
-    private void contentsToolStripMenuItem_Click(object sender, EventArgs e) => ShowContents();
+    private void contentsToolStripMenuItem_Click(object? sender, EventArgs e) => ShowContents();
 
     protected override void OnMdiChildActivate(EventArgs e)
     {
         base.OnMdiChildActivate(e);
 
         _activeMdiChildToolStripTextBox.Text = ActiveMdiChild != null ? ActiveMdiChild.Text : null;
-        _saveButton.Enabled = ActiveMdiChild != null;
+        _saveButton!.Enabled = ActiveMdiChild != null;
 
         if (ActiveMdiChild != null)
         {
-            _toolStripPanel.ResumeLayout(false);
+            _toolStripPanel!.ResumeLayout(false);
             if (_queryFormToolStrip != null)
                 _toolStripPanel.Controls.Remove(_queryFormToolStrip);
 
@@ -887,10 +887,10 @@ public class MainForm : Form
             CreateRecentFileListMenu();
         }
         else
-            _mnuRecentFileList.DropDownItems.Clear();
+            _mnuRecentFileList!.DropDownItems.Clear();
     }
 
-    private void CloseAllDocumentsMenuItem_Click(object sender, EventArgs e)
+    private void CloseAllDocumentsMenuItem_Click(object? sender, EventArgs e)
     {
         while (true)
         {
@@ -910,7 +910,7 @@ public class MainForm : Form
     internal void SaveAll()
     {
         Cursor = Cursors.WaitCursor;
-        _toolStripStatusLabel.Text = "Saving all items...";
+        _toolStripStatusLabel!.Text = "Saving all items...";
         Log.Write(LogLevel.Trace, "Saving all items...");
 
         var fileNamePrefix = Path.GetTempPath() + "DataCommander.SaveAll." + '[' + DateTime.Now.ToString("yyyyMMddHHmmss.fff") + ']';
@@ -934,12 +934,12 @@ public class MainForm : Form
         Cursor = Cursors.Default;
     }
 
-    private void saveAllToolStripMenuItem_Click(object sender, EventArgs e) => SaveAll();
+    private void saveAllToolStripMenuItem_Click(object? sender, EventArgs e) => SaveAll();
 
     private ToolStripTextBox _activeMdiChildToolStripTextBox;
     public ToolStripTextBox ActiveMdiChildToolStripTextBox => _activeMdiChildToolStripTextBox;
 
-    private void CheckForToolStripMenuItem_Click(object sender, EventArgs e)
+    private void CheckForToolStripMenuItem_Click(object? sender, EventArgs e)
     {
         const string url = "https://github.com/csbernath/DataCommander/releases";
         var processStartInfo = new ProcessStartInfo
@@ -950,7 +950,7 @@ public class MainForm : Form
         Process.Start(processStartInfo);
     }
 
-    private void managedMemoryToolStripStatusLabel_MouseUp(object sender, MouseEventArgs e)
+    private void managedMemoryToolStripStatusLabel_MouseUp(object? sender, MouseEventArgs e)
     {
         if (e.Button == MouseButtons.Right)
         {
@@ -960,13 +960,13 @@ public class MainForm : Form
             menuItem.Click += CollectGarbage_Click;
             menu.Items.Add(menuItem);
 
-            var bounds = _managedMemoryToolStripStatusLabel.Bounds;
+            var bounds = _managedMemoryToolStripStatusLabel!.Bounds;
             var location = e.Location;
             menu.Show(_statusBar, bounds.X + location.X, bounds.Y + location.Y);
         }
     }
 
-    private void CollectGarbage_Click(object sender, EventArgs e)
+    private void CollectGarbage_Click(object? sender, EventArgs e)
     {
         GC.Collect();
 

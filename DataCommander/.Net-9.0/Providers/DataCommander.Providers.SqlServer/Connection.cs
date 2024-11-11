@@ -76,7 +76,7 @@ internal sealed class Connection : ConnectionBase
         _sqlConnection.StateChange += OnStateChange;
     }
 
-    private void OnStateChange(object sender, StateChangeEventArgs e)
+    private void OnStateChange(object? sender, StateChangeEventArgs e)
     {
         var text = $"Connection.State changed. OriginalState: {e.OriginalState}, CurrentState: {e.CurrentState}";
         InvokeInfoMessage(
@@ -110,7 +110,7 @@ set arithabort on";
 
     private long _createCommandTimestamp;
 
-    private void OnInfoMessage(object sender, SqlInfoMessageEventArgs e)
+    private void OnInfoMessage(object? sender, SqlInfoMessageEventArgs e)
     {
         var clock = ClockAggregateRepository.Singleton.Get();
         var localTime = clock.GetLocalTimeFromCurrentEnvironmentTickCount64();

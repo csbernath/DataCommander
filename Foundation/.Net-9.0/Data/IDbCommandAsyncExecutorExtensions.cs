@@ -14,13 +14,13 @@ public static class IDbCommandAsyncExecutorExtensions
         this IDbCommandAsyncExecutor executor,
         IEnumerable<ExecuteCommandAsyncRequest> requests,
         CancellationToken cancellationToken) => executor.ExecuteAsync(
-            async (connection, _) =>
-            {
-                foreach (var request in requests)
-                    using (var command = connection.CreateCommand(request.CreateCommandRequest))
-                        await request.Execute(command);
-            },
-            cancellationToken);
+        async (connection, _) =>
+        {
+            foreach (var request in requests)
+                using (var command = connection.CreateCommand(request.CreateCommandRequest))
+                    await request.Execute(command);
+        },
+        cancellationToken);
 
     public static Task ExecuteAsync(
         this IDbCommandAsyncExecutor executor,
@@ -72,17 +72,17 @@ public static class IDbCommandAsyncExecutorExtensions
         ExecuteReaderRequest executeReaderRequest,
         Func<DbDataReader, CancellationToken, Task> readResults,
         CancellationToken cancellationToken) => executor.ExecuteAsync(
-            async (connection, _) =>
-            {
-                await using var command = connection.CreateCommand(executeReaderRequest.CreateCommandRequest);
-                await using var dataReader =
-                             await command.ExecuteReaderAsync(executeReaderRequest.CommandBehavior,
-                                 cancellationToken);
-                await readResults(dataReader, cancellationToken);
-            },
-            cancellationToken);
+        async (connection, _) =>
+        {
+            await using var command = connection.CreateCommand(executeReaderRequest.CreateCommandRequest);
+            await using var dataReader =
+                await command.ExecuteReaderAsync(executeReaderRequest.CommandBehavior,
+                    cancellationToken);
+            await readResults(dataReader, cancellationToken);
+        },
+        cancellationToken);
 
-    public static async Task<ReadOnlySegmentLinkedList<T>?> ExecuteReaderAsync<T>(
+    public static async Task<ReadOnlySegmentLinkedList<T>> ExecuteReaderAsync<T>(
         this IDbCommandAsyncExecutor executor,
         ExecuteReaderRequest executeReaderRequest,
         int segmentLength,
@@ -92,9 +92,8 @@ public static class IDbCommandAsyncExecutorExtensions
         ReadOnlySegmentLinkedList<T>? records = null;
         await executor.ExecuteReaderAsync(
             executeReaderRequest,
-            async (dataReader, _) => records =
-                await dataReader.ReadResultAsync(segmentLength, readDataRecord, cancellationToken),
+            async (dataReader, _) => records = await dataReader.ReadResultAsync(segmentLength, readDataRecord, cancellationToken),
             cancellationToken);
-        return records;
+        return records!;
     }
 }

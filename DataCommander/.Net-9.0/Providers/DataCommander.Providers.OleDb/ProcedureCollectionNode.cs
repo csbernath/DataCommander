@@ -40,7 +40,7 @@ internal sealed class ProcedureCollectionNode(SchemaNode schema) : ITreeNode
     }
 
     public bool Sortable => false;
-    public string Query => null;
+    public string? Query => null;
 
     public ContextMenu? GetContextMenu() => throw new System.NotImplementedException();
 }

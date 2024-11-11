@@ -53,7 +53,7 @@ internal class CatalogNode(OleDbConnection connection, string? name) : ITreeNode
     }
 
     public bool Sortable => false;
-    public string Query => null;
+    public string? Query => null;
     public OleDbConnection Connection { get; } = connection;
     public string? Name { get; } = name;
 

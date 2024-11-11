@@ -19,7 +19,7 @@ internal partial class DataViewPropertiesForm : Form
         sortTextBox.Text = properties.Sort;
     }
 
-    private void okButton_Click(object sender, EventArgs e)
+    private void okButton_Click(object? sender, EventArgs e)
     {
         _properties = new DataViewProperties(rowFilterTextBox.Text, sortTextBox.Text);
         DialogResult = DialogResult.OK;

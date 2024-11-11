@@ -15,7 +15,7 @@ internal sealed class TriggerNode(DatabaseNode databaseNode, int id, string? nam
     public bool IsLeaf => true;
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => null;
     public bool Sortable => false;
-    public string Query => null;
+    public string? Query => null;
 
     public ContextMenu? GetContextMenu()
     {
@@ -25,7 +25,7 @@ internal sealed class TriggerNode(DatabaseNode databaseNode, int id, string? nam
         return contextMenu;
     }
 
-    private void menuItemScriptObject_Click(object sender, EventArgs e)
+    private void menuItemScriptObject_Click(object? sender, EventArgs e)
     {
         var cb = new SqlCommandBuilder();
         var databaseName = cb.QuoteIdentifier(databaseNode.Name);

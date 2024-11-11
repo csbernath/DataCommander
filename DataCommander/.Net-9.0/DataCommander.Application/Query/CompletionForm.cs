@@ -75,20 +75,20 @@ internal sealed class CompletionForm : Form
     /// </summary>
     private void InitializeComponent()
     {
-        this.SuspendLayout();
+        SuspendLayout();
         // 
         // CompletionForm
         // 
-        this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-        this.ClientSize = new System.Drawing.Size(400, 140);
-        this.ControlBox = false;
-        this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-        this.MaximizeBox = false;
-        this.MinimizeBox = false;
-        this.Name = "CompletionForm";
-        this.ShowInTaskbar = false;
-        this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-        this.ResumeLayout(false);
+        AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+        ClientSize = new System.Drawing.Size(400, 140);
+        ControlBox = false;
+        FormBorderStyle = FormBorderStyle.None;
+        MaximizeBox = false;
+        MinimizeBox = false;
+        Name = "CompletionForm";
+        ShowInTaskbar = false;
+        StartPosition = FormStartPosition.Manual;
+        ResumeLayout(false);
 
     }
 }
