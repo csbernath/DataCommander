@@ -141,7 +141,7 @@ public sealed partial class QueryForm
                 var tableName = _sqlStatement.FindTableName();
                 text = tableName;
                 dataSet.Tables[0].TableName = tableName;
-                getTableSchemaResult = Provider.GetTableSchema(Connection.Connection, tableName);
+                getTableSchemaResult = Provider.GetTableSchema(Connection!.Connection!, tableName);
             }
             else
             {
@@ -247,7 +247,7 @@ public sealed partial class QueryForm
 
     public void ShowText(string text)
     {
-        var mainForm = DataCommanderApplication.Instance.MainForm;
+        var mainForm = DataCommanderApplication.Instance.MainForm!;
         mainForm.Cursor = Cursors.WaitCursor;
 
         try

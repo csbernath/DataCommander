@@ -79,7 +79,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         _mnuGoTo!.Click += mnuGoTo_Click;
         _mnuClearCache!.Click += mnuClearCache_Click;
 
-        var sqlKeyWords = Settings.CurrentType.Attributes["SqlReservedWords"].GetValue<string[]>();
+        var sqlKeyWords = Settings.CurrentType!.Attributes["SqlReservedWords"].GetValue<string[]>();
         var providerKeyWords = provider.KeyWords;
 
         _queryTextBox!.SetColorTheme(colorTheme);
@@ -104,7 +104,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         _resultSetsTabControl.Dock = DockStyle.Fill;
         _resultSetsTabPage.Controls.Add(_resultSetsTabControl);
 
-        _tabControl.TabPages.Add(_resultSetsTabPage);
+        _tabControl!.TabPages.Add(_resultSetsTabPage);
         _tabControl.TabPages.Add(_messagesTabPage);
         _tabControl.SelectedTab = _messagesTabPage;
 
@@ -1191,7 +1191,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         var text = Provider.GetConnectionName(Connection!.Connection);
         Text = text;
 
-        var mainForm = DataCommanderApplication.Instance.MainForm;
+        var mainForm = DataCommanderApplication.Instance.MainForm!;
         mainForm.ActiveMdiChildToolStripTextBox.Text = text;
     }
 
@@ -1234,7 +1234,7 @@ public sealed partial class QueryForm : Form, IQueryForm
                 var getQueryConfigurationResult = GetQueryConfiguration(statements[0].CommandText);
                 if (getQueryConfigurationResult.Succeeded)
                 {
-                    command = Connection.CreateCommand();
+                    command = Connection!.CreateCommand();
                     command.CommandText = statements[0].CommandText;
                     command.CommandTimeout = _commandTimeout;
                 }
@@ -1255,8 +1255,7 @@ public sealed partial class QueryForm : Form, IQueryForm
                     (
                         from statement in statements
                         select new AsyncDataAdapterCommand(null, statement.LineIndex,
-                            Connection.Connection.CreateCommand(new CreateCommandRequest(statement.CommandText, null, CommandType.Text, _commandTimeout,
-                                _transaction)), null, null, null)
+                            Connection!.Connection.CreateCommand(new CreateCommandRequest(statement.CommandText, null, CommandType.Text, _commandTimeout, _transaction)), null, null, null)
                     )
                     .ToReadOnlyCollection();
 
@@ -1490,7 +1489,7 @@ public sealed partial class QueryForm : Form, IQueryForm
     private static List<List<Token>> GetDeclarations(List<Token> tokens)
     {
         List<List<Token>> declarations = [];
-        List<Token> declaration = null;
+        List<Token>? declaration = null;
         foreach (var token in tokens)
         {
             if (token.Type == TokenType.KeyWord && string.Equals(token.Value, "declare", StringComparison.InvariantCultureIgnoreCase))
@@ -1501,7 +1500,7 @@ public sealed partial class QueryForm : Form, IQueryForm
                 declaration = [];
             }
 
-            declaration.Add(token);
+            declaration!.Add(token);
         }
 
         if (declaration != null)
@@ -1548,7 +1547,7 @@ public sealed partial class QueryForm : Form, IQueryForm
                     var maxLength = 0;
                     foreach (DataRow dataRow in dataTable.Rows)
                     {
-                        var length = dataRow[column].ToString().Length;
+                        var length = dataRow[column].ToString()!.Length;
 
                         if (length > maxLength)
                         {
@@ -1607,7 +1606,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         {
             var tableName = _sqlStatement.FindTableName();
             dataTableEditor.TableName = tableName;
-            var getTableSchemaResult = Provider.GetTableSchema(Connection.Connection, tableName);
+            var getTableSchemaResult = Provider.GetTableSchema(Connection!.Connection!, tableName);
             dataTableEditor.TableSchema = getTableSchemaResult;
         }
 
@@ -1775,7 +1774,7 @@ public sealed partial class QueryForm : Form, IQueryForm
             if (e != null)
                 ShowMessage(e);
 
-            if (Connection.State == ConnectionState.Open && Connection.Database != _database)
+            if (Connection!.State == ConnectionState.Open && Connection.Database != _database)
             {
                 _database = Connection.Database;
                 SetText();
@@ -1834,7 +1833,7 @@ public sealed partial class QueryForm : Form, IQueryForm
                         var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
                             "Opening connection...", string.Empty, _colorTheme);
                         cancelableOperationForm.Execute(new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken)));
-                        Connection.Connection.Dispose();
+                        Connection.Connection!.Dispose();
                         Connection = connection;
                         AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Opening connection succeeded."));
                     }

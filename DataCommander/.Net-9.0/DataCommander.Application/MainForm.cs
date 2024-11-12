@@ -566,7 +566,7 @@ public class MainForm : Form
     {
         if (!e.Cancel && _queryFormToolStrip != null)
         {
-            _toolStripPanel.Controls.Remove(_queryFormToolStrip);
+            _toolStripPanel!.Controls.Remove(_queryFormToolStrip);
             _queryFormToolStrip = null;
         }
     }
@@ -593,8 +593,8 @@ public class MainForm : Form
 
     private void mnuRecentFile_Click(object? sender, EventArgs e)
     {
-        var menuItem = (ToolStripMenuItem)sender;
-        var index = _mnuRecentFileList.DropDownItems.IndexOf(menuItem);
+        var menuItem = (ToolStripMenuItem)sender!;
+        var index = _mnuRecentFileList!.DropDownItems.IndexOf(menuItem);
         var count = _recentFileList.Count;
         var path = _recentFileList[count - index - 1];
         LoadFiles([path]);
@@ -612,7 +612,7 @@ public class MainForm : Form
             menuItems.Add(menuItem);
         }
 
-        _mnuRecentFileList.DropDownItems.Clear();
+        _mnuRecentFileList!.DropDownItems.Clear();
         _mnuRecentFileList.DropDownItems.AddRange(menuItems.ToArray());
     }
 
@@ -830,7 +830,7 @@ public class MainForm : Form
             }
 
             var provider = ProviderFactory.CreateProvider(providerIdentifier);
-            Assert.IsTrue(provider != null);
+            Assert.IsNotNull(provider);
 
             var connectionStringAndCredential = new ConnectionStringAndCredential(connectionString, null);
             var connectionInfo = new ConnectionInfo(null, providerIdentifier, connectionStringAndCredential);
@@ -877,7 +877,7 @@ public class MainForm : Form
             if (queryFormToolStrip != null)
             {
                 queryFormToolStrip.Visible = true;
-                var location = new Point(_toolStrip.Right, _toolStrip.Top);
+                var location = new Point(_toolStrip!.Right, _toolStrip.Top);
                 _toolStripPanel.Join(queryFormToolStrip, location);
                 _toolStripPanel.PerformLayout();
 

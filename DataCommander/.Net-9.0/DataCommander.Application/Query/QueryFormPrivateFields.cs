@@ -73,7 +73,7 @@ public sealed partial class QueryForm
     private ToolStripMenuItem _mnuOpenTable;
     private readonly IContainer components = new Container();
     private readonly ConnectionInfo _connectionInfo;
-    private DbTransaction _transaction;
+    private DbTransaction? _transaction;
     private SqlParser _sqlStatement;
     private DbCommand _command;
     private CommandType _commandType = CommandType.Text;

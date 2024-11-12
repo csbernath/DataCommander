@@ -159,7 +159,7 @@ public sealed partial class QueryForm
             _parentStatusBar.Items[0].Text = $"Closing connection to data source {dataSource}'....";
             Connection.Close();
             _parentStatusBar.Items[0].Text = $"Connection to data source {dataSource} closed.";
-            Connection.Connection.Dispose();
+            Connection!.Connection!.Dispose();
             Connection = null;
         }
 
@@ -180,7 +180,7 @@ public sealed partial class QueryForm
     {
         try
         {
-            var dataTable = oleDbConnection.GetOleDbSchemaTable(guid, null);
+            var dataTable = oleDbConnection.GetOleDbSchemaTable(guid, null)!;
             dataTable.TableName = name;
             dataSet.Tables.Add(dataTable);
         }
@@ -208,7 +208,7 @@ public sealed partial class QueryForm
         SetStatusbarPanelText("Cancel Executing Command/Query...");
         _cancel = true;
         SetGui(CommandState.None);
-        _dataAdapter.Cancel();
+        _dataAdapter!.Cancel();
     }
 
     private void WriteRows(long rowCount, int scale)
@@ -299,7 +299,7 @@ public sealed partial class QueryForm
     private void FindText(string text)
     {
         var found = false;
-        var control = ActiveControl;
+        var control = ActiveControl!;
 
         try
         {
@@ -317,7 +317,7 @@ public sealed partial class QueryForm
 
             if (control is TreeView treeView)
             {
-                var treeNode2 = treeView.SelectedNode.FirstNode;
+                var treeNode2 = treeView.SelectedNode!.FirstNode;
 
                 if (treeNode2 == null || treeNode2.Tag == null)
                     treeNode2 = treeView.SelectedNode.NextNode;
@@ -466,8 +466,8 @@ public sealed partial class QueryForm
         const string textBoxText = "Please wait...";
         var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, showDialogDelay, formText, textBoxText, _colorTheme);
         var startTimestamp = Stopwatch.GetTimestamp();
-        var response = cancelableOperationForm.Execute(new Task<GetCompletionResult?>(() =>
-            Provider.GetCompletion(Connection, _transaction, text, position, cancellationTokenSource.Token).Result));
+        var response = cancelableOperationForm.Execute(new Task<GetCompletionResult>(() =>
+            Provider.GetCompletion(Connection!, _transaction, text, position, cancellationTokenSource.Token).Result));
         var elapsed = Stopwatch.GetTimestamp() - startTimestamp;
         var from = response.FromCache ? "cache" : "data source";
         var count = response.Items != null ? response.Items.Count : 0;
@@ -647,7 +647,7 @@ public sealed partial class QueryForm
 
         using (var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
         {
-            schemaTable = dataReader.GetSchemaTable();
+            schemaTable = dataReader.GetSchemaTable()!;
             dataTypeNames = new string[dataReader.FieldCount];
 
             for (var i = 0; i < dataReader.FieldCount; i++)
@@ -658,7 +658,7 @@ public sealed partial class QueryForm
         var createTable = new StringBuilder();
         createTable.AppendFormat("create table [{0}]\r\n(\r\n", tableName);
         var stringTable = new StringTable(3);
-        var last = schemaTable.Rows.Count - 1;
+        var last = schemaTable!.Rows.Count - 1;
 
         for (var i = 0; i <= last; i++)
         {
@@ -697,7 +697,9 @@ public sealed partial class QueryForm
             var destinationConnection = nextQueryForm.Connection;
             var sqlStatement = new SqlParser(Query);
             _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
-            var tableName = _command.CommandType == CommandType.StoredProcedure ? _command.CommandText : sqlStatement.FindTableName();
+            var tableName = _command.CommandType == CommandType.StoredProcedure
+                ? _command.CommandText
+                : sqlStatement.FindTableName()!;
 
             if (tableName[0] == '[' && destinationProvider.Identifier == "System.Data.OracleClient")
                 tableName = tableName[1..^1];

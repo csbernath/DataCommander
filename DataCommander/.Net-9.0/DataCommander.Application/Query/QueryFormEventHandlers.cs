@@ -32,7 +32,7 @@ public sealed partial class QueryForm
 {
     private void CloseResultSetTabPage_Click(object? sender, EventArgs e)
     {
-        var toolStripMenuItem = (ToolStripMenuItem)sender;
+        var toolStripMenuItem = (ToolStripMenuItem)sender!;
         var tabPage = (TabPage)toolStripMenuItem.Tag!;
         CloseResultSetTabPage(tabPage);
         toolStripMenuItem.Tag = null;
@@ -94,7 +94,7 @@ public sealed partial class QueryForm
 
     private void tvObjectBrowser_BeforeExpand(object? sender, TreeViewCancelEventArgs e)
     {
-        var treeNode = e.Node;
+        var treeNode = e.Node!;
 
         if (treeNode.Nodes.Count > 0)
         {
@@ -170,7 +170,7 @@ Please wait...",
         var treeNodeV = _tvObjectExplorer.SelectedNode;
         if (treeNodeV != null)
         {
-            var treeNode = (ITreeNode)treeNodeV.Tag;
+            var treeNode = (ITreeNode)treeNodeV.Tag!;
             treeNodeV.Nodes.Clear();
 
             var startTimestamp = Stopwatch.GetTimestamp();
@@ -178,7 +178,7 @@ Please wait...",
             var cancellationToken = cancellationTokenSource.Token;
             var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
                 "Getting tree node children...", "Please wait...", _colorTheme);
-            var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => treeNode.GetChildren(true, cancellationToken).Result));
+            var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => treeNode!.GetChildren(true, cancellationToken).Result));
             AddNodes(treeNodeV.Nodes, children, treeNode.Sortable, startTimestamp);
         }
     }
@@ -280,7 +280,7 @@ Please wait...",
             if (_findTextForm == null)
                 _findTextForm = new FindTextForm();
 
-            var control = ActiveControl;
+            var control = ActiveControl!;
             var dataTableViewer = control as DataTableEditor;
 
             if (dataTableViewer == null)
@@ -565,7 +565,7 @@ Please wait...",
             {
                 using var dataReader = _command.ExecuteReader();
                 var dataReaderHelper = Provider.CreateDataReaderHelper(dataReader);
-                var schemaTable = dataReader.GetSchemaTable();
+                var schemaTable = dataReader.GetSchemaTable()!;
                 var schemaRows = schemaTable.Rows;
                 var columnCount = schemaRows.Count;
                 var sb = new StringBuilder();
@@ -620,7 +620,7 @@ Please wait...",
 
     private async void mnuDuplicateConnection_Click(object? sender, EventArgs e)
     {
-        var mainForm = DataCommanderApplication.Instance.MainForm;
+        var mainForm = DataCommanderApplication.Instance.MainForm!;
         var index = mainForm.MdiChildren.Length;
 
         var connection = Provider.CreateConnection(_connectionInfo.ConnectionStringAndCredential);
@@ -633,10 +633,10 @@ Please wait...",
         cancelableOperationForm.Execute(new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken)));
         var elapsedTicks = stopwatch.ElapsedTicks;
 
-        var database = Connection.Database;
+        var database = Connection!.Database;
 
         if (connection.Database != Connection.Database)
-            connection.Connection.ChangeDatabase(database);
+            connection.Connection!.ChangeDatabase(database);
 
         var queryForm = new QueryForm(_mainForm, Provider, _connectionInfo, connection, mainForm.StatusBar, _colorTheme);
 
@@ -668,7 +668,7 @@ Please wait...",
     {
         if (_transaction == null)
         {
-            var transaction = Connection.Connection.BeginTransaction();
+            var transaction = Connection!.Connection!.BeginTransaction();
             SetTransaction(transaction);
         }
     }
@@ -768,7 +768,7 @@ Please wait...",
 
     private void textBox_SelectionChanged(object? sender, EventArgs e)
     {
-        var richTextBox = (RichTextBox)sender;
+        var richTextBox = (RichTextBox)sender!;
         var charIndex = richTextBox.SelectionStart;
         var line = richTextBox.GetLineFromCharIndex(charIndex) + 1;
         var lineIndex = QueryTextBox.GetLineIndex(richTextBox, -1);
@@ -782,7 +782,7 @@ Please wait...",
         {
             Cursor = Cursors.WaitCursor;
 
-            if (Connection.Connection is OleDbConnection oleDbConnection && string.IsNullOrEmpty(Query))
+            if (Connection!.Connection is OleDbConnection oleDbConnection && string.IsNullOrEmpty(Query))
             {
                 var dataSet = new DataSet();
                 AddTable(oleDbConnection, dataSet, OleDbSchemaGuid.Provider_Types, "Provider Types");
@@ -930,7 +930,7 @@ Please wait...",
 
     private void ParseToolStripMenuItem_Click(object? sender, EventArgs e)
     {
-        var executor = Connection.Connection.CreateCommandExecutor();
+        var executor = Connection!.Connection!.CreateCommandExecutor();
         var on = false;
         try
         {

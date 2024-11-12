@@ -97,7 +97,7 @@ public static class Settings
     /// <summary>
     /// Gets the config node of the calling method's type.
     /// </summary>
-    public static ConfigurationNode? CurrentType
+    public static ConfigurationNode CurrentType
     {
         [MethodImpl(MethodImplOptions.NoInlining)]
         get
@@ -105,11 +105,11 @@ public static class Settings
             var trace = new StackTrace(1);
             var nodeName = ConfigurationNodeName.FromType(trace, 0);
             var node = Section.SelectNode(nodeName, true);
-            return node;
+            return node!;
         }
     }
 
-    public static ConfigurationNode? CurrentNamespace
+    public static ConfigurationNode CurrentNamespace
     {
         [MethodImpl(MethodImplOptions.NoInlining)]
         get
@@ -117,7 +117,7 @@ public static class Settings
             var trace = new StackTrace(1);
             var nodeName = ConfigurationNodeName.FromNamespace(trace, 0);
             var node = Section.SelectNode(nodeName, true);
-            return node;
+            return node!;
         }
     }
 

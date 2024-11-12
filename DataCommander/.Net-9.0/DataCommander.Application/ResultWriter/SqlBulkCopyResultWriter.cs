@@ -73,7 +73,7 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
         _logResultWriter.WriteTableBegin(schemaTable);
         if (_transaction == null)
         {
-            _transaction = _destinationConnection.Connection.BeginTransaction();
+            _transaction = _destinationConnection.Connection!.BeginTransaction();
             _setTransaction(_transaction);
         }
 

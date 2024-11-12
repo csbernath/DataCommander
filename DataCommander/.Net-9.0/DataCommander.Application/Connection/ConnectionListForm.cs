@@ -407,7 +407,7 @@ internal sealed class ConnectionListForm : Form
     {
         get
         {
-            var index = _dataGrid.CurrentCell.RowIndex;
+            var index = _dataGrid!.CurrentCell!.RowIndex;
 
             if (index >= 0)
             {
@@ -429,7 +429,7 @@ internal sealed class ConnectionListForm : Form
             var dataView = _dataTable.DefaultView;
             var selectedCount = 0;
 
-            foreach (DataGridViewRow dataGridViewRow in _dataGrid.SelectedRows)
+            foreach (DataGridViewRow dataGridViewRow in _dataGrid!.SelectedRows)
             {
                 var dataRowView = (DataRowView)dataGridViewRow.DataBoundItem!;
                 var row = dataRowView.Row;
@@ -515,7 +515,7 @@ Provider name: {providerInfo.Name}");
 
     private void DataGrid_DoubleClick(object? sender, EventArgs e)
     {
-        var position = _dataGrid.PointToClient(Cursor.Position);
+        var position = _dataGrid!.PointToClient(Cursor.Position);
         var hitTestInfo = _dataGrid.HitTest(position.X, position.Y);
 
         switch (hitTestInfo.Type)

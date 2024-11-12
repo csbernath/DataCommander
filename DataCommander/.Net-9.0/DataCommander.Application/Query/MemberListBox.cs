@@ -225,7 +225,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
         var index = -1;
 
         if (filteredItems.Count > 0)
-            index = filteredItems.MinIndexedItem(i => i.IndexOf).Value.Index;
+            index = filteredItems.MinIndexedItem(i => i.IndexOf).Value!.Index;
 
         if (index >= 0)
         {

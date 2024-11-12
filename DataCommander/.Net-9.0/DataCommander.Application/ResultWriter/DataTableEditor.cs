@@ -240,19 +240,6 @@ internal class DataTableEditor : UserControl
             return column;
         });
 
-    private object CurrentCellValue
-    {
-        get
-        {
-            var cell = _dataGrid!.CurrentCell;
-            var rowNumber = cell.RowIndex;
-            var columnNumber = cell.ColumnIndex;
-            var dataRow = _dataTable.DefaultView[rowNumber].Row;
-            var value = dataRow[columnNumber];
-            return value;
-        }
-    }
-
     /// <summary> 
     /// Clean up any resources being used.
     /// </summary>
@@ -549,7 +536,7 @@ internal class DataTableEditor : UserControl
         {
             var where = GetWhere(dataRow);
             sb.Append(@where);
-            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild!;
+            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm!.ActiveMdiChild!;
             var text = sb.ToString();
             queryForm.AppendQueryText(text);
         }
@@ -581,9 +568,9 @@ internal class DataTableEditor : UserControl
         var where = GetWhere(e.Row);
         _statementStringBuilder.Append(@where);
 
-        if (_dataGrid.SelectedRows.Count == 1)
+        if (_dataGrid!.SelectedRows.Count == 1)
         {
-            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild!;
+            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm!.ActiveMdiChild!;
             var text = _statementStringBuilder.ToString();
             _statementStringBuilder = null;
             queryForm.AppendQueryText(text);
@@ -603,7 +590,7 @@ internal class DataTableEditor : UserControl
 
     private void CopyColumnName_Click(object? sender, EventArgs e) => Clipboard.SetDataObject(_columnName, true, 5, 200);
 
-    private int[] GetColumnIndexes() => (from c in _dataGrid.Columns.Cast<DataGridViewColumn>()
+    private int[] GetColumnIndexes() => (from c in _dataGrid!.Columns.Cast<DataGridViewColumn>()
                                          where c.Visible
                                          orderby c.DisplayIndex
                                          select c.Index).ToArray();
@@ -883,7 +870,7 @@ internal class DataTableEditor : UserControl
 
     private void RemoveRowFilter_Click(object? sender, EventArgs e) => _dataTable.DefaultView.RowFilter = null;
 
-    private void ApplyRowFilter(string rowFilter)
+    private void ApplyRowFilter(string? rowFilter)
     {
         try
         {
@@ -899,7 +886,7 @@ internal class DataTableEditor : UserControl
 
     private void RowFilter_Click(object? sender, EventArgs e)
     {
-        var menuItem = (ToolStripMenuItem)sender;
+        var menuItem = (ToolStripMenuItem)sender!;
         var rowFilter = menuItem.Text;
         ApplyRowFilter(rowFilter);
     }
@@ -925,7 +912,7 @@ internal class DataTableEditor : UserControl
 
         for (var i = 0; i < array.Length; i++)
         {
-            var obj = array.GetValue(i);
+            var obj = array.GetValue(i)!;
             sb.AppendLine(obj.ToString());
         }
 
@@ -934,13 +921,13 @@ internal class DataTableEditor : UserControl
 
     private void HideColumn_Click(object? sender, EventArgs e)
     {
-        var column = _dataGrid.Columns[_columnIndex];
+        var column = _dataGrid!.Columns[_columnIndex];
         column.Visible = false;
     }
 
     private void UnhideAllColumns_Click(object? sender, EventArgs e)
     {
-        foreach (var column in _dataGrid.Columns.Cast<DataGridViewColumn>().Where(c => !c.Visible))
+        foreach (var column in _dataGrid!.Columns.Cast<DataGridViewColumn>().Where(c => !c.Visible))
         {
             column.Visible = true;
         }
@@ -963,7 +950,7 @@ internal class DataTableEditor : UserControl
             var columns = _dataTable.Columns;
             var columnCount = columns.Count;
 
-            foreach (var row in _dataGrid.Rows.Cast<DataGridViewRow>().Where(r => r.Visible))
+            foreach (var row in _dataGrid!.Rows.Cast<DataGridViewRow>().Where(r => r.Visible))
             {
                 xmlWriter.WriteStartElement("row");
                 for (var columnIndex = 0; columnIndex < columnCount; columnIndex++)
@@ -1041,7 +1028,7 @@ internal class DataTableEditor : UserControl
     {
         DataGridViewRow? currentRow = null;
 
-        foreach (DataGridViewRow row in _dataGrid.SelectedRows)
+        foreach (DataGridViewRow row in _dataGrid!.SelectedRows)
         {
             if (row == _dataGrid.CurrentRow)
             {
@@ -1079,7 +1066,7 @@ internal class DataTableEditor : UserControl
                 menu.Items.Add(menuItem);
             }
 
-            var hitTestInfo = _dataGrid.HitTest(e.X, e.Y);
+            var hitTestInfo = _dataGrid!.HitTest(e.X, e.Y);
             switch (hitTestInfo.Type)
             {
                 case DataGridViewHitTestType.TopLeftHeader:

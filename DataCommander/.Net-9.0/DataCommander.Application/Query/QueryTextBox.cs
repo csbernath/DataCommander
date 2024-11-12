@@ -623,7 +623,7 @@ public sealed class QueryTextBox : UserControl
             var path = text;
 
             if (File.Exists(path))
-                DataCommanderApplication.Instance.MainForm.LoadFiles(path.ItemToArray());
+                DataCommanderApplication.Instance.MainForm!.LoadFiles(path.ItemToArray());
             else if (Uri.TryCreate(path, UriKind.Absolute, out var uri))
             {
                 if (uri.Scheme == "file")
