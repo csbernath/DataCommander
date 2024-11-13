@@ -14,8 +14,4 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Assertions\Foundation.Assertions.csproj" />
-  </ItemGroup>
-
 </Project>

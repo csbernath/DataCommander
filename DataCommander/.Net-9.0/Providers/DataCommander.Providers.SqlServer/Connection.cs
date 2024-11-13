@@ -13,7 +13,6 @@ using Foundation.Core.ClockAggregate;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 using Microsoft.Data.SqlClient;
-using Microsoft.Identity.Client;
 
 namespace DataCommander.Providers.SqlServer;
 
