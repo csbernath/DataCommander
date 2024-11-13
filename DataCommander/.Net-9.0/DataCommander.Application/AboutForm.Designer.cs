@@ -31,35 +31,36 @@ namespace DataCommander.Application
         /// </summary>
         private void InitializeComponent()
         {
-            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
-            this.SuspendLayout();
+            webBrowser1 = new WebBrowser();
+            SuspendLayout();
             // 
             // webBrowser1
             // 
-            this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webBrowser1.Location = new System.Drawing.Point(0, 0);
-            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.ScrollBarsEnabled = false;
-            this.webBrowser1.Size = new System.Drawing.Size(524, 420);
-            this.webBrowser1.TabIndex = 0;
-            this.webBrowser1.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowser1_Navigating);
+            webBrowser1.Dock = DockStyle.Fill;
+            webBrowser1.Location = new System.Drawing.Point(0, 0);
+            webBrowser1.Margin = new Padding(4);
+            webBrowser1.MinimumSize = new System.Drawing.Size(23, 26);
+            webBrowser1.Name = "webBrowser1";
+            webBrowser1.ScrollBarsEnabled = false;
+            webBrowser1.Size = new System.Drawing.Size(584, 509);
+            webBrowser1.TabIndex = 0;
+            webBrowser1.Navigating += webBrowser1_Navigating;
             // 
             // AboutForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(524, 420);
-            this.Controls.Add(this.webBrowser1);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "AboutForm";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "About Data Commander";
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(584, 509);
+            Controls.Add(webBrowser1);
+            Margin = new Padding(4);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "AboutForm";
+            ShowIcon = false;
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "About Data Commander";
+            ResumeLayout(false);
         }
 
         #endregion

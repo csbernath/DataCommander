@@ -36,22 +36,13 @@ public partial class AboutForm : Form
     a {{text-decoration:none}}
 </style>
 <div style=""font-family:verdana;font-size:9pt"">
-Build date: {lastWriteTime:yyyy-MM-dd}
-<br/><br/>
-Version: {assembly.GetName().Version}
-<br/><br/>
-Copyright © 2002-2024 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Bernáth</a>
-<br/>
-This program is freeware and released under the <a href=""https://www.gnu.org/licenses/gpl.txt"">GNU General Public Licence</a>.
-<br/><br/>
-<a href=""https://github.com/csbernath/DataCommander"">GitHub repository</a>
-<br/><br/>
-Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.Net-9.0/README.md"">Foundation Class Library</a>
-<br/><br/>
-<a href=""applicationdatafile://"">Application Data file</a>
-<br/>
-<a href=""logfile://"">Log file</a>
-<br/><br/>
+Data Commander Version: {assembly.GetName().Version} ({lastWriteTime:yyyy-MM-dd})<br/>
+Copyright © 2002-2024 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Bernáth</a><br/>
+This program is freeware and released under the <a href=""https://www.gnu.org/licenses/gpl.txt"">GNU General Public Licence</a>.<br/><br/>
+<a href=""https://github.com/csbernath/DataCommander"">GitHub repository</a><br/>
+Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.Net-9.0/README.md"">Foundation Class Library</a><br/><br/>
+<a href=""applicationdatafile://"">Application Data file</a><br/>
+<a href=""logfile://"">Log file</a><br/><br/>
 <table style=""font-family:verdana;font-size:9pt"">
 <tr><td>Windows Name:</td><td>{windowsName}</td></tr>
 <tr><td>Windows CurrentBuild:</td><td>{windowsCurrentVersion.CurrentBuild}</td></tr>
