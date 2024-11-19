@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
@@ -21,7 +20,7 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
     private readonly int _maxRecords;
     private readonly int _rowBlockSize;
     private readonly IResultWriter? _resultWriter;
-    private readonly Action<IAsyncDataAdapter, Exception>? _endFill;
+    private readonly Action<IAsyncDataAdapter, Exception?>? _endFill;
     private readonly Action<IAsyncDataAdapter>? _writeEnd;
 
     public SqlBulkCopyAsyncDataAdapter(SqlConnection destinationConnection, SqlTransaction destionationTransaction, string destinationTableName,
@@ -63,7 +62,7 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
 
     private void Fill()
     {
-        Exception exception = null;
+        Exception? exception = null;
         try
         {
             foreach (var command in _commands!)
@@ -84,7 +83,7 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
         }
 
         _writeEnd!(this);
-        _endFill!(this, exception!);
+        _endFill!(this, exception);
     }
 
     private void CancelCommand() => _command!.Cancel();

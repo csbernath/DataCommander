@@ -18,8 +18,8 @@ public class JsonResultWriter(Action<InfoMessage> addInfoMessage) : IResultWrite
     private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage, false);
     private Guid? _guid;
     private int _tableIndex;    
-    private List<FoundationDbColumn> _columns;
-    private JsonTextWriter _jsonTextWriter;
+    private List<FoundationDbColumn>? _columns;
+    private JsonTextWriter? _jsonTextWriter;
 
     void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);
     void IResultWriter.AfterExecuteReader() => _logResultWriter.AfterExecuteReader();
@@ -59,11 +59,11 @@ public class JsonResultWriter(Action<InfoMessage> addInfoMessage) : IResultWrite
         {
             var row = rows[rowIndex];
 
-            _jsonTextWriter.WriteStartObject();
+            _jsonTextWriter!.WriteStartObject();
 
             for (var columnIndex = 0; columnIndex < row.Length; ++columnIndex)
             {
-                var column = _columns[columnIndex];
+                var column = _columns![columnIndex];
                 var value = row[columnIndex];
 
                 _jsonTextWriter.WritePropertyName(column.ColumnName);
@@ -93,7 +93,7 @@ public class JsonResultWriter(Action<InfoMessage> addInfoMessage) : IResultWrite
     {
         _logResultWriter.WriteTableEnd();
 
-        _jsonTextWriter.WriteEndArray();
+        _jsonTextWriter!.WriteEndArray();
         _jsonTextWriter.Close();
         _jsonTextWriter = null;
 

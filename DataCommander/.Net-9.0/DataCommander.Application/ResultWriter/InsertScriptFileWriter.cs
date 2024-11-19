@@ -50,8 +50,8 @@ internal sealed class InsertScriptFileWriter : IResultWriter
 
     public static string GetCreateTableStatement(DataTable schemaTable)
     {
-        var sb = new StringBuilder();
-        sb.AppendFormat("create table {0}\r\n(\r\n", schemaTable.TableName);
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendFormat("create table {0}\r\n(\r\n", schemaTable.TableName);
         var first = true;
 
         foreach (DataRow schemaRow in schemaTable.Rows)
@@ -61,18 +61,15 @@ internal sealed class InsertScriptFileWriter : IResultWriter
             if (first)
                 first = false;
             else
-                sb.Append(",\r\n");
+                stringBuilder.Append(",\r\n");
 
             var columnSize = dataColumnSchema.ColumnSize;
             var columnSizeString = columnSize == int.MaxValue ? "max" : columnSize.ToString();
-            var dataType = dataColumnSchema.DataType;
-            string dataTypeName;
+            var dataType = dataColumnSchema.DataType!;
             var contains = schemaTable.Columns.Contains("DataTypeName");
-
-            if (contains)
-                dataTypeName = (string)schemaRow["DataTypeName"];
-            else
-                dataTypeName = GetDataTypeName(dataType);
+            var dataTypeName = contains
+                ? (string)schemaRow["DataTypeName"]
+                : GetDataTypeName(dataType);
 
             switch (dataTypeName)
             {
@@ -91,21 +88,21 @@ internal sealed class InsertScriptFileWriter : IResultWriter
                     break;
             }
 
-            sb.AppendFormat("\t{0} {1}", dataColumnSchema.ColumnName, dataTypeName);
+            stringBuilder.AppendFormat("\t{0} {1}", dataColumnSchema.ColumnName, dataTypeName);
 
             if (dataColumnSchema.AllowDbNull == false)
             {
-                sb.Append(" not null");
+                stringBuilder.Append(" not null");
             }
         }
 
-        sb.Append("\r\n)");
-        return sb.ToString();
+        stringBuilder.Append("\r\n)");
+        return stringBuilder.ToString();
     }
 
     public static string ToString(object value)
     {
-        string s = null;
+        string? s = null;
 
         if (value != null)
         {

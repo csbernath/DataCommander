@@ -142,7 +142,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         _rowBlockSize = attributes["RowBlockSize"].GetValue<int>();
         _timer.Interval = attributes["TimerInterval"].GetValue<int>();
 
-        SettingsChanged(null, null);
+        SettingsChanged(null, EventArgs.Empty);
         Settings.Changed += SettingsChanged;
 
         colorTheme?.Apply(this);
@@ -203,7 +203,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         }
     }
 
-    public ColorTheme ColorTheme => _colorTheme;
+    public ColorTheme? ColorTheme => _colorTheme;
 
     public CommandState ButtonState { get; private set; }
 
@@ -1167,7 +1167,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         return s;
     }
 
-    private string GetToolTipText(DataTable dataTable)
+    private string GetToolTipText(DataTable? dataTable)
     {
         var sb = new StringBuilder();
 
@@ -1260,7 +1260,7 @@ public sealed partial class QueryForm : Form, IQueryForm
                     .ToReadOnlyCollection();
 
             int maxRecords;
-            IResultWriter resultWriter = null;
+            IResultWriter? resultWriter = null;
 
             switch (TableStyle)
             {
@@ -1921,16 +1921,16 @@ public sealed partial class QueryForm : Form, IQueryForm
 
         ButtonState = buttonState;
 
-        _executeQueryToolStripMenuItem.Enabled = ok;
-        _executeQueryMenuItem.Enabled = ok;
+        _executeQueryToolStripMenuItem!.Enabled = ok;
+        _executeQueryMenuItem!.Enabled = ok;
         _mnuExecuteQuerySingleRow.Enabled = ok;
         _mnuExecuteQuerySchemaOnly.Enabled = ok;
         _mnuExecuteQueryKeyInfo.Enabled = ok;
-        _mnuExecuteQueryXml.Enabled = ok;
+        _mnuExecuteQueryXml!.Enabled = ok;
 
         Log.Trace("this.executeQuerySplitButton.Enabled = {0};", ok);
-        _executeQuerySplitButton.Enabled = ok;
-        _cancelQueryButton.Enabled = cancel;
+        _executeQuerySplitButton!.Enabled = ok;
+        _cancelQueryButton!.Enabled = cancel;
     }
 
     private static void WriteInfoMessageToLog(InfoMessage infoMessage)

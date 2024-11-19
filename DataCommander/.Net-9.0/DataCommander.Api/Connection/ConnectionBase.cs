@@ -4,28 +4,34 @@ using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
+using Foundation.Assertions;
 
 namespace DataCommander.Api.Connection;
 
 public abstract class ConnectionBase : IDisposable, IAsyncDisposable
 {
-    public DbConnection? Connection { get; protected set; }
+    private DbConnection? _connection;
+
+    public DbConnection Connection => _connection!;
+    protected void SetConnection(DbConnection connection) => _connection = connection;
+    
     public abstract Task OpenAsync(CancellationToken cancellationToken);
 
     public void Close()
     {
-        if (Connection != null)
+        if (_connection != null)
             Connection.Close();
     }
 
     public abstract DbCommand CreateCommand();
     public abstract string DataSource { get; }
 
-    public string? Database
+    public string Database
     {
         get
         {
-            var database = Connection?.Database;
+            Assert.IsNotNull(Connection);
+            var database = Connection.Database;
             return database;
         }
     }

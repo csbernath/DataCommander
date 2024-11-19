@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -34,7 +33,7 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
     //private IDbDataParameter[] parameters;
     private ConcurrentQueue<QueueItem> _queue;
     private Task _task;
-    private EventWaitHandle _enqueueEvent;
+    private EventWaitHandle? _enqueueEvent;
     private bool _writeEnded;
     private readonly bool _canConvertCommandToString;
     private long _readRowCount;
@@ -175,7 +174,7 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
                     else
                     {
                         methodLog.Write(LogLevel.Trace, "this.enqueueEvent.WaitOne( 1000 );...");
-                        _enqueueEvent.WaitOne(1000);
+                        _enqueueEvent!.WaitOne(1000);
                         methodLog.Write(LogLevel.Trace, "this.enqueueEvent.WaitOne( 1000 ); finished.");
                     }
                 }
@@ -223,7 +222,7 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
         };
 
         _queue.Enqueue(queueItem);
-        _enqueueEvent.Set();
+        _enqueueEvent!.Set();
 
         while (!_cancellationToken.IsCancellationRequested && _queue.Count > 10)
         {

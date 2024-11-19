@@ -17,21 +17,21 @@ internal sealed class IndexCollectionNode(DatabaseNode databaseNode, int id) : I
     {
         var cb = new SqlCommandBuilder();
 
-        var commandText = string.Format(@"select
+        var database = cb.QuoteIdentifier(databaseNode.Name);
+        var commandText = $@"select
     i.name,
     i.index_id,
     i.type,
     i.is_unique
-from {0}.sys.schemas s (nolock)
-join {0}.sys.objects o (nolock)
+from {database}.sys.schemas s (nolock)
+join {database}.sys.objects o (nolock)
     on s.schema_id = o.schema_id
-join {0}.sys.indexes i (nolock)
+join {database}.sys.indexes i (nolock)
     on o.object_id = i.object_id
 where
     o.object_id = @object_id and
     i.type > 0
-order by i.name",
-            cb.QuoteIdentifier(databaseNode.Name));
+order by i.name";
 
         var parameters = new SqlParameterCollectionBuilder();
         parameters.Add("object_id", id);

@@ -52,9 +52,9 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
 
         if (schemaTable != null)
         {
-            var columnNameColumn = schemaTable.Columns[SchemaTableColumn.ColumnName];
-            var columnSizeColumn = schemaTable.Columns["ColumnSize"];
-            var dataTypeColumn = schemaTable.Columns["DataType"];
+            var columnNameColumn = schemaTable.Columns[SchemaTableColumn.ColumnName]!;
+            var columnSizeColumn = schemaTable.Columns[SchemaTableColumn.ColumnSize]!;
+            var dataTypeColumn = schemaTable.Columns[SchemaTableColumn.DataType]!;
 
             var fieldCount = schemaTable.Rows.Count;
             _columnSize = new int[fieldCount];
@@ -72,7 +72,7 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
 
                 if (type.IsArray)
                 {
-                    elementType = type.GetElementType();
+                    elementType = type.GetElementType()!;
 
                     if (numOfBytes > 2048)
                         numOfBytes = 2048;
@@ -158,9 +158,9 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
         }
     }
 
-    private static string StringValue(object value, int columnSize)
+    private static string? GetStringValue(object value, int columnSize)
     {
-        string stringValue = null;
+        string? stringValue = null;
 
         if (value == null)
         {
@@ -242,11 +242,11 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
 
                 for (var j = 0; j < last; j++)
                 {
-                    Write(sb, StringValue(row[j], _columnSize![j]), _columnSize[j]);
+                    Write(sb, GetStringValue(row[j], _columnSize![j]), _columnSize[j]);
                     sb.Append(' ');
                 }
 
-                sb.Append(StringValue(row[last], _columnSize![last]));
+                sb.Append(GetStringValue(row[last], _columnSize![last]));
                 sb.Append(Environment.NewLine);
             }
 
@@ -275,16 +275,12 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
             {
                 var name = parameter.ParameterName;
                 var value = parameter.Value;
-                string valueString;
+                string? valueString;
 
                 if (value == null)
-                {
                     valueString = "(null)";
-                }
                 else if (value == DBNull.Value)
-                {
                     valueString = "<NULL>";
-                }
                 else
                 {
                     switch (parameter.DbType)

@@ -9,7 +9,7 @@ namespace Foundation.Data;
 
 public static class Db
 {
-    public static ReadOnlySegmentLinkedList<T>? ExecuteReader<T>(
+    public static ReadOnlySegmentLinkedList<T> ExecuteReader<T>(
         Func<DbConnection> createConnection,
         ExecuteReaderRequest request,
         int segmentLength,
@@ -17,7 +17,7 @@ public static class Db
     {
         ReadOnlySegmentLinkedList<T>? rows = null;
         ExecuteReader(createConnection, request, dataReader => rows = dataReader.ReadResult(segmentLength, readRecord));
-        return rows;
+        return rows!;
     }
 
     public static void ExecuteReader(

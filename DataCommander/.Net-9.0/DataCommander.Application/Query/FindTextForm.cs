@@ -10,8 +10,8 @@ public class FindTextForm : Form
     private Button? _btnOk;
     private Button? _btnCancel;
     private Label? _label1;
-    private CheckBox _cbMatchCase;
-    private CheckBox _cbMatchWholeWord;
+    private CheckBox? _cbMatchCase;
+    private CheckBox? _cbMatchWholeWord;
 
     /// <summary>
     /// Required designer variable.
@@ -45,12 +45,12 @@ public class FindTextForm : Form
         {
             var richTextBoxFinds = RichTextBoxFinds.None;
 
-            if (_cbMatchCase.Checked)
+            if (_cbMatchCase!.Checked)
             {
                 richTextBoxFinds |= RichTextBoxFinds.MatchCase;
             }
 
-            if (_cbMatchWholeWord.Checked)
+            if (_cbMatchWholeWord!.Checked)
             {
                 richTextBoxFinds |= RichTextBoxFinds.WholeWord;
             }

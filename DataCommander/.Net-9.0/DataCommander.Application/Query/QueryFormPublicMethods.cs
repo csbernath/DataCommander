@@ -109,7 +109,7 @@ public sealed partial class QueryForm
     {
         set
         {
-            _font = value;
+            _font = value!;
             _queryTextBox.Font = value;
             var size1 = TextRenderer.MeasureText("1", value);
             var size2 = TextRenderer.MeasureText("12", value);

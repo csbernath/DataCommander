@@ -5,7 +5,6 @@ using System.Data;
 using System.Data.Common;
 using System.Globalization;
 using System.IO;
-using Foundation.Assertions;
 
 namespace Foundation.Data.TextData;
 

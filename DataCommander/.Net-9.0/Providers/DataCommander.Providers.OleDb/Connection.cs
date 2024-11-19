@@ -8,16 +8,15 @@ namespace DataCommander.Providers.OleDb;
 
 internal sealed class Connection : ConnectionBase
 {
-    private readonly OleDbConnection oledbConnection;
+    private readonly OleDbConnection _oledbConnection;
 
     public Connection(string connectionString)
     {
-        oledbConnection = new OleDbConnection(connectionString);
-        Connection = oledbConnection;
-        oledbConnection.InfoMessage += OnInfoMessage;
+        _oledbConnection = new OleDbConnection(connectionString);
+        _oledbConnection.InfoMessage += OnInfoMessage;
     }
 
-    public override Task OpenAsync(CancellationToken cancellationToken) => oledbConnection.OpenAsync(cancellationToken);
+    public override Task OpenAsync(CancellationToken cancellationToken) => _oledbConnection.OpenAsync(cancellationToken);
 
     void OnInfoMessage(object? sender, OleDbInfoMessageEventArgs e)
     {
@@ -25,9 +24,9 @@ internal sealed class Connection : ConnectionBase
         InvokeInfoMessage([InfoMessageFactory.Create(InfoMessageSeverity.Information, null, text)]);
     }
 
-    public override string DataSource => oledbConnection.DataSource;
-    public override string ServerVersion => oledbConnection.ServerVersion;
+    public override string DataSource => _oledbConnection.DataSource;
+    public override string ServerVersion => _oledbConnection.ServerVersion;
     public override string? ConnectionInformation { get; }
-    public override DbCommand CreateCommand() => oledbConnection.CreateCommand();
+    public override DbCommand CreateCommand() => _oledbConnection.CreateCommand();
     public override Task<int> GetTransactionCountAsync(CancellationToken cancellationToken) => Task.FromResult(0);
 }

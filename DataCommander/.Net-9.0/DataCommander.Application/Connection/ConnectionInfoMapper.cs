@@ -14,7 +14,7 @@ public static class ConnectionInfoMapper
             credentialDto = new CredentialDto(credential.UserId, password);
         }
 
-        return new ConnectionDto(connectionInfo.ConnectionName, connectionInfo.ProviderIdentifier,
+        return new ConnectionDto(connectionInfo.ConnectionName!, connectionInfo.ProviderIdentifier,
             connectionInfo.ConnectionStringAndCredential.ConnectionString,
             credentialDto);
     }

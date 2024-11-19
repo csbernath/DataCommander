@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -11,7 +10,6 @@ using System.Threading.Tasks;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
 using Foundation.Data;
-using Foundation.Linq;
 using Foundation.Log;
 
 namespace DataCommander.Application.ResultWriter;
@@ -49,13 +47,13 @@ internal sealed class CopyResultWriter(
     void IResultWriter.WriteTableBegin(DataTable schemaTable)
     {
         _logResultWriter.WriteTableBegin(schemaTable);
-        destinationProvider.CreateInsertCommand(schemaTable, null, destinationConnection.Connection, tableName, out _insertCommand,
+        destinationProvider.CreateInsertCommand(schemaTable, null, destinationConnection.Connection!, tableName, out _insertCommand,
             out _converters);
         //  TODO this.messageWriter.WriteLine( this.insertCommand.CommandText );
         _parameters = _insertCommand.Parameters.Cast<IDbDataParameter>().ToArray();
         if (_transaction == null)
         {
-            _transaction = destinationConnection.Connection.BeginTransaction();
+            _transaction = destinationConnection.Connection!.BeginTransaction();
             setTransaction(_transaction);
         }
 
@@ -96,7 +94,7 @@ internal sealed class CopyResultWriter(
                         sb.AppendLine();
                     }
 
-                    var commandText = destinationProvider.CommandToString(_insertCommand);
+                    var commandText = destinationProvider.CommandToString(_insertCommand!);
                     sb.Append(commandText);
                 }
                 else

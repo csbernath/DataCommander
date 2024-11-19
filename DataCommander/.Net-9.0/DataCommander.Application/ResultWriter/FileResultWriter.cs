@@ -17,7 +17,7 @@ internal sealed class FileResultWriter : IResultWriter
 
     public FileResultWriter(TextWriter messageWriter)
     {
-        Assert.IsTrue(messageWriter != null);
+        Assert.IsNotNull(messageWriter);
 
         _messageWriter = messageWriter;
     }

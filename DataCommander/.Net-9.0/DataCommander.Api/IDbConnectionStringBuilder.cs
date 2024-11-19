@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace DataCommander.Api;
+﻿namespace DataCommander.Api;
 
 public interface IDbConnectionStringBuilder
 {

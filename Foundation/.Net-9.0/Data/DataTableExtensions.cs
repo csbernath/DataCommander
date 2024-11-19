@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Linq;
-using Foundation.Linq;
 using Foundation.Text;
 
 namespace Foundation.Data;

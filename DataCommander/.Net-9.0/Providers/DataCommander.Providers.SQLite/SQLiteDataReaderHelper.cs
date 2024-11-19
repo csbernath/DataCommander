@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Data.Common;
 using DataCommander.Api;
 using DataCommander.Api.FieldReaders;
 using Microsoft.Data.Sqlite;

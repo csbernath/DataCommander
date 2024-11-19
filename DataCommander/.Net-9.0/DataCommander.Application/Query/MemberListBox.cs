@@ -14,9 +14,9 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
 {
     private readonly CompletionForm _completionForm;
     private readonly QueryTextBox _textBox;
-    private GetCompletionResult _result;
+    private GetCompletionResult? _result;
     private string _prefix = string.Empty;
-    private readonly Container _components = null;
+    private readonly Container? _components = null;
 
     public MemberListBox(CompletionForm completionForm, QueryTextBox textBox, ColorTheme colorTheme)
     {
@@ -40,7 +40,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
     {
         ListBox.Items.Clear();
 
-        foreach (var item in _result.Items)
+        foreach (var item in _result!.Items)
         {
             var listBoxItem = new ListBoxItem<IObjectName>(item, ToString);
             ListBox.Items.Add(listBoxItem);
@@ -132,7 +132,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
         if (listBoxItem != null)
         {
             var selectedItem = listBoxItem.Item.UnquotedName;
-            var startIndex = _result.StartPosition;
+            var startIndex = _result!.StartPosition;
             var tokenIterator = new TokenIterator(_textBox.Text[startIndex..]);
             var token = tokenIterator.Next();
             int length;

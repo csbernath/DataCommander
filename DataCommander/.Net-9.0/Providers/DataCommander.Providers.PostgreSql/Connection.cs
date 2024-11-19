@@ -42,6 +42,6 @@ internal sealed class Connection : ConnectionBase
         }
 
         _npgsqlConnection = new NpgsqlConnection(npgsqlConnectionStringBuilder.ConnectionString);
-        Connection = _npgsqlConnection;
+        SetConnection(_npgsqlConnection);
     }
 }

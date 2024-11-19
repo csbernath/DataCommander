@@ -8,7 +8,7 @@ namespace Foundation.Data.SqlClient.DbQueryBuilding;
 
 public static class CreateUpdateSqlStatementMethodFactory
 {
-    public static ReadOnlyCollection<Line> Create(string schema, string table, Column identifierColumn, Column versionColumn,
+    public static ReadOnlyCollection<Line> Create(string schema, string table, Column identifierColumn, Column? versionColumn,
         IReadOnlyCollection<Column> columns)
     {
         List<string> arguments =

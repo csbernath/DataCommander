@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Foundation.Assertions;
 using Foundation.Configuration;
 
 namespace Foundation.Windows.Forms;

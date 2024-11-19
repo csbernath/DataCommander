@@ -39,7 +39,7 @@ internal sealed class StoredProcedureNode(DatabaseNode database, string owner, s
     private void ScriptObjectMenuItem_Click(object? sender, EventArgs e)
     {
         var stopwatch = Stopwatch.StartNew();
-        var queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender!;
         var cancellationTokenSource = new CancellationTokenSource();
         var cancellationToken = cancellationTokenSource.Token;
         var cancelableOperationForm = queryForm.CreateCancelableOperationForm(cancellationTokenSource, TimeSpan.FromSeconds(1),

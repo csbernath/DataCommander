@@ -180,7 +180,7 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
     {
         var name1 = DatabaseNode.Name + "." + owner + "." + name;
         var query = "select * from " + name1;
-        var queryForm = (IQueryForm)sender;            
+        var queryForm = (IQueryForm)sender!;            
         queryForm.EditRows(query);
     }
 
@@ -282,24 +282,22 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
 
                     var filter = $"Name = '{keyCol}'";
                     var dataRow = schema.Select(filter)[0];
-                    var identity = dataRow[1].ToString();
-
-                    if (identity.Length > 0)
-                        dataRow[1] = "PKEY," + dataRow[1];
-                    else
-                        dataRow[1] = "PKEY";
+                    var identity = dataRow[1].ToString()!;
+                    dataRow[1] = identity.Length > 0
+                        ? "PKEY," + dataRow[1]
+                        : "PKEY";
                 }
         }
 
         dataSet.Tables.Add(schema);
 
-        var queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender!;
         queryForm.ShowDataSet(dataSet);
     }
 
     private void CreateTableScriptToClipboard(object? sender, EventArgs e)
     {
-        var queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender!;
         queryForm.SetStatusbarPanelText("Copying table script to clipboard...");
         var cancellationTokenSource = new CancellationTokenSource();
         var cancelableOperationForm = queryForm.CreateCancelableOperationForm(cancellationTokenSource, TimeSpan.FromSeconds(1),
@@ -347,7 +345,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
                 stringBuilder.AppendLine("GO");
             }
 
-            var reindented = stringCollectionItem.Replace("\t", "    ");
+            var reindented = stringCollectionItem!.Replace("\t", "    ");
             stringBuilder.Append(reindented);
         }
 
@@ -369,7 +367,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
         var dataSet = new DataSet();
         dataSet.Tables.Add(dataTable);
 
-        var queryForm = (IQueryForm)sender;            
+        var queryForm = (IQueryForm)sender!;            
         queryForm.ShowDataSet(dataSet);
     }
 
@@ -382,7 +380,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
             selectStatement = GetSelectStatement(connection, name1);
         }
 
-        var queryForm = (IQueryForm?)sender;
+        var queryForm = (IQueryForm)sender!;
         queryForm.SetClipboardText(selectStatement);
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }
@@ -411,24 +409,24 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
 
     private void InsertScript_Click(object? sender, EventArgs e)
     {
-        var commandText = string.Format(@"select
+        var commandText = $@"select
     c.name,
     t.name as TypeName,
     c.max_length,
     c.precision,
     c.scale,
     c.is_nullable
-from [{0}].sys.schemas s (nolock)
-join [{0}].sys.objects o (nolock)
+from [{DatabaseNode.Name}].sys.schemas s (nolock)
+join [{DatabaseNode.Name}].sys.objects o (nolock)
 	on s.schema_id = o.schema_id
-join [{0}].sys.columns c (nolock)
+join [{DatabaseNode.Name}].sys.columns c (nolock)
 	on o.object_id = c.object_id
-join [{0}].sys.types t (nolock)
+join [{DatabaseNode.Name}].sys.types t (nolock)
 	on c.user_type_id = t.user_type_id
 where
-	s.name = '{1}'
-	and o.name = '{2}'
-order by c.column_id", DatabaseNode.Name, owner, name);
+	s.name = '{owner}'
+	and o.name = '{name}'
+order by c.column_id";
         Log.Write(LogLevel.Trace, commandText);
         var columns = Db.ExecuteReader(
             DatabaseNode.Databases.Server.CreateConnection,
@@ -621,7 +619,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
 
         var columns = getTableSchemaResult.Columns
             .Select(i => new Foundation.Data.SqlClient.DbQueryBuilding.Column(i.ColumnName, i.TypeName, i.IsNullable == true))
-            .ToReadOnlyCollection();
+            .ToArray();
         var createInsertSqlSqlStatementMethod = CreateInsertSqlStatementMethodFactory.Create(owner, name, columns);
 
         var identifierColumn = getTableSchemaResult.UniqueIndexColumns
@@ -637,7 +635,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
         {
             columns = columns
                 .Where(i => i.ColumnName != identifierColumn.ColumnName)
-                .ToReadOnlyCollection();
+                .ToArray();
 
             createUpdateSqlStatementMethod = CreateUpdateSqlStatementMethodFactory.Create(owner, name, identifierColumn, versionColumn, columns);
 
@@ -670,7 +668,7 @@ order by c.column_id", DatabaseNode.Name, owner, name);
             }
         }
 
-        var queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender!;
         queryForm.SetClipboardText(textBuilder.ToLines().ToIndentedString("    "));
         queryForm.SetStatusbarPanelText("Copying script to clipboard finished.");
     }

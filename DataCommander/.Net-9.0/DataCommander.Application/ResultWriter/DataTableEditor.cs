@@ -39,7 +39,7 @@ internal class DataTableEditor : UserControl
     private int _columnIndex;
     private string _columnName;
     private object _cellValue;
-    private StringBuilder _statementStringBuilder;
+    private StringBuilder? _statementStringBuilder;
 
     /// <summary> 
     /// Required designer variable.
@@ -62,7 +62,7 @@ internal class DataTableEditor : UserControl
         colorTheme.Apply(_dataGrid);
     }
 
-    public DataGridView DataGrid => _dataGrid;
+    public DataGridView DataGrid => _dataGrid!;
 
     public DataTable DataTable
     {
@@ -304,7 +304,7 @@ internal class DataTableEditor : UserControl
 
     private static string ToString(DataColumn column, object value)
     {
-        string valueString;
+        string? valueString;
 
         if (value == DBNull.Value)
             valueString = "null";

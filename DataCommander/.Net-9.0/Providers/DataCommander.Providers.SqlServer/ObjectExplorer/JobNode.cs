@@ -4,6 +4,7 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
+using Foundation.Assertions;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
@@ -17,7 +18,7 @@ internal sealed class JobNode : ITreeNode
 
     public JobNode(JobCollectionNode jobs, string? name)
     {
-        ArgumentNullException.ThrowIfNull(jobs);
+        Assert.IsNotNull(jobs);
 
         _jobs = jobs;
         _name = name;

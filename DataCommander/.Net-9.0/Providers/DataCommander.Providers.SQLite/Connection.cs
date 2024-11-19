@@ -17,7 +17,7 @@ internal sealed class Connection : ConnectionBase
         _sqliteConnection = new SqliteConnection(connectionStringAndCredential.ConnectionString);
         // this.sqliteConnection.Flags = SQLiteConnectionFlags.LogAll;
         // this.sqliteConnection.Trace += this.sqliteConnection_Trace;
-        Connection = _sqliteConnection;
+        SetConnection(_sqliteConnection);
     }
 
     public override Task OpenAsync(CancellationToken cancellationToken) => _sqliteConnection.OpenAsync(cancellationToken);

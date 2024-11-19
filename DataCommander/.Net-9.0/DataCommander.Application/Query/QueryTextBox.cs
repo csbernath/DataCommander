@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
@@ -27,7 +26,7 @@ public sealed class QueryTextBox : UserControl
     private int _prevSelectionStart;
     private int _prevSelectionLength;
     private bool _changeEventEnabled = true;
-    private ToolStripStatusLabel _sbPanel;
+    private ToolStripStatusLabel? _sbPanel;
     private int _columnIndex;
     private ColorTheme _colorTheme;
     private readonly UndoRedoState<string> _undoRedoState = new([], 0);
@@ -238,10 +237,10 @@ public sealed class QueryTextBox : UserControl
         return i;
     }
 
-    public static string PrevWord(string text, ref int index)
+    public static string? PrevWord(string text, ref int index)
     {
         var wordEnd = -1;
-        string word = null;
+        string? word = null;
 
         while (index >= 0)
         {

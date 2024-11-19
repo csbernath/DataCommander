@@ -59,7 +59,7 @@ drop table #catalog";
         connection.Open();
 
         var parameters = new SqlParameterCollectionBuilder();
-        parameters.Add("@name", _linkedServer.Name);
+        parameters.Add("@name", _linkedServer.Name!);
         parameters.Add("@getSystemCatalogs", false);
 
         var executor = connection.CreateCommandExecutor();

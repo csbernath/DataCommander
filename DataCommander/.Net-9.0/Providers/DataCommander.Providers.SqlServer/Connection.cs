@@ -3,7 +3,6 @@ using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
-using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api.Connection;
@@ -69,7 +68,7 @@ internal sealed class Connection : ConnectionBase
             ? new SqlCredential(credential.UserId, credential.Password.SecureString)
             : null;
         _sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString, sqlCredential);
-        Connection = _sqlConnection;
+        SetConnection(_sqlConnection);
         _sqlConnection.FireInfoMessageEventOnUserErrors = true;
         _sqlConnection.InfoMessage += OnInfoMessage;
         _sqlConnection.StateChange += OnStateChange;
@@ -139,6 +138,6 @@ set arithabort on";
     public override DbCommand CreateCommand()
     {
         _createCommandTimestamp = Stopwatch.GetTimestamp();
-        return _sqlConnection.CreateCommand();
+        return _sqlConnection!.CreateCommand();
     }
 }

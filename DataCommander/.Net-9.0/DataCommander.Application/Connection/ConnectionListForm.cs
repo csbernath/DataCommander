@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using DataCommander.Application.ResultWriter;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
-using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Windows.Forms;
 using Newtonsoft.Json;
@@ -22,6 +21,7 @@ internal sealed class ConnectionListForm : Form
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private readonly List<ConnectionInfo> _connectionInfos;
+    private ConnectionInfo? _connectionInfo;
     private ConnectionBase? _connection;
     private DoubleBufferedDataGridView? _dataGrid;
     private Button? _btnOk;    
@@ -32,7 +32,7 @@ internal sealed class ConnectionListForm : Form
     private readonly Container _components = new();
     private readonly ColorTheme? _colorTheme;
 
-    public ConnectionListForm(StatusStrip statusBar, ColorTheme? colorTheme)
+    public ConnectionListForm(ColorTheme? colorTheme)
     {
         _colorTheme = colorTheme;
 
@@ -102,8 +102,8 @@ internal sealed class ConnectionListForm : Form
         }
     }
 
-    public ConnectionInfo ConnectionInfo { get; private set; }
-    public ConnectionBase? Connection => _connection;
+    public ConnectionInfo ConnectionInfo => _connectionInfo!;
+    public ConnectionBase Connection => _connection!;
 
     protected override void Dispose(bool disposing)
     {
@@ -226,19 +226,19 @@ internal sealed class ConnectionListForm : Form
         connectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
 
         if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var value))
-            row[ConnectionStringKeyword.DataSource] = (string)value;
+            row[ConnectionStringKeyword.DataSource] = (string)value!;
         else if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.Host, out value))
-            row[ConnectionStringKeyword.DataSource] = (string)value;        
+            row[ConnectionStringKeyword.DataSource] = (string)value!;        
 
         if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.InitialCatalog, out value))
-            row[ConnectionStringKeyword.InitialCatalog] = (string)value;
+            row[ConnectionStringKeyword.InitialCatalog] = (string)value!;
 
         if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out value))
         {
             var integratedSecurity = value switch
             {
                 bool boolValue => boolValue,
-                _ => bool.Parse((string)value),
+                _ => bool.Parse((string)value!),
             };
             row[ConnectionStringKeyword.IntegratedSecurity] = integratedSecurity;
         }
@@ -246,12 +246,12 @@ internal sealed class ConnectionListForm : Form
         if (connectionInfo.ConnectionStringAndCredential.Credential != null)
             row[ConnectionStringKeyword.UserId] = connectionInfo.ConnectionStringAndCredential.Credential.UserId;
         else if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out value))
-            row[ConnectionStringKeyword.UserId] = (string)value;
+            row[ConnectionStringKeyword.UserId] = (string)value!;
     }
 
     private void BtnOK_Click(object? sender, EventArgs e)
     {
-        var connectionInfo = SelectedConnectionInfo;
+        var connectionInfo = SelectedConnectionInfo!;
         Connect(connectionInfo);
     }
 
@@ -450,10 +450,10 @@ internal sealed class ConnectionListForm : Form
         get
         {
             var index = SelectedIndex;
-            var connectionProperties = index >= 0
+            var connectionInfo = index >= 0
                 ? _connectionInfos[index]
                 : null;
-            return connectionProperties;
+            return connectionInfo;
         }
     }
 
@@ -500,7 +500,7 @@ Provider name: {providerInfo.Name}");
                 if (openConnectionTask.Exception != null)
                     throw openConnectionTask.Exception;
                 ElapsedTicks = Stopwatch.GetTimestamp() - startTimestamp;                
-                ConnectionInfo = connectionInfo;
+                _connectionInfo = connectionInfo;
                 _connection = connection;
                 DialogResult = DialogResult.OK;
             }

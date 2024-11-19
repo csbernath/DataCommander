@@ -19,7 +19,6 @@ using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Diagnostics;
-using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Threading;
 using Foundation.Windows.Forms;
@@ -260,7 +259,7 @@ public class MainForm : Form
         _mnuConnect.ShortcutKeys = Keys.Control | Keys.N;
         _mnuConnect.Size = new Size(235, 26);
         _mnuConnect.Text = "&Connect";
-        _mnuConnect.Click += mnuConnect_Click;
+        _mnuConnect.Click += MnuConnect_Click;
         // 
         // _mnuOpen
         // 
@@ -299,7 +298,7 @@ public class MainForm : Form
         _mnuExit.ShortcutKeys = Keys.Alt | Keys.F4;
         _mnuExit.Size = new Size(235, 26);
         _mnuExit.Text = "Exit";
-        _mnuExit.Click += mnuExit_Click;
+        _mnuExit.Click += MnuExit_Click;
         // 
         // optionsMenuItem
         // 
@@ -512,7 +511,7 @@ public class MainForm : Form
     {
         try
         {
-            var connectionForm = new ConnectionListForm(_statusBar, _colorTheme);
+            var connectionForm = new ConnectionListForm(_colorTheme);
 
             if (connectionForm.ShowDialog() == DialogResult.OK)
             {
@@ -571,9 +570,9 @@ public class MainForm : Form
         }
     }
 
-    private void mnuConnect_Click(object? sender, EventArgs e) => Connect();
+    private void MnuConnect_Click(object? sender, EventArgs e) => Connect();
 
-    private void mnuExit_Click(object? sender, EventArgs e) => Close();
+    private void MnuExit_Click(object? sender, EventArgs e) => Close();
 
     private void mnuAbout_Click(object? sender, EventArgs e)
     {
@@ -662,8 +661,8 @@ public class MainForm : Form
 
                 var fileName = fileDialog.FileName;
                 var extension = Path.GetExtension(fileName).ToLower();
-                string connectionString = null;
-                IProvider provider = null;
+                string? connectionString = null;
+                IProvider? provider = null;
 
                 switch (fileDialog.FilterIndex)
                 {
@@ -694,7 +693,7 @@ public class MainForm : Form
 
                     case 5:
                         connectionString = $"{ConnectionStringKeyword.DataSource}={fileName}";
-                        provider = ProviderFactory.CreateProvider("Msi");
+                        provider = ProviderFactory.CreateProvider(ProviderIdentifier.Msi);
                         break;
 
                     case 6:
@@ -704,7 +703,7 @@ public class MainForm : Form
 
                     case 7:
                         connectionString = $"{ConnectionStringKeyword.DataSource}={fileName}";
-                        provider = ProviderFactory.CreateProvider("SqlServerCe");
+                        provider = ProviderFactory.CreateProvider(ProviderIdentifier.SqlServerCe40);
                         break;
 
                     case 8:
@@ -785,7 +784,7 @@ public class MainForm : Form
 
     private void saveButton_Click(object? sender, EventArgs e)
     {
-        var queryForm = (QueryForm)ActiveMdiChild;
+        var queryForm = (QueryForm)ActiveMdiChild!;
 
         if (queryForm != null)
             queryForm.Save();
@@ -863,7 +862,7 @@ public class MainForm : Form
     {
         base.OnMdiChildActivate(e);
 
-        _activeMdiChildToolStripTextBox.Text = ActiveMdiChild != null ? ActiveMdiChild.Text : null;
+        _activeMdiChildToolStripTextBox!.Text = ActiveMdiChild?.Text;
         _saveButton!.Enabled = ActiveMdiChild != null;
 
         if (ActiveMdiChild != null)
@@ -936,8 +935,8 @@ public class MainForm : Form
 
     private void saveAllToolStripMenuItem_Click(object? sender, EventArgs e) => SaveAll();
 
-    private ToolStripTextBox _activeMdiChildToolStripTextBox;
-    public ToolStripTextBox ActiveMdiChildToolStripTextBox => _activeMdiChildToolStripTextBox;
+    private ToolStripTextBox? _activeMdiChildToolStripTextBox;
+    public ToolStripTextBox ActiveMdiChildToolStripTextBox => _activeMdiChildToolStripTextBox!;
 
     private void CheckForToolStripMenuItem_Click(object? sender, EventArgs e)
     {

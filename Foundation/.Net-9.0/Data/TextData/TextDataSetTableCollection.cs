@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Foundation.Assertions;
 using Foundation.Collections.IndexableCollection;
 
 namespace Foundation.Data.TextData;

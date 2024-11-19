@@ -4,7 +4,7 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.SqlServer;
 
-internal sealed class ObjectName(string schemaName, string objectName) : IObjectName
+internal sealed class ObjectName(string? schemaName, string objectName) : IObjectName
 {
     string IObjectName.UnquotedName
     {

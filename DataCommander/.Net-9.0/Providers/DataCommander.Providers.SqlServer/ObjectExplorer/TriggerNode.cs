@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.JavaScript;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -13,7 +14,10 @@ internal sealed class TriggerNode(DatabaseNode databaseNode, int id, string? nam
 {
     public string? Name { get; } = name;
     public bool IsLeaf => true;
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => null;
+
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
+        Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
+    
     public bool Sortable => false;
     public string? Query => null;
 
@@ -37,10 +41,10 @@ where m.object_id = {id}";
         {
             connection.Open();
             var executor = connection.CreateCommandExecutor();
-            definition = (string)executor.ExecuteScalar(new CreateCommandRequest(commandText));
+            definition = (string)executor.ExecuteScalar(new CreateCommandRequest(commandText))!;
         }
 
-        var queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender!;
         queryForm.ShowText(definition);
     }
 }

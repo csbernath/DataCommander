@@ -38,9 +38,9 @@ internal sealed class LogResultWriter : IResultWriter
 
     private string? _fileName;
     private Api.QueryConfiguration.Query? _query;
-    private ReadOnlyCollection<DbRequestParameter> _parameters;
-    private string _commandText;
-    private List<Result> _results;
+    private ReadOnlyCollection<DbRequestParameter>? _parameters;
+    private string? _commandText;
+    private List<Result>? _results;
 
     public LogResultWriter(Action<InfoMessage> addInfoMessage, bool showSchemaTable)
     {
@@ -154,7 +154,7 @@ internal sealed class LogResultWriter : IResultWriter
         {
             var fields = dbColumns.Select(ToField).ToReadOnlyCollection();
             var result = new Result(fields);
-            _results.Add(result);
+            _results!.Add(result);
         }
     }
 

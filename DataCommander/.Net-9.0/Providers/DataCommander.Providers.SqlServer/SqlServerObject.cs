@@ -73,11 +73,12 @@ begin
     end
 end";
     }
-    
+
     public static string GetObjectsByDatabase(string database, IEnumerable<string> objectTypes)
     {
         Assert.IsTrue(!database.IsNullOrWhiteSpace());
-        Assert.IsTrue(objectTypes != null && objectTypes.Any());
+        Assert.IsNotNull(objectTypes);
+        Assert.IsTrue(objectTypes.Any());
 
         return $@"if exists(select * from sys.databases (nolock) where name = '{database}')
 begin
@@ -88,5 +89,5 @@ begin
     where o.type in({string.Join(",", objectTypes.Select(t => t.ToNullableVarChar()))})
     order by s.name,o.name
 end";
-    }    
+    }
 }

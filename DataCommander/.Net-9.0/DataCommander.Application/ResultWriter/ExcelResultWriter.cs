@@ -14,7 +14,7 @@ internal sealed class ExcelResultWriter : IResultWriter
     private IProvider _provider;
     private readonly Action<InfoMessage> _addInfoMessage;
     private readonly IResultWriter _logResultWriter;
-    private ExcelPackage _excelPackage;
+    private ExcelPackage? _excelPackage;
     private ExcelWorksheet _excelWorksheet;
     private int _rowCount;
 
@@ -83,13 +83,13 @@ internal sealed class ExcelResultWriter : IResultWriter
     void IResultWriter.End()
     {
         _logResultWriter.End();
-        _excelPackage.Save();
+        _excelPackage!.Save();
         Process.Start(_excelPackage.File.FullName);
     }
 
     private void CreateTable(DataTable schemaTable)
     {
-        var worksheets = _excelPackage.Workbook.Worksheets;
+        var worksheets = _excelPackage!.Workbook.Worksheets;
         var tableName = $"Table{worksheets.Count + 1}";
         _excelWorksheet = worksheets.Add(tableName);
         var cells = _excelWorksheet.Cells;

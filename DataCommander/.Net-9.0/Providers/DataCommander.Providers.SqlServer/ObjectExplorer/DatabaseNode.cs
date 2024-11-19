@@ -130,7 +130,7 @@ from	[{0}].sys.database_files f", name);
         textBuilder.Add($"ALTER DATABASE [{databaseName}] SET MULTI_USER WITH NO_WAIT");
 
         var text = textBuilder.ToLines().ToIndentedString("  ");
-        var queryForm = (IQueryForm?)sender;
+        var queryForm = (IQueryForm)sender!;
         queryForm.SetClipboardText(text);
     }
 

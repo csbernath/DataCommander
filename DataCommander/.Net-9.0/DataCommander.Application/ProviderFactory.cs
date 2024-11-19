@@ -10,17 +10,17 @@ public static class ProviderFactory
 {
     public static IProvider CreateProvider(string providerIdentifier)
     {
-        ArgumentNullException.ThrowIfNull(providerIdentifier);
+        Assert.IsNotWhiteSpace(providerIdentifier);
         var folder = Settings.SelectNode("DataCommander/Providers", true)!;
         folder = folder.ChildNodes[providerIdentifier];
         var attributes = folder.Attributes;
         var typeName = attributes["TypeName"].GetValue<string>()!;
         var type = Type.GetType(typeName, true)!;
         var instance = Activator.CreateInstance(type);
-        ArgumentNullException.ThrowIfNull(instance);
+        Assert.IsNotNull(instance);
         Assert.IsTrue(instance is IProvider);
         var provider = (IProvider)instance;
-        ArgumentNullException.ThrowIfNull(provider);
+        Assert.IsNotNull(provider);
         return provider;
     }
 

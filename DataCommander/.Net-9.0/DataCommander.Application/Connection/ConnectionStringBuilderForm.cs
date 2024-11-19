@@ -147,7 +147,7 @@ internal partial class ConnectionStringBuilderForm : Form
     {
         var applicationData = DataCommanderApplication.Instance.ApplicationData;
         var folder = applicationData.CurrentType;
-        folder = folder.CreateNode(_selectedProviderName);
+        folder = folder.CreateNode(_selectedProviderName!);
         var contains = folder.Attributes.TryGetAttributeValue("Data Sources", out string[]? dataSourceArray);
 
         if (!contains || refresh)

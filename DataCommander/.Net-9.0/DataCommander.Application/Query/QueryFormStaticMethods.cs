@@ -83,16 +83,8 @@ internal static class QueryFormStaticMethods
                 Text = dataColumn.ColumnName,
                 Width = -2
             };
-
-            var type = (Type)dataColumn.ExtendedProperties[0];
-
-            if (type == null)
-            {
-                type = dataColumn.DataType;
-            }
-
+            var type = (Type?)dataColumn.ExtendedProperties[0] ?? dataColumn.DataType;
             columnHeader.TextAlign = GetHorizontalAlignment(type);
-
             listView.Columns.Add(columnHeader);
         }
 
@@ -104,15 +96,9 @@ internal static class QueryFormStaticMethods
             for (var i = 0; i < count; i++)
             {
                 var value = dataRow[i];
-
-                if (value == DBNull.Value)
-                {
-                    items[i] = "(null)";
-                }
-                else
-                {
-                    items[i] = value.ToString();
-                }
+                items[i] = value == DBNull.Value
+                    ? "(null)"
+                    : value.ToString()!;
             }
 
             var listViewItem = new ListViewItem(items);

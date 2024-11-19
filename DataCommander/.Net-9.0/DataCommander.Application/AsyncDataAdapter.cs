@@ -59,7 +59,7 @@ internal sealed class AsyncDataAdapter(
         }
     }
 
-    private async Task ReadTable(DbDataReader dataReader, DataTable schemaTable, int tableIndex, CancellationToken cancellationToken)
+    private async Task ReadTable(DbDataReader dataReader, DataTable? schemaTable, int tableIndex, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(dataReader);
         ArgumentNullException.ThrowIfNull(schemaTable);

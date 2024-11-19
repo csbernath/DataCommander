@@ -509,7 +509,7 @@ public sealed partial class QueryForm
                         }
                     }
 
-                    DataSet dataSet = null;
+                    DataSet? dataSet = null;
                     var i = 1;
 
                     do

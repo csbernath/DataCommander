@@ -84,29 +84,17 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
                     var scale = schemaRow.NumericScale.Value;
 
                     if (precision > 38)
-                    {
                         precision = 38;
-                    }
 
                     if (scale > 38)
-                    {
                         scale = 38;
-                    }
 
                     if (precision < scale)
-                    {
                         precision = scale;
-                    }
 
-                    if (scale == 0)
-                    {
-                        typeName = $"decimal({precision})";
-                    }
-                    else
-                    {
-                        typeName = $"decimal({precision},{scale})";
-                    }
-
+                    typeName = scale == 0
+                        ? $"decimal({precision})"
+                        : $"decimal({precision},{scale})";
                     break;
 
                 case TypeCode.Double:

@@ -28,7 +28,7 @@ internal sealed class SqlServerProvider : IProvider
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private static string[]? _keyWords;
-    
+
     static SqlServerProvider()
     {
         var configurationNode = Settings.CurrentType!;
@@ -128,7 +128,7 @@ internal sealed class SqlServerProvider : IProvider
             command.CommandType = CommandType.Text;
 
             using var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly);
-            schemaTable = dataReader.GetSchemaTable();
+            schemaTable = dataReader.GetSchemaTable()!;
             count = dataReader.FieldCount;
             dataTypeNames = new string[count];
 
@@ -215,8 +215,8 @@ internal sealed class SqlServerProvider : IProvider
 
                 case SqlDataTypeName.Decimal:
                     parameter.SqlDbType = SqlDbType.Decimal;
-                    parameter.Precision = (byte)columnSchema.NumericPrecision.Value;
-                    parameter.Scale = (byte)columnSchema.NumericScale.Value;
+                    parameter.Precision = (byte)columnSchema.NumericPrecision!.Value;
+                    parameter.Scale = (byte)columnSchema.NumericScale!.Value;
                     converters[i] = ConvertToDecimal;
                     break;
 
@@ -240,7 +240,7 @@ internal sealed class SqlServerProvider : IProvider
 
     void IProvider.DeriveParameters(IDbCommand command)
     {
-        var sqlConnection = (SqlConnection)command.Connection;
+        var sqlConnection = (SqlConnection)command.Connection!;
         var sqlCommand = new SqlCommand(command.CommandText, sqlConnection)
         {
             CommandType = command.CommandType,
@@ -276,7 +276,7 @@ internal sealed class SqlServerProvider : IProvider
             TypeCode.DateTime => SqlDataTypeName.DateTime,
             TypeCode.Double => SqlDataTypeName.Float,
             TypeCode.String => $"{SqlDataTypeName.NVarChar}({columnSize})",
-            _ => $"'{typeCode}'",// TODO
+            _ => $"'{typeCode}'", // TODO
         };
         return typeName;
     }
@@ -406,13 +406,13 @@ internal sealed class SqlServerProvider : IProvider
                     case SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function:
                     {
                         name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
-                            var nameParts = sqlObject.Name != null
+                        var nameParts = sqlObject.Name != null
                             ? new IdentifierParser(new StringReader(sqlObject.Name)).Parse().ToList()
                             : null;
-                            var namePartsCount = nameParts != null
+                        var namePartsCount = nameParts != null
                             ? nameParts.Count
                             : 0;
-                            List<string> statements = [];
+                        List<string> statements = [];
 
                         switch (namePartsCount)
                         {
@@ -422,7 +422,7 @@ internal sealed class SqlServerProvider : IProvider
                                 statements.Add(SqlServerObject.GetDatabases());
                                 statements.Add(SqlServerObject.GetSchemas());
 
-                                        var objectTypes = sqlObject.Type.ToObjectTypes();
+                                var objectTypes = sqlObject.Type.ToObjectTypes();
                                 statements.Add(SqlServerObject.GetObjects("dbo", objectTypes));
                             }
                                 break;
@@ -432,7 +432,7 @@ internal sealed class SqlServerProvider : IProvider
                                 {
                                     statements.Add(SqlServerObject.GetSchemas(nameParts[0]));
 
-                                        var objectTypes = sqlObject.Type.ToObjectTypes();
+                                    var objectTypes = sqlObject.Type.ToObjectTypes();
                                     statements.Add(SqlServerObject.GetObjects(nameParts[0], objectTypes));
                                 }
 
@@ -442,7 +442,7 @@ internal sealed class SqlServerProvider : IProvider
                             {
                                 if (nameParts[0] != null && nameParts[1] != null)
                                 {
-                                            var objectTypes = sqlObject.Type.ToObjectTypes();
+                                    var objectTypes = sqlObject.Type.ToObjectTypes();
                                     statements.Add(SqlServerObject.GetObjects(nameParts[0], nameParts[1], objectTypes));
                                 }
                             }
@@ -511,7 +511,7 @@ end", name.Database, ownersString, name.Name);
                         break;
 
                     case SqlObjectTypes.Value:
-                        var items = sqlObject.ParentName.Split('.');
+                        var items = sqlObject.ParentName!.Split('.');
                         i = items.Length - 1;
                         var columnName = items[i];
                         string tableNameOrAlias = null;
@@ -526,8 +526,8 @@ end", name.Database, ownersString, name.Name);
                             var contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out var tableName);
                             if (contains)
                             {
-                                string where;
-                                var tokenIndex = previousToken.Index + 1;
+                                string? where;
+                                var tokenIndex = previousToken!.Index + 1;
                                 if (tokenIndex < tokens.Count)
                                 {
                                     var token = tokens[tokenIndex];
@@ -590,7 +590,7 @@ from
                                 if (fieldCount == 1)
                                 {
                                     schemaName = null;
-                                    objectName = dataReader[0].ToString();
+                                    objectName = dataReader[0].ToString()!;
                                 }
                                 else
                                 {
@@ -623,14 +623,6 @@ from
         return new SqlDataParameter(sqlParameter);
     }
 
-    public string GetExceptionMessage(Exception exception)
-    {
-        var message = exception is SqlException sqlException
-            ? sqlException.Errors.ToLogString()
-            : exception.ToString();
-        return message;
-    }
-
     DataTable IProvider.GetParameterTable(IDataParameterCollection parameters)
     {
         var dataTable = new DataTable();
@@ -656,33 +648,24 @@ from
             row[3] = p.SqlDbType.ToString().ToLower();
 
             var precision = p.Precision;
-            int size;
-
-            if (precision > 0)
-            {
-                if (precision <= 9)
-                    size = 5;
-                else if (precision <= 19)
-                    size = 9;
-                else if (precision <= 28)
-                    size = 13;
-                else
-                    size = 17;
-            }
-            else
-            {
-                size = p.Size;
-            }
+            var size = precision > 0
+                ? precision switch
+                {
+                    <= 9 => 5,
+                    <= 19 => 9,
+                    <= 28 => 13,
+                    _ => 17
+                }
+                : p.Size;
 
             row[4] = size;
             row[5] = p.Precision;
             row[6] = p.Scale;
             row[7] = p.Direction.ToString("G");
 
-            if (p.Value == null)
-                row[8] = DBNull.Value;
-            else
-                row[8] = p.Value;
+            row[8] = p.Value == null
+                ? DBNull.Value
+                : p.Value;
 
             row[9] = p.TypeName;
 

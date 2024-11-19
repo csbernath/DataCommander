@@ -14,7 +14,7 @@ public partial class AboutForm : Form
 {
     private bool _first = true;
 
-    public AboutForm(ColorTheme colorTheme)
+    public AboutForm(ColorTheme? colorTheme)
     {
         var assembly = Assembly.GetEntryAssembly()!;
         var path = assembly.Location;

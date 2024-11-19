@@ -372,7 +372,7 @@ Please wait...",
 
     private void mnuShowShemaTable_Click(object? sender, EventArgs e)
     {
-        _mnuShowShemaTable.Checked = !_mnuShowShemaTable.Checked;
+        _mnuShowShemaTable!.Checked = !_mnuShowShemaTable.Checked;
         _showSchemaTable = !_showSchemaTable;
     }
 
@@ -660,8 +660,8 @@ Please wait...",
         var maxRecords = int.MaxValue;
         var tableName = sqlStatement.FindTableName();
         var sqlCeResultWriter = new SqlCeResultWriter(_textBoxWriter, tableName);
-        var asyncDataAdatper = new AsyncDataAdapter(Provider, maxRecords, _rowBlockSize, sqlCeResultWriter, EndFillInvoker, WriteEndInvoker);
-        asyncDataAdatper.Start(new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray());
+        var asyncDataAdapter = new AsyncDataAdapter(Provider, maxRecords, _rowBlockSize, sqlCeResultWriter, EndFillInvoker, WriteEndInvoker);
+        asyncDataAdapter.Start(new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray());
     }
 
     private void beginTransactionToolStripMenuItem_Click(object? sender, EventArgs e)
@@ -773,7 +773,7 @@ Please wait...",
         var line = richTextBox.GetLineFromCharIndex(charIndex) + 1;
         var lineIndex = QueryTextBox.GetLineIndex(richTextBox, -1);
         var col = charIndex - lineIndex + 1;
-        _sbPanelCaretPosition.Text = "Ln " + line + " Col " + col;
+        _sbPanelCaretPosition!.Text = "Ln " + line + " Col " + col;
     }
 
     private void MnuDescribeParameters_Click(object? sender, EventArgs e)

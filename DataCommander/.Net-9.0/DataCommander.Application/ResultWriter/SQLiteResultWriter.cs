@@ -103,7 +103,7 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
                     break;
 
                 case TypeCode.Decimal:
-                    var precision = schemaRow.NumericPrecision.Value;
+                    var precision = schemaRow.NumericPrecision!.Value;
                     var scale = schemaRow.NumericPrecision.Value;
 
                     if (precision <= 28 && scale <= 28)

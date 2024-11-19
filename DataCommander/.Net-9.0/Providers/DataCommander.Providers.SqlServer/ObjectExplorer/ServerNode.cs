@@ -161,7 +161,7 @@ drop table #SVer";
         var dataSet = new DataSet();
         dataSet.Tables.Add(dataTable);
 
-        var queryForm = (IQueryForm?)sender;
+        var queryForm = (IQueryForm)sender!;
         queryForm.ShowDataSet(dataSet);
     }
 }
