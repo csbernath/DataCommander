@@ -112,7 +112,7 @@ public class StringTable
             var column = Columns[j];
             var alignRight = column.Align == StringTableColumnAlign.Right;
 
-            string text;
+            string? text;
             if (j == last && !alignRight)
                 text = row[j];
             else

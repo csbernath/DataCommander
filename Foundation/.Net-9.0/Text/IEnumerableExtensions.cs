@@ -49,7 +49,7 @@ public static class IEnumerableExtensions
         for (columnIndex = 0;columnIndex < columns.Count;++columnIndex)
         {
             var max = table.Rows
-                .Select(r => r[columnIndex] == null ? 0 : r[columnIndex].Length)
+                .Select(r => r[columnIndex] == null ? 0 : r[columnIndex]!.Length)
                 .Max();
             secondRow[columnIndex] = new string('-', max);
             columnWidths[columnIndex] = max;

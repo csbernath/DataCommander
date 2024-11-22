@@ -158,18 +158,14 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
         }
     }
 
-    private static string? GetStringValue(object value, int columnSize)
+    private static string? GetStringValue(object? value, int columnSize)
     {
         string? stringValue = null;
 
         if (value == null)
-        {
             stringValue = "null";
-        }
         else if (value == DBNull.Value)
-        {
             stringValue = "NULL";
-        }
         else
         {
             var type = value.GetType();

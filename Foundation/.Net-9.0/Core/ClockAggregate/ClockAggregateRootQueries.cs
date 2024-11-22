@@ -1,4 +1,5 @@
 ﻿using System;
+using Foundation.Assertions;
 
 namespace Foundation.Core.ClockAggregate;
 
@@ -26,7 +27,7 @@ public static class ClockAggregateRootQueries
 
     public static DateTime GetUniversalTimeFromStopwatchTimestamp(this ClockAggregateRoot clock, long stopwatchTimestamp)
     {
-        ArgumentNullException.ThrowIfNull(clock);
+        Assert.IsNotNull(clock);
         var clockState = clock.GetAggregateState();
         var stopwatchTicks = stopwatchTimestamp - clockState.StopwatchTimestamp;
         var timeSpanTicksDouble = stopwatchTicks * StopwatchConstants.TimeSpanTicksPerStopwatchTick;
@@ -39,7 +40,7 @@ public static class ClockAggregateRootQueries
         this ClockAggregateRoot clock,
         long stopwatchTimestamp)
     {
-        ArgumentNullException.ThrowIfNull(clock);
+        Assert.IsNotNull(clock);
         var clockState = clock.GetAggregateState();
         var stopwatchTicks = stopwatchTimestamp - clockState.StopwatchTimestamp;
 
@@ -56,7 +57,7 @@ public static class ClockAggregateRootQueries
 
     private static DateTime GetUniversalTimeFromEnvironmentTickCount64(this ClockAggregateRoot clock, long environmentTickCount64)
     {
-        ArgumentNullException.ThrowIfNull(clock);
+        Assert.IsNotNull(clock);
         var clockState = clock.GetAggregateState();
         var milliseconds = environmentTickCount64 - clockState.EnvironmentTickCount64;
         var universalTime = clockState.UniversalTime.AddMilliseconds(milliseconds);

@@ -127,7 +127,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
 
     private void SelectItem()
     {
-        var listBoxItem = (ListBoxItem<IObjectName>)ListBox.SelectedItem;
+        var listBoxItem = (ListBoxItem<IObjectName>?)ListBox.SelectedItem;
 
         if (listBoxItem != null)
         {

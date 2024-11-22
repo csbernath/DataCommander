@@ -8,7 +8,7 @@ namespace Foundation.Text;
 
 public static class StringHelper
 {
-    public static string FormatColumn(string col, int colWidth, bool alignRight)
+    public static string FormatColumn(string? col, int colWidth, bool alignRight)
     {
         var length = col != null
             ? col.Length

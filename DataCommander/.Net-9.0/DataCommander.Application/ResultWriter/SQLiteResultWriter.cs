@@ -12,9 +12,9 @@ namespace DataCommander.Application.ResultWriter;
 
 internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name) : IResultWriter
 {
-    private SqliteConnection _connection;
-    private SqliteTransaction _transaction;
-    private SqliteCommand _insertCommand;
+    private SqliteConnection? _connection;
+    private SqliteTransaction? _transaction;
+    private SqliteCommand? _insertCommand;
 
     void IResultWriter.Begin(IProvider provider)
     {

@@ -134,7 +134,7 @@ internal partial class ConnectionStringBuilderForm : Form
         }
     }
 
-    private void GetDataSources(string[] dataSourceArray)
+    private void GetDataSources(string[]? dataSourceArray)
     {
         dataSourcesComboBox.Items.Clear();
 

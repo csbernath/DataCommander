@@ -142,13 +142,9 @@ internal sealed class CopyResultWriter(
                     {
                         var succeeded = _queue.TryDequeue(out var item);
                         if (succeeded)
-                        {
-                            items.Add(item);
-                        }
+                            items.Add(item!);
                         else
-                        {
                             break;
-                        }
                     }
 
                     InsertItems(items);

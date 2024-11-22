@@ -28,7 +28,7 @@ public sealed class QueryTextBox : UserControl
     private bool _changeEventEnabled = true;
     private ToolStripStatusLabel? _sbPanel;
     private int _columnIndex;
-    private ColorTheme _colorTheme;
+    private ColorTheme? _colorTheme;
     private readonly UndoRedoState<string> _undoRedoState = new([], 0);
 
     public RichTextBox RichTextBox { get; private set; }
@@ -67,7 +67,7 @@ public sealed class QueryTextBox : UserControl
         }
     }
 
-    public void AddKeyWords(string[] keyWords, Color color)
+    public void AddKeyWords(string[]? keyWords, Color color)
     {
         if (keyWords != null)
         {

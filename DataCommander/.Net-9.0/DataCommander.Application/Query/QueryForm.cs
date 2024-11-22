@@ -72,7 +72,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         _messagesTabPage.Controls.Add(_messagesTextBox);
 
         InitializeComponent();
-        GarbageMonitor.Default.Add("queryForm._toolStrip", _toolStrip);
+        GarbageMonitor.Default.Add("queryForm._toolStrip", _toolStrip!);
         _mnuFind!.Click += mnuFind_Click;
         _mnuFindNext!.Click += mnuFindNext_Click;
         _mnuPaste!.Click += mnuPaste_Click;

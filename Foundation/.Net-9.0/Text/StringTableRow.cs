@@ -5,7 +5,7 @@ namespace Foundation.Text;
 
 public sealed class StringTableRow
 {
-    private readonly string[] _cells;
+    private readonly string?[] _cells;
 
     internal StringTableRow(StringTable table)
     {
@@ -17,7 +17,7 @@ public sealed class StringTableRow
 
     public StringTable Table { get; }
 
-    public string this[int columnIndex]
+    public string? this[int columnIndex]
     {
         get
         {

@@ -96,10 +96,10 @@ internal class DataTableEditor : UserControl
                         DataPropertyName = dataColumn.ColumnName
                     };
 
-                    string columnName;
+                    string? columnName;
                     if (dataColumn.ExtendedProperties.ContainsKey("ColumnName"))
                     {
-                        columnName = (string)dataColumn.ExtendedProperties["ColumnName"];
+                        columnName = (string?)dataColumn.ExtendedProperties["ColumnName"];
                         if (string.IsNullOrEmpty(columnName))
                         {
                             columnName = "(no column name)";
@@ -112,7 +112,7 @@ internal class DataTableEditor : UserControl
 
                     textBoxColumn.HeaderText = columnName;
                     var maxWidth = graphics.MeasureString(columnName, font).Width;
-                    var type = (Type)dataColumn.ExtendedProperties[0];
+                    var type = (Type?)dataColumn.ExtendedProperties[0];
 
                     if (type == null)
                     {

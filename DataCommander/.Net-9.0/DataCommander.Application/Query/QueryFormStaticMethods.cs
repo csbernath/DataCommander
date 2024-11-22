@@ -170,7 +170,7 @@ internal static class QueryFormStaticMethods
 
             while (true)
             {
-                found = matcher.IsMatch(dataRow[columnIndex].ToString());
+                found = matcher.IsMatch(dataRow[columnIndex].ToString()!);
 
                 if (found)
                 {
