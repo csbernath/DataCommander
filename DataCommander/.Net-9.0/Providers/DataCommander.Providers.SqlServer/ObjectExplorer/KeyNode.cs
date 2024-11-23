@@ -5,11 +5,9 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal class KeyNode(int id, string? name) : ITreeNode
+internal class KeyNode(string? name) : ITreeNode
 {
-    private readonly string? _name = name;
-
-    public string? Name => _name;
+    public string? Name => name;
     public bool IsLeaf => true;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>

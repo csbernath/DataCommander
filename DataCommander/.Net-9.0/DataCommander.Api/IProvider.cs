@@ -13,7 +13,7 @@ public interface IProvider
 {
     string Identifier { get; }
     DbProviderFactory DbProviderFactory { get; }
-    string[] KeyWords { get; }
+    string[]? KeyWords { get; }
     bool CanConvertCommandToString { get; }
     bool IsCommandCancelable { get; }
 

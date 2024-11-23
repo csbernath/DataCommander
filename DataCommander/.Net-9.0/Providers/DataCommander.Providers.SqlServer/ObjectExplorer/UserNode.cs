@@ -16,7 +16,7 @@ internal sealed class UserNode(DatabaseNode database, string? name) : ITreeNode
 
     public bool Sortable => false;
 
-    public string Query
+    public string? Query
     {
         get
         {

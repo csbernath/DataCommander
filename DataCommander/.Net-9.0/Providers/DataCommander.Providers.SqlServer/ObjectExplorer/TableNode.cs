@@ -94,7 +94,7 @@ where
 
     public bool Sortable => false;
 
-    public string Query
+    public string? Query
     {
         get
         {
@@ -112,15 +112,14 @@ where
 
         var dropdownItems = new[]
         {
-            new MenuItem("CREATE to clipboard", CreateTableScriptToClipboard, EmptyReadOnlyCollection<MenuItem>.Value),
-            new MenuItem("SELECT to clipboard", SelectScript_Click, EmptyReadOnlyCollection<MenuItem>.Value),
-            new MenuItem("INSERT to clipboard", InsertScript_Click, EmptyReadOnlyCollection<MenuItem>.Value),
-            new MenuItem("UPDATE to clipboard", UpdateScript_Click, EmptyReadOnlyCollection<MenuItem>.Value),
-            new MenuItem("C# ORM to clipboard", CsharpOrm_Click, EmptyReadOnlyCollection<MenuItem>.Value),
-            new MenuItem("C# DTO with properties to clipboard", DataTransferObjectWithProperties_Click, EmptyReadOnlyCollection<MenuItem>.Value)
-        }.ToReadOnlyCollection();
+            new MenuItem("CREATE to clipboard", CreateTableScriptToClipboard, Array.Empty<MenuItem>()),
+            new MenuItem("SELECT to clipboard", SelectScript_Click, Array.Empty<MenuItem>()),
+            new MenuItem("INSERT to clipboard", InsertScript_Click, Array.Empty<MenuItem>()),
+            new MenuItem("UPDATE to clipboard", UpdateScript_Click, Array.Empty<MenuItem>()),
+            new MenuItem("C# ORM to clipboard", CsharpOrm_Click, Array.Empty<MenuItem>()),
+            new MenuItem("C# DTO with properties to clipboard", DataTransferObjectWithProperties_Click, Array.Empty<MenuItem>())
+        };
         var scriptTableAs = new MenuItem("Script Table as", null, dropdownItems);
-
         var schema = new MenuItem("Schema", Schema_Click, EmptyReadOnlyCollection<MenuItem>.Value);
         var indexes = new MenuItem("Indexes", Indexes_Click, EmptyReadOnlyCollection<MenuItem>.Value);
 
@@ -544,7 +543,7 @@ order by c.column_id";
             var last = getTableSchemaResult.Columns.Count - 1;
             foreach (var item in getTableSchemaResult.Columns.SelectIndexed())
             {
-                var column = item.Value;
+                var column = item.Value!;
                 var line = new StringBuilder();
                 line.Append($"{column.ColumnName} = @{column.ColumnName}");
                 if (item.Index < last)
@@ -561,7 +560,7 @@ order by c.column_id";
                 var last = getTableSchemaResult.UniqueIndexColumns.Count - 1;
                 foreach (var item in getTableSchemaResult.UniqueIndexColumns.SelectIndexed())
                 {
-                    var columnId = item.Value.ColumnId;
+                    var columnId = item.Value!.ColumnId;
                     var column = getTableSchemaResult.Columns.First(i => i.ColumnId == columnId);
                     var line = new StringBuilder();
                     line.Append($"{column.ColumnName} = @{column.ColumnName}");
@@ -593,7 +592,7 @@ order by c.column_id";
         {
             connection.Open();
 
-            var databaseName = DatabaseNode.Name.Contains('.')
+            var databaseName = DatabaseNode.Name!.Contains('.')
                 ? $"[{DatabaseNode.Name}]"
                 : DatabaseNode.Name;
 

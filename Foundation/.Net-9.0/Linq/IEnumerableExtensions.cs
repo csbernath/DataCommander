@@ -206,7 +206,7 @@ public static partial class IEnumerableExtensions
     }
 
     [Pure]
-    public static IEnumerable<IndexedItem<T?>> SelectIndexed<T>(this IEnumerable<T> source) => source.Select((item, i) => IndexedItemFactory.Create(i, item));
+    public static IEnumerable<IndexedItem<T>> SelectIndexed<T>(this IEnumerable<T> source) => source.Select((item, i) => IndexedItemFactory.Create(i, item));
 
     [Pure]
     public static IEnumerable<TSource[]> Split<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> isSeparator)

@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 
 namespace DataCommander.Providers.OleDb;
 
-internal sealed class ProcedureNode(string name) : ITreeNode
+internal sealed class ProcedureNode(string? name) : ITreeNode
 {
     public string? Name
     {
@@ -22,21 +23,18 @@ internal sealed class ProcedureNode(string name) : ITreeNode
 
     public bool IsLeaf => true;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => null;
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
+        Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
 
     public bool Sortable => false;
 
-    public string Query
+    public string? Query
     {
         get
         {
-            string query;
-
-            if (name != null)
-                query = "exec " + name;
-            else
-                query = null;
-
+            var query = name != null
+                ? "exec " + name
+                : null;
             return query;
         }
     }

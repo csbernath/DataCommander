@@ -257,17 +257,20 @@ public sealed partial class QueryForm
 
     private ToolStripMenuItem ToToolStripMenuItem(MenuItem source)
     {
-        var item = new ToolStripMenuItem(source.Text, null, (sender, args) =>
-        {
-            try
+        EventHandler? onClick = source.OnClick != null
+            ? (sender, eventArgs) =>
             {
-                source.OnClick(this, args);
+                try
+                {
+                    source.OnClick(sender, eventArgs);
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show(exception.Message);
+                }
             }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.Message);
-            }
-        });
+            : null;
+        var item = new ToolStripMenuItem(source.Text, null, onClick);
         var dropdownItems = source.DropDownItems
             .Select(ToToolStripMenuItem)
             .Cast<ToolStripItem>()
@@ -696,14 +699,12 @@ public sealed partial class QueryForm
             var destinationProvider = nextQueryForm.Provider;
             var destinationConnection = nextQueryForm.Connection;
             var sqlStatement = new SqlParser(Query);
-            _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
+            _command = sqlStatement.CreateCommand(Provider, Connection!, _commandType, _commandTimeout);
             var tableName = _command.CommandType == CommandType.StoredProcedure
                 ? _command.CommandText
                 : sqlStatement.FindTableName()!;
-
             if (tableName[0] == '[' && destinationProvider.Identifier == "System.Data.OracleClient")
                 tableName = tableName[1..^1];
-
             IResultWriter resultWriter = new CopyResultWriter(AddInfoMessage, destinationProvider, destinationConnection, tableName,
                 nextQueryForm.InvokeSetTransaction, CancellationToken.None);
             var maxRecords = int.MaxValue;

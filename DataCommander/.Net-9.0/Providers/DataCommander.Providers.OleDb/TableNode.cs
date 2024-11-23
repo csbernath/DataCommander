@@ -26,11 +26,12 @@ sealed class TableNode(SchemaNode schema, string? name) : ITreeNode
 
     public bool IsLeaf => true;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => null;
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
+        Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
 
     public bool Sortable => false;
 
-    public string Query
+    public string? Query
     {
         get
         {
@@ -65,7 +66,7 @@ sealed class TableNode(SchemaNode schema, string? name) : ITreeNode
         var dataSet = new DataSet();
         dataSet.Tables.Add(dataTable);
 
-        var queryForm = (IQueryForm)sender;
+        var queryForm = (IQueryForm)sender!;
         queryForm.ShowDataSet(dataSet);
     }
 }

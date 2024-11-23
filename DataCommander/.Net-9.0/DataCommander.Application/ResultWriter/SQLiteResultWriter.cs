@@ -200,11 +200,11 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
 
             for (var j = 0; j < row.Length; j++)
             {
-                var parameter = _insertCommand.Parameters[j];
+                var parameter = _insertCommand!.Parameters[j];
                 parameter.Value = row[j];
             }
 
-            _insertCommand.ExecuteNonQuery();
+            _insertCommand!.ExecuteNonQuery();
         }
     }
 

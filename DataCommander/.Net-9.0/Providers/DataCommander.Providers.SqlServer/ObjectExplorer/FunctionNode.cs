@@ -24,7 +24,7 @@ internal sealed class FunctionNode(
 
     public bool Sortable => false;
 
-    public string Query
+    public string? Query
     {
         get
         {
@@ -56,7 +56,7 @@ from	{database.Name}.{owner}.[{name}]()",
         using (var connection = database.Databases.Server.CreateConnection())
         {
             connection.Open();
-            text = SqlDatabase.GetSysComments(connection, database.Name, owner, name, CancellationToken.None).Result;
+            text = SqlDatabase.GetSysComments(connection, database.Name!, owner, name, CancellationToken.None).Result;
         }
 
         var queryForm = (IQueryForm)sender!;

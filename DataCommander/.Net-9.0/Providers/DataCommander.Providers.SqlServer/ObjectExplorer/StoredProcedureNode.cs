@@ -19,7 +19,7 @@ internal sealed class StoredProcedureNode(DatabaseNode database, string owner, s
 
     public bool Sortable => false;
 
-    public string Query
+    public string? Query
     {
         get
         {
@@ -57,7 +57,7 @@ internal sealed class StoredProcedureNode(DatabaseNode database, string owner, s
     {
         await using var connection = database.Databases.Server.CreateConnection();
         await connection.OpenAsync(cancellationToken);
-        var text = await SqlDatabase.GetSysComments(connection, database.Name, owner, name, cancellationToken);
+        var text = await SqlDatabase.GetSysComments(connection, database.Name!, owner, name, cancellationToken);
         return text;
     }
 }

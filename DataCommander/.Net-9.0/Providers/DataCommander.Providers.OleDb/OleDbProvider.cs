@@ -208,7 +208,7 @@ internal sealed class OleDbProvider : IProvider
         return table;
     }
 
-    public static XmlReader ExecuteXmlReader(IDbCommand command) => null;
+    public static XmlReader ExecuteXmlReader(IDbCommand command) => throw new NotImplementedException();
 
     Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
     {
@@ -267,11 +267,8 @@ internal sealed class OleDbProvider : IProvider
         IDbConnection destinationconnection,
         string? destinationTableName,
         out IDbCommand insertCommand,
-        out Converter<object, object>[] converters)
-    {
-        insertCommand = null;
-        converters = null;
-    }
+        out Converter<object, object>[] converters) =>
+        throw new NotImplementedException();
 
     string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
 

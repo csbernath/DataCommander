@@ -23,7 +23,7 @@ internal sealed class ViewNode(DatabaseNode database, int id, string? schema, st
 
     public bool Sortable => false;
 
-    public string Query
+    public string? Query
     {
         get
         {

@@ -335,7 +335,7 @@ internal sealed class SqlServerProvider : IProvider
         CancellationToken cancellationToken)
     {
         var fromCache = false;
-        List<IObjectName> array = null;
+        List<IObjectName>? array = null;
         var sqlStatement = new SqlParser(text);
         var tokens = sqlStatement.Tokens;
         sqlStatement.FindToken(position, out var previousToken, out var currentToken);
@@ -362,15 +362,15 @@ internal sealed class SqlServerProvider : IProvider
                 }
                 else
                 {
-                    SortedList<string?, object> list = [];
+                    SortedList<string, object> list = [];
 
                     for (var i = 0; i < tokens.Count; i++)
                     {
                         var token = tokens[i];
                         var keyWord = token.Value;
 
-                        if (keyWord != null && keyWord.Length >= 2 && keyWord.StartsWith(value) && keyWord != value && !list.ContainsKey(token.Value))
-                            list.Add(token.Value, null);
+                        if (keyWord.Length >= 2 && keyWord.StartsWith(value) && keyWord != value)
+                            list.TryAdd(token.Value, null);
                     }
 
                     array = list.Keys.Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
@@ -440,10 +440,10 @@ internal sealed class SqlServerProvider : IProvider
 
                             case 3:
                             {
-                                if (nameParts[0] != null && nameParts[1] != null)
+                                if (nameParts![0] != null && nameParts[1] != null)
                                 {
                                     var objectTypes = sqlObject.Type.ToObjectTypes();
-                                    statements.Add(SqlServerObject.GetObjects(nameParts[0], nameParts[1], objectTypes));
+                                    statements.Add(SqlServerObject.GetObjects(nameParts[0]!, nameParts[1]!, objectTypes));
                                 }
                             }
                                 break;

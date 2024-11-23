@@ -18,7 +18,7 @@ internal class CatalogsNode(OleDbConnection connection) : ITreeNode
 
         try
         {
-            var dataTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Catalogs, null);
+            var dataTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Catalogs, null)!;
             var count = dataTable.Rows.Count;
             var nameColumn = dataTable.Columns["CATALOG_NAME"];
             treeNodes = new ITreeNode[count];

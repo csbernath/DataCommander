@@ -25,7 +25,7 @@ internal sealed class TableCollectionNode(SchemaNode schema) : ITreeNode
             if (catalog != null)
                 restrictions = [catalog, schema.Name];
 
-            DataTable dataTable = dataTable = schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, restrictions);
+            var dataTable = schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, restrictions)!;
             var count = dataTable.Rows.Count;
             var nameColumn = dataTable.Columns["TABLE_NAME"];
             treeNodes = new ITreeNode[count];

@@ -890,7 +890,7 @@ Please wait...",
                 if (query != null)
                 {
                     var text0 = QueryTextBox.Text;
-                    string append = null;
+                    string? append = null;
                     var selectionStart = QueryTextBox.RichTextBox.TextLength;
 
                     if (!string.IsNullOrEmpty(text0))
