@@ -37,9 +37,10 @@ public partial class AboutForm : Form
 </style>
 <div style=""font-family:verdana;font-size:9pt"">
 Data Commander Version: {assembly.GetName().Version} ({lastWriteTime:yyyy-MM-dd})<br/>
-Copyright © 2002-2024 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Bernáth</a><br/>
-This program is freeware and released under the <a href=""https://www.gnu.org/licenses/gpl.txt"">GNU General Public Licence</a>.<br/><br/>
 <a href=""https://github.com/csbernath/DataCommander"">GitHub repository</a><br/>
+Copyright © 2002-2024 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Bernáth</a><br/><br/>
+<a href=""https://en.wikipedia.org/wiki/Free_and_open-source_software"">Free and open-source software</a><br/>
+This program is released under the <a href=""https://www.gnu.org/licenses/gpl.txt"">GNU General Public Licence</a>.<br/><br/>
 Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.Net-9.0/README.md"">Foundation Class Library</a><br/><br/>
 <a href=""applicationdatafile://"">Application Data file</a><br/>
 <a href=""logfile://"">Log file</a><br/><br/>
@@ -57,7 +58,7 @@ Credits:
     <li><a href=""https://www.visualstudio.com/vs/community/"">Visual Studio Community</a></li>
     <li><a href=""https://www.jetbrains.com/resharper/"">JetBrains R# ReSharper</a></li>
     <li><a href=""https://github.com/JanKallman/EPPlus"">EPPlus Excel generator</a></li>
-    <li><a href=""https://system.data.sqlite.org"">SQLite provider</a></li>
+    <li><a href=""https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/?tabs=net-cli"">Microsoft SQLite provider</a></li>
     <li><a href=""https://www.nuget.org/packages/MySql.Data/"">MySQL provider</a></li>
     <li><a href=""https://github.com/npgsql/npgsql"">PostgreSQL provider</a></li>  
 </ul>
