@@ -54,7 +54,7 @@ internal sealed class FileResultWriter : IResultWriter
 
         for (var i = 0; i < count; i++)
         {
-            DataWriterBase dataWriter = null;
+            DataWriterBase? dataWriter = null;
             var column = schemaTable.Rows[i];
             var dataType = (Type)column["DataType"];
             var typeCode = Type.GetTypeCode(dataType);

@@ -18,7 +18,7 @@ internal sealed class AsyncDataAdapter(
     int maxRecords,
     int rowBlockSize,
     IResultWriter resultWriter,
-    Action<IAsyncDataAdapter, Exception> endFill,
+    Action<IAsyncDataAdapter, Exception?> endFill,
     Action<IAsyncDataAdapter> writeEnd)
     : IAsyncDataAdapter
 {
@@ -188,9 +188,7 @@ internal sealed class AsyncDataAdapter(
         }
         finally
         {
-            if (command != null && command.Parameters != null)
-                resultWriter.WriteParameters(command.Parameters);
-
+            resultWriter.WriteParameters(command.Parameters);
             endFill(this, exception);
         }
     }

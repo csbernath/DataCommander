@@ -530,7 +530,7 @@ public sealed partial class QueryForm
                         }
                     } while (dataReader.NextResult());
 
-                    ShowDataSet(dataSet);
+                    ShowDataSet(dataSet!);
                     _tabControl.SelectedTab = _resultSetsTabPage;
                 }
                 finally

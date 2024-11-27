@@ -682,7 +682,7 @@ public sealed class QueryTextBox : UserControl
 
     private void CopyTableWithSqlBulkCopy_Click(object? sender, EventArgs e)
     {
-        var queryForm = (QueryForm)Parent;
+        var queryForm = (QueryForm)Parent!;
         QueryForm.CopyTableWithSqlBulkCopy();
     }
 

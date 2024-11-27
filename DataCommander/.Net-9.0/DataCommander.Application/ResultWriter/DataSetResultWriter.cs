@@ -10,11 +10,11 @@ namespace DataCommander.Application.ResultWriter;
 internal sealed class DataSetResultWriter(Action<InfoMessage> addInfoMessage, bool showShemaTable) : IResultWriter
 {
     private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage, showShemaTable);
-    private IProvider _provider;
-    private DataTable _dataTable;
+    private IProvider? _provider;
+    private DataTable? _dataTable;
     private int _tableIndex = -1;
 
-    public DataSet DataSet { get; private set; }
+    public DataSet? DataSet { get; private set; }
 
     void IResultWriter.Begin(IProvider provider)
     {
@@ -46,7 +46,7 @@ internal sealed class DataSetResultWriter(Action<InfoMessage> addInfoMessage, bo
     void IResultWriter.WriteRows(object[][] rows, int rowCount)
     {
         _logResultWriter.WriteRows(rows, rowCount);
-        var targetRows = _dataTable.Rows;
+        var targetRows = _dataTable!.Rows;
         for (var i = 0; i < rowCount; i++)
             targetRows.Add(rows[i]);
     }
@@ -54,7 +54,7 @@ internal sealed class DataSetResultWriter(Action<InfoMessage> addInfoMessage, bo
     void IResultWriter.WriteTableEnd()
     {
         _logResultWriter.WriteTableEnd();
-        GarbageMonitor.Default.Add("DataSetResultWriter", "System.Data.DataTable", _dataTable.Rows.Count, _dataTable);
+        GarbageMonitor.Default.Add("DataSetResultWriter", "System.Data.DataTable", _dataTable!.Rows.Count, _dataTable);
     }
 
     void IResultWriter.WriteParameters(IDataParameterCollection parameters)
@@ -72,10 +72,10 @@ internal sealed class DataSetResultWriter(Action<InfoMessage> addInfoMessage, bo
         if (showShemaTable)
         {
             schemaTable.TableName = $"Schema {_tableIndex}";
-            DataSet.Tables.Add(schemaTable);
+            DataSet!.Tables.Add(schemaTable);
         }
 
-        _dataTable = DataSet.Tables.Add();
+        _dataTable = DataSet!.Tables.Add();
         if (!string.IsNullOrEmpty(tableName))
             _dataTable.TableName = tableName;
 
@@ -84,7 +84,7 @@ internal sealed class DataSetResultWriter(Action<InfoMessage> addInfoMessage, bo
             var dataColumnSchema = FoundationDbColumnFactory.Create(schemaRow);
             var columnName = dataColumnSchema.ColumnName;
             var columnSize = dataColumnSchema.ColumnSize;
-            var dataType = _provider.GetColumnType(dataColumnSchema);
+            var dataType = _provider!.GetColumnType(dataColumnSchema);
 
             DataColumn dataColumn;
             var n = 2;

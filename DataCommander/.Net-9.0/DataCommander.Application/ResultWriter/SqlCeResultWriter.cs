@@ -13,7 +13,7 @@ namespace DataCommander.Application.ResultWriter;
 internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableName) : IResultWriter
 {
     private IProvider _provider;
-    private SqlCeConnection _connection;
+    private SqlCeConnection? _connection;
     private SqlCeCommand _insertCommand;
 
     void IResultWriter.Begin(IProvider provider) => _provider = provider;
@@ -50,7 +50,7 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
         var values = new StringBuilder();
         values.Append("values(");
         var stringTable = new StringTable(3);
-        _insertCommand = _connection.CreateCommand();
+        _insertCommand = _connection!.CreateCommand();
         var last = schemaTable.Rows.Count - 1;
 
         for (var i = 0; i <= last; i++)
@@ -226,7 +226,7 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
 
     void IResultWriter.End()
     {
-        _connection.Close();
+        _connection!.Close();
         _connection.Dispose();
         _connection = null;
     }
