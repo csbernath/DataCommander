@@ -120,8 +120,8 @@ where
             new MenuItem("C# DTO with properties to clipboard", DataTransferObjectWithProperties_Click, Array.Empty<MenuItem>())
         };
         var scriptTableAs = new MenuItem("Script Table as", null, dropdownItems);
-        var schema = new MenuItem("Schema", Schema_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        var indexes = new MenuItem("Indexes", Indexes_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+        var schema = new MenuItem("Schema", Schema_Click, Array.Empty<MenuItem>());
+        var indexes = new MenuItem("Indexes", Indexes_Click, Array.Empty<MenuItem>());
 
         var items = new[] { editRows, scriptTableAs, schema, indexes }.ToReadOnlyCollection();
         var menu = new ContextMenu(items);
