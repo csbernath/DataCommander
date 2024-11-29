@@ -1141,7 +1141,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         _enqueueEvent.Set();
     }
 
-    private void AppendMessageText(DateTime dateTime, InfoMessageSeverity severity, string? header, string text)
+    private void AppendMessageText(DateTimeOffset dateTime, InfoMessageSeverity severity, string? header, string text)
     {
         var stringBuilder = new StringBuilder();
         stringBuilder.Append('[');

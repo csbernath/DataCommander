@@ -37,7 +37,7 @@ internal sealed class SqlServerProvider : IProvider
 
     public static int ShortStringSize { get; }
 
-    internal static List<InfoMessage> ToInfoMessages(SqlErrorCollection sqlErrors, DateTime creationTime)
+    internal static List<InfoMessage> ToInfoMessages(SqlErrorCollection sqlErrors, DateTimeOffset creationTime)
     {
         ArgumentNullException.ThrowIfNull(sqlErrors);
 

@@ -17,7 +17,7 @@ public sealed class UniversalTime : IDateTimeProvider
         {
             var clock = ClockAggregateRepository.Singleton.Get();
             var universalTime = clock.GetUniversalTimeFromCurrentEnvironmentTickCount64();
-            return universalTime;
+            return universalTime.DateTime;
         }
     }
 }

@@ -9,9 +9,9 @@ public static class ClockAggregateRootFactory
     {
         var stopwatchTimestamp = Stopwatch.GetTimestamp();
         var environmentTickCount = Environment.TickCount64;
-        var universalTime = DateTime.UtcNow;
-        var localTime = universalTime.ToLocalTime();
-        var clockAggregateState = new ClockAggregateState(stopwatchTimestamp, environmentTickCount, universalTime, localTime);
+        var universalDateTimeOffset = DateTimeOffset.UtcNow;
+        var localDateTimeOffset = universalDateTimeOffset.ToLocalTime();
+        var clockAggregateState = new ClockAggregateState(stopwatchTimestamp, environmentTickCount, universalDateTimeOffset, localDateTimeOffset);
         return new ClockAggregateRoot(clockAggregateState);
     }
 }
