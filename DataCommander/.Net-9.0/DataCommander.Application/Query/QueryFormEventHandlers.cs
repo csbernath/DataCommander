@@ -191,7 +191,7 @@ Please wait...",
             using (new CursorManager(Cursors.WaitCursor))
             {
                 var startTimestamp = Stopwatch.GetTimestamp();            
-                objectExplorer.SetConnection(_connectionInfo.ConnectionStringAndCredential);
+                objectExplorer.SetConnectionStringAndCredential(_connectionInfo.ConnectionStringAndCredential);
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), "Getting children...",
                     "Please wait...", _colorTheme);

@@ -13,16 +13,16 @@ internal sealed class ObjectExplorer(IProvider provider) : IObjectExplorer
 
     public bool Sortable => false;
 
-    private OleDbConnection? _connection;
+    private ConnectionStringAndCredential _connectionStringAndCredential;
 
-    void IObjectExplorer.SetConnection(ConnectionStringAndCredential connectionStringAndCredential) =>
-        _connection = (OleDbConnection)_provider.CreateConnection(connectionStringAndCredential).Connection;
+    void IObjectExplorer.SetConnectionStringAndCredential(ConnectionStringAndCredential connectionStringAndCredential) =>
+        _connectionStringAndCredential = connectionStringAndCredential;
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var treeNodes = new ITreeNode[]
         {
-            new CatalogsNode(_connection!)
+            new CatalogsNode(_connectionStringAndCredential)
         };
         return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
     }

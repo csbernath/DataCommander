@@ -14,6 +14,7 @@ internal sealed class Connection : ConnectionBase
     {
         _oledbConnection = new OleDbConnection(connectionString);
         _oledbConnection.InfoMessage += OnInfoMessage;
+        SetConnection(_oledbConnection);
     }
 
     public override Task OpenAsync(CancellationToken cancellationToken) => _oledbConnection.OpenAsync(cancellationToken);

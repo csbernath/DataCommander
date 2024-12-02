@@ -35,7 +35,7 @@ sealed class TableNode(SchemaNode schema, string? name) : ITreeNode
     {
         get
         {
-            string query;
+            string? query;
 
             if (name != null)
             {
@@ -61,11 +61,17 @@ sealed class TableNode(SchemaNode schema, string? name) : ITreeNode
 
     private void Columns_Click(object? sender, EventArgs e)
     {
-        var restrictions = new object[] { schema.Catalog.Name, schema.Name, name };
-        var dataTable = schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, restrictions);
+        DataTable dataTable;
+        using (var connection = ConnectionFactory.CreateConnection(schema.Catalog.CatalogsNode.ConnectionStringAndCredential))
+        {
+            connection.Open();
+            var restrictions = new object[] { schema.Catalog.Name, schema.Name, name };
+            dataTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, restrictions);
+        }
+
         var dataSet = new DataSet();
         dataSet.Tables.Add(dataTable);
-
+        
         var queryForm = (IQueryForm)sender!;
         queryForm.ShowDataSet(dataSet);
     }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.OleDb;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,13 +10,19 @@ namespace DataCommander.Providers.OleDb;
 internal sealed class ProcedureCollectionNode(SchemaNode schema) : ITreeNode
 {
     public string Name => "Procedures";
-
     public bool IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var restrictions = new object[] { schema.Catalog.Name!, schema.Name };
-        var dataTable = schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Procedures, restrictions)!;
+        DataTable dataTable;
+
+        await using (var connection = ConnectionFactory.CreateConnection(schema.Catalog.CatalogsNode.ConnectionStringAndCredential))
+        {
+            await connection.OpenAsync(cancellationToken);
+            dataTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Procedures, restrictions)!;
+        }
+
         var count = dataTable.Rows.Count;
         var procedureName = dataTable.Columns["PROCEDURE_NAME"]!;
         var treeNodes = new ITreeNode[count];
@@ -25,7 +32,7 @@ internal sealed class ProcedureCollectionNode(SchemaNode schema) : ITreeNode
             treeNodes[i] = new ProcedureNode(name);
         }
 
-        return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
+        return treeNodes;
     }
 
     public bool Sortable => false;

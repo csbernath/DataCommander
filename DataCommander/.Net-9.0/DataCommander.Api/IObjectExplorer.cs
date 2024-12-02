@@ -8,6 +8,6 @@ namespace DataCommander.Api;
 public interface IObjectExplorer
 {
     bool Sortable { get; }
-    void SetConnection(ConnectionStringAndCredential connectionStringAndCredential);
+    void SetConnectionStringAndCredential(ConnectionStringAndCredential connectionStringAndCredential);
     Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken);
 }

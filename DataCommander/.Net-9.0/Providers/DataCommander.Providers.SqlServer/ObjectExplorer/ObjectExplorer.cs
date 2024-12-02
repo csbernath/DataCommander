@@ -11,7 +11,7 @@ internal sealed class ObjectExplorer : IObjectExplorer
 {
     private ConnectionStringAndCredential _connectionStringAndCredential;
 
-    void IObjectExplorer.SetConnection(ConnectionStringAndCredential connectionStringAndCredential) =>
+    void IObjectExplorer.SetConnectionStringAndCredential(ConnectionStringAndCredential connectionStringAndCredential) =>
         _connectionStringAndCredential = connectionStringAndCredential;
 
     Task<IEnumerable<ITreeNode>> IObjectExplorer.GetChildren(bool refresh, CancellationToken cancellationToken) =>

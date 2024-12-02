@@ -228,19 +228,16 @@ internal sealed class OleDbProvider : IProvider
 
     public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer(this);
 
-    public static void ClearCompletionCache()
-    {
-    }
-
     GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string? tableName) => throw new NotImplementedException();
     List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
-    public static string GetExceptionMessage(Exception e) => e.ToString();
 
-    public static string? GetConnectionName(Func<IDbConnection> createConnection) => null;
+    public string? GetConnectionName(IDbConnection connection)
+    {
+        return null;
+    }
 
-    public string? GetConnectionName(IDbConnection connection) => throw new NotImplementedException();
-
-    ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(connectionStringAndCredential.ConnectionString);
+    ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) =>
+        new Connection(connectionStringAndCredential.ConnectionString);
 
     string[] IProvider.KeyWords => null;
 

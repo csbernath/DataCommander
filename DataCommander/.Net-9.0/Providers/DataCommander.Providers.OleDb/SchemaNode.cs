@@ -5,10 +5,7 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.OleDb;
 
-/// <summary>
-/// Summary description for CatalogsNode.
-/// </summary>
-sealed class SchemaNode(CatalogNode catalog, string name) : ITreeNode
+internal sealed class SchemaNode(CatalogNode catalog, string name) : ITreeNode
 {
     string? ITreeNode.Name
     {

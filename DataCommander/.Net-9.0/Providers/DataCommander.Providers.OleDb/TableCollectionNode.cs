@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.OleDb;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ internal sealed class TableCollectionNode(SchemaNode schema) : ITreeNode
 
     public bool IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         ITreeNode[] treeNodes;
 
@@ -24,7 +25,13 @@ internal sealed class TableCollectionNode(SchemaNode schema) : ITreeNode
             if (catalog != null)
                 restrictions = [catalog, schema.Name];
 
-            var dataTable = schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, restrictions)!;
+            DataTable dataTable;
+            await using (var connection = ConnectionFactory.CreateConnection(schema.Catalog.CatalogsNode.ConnectionStringAndCredential))
+            {
+                await connection.OpenAsync(cancellationToken);
+                dataTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, restrictions)!;
+            }
+
             var count = dataTable.Rows.Count;
             var nameColumn = dataTable.Columns["TABLE_NAME"];
             treeNodes = new ITreeNode[count];
@@ -40,7 +47,7 @@ internal sealed class TableCollectionNode(SchemaNode schema) : ITreeNode
             treeNodes = [new TableNode(schema, null)];
         }
 
-        return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
+        return treeNodes;
     }
 
     public bool Sortable => false;

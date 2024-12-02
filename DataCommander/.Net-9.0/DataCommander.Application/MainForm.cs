@@ -649,7 +649,7 @@ public class MainForm : Form
             var fileDialog = new OpenFileDialog
             {
                 Filter =
-                "SQL script files(*.sql)|*.sql|Access Files(*.mdb)|*.mdb|Access 2007 Files(*.accdb)|*.accdb|Excel files (*.xls;*.xlsx)|*.xls;*.xlsx|MSI files (*.msi)|*.msi|SQLite files (*.*)|*.*|SQL Server Compact files (*.sdf)|*.sdf|SQL Server Compact 4.0 files (*.sdf)|*.sdf",
+                "SQL script files(*.sql)|*.sql|Access Files(*.mdb)|*.mdb|Access 2007 Files(*.accdb)|*.accdb|Excel files (*.xls;*.xlsx)|*.xls;*.xlsx|Microsoft.ACE.OLEDB.16.0|*.*|MSI files (*.msi)|*.msi|SQLite files (*.*)|*.*|SQL Server Compact files (*.sdf)|*.sdf|SQL Server Compact 4.0 files (*.sdf)|*.sdf",
                 RestoreDirectory = true
             };
             var currentDirectory = Environment.CurrentDirectory;
@@ -690,23 +690,28 @@ public class MainForm : Form
 
                         provider = ProviderFactory.CreateProvider(ProviderIdentifier.OleDb);
                         break;
-
+                    
                     case 5:
-                        connectionString = $"{ConnectionStringKeyword.DataSource}={fileName}";
-                        provider = ProviderFactory.CreateProvider(ProviderIdentifier.Msi);
+                        connectionString = $"Provider=Microsoft.ACE.OLEDB.16.0;Data Source={fileName}";
+                        provider = ProviderFactory.CreateProvider(ProviderIdentifier.OleDb);
                         break;
 
                     case 6:
                         connectionString = $"{ConnectionStringKeyword.DataSource}={fileName}";
-                        provider = ProviderFactory.CreateProvider(ProviderIdentifier.SqLite);
+                        provider = ProviderFactory.CreateProvider(ProviderIdentifier.Msi);
                         break;
 
                     case 7:
                         connectionString = $"{ConnectionStringKeyword.DataSource}={fileName}";
-                        provider = ProviderFactory.CreateProvider(ProviderIdentifier.SqlServerCe40);
+                        provider = ProviderFactory.CreateProvider(ProviderIdentifier.SqLite);
                         break;
 
                     case 8:
+                        connectionString = $"{ConnectionStringKeyword.DataSource}={fileName}";
+                        provider = ProviderFactory.CreateProvider(ProviderIdentifier.SqlServerCe40);
+                        break;
+
+                    case 9:
                         connectionString = $"{ConnectionStringKeyword.DataSource}={fileName}";
                         provider = ProviderFactory.CreateProvider(ProviderIdentifier.SqlServerCe40);
                         break;

@@ -116,7 +116,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         if (objectExplorer != null)
         {
             var startTimestamp = Stopwatch.GetTimestamp();            
-            objectExplorer.SetConnection(_connectionInfo.ConnectionStringAndCredential);
+            objectExplorer.SetConnectionStringAndCredential(_connectionInfo.ConnectionStringAndCredential);
             var cancellationTokenSource = new CancellationTokenSource();
             var cancelableOperationForm = new CancelableOperationForm(mainForm, cancellationTokenSource, TimeSpan.FromSeconds(1), "Getting children...",
                 "Please wait...", colorTheme);

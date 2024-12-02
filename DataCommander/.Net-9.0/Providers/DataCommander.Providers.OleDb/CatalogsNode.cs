@@ -3,21 +3,30 @@ using System.Data.OleDb;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
+using DataCommander.Api.Connection;
 
 namespace DataCommander.Providers.OleDb;
 
-internal class CatalogsNode(OleDbConnection connection) : ITreeNode
+internal class CatalogsNode : ITreeNode
 {
+    public readonly ConnectionStringAndCredential ConnectionStringAndCredential;
+
+    public CatalogsNode(ConnectionStringAndCredential connectionStringAndCredential)
+    {
+        ConnectionStringAndCredential = connectionStringAndCredential;
+    }
+
     public string? Name => "Catalogs";
 
     public bool IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         ITreeNode[] treeNodes;
 
-        try
+        await using (var connection = ConnectionFactory.CreateConnection(ConnectionStringAndCredential))
         {
+            await connection.OpenAsync(cancellationToken);
             var dataTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Catalogs, null)!;
             var count = dataTable.Rows.Count;
             var nameColumn = dataTable.Columns["CATALOG_NAME"];
@@ -26,16 +35,11 @@ internal class CatalogsNode(OleDbConnection connection) : ITreeNode
             for (var i = 0; i < count; i++)
             {
                 var name = (string)dataTable.Rows[i][nameColumn];
-                treeNodes[i] = new CatalogNode(connection, name);
+                treeNodes[i] = new CatalogNode(this, name);
             }
         }
-        catch
-        {
-            treeNodes = new ITreeNode[1];
-            treeNodes[0] = new CatalogNode(connection, null);
-        }
 
-        return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
+        return treeNodes;
     }
 
     public bool Sortable => false;

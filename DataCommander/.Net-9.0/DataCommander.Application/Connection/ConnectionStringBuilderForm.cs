@@ -281,31 +281,38 @@ internal partial class ConnectionStringBuilderForm : Form
         var providerInfo = _providers[providersComboBox.SelectedIndex];
         var provider = ProviderFactory.CreateProvider(providerInfo.Identifier);
         var connectionStringBuilder = provider.CreateConnectionStringBuilder();
-        var connectionStringAndCredential = SaveDialogToConnectionStringAndCredential(connectionStringBuilder);
+        var connectionStringAndCredential = SaveDialogToConnectionStringAndCredential(provider.Identifier, connectionStringBuilder);
         var connectionName = connectionNameTextBox.Text;
         var connectionInfo = new ConnectionInfo(connectionName, providerInfo.Identifier, connectionStringAndCredential);
         return connectionInfo;
     }
 
-    private ConnectionStringAndCredential SaveDialogToConnectionStringAndCredential(IDbConnectionStringBuilder dbConnectionStringBuilder)
+    private ConnectionStringAndCredential SaveDialogToConnectionStringAndCredential(
+        string providerIdentifier,
+        IDbConnectionStringBuilder connectionStringBuilder)
     {
-        if (dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.DataSource))
-            SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.DataSource, dataSourcesComboBox.Text);
-        else if (dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.Host))
-            SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.Host, dataSourcesComboBox.Text);
+        if (providerIdentifier == ProviderIdentifier.OleDb)
+        {
+            var selectedIndex = oleDbProvidersComboBox.SelectedIndex;
+            var oleDbProvider = _oleDbProviders![selectedIndex];
+            connectionStringBuilder.SetValue("Provider", oleDbProvider.Name);
+        }
+        else
+        {
+            if (connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.DataSource))
+                SetValue(connectionStringBuilder, ConnectionStringKeyword.DataSource, dataSourcesComboBox.Text);
+            else if (connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.Host))
+                SetValue(connectionStringBuilder, ConnectionStringKeyword.Host, dataSourcesComboBox.Text);
 
-        SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.InitialCatalog, initialCatalogComboBox.Text);
+            if (connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.InitialCatalog))
+                SetValue(connectionStringBuilder, ConnectionStringKeyword.InitialCatalog, initialCatalogComboBox.Text);
 
-        //var oleDbConnectionStringBuilder = dbConnectionStringBuilder as OleDbConnectionStringBuilder;
-        //if (oleDbConnectionStringBuilder != null)
-        //{
-        //    int selectedIndex = this.oleDbProvidersComboBox.SelectedIndex;
-        //    OleDbProviderInfo oleDbProviderInfo = this.oleDbProviders[selectedIndex];
-        //    oleDbConnectionStringBuilder.Provider = oleDbProviderInfo.Name;
-        //}
-
-        if (dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity))
-            dbConnectionStringBuilder.SetValue(ConnectionStringKeyword.IntegratedSecurity, integratedSecurityCheckBox.Checked);
+            if (connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity))
+                connectionStringBuilder.SetValue(ConnectionStringKeyword.IntegratedSecurity, integratedSecurityCheckBox.Checked);
+            
+            if (connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.TrustServerCertificate))
+                connectionStringBuilder.SetValue(ConnectionStringKeyword.TrustServerCertificate, trustServerCertificateCheckBox.Checked);
+        }
 
         Credential? credential;
 
@@ -324,10 +331,7 @@ internal partial class ConnectionStringBuilderForm : Form
         else
             credential = null;
 
-        if (dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.TrustServerCertificate))
-            dbConnectionStringBuilder.SetValue(ConnectionStringKeyword.TrustServerCertificate, trustServerCertificateCheckBox.Checked);
-
-        return new ConnectionStringAndCredential(dbConnectionStringBuilder.ConnectionString, credential);
+        return new ConnectionStringAndCredential(connectionStringBuilder.ConnectionString, credential);
     }
 
     private void testButton_Click(object? sender, EventArgs e)

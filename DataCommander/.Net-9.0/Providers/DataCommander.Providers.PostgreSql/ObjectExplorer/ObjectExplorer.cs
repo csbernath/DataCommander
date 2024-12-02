@@ -13,7 +13,7 @@ internal sealed class ObjectExplorer : IObjectExplorer
     
     public NpgsqlConnection CreateConnection() => ConnectionFactory.CreateConnection(_connectionStringAndCredential!);
 
-    public void SetConnection(ConnectionStringAndCredential connectionStringAndCredential) =>
+    public void SetConnectionStringAndCredential(ConnectionStringAndCredential connectionStringAndCredential) =>
         _connectionStringAndCredential = connectionStringAndCredential;
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) =>

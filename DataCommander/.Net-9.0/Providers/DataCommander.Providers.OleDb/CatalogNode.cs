@@ -1,13 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.OleDb;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
+using Foundation.Data;
 
 namespace DataCommander.Providers.OleDb;
 
-internal class CatalogNode(OleDbConnection connection, string? name) : ITreeNode
+internal class CatalogNode(CatalogsNode catalogsNode, string? name) : ITreeNode
 {
+    public CatalogsNode CatalogsNode { get; } = catalogsNode;
+
     string? ITreeNode.Name
     {
         get
@@ -25,14 +29,20 @@ internal class CatalogNode(OleDbConnection connection, string? name) : ITreeNode
 
     public bool IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         ITreeNode[] treeNodes;
 
         try
         {
-            var restrictions = new object[] { Name };
-            var dataTable = Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Schemata, restrictions)!;
+            DataTable dataTable;
+            await using (var connection = ConnectionFactory.CreateConnection(CatalogsNode.ConnectionStringAndCredential))
+            {
+                await connection.OpenAsync(cancellationToken);
+                var restrictions = new object[] { Name };
+                dataTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Schemata, restrictions)!;
+            }
+            
             var count = dataTable.Rows.Count;
             var nameColumn = dataTable.Columns["SCHEMA_NAME"];
             treeNodes = new ITreeNode[count];
@@ -49,12 +59,11 @@ internal class CatalogNode(OleDbConnection connection, string? name) : ITreeNode
             treeNodes[0] = new SchemaNode(this, null);
         }
 
-        return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
+        return treeNodes;
     }
 
     public bool Sortable => false;
     public string? Query => null;
-    public OleDbConnection Connection { get; } = connection;
     public string? Name { get; } = name;
 
     public ContextMenu? GetContextMenu() => null;
