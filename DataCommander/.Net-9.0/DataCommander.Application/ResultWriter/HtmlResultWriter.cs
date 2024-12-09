@@ -13,7 +13,7 @@ namespace DataCommander.Application.ResultWriter;
 public class HtmlResultWriter(Action<InfoMessage> addInfoMessage) : IResultWriter
 {
     private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage, false);
-    private HtmlTextWriter _htmlTextWriter;
+    private HtmlTextWriter? _htmlTextWriter;
 
     void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);
     void IResultWriter.AfterExecuteReader() => _logResultWriter.AfterExecuteReader();
@@ -35,7 +35,7 @@ public class HtmlResultWriter(Action<InfoMessage> addInfoMessage) : IResultWrite
         {
             var row = rows[rowIndex];
 
-            _htmlTextWriter.WriteLine();
+            _htmlTextWriter!.WriteLine();
             _htmlTextWriter.WriteFullBeginTag("tr");
             _htmlTextWriter.WriteLine();
             ++_htmlTextWriter.Indent;
@@ -97,7 +97,7 @@ public class HtmlResultWriter(Action<InfoMessage> addInfoMessage) : IResultWrite
     {
         _logResultWriter.WriteTableEnd();
 
-        --_htmlTextWriter.Indent;
+        --_htmlTextWriter!.Indent;
         _htmlTextWriter.WriteLine();
         _htmlTextWriter.WriteEndTag("table");
         _htmlTextWriter.Close();

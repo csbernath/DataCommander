@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using DataCommander.Application.Connection;
 using DataCommander.Application.Query;
@@ -642,7 +643,7 @@ public class MainForm : Form
         base.OnClosing(e);
     }
 
-    private async void Open()
+    private async Task Open()
     {
         try
         {
@@ -765,7 +766,7 @@ public class MainForm : Form
         CreateRecentFileListMenu();
     }
 
-    public StatusStrip StatusBar => _statusBar;
+    public StatusStrip? StatusBar => _statusBar;
 
     private static string Serialize(Font font)
     {

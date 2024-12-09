@@ -17,7 +17,7 @@ internal sealed class InsertScriptFileWriter : IResultWriter
 {
     private readonly string? _tableName;
     private readonly TextWriter _messageWriter;
-    private StreamWriter _streamWriter;
+    private StreamWriter? _streamWriter;
     private DataTable _schemaTable;
     private string _sqlStatementPrefix;
     private bool _firstRow = true;
@@ -100,7 +100,7 @@ internal sealed class InsertScriptFileWriter : IResultWriter
         return stringBuilder.ToString();
     }
 
-    public static string ToString(object value)
+    public static string? ToString(object value)
     {
         string? s = null;
 
@@ -305,13 +305,13 @@ internal sealed class InsertScriptFileWriter : IResultWriter
         {
             sb.AppendLine();
             sb.Append("GO");
-            _streamWriter.Write(sb);
+            _streamWriter!.Write(sb);
         }
     }
 
     void IResultWriter.WriteTableEnd()
     {
-        _streamWriter.Close();
+        _streamWriter!.Close();
         _streamWriter.Dispose();
         _streamWriter = null;
     }

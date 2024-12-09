@@ -80,8 +80,8 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
 
                 case TypeCode.Decimal:
                     sqlDbType = SqlDbType.Decimal;
-                    var precision = schemaRow.NumericPrecision.Value;
-                    var scale = schemaRow.NumericScale.Value;
+                    var precision = schemaRow.NumericPrecision!.Value;
+                    var scale = schemaRow.NumericScale!.Value;
 
                     if (precision > 38)
                         precision = 38;

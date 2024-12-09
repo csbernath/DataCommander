@@ -184,10 +184,8 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
                     {
                         var s = bytes[i].ToString("x");
 
-                        if (s.Length == 1)
-                        {
-                            s = "0" + s;
-                        }
+                        if (s.Length == 1)                        
+                            s = "0" + s;                        
 
                         sb.Append(s);
                     }

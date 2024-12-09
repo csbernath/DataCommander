@@ -41,11 +41,11 @@ public sealed partial class QueryForm
     private void EditRows_Click(object? sender, EventArgs e) => EditRows(Query);
     private void Timer_Tick(object o, EventArgs e) => Invoke(ShowTimer);
 
-    protected override void OnFormClosing(FormClosingEventArgs formClosingEventArgs)
+    protected override void OnFormClosing(FormClosingEventArgs e)
     {
         using (new CursorManager(Cursors.WaitCursor))
         {
-            base.OnFormClosing(formClosingEventArgs);
+            base.OnFormClosing(e);
             var cancel = SaveTextOnFormClosing();
             if (!cancel)
             {
@@ -59,7 +59,7 @@ public sealed partial class QueryForm
             }
 
             if (cancel)
-                formClosingEventArgs.Cancel = cancel;
+                e.Cancel = cancel;
         }
     }
 
@@ -150,7 +150,7 @@ Please wait...",
                 var treeNode = _tvObjectExplorer.GetNodeAt(e.X, e.Y);
                 if (treeNode != null)
                 {
-                    var treeNode2 = (ITreeNode)treeNode.Tag;
+                    var treeNode2 = (ITreeNode)treeNode.Tag!;
 
                     if (e.Button != MouseButtons.Left)
                         _tvObjectExplorer.SelectedNode = treeNode;

@@ -603,7 +603,7 @@ public sealed class QueryTextBox : UserControl
         return dataObject.GetDataPresent(name);
     }
 
-    private static object GetData(IDataObject dataObject, string format)
+    private static object? GetData(IDataObject dataObject, string format)
     {
         var dataFormat = DataFormats.GetFormat(format);
         var name = dataFormat.Name;
@@ -636,7 +636,7 @@ public sealed class QueryTextBox : UserControl
                 var startIndex = RichTextBox.SelectionStart;
                 RichTextBox.SelectionLength = 0;
                 RichTextBox.SelectedText = text;
-                RichTextBox.SelectionStart = startIndex + text.Length;
+                RichTextBox.SelectionStart = startIndex + text!.Length;
                 RichTextBox.Focus();
             }
         }
@@ -698,7 +698,7 @@ public sealed class QueryTextBox : UserControl
             items.Add(menuItem);
 
             var forms = DataCommanderApplication.Instance.MainForm!.MdiChildren;
-            var index = Array.IndexOf(forms, (QueryForm)Parent);
+            var index = Array.IndexOf(forms, (QueryForm)Parent!);
             if (index < forms.Length - 1)
             {
                 var nextQueryForm = (QueryForm)forms[index + 1];

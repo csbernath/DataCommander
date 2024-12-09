@@ -98,7 +98,7 @@ public sealed partial class QueryForm
         SetStatusbarPanelText($"File {_fileName} loaded successfully.");
     }
 
-    public void SetStatusbarPanelText(string text)
+    public void SetStatusbarPanelText(string? text)
     {
         var color = _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText;
         SetStatusbarPanelText(text, color);

@@ -150,17 +150,13 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
 
             stringTableRow[2] = typeName;
             st.Rows.Add(stringTableRow);
-            var allowDbNull = schemaRow.AllowDbNull.Value;
+            var allowDbNull = schemaRow.AllowDbNull!.Value;
 
             if (!allowDbNull)
-            {
                 stringTableRow[2] += " NOT NULL";
-            }
 
             if (i < schemaRowCount - 1)
-            {
-                stringTableRow[2] += ',';
-            }
+                stringTableRow[2] += ',';            
 
             var parameter = new SqliteParameter
             {

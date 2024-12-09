@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime;
 using System.Text;
 using Foundation.Core;
+using Foundation.Core.ClockAggregate;
 using Foundation.Log;
 using Foundation.Text;
 
@@ -36,6 +37,7 @@ public static class AppDomainMonitor
         var stopwatchFrequency = GetStopwatchFrequency();
         var zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
         var tickCountString = $"{tickCount64} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";
+        var clockAggregate = ClockAggregateRepository.Singleton.Get();
 
         var message = $@"Environment information
 MachineName:            {Environment.MachineName}
@@ -59,7 +61,7 @@ GC IsServerGC:          {GCSettings.IsServerGC}
 GC LargeObjectHeapCompactionMode: {GCSettings.LargeObjectHeapCompactionMode}
 GC LatencyMode:         {GCSettings.LatencyMode}
 WorkingSet:             {(double)workingSet / (1024 * 1024):N} MB ({workingSet} bytes)
-TickCount:              {tickCountString}
+TickCount64:            {tickCountString}
 Stopwatch.Frequency:    {stopwatchFrequency}
 TimeZoneInfo.Local.Id:  {TimeZoneInfo.Local.Id}
 TempPath:               {Path.GetTempPath()}";

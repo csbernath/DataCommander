@@ -66,7 +66,7 @@ public class JsonResultWriter(Action<InfoMessage> addInfoMessage) : IResultWrite
                 var column = _columns![columnIndex];
                 var value = row[columnIndex];
 
-                _jsonTextWriter.WritePropertyName(column.ColumnName);
+                _jsonTextWriter.WritePropertyName(column.ColumnName!);
 
                 switch (value)
                 {

@@ -276,9 +276,9 @@ public sealed partial class QueryForm
         return item;
     }
 
-    private static TreeNode FindTreeNode(TreeNode parent, IStringMatcher matcher)
+    private static TreeNode? FindTreeNode(TreeNode parent, IStringMatcher matcher)
     {
-        TreeNode found = null;
+        TreeNode? found = null;
 
         if (matcher.IsMatch(parent.Text))
             found = parent;
@@ -475,7 +475,7 @@ public sealed partial class QueryForm
         return response;
     }
 
-    private async void ExecuteReader(CommandBehavior commandBehavior)
+    private async Task ExecuteReader(CommandBehavior commandBehavior)
     {
         try
         {
@@ -551,7 +551,7 @@ public sealed partial class QueryForm
         try
         {
             _sqlStatement = new SqlParser(Query);
-            _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
+            _command = _sqlStatement.CreateCommand(Provider, Connection!, _commandType, _commandTimeout);
             var dataSet = new DataSet();
             using (var dataReader = _command.ExecuteReader())
             {

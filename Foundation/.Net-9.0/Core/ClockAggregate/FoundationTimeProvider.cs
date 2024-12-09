@@ -6,7 +6,8 @@ public class FoundationTimeProvider : TimeProvider
 {
     public override DateTimeOffset GetUtcNow()
     {
-        var now = ClockAggregateRootFactory.Now();
-        return now.GetUniversalTimeOffset();
+        var clockAggregateRoot = ClockAggregateRepository.Singleton.Get();
+        var utcNow = clockAggregateRoot.GetUtcFromCurrentEnvironmentTickCount64();
+        return utcNow;
     }
 }

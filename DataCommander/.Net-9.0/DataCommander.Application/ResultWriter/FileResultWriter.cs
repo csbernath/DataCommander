@@ -136,7 +136,7 @@ internal sealed class FileResultWriter : IResultWriter
                     throw new NotImplementedException(typeCode.ToString());
             }
 
-            _dataWriters[i] = dataWriter;
+            _dataWriters[i] = dataWriter!;
 
             var row = st.NewRow();
             row[0] = (string)column[SchemaTableColumn.ColumnName];

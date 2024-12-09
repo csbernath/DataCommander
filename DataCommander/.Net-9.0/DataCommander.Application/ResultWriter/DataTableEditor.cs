@@ -46,7 +46,7 @@ internal class DataTableEditor : UserControl
     /// </summary>
     private readonly Container _components = new();
 
-    public DataTableEditor(IQueryForm queryForm, DbCommandBuilder commandBuilder, ColorTheme colorTheme)
+    public DataTableEditor(IQueryForm queryForm, DbCommandBuilder commandBuilder, ColorTheme? colorTheme)
     {
         _queryForm = queryForm;
         _commandBuilder = commandBuilder;
@@ -59,7 +59,8 @@ internal class DataTableEditor : UserControl
         // TODO: Add any initialization after the InitForm call
         GarbageMonitor.Default.Add("DataTableEditor", this);
 
-        colorTheme.Apply(_dataGrid);
+        if (colorTheme != null)
+            colorTheme.Apply(_dataGrid);
     }
 
     public DataGridView DataGrid => _dataGrid!;
@@ -379,7 +380,7 @@ internal class DataTableEditor : UserControl
             var contains = row.Table.Columns.Contains(columnName);
             if (contains)
             {
-                var dataColumn = _dataTable.Columns[columnName];
+                var dataColumn = _dataTable.Columns[columnName]!;
                 var value = row[dataColumn, DataRowVersion.Current];
                 var valueString = ToString(dataColumn, value);
                 var operatorString = value == DBNull.Value ? "is" : "=";

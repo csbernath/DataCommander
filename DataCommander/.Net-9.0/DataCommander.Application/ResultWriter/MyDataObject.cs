@@ -15,9 +15,9 @@ internal sealed class MyDataObject(DataView dataView, int[] columnIndexes) : IDa
 
     object IDataObject.GetData(string format) => throw new NotImplementedException();
 
-    object IDataObject.GetData(string format, bool autoConvert)
+    object? IDataObject.GetData(string format, bool autoConvert)
     {
-        object data;
+        object? data;
 
         if (format == DataFormats.CommaSeparatedValue)
         {

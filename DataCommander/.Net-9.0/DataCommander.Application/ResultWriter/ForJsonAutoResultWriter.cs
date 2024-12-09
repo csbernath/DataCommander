@@ -17,7 +17,7 @@ internal sealed class ForJsonAutoResultWriter(Action<InfoMessage> addInfoMessage
     private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage, false);
     private bool _isJsonAuto;
     private string _path;
-    private TextWriter _textWriter;
+    private TextWriter? _textWriter;
     private string _formattedPath;
 
     void IResultWriter.Begin(IProvider provider) => _logResultWriter.Begin(provider);
@@ -67,7 +67,7 @@ internal sealed class ForJsonAutoResultWriter(Action<InfoMessage> addInfoMessage
                 var row = rows[rowIndex];
                 var stringField = (StringField)row[0];
                 var fragment = stringField.Value;
-                _textWriter.Write(fragment);
+                _textWriter!.Write(fragment);
             }
         }
     }
@@ -78,7 +78,7 @@ internal sealed class ForJsonAutoResultWriter(Action<InfoMessage> addInfoMessage
 
         if (_isJsonAuto)
         {
-            _textWriter.Close();
+            _textWriter!.Close();
             _textWriter = null;
 
             using var streamReader = new StreamReader(_path);
@@ -104,7 +104,7 @@ internal sealed class ForJsonAutoResultWriter(Action<InfoMessage> addInfoMessage
                     case JsonToken.StartConstructor:
                         break;
                     case JsonToken.PropertyName:
-                        var propertyName = (string)jsonTextReader.Value;
+                        var propertyName = (string)jsonTextReader.Value!;
                         jsonTextWriter.WritePropertyName(propertyName);
                         break;
                     case JsonToken.Comment:

@@ -205,7 +205,7 @@ internal sealed class LogResultWriter : IResultWriter
 
             case SqlDbType.Decimal:
                 stringBuilder.Append('(');
-                stringBuilder.Append(dbColumn.NumericPrecision.Value);
+                stringBuilder.Append(dbColumn.NumericPrecision!.Value);
 
                 if (dbColumn.NumericScale > 0)
                 {

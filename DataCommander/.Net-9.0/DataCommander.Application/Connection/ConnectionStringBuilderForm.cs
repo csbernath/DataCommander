@@ -255,7 +255,7 @@ internal partial class ConnectionStringBuilderForm : Form
             }
             catch (Exception ex)
             {
-                DataCommanderApplication.Instance.MainForm!.StatusBar.Items[0].Text = ex.Message;
+                DataCommanderApplication.Instance.MainForm!.StatusBar!.Items[0].Text = ex.Message;
             }
             finally
             {
