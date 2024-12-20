@@ -42,7 +42,7 @@ namespace DataCommander.Application
             webBrowser1.MinimumSize = new System.Drawing.Size(23, 26);
             webBrowser1.Name = "webBrowser1";
             webBrowser1.ScrollBarsEnabled = false;
-            webBrowser1.Size = new System.Drawing.Size(584, 509);
+            webBrowser1.Size = new System.Drawing.Size(584, 519);
             webBrowser1.TabIndex = 0;
             webBrowser1.Navigating += webBrowser1_Navigating;
             // 
@@ -50,7 +50,7 @@ namespace DataCommander.Application
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(584, 509);
+            ClientSize = new System.Drawing.Size(584, 519);
             Controls.Add(webBrowser1);
             Margin = new Padding(4);
             MaximizeBox = false;
