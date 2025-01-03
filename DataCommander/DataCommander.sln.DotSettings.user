@@ -1,0 +1,22 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ATask_002Ecs_002Fl_003AC_0021_003FUsers_003Fcsaba_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003F2e49d132ea68ff47071c64476ae29138fa965dc555ef7c3f4991586431de241_003FTask_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
+  &lt;Assembly Path="C:\Users\Csabi\.nuget\packages\system.configuration.configurationmanager\7.0.0\lib\net7.0\System.Configuration.ConfigurationManager.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\Csabi\.nuget\packages\microsoft.data.sqlclient\5.1.1\ref\net6.0\Microsoft.Data.SqlClient.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\csaba\.nuget\packages\microsoft.data.sqlclient\5.1.2\ref\net6.0\Microsoft.Data.SqlClient.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\8.0.1\System.Windows.Forms.dll" /&gt;&#xD;
+&lt;/AssemblyExplorer&gt;</s:String>
+	<s:Boolean x:Key="/Default/Environment/InlayHints/GeneralInlayHintsOptions/EnableInlayHints/@EntryValue">False</s:Boolean>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=afd5894f_002Db21e_002D43eb_002D8785_002Daf8d82b23721/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Test1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::4CCB9E25-FA57-4BDD-AB78-842D7BEFE8F8::net6.0::Foundation.Assertions.Test.UnitTest1.Test1&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4CCB9E25-FA57-4BDD-AB78-842D7BEFE8F8::net6.0::Foundation.Assertions.Test.UnitTest2.Test1&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=DataCommander_002EApplication_002FCancelableOperationForm/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/Initialized/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=7e353c6b_002D78b1_002D4cc9_002Daa86_002D90ef48ae7239_0023DataCommander_002EProviders_002ETfs/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=80bb6d36_002D97b2_002D4393_002D929d_002D0af5f7a05ffa_0023DataCommander_002EProviders_002ESqlServerCe40/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=8321db29_002D34c0_002D4a27_002Dae1d_002Dc3ce807a9353_0023DataCommander_002EProviders_002EMsi/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=c088fda9_002D7991_002D41df_002Da72d_002D6b7074ac555b_0023DataCommander_002EProviders_002EMySql/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=e6e924fd_002D41d2_002D4a5e_002D909b_002Dad4be7ab4084_0023DataCommander_002EProviders_002EOdp/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
