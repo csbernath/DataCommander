@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Foundation\.Net-6.0\Data\Foundation.Data.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\Data\Foundation.Data.csproj" />
     <ProjectReference Include="..\..\DataCommander.Api\DataCommander.Api.csproj" />
   </ItemGroup>
 

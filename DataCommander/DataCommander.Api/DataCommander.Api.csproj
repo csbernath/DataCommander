@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>10</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.OleDb" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Foundation\Assertions\Foundation.Assertions.csproj" />
+    <ProjectReference Include="..\..\Foundation\Collections\Foundation.Collections.csproj" />
+    <ProjectReference Include="..\..\Foundation\Core\Foundation.Core.csproj" />
+    <ProjectReference Include="..\..\Foundation\Data\Foundation.Data.csproj" />
+    <ProjectReference Include="..\..\Foundation\Text\Foundation.Text.csproj" />
+  </ItemGroup>
+
+</Project>

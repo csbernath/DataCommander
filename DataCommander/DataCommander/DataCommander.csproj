@@ -21,10 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Foundation\.Net-6.0\Configuration\Foundation.Configuration.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\.Net-6.0\Data\Foundation.Data.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\.Net-6.0\DefaultLog\Foundation.DefaultLog.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\.Net-6.0\Log\Foundation.Log.csproj" />
+    <ProjectReference Include="..\..\Foundation\Configuration\Foundation.Configuration.csproj" />
+    <ProjectReference Include="..\..\Foundation\Data\Foundation.Data.csproj" />
+    <ProjectReference Include="..\..\Foundation\DefaultLog\Foundation.DefaultLog.csproj" />
+    <ProjectReference Include="..\..\Foundation\Log\Foundation.Log.csproj" />
     <ProjectReference Include="..\DataCommander.Application\DataCommander.Application.csproj" />
   </ItemGroup>
 
