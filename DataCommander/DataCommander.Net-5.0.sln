@@ -10,43 +10,43 @@ EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{71C8735D-181F-43FF-8CFF-5DB64B9CC5AE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Assertions", "..\..\Foundation\.Net-5.0\Assertions\Foundation.Assertions.csproj", "{873C1C9E-1ECC-4C53-B857-CC893F55EA6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Assertions", "..\Foundation\Assertions\Foundation.Assertions.csproj", "{873C1C9E-1ECC-4C53-B857-CC893F55EA6A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Collections", "..\..\Foundation\.Net-5.0\Collections\Foundation.Collections.csproj", "{976386E0-094B-4383-9443-2FC84ECB0A3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Collections", "..\Foundation\Collections\Foundation.Collections.csproj", "{976386E0-094B-4383-9443-2FC84ECB0A3F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Configuration", "..\..\Foundation\.Net-5.0\Configuration\Foundation.Configuration.csproj", "{4EE76136-D030-452F-95BE-8A63947C2854}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Configuration", "..\Foundation\Configuration\Foundation.Configuration.csproj", "{4EE76136-D030-452F-95BE-8A63947C2854}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Core", "..\..\Foundation\.Net-5.0\Core\Foundation.Core.csproj", "{9D83C864-9571-475D-A79A-84ACF75F1BF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Core", "..\Foundation\Core\Foundation.Core.csproj", "{9D83C864-9571-475D-A79A-84ACF75F1BF1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Data", "..\..\Foundation\.Net-5.0\Data\Foundation.Data.csproj", "{3A9F3290-3A4A-460E-88FE-E4D1EDB9D155}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Data", "..\Foundation\Data\Foundation.Data.csproj", "{3A9F3290-3A4A-460E-88FE-E4D1EDB9D155}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Data.SqlClient", "..\..\Foundation\.Net-5.0\Data.SqlClient\Foundation.Data.SqlClient.csproj", "{8C6E4459-FF09-4EA6-8F0F-6FB8848272C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Data.SqlClient", "..\Foundation\Data.SqlClient\Foundation.Data.SqlClient.csproj", "{8C6E4459-FF09-4EA6-8F0F-6FB8848272C8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.DefaultLog", "..\..\Foundation\.Net-5.0\DefaultLog\Foundation.DefaultLog.csproj", "{A23D8394-BE4C-47DF-9A74-66069CF247A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.DefaultLog", "..\Foundation\DefaultLog\Foundation.DefaultLog.csproj", "{A23D8394-BE4C-47DF-9A74-66069CF247A7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Deployment", "..\..\Foundation\.Net-5.0\Deployment\Foundation.Deployment.csproj", "{E71E5BC3-D023-4A4B-80C4-0B491070CC1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Deployment", "..\Foundation\Deployment\Foundation.Deployment.csproj", "{E71E5BC3-D023-4A4B-80C4-0B491070CC1A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Diagnostics", "..\..\Foundation\.Net-5.0\Diagnostics\Foundation.Diagnostics.csproj", "{6C40945A-979E-4CA2-93D1-FBC8A7E9BE64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Diagnostics", "..\Foundation\Diagnostics\Foundation.Diagnostics.csproj", "{6C40945A-979E-4CA2-93D1-FBC8A7E9BE64}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.InternalLog", "..\..\Foundation\.Net-5.0\InternalLog\Foundation.InternalLog.csproj", "{60813319-C3A3-47B7-ABE7-C52572315443}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.InternalLog", "..\Foundation\InternalLog\Foundation.InternalLog.csproj", "{60813319-C3A3-47B7-ABE7-C52572315443}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.IO", "..\..\Foundation\.Net-5.0\IO\Foundation.IO.csproj", "{E81AA2CE-B8BF-4478-A5A4-3E1CCFD7DF28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.IO", "..\Foundation\IO\Foundation.IO.csproj", "{E81AA2CE-B8BF-4478-A5A4-3E1CCFD7DF28}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Linq", "..\..\Foundation\.Net-5.0\Linq\Foundation.Linq.csproj", "{0680C4D0-DA6D-4CF0-89F3-A9BAA59DCE48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Linq", "..\Foundation\Linq\Foundation.Linq.csproj", "{0680C4D0-DA6D-4CF0-89F3-A9BAA59DCE48}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Log", "..\..\Foundation\.Net-5.0\Log\Foundation.Log.csproj", "{2AF79CD9-A352-49A9-A842-87B0CB1BCBDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Log", "..\Foundation\Log\Foundation.Log.csproj", "{2AF79CD9-A352-49A9-A842-87B0CB1BCBDD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Text", "..\..\Foundation\.Net-5.0\Text\Foundation.Text.csproj", "{493B8277-8ED6-42E3-AD45-4257AFB4C077}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Text", "..\Foundation\Text\Foundation.Text.csproj", "{493B8277-8ED6-42E3-AD45-4257AFB4C077}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Threading", "..\..\Foundation\.Net-5.0\Threading\Foundation.Threading.csproj", "{A8DD8422-3463-4F91-A620-25BCC1127C53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Threading", "..\Foundation\Threading\Foundation.Threading.csproj", "{A8DD8422-3463-4F91-A620-25BCC1127C53}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Xml", "..\..\Foundation\.Net-5.0\Xml\Foundation.Xml.csproj", "{05FCB4BA-781D-4B25-BB86-9E2F5E2FE3D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Xml", "..\Foundation\Xml\Foundation.Xml.csproj", "{05FCB4BA-781D-4B25-BB86-9E2F5E2FE3D0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Api", "DataCommander.Api\DataCommander.Api.csproj", "{85C955DA-4060-4558-9866-FF660244E33E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Application", "DataCommander.Application\DataCommander.Application.csproj", "{13E1283E-F978-4ED3-AF66-5842A29009EA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Windows.Forms", "..\..\Foundation\.Net-5.0\Windows.Forms\Foundation.Windows.Forms.csproj", "{D036893C-779C-43F8-AD54-9EECA847A17F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Windows.Forms", "..\Foundation\Windows.Forms\Foundation.Windows.Forms.csproj", "{D036893C-779C-43F8-AD54-9EECA847A17F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander", "DataCommander\DataCommander.csproj", "{D2A37383-F42E-4FA1-ABC5-3EC9C091B496}"
 EndProject
