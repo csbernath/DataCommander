@@ -25,13 +25,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Foundation\.Net-9.0\Assertions\Foundation.Assertions.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\.Net-9.0\Data.SqlClient\Foundation.Data.SqlClient.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\.Net-9.0\Data\Foundation.Data.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\.Net-9.0\Diagnostics\Foundation.Diagnostics.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\.Net-9.0\Log\Foundation.Log.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\.Net-9.0\Threading\Foundation.Threading.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\.Net-9.0\Windows.Forms\Foundation.Windows.Forms.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\Assertions\Foundation.Assertions.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\Data.SqlClient\Foundation.Data.SqlClient.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\Data\Foundation.Data.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\Diagnostics\Foundation.Diagnostics.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\Log\Foundation.Log.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\Threading\Foundation.Threading.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\Windows.Forms\Foundation.Windows.Forms.csproj" />
     <ProjectReference Include="..\DataCommander.Api\DataCommander.Api.csproj" />
   </ItemGroup>
 
