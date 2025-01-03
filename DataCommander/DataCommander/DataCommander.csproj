@@ -23,10 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Foundation\Configuration\Foundation.Configuration.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\Data\Foundation.Data.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\DefaultLog\Foundation.DefaultLog.csproj" />
-    <ProjectReference Include="..\..\..\Foundation\Log\Foundation.Log.csproj" />
+    <ProjectReference Include="..\..\Foundation\Configuration\Foundation.Configuration.csproj" />
+    <ProjectReference Include="..\..\Foundation\Data\Foundation.Data.csproj" />
+    <ProjectReference Include="..\..\Foundation\DefaultLog\Foundation.DefaultLog.csproj" />
+    <ProjectReference Include="..\..\Foundation\Log\Foundation.Log.csproj" />
     <ProjectReference Include="..\DataCommander.Application\DataCommander.Application.csproj" />
   </ItemGroup>
 
