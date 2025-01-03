@@ -39,7 +39,7 @@ Build date: {lastWriteTime.ToString("yyyy-MM-dd")}
 <br/><br/>
 Version: {assembly.GetName().Version}
 <br/><br/>
-Copyright © 2002-2024 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Bernáth</a>
+Copyright © 2002-2025 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Bernáth</a>
 <br/>
 This program is freeware and released under the <a href=""https://www.gnu.org/licenses/gpl.txt"">GNU General Public Licence</a>.
 <br/><br/>
