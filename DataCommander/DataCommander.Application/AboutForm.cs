@@ -38,7 +38,7 @@ public partial class AboutForm : Form
 <div style=""font-family:verdana;font-size:9pt"">
 Data Commander Version: {assembly.GetName().Version} ({lastWriteTime:yyyy-MM-dd})<br/>
 <a href=""https://github.com/csbernath/DataCommander"">GitHub repository</a><br/>
-Copyright © 2002-2024 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Bernáth</a><br/><br/>
+Copyright © 2002-2025 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Bernáth</a><br/><br/>
 <a href=""https://en.wikipedia.org/wiki/Free_and_open-source_software"">Free and open-source software</a><br/>
 This program is released under the <a href=""https://www.gnu.org/licenses/gpl.txt"">GNU General Public Licence</a>.<br/><br/>
 Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.Net-9.0/README.md"">Foundation Class Library</a><br/><br/>
