@@ -6,3 +6,4 @@ packages/
 References/
 *.bak
 *.exe
+.idea/
