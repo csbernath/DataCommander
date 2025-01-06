@@ -42,7 +42,8 @@ internal static class SqlServerVersionInfoRepository
             new("13.00.5108", "5014365 Security update for SQL Server 2016 SP2 GDR: June 14, 2022"),
             new("13.00.6300", "Microsoft SQL Server 2016 Service Pack 3 (SP3)"),
             new("13.00.6435", "5029186 Security update for SQL Server 2016 SP3 GDR: October 10, 2023"),
-            new("13.00.6445", "5042207 Security update for SQL Server 2016 SP3 GDR: September 10, 2024 "),
+            new("13.00.6445", "5042207 Security update for SQL Server 2016 SP3 GDR: September 10, 2024"),
+            new("13.00.6455", "5046855 Security update for SQL Server 2016 SP3 GDR: November 12, 2024"),
             new("14.00.1000", "Microsoft SQL Server 2017 (RTM)"),
             new("14.00.3045", "Microsoft SQL Server 2017 (RTM-CU12) (KB4464082)"),
             new("14.00.3048", "Microsoft SQL Server 2017 (RTM-CU13) (KB4466404)"),
@@ -53,6 +54,7 @@ internal static class SqlServerVersionInfoRepository
             new("16.00.1105", "5029379 Security update for SQL Server 2022 GDR: October 10, 2023"),
             new("16.00.1110", "5032968 Security update for SQL Server 2022 GDR: January 9, 2024"),
             new("16.00.1125", "5042211 Security update for SQL Server 2022 GDR: September 10, 2024"),
+            new("16.00.1135", "5046861 Security update for SQL Server 2022 GDR: November 12, 2024 "),
             new("16.00.4100", "5033592 Security update for SQL Server 2022 CU10: January 9, 2024")
         }.ToDictionary(i => i.Version);
 }
