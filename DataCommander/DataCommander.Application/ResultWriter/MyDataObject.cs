@@ -13,9 +13,7 @@ internal sealed class MyDataObject(DataView dataView, int[] columnIndexes) : IDa
 
     object IDataObject.GetData(Type format) => throw new NotImplementedException();
 
-    object IDataObject.GetData(string format) => throw new NotImplementedException();
-
-    object? IDataObject.GetData(string format, bool autoConvert)
+    object IDataObject.GetData(string format)
     {
         object? data;
 
@@ -56,11 +54,11 @@ internal sealed class MyDataObject(DataView dataView, int[] columnIndexes) : IDa
         return data;
     }
 
+    object? IDataObject.GetData(string format, bool autoConvert) => throw new NotImplementedException();
+
     bool IDataObject.GetDataPresent(Type format) => throw new NotImplementedException();
 
-    bool IDataObject.GetDataPresent(string format) => throw new NotImplementedException();
-
-    bool IDataObject.GetDataPresent(string format, bool autoConvert)
+    bool IDataObject.GetDataPresent(string format)
     {
         bool isDataPresent;
 
@@ -79,17 +77,19 @@ internal sealed class MyDataObject(DataView dataView, int[] columnIndexes) : IDa
         return isDataPresent;
     }
 
-    string[] IDataObject.GetFormats() => throw new NotImplementedException();
+    bool IDataObject.GetDataPresent(string format, bool autoConvert) => throw new NotImplementedException();
 
-    string[] IDataObject.GetFormats(bool autoConvert) => [
-            DataFormats.CommaSeparatedValue,
-            DataFormats.Html,
-            //DataFormats.StringFormat,
-            DataFormats.Text,
-            DataFormats.UnicodeText,
-            "TabSeparatedValues" // TODO
-        ];
+    string[] IDataObject.GetFormats() =>
+    [
+        DataFormats.CommaSeparatedValue,
+        DataFormats.Html,
+        //DataFormats.StringFormat,
+        DataFormats.Text,
+        DataFormats.UnicodeText,
+        "TabSeparatedValues" // TODO
+    ];
 
+    string[] IDataObject.GetFormats(bool autoConvert) => throw new NotImplementedException();
     void IDataObject.SetData(object? data) => throw new NotImplementedException();
     void IDataObject.SetData(Type format, object? data) => throw new NotImplementedException();
     void IDataObject.SetData(string format, object? data) => throw new NotImplementedException();
