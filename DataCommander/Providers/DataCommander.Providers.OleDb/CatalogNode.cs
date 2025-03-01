@@ -4,7 +4,6 @@ using System.Data.OleDb;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Foundation.Data;
 
 namespace DataCommander.Providers.OleDb;
 
