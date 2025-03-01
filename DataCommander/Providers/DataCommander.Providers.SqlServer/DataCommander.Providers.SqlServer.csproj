@@ -10,8 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
-    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="172.52.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
+    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="172.61.0" />
   </ItemGroup>
 
   <ItemGroup>
