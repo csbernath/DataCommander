@@ -17,19 +17,11 @@ internal sealed class Connection : ConnectionBase
     {
         _connectionString = connectionString;
         _mySqlConnection = new MySqlConnection(connectionString);
-        Connection = _mySqlConnection;
+        SetConnection(_mySqlConnection);
     }
 
     public override Task OpenAsync(CancellationToken cancellationToken) => _mySqlConnection.OpenAsync(cancellationToken);
     public override DbCommand CreateCommand() => _mySqlConnection.CreateCommand();
-
-    public override string ConnectionName
-    {
-        get => _connectionName;
-        set => _connectionName = value;
-    }
-
-    public override string Caption => _connectionName;
 
     public override string DataSource
     {
@@ -47,6 +39,7 @@ internal sealed class Connection : ConnectionBase
     }
 
     public override string ServerVersion => _mySqlConnection.ServerVersion;
+    public override string? ConnectionInformation { get; }
 
     public override Task<int> GetTransactionCountAsync(CancellationToken cancellationToken)
     {

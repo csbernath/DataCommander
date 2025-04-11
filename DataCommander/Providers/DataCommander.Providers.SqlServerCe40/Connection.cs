@@ -14,15 +14,13 @@ internal sealed class Connection : ConnectionBase
     public Connection(string connectionString)
     {
         _sqlCeConnection = new SqlCeConnection(connectionString);
-        Connection = _sqlCeConnection;
+        SetConnection(_sqlCeConnection);
     }
 
     public override Task OpenAsync(CancellationToken cancellationToken) => _sqlCeConnection.OpenAsync(cancellationToken);
 
     public override DbCommand CreateCommand() => _sqlCeConnection.CreateCommand();
 
-    public override string ConnectionName { get; set; }
-    public override string Caption => _sqlCeConnection.DataSource;
     public override string DataSource => _sqlCeConnection.DataSource;
     protected void SetDatabase(string database) => throw new NotImplementedException();
     public override string ServerVersion => _sqlCeConnection.ServerVersion;

@@ -11,6 +11,8 @@ using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataCommander.Providers.MySql;
 
@@ -102,29 +104,28 @@ internal sealed class MySqlProvider : IProvider
         throw new NotImplementedException();
     }
 
-    GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
+    public Task<GetCompletionResult> GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position,
+        CancellationToken cancellationToken)
     {
-        var response = new GetCompletionResponse
-        {
-            FromCache = false
-        };
-
         var sqlStatement = new SqlParser(text);
         var tokens = sqlStatement.Tokens;
         sqlStatement.FindToken(position, out var previousToken, out var currentToken);
+        int startPosition;
+        int length;
+        List<IObjectName>? items = null;
 
         if (currentToken != null)
         {
             var parts = new IdentifierParser(new StringReader(currentToken.Value)).Parse();
             var lastPart = parts.Last();
             var lastPartLength = lastPart != null ? lastPart.Length : 0;
-            response.StartPosition = currentToken.EndPosition - lastPartLength + 1;
-            response.Length = lastPartLength;
+            startPosition = currentToken.EndPosition - lastPartLength + 1;
+            length = lastPartLength;
         }
         else
         {
-            response.StartPosition = position;
-            response.Length = 0;
+            startPosition = position;
+            length = 0;
         }
 
         var sqlObject = sqlStatement.FindSqlObject(previousToken, currentToken);
@@ -171,14 +172,14 @@ internal sealed class MySqlProvider : IProvider
             var executor = DbCommandExecutorFactory.Create(connection.Connection);
             foreach (var statement in statements)
             {
-                var items = executor.ExecuteReader(new ExecuteReaderRequest(statement), 128, dataRecord => new ObjectName(null, dataRecord.GetString(0)));
-                objectNames.AddRange(items);
+                var items2 = executor.ExecuteReader(new ExecuteReaderRequest(statement), 128, dataRecord => new ObjectName(null, dataRecord.GetString(0)));
+                objectNames.AddRange(items2);
             }
 
-            response.Items = objectNames;
+            items = objectNames;
         }
 
-        return response;
+        return Task.FromResult(new GetCompletionResult(startPosition, length, items, false));
     }
 
     DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
