@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Foundation.Assertions;
 using Foundation.Core;
 
@@ -28,9 +29,9 @@ public class Progress
 
     public void Add(int value, long timestamp)
     {
-        Assert.IsTrue(value >= 0);
+        Assert.IsGreaterThanOrEqual(value, 0);
         var newTaskCount = _currentTaskCount + value;
-        Assert.IsTrue(newTaskCount <= _taskCount);
+        Assert.IsLessThanOrEqual(newTaskCount, _taskCount);
 
         var newRatio = (double)newTaskCount / _taskCount;
         var newPercentDouble = _startPercent + newRatio * (_endPercent - _startPercent);
@@ -39,7 +40,7 @@ public class Progress
         var estimatedTimeAmount = (long)(elapsedTimeAmount / newRatio);
         var estimatedTimeAmountString = StopwatchTimeSpan.ToString(estimatedTimeAmount, 3);
 
-        System.Diagnostics.Debug.WriteLine(
+        Debug.WriteLine(
             $"newTaskCount: {newTaskCount}, newPercentDouble: {newPercentDouble}, elapsed:  {StopwatchTimeSpan.ToString(elapsedTimeAmount, 3)} estimatedTimeAmount: {estimatedTimeAmountString}");
 
         var newPercent = (int)newPercentDouble;
