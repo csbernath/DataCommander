@@ -63,11 +63,11 @@ SegmentedListBuilder - build a list of segments
 The library defines a configuration section handler.
 ```xml
 <configuration>
-	<configSections>
-		<section name="DataCommander.Foundation.Configuration" type="DataCommander.Foundation.Configuration.SectionHandler, DataCommander.Foundation"/>
-	</configSections>
-	<DataCommander.Foundation.Configuration>
-	</DataCommander.Foundation.Configuration>
+    <configSections>
+        <section name="DataCommander.Foundation.Configuration" type="DataCommander.Foundation.Configuration.SectionHandler, DataCommander.Foundation"/>
+    </configSections>
+    <DataCommander.Foundation.Configuration>
+    </DataCommander.Foundation.Configuration>
 </configuration>
 ```
 
@@ -75,12 +75,12 @@ The schema of the configuration section is a tree of nodes. The node can contain
 
 ```xml
 <DataCommander.Foundation.Configuration>
-	<node name="Node1">
-		<attribute name="Enabled" type="bool" value="true"/>
-		<attribute name="Path" value="%TEMP%"/>
-	</node>
-	<Node2>
-	</Node2>
+    <node name="Node1">
+        <attribute name="Enabled" type="bool" value="true"/>
+        <attribute name="Path" value="%TEMP%"/>
+    </node>
+    <Node2>
+    </Node2>
 </DataCommander.Foundation.Configuration>
 </configuration>
 ```
@@ -114,10 +114,10 @@ If the name of the xml element is not node or attribute then the type of the ele
 
 ```xml
 <attribute name="MyArray" type="int[]">
-	<a value="3"/>
-	<a value="5"/>
-	<a value="7"/>
-	<a value="9"/>
+    <a value="3"/>
+    <a value="5"/>
+    <a value="7"/>
+    <a value="9"/>
 </attribute>
 ```
 
@@ -182,23 +182,23 @@ The built-in implementation can be replaced with NLog,log4net etc. The applicati
 See the default configuration in Data Commander as an example:
 ```xml
 <Diagnostics>
-	<LogFactory>
-		<attribute name="TypeName" value="DataCommander.Foundation.Diagnostics.FoundationLogFactory"/>
-	</LogFactory>
-	<FoundationLogFactory>
-		<attribute name="DateTimeKind" type="System.DateTimeKind" value="Local"/>
-		<LogWriters>
-			<node>
-				<attribute name="Type" value="FileLogWriter"/>
-				<attribute name="Enabled" type="bool" value="true"/>
-				<attribute name="LogLevel" type="DataCommander.Foundation.Diagnostics.LogLevel" value="Debug"/>
-				<attribute name="DateTimeKind" type="System.DateTimeKind" value="Local"/>
-				<attribute name="Path" value="%TEMP%\DataCommander[{date}]({time}) {guid}.log"/>
-				<attribute name="Async" type="bool" value="true"/>
-				<attribute name="FileAttributes" type="System.IO.FileAttributes" value="ReadOnly,Hidden"/>
-			</node>
-		</LogWriters>
-	</FoundationLogFactory>
+    <LogFactory>
+        <attribute name="TypeName" value="DataCommander.Foundation.Diagnostics.FoundationLogFactory"/>
+    </LogFactory>
+    <FoundationLogFactory>
+        <attribute name="DateTimeKind" type="System.DateTimeKind" value="Local"/>
+        <LogWriters>
+            <node>
+                <attribute name="Type" value="FileLogWriter"/>
+                <attribute name="Enabled" type="bool" value="true"/>
+                <attribute name="LogLevel" type="DataCommander.Foundation.Diagnostics.LogLevel" value="Debug"/>
+                <attribute name="DateTimeKind" type="System.DateTimeKind" value="Local"/>
+                <attribute name="Path" value="%TEMP%\DataCommander[{date}]({time}) {guid}.log"/>
+                <attribute name="Async" type="bool" value="true"/>
+                <attribute name="FileAttributes" type="System.IO.FileAttributes" value="ReadOnly,Hidden"/>
+            </node>
+        </LogWriters>
+    </FoundationLogFactory>
 </Diagnostics>
 ```
 The log factory class is the built-in FoundationLogFactory. The configuration of this class is in the FoundationLogFactory xml element. The factory creates a file log writer. The log files will be written into the %TEMP% directory. One file per application start.
