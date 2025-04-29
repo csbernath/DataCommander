@@ -33,20 +33,28 @@ public static class AppDomainMonitor
         var tickCount64 = Environment.TickCount64;
         var totalDays = (double)tickCount64 / TimeSpan.MillisecondsPerDay;
         var workingSet = Environment.WorkingSet;
-        var windowsVersionInfo = WindowsCurrentVersionRepository.Get();
+        var osVersion = Environment.OSVersion;
+        var windowsCurrentVersion = osVersion.Platform == PlatformID.Win32NT
+            ? WindowsCurrentVersionRepository.Get()
+            : null;
         var stopwatchFrequency = GetStopwatchFrequency();
         var zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
         var tickCountString = $"{tickCount64} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";
-        var clockAggregate = ClockAggregateRepository.Singleton.Get();
+        var messageStringBuilder = new StringBuilder();
 
-        var message = $@"Environment information
+        messageStringBuilder.Append($@"Environment information
 MachineName:            {Environment.MachineName}
 ProcessorCount:         {Environment.ProcessorCount}
-OSVersion:              {Environment.OSVersion}
-Windows ProductName:    {windowsVersionInfo.ProductName}
-Windows DisplayVersion: {windowsVersionInfo.DisplayVersion}
-Windows ReleaseId:      {windowsVersionInfo.ReleaseId}
-Windows CurrentBuild:   {windowsVersionInfo.CurrentBuild}
+OSVersion:              {Environment.OSVersion}");
+
+        if (windowsCurrentVersion != null)
+            messageStringBuilder.Append($@"
+Windows ProductName:    {windowsCurrentVersion.ProductName}
+Windows DisplayVersion: {windowsCurrentVersion.DisplayVersion}
+Windows ReleaseId:      {windowsCurrentVersion.ReleaseId}
+Windows CurrentBuild:   {windowsCurrentVersion.CurrentBuild}");
+
+        messageStringBuilder.Append($@" 
 Is64BitOperatingSystem: {Environment.Is64BitOperatingSystem}
 Is64BitProcess:         {Environment.Is64BitProcess}
 IntPtr.Size:            {IntPtr.Size} ({IntPtr.Size * 8} bit)
@@ -64,8 +72,8 @@ WorkingSet:             {(double)workingSet / (1024 * 1024):N} MB ({workingSet} 
 TickCount64:            {tickCountString}
 Stopwatch.Frequency:    {stopwatchFrequency}
 TimeZoneInfo.Local.Id:  {TimeZoneInfo.Local.Id}
-TempPath:               {Path.GetTempPath()}";
-        return message;
+TempPath:               {Path.GetTempPath()}");
+        return messageStringBuilder.ToString();
     }
 
     private static string GetStopwatchFrequency() =>
