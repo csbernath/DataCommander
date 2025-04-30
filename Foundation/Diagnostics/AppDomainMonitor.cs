@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime;
+using System.Runtime.InteropServices;
 using System.Text;
 using Foundation.Core;
 using Foundation.Core.ClockAggregate;
@@ -54,7 +55,10 @@ Windows DisplayVersion: {windowsCurrentVersion.DisplayVersion}
 Windows ReleaseId:      {windowsCurrentVersion.ReleaseId}
 Windows CurrentBuild:   {windowsCurrentVersion.CurrentBuild}");
 
-        messageStringBuilder.Append($@" 
+        messageStringBuilder.Append($@"
+OSArchitecture:         {RuntimeInformation.OSArchitecture}
+OSDescription:          {RuntimeInformation.OSDescription}
+FrameworkDescription:   {RuntimeInformation.FrameworkDescription}
 Is64BitOperatingSystem: {Environment.Is64BitOperatingSystem}
 Is64BitProcess:         {Environment.Is64BitProcess}
 IntPtr.Size:            {IntPtr.Size} ({IntPtr.Size * 8} bit)
@@ -76,8 +80,49 @@ TempPath:               {Path.GetTempPath()}");
         return messageStringBuilder.ToString();
     }
 
-    private static string GetStopwatchFrequency() =>
-        $"{Stopwatch.Frequency} ({Math.Round((double)Stopwatch.Frequency / TenPowerConstants.TenPower6, 2)} MHz, 1 tick = {Math.Round(StopwatchConstants.NanosecondsPerTick)} nanoseconds, 1 millisecond = {Math.Round(StopwatchConstants.TicksPerMillisecond)} ticks)";
+    private static string GetStopwatchFrequency()
+    {
+        var frequency = Stopwatch.Frequency;
+        var frequencyString = ToString(frequency, "Hz");
+        return
+            $"{frequency} ({frequencyString}, 1 tick = {Math.Round(StopwatchConstants.NanosecondsPerTick)} nanoseconds, 1 millisecond = {Math.Round(StopwatchConstants.TicksPerMillisecond)} ticks)";
+    }
+
+    private static string ToString(long value, string symbol)
+    {
+        long denominator;
+        char? prefix;
+
+        switch (value)
+        {
+            case >= TenPowerConstants.TenPower15:
+                denominator = TenPowerConstants.TenPower15;
+                prefix = 'P';
+                break;
+            case >= TenPowerConstants.TenPower12:
+                denominator = TenPowerConstants.TenPower12;
+                prefix = 'T';
+                break;
+            case >= TenPowerConstants.TenPower9:
+                denominator = TenPowerConstants.TenPower9;
+                prefix = 'G';
+                break;
+            case >= TenPowerConstants.TenPower6:
+                denominator = TenPowerConstants.TenPower6;
+                prefix = 'M';
+                break;
+            case >= TenPowerConstants.TenPower3:
+                denominator = TenPowerConstants.TenPower3;
+                prefix = 'K';
+                break;
+            default:
+                denominator = 1;
+                prefix = null;
+                break;
+        }
+
+        return $"{Math.Round((decimal)value / denominator, 2)} {prefix}{symbol}";
+    }
 
     public static string GetCurrentDomainState()
     {
@@ -88,38 +133,37 @@ TempPath:               {Path.GetTempPath()}");
         return stringBuilder.ToString();
     }
 
-    private static void AppendAppDomainState(AppDomain appDomain, StringBuilder sb)
+    private static void AppendAppDomainState(AppDomain appDomain, StringBuilder stringBuilder)
     {
         try
         {
             var friendlyName = appDomain.FriendlyName;
-            sb.AppendFormat("FriendlyName: {0}\r\n", friendlyName);
+            stringBuilder.AppendFormat("FriendlyName: {0}\r\n", friendlyName);
             var assemblies = appDomain.GetAssemblies();
-            sb.AppendLine("Assemblies:");
+            stringBuilder.AppendLine("Assemblies:");
 
             List<AssemblyInfo> assemblyInfos = [];
 
-            for (var i = 0; i < assemblies.Length; i++)
+            foreach (var assembly in assemblies)
             {
                 try
                 {
-                    var assembly = assemblies[i];
                     var assemblyInfo = GetAssemblyInfo(assembly);
                     assemblyInfos.Add(assemblyInfo);
                 }
                 catch (Exception e)
                 {
-                    Log.Error("{0}\t\n{1}", assemblies[i], e);
+                    Log.Error("{0}\t\n{1}", assembly, e);
                 }
             }
 
             assemblyInfos.Sort((info, assemblyInfo) => string.Compare(info.Name, assemblyInfo.Name, StringComparison.InvariantCulture));
 
-            sb.Append(assemblyInfos.ToString(Columns));
+            stringBuilder.Append(assemblyInfos.ToString(Columns));
         }
-        catch (Exception e)
+        catch (Exception exception)
         {
-            Log.Write(LogLevel.Error, e.ToString());
+            Log.Write(LogLevel.Error, exception.ToString());
         }
     }
 
