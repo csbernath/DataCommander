@@ -7,6 +7,7 @@ using Foundation.Configuration;
 using Foundation.Diagnostics;
 using Foundation.Log;
 using Microsoft.Win32;
+using OfficeOpenXml;
 
 namespace DataCommander.Application;
 
@@ -44,6 +45,8 @@ public sealed class DataCommanderApplication
     {
         if (!_updaterStarted)
         {
+            ExcelPackage.License.SetNonCommercialOrganization("My Noncommercial organization");
+            
             MainForm = new MainForm();
 
             Task.Delay(1000).ContinueWith(_ =>
