@@ -340,14 +340,9 @@ internal class DataTableEditor : UserControl
                     break;
 
                 default:
-                    if (type == typeof(Guid))
-                    {
-                        var guid = (Guid)value;
-                        valueString = guid.ToString().ToNullableVarChar();
-                    }
-                    else
-                        valueString = value.ToString();
-
+                    valueString = type == typeof(Guid)
+                        ? $"'{value}'"
+                        : value.ToString();
                     break;
             }
         }
