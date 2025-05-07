@@ -34,7 +34,7 @@ internal sealed class DataGridViewResultWriter : IResultWriter
     private static DataGridViewColumn ToDataGridViewColumn(DataRow schemaDataRow)
     {
         var schema = FoundationDbColumnFactory.Create(schemaDataRow);
-        var column = new DataGridViewTextBoxColumn()
+        var column = new DataGridViewTextBoxColumn
         {
             AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
             Name = schema.ColumnName

@@ -11,6 +11,8 @@ internal class DoubleBufferedDataGridView : DataGridView
 
         // AccessViolationException on ToolTip that faults COMCTL32.dll - .NET 4.0
         //ShowCellToolTips = false;
+
+        AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
     }
 
     public bool PublicDoubleBuffered
