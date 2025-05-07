@@ -63,7 +63,7 @@ internal sealed class AsyncDataAdapter(
     {
         ArgumentNullException.ThrowIfNull(dataReader);
         ArgumentNullException.ThrowIfNull(schemaTable);
-        Assert.IsInRange(tableIndex >= 0);
+        Assert.IsGreaterThanOrEqual(tableIndex, 0);
 
         using (LogFactory.Instance.GetCurrentMethodLog())
         {
@@ -249,7 +249,7 @@ internal sealed class AsyncDataAdapter(
             foreach (var command in commands)
             {
                 await Fill(command, cancellationToken);
-                command.Command.Dispose();
+                await command.Command.DisposeAsync();
             }
         }
         finally

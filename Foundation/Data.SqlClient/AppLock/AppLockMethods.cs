@@ -4,7 +4,7 @@ using Microsoft.Data.SqlClient;
 
 namespace Foundation.Data.SqlClient.AppLock;
 
-public sealed class AppLockMethods
+public static class AppLockMethods
 {
     public static GetAppLockReturnCode GetAppLock(IDbConnection connection, IDbTransaction transaction, string resourceName, LockMode lockMode,
         LockOwner? lockOwner,

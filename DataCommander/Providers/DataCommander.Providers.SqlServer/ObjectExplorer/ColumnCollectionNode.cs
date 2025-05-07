@@ -6,14 +6,11 @@ using DataCommander.Api;
 using Microsoft.Data.SqlClient;
 using Foundation.Data;
 using Foundation.Linq;
-using Foundation.Log;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : ITreeNode
 {
-    private readonly ILog _log = LogFactory.Instance.GetCurrentTypeLog();
-
     private static ColumnNode ToColumnNode(IDataRecord dataRecord)
     {
         var id = dataRecord.GetInt32(0);
