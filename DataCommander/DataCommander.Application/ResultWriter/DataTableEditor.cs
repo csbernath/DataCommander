@@ -280,7 +280,7 @@ internal class DataTableEditor : UserControl
         _dataGrid.Dock = DockStyle.Fill;
         _dataGrid.Location = new Point(0, 0);
         _dataGrid.Name = "_dataGrid";
-        dataGridViewCellStyle1.NullValue = "(null)";
+        dataGridViewCellStyle1.NullValue = "NULL";
         _dataGrid.RowsDefaultCellStyle = dataGridViewCellStyle1;
         _dataGrid.Size = new Size(424, 208);
         _dataGrid.TabIndex = 0;
