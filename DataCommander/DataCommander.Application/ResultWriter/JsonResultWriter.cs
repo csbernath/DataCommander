@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Text.Json;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.FieldReaders;
 using Foundation.Data;
-using Newtonsoft.Json;
 
 namespace DataCommander.Application.ResultWriter;
 
@@ -19,7 +19,8 @@ public class JsonResultWriter(Action<InfoMessage> addInfoMessage) : IResultWrite
     private Guid? _guid;
     private int _tableIndex;    
     private List<FoundationDbColumn>? _columns;
-    private JsonTextWriter? _jsonTextWriter;
+    private FileStream? _utf8JsonStream;    
+    private Utf8JsonWriter? _utf8JsonWriter;
 
     void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);
     void IResultWriter.AfterExecuteReader() => _logResultWriter.AfterExecuteReader();
@@ -40,13 +41,10 @@ public class JsonResultWriter(Action<InfoMessage> addInfoMessage) : IResultWrite
 
         var path = Path.Combine(Path.GetTempPath(), $"JsonResult {_guid} {_tableIndex}.json");
         _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, $"Creating file {path}..."));
-
-        var streamWriter = new StreamWriter(path, false, Encoding.UTF8);
-        _jsonTextWriter = new JsonTextWriter(streamWriter)
-        {
-            Formatting = Formatting.Indented
-        };
-        _jsonTextWriter.WriteStartArray();
+        
+        _utf8JsonStream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
+        _utf8JsonWriter = new Utf8JsonWriter(_utf8JsonStream, new JsonWriterOptions { Indented = true });
+        _utf8JsonWriter.WriteStartArray();
 
         _columns = schemaTable.Rows.Cast<DataRow>().Select(FoundationDbColumnFactory.Create).ToList();
     }
@@ -59,33 +57,48 @@ public class JsonResultWriter(Action<InfoMessage> addInfoMessage) : IResultWrite
         {
             var row = rows[rowIndex];
 
-            _jsonTextWriter!.WriteStartObject();
+            _utf8JsonWriter!.WriteStartObject();
 
             for (var columnIndex = 0; columnIndex < row.Length; ++columnIndex)
             {
                 var column = _columns![columnIndex];
                 var value = row[columnIndex];
 
-                _jsonTextWriter.WritePropertyName(column.ColumnName!);
+                _utf8JsonWriter.WritePropertyName(column.ColumnName!);
 
                 switch (value)
                 {
-                    case DateTimeField dateTimeField:
-                        value = dateTimeField.Value;
+                    case DBNull:
+                        _utf8JsonWriter.WriteNullValue();
                         break;
-
+                    case bool boolValue:
+                        _utf8JsonWriter.WriteBooleanValue(boolValue);
+                        break;
+                    case int int32Value:
+                        _utf8JsonWriter.WriteNumberValue(int32Value);
+                        break;
+                    case long longValue:
+                        _utf8JsonWriter.WriteNumberValue(longValue);
+                        break;
+                    case string stringValue:
+                        _utf8JsonWriter.WriteStringValue(stringValue);
+                        break;
                     case BinaryField binaryField:
-                        value = binaryField.Value;
+                        _utf8JsonWriter.WriteStringValue(binaryField.Value);
                         break;
-
+                    case DateTimeField dateTimeField:
+                        _utf8JsonWriter.WriteStringValue(dateTimeField.Value);
+                        break;
+                    case StringField stringField:
+                        _utf8JsonWriter.WriteStringValue(stringField.Value);
+                        break;
                     default:
+                        Debug.WriteLine("");
                         break;
                 }
-
-                _jsonTextWriter.WriteValue(value);
             }
 
-            _jsonTextWriter.WriteEndObject();
+            _utf8JsonWriter.WriteEndObject();
         }
     }
 
@@ -93,9 +106,13 @@ public class JsonResultWriter(Action<InfoMessage> addInfoMessage) : IResultWrite
     {
         _logResultWriter.WriteTableEnd();
 
-        _jsonTextWriter!.WriteEndArray();
-        _jsonTextWriter.Close();
-        _jsonTextWriter = null;
+        _utf8JsonWriter!.WriteEndArray();
+        _utf8JsonWriter.Dispose();
+        _utf8JsonWriter = null;
+        
+        //_utf8JsonStream!.Close();
+        _utf8JsonStream!.Dispose();
+        _utf8JsonStream = null;
 
         ++_tableIndex;
     }
