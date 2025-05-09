@@ -513,7 +513,9 @@ end", name.Database, ownersString, name.Name);
                     case SqlObjectTypes.Value:
                         var items = sqlObject.ParentName!.Split('.');
                         i = items.Length - 1;
-                        var columnName = items[i];
+                        var sqlCommandBuilder = new SqlCommandBuilder();
+                        var columnName = sqlCommandBuilder.QuoteIdentifier(items[i]);
+
                         string tableNameOrAlias = null;
                         if (i > 0)
                         {
