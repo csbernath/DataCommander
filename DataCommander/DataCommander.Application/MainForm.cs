@@ -147,13 +147,8 @@ public class MainForm : Form
         };
         _timer.Tick += Timer_Tick;
         _timer.Start();
-    }
 
-    private static string BytesToText(long bytes)
-    {
-        var megaBytes = bytes / 1024.0 / 1024.0;
-        var text = $"{Math.Round(megaBytes, 0)}";
-        return text;
+        ToolbarOrientationChanged();
     }
 
     public void UpdateTotalMemory()
@@ -161,7 +156,7 @@ public class MainForm : Form
         var totalMemory = GC.GetTotalMemory(false);
         var workingSet = Environment.WorkingSet;
 
-        _managedMemoryToolStripStatusLabel!.Text = $"{BytesToText(totalMemory)} / {BytesToText(workingSet)} MB";
+        _managedMemoryToolStripStatusLabel!.Text = $"{BytesToText(totalMemory)} / {BytesToText(workingSet)}";
 
         _managedMemoryToolStripStatusLabel.ForeColor = totalMemory <= 256 * 1024 * 1024
             ? _colorTheme != null
@@ -169,6 +164,8 @@ public class MainForm : Form
                 : SystemColors.ControlText
             : Color.Red;
     }
+
+    private static string BytesToText(long bytes) => MeasurementUnit.ToString(bytes, 0, "B");
 
     private void Timer_Tick(object? sender, EventArgs e) => UpdateTotalMemory();
 
@@ -986,4 +983,26 @@ public class MainForm : Form
 
         ThreadMonitor.Join(0);
     }
+    
+    private void ToolbarOrientationChanged()
+    {
+        int iY = 0;
+        int iX = 0;
+
+        foreach (ToolStrip ts in Controls.OfType<ToolStrip>().OrderBy( t => t.TabIndex))
+        {
+            ts.Location = new Point(iX, iY);
+
+            var _tbOrientation = Orientation.Horizontal;
+
+            if (_tbOrientation == Orientation.Horizontal)
+            {
+                // we have to add more space to avoid this issue in the ToolStripManager
+                // https://github.com/dotnet/winforms/issues/13123
+                iX += ts.Width + 4;
+            }
+            else
+                iY += ts.Height;
+        }
+    }    
 }
