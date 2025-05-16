@@ -1832,7 +1832,12 @@ public sealed partial class QueryForm : Form, IQueryForm
                         var cancellationToken = cancellationTokenSource.Token;
                         var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
                             "Opening connection...", string.Empty, _colorTheme);
-                        cancelableOperationForm.Execute(new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken)));
+                        
+                        var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
+                        cancelableOperationForm.Execute(openConnectionTask);
+                        if (openConnectionTask.Exception != null)
+                            throw openConnectionTask.Exception;
+                        
                         Connection.Connection!.Dispose();
                         Connection = connection;
                         AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Opening connection succeeded."));
