@@ -27,7 +27,6 @@ namespace DataCommander.Providers.SqlServer;
 internal sealed class SqlServerProvider : IProvider
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-    private static string[]? _keyWords;
 
     static SqlServerProvider()
     {
@@ -68,19 +67,7 @@ internal sealed class SqlServerProvider : IProvider
 
     ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(connectionStringAndCredential);
 
-    string[] IProvider.KeyWords
-    {
-        get
-        {
-            if (_keyWords == null)
-            {
-                var folder = Settings.CurrentType;
-                _keyWords = folder.Attributes["TSqlKeyWords"].GetValue<string[]>()!;
-            }
-
-            return _keyWords;
-        }
-    }
+    string[] IProvider.KeyWords => KeyWordRepository.Get();
 
     bool IProvider.CanConvertCommandToString => true;
 
@@ -358,7 +345,7 @@ internal sealed class SqlServerProvider : IProvider
             {
                 if (value.StartsWith("@@"))
                 {
-                    array = _keyWords.Where(k => k.StartsWith(value)).Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
+                    array = KeyWordRepository.Get().Where(k => k.StartsWith(value)).Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
                 }
                 else
                 {
