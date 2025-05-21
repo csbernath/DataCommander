@@ -82,11 +82,6 @@ internal class DataTableEditor : UserControl
                     _dataGrid.DataError += DataGrid_DataError;
                 }
 
-                //var ts = new DataGridTableStyle();
-                //ts.MappingName = _dataTable.TableName;
-                // TODO
-                // dataGrid.TableStyles.Add(ts);                    
-
                 var graphics = CreateGraphics();
                 var font = _dataGrid.Font;
 
@@ -153,26 +148,18 @@ internal class DataTableEditor : UserControl
                             if (length <= 256)
                             {
                                 var width = graphics.MeasureString(s, font).Width;
-
-
                                 if (width > maxWidth)
-                                {
                                     maxWidth = width;
-                                }
                             }
 
                             if (rowIndex == 999)
-                            {
                                 break;
-                            }
 
                             rowIndex++;
                         }
 
                         if (maxWidth > 250)
-                        {
                             maxWidth = 250;
-                        }
                     }
 
                     textBoxColumn.Width = (int)Math.Ceiling(maxWidth) + 5;
@@ -361,13 +348,12 @@ internal class DataTableEditor : UserControl
 
         foreach (var uniqueIndexColumn in uniqueIndexColumns)
         {
-            var columnId = uniqueIndexColumn.ColumnId;
             var columnName = uniqueIndexColumn.ColumnName;
 
             if (first)
             {
                 first = false;
-                stringBuilder.Append(" where ");
+                stringBuilder.Append("where ");
             }
             else
                 stringBuilder.Append(" and ");
@@ -412,7 +398,6 @@ internal class DataTableEditor : UserControl
 
         if (valid)
         {
-            var table = dataRow.Table;
             stringBuilder = new StringBuilder();
             stringBuilder.AppendFormat("\r\ninsert into {0}(", _tableName);
             var first = true;
@@ -469,12 +454,8 @@ internal class DataTableEditor : UserControl
 
     private void HandleDataRowChangeAction(DataRow dataRow)
     {
-        //var builder = this.provi
-        //IProvider provider;
-        //provider.DbProviderFactory.CreateCommandBuilder().QuoteIdentifier(
-
-        var sb = new StringBuilder();
-        sb.AppendFormat("\r\nupdate {0}", _tableName);
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append($"\r\nupdate {_tableName}");
         var first = true;
         var changed = false;
 
@@ -487,11 +468,10 @@ internal class DataTableEditor : UserControl
             if (currentValue is IComparable comparable)
             {
                 if (proposedValue == DBNull.Value)
-                    @equals = currentValue == DBNull.Value;
+                    equals = currentValue == DBNull.Value;
                 else
                 {
                     var currentType = currentValue.GetType();
-                    var proposedType = proposedValue.GetType();
                     int c;
 
                     try
@@ -504,36 +484,37 @@ internal class DataTableEditor : UserControl
                         c = comparable.CompareTo(convertedValue);
                     }
 
-                    @equals = c == 0;
+                    equals = c == 0;
                 }
             }
             else
-                @equals = Equals(currentValue, proposedValue);
+                equals = Equals(currentValue, proposedValue);
 
-            if (!@equals)
+            if (!equals)
             {
                 changed = true;
 
                 if (first)
                 {
                     first = false;
-                    sb.Append(" set ");
+                    stringBuilder.Append("\r\nset ");
                 }
                 else
-                    sb.Append(", ");
+                    stringBuilder.Append(", ");
 
                 var valueString = ToString(column, proposedValue);
                 var quotedColumnName = _commandBuilder.QuoteIdentifier(column.ColumnName);
-                sb.AppendFormat("{0} = {1}", quotedColumnName, valueString);
+                stringBuilder.Append($"{quotedColumnName} = {valueString}");
             }
         }
 
         if (changed)
         {
             var where = GetWhere(dataRow);
-            sb.Append(@where);
+            stringBuilder.AppendLine();
+            stringBuilder.Append(where);
             var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm!.ActiveMdiChild!;
-            var text = sb.ToString();
+            var text = stringBuilder.ToString();
             queryForm.AppendQueryText(text);
         }
     }
@@ -549,9 +530,6 @@ internal class DataTableEditor : UserControl
             case DataRowAction.Change:
                 HandleDataRowChangeAction(e.Row);
                 break;
-
-            default:
-                break;
         }
     }
 
@@ -562,7 +540,8 @@ internal class DataTableEditor : UserControl
 
         _statementStringBuilder.AppendFormat("\r\ndelete from {0}", _tableName);
         var where = GetWhere(e.Row);
-        _statementStringBuilder.Append(@where);
+        _statementStringBuilder.AppendLine();
+        _statementStringBuilder.Append(where);
 
         if (_dataGrid!.SelectedRows.Count == 1)
         {
@@ -586,10 +565,11 @@ internal class DataTableEditor : UserControl
 
     private void CopyColumnName_Click(object? sender, EventArgs e) => Clipboard.SetDataObject(_columnName, true, 5, 200);
 
-    private int[] GetColumnIndexes() => (from c in _dataGrid!.Columns.Cast<DataGridViewColumn>()
-                                         where c.Visible
-                                         orderby c.DisplayIndex
-                                         select c.Index).ToArray();
+    private int[] GetColumnIndexes() =>
+        (from c in _dataGrid!.Columns.Cast<DataGridViewColumn>()
+            where c.Visible
+            orderby c.DisplayIndex
+            select c.Index).ToArray();
 
     private void SaveTableAs_Click(object? sender, EventArgs e)
     {
@@ -1254,9 +1234,6 @@ internal class DataTableEditor : UserControl
                 case DataGridViewHitTestType.RowHeader:
                     menuItem = new ToolStripMenuItem("Hide rows", null, HideRows_Click);
                     menu.Items.Add(menuItem);
-                    break;
-
-                default:
                     break;
             }
 
