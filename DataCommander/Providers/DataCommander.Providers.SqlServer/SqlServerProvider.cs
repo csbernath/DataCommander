@@ -627,16 +627,16 @@ from
         dataTable.Columns.Add("TypeName", typeof(string));
         var index = 0;
 
-        foreach (SqlParameter p in parameters)
+        foreach (SqlParameter parameter in parameters)
         {
             var row = dataTable.NewRow();
 
             row[0] = index;
-            row[1] = p.ParameterName;
-            row[2] = p.DbType.ToString("G");
-            row[3] = p.SqlDbType.ToString().ToLower();
+            row[1] = parameter.ParameterName;
+            row[2] = parameter.DbType.ToString("G");
+            row[3] = parameter.SqlDbType.ToString().ToLower();
 
-            var precision = p.Precision;
+            var precision = parameter.Precision;
             var size = precision > 0
                 ? precision switch
                 {
@@ -645,18 +645,18 @@ from
                     <= 28 => 13,
                     _ => 17
                 }
-                : p.Size;
+                : parameter.Size;
 
             row[4] = size;
-            row[5] = p.Precision;
-            row[6] = p.Scale;
-            row[7] = p.Direction.ToString("G");
+            row[5] = parameter.Precision;
+            row[6] = parameter.Scale;
+            row[7] = parameter.Direction.ToString("G");
 
-            row[8] = p.Value == null
+            row[8] = parameter.Value == null
                 ? DBNull.Value
-                : p.Value;
+                : parameter.Value;
 
-            row[9] = p.TypeName;
+            row[9] = parameter.TypeName;
 
             dataTable.Rows.Add(row);
 
@@ -668,7 +668,7 @@ from
 
     DataTable IProvider.GetSchemaTable(IDataReader dataReader)
     {
-        DataTable table = null;
+        DataTable? table = null;
         var schemaTable = dataReader.GetSchemaTable();
 
         if (schemaTable != null)

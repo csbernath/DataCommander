@@ -129,7 +129,7 @@ public sealed partial class QueryForm
         }
     }
 
-    public void ShowDataSet(DataSet dataSet)
+    public void ShowDataSet(DataSet? dataSet)
     {
         using var log = LogFactory.Instance.GetCurrentMethodLog();
         if (dataSet != null && dataSet.Tables.Count > 0)
