@@ -30,7 +30,7 @@ internal partial class ConnectionStringBuilderForm : Form
     private List<OleDbProviderInfo>? _oleDbProviders;
     private readonly ColorTheme _colorTheme;
 
-    public ConnectionStringBuilderForm(ColorTheme colorTheme)
+    public ConnectionStringBuilderForm(ColorTheme? colorTheme)
     {
         _colorTheme = colorTheme;
 
@@ -107,7 +107,7 @@ internal partial class ConnectionStringBuilderForm : Form
         }
     }
 
-    private void providersComboBox_SelectedIndexChanged(object? sender, EventArgs e)
+    private void HandleProvidersComboBoxSelectedIndexChanged(object? sender, EventArgs e)
     {
         try
         {
@@ -197,12 +197,12 @@ internal partial class ConnectionStringBuilderForm : Form
         }
     }
 
-    private void dataSourcesComboBox_SelectedIndexChanged(object? sender, EventArgs e)
+    private void HandleDataSourcesComboBoxSelectedIndexChanged(object? sender, EventArgs e)
     {
         var dataSource = dataSourcesComboBox.Text;
     }
 
-    private void refreshButton_Click(object? sender, EventArgs e)
+    private void HandleRefreshButtonClicked(object? sender, EventArgs e)
     {
         var provider = providersComboBox.Text;
 
@@ -210,7 +210,7 @@ internal partial class ConnectionStringBuilderForm : Form
             GetDataSources(true);
     }
 
-    private void dataSourcesComboBox_DropDown(object? sender, EventArgs e)
+    private void HandleDataSourcesComboBoxDropDown(object? sender, EventArgs e)
     {
         if (_dataSources == null)
         {
@@ -229,7 +229,7 @@ internal partial class ConnectionStringBuilderForm : Form
         return connection;
     }
 
-    private void initialCatalogComboBox_DropDown(object? sender, EventArgs e)
+    private void HandleInitialCatalogComboBoxDropDown(object? sender, EventArgs e)
     {
         var dataSource = dataSourcesComboBox.Text;
 
@@ -264,7 +264,7 @@ internal partial class ConnectionStringBuilderForm : Form
         }
     }
 
-    private void OK_Click(object? sender, EventArgs e)
+    private void HandleOKClicked(object? sender, EventArgs e)
     {
         _connectionInfo = SaveDialogToConnectionInfo();
         DialogResult = DialogResult.OK;
@@ -334,7 +334,7 @@ internal partial class ConnectionStringBuilderForm : Form
         return new ConnectionStringAndCredential(connectionStringBuilder.ConnectionString, credential);
     }
 
-    private void testButton_Click(object? sender, EventArgs e)
+    private void HandleTestButtonClicked(object? sender, EventArgs e)
     {
         try
         {
@@ -381,14 +381,14 @@ Provider name: {providerInfo.Name}
         }
     }
 
-    private void integratedSecurityCheckBox_CheckedChanged(object? sender, EventArgs e)
+    private void HandleIntegratedSecurityCheckBoxCheckedChanged(object? sender, EventArgs e)
     {
         var integratedSecurity = integratedSecurityCheckBox.Checked;
         userIdTextBox.Enabled = !integratedSecurity;
         passwordTextBox.Enabled = !integratedSecurity;
     }
 
-    private void passwordTextBox_TextChanged(object? sender, EventArgs e) => _passwordChanged = true;
+    private void HandlePasswordTextBoxTextChanged(object? sender, EventArgs e) => _passwordChanged = true;
 
     private sealed class OleDbProviderInfo(string name)
     {

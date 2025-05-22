@@ -63,7 +63,7 @@ namespace DataCommander.Application.Connection
             providersComboBox.Name = "providersComboBox";
             providersComboBox.Size = new System.Drawing.Size(440, 25);
             providersComboBox.TabIndex = 2;
-            providersComboBox.SelectedIndexChanged += providersComboBox_SelectedIndexChanged;
+            providersComboBox.SelectedIndexChanged += HandleProvidersComboBoxSelectedIndexChanged;
             // 
             // label1
             // 
@@ -83,8 +83,8 @@ namespace DataCommander.Application.Connection
             dataSourcesComboBox.Name = "dataSourcesComboBox";
             dataSourcesComboBox.Size = new System.Drawing.Size(440, 25);
             dataSourcesComboBox.TabIndex = 3;
-            dataSourcesComboBox.DropDown += dataSourcesComboBox_DropDown;
-            dataSourcesComboBox.SelectedIndexChanged += dataSourcesComboBox_SelectedIndexChanged;
+            dataSourcesComboBox.DropDown += HandleDataSourcesComboBoxDropDown;
+            dataSourcesComboBox.SelectedIndexChanged += HandleDataSourcesComboBoxSelectedIndexChanged;
             // 
             // dataSourceLabel
             // 
@@ -123,7 +123,7 @@ namespace DataCommander.Application.Connection
             passwordTextBox.PasswordChar = '*';
             passwordTextBox.Size = new System.Drawing.Size(440, 25);
             passwordTextBox.TabIndex = 7;
-            passwordTextBox.TextChanged += passwordTextBox_TextChanged;
+            passwordTextBox.TextChanged += HandlePasswordTextBoxTextChanged;
             // 
             // label4
             // 
@@ -143,7 +143,7 @@ namespace DataCommander.Application.Connection
             initialCatalogComboBox.Name = "initialCatalogComboBox";
             initialCatalogComboBox.Size = new System.Drawing.Size(440, 25);
             initialCatalogComboBox.TabIndex = 8;
-            initialCatalogComboBox.DropDown += initialCatalogComboBox_DropDown;
+            initialCatalogComboBox.DropDown += HandleInitialCatalogComboBoxDropDown;
             // 
             // label5
             // 
@@ -164,7 +164,7 @@ namespace DataCommander.Application.Connection
             okButton.TabIndex = 9;
             okButton.Text = "OK";
             okButton.UseVisualStyleBackColor = true;
-            okButton.Click += OK_Click;
+            okButton.Click += HandleOKClicked;
             // 
             // cancelButton
             // 
@@ -187,7 +187,7 @@ namespace DataCommander.Application.Connection
             integratedSecurityCheckBox.TabIndex = 5;
             integratedSecurityCheckBox.Text = "Integrated security";
             integratedSecurityCheckBox.UseVisualStyleBackColor = true;
-            integratedSecurityCheckBox.CheckedChanged += integratedSecurityCheckBox_CheckedChanged;
+            integratedSecurityCheckBox.CheckedChanged += HandleIntegratedSecurityCheckBoxCheckedChanged;
             // 
             // refreshButton
             // 
@@ -198,7 +198,7 @@ namespace DataCommander.Application.Connection
             refreshButton.TabIndex = 4;
             refreshButton.Text = "&Refresh";
             refreshButton.UseVisualStyleBackColor = true;
-            refreshButton.Click += refreshButton_Click;
+            refreshButton.Click += HandleRefreshButtonClicked;
             // 
             // connectionNameTextBox
             // 
@@ -227,7 +227,7 @@ namespace DataCommander.Application.Connection
             testButton.TabIndex = 16;
             testButton.Text = "&Test";
             testButton.UseVisualStyleBackColor = true;
-            testButton.Click += testButton_Click;
+            testButton.Click += HandleTestButtonClicked;
             // 
             // oleDbProvidersComboBox
             // 
