@@ -7,6 +7,12 @@ public static class ConnectionFactory
 {
     public static SqlConnection CreateConnection(ConnectionStringAndCredential connectionStringAndCredential)
     {
+        var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionStringAndCredential.ConnectionString)
+        {
+            ApplicationName = "Data Commander",
+            Pooling = true,
+            MaxPoolSize = 10
+        };
         SqlCredential? sqlCredential = null;
         var credential = connectionStringAndCredential.Credential;
         if (credential != null)
@@ -15,6 +21,6 @@ public static class ConnectionFactory
             sqlCredential = new SqlCredential(credential.UserId, password);
         }
 
-        return new SqlConnection(connectionStringAndCredential.ConnectionString, sqlCredential);
+        return new SqlConnection(sqlConnectionStringBuilder.ConnectionString, sqlCredential);
     }
 }

@@ -58,16 +58,7 @@ internal sealed class Connection : ConnectionBase
 
     private void CreateConnection()
     {
-        var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_connectionStringAndCredential.ConnectionString)
-        {
-            ApplicationName = "Data Commander",
-            Pooling = false
-        };
-        var credential = _connectionStringAndCredential.Credential;
-        var sqlCredential = credential != null
-            ? new SqlCredential(credential.UserId, credential.Password.SecureString)
-            : null;
-        _sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString, sqlCredential);
+        _sqlConnection = ConnectionFactory.CreateConnection(_connectionStringAndCredential);
         SetConnection(_sqlConnection);
         _sqlConnection.FireInfoMessageEventOnUserErrors = true;
         _sqlConnection.InfoMessage += OnInfoMessage;
