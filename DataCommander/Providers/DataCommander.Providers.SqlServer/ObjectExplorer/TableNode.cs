@@ -177,7 +177,7 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
 
     private void EditRows(object? sender, EventArgs e)
     {
-        var name1 = DatabaseNode.Name + "." + owner + "." + name;
+        var name1 = $"{DatabaseNode.Name}.{ObjectName.QuoteIdentifier(owner)}.{ObjectName.QuoteIdentifier(name)}";
         var query = "select * from " + name1;
         var queryForm = (IQueryForm)sender!;            
         queryForm.EditRows(query);

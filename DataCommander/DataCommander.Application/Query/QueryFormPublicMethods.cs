@@ -223,6 +223,8 @@ public sealed partial class QueryForm
 
     public void EditRows(string query)
     {
+        EnsureConnectionIsOpen();
+        
         try
         {
             Log.Write(LogLevel.Trace, "Query:\r\n{0}", query);

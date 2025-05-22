@@ -1195,8 +1195,39 @@ public sealed partial class QueryForm : Form, IQueryForm
         mainForm.ActiveMdiChildToolStripTextBox.Text = text;
     }
 
+    private void EnsureConnectionIsOpen()
+    {
+        if (Connection!.State == ConnectionState.Closed)
+        {
+            try
+            {
+                AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Connection is closed. Opening connection..."));
+                var connection = Provider.CreateConnection(_connectionInfo.ConnectionStringAndCredential);
+                var cancellationTokenSource = new CancellationTokenSource();
+                var cancellationToken = cancellationTokenSource.Token;
+                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
+                    "Opening connection...", string.Empty, _colorTheme);
+
+                var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
+                cancelableOperationForm.Execute(openConnectionTask);
+                if (openConnectionTask.Exception != null)
+                    throw openConnectionTask.Exception;
+
+                Connection.Connection!.Dispose();
+                Connection = connection;
+                AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Opening connection succeeded."));
+            }
+            catch (Exception exception)
+            {
+                AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Error, null, $"Opening connection failed.\r\n{exception.Message}"));
+            }
+        }
+    }
+
     private void ExecuteQuery()
     {
+        EnsureConnectionIsOpen();
+        
         var message = new string('-', 80);
         AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, message));
 
@@ -1820,35 +1851,6 @@ public sealed partial class QueryForm : Form, IQueryForm
                     break;
             }
 
-            if (e != null)
-            {
-                if (Connection.State == ConnectionState.Closed)
-                {
-                    try
-                    {
-                        AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Connection is closed. Opening connection..."));
-                        var connection = Provider.CreateConnection(_connectionInfo.ConnectionStringAndCredential);
-                        var cancellationTokenSource = new CancellationTokenSource();
-                        var cancellationToken = cancellationTokenSource.Token;
-                        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
-                            "Opening connection...", string.Empty, _colorTheme);
-                        
-                        var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
-                        cancelableOperationForm.Execute(openConnectionTask);
-                        if (openConnectionTask.Exception != null)
-                            throw openConnectionTask.Exception;
-                        
-                        Connection.Connection!.Dispose();
-                        Connection = connection;
-                        AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Opening connection succeeded."));
-                    }
-                    catch (Exception exception)
-                    {
-                        AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Error, null, $"Opening connection failed.\r\n{exception.Message}"));
-                    }
-                }
-            }
-
             if (e != null || dataAdapter.TableCount == 0)
                 _tabControl.SelectedTab = _messagesTabPage;
             else
@@ -1906,7 +1908,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         Invoke(() => _mainForm.UpdateTotalMemory());
     }
 
-    private void EndFillInvoker(IAsyncDataAdapter dataAdapter, Exception e) => Invoke(() => EndFill(dataAdapter, e));
+    private void EndFillInvoker(IAsyncDataAdapter dataAdapter, Exception? e) => Invoke(() => EndFill(dataAdapter, e));
 
     private void WriteEndInvoker(IAsyncDataAdapter dataAdapter) => Invoke(() => WriteEnd(dataAdapter));
 

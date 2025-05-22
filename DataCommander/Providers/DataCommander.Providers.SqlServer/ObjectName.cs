@@ -40,7 +40,7 @@ internal sealed class ObjectName(string? schemaName, string objectName) : IObjec
         }
     }
 
-    private static string QuoteIdentifier(string unquotedIdentifier)
+    public static string QuoteIdentifier(string unquotedIdentifier)
     {
         var quotedIdentifier = unquotedIdentifier.IndexOfAny(['.', '-']) >= 0 || IsKeyWord(unquotedIdentifier) 
             ? new SqlCommandBuilder().QuoteIdentifier(unquotedIdentifier)
