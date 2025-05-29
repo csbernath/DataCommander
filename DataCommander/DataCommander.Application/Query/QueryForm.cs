@@ -1195,8 +1195,9 @@ public sealed partial class QueryForm : Form, IQueryForm
         mainForm.ActiveMdiChildToolStripTextBox.Text = text;
     }
 
-    private void EnsureConnectionIsOpen()
+    private bool EnsureConnectionIsOpen()
     {
+        var succeeded = true;
         if (Connection!.State == ConnectionState.Closed)
         {
             try
@@ -1219,194 +1220,199 @@ public sealed partial class QueryForm : Form, IQueryForm
             }
             catch (Exception exception)
             {
+                succeeded = false;
                 AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Error, null, $"Opening connection failed.\r\n{exception.Message}"));
             }
         }
+        return succeeded;
     }
 
     private void ExecuteQuery()
     {
-        EnsureConnectionIsOpen();
-        
-        var message = new string('-', 80);
-        AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, message));
-
-        var query = Query;
-        if (string.IsNullOrWhiteSpace(query))
-            return;
-
-        Log.Trace("ExecuteQuery...");
-
-        Cursor = Cursors.AppStarting;
-        SetGui(CommandState.Cancel);
-
-        if (_dataAdapter != null)
-            Log.Error("this.dataAdapter == null failed");
-
-        Assert.IsTrue(_dataAdapter == null);
-
-        Log.Trace("ThreadMonitor:\r\n{0}", ThreadMonitor.ToStringTableString());
-        ThreadMonitor.Join(0);
-        Log.Trace(GarbageMonitor.Default.State);
-        _openTableMode = false;
-        _cancel = false;
-
-        try
+        var succeeded = EnsureConnectionIsOpen();
+        if (succeeded)
         {
-            SetStatusbarPanelText("Executing query...");
-            var statements = Provider.GetStatements(query);
-            Log.Write(LogLevel.Trace, "Query:\r\n{0}", query);
-            IReadOnlyCollection<AsyncDataAdapterCommand> commands;
+            var message = new string('-', 80);
+            AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, message));
 
-            if (statements.Count == 1)
+            var query = Query;
+            if (string.IsNullOrWhiteSpace(query))
+                return;
+
+            Log.Trace("ExecuteQuery...");
+
+            Cursor = Cursors.AppStarting;
+            SetGui(CommandState.Cancel);
+
+            if (_dataAdapter != null)
+                Log.Error("this.dataAdapter == null failed");
+
+            Assert.IsTrue(_dataAdapter == null);
+
+            Log.Trace("ThreadMonitor:\r\n{0}", ThreadMonitor.ToStringTableString());
+            ThreadMonitor.Join(0);
+            Log.Trace(GarbageMonitor.Default.State);
+            _openTableMode = false;
+            _cancel = false;
+
+            try
             {
-                DbCommand command;
+                SetStatusbarPanelText("Executing query...");
+                var statements = Provider.GetStatements(query);
+                Log.Write(LogLevel.Trace, "Query:\r\n{0}", query);
+                IReadOnlyCollection<AsyncDataAdapterCommand> commands;
 
-                var getQueryConfigurationResult = GetQueryConfiguration(statements[0].CommandText);
-                if (getQueryConfigurationResult.Succeeded)
+                if (statements.Count == 1)
                 {
-                    command = Connection!.CreateCommand();
-                    command.CommandText = statements[0].CommandText;
-                    command.CommandTimeout = _commandTimeout;
+                    DbCommand command;
+
+                    var getQueryConfigurationResult = GetQueryConfiguration(statements[0].CommandText);
+                    if (getQueryConfigurationResult.Succeeded)
+                    {
+                        command = Connection!.CreateCommand();
+                        command.CommandText = statements[0].CommandText;
+                        command.CommandTimeout = _commandTimeout;
+                    }
+                    else
+                    {
+                        _sqlStatement = new SqlParser(statements[0].CommandText);
+                        command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
+                    }
+
+                    command.Transaction = _transaction;
+                    commands = new AsyncDataAdapterCommand(_fileName, 0, command,
+                        getQueryConfigurationResult.Succeeded ? getQueryConfigurationResult.Query : null,
+                        getQueryConfigurationResult.Succeeded ? getQueryConfigurationResult.Parameters : null,
+                        getQueryConfigurationResult.Succeeded ? getQueryConfigurationResult.CommandText : null).ItemToArray();
                 }
                 else
+                    commands =
+                        (
+                            from statement in statements
+                            select new AsyncDataAdapterCommand(null, statement.LineIndex,
+                                Connection!.Connection.CreateCommand(new CreateCommandRequest(statement.CommandText, null, CommandType.Text, _commandTimeout,
+                                    _transaction)), null, null, null)
+                        )
+                        .ToReadOnlyCollection();
+
+                int maxRecords;
+                IResultWriter? resultWriter = null;
+
+                switch (TableStyle)
                 {
-                    _sqlStatement = new SqlParser(statements[0].CommandText);
-                    command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
+                    case ResultWriterType.DataGrid:
+                    case ResultWriterType.ListView:
+                        maxRecords = int.MaxValue;
+                        _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
+                        resultWriter = _dataSetResultWriter;
+                        break;
+
+                    case ResultWriterType.DataGridView:
+                        maxRecords = int.MaxValue;
+                        resultWriter = new DataGridViewResultWriter();
+                        break;
+
+                    case ResultWriterType.Excel:
+                        maxRecords = int.MaxValue;
+                        resultWriter = new ExcelResultWriter(Provider, AddInfoMessage);
+                        _tabControl.SelectedTab = _messagesTabPage;
+                        break;
+
+                    case ResultWriterType.File:
+                        maxRecords = int.MaxValue;
+                        resultWriter = new FileResultWriter(_textBoxWriter);
+                        _tabControl.SelectedTab = _messagesTabPage;
+                        break;
+
+                    case ResultWriterType.ForJsonAuto:
+                        maxRecords = int.MaxValue;
+                        resultWriter = new ForJsonAutoResultWriter(AddInfoMessage);
+                        break;
+
+                    case ResultWriterType.Html:
+                        maxRecords = _htmlMaxRecords;
+                        _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
+                        resultWriter = _dataSetResultWriter;
+                        break;
+
+                    case ResultWriterType.HtmlFile:
+                        maxRecords = int.MaxValue;
+                        resultWriter = new HtmlResultWriter(AddInfoMessage);
+                        break;
+
+                    case ResultWriterType.JsonFile:
+                        maxRecords = int.MaxValue;
+                        resultWriter = new JsonResultWriter(AddInfoMessage);
+                        break;
+
+                    case ResultWriterType.InsertScriptFile:
+                    {
+                        maxRecords = int.MaxValue;
+                        var tableName = _sqlStatement.FindTableName();
+                        resultWriter = new InsertScriptFileWriter(tableName, _textBoxWriter);
+                        _tabControl.SelectedTab = _messagesTabPage;
+                    }
+                        break;
+
+                    case ResultWriterType.Log:
+                        maxRecords = int.MaxValue;
+                        resultWriter = new LogResultWriter(AddInfoMessage, _showSchemaTable);
+                        _tabControl.SelectedTab = _messagesTabPage;
+                        break;
+
+                    case ResultWriterType.Rtf:
+                        maxRecords = _wordMaxRecords;
+                        _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
+                        resultWriter = _dataSetResultWriter;
+                        break;
+
+                    case ResultWriterType.SqLite:
+                    {
+                        maxRecords = int.MaxValue;
+                        var tableName = _sqlStatement.FindTableName();
+                        resultWriter = new SqLiteResultWriter(_textBoxWriter, tableName);
+                        _tabControl.SelectedTab = _messagesTabPage;
+                    }
+                        break;
+
+                    default:
+                        maxRecords = int.MaxValue;
+                        var textBox = new RichTextBox();
+                        GarbageMonitor.Default.Add("ExecuteQuery.textBox", textBox);
+                        textBox.MaxLength = int.MaxValue;
+                        textBox.Multiline = true;
+                        textBox.WordWrap = false;
+                        textBox.Font = _font;
+                        textBox.Dock = DockStyle.Fill;
+                        textBox.ScrollBars = RichTextBoxScrollBars.Both;
+                        textBox.SelectionChanged += textBox_SelectionChanged;
+
+                        var resultSetTabPage = new TabPage("TextResult");
+                        resultSetTabPage.Controls.Add(textBox);
+                        _resultSetsTabControl.TabPages.Add(resultSetTabPage);
+                        _resultSetsTabControl.SelectedTab = resultSetTabPage;
+
+                        if (_colorTheme != null)
+                            _colorTheme.Apply(resultSetTabPage);
+
+                        var textWriter = new TextBoxWriter(textBox);
+                        resultWriter = new TextResultWriter(AddInfoMessage, textWriter, this);
+                        break;
                 }
 
-                command.Transaction = _transaction;
-                commands = new AsyncDataAdapterCommand(_fileName, 0, command,
-                    getQueryConfigurationResult.Succeeded ? getQueryConfigurationResult.Query : null,
-                    getQueryConfigurationResult.Succeeded ? getQueryConfigurationResult.Parameters : null,
-                    getQueryConfigurationResult.Succeeded ? getQueryConfigurationResult.CommandText : null).ItemToArray();
+                _stopwatch.Start();
+                _timer.Start();
+                ShowTimer();
+
+                _errorCount = 0;
+                _dataAdapter = new AsyncDataAdapter(Provider, maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
+                _dataAdapter.Start(commands);
             }
-            else
-                commands =
-                    (
-                        from statement in statements
-                        select new AsyncDataAdapterCommand(null, statement.LineIndex,
-                            Connection!.Connection.CreateCommand(new CreateCommandRequest(statement.CommandText, null, CommandType.Text, _commandTimeout, _transaction)), null, null, null)
-                    )
-                    .ToReadOnlyCollection();
-
-            int maxRecords;
-            IResultWriter? resultWriter = null;
-
-            switch (TableStyle)
+            catch (Exception ex)
             {
-                case ResultWriterType.DataGrid:
-                case ResultWriterType.ListView:
-                    maxRecords = int.MaxValue;
-                    _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
-                    resultWriter = _dataSetResultWriter;
-                    break;
-
-                case ResultWriterType.DataGridView:
-                    maxRecords = int.MaxValue;
-                    resultWriter = new DataGridViewResultWriter();
-                    break;
-
-                case ResultWriterType.Excel:
-                    maxRecords = int.MaxValue;
-                    resultWriter = new ExcelResultWriter(Provider, AddInfoMessage);
-                    _tabControl.SelectedTab = _messagesTabPage;
-                    break;
-
-                case ResultWriterType.File:
-                    maxRecords = int.MaxValue;
-                    resultWriter = new FileResultWriter(_textBoxWriter);
-                    _tabControl.SelectedTab = _messagesTabPage;
-                    break;
-
-                case ResultWriterType.ForJsonAuto:
-                    maxRecords = int.MaxValue;
-                    resultWriter = new ForJsonAutoResultWriter(AddInfoMessage);
-                    break;
-
-                case ResultWriterType.Html:
-                    maxRecords = _htmlMaxRecords;
-                    _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
-                    resultWriter = _dataSetResultWriter;
-                    break;
-
-                case ResultWriterType.HtmlFile:
-                    maxRecords = int.MaxValue;
-                    resultWriter = new HtmlResultWriter(AddInfoMessage);
-                    break;
-
-                case ResultWriterType.JsonFile:
-                    maxRecords = int.MaxValue;
-                    resultWriter = new JsonResultWriter(AddInfoMessage);
-                    break;
-
-                case ResultWriterType.InsertScriptFile:
-                {
-                    maxRecords = int.MaxValue;
-                        var tableName = _sqlStatement.FindTableName();
-                    resultWriter = new InsertScriptFileWriter(tableName, _textBoxWriter);
-                    _tabControl.SelectedTab = _messagesTabPage;
-                }
-                    break;
-
-                case ResultWriterType.Log:
-                    maxRecords = int.MaxValue;
-                    resultWriter = new LogResultWriter(AddInfoMessage, _showSchemaTable);
-                    _tabControl.SelectedTab = _messagesTabPage;
-                    break;
-
-                case ResultWriterType.Rtf:
-                    maxRecords = _wordMaxRecords;
-                    _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
-                    resultWriter = _dataSetResultWriter;
-                    break;
-
-                case ResultWriterType.SqLite:
-                {
-                    maxRecords = int.MaxValue;
-                        var tableName = _sqlStatement.FindTableName();
-                    resultWriter = new SqLiteResultWriter(_textBoxWriter, tableName);
-                    _tabControl.SelectedTab = _messagesTabPage;
-                }
-                    break;
-
-                default:
-                    maxRecords = int.MaxValue;
-                    var textBox = new RichTextBox();
-                    GarbageMonitor.Default.Add("ExecuteQuery.textBox", textBox);                    
-                    textBox.MaxLength = int.MaxValue;
-                    textBox.Multiline = true;
-                    textBox.WordWrap = false;
-                    textBox.Font = _font;
-                    textBox.Dock = DockStyle.Fill;
-                    textBox.ScrollBars = RichTextBoxScrollBars.Both;
-                    textBox.SelectionChanged += textBox_SelectionChanged;
-
-                    var resultSetTabPage = new TabPage("TextResult");
-                    resultSetTabPage.Controls.Add(textBox);
-                    _resultSetsTabControl.TabPages.Add(resultSetTabPage);
-                    _resultSetsTabControl.SelectedTab = resultSetTabPage;
-
-                    if (_colorTheme != null)
-                        _colorTheme.Apply(resultSetTabPage);
-
-                    var textWriter = new TextBoxWriter(textBox);
-                    resultWriter = new TextResultWriter(AddInfoMessage, textWriter, this);
-                    break;
+                WriteEnd(_dataAdapter);
+                EndFill(_dataAdapter, ex);
             }
-
-            _stopwatch.Start();
-            _timer.Start();
-            ShowTimer();
-
-            _errorCount = 0;
-            _dataAdapter = new AsyncDataAdapter(Provider, maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
-            _dataAdapter.Start(commands);
-        }
-        catch (Exception ex)
-        {
-            WriteEnd(_dataAdapter);
-            EndFill(_dataAdapter, ex);
         }
     }
 

@@ -11,7 +11,9 @@ public static class ConnectionFactory
         {
             ApplicationName = "Data Commander",
             Pooling = true,
-            MaxPoolSize = 10
+            MaxPoolSize = 10,
+            CommandTimeout = 8,
+            ConnectTimeout = 5
         };
         SqlCredential? sqlCredential = null;
         var credential = connectionStringAndCredential.Credential;
@@ -21,6 +23,7 @@ public static class ConnectionFactory
             sqlCredential = new SqlCredential(credential.UserId, password);
         }
 
-        return new SqlConnection(sqlConnectionStringBuilder.ConnectionString, sqlCredential);
+        var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString, sqlCredential);
+        return sqlConnection;
     }
 }

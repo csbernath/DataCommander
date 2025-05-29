@@ -223,27 +223,29 @@ public sealed partial class QueryForm
 
     public void EditRows(string query)
     {
-        EnsureConnectionIsOpen();
-        
-        try
+        var succeeded = EnsureConnectionIsOpen();
+        if (succeeded)
         {
-            Log.Write(LogLevel.Trace, "Query:\r\n{0}", query);
-            _sqlStatement = new SqlParser(query);
-            _commandType = CommandType.Text;
-            _openTableMode = true;
-            _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
-            AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Executing query..."));
-            _stopwatch.Start();
-            _timer.Start();
-            const int maxRecords = int.MaxValue;
-            _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
-            var resultWriter = _dataSetResultWriter;
-            _dataAdapter = new AsyncDataAdapter(Provider,  maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
-            _dataAdapter.Start(new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray());
-        }
-        catch (Exception ex)
-        {
-            EndFill(_dataAdapter, ex);
+            try
+            {
+                Log.Write(LogLevel.Trace, "Query:\r\n{0}", query);
+                _sqlStatement = new SqlParser(query);
+                _commandType = CommandType.Text;
+                _openTableMode = true;
+                _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
+                AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Executing query..."));
+                _stopwatch.Start();
+                _timer.Start();
+                const int maxRecords = int.MaxValue;
+                _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
+                var resultWriter = _dataSetResultWriter;
+                _dataAdapter = new AsyncDataAdapter(Provider, maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
+                _dataAdapter.Start(new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray());
+            }
+            catch (Exception ex)
+            {
+                EndFill(_dataAdapter, ex);
+            }
         }
     }
 

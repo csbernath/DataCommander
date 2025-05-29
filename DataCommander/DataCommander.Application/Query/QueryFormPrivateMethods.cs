@@ -138,7 +138,8 @@ public sealed partial class QueryForm
             }
             catch (Exception exception)
             {
-                var text = exception.ToString();
+                AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Error, null, exception.ToString()));
+                var text = exception.Message;
                 var caption = "Getting transaction count failed. Close window?";
                 var dialogResult = MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Error);
                 if (dialogResult == DialogResult.No)
