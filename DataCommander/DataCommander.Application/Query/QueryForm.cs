@@ -1214,8 +1214,12 @@ public sealed partial class QueryForm : Form, IQueryForm
                 if (openConnectionTask.Exception != null)
                     throw openConnectionTask.Exception;
 
-                Connection.Connection!.Dispose();
+                connection.InfoMessage += Connection_InfoMessage;
+                connection.DatabaseChanged += Connection_DatabaseChanged;
+                
+                Connection.Connection.Dispose();                
                 Connection = connection;
+                
                 AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Opening connection succeeded."));
             }
             catch (Exception exception)
