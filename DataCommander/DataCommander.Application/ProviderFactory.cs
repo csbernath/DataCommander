@@ -17,10 +17,10 @@ public static class ProviderFactory
         var typeName = attributes["TypeName"].GetValue<string>()!;
         var type = Type.GetType(typeName, true)!;
         var instance = Activator.CreateInstance(type);
-        Assert.IsNotNull(instance);
+        ArgumentNullException.ThrowIfNull(instance);
         Assert.IsTrue(instance is IProvider);
         var provider = (IProvider)instance;
-        Assert.IsNotNull(provider);
+        ArgumentNullException.ThrowIfNull(provider);
         return provider;
     }
 

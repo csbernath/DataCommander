@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Foundation.Assertions;
 using Foundation.Core;
@@ -22,7 +23,7 @@ order by table_name";
     public static string GetObjects(string schema, IEnumerable<string> objectTypes)
     {
         Assert.IsNotWhiteSpace(schema);
-        Assert.IsNotNull(objectTypes);
+        ArgumentNullException.ThrowIfNull(objectTypes);
         Assert.IsTrue(objectTypes.Any());
         var enumerable = objectTypes.Select(o => o.ToNullableVarChar());
         return
@@ -51,7 +52,7 @@ end";
     {
         Assert.IsTrue(!database.IsNullOrWhiteSpace());
         Assert.IsTrue(!schema.IsNullOrWhiteSpace());
-        Assert.IsNotNull(objectTypes);
+        ArgumentNullException.ThrowIfNull(objectTypes);
         Assert.IsTrue(objectTypes.Any());
 
         return string.Format(@"if exists(select * from sys.databases (nolock) where name = '{0}')

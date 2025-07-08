@@ -9,7 +9,6 @@ using System.Text;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.QueryConfiguration;
-using Foundation.Assertions;
 using Foundation.Collections;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
@@ -44,7 +43,7 @@ internal sealed class LogResultWriter : IResultWriter
 
     public LogResultWriter(Action<InfoMessage> addInfoMessage, bool showSchemaTable)
     {
-        Assert.IsNotNull(addInfoMessage);
+        ArgumentNullException.ThrowIfNull(addInfoMessage);
         _addInfoMessage = addInfoMessage;
         _showSchemaTable = showSchemaTable;
     }

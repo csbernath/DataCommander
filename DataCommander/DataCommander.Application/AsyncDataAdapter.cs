@@ -173,7 +173,7 @@ internal sealed class AsyncDataAdapter(
 
     private async Task Fill(AsyncDataAdapterCommand asyncDataAdapterCommand, CancellationToken cancellationToken)
     {
-        Assert.IsNotNull(asyncDataAdapterCommand);
+        ArgumentNullException.ThrowIfNull(asyncDataAdapterCommand);
         
         Exception? exception = null;
         var command = asyncDataAdapterCommand.Command;

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
-using Foundation.Assertions;
 
 namespace Foundation.Data;
 
@@ -11,7 +11,7 @@ public sealed class ExecuteReaderRequest
 
     public ExecuteReaderRequest(CreateCommandRequest createCommandRequest, CommandBehavior commandBehavior)
     {
-        Assert.IsNotNull(createCommandRequest);
+        ArgumentNullException.ThrowIfNull(createCommandRequest);
         CreateCommandRequest = createCommandRequest;
         CommandBehavior = commandBehavior;
     }

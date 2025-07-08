@@ -16,7 +16,6 @@ using DataCommander.Application.Connection;
 using DataCommander.Application.Query;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
-using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Diagnostics;
@@ -832,7 +831,7 @@ public class MainForm : Form
             }
 
             var provider = ProviderFactory.CreateProvider(providerIdentifier);
-            Assert.IsNotNull(provider);
+            ArgumentNullException.ThrowIfNull(provider);
 
             var connectionStringAndCredential = new ConnectionStringAndCredential(connectionString, null);
             var connectionInfo = new ConnectionInfo(null, providerIdentifier, connectionStringAndCredential);

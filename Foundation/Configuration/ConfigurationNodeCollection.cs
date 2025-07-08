@@ -1,8 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Foundation.Assertions;
 using Foundation.Collections.IndexableCollection;
 
 namespace Foundation.Configuration;
@@ -28,8 +28,7 @@ public sealed class ConfigurationNodeCollection : ICollection<ConfigurationNode>
 
     public void Add(ConfigurationNode item)
     {
-        Assert.IsNotNull(item);
-        
+        ArgumentNullException.ThrowIfNull(item);
         _collection.Add(item);
     }
 

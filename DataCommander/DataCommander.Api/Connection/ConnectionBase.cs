@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
-using Foundation.Assertions;
 
 namespace DataCommander.Api.Connection;
 
@@ -30,7 +29,7 @@ public abstract class ConnectionBase : IDisposable, IAsyncDisposable
     {
         get
         {
-            Assert.IsNotNull(Connection);
+            ArgumentNullException.ThrowIfNull(Connection);
             var database = Connection.Database;
             return database;
         }

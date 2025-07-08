@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
-using Foundation.Assertions;
 
 namespace Foundation.Data.SqlClient;
 
@@ -33,7 +32,7 @@ public class AsyncDbCommand : IDbCommand
     {
         get
         {
-            Assert.IsNotNull(_command);
+            ArgumentNullException.ThrowIfNull(_command);
             return _command!.CommandType;
         }
 
@@ -48,7 +47,7 @@ public class AsyncDbCommand : IDbCommand
 
     public int ExecuteNonQuery()
     {
-        Assert.IsNotNull(_connection);
+        ArgumentNullException.ThrowIfNull(_connection);
         return _connection.ExecuteNonQuery(this);
     }
 
@@ -89,13 +88,13 @@ public class AsyncDbCommand : IDbCommand
     {
         get
         {
-            Assert.IsNotNull(_command);
+            ArgumentNullException.ThrowIfNull(_command);
             return _command.CommandText;
         }
 
         set
         {
-            Assert.IsNotNull(_command);
+            ArgumentNullException.ThrowIfNull(_command);
             _command.CommandText = value;
         }
     }
@@ -104,7 +103,7 @@ public class AsyncDbCommand : IDbCommand
     {
         get
         {
-            Assert.IsNotNull(_command);
+            ArgumentNullException.ThrowIfNull(_command);
             return _command.Parameters;
         }
     }
@@ -113,13 +112,13 @@ public class AsyncDbCommand : IDbCommand
     {
         get
         {
-            Assert.IsNotNull(_command);
+            ArgumentNullException.ThrowIfNull(_command);
             return _command.Transaction;
         }
 
         set
         {
-            Assert.IsNotNull(_command);
+            ArgumentNullException.ThrowIfNull(_command);
             _command.Transaction = value;
         }
     }

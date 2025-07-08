@@ -4,7 +4,6 @@ using System.Data.Common;
 using System.IO;
 using System.Text;
 using DataCommander.Api;
-using Foundation.Assertions;
 using Foundation.Text;
 
 namespace DataCommander.Application.ResultWriter;
@@ -17,7 +16,7 @@ internal sealed class FileResultWriter : IResultWriter
 
     public FileResultWriter(TextWriter messageWriter)
     {
-        Assert.IsNotNull(messageWriter);
+        ArgumentNullException.ThrowIfNull(messageWriter);
 
         _messageWriter = messageWriter;
     }

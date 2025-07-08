@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api.Connection;
-using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Core.ClockAggregate;
 using Foundation.Data;
@@ -35,7 +34,7 @@ internal sealed class Connection : ConnectionBase
     {
         get
         {
-            Assert.IsNotNull(_sqlConnection);
+            ArgumentNullException.ThrowIfNull(_sqlConnection);
             var executor = _sqlConnection.CreateCommandExecutor();
             var commandText = "select @@version";
             var version = (string)executor.ExecuteScalar(new CreateCommandRequest(commandText))!;
@@ -76,7 +75,7 @@ internal sealed class Connection : ConnectionBase
 
     public override async Task OpenAsync(CancellationToken cancellationToken)
     {
-        Assert.IsNotNull(_sqlConnection);
+        ArgumentNullException.ThrowIfNull(_sqlConnection);
         await _sqlConnection.OpenAsync(cancellationToken);
 
         if (!cancellationToken.IsCancellationRequested)

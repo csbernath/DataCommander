@@ -51,7 +51,7 @@ end";
     {
         Assert.IsTrue(!database.IsNullOrWhiteSpace());
         Assert.IsTrue(!schema.IsNullOrWhiteSpace());
-        Assert.IsNotNull(objectTypes);
+        ArgumentNullException.ThrowIfNull(objectTypes);
         Assert.IsTrue(objectTypes.Any());
 
         return $@"if exists(select * from sys.databases (nolock) where name = '{database}')
@@ -77,7 +77,7 @@ end";
     public static string GetObjectsByDatabase(string database, IEnumerable<string> objectTypes)
     {
         Assert.IsTrue(!database.IsNullOrWhiteSpace());
-        Assert.IsNotNull(objectTypes);
+        ArgumentNullException.ThrowIfNull(objectTypes);
         Assert.IsTrue(objectTypes.Any());
 
         return $@"if exists(select * from sys.databases (nolock) where name = '{database}')
