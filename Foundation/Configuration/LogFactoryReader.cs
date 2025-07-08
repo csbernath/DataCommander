@@ -1,5 +1,6 @@
 ﻿using System;
 using Foundation.Assertions;
+using Foundation.Diagnostics;
 using Foundation.InternalLog;
 using Foundation.Log;
 
@@ -7,11 +8,12 @@ namespace Foundation.Configuration;
 
 public static class LogFactoryReader
 {
-    private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(LogFactory));
-
     public static void Read()
     {
-        Log.Trace("Reading LogFactory configuration...");
+        var currentLog = InternalLogFactory.Instance.GetTypeLog(typeof(LogFactory));
+        GarbageMonitor.Default.Add(nameof(InternalLogFactory), currentLog);
+        
+        currentLog.Trace("Reading LogFactory configuration...");
         var node = Settings.SelectCurrentType();
         if (node != null)
         {
@@ -21,9 +23,12 @@ public static class LogFactoryReader
 
             Assert.IsTrue(instance is ILogFactory);
             var applicationLog = (ILogFactory) instance;
+
             LogFactory.Set(applicationLog);
+            LogFactory.Instance.Write(InternalLogFactory.InternalLogWriter.LogEntries);
+            currentLog = LogFactory.Instance.GetLog(null);
         }
 
-        Log.Trace("LogFactory configuration has been read successfully.");
+        currentLog.Trace("LogFactory configuration has been read successfully.");
     }
 }

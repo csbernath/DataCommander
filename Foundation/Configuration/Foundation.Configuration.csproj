@@ -22,6 +22,7 @@
     <ProjectReference Include="..\Assertions\Foundation.Assertions.csproj" />
     <ProjectReference Include="..\Collections\Foundation.Collections.csproj" />
     <ProjectReference Include="..\Core\Foundation.Core.csproj" />
+    <ProjectReference Include="..\Diagnostics\Foundation.Diagnostics.csproj" />
     <ProjectReference Include="..\InternalLog\Foundation.InternalLog.csproj" />
     <ProjectReference Include="..\Text\Foundation.Text.csproj" />
     <ProjectReference Include="..\Xml\Foundation.Xml.csproj" />

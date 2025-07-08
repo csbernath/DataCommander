@@ -146,7 +146,7 @@ public sealed partial class QueryForm
             else
             {
                 ResultSetCount++;
-                text = $"Set {ResultSetCount}";
+                text = $"Initialize {ResultSetCount}";
             }
 
             var resultSetTabPage = new TabPage(text);
