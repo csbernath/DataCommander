@@ -4,7 +4,7 @@
     <AssemblyName>DataCommander.Providers.SqlServer</AssemblyName>
     <RootNamespace>DataCommander.Providers.SqlServer</RootNamespace>
     <LangVersion>13</LangVersion>
-    <TargetFramework>net9.0-windows7.0</TargetFramework>
+    <TargetFramework>net10.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <BaseOutputPath>..\..\DataCommander\bin</BaseOutputPath>
   </PropertyGroup>

@@ -19,6 +19,8 @@ using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
 using Foundation.Threading;
+using ContextMenu = DataCommander.Api.ContextMenu;
+using MenuItem = DataCommander.Api.MenuItem;
 
 namespace DataCommander.Application.Query;
 

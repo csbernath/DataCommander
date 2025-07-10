@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows7.0</TargetFramework>
+    <TargetFramework>net10.0-windows7.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <Company>Data Commander</Company>    
-    <Product>Data Commander.Net-9.0</Product>    
+    <Product>Data Commander.Net-10.0</Product>    
     <ApplicationIcon>App.ico</ApplicationIcon>
     <Authors>Data Commander</Authors>
     <PackageId>Data Commander</PackageId>
