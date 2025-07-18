@@ -18,8 +18,8 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.0-preview2.25178.5" />
     <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="172.76.0" />
     <PackageReference Include="Npgsql" Version="9.0.3" />
-    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.9.0" />
-    <PackageReference Include="System.Text.Json" Version="10.0.0-preview.5.25277.114" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.9.1" />
+    <PackageReference Include="System.Text.Json" Version="10.0.0-preview.6.25358.103" />
   </ItemGroup>
 
   <ItemGroup>
