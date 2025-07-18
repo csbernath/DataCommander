@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Foundation.Configuration;
 using Foundation.Diagnostics;
 using Foundation.Log;
@@ -16,6 +17,10 @@ public sealed class DataCommanderApplication
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private string? _sectionName;
     private readonly bool _updaterStarted = false;
+    
+#pragma warning disable WFO5001
+    private SystemColorMode _colorMode;
+#pragma warning restore WFO5001
 
     private DataCommanderApplication()
     {
@@ -38,11 +43,18 @@ public sealed class DataCommanderApplication
     public ApplicationData ApplicationData { get; } = new();
 
     public string? ApplicationDataFileName { get; private set; }
+    
+#pragma warning disable WFO5001
+    public SystemColorMode ColorMode => _colorMode;
+#pragma warning restore WFO5001    
 
     public MainForm? MainForm { get; private set; }
 
-    public void Run()
+#pragma warning disable WFO5001    
+    public void Run(SystemColorMode colorMode)
     {
+        _colorMode = colorMode;
+        
         if (!_updaterStarted)
         {
             ExcelPackage.License.SetNonCommercialOrganization("My Noncommercial organization");
@@ -55,6 +67,7 @@ public sealed class DataCommanderApplication
             System.Windows.Forms.Application.Run(MainForm);
         }
     }
+#pragma warning restore WFO5001    
 
     public void SaveApplicationData()
     {

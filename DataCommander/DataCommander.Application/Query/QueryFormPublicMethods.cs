@@ -101,7 +101,10 @@ public sealed partial class QueryForm
     public void SetStatusbarPanelText(string? text)
     {
         var color = _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText;
-        SetStatusbarPanelText(text, color);
+        // TODO
+        // SetStatusbarPanelText(text, color);
+
+        SetStatusbarPanelText(text, null);
     }
 
     [AllowNull]
@@ -146,7 +149,7 @@ public sealed partial class QueryForm
             else
             {
                 ResultSetCount++;
-                text = $"Initialize {ResultSetCount}";
+                text = $"Result {ResultSetCount}";
             }
 
             var resultSetTabPage = new TabPage(text);

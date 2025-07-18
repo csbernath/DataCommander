@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
@@ -23,12 +24,7 @@ public partial class AboutForm : Form
         var buildNumber = int.Parse(windowsCurrentVersion.CurrentBuild!);
         var windowsName =
             WindowsNameCalculator.GetWindowsNameFromBuildNumber(buildNumber, windowsCurrentVersion.EditionId, windowsCurrentVersion.DisplayVersion);
-        var brightness = colorTheme?.BackColor.GetBrightness();
-
-        var bodyStyle = brightness < 0.12f
-            ? "body {background-color: #202020;color:#dcdcdc}"
-            : null;
-
+        var bodyStyle = $"body {{background-color:{ToString(SystemColors.Control)};color:{ToString(SystemColors.ControlText)}}}";
         var text =
             $@"
 <style>
@@ -131,4 +127,6 @@ Credits:
             e.Cancel = true;
         }
     }
+
+    private static string ToString(Color color) => $"#{color.R:X2}{color.G:X2}{color.B:X2}";
 }

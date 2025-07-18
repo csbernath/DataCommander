@@ -95,9 +95,10 @@ internal sealed class ConnectionListForm : Form
         _dataGrid!.DataSource = _dataTable;
         if (colorTheme != null)
         {
-            BackColor = colorTheme.BackColor;
-            ForeColor = colorTheme.ForeColor;
-
+            // TODO
+            // BackColor = colorTheme.BackColor;
+            // ForeColor = colorTheme.ForeColor;
+            //
             colorTheme.Apply(_dataGrid);
         }
     }

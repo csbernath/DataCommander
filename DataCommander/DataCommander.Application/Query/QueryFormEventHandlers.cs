@@ -228,8 +228,9 @@ Please wait...",
                     {
                         if (_colorTheme != null)
                         {
-                            contextMenu.ForeColor = _colorTheme.ForeColor;
-                            contextMenu.BackColor = _colorTheme.BackColor;
+                            // TODO
+                            // contextMenu.ForeColor = _colorTheme.ForeColor;
+                            // contextMenu.BackColor = _colorTheme.BackColor;
                         }
 
                         var contains = components.Components.Cast<IComponent>().Contains(contextMenu);

@@ -64,19 +64,28 @@ public class MainForm : Form
     private readonly System.Windows.Forms.Timer _timer;
     private ColorTheme? _colorTheme;
 
-    private void SetColorTheme(bool darkColorTheme)
+#pragma warning disable WFO5001
+    private void SetColorTheme(SystemColorMode colorMode)
     {
-        var colorTheme = darkColorTheme
-            ? new ColorTheme(
-                Color.FromArgb(220, 220, 220),
-                Color.FromArgb(30, 30, 30),
-                Color.DarkOliveGreen,
-                Color.FromArgb(86, 156, 214),
-                Color.FromArgb(203, 65, 65))
-            : null;
-
-        _colorTheme = colorTheme;
+        switch (colorMode)
+        {
+            case SystemColorMode.Classic:
+                break;
+            case SystemColorMode.System:
+                break;
+            case SystemColorMode.Dark:
+                _colorTheme = new ColorTheme(
+                    null,
+                    null,
+                    Color.DarkOliveGreen,
+                    Color.FromArgb(86, 156, 214),
+                    Color.FromArgb(203, 65, 65));
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(colorMode), colorMode, null);
+        }
     }
+#pragma warning enable WFO5001
 
     public MainForm()
     {
@@ -85,7 +94,7 @@ public class MainForm : Form
         //
         InitializeComponent();
 
-        Text = "Data Commander";
+        Text = $"Data Commander (.NET {Environment.Version.Major})";
 
         _helpButton!.Click += HelpButton_Click;
         _mnuAbout!.Click += mnuAbout_Click;
@@ -103,39 +112,37 @@ public class MainForm : Form
         _toolStripStatusLabel!.Text = message;
         Log.Trace(message);
 
-        if (!DataCommanderApplication.Instance.ApplicationData.CurrentType.Attributes.TryGetAttributeValue<bool>("DarkColorTheme", out var darkColorTheme))
-            darkColorTheme = false;
-
-        SetColorTheme(darkColorTheme);
+        SetColorTheme(DataCommanderApplication.Instance.ColorMode);
 
         if (_colorTheme != null)
         {
-            ForeColor = _colorTheme.ForeColor;
-            BackColor = _colorTheme.BackColor;
-
-            foreach (Control control in Controls)
-            {
-                control.ForeColor = _colorTheme.ForeColor;
-                control.BackColor = _colorTheme.BackColor;
-            }
-
-            _toolStripPanel!.BackColor = _colorTheme.BackColor;
-
-            _mainMenu!.ForeColor = _colorTheme.ForeColor;
-            _mainMenu.BackColor = _colorTheme.BackColor;
-
-            foreach (var menuItem in _mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
-            foreach (ToolStripItem x in menuItem.DropDownItems)
-                _colorTheme.Apply(x);
-
-            _toolStrip!.BackColor = _colorTheme.BackColor;
-            _toolStrip.ForeColor = _colorTheme.ForeColor;
-
-            foreach (ToolStripItem item in _toolStrip.Items)
-                _colorTheme.Apply(item);
-
-            foreach (ToolStripItem item in _statusBar!.Items)
-                _colorTheme.Apply(item);
+            // TODO
+            // ForeColor = _colorTheme.ForeColor;
+            // BackColor = _colorTheme.BackColor;
+            //
+            // foreach (Control control in Controls)
+            // {
+            //     control.ForeColor = _colorTheme.ForeColor;
+            //     control.BackColor = _colorTheme.BackColor;
+            // }
+            //
+            // _toolStripPanel!.BackColor = _colorTheme.BackColor;
+            //
+            // _mainMenu!.ForeColor = _colorTheme.ForeColor;
+            // _mainMenu.BackColor = _colorTheme.BackColor;
+            //
+            // foreach (var menuItem in _mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
+            // foreach (ToolStripItem x in menuItem.DropDownItems)
+            //     _colorTheme.Apply(x);
+            //
+            // _toolStrip!.BackColor = _colorTheme.BackColor;
+            // _toolStrip.ForeColor = _colorTheme.ForeColor;
+            //
+            // foreach (ToolStripItem item in _toolStrip.Items)
+            //     _colorTheme.Apply(item);
+            //
+            // foreach (ToolStripItem item in _statusBar!.Items)
+            //     _colorTheme.Apply(item);
         }
 
         UpdateTotalMemory();
@@ -157,11 +164,12 @@ public class MainForm : Form
 
         _managedMemoryToolStripStatusLabel!.Text = $"{BytesToText(totalMemory)} / {BytesToText(workingSet)}";
 
-        _managedMemoryToolStripStatusLabel.ForeColor = totalMemory <= 256 * 1024 * 1024
-            ? _colorTheme != null
-                ? _colorTheme.ForeColor
-                : SystemColors.ControlText
-            : Color.Red;
+        // TODO
+        // _managedMemoryToolStripStatusLabel.ForeColor = totalMemory <= 256 * 1024 * 1024
+        //     ? _colorTheme != null
+        //         ? _colorTheme.ForeColor
+        //         : SystemColors.ControlText
+        //     : Color.Red;
     }
 
     private static string BytesToText(long bytes) => MeasurementUnit.ToString(bytes, 0, "B");
@@ -235,7 +243,9 @@ public class MainForm : Form
         // 
         // _menuItem1
         // 
-        _menuItem1.DropDownItems.AddRange([_newToolStripMenuItem, _mnuConnect, _mnuOpen, _recentConnectionsToolStripMenuItem, _saveAllToolStripMenuItem, _mnuRecentFileList, _mnuExit]);
+        _menuItem1.DropDownItems.AddRange([
+            _newToolStripMenuItem, _mnuConnect, _mnuOpen, _recentConnectionsToolStripMenuItem, _saveAllToolStripMenuItem, _mnuRecentFileList, _mnuExit
+        ]);
         _menuItem1.MergeIndex = 1;
         _menuItem1.Name = "_menuItem1";
         _menuItem1.Size = new Size(86, 24);
@@ -356,7 +366,9 @@ public class MainForm : Form
         _toolStrip.Dock = DockStyle.None;
         _toolStrip.ImageList = _imageList;
         _toolStrip.ImageScalingSize = new Size(20, 20);
-        _toolStrip.Items.AddRange([_btnConnect, _openButton, _saveButton, _toolStripSeparator1, _helpButton, _toolStripSeparator2, _activeMdiChildToolStripTextBox]);
+        _toolStrip.Items.AddRange([
+            _btnConnect, _openButton, _saveButton, _toolStripSeparator1, _helpButton, _toolStripSeparator2, _activeMdiChildToolStripTextBox
+        ]);
         _toolStrip.Location = new Point(4, 0);
         _toolStrip.Name = "_toolStrip";
         _toolStrip.Size = new Size(792, 27);
@@ -491,17 +503,18 @@ public class MainForm : Form
 
     private void optionsMenuItem_Click(object? sender, EventArgs e)
     {
-        var optionsForm = new OptionsForm(_colorTheme != null, SelectedFont, _colorTheme);
-        if (optionsForm.ShowDialog() == DialogResult.OK)
-        {
-            var darkColorTheme = optionsForm.DarkColorTheme;
-            SetColorTheme(darkColorTheme);
-            SelectedFont = optionsForm.SelectedFont;
-
-            var attributes = DataCommanderApplication.Instance.ApplicationData.CurrentType.Attributes;
-            attributes.SetAttributeValue("DarkColorTheme", darkColorTheme);
-            attributes.SetAttributeValue("Font", Serialize(SelectedFont));
-        }
+        // TODO
+        // var optionsForm = new OptionsForm(_colorTheme != null, SelectedFont, _colorTheme);
+        // if (optionsForm.ShowDialog() == DialogResult.OK)
+        // {
+        //     var darkColorTheme = optionsForm.DarkColorTheme;
+        //     SetColorTheme(darkColorTheme);
+        //     SelectedFont = optionsForm.SelectedFont;
+        //
+        //     var attributes = DataCommanderApplication.Instance.ApplicationData.CurrentType.Attributes;
+        //     attributes.SetAttributeValue("DarkColorTheme", darkColorTheme);
+        //     attributes.SetAttributeValue("Font", Serialize(SelectedFont));
+        // }
     }
 
     private void Connect()
@@ -543,7 +556,8 @@ public class MainForm : Form
                 var connectionStringBuilder = provider.CreateConnectionStringBuilder();
                 connectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
                 var connection = connectionForm.Connection;
-                QueryFormStaticMethods.AddInfoMessageToQueryForm(queryForm, connectionForm.ElapsedTicks, connectionInfo.ConnectionName, providerInfo.Name, connection);
+                QueryFormStaticMethods.AddInfoMessageToQueryForm(queryForm, connectionForm.ElapsedTicks, connectionInfo.ConnectionName, providerInfo.Name,
+                    connection);
                 queryForm.Show();
 
                 if (WindowState == FormWindowState.Maximized)
@@ -646,7 +660,7 @@ public class MainForm : Form
             var fileDialog = new OpenFileDialog
             {
                 Filter =
-                "SQL script files(*.sql)|*.sql|Access Files(*.mdb)|*.mdb|Access 2007 Files(*.accdb)|*.accdb|Excel files (*.xls;*.xlsx)|*.xls;*.xlsx|Microsoft.ACE.OLEDB.16.0|*.*|MSI files (*.msi)|*.msi|SQLite files (*.*)|*.*|SQL Server Compact files (*.sdf)|*.sdf|SQL Server Compact 4.0 files (*.sdf)|*.sdf",
+                    "SQL script files(*.sql)|*.sql|Access Files(*.mdb)|*.mdb|Access 2007 Files(*.accdb)|*.accdb|Excel files (*.xls;*.xlsx)|*.xls;*.xlsx|Microsoft.ACE.OLEDB.16.0|*.*|MSI files (*.msi)|*.msi|SQLite files (*.*)|*.*|SQL Server Compact files (*.sdf)|*.sdf|SQL Server Compact 4.0 files (*.sdf)|*.sdf",
                 RestoreDirectory = true
             };
             var currentDirectory = Environment.CurrentDirectory;
@@ -687,7 +701,7 @@ public class MainForm : Form
 
                         provider = ProviderFactory.CreateProvider(ProviderIdentifier.OleDb);
                         break;
-                    
+
                     case 5:
                         connectionString = $"Provider=Microsoft.ACE.OLEDB.16.0;Data Source={fileName}";
                         provider = ProviderFactory.CreateProvider(ProviderIdentifier.OleDb);
@@ -982,13 +996,13 @@ public class MainForm : Form
 
         ThreadMonitor.Join(0);
     }
-    
+
     private void ToolbarOrientationChanged()
     {
         int iY = 0;
         int iX = 0;
 
-        foreach (ToolStrip ts in Controls.OfType<ToolStrip>().OrderBy( t => t.TabIndex))
+        foreach (ToolStrip ts in Controls.OfType<ToolStrip>().OrderBy(t => t.TabIndex))
         {
             ts.Location = new Point(iX, iY);
 
@@ -1003,5 +1017,5 @@ public class MainForm : Form
             else
                 iY += ts.Height;
         }
-    }    
+    }
 }

@@ -29,8 +29,9 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
 
         if (colorTheme != null)
         {
-            ListBox!.ForeColor = colorTheme.ForeColor;
-            ListBox.BackColor = colorTheme.BackColor;
+            // TODO
+            // ListBox!.ForeColor = colorTheme.ForeColor;
+            // ListBox.BackColor = colorTheme.BackColor;
         }
     }
 

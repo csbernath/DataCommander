@@ -57,13 +57,14 @@ public sealed class QueryTextBox : UserControl
 
         if (colorTheme != null)
         {
-            BackColor = colorTheme.BackColor;
-            ForeColor = colorTheme.ForeColor;
-
-            //EnableChangeEvent(false);
-            RichTextBox.BackColor = colorTheme.BackColor;
-            RichTextBox.ForeColor = colorTheme.ForeColor;
-            //EnableChangeEvent(true);
+            // TODO
+            // BackColor = colorTheme.BackColor;
+            // ForeColor = colorTheme.ForeColor;
+            //
+            // //EnableChangeEvent(false);
+            // RichTextBox.BackColor = colorTheme.BackColor;
+            // RichTextBox.ForeColor = colorTheme.ForeColor;
+            // //EnableChangeEvent(true);
         }
     }
 
@@ -325,9 +326,10 @@ public sealed class QueryTextBox : UserControl
             {
                 RichTextBox.SelectionStart = startIndex;
                 RichTextBox.SelectionLength = endIndex - startIndex + 1;
-                RichTextBox.SelectionColor = _colorTheme != null
-                    ? _colorTheme.ForeColor
-                    : SystemColors.ControlText;
+                // TODO
+                // RichTextBox.SelectionColor = _colorTheme != null
+                //     ? _colorTheme.ForeColor
+                //     : SystemColors.ControlText;
             }
             finally
             {

@@ -8,6 +8,7 @@ using DataCommander.Application;
 using Foundation.Configuration;
 using Foundation.Data.MethodProfiler;
 using Foundation.Log;
+using Microsoft.Win32;
 using LogLevel = Foundation.Log.LogLevel;
 
 namespace DataCommander;
@@ -17,6 +18,20 @@ internal static class EntryPoint
     [STAThread]
     public static void Main()
     {
+#pragma warning disable WFO5001
+        var colorMode = SystemColorMode.System;
+        // if (!ApplicationData.CurrentType.Attributes.TryGetAttributeValue("ColorMode", out _colorMode))
+        //     _colorMode = SystemColorMode.System;
+
+        if (colorMode == SystemColorMode.System && !AppsUseLightTheme())
+            colorMode = SystemColorMode.Dark;
+
+        if (colorMode != SystemColorMode.System)
+            System.Windows.Forms.Application.SetColorMode(colorMode);
+#pragma warning restore WFO5001
+        
+        ApplicationConfiguration.Initialize();
+        
         try
         {
             //var updateStarted = Update();
@@ -30,7 +45,7 @@ internal static class EntryPoint
                 {
                     Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                     Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
-                    Run();
+                    Run(colorMode);
                 }
                 finally
                 {
@@ -64,7 +79,8 @@ internal static class EntryPoint
     //    return updateStarted;
     //}
 
-    private static void Run()
+#pragma warning disable WFO5001    
+    private static void Run(SystemColorMode colorMode)
     {
         using var methodLog = LogFactory.Instance.GetCurrentMethodLog();
         var applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(false);
@@ -73,7 +89,15 @@ internal static class EntryPoint
         var sectionName = Settings.SectionName;
         var dataCommanderApplication = DataCommanderApplication.Instance;
         dataCommanderApplication.LoadApplicationData(fileName, sectionName);
-        dataCommanderApplication.Run();
+        dataCommanderApplication.Run(colorMode);
         dataCommanderApplication.SaveApplicationData();
     }
+#pragma warning restore WFO5001    
+    
+    private static bool AppsUseLightTheme()
+    {
+        using var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
+        var value = key?.GetValue("AppsUseLightTheme");
+        return value is int i && i > 0;
+    }    
 }
