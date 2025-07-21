@@ -8,6 +8,14 @@ internal static class ColorThemeApplier
 {
     public static void Apply(this ColorTheme colorTheme, DataGridView dataGridView)
     {
+        var foreColor = colorTheme.ForeColor;
+        if (foreColor != null)
+        {
+            dataGridView.ForeColor = foreColor.Value;
+            dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = foreColor.Value;
+            dataGridView.RowsDefaultCellStyle.ForeColor = foreColor.Value;
+        }
+
         var backColor = colorTheme.BackColor;
         if (backColor != null)
         {
@@ -18,34 +26,22 @@ internal static class ColorThemeApplier
             dataGridView.RowHeadersDefaultCellStyle.BackColor = backColor.Value;
             dataGridView.RowHeadersDefaultCellStyle.ForeColor = backColor.Value;
         }
-        else
-            dataGridView.EnableHeadersVisualStyles = false;
 
-        var foreColor = colorTheme.ForeColor;
-        if (foreColor != null)
-        {
-            dataGridView.ForeColor = foreColor.Value;
-            dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = foreColor.Value;
-            dataGridView.RowsDefaultCellStyle.ForeColor = foreColor.Value;
-        }
-
-        //dataGridView.EnableHeadersVisualStyles = true;
+        dataGridView.EnableHeadersVisualStyles = false;
     }
 
     public static void Apply(this ColorTheme colorTheme, Control control)
     {
-        // TODO
-        // control.ForeColor = colorTheme.ForeColor;
-        // control.BackColor = colorTheme.BackColor;
-        //
-        // foreach (Control childControl in control.Controls)
-        //     colorTheme.Apply(childControl);
+        control.ForeColor = colorTheme.ForeColor.Value;
+        control.BackColor = colorTheme.BackColor.Value;
+        
+        foreach (Control childControl in control.Controls)
+            colorTheme.Apply(childControl);
     }
 
     public static void Apply(this ColorTheme colorTheme, ToolStripItem toolStripItem)
     {
-        // TODO
-        // toolStripItem.ForeColor = colorTheme.ForeColor;
-        // toolStripItem.BackColor = colorTheme.BackColor;
+        toolStripItem.ForeColor = colorTheme.ForeColor.Value;
+        toolStripItem.BackColor = colorTheme.BackColor.Value;
     }
 }

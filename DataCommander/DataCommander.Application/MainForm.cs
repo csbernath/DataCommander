@@ -75,11 +75,12 @@ public class MainForm : Form
                 break;
             case SystemColorMode.Dark:
                 _colorTheme = new ColorTheme(
-                    null,
-                    null,
+                    Color.FromArgb(220, 220, 220),
+                    //Color.White,
+                    Color.FromArgb(30, 30, 30),
                     Color.DarkOliveGreen,
                     Color.FromArgb(86, 156, 214),
-                    Color.FromArgb(203, 65, 65));
+                    Color.FromArgb(0xb1, 0x4b, 0x4b));
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(colorMode), colorMode, null);

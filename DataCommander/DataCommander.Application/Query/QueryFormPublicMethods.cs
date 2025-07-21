@@ -100,11 +100,8 @@ public sealed partial class QueryForm
 
     public void SetStatusbarPanelText(string? text)
     {
-        var color = _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText;
-        // TODO
-        // SetStatusbarPanelText(text, color);
-
-        SetStatusbarPanelText(text, null);
+        var color = _colorTheme != null ? _colorTheme.ForeColor.Value : SystemColors.ControlText;
+        SetStatusbarPanelText(text, color);
     }
 
     [AllowNull]

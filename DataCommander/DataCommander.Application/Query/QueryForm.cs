@@ -2104,12 +2104,10 @@ public sealed partial class QueryForm : Form, IQueryForm
     [DllImport("user32.dll")]
     private static extern int SendMessage(IntPtr hwnd, int msg, IntPtr wParam, ref Tchittestinfo lParam);
 
-    private void SetStatusbarPanelText(string? text, Color? color)
+    private void SetStatusbarPanelText(string? text, Color color)
     {
         _sbPanelText.Text = text;
-
-        if (color != null)
-            _sbPanelText.ForeColor = color.Value;
+        _sbPanelText.ForeColor = color;        
     }
 
     public ICancelableOperationForm CreateCancelableOperationForm(
