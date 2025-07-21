@@ -24,22 +24,19 @@ internal sealed class FunctionNode(
 
     public bool Sortable => false;
 
-    public string? Query
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        get
+        //string query = string.Format("select {0}.{1}.[{2}]()",database.Name,owner,name);
+        var query = xtype switch
         {
-            //string query = string.Format("select {0}.{1}.[{2}]()",database.Name,owner,name);
-            var query = xtype switch
-            {
-                //Scalar function
-                "FN" => $"select {database.Name}.{owner}.[{name}]()",
-                //Table function
-                "TF" or "IF" => $@"select	*
+            //Scalar function
+            "FN" => $"select {database.Name}.{owner}.[{name}]()",
+            //Table function
+            "TF" or "IF" => $@"select	*
 from	{database.Name}.{owner}.[{name}]()",
-                _ => null,
-            };
-            return query;
-        }
+            _ => null,
+        };
+        return Task.FromResult(query);
     }
 
     public ContextMenu? GetContextMenu()

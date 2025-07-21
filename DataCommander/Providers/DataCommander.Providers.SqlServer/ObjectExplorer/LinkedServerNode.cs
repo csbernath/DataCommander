@@ -22,7 +22,7 @@ internal sealed class LinkedServerNode : ITreeNode
     bool ITreeNode.IsLeaf => false;
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>(new LinkedServerCatalogCollectionNode(this).ItemAsEnumerable());
     bool ITreeNode.Sortable => false;
-    string? ITreeNode.Query => null;
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
     public ContextMenu? GetContextMenu() => null;
 }

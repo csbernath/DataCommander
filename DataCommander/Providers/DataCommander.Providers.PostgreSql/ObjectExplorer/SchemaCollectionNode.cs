@@ -11,7 +11,7 @@ internal sealed class SchemaCollectionNode(ObjectExplorer objectExplorer) : ITre
     public ObjectExplorer ObjectExplorer { get; } = objectExplorer;
     bool ITreeNode.IsLeaf => false;
     string ITreeNode.Name => "Schemas";
-    string? ITreeNode.Query => null;
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 
     bool ITreeNode.Sortable => false;

@@ -31,24 +31,21 @@ sealed class TableNode(SchemaNode schema, string? name) : ITreeNode
 
     public bool Sortable => false;
 
-    public string? Query
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        get
+        string? query;
+
+        if (name != null)
         {
-            string? query;
-
-            if (name != null)
-            {
-                var name2 = name.Contains(' ')
-                    ? "[" + name + "]"
-                    : name;
-                query = "select * from " + name2;
-            }
-            else
-                query = null;
-
-            return query;
+            var name2 = name.Contains(' ')
+                ? "[" + name + "]"
+                : name;
+            query = "select * from " + name2;
         }
+        else
+            query = null;
+
+        return Task.FromResult(query);
     }
 
     public ContextMenu? GetContextMenu()

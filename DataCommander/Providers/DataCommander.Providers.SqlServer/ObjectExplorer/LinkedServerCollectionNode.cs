@@ -50,7 +50,7 @@ order by s.name";
 
     bool ITreeNode.Sortable => false;
 
-    string? ITreeNode.Query => null;
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
     public ContextMenu? GetContextMenu() => null;
 }

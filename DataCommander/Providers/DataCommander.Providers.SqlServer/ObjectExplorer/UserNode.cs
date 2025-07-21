@@ -16,11 +16,9 @@ internal sealed class UserNode(DatabaseNode database, string? name) : ITreeNode
 
     public bool Sortable => false;
 
-    public string? Query
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        get
-        {
-            var query = $@"declare @uid smallint
+        var query = $@"declare @uid smallint
 select @uid = uid
 from {database.Name}..sysusers
 where name = '{Name}'
@@ -31,8 +29,7 @@ join {database.Name}..sysusers u
 where memberuid = @uid
 group by u.name";
 
-            return query;
-        }
+        return Task.FromResult(query);
     }
 
     public ContextMenu? GetContextMenu() => null;

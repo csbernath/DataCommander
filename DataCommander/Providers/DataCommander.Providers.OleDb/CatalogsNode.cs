@@ -43,7 +43,7 @@ internal class CatalogsNode : ITreeNode
     }
 
     public bool Sortable => false;
-    public string? Query => null;
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
     public ContextMenu? GetContextMenu() => throw new System.NotImplementedException();
 }

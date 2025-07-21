@@ -94,16 +94,13 @@ where
 
     public bool Sortable => false;
 
-    public string? Query
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        get
-        {
-            var name1 = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
-            using var connection = DatabaseNode.Databases.Server.CreateConnection();
-            connection.Open();
-            var text = GetSelectStatement(connection, name1);
-            return text;
-        }
+        var name1 = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
+        using var connection = DatabaseNode.Databases.Server.CreateConnection();
+        connection.Open();
+        var text = GetSelectStatement(connection, name1);
+        return Task.FromResult(text);
     }
 
     public ContextMenu? GetContextMenu()

@@ -28,15 +28,12 @@ internal sealed class ProcedureNode(string? name) : ITreeNode
 
     public bool Sortable => false;
 
-    public string? Query
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        get
-        {
-            var query = name != null
-                ? "exec " + name
-                : null;
-            return query;
-        }
+        var query = name != null
+            ? "exec " + name
+            : null;
+        return Task.FromResult(query);
     }
 
     public ContextMenu? GetContextMenu() => throw new System.NotImplementedException();

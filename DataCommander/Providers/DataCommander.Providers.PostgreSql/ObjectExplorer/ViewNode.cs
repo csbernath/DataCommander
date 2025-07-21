@@ -17,6 +17,6 @@ internal sealed class ViewNode(string? name) : ITreeNode
         Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
 
     bool ITreeNode.Sortable => false;
-    string? ITreeNode.Query => null;
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 }

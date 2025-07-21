@@ -23,16 +23,13 @@ internal sealed class ViewNode(DatabaseNode database, int id, string? schema, st
 
     public bool Sortable => false;
 
-    public string? Query
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        get
-        {
-            var name1 = new DatabaseObjectMultipartName(null, database.Name, schema, name);
-            string text;
-            using (var connection = database.Databases.Server.CreateConnection())
-                text = TableNode.GetSelectStatement(connection, name1);
-            return text;
-        }
+        var name1 = new DatabaseObjectMultipartName(null, database.Name, schema, name);
+        string text;
+        using (var connection = database.Databases.Server.CreateConnection())
+            text = TableNode.GetSelectStatement(connection, name1);
+        return Task.FromResult(text);
     }
 
     public ContextMenu? GetContextMenu()

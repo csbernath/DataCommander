@@ -19,13 +19,10 @@ internal sealed class StoredProcedureNode(DatabaseNode database, string owner, s
 
     public bool Sortable => false;
 
-    public string? Query
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        get
-        {
-            var query = $"exec {owner}.{name}";
-            return query;
-        }
+        var query = $"exec {owner}.{name}";
+        return Task.FromResult(query);
     }
 
     public ContextMenu? GetContextMenu()

@@ -16,11 +16,9 @@ internal sealed class RoleNode(DatabaseNode database, string? name) : ITreeNode
     
     public bool Sortable => false;
 
-    public string? Query
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        get
-        {
-            var query = string.Format(@"declare @uid smallint
+        var query = string.Format(@"declare @uid smallint
 select @uid = uid from {0}..sysusers where name = '{1}'
 
 select u.name from {0}..sysmembers m
@@ -29,8 +27,7 @@ on m.memberuid = u.uid
 where m.groupuid = @uid
 order by u.name", database.Name, Name);
 
-            return query;
-        }
+        return Task.FromResult(query);
     }
 
     public ContextMenu? GetContextMenu() => null;

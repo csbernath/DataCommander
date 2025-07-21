@@ -883,35 +883,30 @@ Please wait...",
         if (selectedNode != null)
         {
             var treeNode = (ITreeNode)selectedNode.Tag!;
-
-            try
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), "Getting query...",
+                "Please wait...", _colorTheme);
+            var cancellationToken = cancellationTokenSource.Token;
+            var query = cancelableOperationForm.Execute(new Task<string?>(() => treeNode.GetQuery(cancellationToken).Result));
+            if (query != null)
             {
-                Cursor = Cursors.WaitCursor;
-                var query = treeNode.Query;
-                if (query != null)
+                var text0 = QueryTextBox.Text;
+                string? append = null;
+                var selectionStart = QueryTextBox.RichTextBox.TextLength;
+
+                if (!string.IsNullOrEmpty(text0))
                 {
-                    var text0 = QueryTextBox.Text;
-                    string? append = null;
-                    var selectionStart = QueryTextBox.RichTextBox.TextLength;
-
-                    if (!string.IsNullOrEmpty(text0))
-                    {
-                        append = Environment.NewLine + Environment.NewLine;
-                        selectionStart += 2;
-                    }
-
-                    append += query;
-
-                    QueryTextBox.RichTextBox.AppendText(append);
-                    QueryTextBox.RichTextBox.SelectionStart = selectionStart;
-                    QueryTextBox.RichTextBox.SelectionLength = query.Length;
-
-                    QueryTextBox.Focus();
+                    append = Environment.NewLine + Environment.NewLine;
+                    selectionStart += 2;
                 }
-            }
-            finally
-            {
-                Cursor = Cursors.Default;
+
+                append += query;
+
+                QueryTextBox.RichTextBox.AppendText(append);
+                QueryTextBox.RichTextBox.SelectionStart = selectionStart;
+                QueryTextBox.RichTextBox.SelectionLength = query.Length;
+
+                QueryTextBox.Focus();
             }
         }
     }

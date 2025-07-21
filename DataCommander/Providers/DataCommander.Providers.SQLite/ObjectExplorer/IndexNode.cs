@@ -22,21 +22,19 @@ internal sealed class IndexNode(TableNode tableNode, string? name) : ITreeNode
 
     bool ITreeNode.Sortable => false;
 
-    string? ITreeNode.Query
+    async Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        get
-        {
-            var commandText = $@"select sql
+        var commandText = $@"select sql
 from main.sqlite_master
 where
     type = 'index'
     and name = '{_name}'";
-            var scalar = Db.ExecuteScalar(
-                () => ConnectionFactory.CreateConnection(_tableNode.DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
-                new CreateCommandRequest(commandText));
-            var sql = (string?)scalar;
-            return sql;
-        }
+        var scalar = await Db.ExecuteScalarAsync(
+            () => ConnectionFactory.CreateConnection(_tableNode.DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
+            new CreateCommandRequest(commandText),
+            cancellationToken);
+        var sql = (string?)scalar;
+        return sql;
     }
 
     public ContextMenu? GetContextMenu() => throw new NotImplementedException();
