@@ -57,14 +57,13 @@ public sealed class QueryTextBox : UserControl
 
         if (colorTheme != null)
         {
-            // TODO
-            // BackColor = colorTheme.BackColor;
-            // ForeColor = colorTheme.ForeColor;
-            //
-            // //EnableChangeEvent(false);
-            // RichTextBox.BackColor = colorTheme.BackColor;
-            // RichTextBox.ForeColor = colorTheme.ForeColor;
-            // //EnableChangeEvent(true);
+            ForeColor = colorTheme.ForeColor.Value;            
+            BackColor = colorTheme.BackColor.Value;
+            
+            //EnableChangeEvent(false);
+            RichTextBox.ForeColor = colorTheme.ForeColor.Value;            
+            RichTextBox.BackColor = colorTheme.BackColor.Value;
+            //EnableChangeEvent(true);
         }
     }
 

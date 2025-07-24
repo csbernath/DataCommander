@@ -2107,7 +2107,7 @@ public sealed partial class QueryForm : Form, IQueryForm
     private void SetStatusbarPanelText(string? text, Color color)
     {
         _sbPanelText.Text = text;
-        _sbPanelText.ForeColor = color;        
+        _sbPanelText.ForeColor = color;
     }
 
     public ICancelableOperationForm CreateCancelableOperationForm(

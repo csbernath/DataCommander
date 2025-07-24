@@ -117,33 +117,32 @@ public class MainForm : Form
 
         if (_colorTheme != null)
         {
-            // TODO
-            // ForeColor = _colorTheme.ForeColor;
-            // BackColor = _colorTheme.BackColor;
-            //
-            // foreach (Control control in Controls)
-            // {
-            //     control.ForeColor = _colorTheme.ForeColor;
-            //     control.BackColor = _colorTheme.BackColor;
-            // }
-            //
-            // _toolStripPanel!.BackColor = _colorTheme.BackColor;
-            //
-            // _mainMenu!.ForeColor = _colorTheme.ForeColor;
-            // _mainMenu.BackColor = _colorTheme.BackColor;
-            //
-            // foreach (var menuItem in _mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
-            // foreach (ToolStripItem x in menuItem.DropDownItems)
-            //     _colorTheme.Apply(x);
-            //
-            // _toolStrip!.BackColor = _colorTheme.BackColor;
-            // _toolStrip.ForeColor = _colorTheme.ForeColor;
-            //
-            // foreach (ToolStripItem item in _toolStrip.Items)
-            //     _colorTheme.Apply(item);
-            //
-            // foreach (ToolStripItem item in _statusBar!.Items)
-            //     _colorTheme.Apply(item);
+            ForeColor = _colorTheme.ForeColor.Value;
+            BackColor = _colorTheme.BackColor.Value;
+            
+            foreach (Control control in Controls)
+            {
+                control.ForeColor = _colorTheme.ForeColor.Value;
+                control.BackColor = _colorTheme.BackColor.Value;
+            }
+            
+            _toolStripPanel!.BackColor = _colorTheme.BackColor.Value;
+            
+            _mainMenu!.ForeColor = _colorTheme.ForeColor.Value;
+            _mainMenu.BackColor = _colorTheme.BackColor.Value;
+            
+            foreach (var menuItem in _mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
+            foreach (ToolStripItem x in menuItem.DropDownItems)
+                _colorTheme.Apply(x);
+            
+            _toolStrip!.BackColor = _colorTheme.BackColor.Value;
+            _toolStrip.ForeColor = _colorTheme.ForeColor.Value;
+            
+            foreach (ToolStripItem item in _toolStrip.Items)
+                _colorTheme.Apply(item);
+            
+            foreach (ToolStripItem item in _statusBar!.Items)
+                _colorTheme.Apply(item);
         }
 
         UpdateTotalMemory();
@@ -165,12 +164,11 @@ public class MainForm : Form
 
         _managedMemoryToolStripStatusLabel!.Text = $"{BytesToText(totalMemory)} / {BytesToText(workingSet)}";
 
-        // TODO
-        // _managedMemoryToolStripStatusLabel.ForeColor = totalMemory <= 256 * 1024 * 1024
-        //     ? _colorTheme != null
-        //         ? _colorTheme.ForeColor
-        //         : SystemColors.ControlText
-        //     : Color.Red;
+        _managedMemoryToolStripStatusLabel.ForeColor = totalMemory <= 256 * 1024 * 1024
+            ? _colorTheme != null
+                ? _colorTheme.ForeColor.Value
+                : SystemColors.ControlText
+            : Color.Red;
     }
 
     private static string BytesToText(long bytes) => MeasurementUnit.ToString(bytes, 0, "B");
