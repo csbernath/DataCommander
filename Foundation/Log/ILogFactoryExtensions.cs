@@ -12,11 +12,14 @@ public static class LogFactoryExtensions
         ArgumentNullException.ThrowIfNull(type);
 
         var name = type.FullName;
-
         var log = logFactory.GetLog(name);
-        //if (log is DefaultLog.Log foundationLog)
-        //    foundationLog.LoggedName = type.Name;
+        return log;
+    }
 
+    public static ILog GetTypeLog<T>(this ILogFactory logFactory)
+    {
+        var name = typeof(T).FullName;
+        var log = logFactory.GetLog(name);
         return log;
     }
 
