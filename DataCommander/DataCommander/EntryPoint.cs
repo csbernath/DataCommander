@@ -7,6 +7,7 @@ using DataCommander.Application;
 //using DataCommander.Updater;
 using Foundation.Configuration;
 using Foundation.Data.MethodProfiler;
+using Foundation.InternalLog;
 using Foundation.Log;
 using Microsoft.Win32;
 using LogLevel = Foundation.Log.LogLevel;
@@ -18,6 +19,8 @@ internal static class EntryPoint
     [STAThread]
     public static void Main()
     {
+        LogFactory.Set(InternalLogFactory.Instance);
+        
 #pragma warning disable WFO5001
         var colorMode = SystemColorMode.System;
         // if (!ApplicationData.CurrentType.Attributes.TryGetAttributeValue("ColorMode", out _colorMode))

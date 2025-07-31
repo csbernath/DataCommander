@@ -67,7 +67,7 @@ internal sealed class LogFactory : ILogFactory
 
     ILog ILogFactory.GetLog(string? name) => new Log(this, name!);
 
-    void ILogFactory.Write(IEnumerable<LogEntry> logEntries)
+    void ILogFactory.Write(IReadOnlyCollection<LogEntry> logEntries)
     {
         if (_multipeLog != null)
             foreach (var logEntry in logEntries)

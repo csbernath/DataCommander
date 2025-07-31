@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using Foundation.Core;
 using Foundation.Log;
 
@@ -6,16 +6,16 @@ namespace Foundation.InternalLog;
 
 public sealed class InternalLogWriter : ILogWriter
 {
-    private readonly List<LogEntry> _logEntries;
+    private readonly BlockingCollection<LogEntry> _logEntries;
     private readonly ILogWriter _textLogWriter;
 
     public InternalLogWriter()
     {
-        _logEntries = new  List<LogEntry>();
+        _logEntries = new BlockingCollection<LogEntry>();
         _textLogWriter = new TextLogWriter(TraceWriter.Instance, new TextLogFormatter());
     }
-    
-    public List<LogEntry> LogEntries => _logEntries;
+
+    public BlockingCollection<LogEntry> LogEntries => _logEntries;
 
     public void Dispose()
     {

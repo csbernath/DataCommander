@@ -15,7 +15,7 @@ public sealed class NullLogFactory : ILogFactory
 
     ILog ILogFactory.GetLog(string? name) => NullLog.Instance;
     
-    void ILogFactory.Write(IEnumerable<LogEntry> logEntries) => throw new NotImplementedException();
+    void ILogFactory.Write(IReadOnlyCollection<LogEntry> logEntries) => throw new NotImplementedException();
 
     void IDisposable.Dispose()
     {

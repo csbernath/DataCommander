@@ -87,7 +87,7 @@ namespace Foundation.Configuration;
 /// </remarks>
 public sealed class ConfigurationSection
 {
-    private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(ConfigurationSection));
+    private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog<ConfigurationSection>();
     private int _changed;
 
     /// <summary>
