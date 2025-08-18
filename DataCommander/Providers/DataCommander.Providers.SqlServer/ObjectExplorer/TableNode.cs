@@ -57,8 +57,13 @@ internal sealed class TableNode(DatabaseNode databaseNode, string? owner, string
 
         if (type == TemporalType.SystemVersionedTemporalTable)
         {
-            var commandText = @$"select t.name,t.object_id
+            var commandText = @$"select
+    s.name as HistoryTableSchemaName,
+    t.name as HistoryTableName,
+    t.object_id as HistoryTableObjectId
 from [{DatabaseNode.Name}].sys.tables t
+join [{DatabaseNode.Name}].sys.schemas s
+    on t.schema_id = s.schema_id
 where
     t.object_id in
     (
@@ -66,8 +71,9 @@ where
         from [{DatabaseNode.Name}].sys.tables t
         where object_id = {id}
     )";
+            string? historyTableSchemaName = null;
             string? historyTableName = null;
-            var historyTableId = 0;
+            var historyTableObjectId = 0;
             var request = new ExecuteReaderRequest(commandText);
             await Db.ExecuteReaderAsync(
                 DatabaseNode.Databases.Server.CreateConnection,
@@ -75,11 +81,12 @@ where
                 async (dataReader, _) =>
                 {
                     await dataReader.ReadAsync(cancellationToken);
-                    historyTableName = dataReader.GetString(0);
-                    historyTableId = dataReader.GetInt32(1);
+                    historyTableSchemaName = dataReader.GetString(0);
+                    historyTableName = dataReader.GetString(1);
+                    historyTableObjectId = dataReader.GetInt32(2);
                 },
                 cancellationToken);
-            treeNodes.Add(new TableNode(DatabaseNode, owner, historyTableName, historyTableId, TemporalType.HistoryTable));
+            treeNodes.Add(new TableNode(DatabaseNode, historyTableSchemaName, historyTableName, historyTableObjectId, TemporalType.HistoryTable));
         }
 
         treeNodes.AddRange([
