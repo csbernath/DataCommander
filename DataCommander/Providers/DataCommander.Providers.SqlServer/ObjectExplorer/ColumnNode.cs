@@ -47,6 +47,11 @@ internal sealed class ColumnNode(
                     typeName = $"{userTypeName}({maxLengthString})";
                     break;
 
+                case SqlServerSystemType.DateTime2:
+                case SqlServerSystemType.DateTimeOffset:
+                    typeName = $"{userTypeName}({scale})";
+                    break;
+
                 case SqlServerSystemType.NChar:
                 case SqlServerSystemType.NVarChar:
                     maxLengthString = maxLength >= 0 ? (maxLength / 2).ToString() : "max";
