@@ -92,8 +92,10 @@ where
         treeNodes.AddRange([
             new ColumnCollectionNode(DatabaseNode, Id),
             new KeyCollectionNode(DatabaseNode, Id),
+            new ConstraintCollectionNode(DatabaseNode, Id),
             new TriggerCollectionNode(DatabaseNode, Id),
-            new IndexCollectionNode(DatabaseNode, Id)
+            new IndexCollectionNode(DatabaseNode, Id),
+            new StatisticsCollectionNode(DatabaseNode, Id)
         ]);
 
         return treeNodes;
