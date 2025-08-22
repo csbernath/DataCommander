@@ -6,24 +6,27 @@ public static class VariantExtensions
 {
     private static Action<object> ToAction<T>(Action<T> source) => value => source((T)value);
 
-    public static void Action<T1, T2, T3>(this Variant<T1, T2, T3> variant, Action<T1?> action1, Action<T2?> action2, Action<T3?> action3)
+    extension<T1, T2, T3>(Variant<T1, T2, T3> variant)
     {
-        switch (variant.Type)
+        public void Action(Action<T1?> action1, Action<T2?> action2, Action<T3?> action3)
         {
-            case 0:
-                var value1 = (T1?)variant.Value;
-                action1(value1);
-                break;
+            switch (variant.Type)
+            {
+                case 0:
+                    var value1 = (T1?)variant.Value;
+                    action1(value1);
+                    break;
 
-            case 1:
-                var value2 = (T2?)variant.Value;
-                action2(value2);
-                break;
+                case 1:
+                    var value2 = (T2?)variant.Value;
+                    action2(value2);
+                    break;
 
-            case 2:
-                var value3 = (T3?)variant.Value;
-                action3(value3);
-                break;
+                case 2:
+                    var value3 = (T3?)variant.Value;
+                    action3(value3);
+                    break;
+            }
         }
     }
 

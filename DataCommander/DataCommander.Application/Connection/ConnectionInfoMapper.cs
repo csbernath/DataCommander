@@ -4,31 +4,37 @@ namespace DataCommander.Application.Connection;
 
 public static class ConnectionInfoMapper
 {
-    public static ConnectionDto ToConnectionDto(this ConnectionInfo connectionInfo)
+    extension(ConnectionInfo connectionInfo)
     {
-        var credential = connectionInfo.ConnectionStringAndCredential.Credential;
-        CredentialDto? credentialDto = null;
-        if (credential != null)
+        public ConnectionDto ToConnectionDto()
         {
-            var password = credential.Password.Protected;
-            credentialDto = new CredentialDto(credential.UserId, password);
-        }
+            var credential = connectionInfo.ConnectionStringAndCredential.Credential;
+            CredentialDto? credentialDto = null;
+            if (credential != null)
+            {
+                var password = credential.Password.Protected;
+                credentialDto = new CredentialDto(credential.UserId, password);
+            }
 
-        return new ConnectionDto(connectionInfo.ConnectionName!, connectionInfo.ProviderIdentifier,
-            connectionInfo.ConnectionStringAndCredential.ConnectionString,
-            credentialDto);
+            return new ConnectionDto(connectionInfo.ConnectionName!, connectionInfo.ProviderIdentifier,
+                connectionInfo.ConnectionStringAndCredential.ConnectionString,
+                credentialDto);
+        }
     }
 
-    public static ConnectionInfo ToConnectionProperties(this ConnectionDto connectionDto)
+    extension(ConnectionDto connectionDto)
     {
-        Credential? credential = null;
-        if (connectionDto.Credential != null)
+        public ConnectionInfo ToConnectionProperties()
         {
-            var password = PasswordFactory.CreateFromProtected(connectionDto.Credential.Password);
-            credential = new Credential(connectionDto.Credential.UserId, password);
-        }
+            Credential? credential = null;
+            if (connectionDto.Credential != null)
+            {
+                var password = PasswordFactory.CreateFromProtected(connectionDto.Credential.Password);
+                credential = new Credential(connectionDto.Credential.UserId, password);
+            }
 
-        return new ConnectionInfo(connectionDto.ConnectionName, connectionDto.ProviderIdentifier,
-            new ConnectionStringAndCredential(connectionDto.ConnectionString, credential));
+            return new ConnectionInfo(connectionDto.ConnectionName, connectionDto.ProviderIdentifier,
+                new ConnectionStringAndCredential(connectionDto.ConnectionString, credential));
+        }
     }
 }

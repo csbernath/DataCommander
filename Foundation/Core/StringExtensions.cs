@@ -14,128 +14,142 @@ public static class StringExtensions
 {
     public const string IndentString = "    ";
 
-    public static IList<char> AsList(this string source) => new StringAsList(source);
-    public static string Format(this string format, params object[] args) => string.Format(format, args);
-    public static string Format(this string format, IFormatProvider provider, params object[] args) => string.Format(provider, format, args);
-    public static string Indent(this string source, int indentCount) => source.Indent(IndentString, indentCount);
-
-    public static IEnumerable<string> GetLines(this string source)
+    extension(string source)
     {
-        using var stringReader = new StringReader(source);
-        while (true)
+        public IList<char> AsList() => new StringAsList(source);
+
+        public string Indent(int indentCount) => source.Indent(IndentString, indentCount);
+
+        public IEnumerable<string> GetLines()
         {
-            var line = stringReader.ReadLine();
-            if (line == null)
-                break;
-
-            yield return line;
-        }
-    }
-
-    public static string IncreaseLineIndent(this string line, int indentSize)
-    {
-        ArgumentNullException.ThrowIfNull(line);
-        Assert.IsInRange(indentSize > 0);
-        var stringBuilder = new StringBuilder();
-        stringBuilder.Append(new string(' ', indentSize));
-        stringBuilder.Append(line);
-        return stringBuilder.ToString();
-    }
-
-    public static string DecreaseLineIndent(this string line, int indentSize)
-    {
-        Assert.IsTrue(!string.IsNullOrEmpty(line));
-        Assert.IsInRange(indentSize > 0);
-        var index = line.IndexOf(c => !char.IsWhiteSpace(c));
-        string decreasedLine;
-        if (index > 0)
-        {
-            index = Math.Min(index, indentSize);
-            decreasedLine = line[index..];
-        }
-        else
-            decreasedLine = line;
-
-        return decreasedLine;
-    }
-
-    public static int IndexOf(this string source, Func<char, bool> predicate)
-    {
-        var result = -1;
-        for (var index = 0; index < source.Length; ++index)
-        {
-            if (predicate(source[index]))
-            {
-                result = index;
-                break;
-            }
-        }
-
-        return result;
-    }
-
-    [Pure]
-    public static bool IsNullOrEmpty(this string value) => string.IsNullOrEmpty(value);
-
-    [Pure]
-    public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value);
-
-    public static DateTime? ParseToNullableDateTime(this string source) => string.IsNullOrEmpty(source) ? (DateTime?)null : DateTime.Parse(source);
-
-    public static DateTime? ParseToNullableDateTime(this string source, IFormatProvider provider) =>
-        string.IsNullOrEmpty(source) ? (DateTime?)null : DateTime.Parse(source, provider);
-
-    public static DateTime? ParseToNullableDateTime(this string source, IFormatProvider provider, DateTimeStyles styles) =>
-        string.IsNullOrEmpty(source) ? (DateTime?)null : DateTime.Parse(source, provider, styles);
-
-    public static DateTime? ParseExactToNullableDateTime(this string source, string format, IFormatProvider provider) =>
-        string.IsNullOrEmpty(source) ? (DateTime?)null : DateTime.ParseExact(source, format, provider);
-
-    public static decimal? ParseToNullableDecimal(this string source) => string.IsNullOrEmpty(source) ? (decimal?)null : decimal.Parse(source);
-
-    public static decimal? ParseToNullableDecimal(this string source, IFormatProvider provider) =>
-        string.IsNullOrEmpty(source) ? (decimal?)null : decimal.Parse(source, provider);
-
-    public static decimal? ParseToNullableDecimal(this string source, NumberStyles style, IFormatProvider provider) =>
-        string.IsNullOrEmpty(source) ? (decimal?)null : decimal.Parse(source, style, provider);
-
-    public static int? ParseToNullableInt32(this string source) => string.IsNullOrEmpty(source) ? (int?)null : int.Parse(source);
-
-    public static string Right(this string value, int length)
-    {
-        ArgumentNullException.ThrowIfNull(value);
-        Assert.IsInRange(value.Length >= length);
-
-        var startIndex = value.Length - length;
-        return value[startIndex..];
-    }
-
-    private static string Indent(this string source, string indentString, int indentCount)
-    {
-        indentString = string.Join(string.Empty, Enumerable.Repeat(indentString, indentCount));
-        var stringBuilder = new StringBuilder();
-
-        using (var stringReader = new StringReader(source))
-        {
-            var sequence = new Sequence();
+            using var stringReader = new StringReader(source);
             while (true)
             {
                 var line = stringReader.ReadLine();
                 if (line == null)
                     break;
 
-                if (sequence.Next() > 0)
-                    stringBuilder.AppendLine();
-
-                if (line.Length > 0)
-                {
-                    stringBuilder.Append(indentString);
-                    stringBuilder.Append(line);
-                }
+                yield return line;
             }
         }
 
-        return stringBuilder.ToString();
+        public int IndexOf(Func<char, bool> predicate)
+        {
+            var result = -1;
+            for (var index = 0; index < source.Length; ++index)
+            {
+                if (predicate(source[index]))
+                {
+                    result = index;
+                    break;
+                }
+            }
+
+            return result;
+        }
+
+        public DateTime? ParseToNullableDateTime() => string.IsNullOrEmpty(source) ? (DateTime?)null : DateTime.Parse(source);
+
+        public DateTime? ParseToNullableDateTime(IFormatProvider provider) =>
+            string.IsNullOrEmpty(source) ? (DateTime?)null : DateTime.Parse(source, provider);
+
+        public DateTime? ParseToNullableDateTime(IFormatProvider provider, DateTimeStyles styles) =>
+            string.IsNullOrEmpty(source) ? (DateTime?)null : DateTime.Parse(source, provider, styles);
+
+        public DateTime? ParseExactToNullableDateTime(string format, IFormatProvider provider) =>
+            string.IsNullOrEmpty(source) ? (DateTime?)null : DateTime.ParseExact(source, format, provider);
+
+        public decimal? ParseToNullableDecimal() => string.IsNullOrEmpty(source) ? (decimal?)null : decimal.Parse(source);
+
+        public decimal? ParseToNullableDecimal(IFormatProvider provider) =>
+            string.IsNullOrEmpty(source) ? (decimal?)null : decimal.Parse(source, provider);
+
+        public decimal? ParseToNullableDecimal(NumberStyles style, IFormatProvider provider) =>
+            string.IsNullOrEmpty(source) ? (decimal?)null : decimal.Parse(source, style, provider);
+
+        public int? ParseToNullableInt32() => string.IsNullOrEmpty(source) ? (int?)null : int.Parse(source);
+
+        private string Indent(string indentString, int indentCount)
+        {
+            indentString = string.Join(string.Empty, Enumerable.Repeat(indentString, indentCount));
+            var stringBuilder = new StringBuilder();
+
+            using (var stringReader = new StringReader(source))
+            {
+                var sequence = new Sequence();
+                while (true)
+                {
+                    var line = stringReader.ReadLine();
+                    if (line == null)
+                        break;
+
+                    if (sequence.Next() > 0)
+                        stringBuilder.AppendLine();
+
+                    if (line.Length > 0)
+                    {
+                        stringBuilder.Append(indentString);
+                        stringBuilder.Append(line);
+                    }
+                }
+            }
+
+            return stringBuilder.ToString();
+        }
+    }
+
+    extension(string format)
+    {
+        public string Format(params object[] args) => string.Format(format, args);
+        public string Format(IFormatProvider provider, params object[] args) => string.Format(provider, format, args);
+    }
+
+    extension(string line)
+    {
+        public string IncreaseLineIndent(int indentSize)
+        {
+            ArgumentNullException.ThrowIfNull(line);
+            Assert.IsInRange(indentSize > 0);
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append(new string(' ', indentSize));
+            stringBuilder.Append(line);
+            return stringBuilder.ToString();
+        }
+
+        public string DecreaseLineIndent(int indentSize)
+        {
+            Assert.IsTrue(!string.IsNullOrEmpty(line));
+            Assert.IsInRange(indentSize > 0);
+            var index = line.IndexOf(c => !char.IsWhiteSpace(c));
+            string decreasedLine;
+            if (index > 0)
+            {
+                index = Math.Min(index, indentSize);
+                decreasedLine = line[index..];
+            }
+            else
+                decreasedLine = line;
+
+            return decreasedLine;
+        }
+    }
+
+    extension(string value)
+    {
+        [Pure]
+        public bool IsNullOrEmpty() => string.IsNullOrEmpty(value);
+
+        [Pure]
+        public bool IsNullOrWhiteSpace() => string.IsNullOrWhiteSpace(value);
+
+        public string Right(int length)
+        {
+            ArgumentNullException.ThrowIfNull(value);
+            Assert.IsInRange(value.Length >= length);
+
+            var startIndex = value.Length - length;
+            return value[startIndex..];
+        }
     }
 
     private sealed class StringAsList(string source) : IList<char>
