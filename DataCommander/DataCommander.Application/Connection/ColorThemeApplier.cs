@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using DataCommander.Api;
 
 namespace DataCommander.Application.Connection;

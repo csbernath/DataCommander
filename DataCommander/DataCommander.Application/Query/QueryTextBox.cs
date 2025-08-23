@@ -372,7 +372,7 @@ public sealed class QueryTextBox : UserControl
                         break;
 
                     case TokenType.String:
-                        color = Color.Red;
+                        color = _colorTheme?.ProviderKeyWordColor;
                         break;
                 }
 
