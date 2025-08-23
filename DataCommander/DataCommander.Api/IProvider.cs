@@ -17,7 +17,7 @@ public interface IProvider
     bool CanConvertCommandToString { get; }
     bool IsCommandCancelable { get; }
 
-    IObjectExplorer CreateObjectExplorer();
+    IObjectExplorer? CreateObjectExplorer();
     void ClearCompletionCache();
     string CommandToString(IDbCommand command);
     string? GetConnectionName(IDbConnection connection);    

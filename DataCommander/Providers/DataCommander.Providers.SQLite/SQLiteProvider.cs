@@ -105,7 +105,7 @@ public sealed class SQLiteProvider : IProvider
 
     IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader) => new SQLiteDataReaderHelper(dataReader);
 
-    public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
+    public IObjectExplorer? CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
 
     public Task<GetCompletionResult> GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position,
         CancellationToken cancellationToken)

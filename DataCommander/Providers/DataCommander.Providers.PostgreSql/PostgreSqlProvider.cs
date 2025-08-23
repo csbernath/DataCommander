@@ -24,7 +24,7 @@ internal sealed class PostgreSqlProvider : IProvider
     string[] IProvider.KeyWords => [];
     bool IProvider.CanConvertCommandToString => throw new NotImplementedException();
     bool IProvider.IsCommandCancelable => true;
-    public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
+    public IObjectExplorer? CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
     void IProvider.ClearCompletionCache() => throw new NotImplementedException();
     string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
     public string? GetConnectionName(IDbConnection connection) => null;

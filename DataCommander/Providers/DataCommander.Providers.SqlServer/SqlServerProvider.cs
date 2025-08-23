@@ -73,7 +73,7 @@ internal sealed class SqlServerProvider : IProvider
 
     bool IProvider.IsCommandCancelable => true;
 
-    public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
+    public IObjectExplorer? CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
 
     public void ClearCompletionCache()
     {

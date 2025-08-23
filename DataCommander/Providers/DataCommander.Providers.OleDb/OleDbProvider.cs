@@ -226,7 +226,7 @@ internal sealed class OleDbProvider : IProvider
         return new OleDbDataReaderHelper(oleDbDataReader);
     }
 
-    public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer(this);
+    public IObjectExplorer? CreateObjectExplorer() => new ObjectExplorer(this);
 
     GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string? tableName) => throw new NotImplementedException();
     List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
