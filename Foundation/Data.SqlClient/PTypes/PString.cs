@@ -107,7 +107,7 @@ public struct PString : INullable
         //        ValueType = PValueType.Default;
         //        _sql = SqlString.Null;
         //    }
-        //    else if (value == DBNull.Value)
+        //    else if (value == DBNull.Base)
         //    {
         //        ValueType = PValueType.Null;
         //        _sql = SqlString.Null;
@@ -115,7 +115,7 @@ public struct PString : INullable
         //    else
         //    {
         //        _sql = (SqlString) value;
-        //        ValueType = _sql.IsNull ? PValueType.Null : PValueType.Value;
+        //        ValueType = _sql.IsNull ? PValueType.Null : PValueType.Base;
         //    }
         //}
     }

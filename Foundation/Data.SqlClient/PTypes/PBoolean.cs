@@ -101,7 +101,7 @@ public struct PBoolean : INullable
         //        ValueType = PValueType.Default;
         //        _sql = SqlBoolean.Null;
         //    }
-        //    else if (value == DBNull.Value)
+        //    else if (value == DBNull.Base)
         //    {
         //        ValueType = PValueType.Null;
         //        _sql = SqlBoolean.Null;
@@ -109,7 +109,7 @@ public struct PBoolean : INullable
         //    else
         //    {
         //        _sql = (SqlBoolean) value;
-        //        ValueType = _sql.IsNull ? PValueType.Null : PValueType.Value;
+        //        ValueType = _sql.IsNull ? PValueType.Null : PValueType.Base;
         //    }
         //}
     }

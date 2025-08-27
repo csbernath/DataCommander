@@ -97,7 +97,7 @@ public readonly struct PDecimal : INullable
         //        ValueType = PValueType.Default;
         //        _sql = SqlDecimal.Null;
         //    }
-        //    else if (value == DBNull.Value)
+        //    else if (value == DBNull.Base)
         //    {
         //        ValueType = PValueType.Null;
         //        _sql = SqlDecimal.Null;
@@ -105,7 +105,7 @@ public readonly struct PDecimal : INullable
         //    else
         //    {
         //        _sql = (SqlDecimal) value;
-        //        ValueType = _sql.IsNull ? PValueType.Null : PValueType.Value;
+        //        ValueType = _sql.IsNull ? PValueType.Null : PValueType.Base;
         //    }
         //}
     }

@@ -13,7 +13,7 @@ public sealed class SqlSequence(int id)
 (
     Id int not null,
     Name varchar(128) collate Latin1_General_CI_AS not null,
-    Value int not null,
+    Base int not null,
     constraint PK_Sequence primary key clustered(Id)
 )";
 
@@ -36,17 +36,17 @@ if @@rowcount = 1
 begin
     begin tran
 
-    select  @value  = s.[Value]
+    select  @value  = s.[Base]
     from    Sequence s with(rowlock,xlock)
     where   s.Id    = @id
 
     update  Sequence
-    set     Value   = @value + @increment
+    set     Base   = @value + @increment
     where   Id      = @id
 
     commit
 
-    select @value as Value
+    select @value as Base
 end
 else
 begin

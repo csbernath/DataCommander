@@ -20,7 +20,7 @@ public readonly struct NanoTimestamp
         var referenceNanoTimestampTicksDouble = referenceUniversalTime.Ticks * 100.0;
         var stopwatchTicks = stopwatchTimestamp - referenceStopwatchTimestamp;
         var seconds = (double) stopwatchTicks / StopwatchConstants.TicksPerSecond;
-        var nanoseconds = seconds * TenPowerConstants.TenPower9;
+        var nanoseconds = seconds * PowersOfTen.Power9;
         var nanoTimestampTicksDouble = referenceNanoTimestampTicksDouble + nanoseconds;
         var nanoTimestampTicks = (ulong) nanoTimestampTicksDouble;
         return new NanoTimestamp(nanoTimestampTicks);

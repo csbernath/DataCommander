@@ -963,14 +963,14 @@ internal class DataTableEditor : UserControl
                             //            DateTimeField dateTimeField = value as DateTimeField;
                             //            if (dateTimeField != null)
                             //            {
-                            //                value = dateTimeField.Value;
+                            //                value = dateTimeField.Base;
                             //            }
                             //            else
                             //            {
                             //                StringField stringField = value as StringField;
                             //                if (stringField != null)
                             //                {
-                            //                    value = stringField.Value;
+                            //                    value = stringField.Base;
                             //                }
                             //                else
                             //                {

@@ -9,7 +9,7 @@ using Foundation.Collections;
 
 namespace Foundation.Configuration;
 
-[DebuggerDisplay("Name = {Name}, Value = {Value}, Description = {Description}")]
+[DebuggerDisplay("Name = {Name}, Base = {Value}, Description = {Description}")]
 public sealed class ConfigurationAttribute(string name, object? value, string? description)
 {
     public string Name { get; } = name;

@@ -52,7 +52,7 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
 
     private void Properties_OnClick(object? sender, EventArgs e)
     {
-        var commandText = @"create table #SVer(ID int,  Name  sysname, Internal_Value int, Value nvarchar(512))
+        var commandText = @"create table #SVer(ID int,  Name  sysname, Internal_Value int, Base nvarchar(512))
 insert #SVer exec master.dbo.xp_msver
 insert #SVer select t.*
 from sys.dm_os_host_info
@@ -93,11 +93,11 @@ SET @physicalMemory = (SELECT TOP 1 [virtual_core_count] *
 IF (@physicalMemory <> 0) 
 BEGIN
   UPDATE #SVer SET [Internal_Value] =  @physicalMemory WHERE Name = N'PhysicalMemory'
-  UPDATE #SVer SET [Value] = CONCAT( @physicalMemory, ' (',  @physicalMemory * 1024, ')') WHERE Name = N'PhysicalMemory'
+  UPDATE #SVer SET [Base] = CONCAT( @physicalMemory, ' (',  @physicalMemory * 1024, ')') WHERE Name = N'PhysicalMemory'
 END
 
 UPDATE #SVer SET [Internal_Value] = (SELECT TOP 1 [virtual_core_count] FROM master.sys.server_resource_stats ORDER BY start_time desc) WHERE Name = N'ProcessorCount'
-UPDATE #SVer SET [Value] = [Internal_Value] WHERE Name = N'ProcessorCount'
+UPDATE #SVer SET [Base] = [Internal_Value] WHERE Name = N'ProcessorCount'
 
 SELECT TOP 1
   @hwGeneration = [hardware_generation],
@@ -108,10 +108,10 @@ SELECT TOP 1
 FROM master.sys.server_resource_stats
 ORDER BY [start_time] DESC
 
-UPDATE #SVer SET [Value] = @hwGeneration WHERE Name = N'HardwareGeneration'
-UPDATE #SVer SET [Value] = @serviceTier WHERE Name = N'ServiceTier'
-UPDATE #SVer SET [Value] = @reservedStorageSize WHERE Name = N'ReservedStorageSizeMB'
-UPDATE #SVer SET [Value] = @usedStorageSize WHERE Name = N'UsedStorageSizeMB'
+UPDATE #SVer SET [Base] = @hwGeneration WHERE Name = N'HardwareGeneration'
+UPDATE #SVer SET [Base] = @serviceTier WHERE Name = N'ServiceTier'
+UPDATE #SVer SET [Base] = @reservedStorageSize WHERE Name = N'ReservedStorageSizeMB'
+UPDATE #SVer SET [Base] = @usedStorageSize WHERE Name = N'UsedStorageSizeMB'
 end
 
 
@@ -122,28 +122,28 @@ exec master.dbo.xp_instance_regread N'HKEY_LOCAL_MACHINE', N'SOFTWARE\Microsoft\
 
 
 SELECT
-(select Value from #SVer where Name = N'ProductName') AS [Product],
+(select Base from #SVer where Name = N'ProductName') AS [Product],
 SERVERPROPERTY(N'ProductVersion') AS [VersionString],
-(select Value from #SVer where Name = N'Language') AS [Language],
-(select Value from #SVer where Name = N'Platform') AS [Platform],
+(select Base from #SVer where Name = N'Language') AS [Language],
+(select Base from #SVer where Name = N'Platform') AS [Platform],
 CAST(SERVERPROPERTY(N'Edition') AS sysname) AS [Edition],
 (select Internal_Value from #SVer where Name = N'ProcessorCount') AS [Processors],
-(select Value from #SVer where Name = N'WindowsVersion') AS [OSVersion],
+(select Base from #SVer where Name = N'WindowsVersion') AS [OSVersion],
 (select Internal_Value from #SVer where Name = N'PhysicalMemory') AS [PhysicalMemory],
 CAST(ISNULL(SERVERPROPERTY('IsClustered'),N'') AS bit) AS [IsClustered],
 @SmoRoot AS [RootDirectory],
 convert(sysname, serverproperty(N'collation')) AS [Collation],
-( select Value from #SVer where Name =N'host_platform') AS [HostPlatform],
-( select Value from #SVer where Name =N'host_release') AS [HostRelease],
-( select Value from #SVer where Name =N'host_service_pack_level') AS [HostServicePackLevel],
-( select Value from #SVer where Name =N'host_distribution') AS [HostDistribution]
+( select Base from #SVer where Name =N'host_platform') AS [HostPlatform],
+( select Base from #SVer where Name =N'host_release') AS [HostRelease],
+( select Base from #SVer where Name =N'host_service_pack_level') AS [HostServicePackLevel],
+( select Base from #SVer where Name =N'host_distribution') AS [HostDistribution]
 
 drop table #SVer";
 
 
         var dataTable = new DataTable();
         dataTable.Columns.Add("Name");
-        dataTable.Columns.Add("Value");
+        dataTable.Columns.Add("Base");
         
         Db.ExecuteReader(CreateConnection, new ExecuteReaderRequest(commandText), dataReader =>
         {

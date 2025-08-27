@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Foundation.Diagnostics.Measurement;
+using Xunit;
 
 namespace Foundation.Diagnostics.Test;
 

@@ -19,6 +19,7 @@ using DataCommander.Api.Connection;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Diagnostics;
+using Foundation.Diagnostics.Measurement;
 using Foundation.Log;
 using Foundation.Threading;
 using Foundation.Windows.Forms;
@@ -35,7 +36,7 @@ public class MainForm : Form
     private ToolStripMenuItem? _menuItem1;
     private ToolStripMenuItem? _mnuConnect;
     private ImageList? _imageList;
-    private System.Windows.Forms.StatusStrip _statusBar;
+    private StatusStrip _statusBar;
     private ToolStrip? _toolStrip;
     private ToolStripMenuItem? _mnuExit;
     private ToolStripMenuItem? _mnuHelp;
@@ -52,14 +53,14 @@ public class MainForm : Form
     private ToolStripMenuItem? _newToolStripMenuItem;
     private ToolStripMenuItem? _contentsToolStripMenuItem;
     private ToolStripSeparator? _toolStripSeparator2;
-    private System.Windows.Forms.ToolStripPanel _toolStripPanel;
+    private ToolStripPanel _toolStripPanel;
     private ToolStripMenuItem? _closeAllDocumentsMenuItem;
     private IContainer? components;
     private ToolStripStatusLabel? _toolStripStatusLabel;
     private ToolStripMenuItem? _saveAllToolStripMenuItem;
     private ToolStripMenuItem? _recentConnectionsToolStripMenuItem;
     private ToolStripMenuItem? _checkForToolStripMenuItem;
-    private System.Windows.Forms.ToolStripStatusLabel _managedMemoryToolStripStatusLabel;
+    private ToolStripStatusLabel _managedMemoryToolStripStatusLabel;
     private ToolStrip? _queryFormToolStrip;
     private readonly System.Windows.Forms.Timer _timer;
     private ColorTheme? _colorTheme;
@@ -171,7 +172,7 @@ public class MainForm : Form
             : _colorTheme!.ProviderKeyWordColor;
     }
 
-    private static string BytesToText(long bytes) => MeasurementUnit.ToDecimalMetricString(bytes, 3, 2, "B");
+    private static string BytesToText(long bytes) => MeasurementUnit.ToBinaryMetricString(bytes, 3, 2, "B");
 
     private void Timer_Tick(object? sender, EventArgs e) => UpdateTotalMemory();
 
@@ -192,37 +193,37 @@ public class MainForm : Form
     /// </summary>
     private void InitializeComponent()
     {
-        components = new System.ComponentModel.Container();
-        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-        _mainMenu = new System.Windows.Forms.MenuStrip();
-        _menuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-        _newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        _mnuConnect = new System.Windows.Forms.ToolStripMenuItem();
-        _mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
-        _recentConnectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        _saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        _mnuRecentFileList = new System.Windows.Forms.ToolStripMenuItem();
-        _mnuExit = new System.Windows.Forms.ToolStripMenuItem();
-        optionsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        _mnuWindow = new System.Windows.Forms.ToolStripMenuItem();
-        _closeAllDocumentsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        _mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
-        _contentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        _checkForToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        _mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-        _toolStrip = new System.Windows.Forms.ToolStrip();
-        _imageList = new System.Windows.Forms.ImageList(components);
-        _btnConnect = new System.Windows.Forms.ToolStripButton();
-        _openButton = new System.Windows.Forms.ToolStripButton();
-        _saveButton = new System.Windows.Forms.ToolStripButton();
-        _toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-        _helpButton = new System.Windows.Forms.ToolStripButton();
-        _toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-        _activeMdiChildToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
-        _statusBar = new System.Windows.Forms.StatusStrip();
-        _toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-        _managedMemoryToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-        _toolStripPanel = new System.Windows.Forms.ToolStripPanel();
+        components = new Container();
+        ComponentResourceManager resources = new ComponentResourceManager(typeof(MainForm));
+        _mainMenu = new MenuStrip();
+        _menuItem1 = new ToolStripMenuItem();
+        _newToolStripMenuItem = new ToolStripMenuItem();
+        _mnuConnect = new ToolStripMenuItem();
+        _mnuOpen = new ToolStripMenuItem();
+        _recentConnectionsToolStripMenuItem = new ToolStripMenuItem();
+        _saveAllToolStripMenuItem = new ToolStripMenuItem();
+        _mnuRecentFileList = new ToolStripMenuItem();
+        _mnuExit = new ToolStripMenuItem();
+        optionsMenuItem = new ToolStripMenuItem();
+        _mnuWindow = new ToolStripMenuItem();
+        _closeAllDocumentsMenuItem = new ToolStripMenuItem();
+        _mnuHelp = new ToolStripMenuItem();
+        _contentsToolStripMenuItem = new ToolStripMenuItem();
+        _checkForToolStripMenuItem = new ToolStripMenuItem();
+        _mnuAbout = new ToolStripMenuItem();
+        _toolStrip = new ToolStrip();
+        _imageList = new ImageList(components);
+        _btnConnect = new ToolStripButton();
+        _openButton = new ToolStripButton();
+        _saveButton = new ToolStripButton();
+        _toolStripSeparator1 = new ToolStripSeparator();
+        _helpButton = new ToolStripButton();
+        _toolStripSeparator2 = new ToolStripSeparator();
+        _activeMdiChildToolStripTextBox = new ToolStripTextBox();
+        _statusBar = new StatusStrip();
+        _toolStripStatusLabel = new ToolStripStatusLabel();
+        _managedMemoryToolStripStatusLabel = new ToolStripStatusLabel();
+        _toolStripPanel = new ToolStripPanel();
         _mainMenu.SuspendLayout();
         _toolStrip.SuspendLayout();
         _statusBar.SuspendLayout();
@@ -231,61 +232,61 @@ public class MainForm : Form
         // 
         // _mainMenu
         // 
-        _mainMenu.Dock = System.Windows.Forms.DockStyle.None;
-        _mainMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
-        _mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { _menuItem1, optionsMenuItem, _mnuWindow, _mnuHelp });
-        _mainMenu.Location = new System.Drawing.Point(0, 0);
+        _mainMenu.Dock = DockStyle.None;
+        _mainMenu.ImageScalingSize = new Size(20, 20);
+        _mainMenu.Items.AddRange(new ToolStripItem[] { _menuItem1, optionsMenuItem, _mnuWindow, _mnuHelp });
+        _mainMenu.Location = new Point(0, 0);
         _mainMenu.MdiWindowListItem = _mnuWindow;
         _mainMenu.Name = "_mainMenu";
-        _mainMenu.Size = new System.Drawing.Size(982, 25);
+        _mainMenu.Size = new Size(982, 25);
         _mainMenu.TabIndex = 1;
         // 
         // _menuItem1
         // 
-        _menuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { _newToolStripMenuItem, _mnuConnect, _mnuOpen, _recentConnectionsToolStripMenuItem, _saveAllToolStripMenuItem, _mnuRecentFileList, _mnuExit });
+        _menuItem1.DropDownItems.AddRange(new ToolStripItem[] { _newToolStripMenuItem, _mnuConnect, _mnuOpen, _recentConnectionsToolStripMenuItem, _saveAllToolStripMenuItem, _mnuRecentFileList, _mnuExit });
         _menuItem1.MergeIndex = 1;
         _menuItem1.Name = "_menuItem1";
-        _menuItem1.Size = new System.Drawing.Size(75, 21);
+        _menuItem1.Size = new Size(75, 21);
         _menuItem1.Text = "&Database";
         // 
         // _newToolStripMenuItem
         // 
         _newToolStripMenuItem.Name = "_newToolStripMenuItem";
-        _newToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
+        _newToolStripMenuItem.Size = new Size(207, 26);
         _newToolStripMenuItem.Text = "&Create";
         _newToolStripMenuItem.Click += CreateMenuItem_Click;
         // 
         // _mnuConnect
         // 
-        _mnuConnect.Image = ((System.Drawing.Image)resources.GetObject("_mnuConnect.Image"));
+        _mnuConnect.Image = ((Image)resources.GetObject("_mnuConnect.Image"));
         _mnuConnect.MergeIndex = 0;
         _mnuConnect.Name = "_mnuConnect";
-        _mnuConnect.ShortcutKeys = ((System.Windows.Forms.Keys)(System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N));
-        _mnuConnect.Size = new System.Drawing.Size(207, 26);
+        _mnuConnect.ShortcutKeys = ((Keys)(Keys.Control | Keys.N));
+        _mnuConnect.Size = new Size(207, 26);
         _mnuConnect.Text = "&Connect";
         _mnuConnect.Click += MnuConnect_Click;
         // 
         // _mnuOpen
         // 
-        _mnuOpen.Image = ((System.Drawing.Image)resources.GetObject("_mnuOpen.Image"));
+        _mnuOpen.Image = ((Image)resources.GetObject("_mnuOpen.Image"));
         _mnuOpen.MergeIndex = 1;
         _mnuOpen.Name = "_mnuOpen";
-        _mnuOpen.ShortcutKeys = ((System.Windows.Forms.Keys)(System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O));
-        _mnuOpen.Size = new System.Drawing.Size(207, 26);
+        _mnuOpen.ShortcutKeys = ((Keys)(Keys.Control | Keys.O));
+        _mnuOpen.Size = new Size(207, 26);
         _mnuOpen.Text = "&Open";
         _mnuOpen.Click += mnuOpen_Click;
         // 
         // _recentConnectionsToolStripMenuItem
         // 
         _recentConnectionsToolStripMenuItem.Name = "_recentConnectionsToolStripMenuItem";
-        _recentConnectionsToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
+        _recentConnectionsToolStripMenuItem.Size = new Size(207, 26);
         _recentConnectionsToolStripMenuItem.Text = "Recent connections";
         // 
         // _saveAllToolStripMenuItem
         // 
         _saveAllToolStripMenuItem.Name = "_saveAllToolStripMenuItem";
-        _saveAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) | System.Windows.Forms.Keys.S));
-        _saveAllToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
+        _saveAllToolStripMenuItem.ShortcutKeys = ((Keys)((Keys.Control | Keys.Shift) | Keys.S));
+        _saveAllToolStripMenuItem.Size = new Size(207, 26);
         _saveAllToolStripMenuItem.Text = "Save All";
         _saveAllToolStripMenuItem.Click += saveAllToolStripMenuItem_Click;
         // 
@@ -293,14 +294,14 @@ public class MainForm : Form
         // 
         _mnuRecentFileList.MergeIndex = 2;
         _mnuRecentFileList.Name = "_mnuRecentFileList";
-        _mnuRecentFileList.Size = new System.Drawing.Size(207, 26);
+        _mnuRecentFileList.Size = new Size(207, 26);
         _mnuRecentFileList.Text = "Recent &File List";
         // 
         // _mnuExit
         // 
         _mnuExit.Name = "_mnuExit";
-        _mnuExit.ShortcutKeys = ((System.Windows.Forms.Keys)(System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4));
-        _mnuExit.Size = new System.Drawing.Size(207, 26);
+        _mnuExit.ShortcutKeys = ((Keys)(Keys.Alt | Keys.F4));
+        _mnuExit.Size = new Size(207, 26);
         _mnuExit.Text = "Exit";
         _mnuExit.Click += MnuExit_Click;
         // 
@@ -308,46 +309,46 @@ public class MainForm : Form
         // 
         optionsMenuItem.MergeIndex = 5;
         optionsMenuItem.Name = "optionsMenuItem";
-        optionsMenuItem.Size = new System.Drawing.Size(66, 21);
+        optionsMenuItem.Size = new Size(66, 21);
         optionsMenuItem.Text = "Options";
         optionsMenuItem.Click += optionsMenuItem_Click;
         // 
         // _mnuWindow
         // 
-        _mnuWindow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { _closeAllDocumentsMenuItem });
+        _mnuWindow.DropDownItems.AddRange(new ToolStripItem[] { _closeAllDocumentsMenuItem });
         _mnuWindow.MergeIndex = 6;
         _mnuWindow.Name = "_mnuWindow";
-        _mnuWindow.Size = new System.Drawing.Size(67, 21);
+        _mnuWindow.Size = new Size(67, 21);
         _mnuWindow.Text = "&Window";
         // 
         // _closeAllDocumentsMenuItem
         // 
         _closeAllDocumentsMenuItem.Name = "_closeAllDocumentsMenuItem";
-        _closeAllDocumentsMenuItem.Size = new System.Drawing.Size(201, 24);
+        _closeAllDocumentsMenuItem.Size = new Size(201, 24);
         _closeAllDocumentsMenuItem.Text = "Close All Documents";
         _closeAllDocumentsMenuItem.Click += CloseAllDocumentsMenuItem_Click;
         // 
         // _mnuHelp
         // 
-        _mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { _contentsToolStripMenuItem, _checkForToolStripMenuItem, _mnuAbout });
+        _mnuHelp.DropDownItems.AddRange(new ToolStripItem[] { _contentsToolStripMenuItem, _checkForToolStripMenuItem, _mnuAbout });
         _mnuHelp.MergeIndex = 7;
         _mnuHelp.Name = "_mnuHelp";
-        _mnuHelp.Size = new System.Drawing.Size(47, 21);
+        _mnuHelp.Size = new Size(47, 21);
         _mnuHelp.Text = "&Help";
         // 
         // _contentsToolStripMenuItem
         // 
         _contentsToolStripMenuItem.Name = "_contentsToolStripMenuItem";
-        _contentsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-        _contentsToolStripMenuItem.Size = new System.Drawing.Size(220, 24);
+        _contentsToolStripMenuItem.ShortcutKeys = Keys.F1;
+        _contentsToolStripMenuItem.Size = new Size(220, 24);
         _contentsToolStripMenuItem.Text = "Contents";
         _contentsToolStripMenuItem.Click += contentsToolStripMenuItem_Click;
         // 
         // _checkForToolStripMenuItem
         // 
         _checkForToolStripMenuItem.Name = "_checkForToolStripMenuItem";
-        _checkForToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
-        _checkForToolStripMenuItem.Size = new System.Drawing.Size(220, 24);
+        _checkForToolStripMenuItem.ShortcutKeys = Keys.F12;
+        _checkForToolStripMenuItem.Size = new Size(220, 24);
         _checkForToolStripMenuItem.Text = "Check for updates ";
         _checkForToolStripMenuItem.Click += CheckForToolStripMenuItem_Click;
         // 
@@ -355,105 +356,105 @@ public class MainForm : Form
         // 
         _mnuAbout.MergeIndex = 0;
         _mnuAbout.Name = "_mnuAbout";
-        _mnuAbout.Size = new System.Drawing.Size(220, 24);
+        _mnuAbout.Size = new Size(220, 24);
         _mnuAbout.Text = "About...";
         // 
         // _toolStrip
         // 
-        _toolStrip.Dock = System.Windows.Forms.DockStyle.None;
+        _toolStrip.Dock = DockStyle.None;
         _toolStrip.ImageList = _imageList;
-        _toolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
-        _toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { _btnConnect, _openButton, _saveButton, _toolStripSeparator1, _helpButton, _toolStripSeparator2, _activeMdiChildToolStripTextBox });
-        _toolStrip.Location = new System.Drawing.Point(3, 25);
+        _toolStrip.ImageScalingSize = new Size(20, 20);
+        _toolStrip.Items.AddRange(new ToolStripItem[] { _btnConnect, _openButton, _saveButton, _toolStripSeparator1, _helpButton, _toolStripSeparator2, _activeMdiChildToolStripTextBox });
+        _toolStrip.Location = new Point(3, 25);
         _toolStrip.Name = "_toolStrip";
-        _toolStrip.Size = new System.Drawing.Size(650, 27);
+        _toolStrip.Size = new Size(650, 27);
         _toolStrip.TabIndex = 2;
         // 
         // _imageList
         // 
-        _imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)resources.GetObject("_imageList.ImageStream"));
-        _imageList.TransparentColor = System.Drawing.Color.Transparent;
+        _imageList.ImageStream = ((ImageListStreamer)resources.GetObject("_imageList.ImageStream"));
+        _imageList.TransparentColor = Color.Transparent;
         // 
         // _btnConnect
         // 
-        _btnConnect.Image = ((System.Drawing.Image)resources.GetObject("_btnConnect.Image"));
+        _btnConnect.Image = ((Image)resources.GetObject("_btnConnect.Image"));
         _btnConnect.Name = "_btnConnect";
-        _btnConnect.Size = new System.Drawing.Size(25, 24);
+        _btnConnect.Size = new Size(25, 24);
         _btnConnect.ToolTipText = "Connect to database";
         _btnConnect.Click += btnConnect_Click;
         // 
         // _openButton
         // 
-        _openButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-        _openButton.Image = ((System.Drawing.Image)resources.GetObject("_openButton.Image"));
-        _openButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+        _openButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        _openButton.Image = ((Image)resources.GetObject("_openButton.Image"));
+        _openButton.ImageTransparentColor = Color.Magenta;
         _openButton.Name = "_openButton";
-        _openButton.Size = new System.Drawing.Size(25, 24);
+        _openButton.Size = new Size(25, 24);
         _openButton.Text = "toolStripButton1";
         _openButton.ToolTipText = "Open database";
         _openButton.Click += openButton_Click;
         // 
         // _saveButton
         // 
-        _saveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+        _saveButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
         _saveButton.Enabled = false;
-        _saveButton.Image = ((System.Drawing.Image)resources.GetObject("_saveButton.Image"));
-        _saveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+        _saveButton.Image = ((Image)resources.GetObject("_saveButton.Image"));
+        _saveButton.ImageTransparentColor = Color.Magenta;
         _saveButton.Name = "_saveButton";
-        _saveButton.Size = new System.Drawing.Size(25, 24);
+        _saveButton.Size = new Size(25, 24);
         _saveButton.ToolTipText = "Save Query";
         _saveButton.Click += saveButton_Click;
         // 
         // _toolStripSeparator1
         // 
         _toolStripSeparator1.Name = "_toolStripSeparator1";
-        _toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
+        _toolStripSeparator1.Size = new Size(6, 27);
         // 
         // _helpButton
         // 
-        _helpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-        _helpButton.Image = ((System.Drawing.Image)resources.GetObject("_helpButton.Image"));
-        _helpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+        _helpButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        _helpButton.Image = ((Image)resources.GetObject("_helpButton.Image"));
+        _helpButton.ImageTransparentColor = Color.Magenta;
         _helpButton.Name = "_helpButton";
-        _helpButton.Size = new System.Drawing.Size(25, 24);
+        _helpButton.Size = new Size(25, 24);
         _helpButton.Text = "Help";
         // 
         // _toolStripSeparator2
         // 
         _toolStripSeparator2.Name = "_toolStripSeparator2";
-        _toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
+        _toolStripSeparator2.Size = new Size(6, 27);
         // 
         // _activeMdiChildToolStripTextBox
         // 
-        _activeMdiChildToolStripTextBox.Font = new System.Drawing.Font("Segoe UI", 8.830189F);
+        _activeMdiChildToolStripTextBox.Font = new Font("Segoe UI", 8.830189F);
         _activeMdiChildToolStripTextBox.Name = "_activeMdiChildToolStripTextBox";
         _activeMdiChildToolStripTextBox.ReadOnly = true;
-        _activeMdiChildToolStripTextBox.Size = new System.Drawing.Size(523, 27);
+        _activeMdiChildToolStripTextBox.Size = new Size(523, 27);
         // 
         // _statusBar
         // 
-        _statusBar.ImageScalingSize = new System.Drawing.Size(20, 20);
-        _statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { _toolStripStatusLabel, _managedMemoryToolStripStatusLabel });
-        _statusBar.Location = new System.Drawing.Point(0, 730);
+        _statusBar.ImageScalingSize = new Size(20, 20);
+        _statusBar.Items.AddRange(new ToolStripItem[] { _toolStripStatusLabel, _managedMemoryToolStripStatusLabel });
+        _statusBar.Location = new Point(0, 730);
         _statusBar.Name = "_statusBar";
         _statusBar.ShowItemToolTips = true;
-        _statusBar.Size = new System.Drawing.Size(982, 23);
+        _statusBar.Size = new Size(982, 23);
         _statusBar.TabIndex = 3;
         // 
         // _toolStripStatusLabel
         // 
         _toolStripStatusLabel.Name = "_toolStripStatusLabel";
-        _toolStripStatusLabel.Size = new System.Drawing.Size(793, 18);
+        _toolStripStatusLabel.Size = new Size(793, 18);
         _toolStripStatusLabel.Spring = true;
-        _toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+        _toolStripStatusLabel.TextAlign = ContentAlignment.MiddleLeft;
         // 
         // _managedMemoryToolStripStatusLabel
         // 
         _managedMemoryToolStripStatusLabel.AutoSize = false;
-        _managedMemoryToolStripStatusLabel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+        _managedMemoryToolStripStatusLabel.DisplayStyle = ToolStripItemDisplayStyle.Text;
         _managedMemoryToolStripStatusLabel.Name = "_managedMemoryToolStripStatusLabel";
-        _managedMemoryToolStripStatusLabel.Size = new System.Drawing.Size(140, 18);
-        _managedMemoryToolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+        _managedMemoryToolStripStatusLabel.Size = new Size(140, 18);
+        _managedMemoryToolStripStatusLabel.TextAlign = ContentAlignment.MiddleRight;
         _managedMemoryToolStripStatusLabel.ToolTipText = "Managed memory / Working set";
         _managedMemoryToolStripStatusLabel.MouseUp += managedMemoryToolStripStatusLabel_MouseUp;
         // 
@@ -461,24 +462,24 @@ public class MainForm : Form
         // 
         _toolStripPanel.Controls.Add(_mainMenu);
         _toolStripPanel.Controls.Add(_toolStrip);
-        _toolStripPanel.Dock = System.Windows.Forms.DockStyle.Top;
-        _toolStripPanel.Location = new System.Drawing.Point(0, 0);
+        _toolStripPanel.Dock = DockStyle.Top;
+        _toolStripPanel.Location = new Point(0, 0);
         _toolStripPanel.Name = "_toolStripPanel";
-        _toolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
-        _toolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-        _toolStripPanel.Size = new System.Drawing.Size(982, 52);
+        _toolStripPanel.Orientation = Orientation.Horizontal;
+        _toolStripPanel.RowMargin = new Padding(3, 0, 0, 0);
+        _toolStripPanel.Size = new Size(982, 52);
         // 
         // MainForm
         // 
-        AutoScaleBaseSize = new System.Drawing.Size(6, 15);
-        ClientSize = new System.Drawing.Size(982, 753);
+        AutoScaleBaseSize = new Size(6, 15);
+        ClientSize = new Size(982, 753);
         Controls.Add(_toolStripPanel);
         Controls.Add(_statusBar);
-        Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)238));
-        Icon = ((System.Drawing.Icon)resources.GetObject("$this.Icon"));
+        Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)238));
+        Icon = ((Icon)resources.GetObject("$this.Icon"));
         IsMdiContainer = true;
         MainMenuStrip = _mainMenu;
-        StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+        StartPosition = FormStartPosition.Manual;
         _mainMenu.ResumeLayout(false);
         _mainMenu.PerformLayout();
         _toolStrip.ResumeLayout(false);
@@ -943,7 +944,7 @@ public class MainForm : Form
 
     private void saveAllToolStripMenuItem_Click(object? sender, EventArgs e) => SaveAll();
 
-    private System.Windows.Forms.ToolStripTextBox _activeMdiChildToolStripTextBox;
+    private ToolStripTextBox _activeMdiChildToolStripTextBox;
     public ToolStripTextBox ActiveMdiChildToolStripTextBox => _activeMdiChildToolStripTextBox!;
 
     private void CheckForToolStripMenuItem_Click(object? sender, EventArgs e)

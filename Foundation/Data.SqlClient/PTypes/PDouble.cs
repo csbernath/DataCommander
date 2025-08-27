@@ -83,7 +83,7 @@ public struct PDouble : INullable
         //        ValueType = PValueType.Default;
         //        _sql = SqlDouble.Null;
         //    }
-        //    else if (value == DBNull.Value)
+        //    else if (value == DBNull.Base)
         //    {
         //        ValueType = PValueType.Null;
         //        _sql = SqlDouble.Null;
@@ -91,7 +91,7 @@ public struct PDouble : INullable
         //    else
         //    {
         //        _sql = (SqlDouble) value;
-        //        ValueType = _sql.IsNull ? PValueType.Null : PValueType.Value;
+        //        ValueType = _sql.IsNull ? PValueType.Null : PValueType.Base;
         //    }
         //}
     }

@@ -36,5 +36,5 @@ internal sealed class ProcedureNode(string? name) : ITreeNode
         return Task.FromResult(query);
     }
 
-    public ContextMenu? GetContextMenu() => throw new System.NotImplementedException();
+    public ContextMenu? GetContextMenu() => throw new NotImplementedException();
 }

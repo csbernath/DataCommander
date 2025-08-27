@@ -7,6 +7,7 @@ using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Text;
 using Foundation.Core;
+using Foundation.Diagnostics.Measurement;
 using Foundation.Log;
 using Foundation.Text;
 
@@ -16,16 +17,16 @@ public static class AppDomainMonitor
 {
     private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(AppDomainMonitor));
 
-    private static readonly StringTableColumnInfo<AppDomainMonitor.AssemblyInfo>[] Columns =
+    private static readonly StringTableColumnInfo<AssemblyInfo>[] Columns =
     [
         new("Name", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Name),
-        StringTableColumnInfo.Create<AppDomainMonitor.AssemblyInfo, Version?>("FileVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.FileVersion),
-        StringTableColumnInfo.Create<AppDomainMonitor.AssemblyInfo, Version?>("Version", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Version),
+        StringTableColumnInfo.Create<AssemblyInfo, Version?>("FileVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.FileVersion),
+        StringTableColumnInfo.Create<AssemblyInfo, Version?>("Version", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Version),
         new("Date", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Date?.ToString("yyyy-MM-dd HH:mm:ss")),
         new("PublicKeyToken", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.PublicKeyToken),
         new("ImageRuntimeVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.ImageRuntimeVersion),
         new("Location", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Location),
-        StringTableColumnInfo.CreateLeft<AppDomainMonitor.AssemblyInfo, bool>("IsDynamic", i => i.IsDynamic)
+        StringTableColumnInfo.CreateLeft<AssemblyInfo, bool>("IsDynamic", i => i.IsDynamic)
     ];
 
     public static string GetEnvironmentInfo()
@@ -105,7 +106,7 @@ TempPath:               {Path.GetTempPath()}");
             var assemblies = appDomain.GetAssemblies();
             stringBuilder.AppendLine("Assemblies:");
 
-            List<AppDomainMonitor.AssemblyInfo> assemblyInfos = [];
+            List<AssemblyInfo> assemblyInfos = [];
 
             foreach (var assembly in assemblies)
             {
@@ -130,7 +131,7 @@ TempPath:               {Path.GetTempPath()}");
         }
     }
 
-    private static AppDomainMonitor.AssemblyInfo GetAssemblyInfo(Assembly assembly)
+    private static AssemblyInfo GetAssemblyInfo(Assembly assembly)
     {
         var isDynamic = assembly.IsDynamic;
         string? location = null;
@@ -148,7 +149,7 @@ TempPath:               {Path.GetTempPath()}");
         var publicKeyToken = name.GetPublicKeyToken();
         var publicKeyTokenString = publicKeyToken != null ? Hex.GetString(publicKeyToken, false) : null;
 
-        return new AppDomainMonitor.AssemblyInfo(name.Name, fileVersion, name.Version, date, publicKeyTokenString, assembly.ImageRuntimeVersion, location, isDynamic);
+        return new AssemblyInfo(name.Name, fileVersion, name.Version, date, publicKeyTokenString, assembly.ImageRuntimeVersion, location, isDynamic);
     }
 
     private static Version? GetFileVersion(string fileName)
