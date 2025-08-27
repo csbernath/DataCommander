@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Foundation.Assertions;
 using Foundation.Collections;
 using Foundation.Core;
 
@@ -13,7 +14,7 @@ public static class MeasurementUnit
     {
         var tenPowers = new List<long>();
         
-        long current = TenPowerConstants.TenPower2;
+        long current = TenPowerConstants.TenPower1;
         while (current < TenPowerConstants.TenPower18)
         {
             tenPowers.Add(current);
@@ -69,19 +70,44 @@ public static class MeasurementUnit
 
     public static decimal Round(this decimal value, int precision, int scale)
     {
-        int CompareTo(int index)
+        var numberOfDigitsLeft = value.GetNumberOfDigitsLeft();
+        var remainingNumberOfDigitsRight = precision - numberOfDigitsLeft;
+        Assert.IsGreaterThanOrEqual(remainingNumberOfDigitsRight, 0);
+        var decimals = Math.Min(remainingNumberOfDigitsRight, scale);
+        return Math.Round(value, decimals);
+    }
+
+    private static int GetNumberOfDigitsLeft(this decimal value)
+    {
+        int? lessThanIndex = null;
+        int? equalsIndex = null;
+
+        bool LessThan(int index)
         {
-            var value2 = TenPowers[index];
-            return value.CompareTo(value2);
+            var lessThan = TenPowers[index] < value;
+            if (lessThan)
+                lessThanIndex = index;
+            return lessThan;
         }
 
-        var numberOfDigitsLeft = BinarySearch.IndexOf(0, TenPowers.Length - 1, CompareTo);
-        if (numberOfDigitsLeft < 0)
-            numberOfDigitsLeft = 2;
+        bool Equals(int index)
+        {
+            var equals = TenPowers[index] == value;
+            if (equals)
+                equalsIndex = index;
+            return equals;
+        }
 
-        var numberOfDigitsRight = precision - numberOfDigitsLeft;
-        var decimals = Math.Min(numberOfDigitsRight, scale);
-        return Math.Round(value, decimals);
+        BinarySearch.Search(0, TenPowers.Length - 1, LessThan, Equals);
+        
+        int numberOfDigitsLeft;
+        if (equalsIndex != null)
+            numberOfDigitsLeft = equalsIndex.Value + 2;
+        else if (lessThanIndex != null)
+            numberOfDigitsLeft = lessThanIndex.Value + 2;
+        else
+            numberOfDigitsLeft = 1;
+        return numberOfDigitsLeft;
     }
 
     private static (long denominator, char? prefix) GetDecimalDenominatorAndPrefix(long value)

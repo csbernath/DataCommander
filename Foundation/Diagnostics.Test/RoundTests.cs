@@ -55,4 +55,43 @@ public class RoundTests
         // Assert
         Assert.Equal(0.12346m, rounded);
     }
+    
+    [Fact]
+    public void Test5()
+    {
+        // Arrange
+        var value = 1.23m;
+
+        // Act
+        var rounded = value.Round(2, 1);
+
+        // Assert
+        Assert.Equal(1.2m, rounded);
+    }
+    
+    [Fact]
+    public void Test6()
+    {
+        // Arrange
+        var value = 12.3m;
+
+        // Act
+        var rounded = value.Round(2, 1);
+
+        // Assert
+        Assert.Equal(12m, rounded);
+    }
+    
+    [Fact]
+    public void Test7()
+    {
+        // Arrange
+        var value = 12.3m;
+
+        // Act
+        var rounded = value.Round(1, 0);
+
+        // Assert
+        Assert.Equal(12m, rounded);
+    }    
 }
