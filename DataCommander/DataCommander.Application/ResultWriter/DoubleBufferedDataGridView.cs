@@ -38,9 +38,9 @@ internal class DoubleBufferedDataGridView : DataGridView
 
     //    for (int i = 0;i<rowCount;i++)
     //    {
-    //        base.Rows[i].HeaderCell.Value = i.ToString();
+    //        base.Rows[i].HeaderCell.Value = i.ToMetricString();
     //    }
     //    ticks = Stopwatch.GetTimestamp() - ticks;
-    //    log.Write(LogLevel.Trace, true, StopwatchTimeSpan.ToString(ticks, 6));
+    //    log.Write(LogLevel.Trace, true, StopwatchTimeSpan.ToMetricString(ticks, 6));
     //}
 }

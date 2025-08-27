@@ -956,7 +956,7 @@ internal class DataTableEditor : UserControl
                             //        if (value is Guid)
                             //        {
                             //            Guid guid = (Guid)value;
-                            //            value = guid.ToString();
+                            //            value = guid.ToMetricString();
                             //        }
                             //        else
                             //        {

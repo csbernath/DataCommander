@@ -171,7 +171,7 @@ public class MainForm : Form
             : Color.Red;
     }
 
-    private static string BytesToText(long bytes) => MeasurementUnit.ToString(bytes, 0, "B");
+    private static string BytesToText(long bytes) => MeasurementUnit.ToMetricString2(bytes, 3, "B");
 
     private void Timer_Tick(object? sender, EventArgs e) => UpdateTotalMemory();
 
