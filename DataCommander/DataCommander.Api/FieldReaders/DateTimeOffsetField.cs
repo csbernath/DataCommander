@@ -23,7 +23,7 @@ public sealed class DateTimeOffsetField(DateTimeOffset value) : IComparable, ICo
         //    format = "yyyy-MM-dd HH:mm:ss.fffZ";
         //}
 
-        //return value.ToMetricString(format);
+        //return value.ToDecimalMetricString(format);
 
         // TODO
         value.ToString(CultureInfo.InvariantCulture);

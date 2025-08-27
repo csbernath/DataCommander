@@ -29,7 +29,7 @@ public static class ExceptionExtensions
 
     // private static void Append(StringBuilder sb, SqlException sqlException)
     // {
-    //     sb.AppendLine(sqlException.ToMetricString());
+    //     sb.AppendLine(sqlException.ToDecimalMetricString());
     //     var errors = sqlException.Errors.ToLogString();
     //     sb.Append(errors);
     // }

@@ -27,7 +27,7 @@ internal sealed class XmlLogFormatter : ILogFormatter
         //Type type = method.DeclaringType;
         //string typeName = type.FullName;
         //xmlWriter.WriteElementString("type", typeName);
-        //xmlWriter.WriteElementString("method", entry.Method.ToMetricString());
+        //xmlWriter.WriteElementString("method", entry.Method.ToDecimalMetricString());
         //xmlWriter.WriteElementString("message", entry.Message);
 
         //xmlWriter.WriteEndElement();

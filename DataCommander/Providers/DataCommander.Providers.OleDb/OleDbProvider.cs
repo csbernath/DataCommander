@@ -95,7 +95,7 @@ internal sealed class OleDbProvider : IProvider
         //      foreach (DataRow dataRow in dataTable.Rows)
         //      { 
         //        OleDbType oleDbType = (OleDbType)dataRow[providerType];
-        //        dataRow[name] = oleDbType.ToMetricString("G");
+        //        dataRow[name] = oleDbType.ToDecimalMetricString("G");
         //
         //        ColumnType columnType;
         //

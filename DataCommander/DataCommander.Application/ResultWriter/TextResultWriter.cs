@@ -307,7 +307,7 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
                 //            sb.Append( array.GetValue(i));
                 //        }
 
-                //        valueString = sb.ToMetricString();
+                //        valueString = sb.ToDecimalMetricString();
                 //    }
                 //    else
                 //    {
@@ -360,7 +360,7 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
                 //            }
                 //            else
                 //            {
-                //                valueString = value.ToMetricString();
+                //                valueString = value.ToDecimalMetricString();
                 //            }
                 //        }
                 //    }
@@ -373,7 +373,7 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
                 row[3] = valueString;
                 stringTable.Rows.Add(row);
 
-                //sb.Append(StringHelper.FormatColumn(parameter.DbType.ToMetricString(),22));       
+                //sb.Append(StringHelper.FormatColumn(parameter.DbType.ToDecimalMetricString(),22));       
             }
 
             textWriter.WriteLine(stringTable);
