@@ -109,7 +109,7 @@ public struct PDateTime : INullable
         //        ValueType = PValueType.Default;
         //        _sql = SqlDateTime.Null;
         //    }
-        //    else if (value == DBNull.Base)
+        //    else if (value == DBNull.Value)
         //    {
         //        ValueType = PValueType.Null;
         //        _sql = SqlDateTime.Null;
@@ -117,7 +117,7 @@ public struct PDateTime : INullable
         //    else
         //    {
         //        _sql = (SqlDateTime) value;
-        //        ValueType = _sql.IsNull ? PValueType.Null : PValueType.Base;
+        //        ValueType = _sql.IsNull ? PValueType.Null : PValueType.Value;
         //    }
         //}
     }

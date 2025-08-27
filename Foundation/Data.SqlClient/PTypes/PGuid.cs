@@ -88,7 +88,7 @@ public readonly struct PGuid : INullable
         //        ValueType = PValueType.Default;
         //        _sql = SqlGuid.Null;
         //    }
-        //    else if (value == DBNull.Base)
+        //    else if (value == DBNull.Value)
         //    {
         //        ValueType = PValueType.Null;
         //        _sql = SqlGuid.Null;
@@ -96,7 +96,7 @@ public readonly struct PGuid : INullable
         //    else
         //    {
         //        _sql = (SqlGuid) value;
-        //        ValueType = _sql.IsNull ? PValueType.Null : PValueType.Base;
+        //        ValueType = _sql.IsNull ? PValueType.Null : PValueType.Value;
         //    }
         //}
     }

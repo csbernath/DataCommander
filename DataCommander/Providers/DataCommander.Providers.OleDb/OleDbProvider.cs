@@ -64,7 +64,7 @@ internal sealed class OleDbProvider : IProvider
         dataTable.Columns.Add("Precision");
         dataTable.Columns.Add("Scale");
         dataTable.Columns.Add("Direction");
-        dataTable.Columns.Add("Base");
+        dataTable.Columns.Add("Value");
 
         foreach (OleDbParameter p in parameters)
         {

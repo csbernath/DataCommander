@@ -71,14 +71,14 @@ public struct PBinary : INullable
         //        ValueType = PValueType.Default;
         //        _sql = SqlBinary.Null;
         //    }
-        //    else if (value == DBNull.Base)
+        //    else if (value == DBNull.Value)
         //    {
         //        ValueType = PValueType.Null;
         //        _sql = SqlBinary.Null;
         //    }
         //    else
         //    {
-        //        ValueType = PValueType.Base;
+        //        ValueType = PValueType.Value;
         //        _sql = (byte[]) value;
         //    }
         //}

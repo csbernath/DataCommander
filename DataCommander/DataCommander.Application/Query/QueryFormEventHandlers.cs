@@ -815,7 +815,7 @@ Please wait...",
 
                         foreach (DataRow row in dataTable.Rows)
                         {
-                            var value = row["Base"];
+                            var value = row["Value"];
                             var type = value.GetType();
                             var typeCode = Type.GetTypeCode(type);
 
@@ -826,9 +826,9 @@ Please wait...",
                                     var ticks = dateTime.Ticks;
 
                                     if (ticks % StopwatchConstants.TicksPerDay == 0)
-                                        row["Base"] = dateTime.ToString("yyyy-MM-dd");
+                                        row["Value"] = dateTime.ToString("yyyy-MM-dd");
                                     else
-                                        row["Base"] = dateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                                        row["Value"] = dateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
                                     break;
                             }

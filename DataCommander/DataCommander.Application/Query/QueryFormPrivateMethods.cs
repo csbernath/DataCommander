@@ -574,7 +574,7 @@ public sealed partial class QueryForm
                         var dataTable = new DataTable($"Table[{tableIndex}].Rows[{rowIndex}]");
                         dataTable.Columns.Add(" ", typeof(int));
                         dataTable.Columns.Add("Name", typeof(string));
-                        dataTable.Columns.Add("Base");
+                        dataTable.Columns.Add("Value");
                         var count = schemaTable!.Rows.Count;
 
                         for (var i = 0; i < count; ++i)

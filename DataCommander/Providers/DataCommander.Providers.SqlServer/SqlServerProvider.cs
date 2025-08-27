@@ -623,7 +623,7 @@ from
         dataTable.Columns.Add("Precision", typeof(int));
         dataTable.Columns.Add("Scale", typeof(int));
         dataTable.Columns.Add("Direction");
-        dataTable.Columns.Add("Base", typeof(object));
+        dataTable.Columns.Add("Value", typeof(object));
         dataTable.Columns.Add("TypeName", typeof(string));
         var index = 0;
 
