@@ -22,8 +22,7 @@ public static class Assert
     public static void IsGreaterThan<T>(T value, T other, [CallerArgumentExpression(nameof(value))] string? paramName = null) where T : IComparable<T> =>
         ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(value, other, paramName);
 
-    public static void IsGreaterThanOrEqual<T>(T value, T other, [CallerArgumentExpression(nameof(value))] string? paramName = null) where T : IComparable<T> =>
-        ArgumentOutOfRangeException.ThrowIfLessThan(value, other, paramName);
+    public static void IsGreaterThanOrEqual<T>(T value, T other, [CallerArgumentExpression(nameof(value))] string? paramName = null) where T : IComparable<T> => ArgumentOutOfRangeException.ThrowIfLessThan(value, other, paramName);
 
     public static void IsInRange(bool condition, [CallerArgumentExpression(nameof(condition))] string? conditionString = null)
     {
@@ -61,10 +60,10 @@ public static class Assert
     public static void IsPositiveOrZero<T>(T value, [CallerArgumentExpression(nameof(value))] string? paramName = null) where T : INumberBase<T> =>
         ArgumentOutOfRangeException.ThrowIfNegative(value, paramName);
 
-    public static void IsTrue(bool condition)
+    public static void IsTrue(bool condition, [CallerArgumentExpression(nameof(condition))] string? conditionString = null)
     {
         if (!condition)
-            throw new ArgumentException("Assert.IsTrue failed.");
+            throw new ArgumentException("Assert.IsTrue failed. Condition: {conditionString}");
     }
 
     public static void IsValidOperation(bool condition, [CallerArgumentExpression(nameof(condition))] string? conditionString = null)

@@ -5,13 +5,16 @@ namespace Foundation.Data;
 
 public static class DbConnectionExtensions
 {
-    public static DbCommand CreateCommand(this DbConnection connection, CreateCommandRequest request)
+    extension(DbConnection connection)
     {
-        ArgumentNullException.ThrowIfNull(connection);
-        var command = connection.CreateCommand();
-        command.Initialize(request);
-        return command;
-    }
+        public DbCommand CreateCommand(CreateCommandRequest request)
+        {
+            ArgumentNullException.ThrowIfNull(connection);
+            var command = connection.CreateCommand();
+            command.Initialize(request);
+            return command;
+        }
 
-    public static IDbCommandAsyncExecutor CreateCommandAsyncExecutor(this DbConnection connection) => new DbCommandAsyncExecutor(connection);
+        public IDbCommandAsyncExecutor CreateCommandAsyncExecutor() => new DbCommandAsyncExecutor(connection);
+    }
 }

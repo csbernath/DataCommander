@@ -4,12 +4,15 @@ namespace Foundation.Data;
 
 public static class IDbConnectionExtensions
 {
-    public static IDbCommandExecutor CreateCommandExecutor(this IDbConnection connection) => new DbCommandExecutor(connection);
-
-    public static IDbCommand CreateCommand(this IDbConnection connection, CreateCommandRequest request)
+    extension(IDbConnection connection)
     {
-        var command = connection.CreateCommand();
-        command.Initialize(request);
-        return command;
+        public IDbCommandExecutor CreateCommandExecutor() => new DbCommandExecutor(connection);
+
+        public IDbCommand CreateCommand(CreateCommandRequest request)
+        {
+            var command = connection.CreateCommand();
+            command.Initialize(request);
+            return command;
+        }
     }
 }

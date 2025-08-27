@@ -11,31 +11,34 @@ namespace Foundation.Data;
 
 public static class DbDataReaderAsyncExtensions
 {
-    public static async Task ReadResultAsync(this DbDataReader dataReader, Action readRecord, CancellationToken cancellationToken)
+    extension(DbDataReader dataReader)
     {
-        while (await dataReader.ReadAsync(cancellationToken))
-            readRecord();
-    }
-
-    public static async Task<ReadOnlySegmentLinkedList<T>> ReadResultAsync<T>(this DbDataReader dataReader, int segmentLength,
-        Func<IDataRecord, T> readRecord, CancellationToken cancellationToken)
-    {
-        var segmentLinkedListBuilder = new SegmentLinkedListBuilder<T>(segmentLength);
-        await dataReader.ReadResultAsync(() =>
+        public async Task ReadResultAsync(Action readRecord, CancellationToken cancellationToken)
         {
-            var record = readRecord(dataReader);
-            segmentLinkedListBuilder.Add(record);
-        }, cancellationToken);
-        return segmentLinkedListBuilder.ToReadOnlySegmentLinkedList();
-    }
+            while (await dataReader.ReadAsync(cancellationToken))
+                readRecord();
+        }
 
-    public static async Task<ReadOnlySegmentLinkedList<T>> ReadNextResultAsync<T>(this DbDataReader dataReader, int segmentLength,
-        Func<IDataRecord, T> readRecord,
-        CancellationToken cancellationToken)
-    {
-        var nextResult = await dataReader.NextResultAsync(cancellationToken);
-        Assert.IsTrue(nextResult);
-        var records = await dataReader.ReadResultAsync(segmentLength, readRecord, cancellationToken);
-        return records;
+        public async Task<ReadOnlySegmentLinkedList<T>> ReadResultAsync<T>(int segmentLength,
+            Func<IDataRecord, T> readRecord, CancellationToken cancellationToken)
+        {
+            var segmentLinkedListBuilder = new SegmentLinkedListBuilder<T>(segmentLength);
+            await dataReader.ReadResultAsync(() =>
+            {
+                var record = readRecord(dataReader);
+                segmentLinkedListBuilder.Add(record);
+            }, cancellationToken);
+            return segmentLinkedListBuilder.ToReadOnlySegmentLinkedList();
+        }
+
+        public async Task<ReadOnlySegmentLinkedList<T>> ReadNextResultAsync<T>(int segmentLength,
+            Func<IDataRecord, T> readRecord,
+            CancellationToken cancellationToken)
+        {
+            var nextResult = await dataReader.NextResultAsync(cancellationToken);
+            Assert.IsTrue(nextResult);
+            var records = await dataReader.ReadResultAsync(segmentLength, readRecord, cancellationToken);
+            return records;
+        }
     }
 }

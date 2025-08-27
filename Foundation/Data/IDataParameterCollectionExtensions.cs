@@ -8,74 +8,77 @@ namespace Foundation.Data;
 
 public static class IDataParameterCollectionExtensions
 {
-    public static void AddRange(this IDataParameterCollection dataParameterCollection, IEnumerable<object> parameters)
+    extension(IDataParameterCollection dataParameterCollection)
     {
-        foreach (var parameter in parameters)
-            dataParameterCollection.Add(parameter);
-    }
-
-    public static string ToLogString(this IDataParameterCollection parameters)
-    {
-        ArgumentNullException.ThrowIfNull(parameters);
-
-        var stringBuilder = new StringBuilder();
-        var first = true;
-
-        foreach (IDataParameter parameter in parameters)
+        public void AddRange(IEnumerable<object> parameters)
         {
-            if (parameter.Direction != ParameterDirection.ReturnValue)
+            foreach (var parameter in parameters)
+                dataParameterCollection.Add(parameter);
+        }
+    
+        public string ToLogString()
+        {
+            ArgumentNullException.ThrowIfNull(dataParameterCollection);
+
+            var stringBuilder = new StringBuilder();
+            var first = true;
+
+            foreach (IDataParameter parameter in dataParameterCollection)
             {
-                var value = parameter.Value;
-
-                if (value != null)
+                if (parameter.Direction != ParameterDirection.ReturnValue)
                 {
-                    string? valueString;
+                    var value = parameter.Value;
 
-                    if (value == DBNull.Value)
+                    if (value != null)
                     {
-                        valueString = SqlNull.NullString;
-                    }
-                    else
-                    {
-                        var dbType = parameter.DbType;
+                        string? valueString;
 
-                        switch (dbType)
+                        if (value == DBNull.Value)
                         {
-                            case DbType.DateTime:
-                                var dateTime = (DateTime)value;
-                                valueString = dateTime.ToSqlConstant();
-                                break;
-
-                            case DbType.Int32:
-                                valueString = value.ToString();
-                                break;
-
-                            case DbType.String:
-                                valueString = "'" + value.ToString()!.Replace("'", "''") + "'";
-                                break;
-
-                            default:
-                                valueString = value.ToString();
-                                break;
+                            valueString = SqlNull.NullString;
                         }
-                    }
+                        else
+                        {
+                            var dbType = parameter.DbType;
 
-                    if (first)
-                    {
-                        first = false;
-                    }
-                    else
-                    {
-                        stringBuilder.AppendLine(",");
-                    }
+                            switch (dbType)
+                            {
+                                case DbType.DateTime:
+                                    var dateTime = (DateTime)value;
+                                    valueString = dateTime.ToSqlConstant();
+                                    break;
 
-                    stringBuilder.AppendFormat("  {0} = {1}", parameter.ParameterName, valueString);
+                                case DbType.Int32:
+                                    valueString = value.ToString();
+                                    break;
+
+                                case DbType.String:
+                                    valueString = "'" + value.ToString()!.Replace("'", "''") + "'";
+                                    break;
+
+                                default:
+                                    valueString = value.ToString();
+                                    break;
+                            }
+                        }
+
+                        if (first)
+                        {
+                            first = false;
+                        }
+                        else
+                        {
+                            stringBuilder.AppendLine(",");
+                        }
+
+                        stringBuilder.AppendFormat("  {0} = {1}", parameter.ParameterName, valueString);
+                    }
                 }
             }
+
+            var s = stringBuilder.ToString();
+
+            return s;
         }
-
-        var s = stringBuilder.ToString();
-
-        return s;
     }
 }

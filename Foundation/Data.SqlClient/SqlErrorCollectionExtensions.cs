@@ -5,22 +5,25 @@ namespace Foundation.Data.SqlClient;
 
 public static class SqlErrorCollectionExtensions
 {
-    public static string? ToLogString(this SqlErrorCollection errors)
+    extension(SqlErrorCollection errors)
     {
-        string? message = null;
-
-        if (errors != null)
+        public string? ToLogString()
         {
-            var stringBuilder = new StringBuilder();
-            foreach (SqlError error in errors)
+            string? message = null;
+
+            if (errors != null)
             {
-                var s = error.ToLogString();
-                stringBuilder.AppendLine(s);
+                var stringBuilder = new StringBuilder();
+                foreach (SqlError error in errors)
+                {
+                    var s = error.ToLogString();
+                    stringBuilder.AppendLine(s);
+                }
+
+                message = stringBuilder.ToString();
             }
 
-            message = stringBuilder.ToString();
+            return message;
         }
-
-        return message;
     }
 }

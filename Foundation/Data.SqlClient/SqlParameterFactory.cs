@@ -85,7 +85,7 @@ public static class SqlParameterFactory
         return parameter;
     }
 
-    public static SqlParameter CreateVarChar(string parameterName, int size, string value)
+    public static SqlParameter CreateVarChar(string parameterName, int size, string? value)
     {
         var parameterValue = value != null ? (object)value : DBNull.Value;
         var parameter = new SqlParameter(parameterName, SqlDbType.VarChar, size)

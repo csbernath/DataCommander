@@ -7,17 +7,20 @@ namespace Foundation.Data;
 
 public static class DataTableExtensions
 {
-    /// <summary>
-    /// Retrieves the string representation of a DataTable (like SQL Query Analyzer).
-    /// </summary>
-    /// <param name="dataTable"></param>
-    /// <returns></returns>
-    public static string ToStringTableString(this DataTable dataTable)
+    extension(DataTable dataTable)
     {
-        ArgumentNullException.ThrowIfNull(dataTable, nameof(dataTable));
-        var rows = dataTable.Rows.Cast<DataRow>()!.Where(dataRow => dataRow.RowState != DataRowState.Deleted);
-        var columns = dataTable.Columns.Cast<DataColumn>()!.Select(ToStringTableColumnInfo).ToArray();
-        return rows.ToString(columns);
+        /// <summary>
+        /// Retrieves the string representation of a DataTable (like SQL Query Analyzer).
+        /// </summary>
+        /// <param name="dataTable"></param>
+        /// <returns></returns>
+        public string ToStringTableString()
+        {
+            ArgumentNullException.ThrowIfNull(dataTable, nameof(dataTable));
+            var rows = dataTable.Rows.Cast<DataRow>()!.Where(dataRow => dataRow.RowState != DataRowState.Deleted);
+            var columns = dataTable.Columns.Cast<DataColumn>()!.Select(ToStringTableColumnInfo).ToArray();
+            return rows.ToString(columns);
+        }
     }
 
     internal static StringTableColumnInfo<DataRow> ToStringTableColumnInfo(DataColumn dataColumn)

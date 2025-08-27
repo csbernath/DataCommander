@@ -8,44 +8,47 @@ namespace Foundation.Linq;
 
 public static class EnumExtensions
 {
-    public static T SetFlag<T>(this T container, T flag)
+    extension<T>(T container)
     {
-        Assert.IsTrue(typeof(T).IsEnum);
+        public T SetFlag(T flag)
+        {
+            Assert.IsTrue(typeof(T).IsEnum);
 
-        var type = typeof(T);
+            var type = typeof(T);
 
-        var containerUInt64 = Convert.ToUInt64(container, CultureInfo.InvariantCulture);
-        var flagUInt64 = Convert.ToUInt64(flag, CultureInfo.InvariantCulture);
-        containerUInt64 |= flagUInt64;
-        return (T) Enum.ToObject(type, containerUInt64);
-    }
-
-    public static T SetFlag<T>(this T container, T flag, bool set)
-    {
-        Assert.IsTrue(typeof(T).IsEnum);
-
-        var type = typeof(T);
-
-        var containerUInt64 = Convert.ToUInt64(container);
-        var flagUInt64 = Convert.ToUInt64(flag);
-
-        if (set)
+            var containerUInt64 = Convert.ToUInt64(container, CultureInfo.InvariantCulture);
+            var flagUInt64 = Convert.ToUInt64(flag, CultureInfo.InvariantCulture);
             containerUInt64 |= flagUInt64;
-        else
+            return (T)Enum.ToObject(type, containerUInt64);
+        }
+
+        public T SetFlag(T flag, bool set)
+        {
+            Assert.IsTrue(typeof(T).IsEnum);
+
+            var type = typeof(T);
+
+            var containerUInt64 = Convert.ToUInt64(container);
+            var flagUInt64 = Convert.ToUInt64(flag);
+
+            if (set)
+                containerUInt64 |= flagUInt64;
+            else
+                containerUInt64 &= ~flagUInt64;
+
+            return (T)Enum.ToObject(type, containerUInt64);
+        }
+
+        public T ResetFlag(T flag)
+        {
+            Assert.IsTrue(typeof(T).IsEnum);
+
+            var type = typeof(T);
+            var containerUInt64 = Convert.ToUInt64(container);
+            var flagUInt64 = Convert.ToUInt64(flag);
             containerUInt64 &= ~flagUInt64;
-
-        return (T) Enum.ToObject(type, containerUInt64);
-    }
-
-    public static T ResetFlag<T>(this T container, T flag)
-    {
-        Assert.IsTrue(typeof(T).IsEnum);
-
-        var type = typeof(T);
-        var containerUInt64 = Convert.ToUInt64(container);
-        var flagUInt64 = Convert.ToUInt64(flag);
-        containerUInt64 &= ~flagUInt64;
-        return (T) Enum.ToObject(type, containerUInt64);
+            return (T)Enum.ToObject(type, containerUInt64);
+        }
     }
 
     public static IEnumerable<Tuple<string, T?>> GetPublicStaticFields<T>(Type type)

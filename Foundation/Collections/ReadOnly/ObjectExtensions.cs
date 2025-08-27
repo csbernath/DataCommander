@@ -2,6 +2,8 @@
 
 public static class ObjectExtensions
 {
-    public static ReadOnlyZeroOrOneElementArray<T> ToReadOnlyZeroOrOneElementArray<T>(this T element) =>
-        new(true, element);
+    extension<T>(T element)
+    {
+        public ReadOnlyZeroOrOneElementArray<T> ToReadOnlyZeroOrOneElementArray() => new(true, element);
+    }
 }

@@ -10,37 +10,38 @@ namespace Foundation.Linq;
 /// </summary>
 public static class DictionaryExtensions
 {
-    public static TValue? GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> valueFactory)
-        where TKey : notnull
+    extension<TKey, TValue>(Dictionary<TKey, TValue> dictionary) where TKey : notnull
     {
-        ref var valueReference = ref CollectionsMarshal.GetValueRefOrAddDefault(dictionary, key, out var exists);
-        TValue? result;
-        
-        if (exists)
-            result = valueReference;
-        else
+        public TValue? GetOrAdd(TKey key, Func<TKey, TValue> valueFactory)
         {
-            valueReference = valueFactory(key);
-            result = valueReference;
+            ref var valueReference = ref CollectionsMarshal.GetValueRefOrAddDefault(dictionary, key, out var exists);
+            TValue? result;
+
+            if (exists)
+                result = valueReference;
+            else
+            {
+                valueReference = valueFactory(key);
+                result = valueReference;
+            }
+
+            return result;
         }
 
-        return result;
-    }
-
-    public static bool TryUpdate<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> valueFactory)
-        where TKey : notnull
-    {
-        ref var val = ref CollectionsMarshal.GetValueRefOrNullRef(dictionary, key);
-        bool updated;
-        
-        if (Unsafe.IsNullRef(ref val))
-            updated = false;
-        else
+        public bool TryUpdate(TKey key, Func<TKey, TValue> valueFactory)
         {
-            val = valueFactory(key);
-            updated = true;
-        }
+            ref var val = ref CollectionsMarshal.GetValueRefOrNullRef(dictionary, key);
+            bool updated;
 
-        return updated;
+            if (Unsafe.IsNullRef(ref val))
+                updated = false;
+            else
+            {
+                val = valueFactory(key);
+                updated = true;
+            }
+
+            return updated;
+        }
     }
 }

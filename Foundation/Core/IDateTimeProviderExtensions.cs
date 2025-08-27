@@ -4,9 +4,15 @@ namespace Foundation.Core;
 
 public static class IDateTimeProviderExtensions
 {
-    public static DateTime Today(this IDateTimeProvider dateTimeProvider)
+    extension(IDateTimeProvider dateTimeProvider)
     {
-        ArgumentNullException.ThrowIfNull(dateTimeProvider);
-        return dateTimeProvider.Now.Date;
+        public DateTime Today
+        {
+            get
+            {
+                ArgumentNullException.ThrowIfNull(dateTimeProvider);
+                return dateTimeProvider.Now.Date;
+            }
+        }
     }
 }

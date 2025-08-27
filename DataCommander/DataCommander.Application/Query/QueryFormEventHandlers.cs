@@ -190,13 +190,14 @@ Please wait...",
         {
             using (new CursorManager(Cursors.WaitCursor))
             {
-                var startTimestamp = Stopwatch.GetTimestamp();            
+                var startTimestamp = Stopwatch.GetTimestamp();
                 objectExplorer.SetConnectionStringAndCredential(_connectionInfo.ConnectionStringAndCredential);
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), "Getting children...",
                     "Please wait...", _colorTheme);
                 var cancellationToken = cancellationTokenSource.Token;
-                var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result));
+                var children = cancelableOperationForm.Execute(
+                    new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result));
                 var rootNodes = _tvObjectExplorer.Nodes;
                 rootNodes.Clear();
                 AddNodes(_tvObjectExplorer.Nodes, children, objectExplorer.Sortable, startTimestamp);
