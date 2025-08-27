@@ -72,6 +72,7 @@ public sealed partial class QueryForm
     private ToolStripMenuItem _mnuCreateInsertSelect;
     private ToolStripMenuItem _mnuOpenTable;
     private readonly IContainer components = new Container();
+    private readonly ProviderInfo _providerInfo;
     private readonly ConnectionInfo _connectionInfo;
     private DbTransaction? _transaction;
     private SqlParser _sqlStatement;

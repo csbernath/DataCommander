@@ -639,7 +639,7 @@ Please wait...",
         if (connection.Database != Connection.Database)
             connection.Connection!.ChangeDatabase(database);
 
-        var queryForm = new QueryForm(_mainForm, Provider, _connectionInfo, connection, mainForm.StatusBar, _colorTheme);
+        var queryForm = new QueryForm(_mainForm, _providerInfo, Provider, _connectionInfo, connection, mainForm.StatusBar, _colorTheme);
 
         if (mainForm.SelectedFont != null)
             queryForm.Font = mainForm.SelectedFont;

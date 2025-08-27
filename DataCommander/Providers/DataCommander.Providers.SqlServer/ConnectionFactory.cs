@@ -7,7 +7,15 @@ public static class ConnectionFactory
 {
     public static SqlConnection CreateConnection(ConnectionStringAndCredential connectionStringAndCredential)
     {
-        var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionStringAndCredential.ConnectionString)
+        var connectionString = CreateCustomizedConnectionString(connectionStringAndCredential.ConnectionString);
+        var sqlCredential = CreateSqlCredential(connectionStringAndCredential);
+        var sqlConnection = new SqlConnection(connectionString, sqlCredential);
+        return sqlConnection;
+    }
+
+    private static string CreateCustomizedConnectionString(string connectionString)
+    {
+        var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString)
         {
             ApplicationName = "Data Commander",
             Pooling = true,
@@ -15,6 +23,11 @@ public static class ConnectionFactory
             CommandTimeout = 8,
             ConnectTimeout = 5
         };
+        return sqlConnectionStringBuilder.ConnectionString;
+    }
+
+    private static SqlCredential? CreateSqlCredential(ConnectionStringAndCredential connectionStringAndCredential)
+    {
         SqlCredential? sqlCredential = null;
         var credential = connectionStringAndCredential.Credential;
         if (credential != null)
@@ -23,7 +36,6 @@ public static class ConnectionFactory
             sqlCredential = new SqlCredential(credential.UserId, password);
         }
 
-        var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString, sqlCredential);
-        return sqlConnection;
+        return sqlCredential;
     }
 }

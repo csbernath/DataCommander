@@ -41,20 +41,30 @@ public sealed partial class QueryForm : Form, IQueryForm
         NumberFormat = new NumberFormatInfo { NumberDecimalSeparator = "." };
     }
 
-    public QueryForm(MainForm mainForm, IProvider provider, ConnectionInfo connectionInfo, ConnectionBase connection,
+    public QueryForm(MainForm mainForm,
+        ProviderInfo providerInfo,
+        IProvider provider, ConnectionInfo connectionInfo, ConnectionBase connection,
         StatusStrip parentStatusBar, ColorTheme? colorTheme)
     {
         Log.Trace(CallerInformation.Create(), "Queryform.ctor...");
         GarbageMonitor.Default.Add("QueryForm", this);
+        
+        ArgumentNullException.ThrowIfNull(providerInfo);
+        ArgumentNullException.ThrowIfNull(provider);
 
-        _mainForm = mainForm;
+        _providerInfo = providerInfo;
         Provider = provider;
+        
+        _mainForm = mainForm;
         _connectionInfo = connectionInfo;
-        Connection = connection;
         _parentStatusBar = parentStatusBar;
         _colorTheme = colorTheme;
+
+        Connection = connection;
+        
         connection.InfoMessage += Connection_InfoMessage;
         connection.DatabaseChanged += Connection_DatabaseChanged;
+        
         _timer.Tick += Timer_Tick;
 
         var task = new Task(ConsumeInfoMessages);
@@ -1203,11 +1213,19 @@ public sealed partial class QueryForm : Form, IQueryForm
             try
             {
                 AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Connection is closed. Opening connection..."));
-                var connection = Provider.CreateConnection(_connectionInfo.ConnectionStringAndCredential);
+
+                var connectionStringBuilder = new DbConnectionStringBuilder();
+                connectionStringBuilder.ConnectionString = _connectionInfo.ConnectionStringAndCredential.ConnectionString;
+                connectionStringBuilder[ConnectionStringKeyword.InitialCatalog] = _database;
+                var connectionStringAndCredential = new ConnectionStringAndCredential(connectionStringBuilder.ConnectionString,
+                    _connectionInfo.ConnectionStringAndCredential.Credential);
+                var connection = Provider.CreateConnection(connectionStringAndCredential);
+                
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
-                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
-                    "Opening connection...", string.Empty, _colorTheme);
+                var text = OpenConnectionFormHelper.CreateOpenConnectionFormText(_connectionInfo, _providerInfo, Provider);
+                var cancelableOperationForm =
+                    new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), "Opening connection...", text, _colorTheme);
 
                 var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
                 cancelableOperationForm.Execute(openConnectionTask);

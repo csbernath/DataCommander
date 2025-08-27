@@ -528,7 +528,7 @@ public class MainForm : Form
                 var connectionInfo = connectionForm.ConnectionInfo;
                 var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
                 var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
-                var queryForm = new QueryForm(this, provider, connectionInfo, connectionForm.Connection, _statusBar, _colorTheme)
+                var queryForm = new QueryForm(this, providerInfo, provider, connectionInfo, connectionForm.Connection, _statusBar, _colorTheme)
                 {
                     MdiParent = this
                 };
@@ -741,7 +741,8 @@ public class MainForm : Form
                     connectionInfos.Add(connectionInfo);
                     ConnectionInfoRepository.Save(connectionInfos);
 
-                    var queryForm = new QueryForm(this, provider, connectionInfo, connection, _statusBar, _colorTheme)
+                    var providerInfo = ProviderInfoRepository.GetProviderInfos().First(p => p.Identifier == provider.Identifier);
+                    var queryForm = new QueryForm(this, providerInfo, provider, connectionInfo, connection, _statusBar, _colorTheme)
                     {
                         MdiParent = this,
                         Font = SelectedFont
@@ -850,8 +851,9 @@ public class MainForm : Form
             var connectionInfo = new ConnectionInfo(null, providerIdentifier, connectionStringAndCredential);
             var connection = provider.CreateConnection(connectionStringAndCredential);
             await connection.OpenAsync(CancellationToken.None);
-
-            var queryForm = new QueryForm(this, provider, connectionInfo, connection, _statusBar, _colorTheme)
+            
+            var providerInfo = ProviderInfoRepository.GetProviderInfos().First(p => p.Identifier == provider.Identifier);
+            var queryForm = new QueryForm(this, providerInfo, provider, connectionInfo, connection, _statusBar, _colorTheme)
             {
                 MdiParent = this,
                 Font = SelectedFont

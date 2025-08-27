@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -464,30 +463,7 @@ internal sealed class ConnectionListForm : Form
             {
                 var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
                 var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
-                var connectionStringBuilder = provider.CreateConnectionStringBuilder();
-                connectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
-
-                var dataSource = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject)
-                    ? (string)dataSourceObject
-                    : null;
-                var host = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.Host, out var hostObject)
-                    ? (string)hostObject
-                    : null;
-
-                var containsIntegratedSecurity = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
-                var stringBuilder = new StringBuilder();
-                stringBuilder.Append($@"Connection name: {connectionInfo.ConnectionName}
-Provider name: {providerInfo.Name}");
-                if (dataSource != null)
-                    stringBuilder.Append($"\r\n{ConnectionStringKeyword.DataSource}: {dataSource}");
-                else if (host != null)
-                    stringBuilder.Append($"\r\n{ConnectionStringKeyword.Host}: {host}");
-                if (containsIntegratedSecurity)
-                    stringBuilder.Append($"\r\n{ConnectionStringKeyword.IntegratedSecurity}: {integratedSecurity}");
-                var credential = connectionInfo.ConnectionStringAndCredential.Credential;
-                if (credential != null)
-                    stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {credential.UserId}");
-                var text = stringBuilder.ToString();
+                var text = OpenConnectionFormHelper.CreateOpenConnectionFormText(connectionInfo, providerInfo, provider);
                 var connection = provider.CreateConnection(connectionInfo.ConnectionStringAndCredential);
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
