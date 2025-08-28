@@ -15,7 +15,7 @@ public static class DecimalExtensions
         var powersOfTen = new List<ulong>();
         ulong powerOfTen = 10;
 
-        while (powerOfTen < PowersOfTen.Power18)
+        while (powerOfTen < PowersOf10.Power18)
         {
             powersOfTen.Add(powerOfTen);
             powerOfTen *= 10;
@@ -38,7 +38,7 @@ public static class DecimalExtensions
         var absoluteValue = decimal.Abs(value);
         bool GreaterThan(int index) => PowersOfTenArray[index] < absoluteValue;
         bool AreEqual(int index) => absoluteValue == PowersOfTenArray[index];
-        var binarySearchResult = BinarySearch.Search2(0, PowersOfTenArray.Length - 1, GreaterThan, AreEqual);
+        var binarySearchResult = BinarySearch.Search(0, PowersOfTenArray.Length - 1, GreaterThan, AreEqual);
         var numberOfLeftDigits = binarySearchResult.ResultRelation switch
         {
             BinarySearchResultRelation.LessThanFirst => 1,

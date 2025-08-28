@@ -12,7 +12,7 @@ public class BinarySearchTests
         var value = 0;
         bool GreaterThan(int index) => value > array[index];
         bool Equals(int index) => value == array[index];
-        var result = BinarySearch.Search2(0, array.Length - 1, GreaterThan, Equals);
+        var result = BinarySearch.Search(0, array.Length - 1, GreaterThan, Equals);
         Assert.Equal(BinarySearchResultRelation.LessThanFirst, result.ResultRelation);
         Assert.Equal(0, result.Index);
     }
@@ -24,7 +24,7 @@ public class BinarySearchTests
         var value = 10;
         bool GreaterThan(int index) => value > array[index];
         bool Equals(int index) => value == array[index];
-        var result = BinarySearch.Search2(0, array.Length - 1, GreaterThan, Equals);
+        var result = BinarySearch.Search(0, array.Length - 1, GreaterThan, Equals);
         Assert.Equal(BinarySearchResultRelation.Equals, result.ResultRelation);
         Assert.Equal(0, result.Index);
     }
@@ -36,7 +36,7 @@ public class BinarySearchTests
         var value = 11;
         bool GreaterThan(int index) => value > array[index];
         bool Equals(int index) => value == array[index];
-        var result = BinarySearch.Search2(0, array.Length - 1, GreaterThan, Equals);
+        var result = BinarySearch.Search(0, array.Length - 1, GreaterThan, Equals);
         Assert.Equal(BinarySearchResultRelation.GreaterThan, result.ResultRelation);
         Assert.Equal(0, result.Index);
     }
@@ -48,7 +48,7 @@ public class BinarySearchTests
         var value = 90;
         bool GreaterThan(int index) => value > array[index];
         bool Equals(int index) => value == array[index];
-        var result = BinarySearch.Search2(0, array.Length - 1, GreaterThan, Equals);
+        var result = BinarySearch.Search(0, array.Length - 1, GreaterThan, Equals);
         Assert.Equal(BinarySearchResultRelation.Equals, result.ResultRelation);
         Assert.Equal(8, result.Index);
     }
@@ -60,7 +60,7 @@ public class BinarySearchTests
         var value = 91;
         bool GreaterThan(int index) => value > array[index];
         bool Equals(int index) => value == array[index];
-        var result = BinarySearch.Search2(0, array.Length - 1, GreaterThan, Equals);
+        var result = BinarySearch.Search(0, array.Length - 1, GreaterThan, Equals);
         Assert.Equal(BinarySearchResultRelation.GreaterThan, result.ResultRelation);
         Assert.Equal(8, result.Index);
     }
@@ -72,7 +72,7 @@ public class BinarySearchTests
         var value = 51;
         bool GreaterThan(int index) => value > array[index];
         bool Equals(int index) => value == array[index];
-        var result = BinarySearch.Search2(0, array.Length - 1, GreaterThan, Equals);
+        var result = BinarySearch.Search(0, array.Length - 1, GreaterThan, Equals);
         Assert.Equal(BinarySearchResultRelation.GreaterThan, result.ResultRelation);
         Assert.Equal(4, result.Index);
     }    

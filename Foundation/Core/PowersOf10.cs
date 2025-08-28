@@ -2,7 +2,7 @@
 
 namespace Foundation.Core;
 
-public static class PowersOfTen
+public static class PowersOf10
 {
     public const byte Power1 = 10;
     public const byte Power2 = Power1 * Power1;

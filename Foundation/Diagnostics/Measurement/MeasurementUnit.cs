@@ -28,7 +28,7 @@ public static class MeasurementUnit
     {
         bool GreaterThan(int index) => unitPrefixes[index].Base < value;
         bool AreEqual(int index) => unitPrefixes[index].Base == value;
-        var binarySearchResult = BinarySearch.Search2(0, unitPrefixes.Count - 1, GreaterThan, AreEqual);
+        var binarySearchResult = BinarySearch.Search(0, unitPrefixes.Count - 1, GreaterThan, AreEqual);
         var index = binarySearchResult.Index;
         return unitPrefixes[index];
     }
