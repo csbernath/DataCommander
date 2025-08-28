@@ -172,7 +172,7 @@ public class MainForm : Form
 GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.CollectionCount(2)} gen2";
     }
 
-    private static string BytesToText(long bytes) => MeasurementUnit.ToBinaryMetricString(bytes, 3, 2, "B");
+    private static string BytesToText(long bytes) => MeasurementUnit.ToBinaryMetricString(bytes, 2, "B");
 
     private void Timer_Tick(object? sender, EventArgs e) => UpdateTotalMemory();
 

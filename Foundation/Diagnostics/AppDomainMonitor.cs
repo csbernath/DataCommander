@@ -83,7 +83,7 @@ TempPath:               {Path.GetTempPath()}");
     private static string GetStopwatchFrequency()
     {
         var frequency = Stopwatch.Frequency;
-        var frequencyString = MeasurementUnit.ToDecimalMetricString(frequency, 5, 2, "Hz");
+        var frequencyString = MeasurementUnit.ToDecimalMetricString(frequency, 2, "Hz");
         return
             $"{frequency} ({frequencyString}, 1 tick = {Math.Round(StopwatchConstants.NanosecondsPerTick)} nanoseconds, 1 millisecond = {Math.Round(StopwatchConstants.TicksPerMillisecond)} ticks)";
     }

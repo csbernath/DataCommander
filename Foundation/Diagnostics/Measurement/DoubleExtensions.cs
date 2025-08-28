@@ -1,9 +1,19 @@
 ﻿using System;
+using Foundation.Assertions;
 
 namespace Foundation.Diagnostics.Measurement;
 
 public static class DoubleExtensions
 {
+    public static double Round(this double value, int precision, int scale)
+    {
+        var integerDigitCount = value.GetIntegerDigitCountByLog10();
+        var remainingNumberOfDigitsRight = precision - integerDigitCount;
+        Assert.IsGreaterThanOrEqual(remainingNumberOfDigitsRight, 0);
+        var decimals = Math.Min(remainingNumberOfDigitsRight, scale);
+        return Math.Round(value, decimals);
+    }
+    
     public static int GetIntegerDigitCountByLog10(this double value)
     {
         var integerDigitCount = value switch

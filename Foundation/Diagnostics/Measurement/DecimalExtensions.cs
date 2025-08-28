@@ -24,15 +24,6 @@ public static class DecimalExtensions
         return powersOfTen.ToArray();
     }
 
-    public static decimal Round(this decimal value, int precision, int scale)
-    {
-        var numberOfDigitsLeft = value.GetNumberOfLeftDigits();
-        var remainingNumberOfDigitsRight = precision - numberOfDigitsLeft;
-        Assert.IsGreaterThanOrEqual(remainingNumberOfDigitsRight, 0);
-        var decimals = Math.Min(remainingNumberOfDigitsRight, scale);
-        return decimal.Round(value, decimals);
-    }
-
     public static int GetNumberOfLeftDigits(this decimal value)
     {
         var absoluteValue = decimal.Abs(value);

@@ -1,35 +1,60 @@
 using System;
 using System.Collections.Generic;
-using Foundation.Collections;
+using System.Globalization;
 
 namespace Foundation.Diagnostics.Measurement;
 
 public static class MeasurementUnit
 {
-    public static string ToDecimalMetricString(decimal value, int precision, int scale, string symbol)
+    public static string ToDecimalMetricString(double value, int numberDecimalDigits, string symbol)
     {
-        var absolutValue = (ulong)Math.Abs(value);
-        var unitPrefix = GetUnitPrefix(absolutValue, DecimalUnitPrefixes.Value);
-        var quotient = value / unitPrefix.Base;
-        var rounded = quotient.Round(precision, scale);
-        return $"{rounded} {unitPrefix.Symbol}{symbol}";
+        const int @base = PowersOf1000.Power1;
+        return ToMetricString(value, numberDecimalDigits, @base, DecimalUnitPrefixes.Value, symbol);
     }
 
-    public static string ToBinaryMetricString(decimal value, int precision, int scale, string symbol)
+    public static string ToBinaryMetricString(double value, int numberDecimalDigits, string symbol)
     {
-        var absolutValue = (ulong)Math.Abs(value);
-        var unitPrefix = GetUnitPrefix(absolutValue, BinaryUnitPrefixes.Value);
-        var quotient = value / unitPrefix.Base;
-        var rounded = quotient.Round(precision, scale);
-        return $"{rounded} {unitPrefix.Symbol}{symbol}";
+        const int @base = PowersOf1024.Power1;
+        return ToMetricString(value, numberDecimalDigits, @base, BinaryUnitPrefixes.Value, symbol);
     }
-    
-    private static UnitPrefix GetUnitPrefix(ulong value, IReadOnlyList<UnitPrefix> unitPrefixes)
+
+    private static string ToMetricString(double value, int numberDecimalDigits, int @base, IReadOnlyList<UnitPrefix> unitPrefixes, string symbol)
     {
-        bool GreaterThan(int index) => unitPrefixes[index].Base < value;
-        bool AreEqual(int index) => unitPrefixes[index].Base == value;
-        var binarySearchResult = BinarySearch.Search(0, unitPrefixes.Count - 1, GreaterThan, AreEqual);
-        var index = binarySearchResult.Index;
-        return unitPrefixes[index];
+        var index = GetUnitPrefixIndex(value, @base);
+        double quotient;
+        string? unitPrefixSymbol;
+        if (index >= 0)
+        {
+            var unitPrefix = unitPrefixes[index];
+            quotient = value / unitPrefix.Base;
+            unitPrefixSymbol = unitPrefix.Symbol;
+        }
+        else
+        {
+            quotient = value;
+            unitPrefixSymbol = null;
+        }
+
+        var numberFormatInfo = new NumberFormatInfo
+        {
+            NumberDecimalDigits = numberDecimalDigits
+        };
+        var rounded = quotient.ToString("N", numberFormatInfo);
+        var decimalMetricString = $"{rounded} {unitPrefixSymbol}{symbol}";
+        return decimalMetricString;
+    }
+
+    private static int GetUnitPrefixIndex(double value, int @base)
+    {
+        int unitPrefixIndex;
+        if (value == 0)
+            unitPrefixIndex = -1;
+        else
+        {
+            var log = Math.Log(Math.Abs(value), @base);
+            unitPrefixIndex = (int)Math.Floor(log) - 1;
+        }
+
+        return unitPrefixIndex;
     }
 }
