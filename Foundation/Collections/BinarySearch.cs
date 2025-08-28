@@ -96,4 +96,43 @@ public static class BinarySearch
             }
         }
     }
+
+    public static BinarySearchResult Search2(int minIndex, int maxIndex, Func<int, bool> greaterThan, Func<int, bool> equals)
+    {
+        var greaterThanIndex = minIndex - 1;
+        var lessThanOrEqualIndex = maxIndex + 1;
+
+        while (greaterThanIndex + 1 < lessThanOrEqualIndex)
+        {
+            var midIndex = greaterThanIndex + (lessThanOrEqualIndex - greaterThanIndex) / 2;
+            if (greaterThan(midIndex))
+                greaterThanIndex = midIndex;
+            else
+                lessThanOrEqualIndex = midIndex;
+
+            Debug.WriteLine($"[{greaterThanIndex}] < value <= [{lessThanOrEqualIndex}]");
+        }
+
+        BinarySearchResultRelation resultRelation;
+        int index;
+        var areEqual = lessThanOrEqualIndex <= maxIndex && equals(lessThanOrEqualIndex);
+
+        if (areEqual)
+        {
+            resultRelation = BinarySearchResultRelation.Equals;
+            index = lessThanOrEqualIndex;
+        }
+        else if (greaterThanIndex < minIndex)
+        {
+            resultRelation = BinarySearchResultRelation.LessThanFirst;
+            index = 0;
+        }
+        else
+        {
+            resultRelation = BinarySearchResultRelation.GreaterThan;
+            index = greaterThanIndex;
+        }
+
+        return new BinarySearchResult(resultRelation, index);
+    }
 }

@@ -26,35 +26,10 @@ public static class MeasurementUnit
     
     private static UnitPrefix GetUnitPrefix(ulong value, IReadOnlyList<UnitPrefix> unitPrefixes)
     {
-        int? lessThanIndex = null;
-        int? equalsIndex = null;
-
-        bool LessThan(int index)
-        {
-            var lessThan = unitPrefixes[index].Base < value;
-            if (lessThan)
-                lessThanIndex = index;
-            return lessThan;
-        }
-
-        bool Equals(int index)
-        {
-            var equals = unitPrefixes[index].Base == value;
-            if (equals)
-                equalsIndex = index;
-            return equals;
-        }
-
-        BinarySearch.Search(0, unitPrefixes.Count - 1, LessThan, Equals);
-
-        int index;
-        if (equalsIndex != null)
-            index = equalsIndex.Value;
-        else if (lessThanIndex != null)
-            index = lessThanIndex.Value;
-        else
-            index = 1;
-        
+        bool GreaterThan(int index) => unitPrefixes[index].Base < value;
+        bool AreEqual(int index) => unitPrefixes[index].Base == value;
+        var binarySearchResult = BinarySearch.Search2(0, unitPrefixes.Count - 1, GreaterThan, AreEqual);
+        var index = binarySearchResult.Index;
         return unitPrefixes[index];
     }
 }

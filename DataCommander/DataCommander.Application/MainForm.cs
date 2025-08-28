@@ -161,15 +161,15 @@ public class MainForm : Form
     public void UpdateTotalMemory()
     {
         var totalMemory = GC.GetTotalMemory(false);
-        var workingSet = Environment.WorkingSet;
-
-        _managedMemoryToolStripStatusLabel!.Text = $"{BytesToText(totalMemory)} / {BytesToText(workingSet)}";
-
+        var text = BytesToText(totalMemory);
+        _managedMemoryToolStripStatusLabel.Text = text;
         _managedMemoryToolStripStatusLabel.ForeColor = totalMemory <= 256 * 1000 * 1000
             ? _colorTheme != null
                 ? _colorTheme.ForeColor.Value
                 : SystemColors.ControlText
             : _colorTheme!.ProviderKeyWordColor;
+        _managedMemoryToolStripStatusLabel.ToolTipText = $@"Managed memory: {text} ({totalMemory:N0} bytes)
+GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.CollectionCount(2)} gen2";
     }
 
     private static string BytesToText(long bytes) => MeasurementUnit.ToBinaryMetricString(bytes, 3, 2, "B");
@@ -455,7 +455,6 @@ public class MainForm : Form
         _managedMemoryToolStripStatusLabel.Name = "_managedMemoryToolStripStatusLabel";
         _managedMemoryToolStripStatusLabel.Size = new Size(140, 18);
         _managedMemoryToolStripStatusLabel.TextAlign = ContentAlignment.MiddleRight;
-        _managedMemoryToolStripStatusLabel.ToolTipText = "Managed memory / Working set";
         _managedMemoryToolStripStatusLabel.MouseUp += managedMemoryToolStripStatusLabel_MouseUp;
         // 
         // _toolStripPanel

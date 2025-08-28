@@ -26,45 +26,24 @@ public static class DecimalExtensions
 
     public static decimal Round(this decimal value, int precision, int scale)
     {
-        var numberOfDigitsLeft = value.GetNumberOfDigitsLeft();
+        var numberOfDigitsLeft = value.GetNumberOfLeftDigits();
         var remainingNumberOfDigitsRight = precision - numberOfDigitsLeft;
         Assert.IsGreaterThanOrEqual(remainingNumberOfDigitsRight, 0);
         var decimals = Math.Min(remainingNumberOfDigitsRight, scale);
         return decimal.Round(value, decimals);
     }
 
-    private static int GetNumberOfDigitsLeft(this decimal value)
+    public static int GetNumberOfLeftDigits(this decimal value)
     {
         var absoluteValue = decimal.Abs(value);
-        int? lessThanIndex = null;
-        int? equalsIndex = null;
-
-        bool LessThan(int index)
+        bool GreaterThan(int index) => PowersOfTenArray[index] < absoluteValue;
+        bool AreEqual(int index) => absoluteValue == PowersOfTenArray[index];
+        var binarySearchResult = BinarySearch.Search2(0, PowersOfTenArray.Length - 1, GreaterThan, AreEqual);
+        var numberOfLeftDigits = binarySearchResult.ResultRelation switch
         {
-            var lessThan = PowersOfTenArray[index] < absoluteValue;
-            if (lessThan)
-                lessThanIndex = index;
-            return lessThan;
-        }
-
-        bool Equals(int index)
-        {
-            var equals = PowersOfTenArray[index] == absoluteValue;
-            if (equals)
-                equalsIndex = index;
-            return equals;
-        }
-
-        BinarySearch.Search(0, PowersOfTenArray.Length - 1, LessThan, Equals);
-        
-        int numberOfDigitsLeft;
-        if (equalsIndex != null)
-            numberOfDigitsLeft = equalsIndex.Value + 2;
-        else if (lessThanIndex != null)
-            numberOfDigitsLeft = lessThanIndex.Value + 2;
-        else
-            numberOfDigitsLeft = 1;
-        
-        return numberOfDigitsLeft;
+            BinarySearchResultRelation.LessThanFirst => 1,
+            _ => binarySearchResult.Index + 2
+        };
+        return numberOfLeftDigits;
     }
 }
