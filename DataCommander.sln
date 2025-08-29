@@ -5,79 +5,80 @@ VisualStudioVersion = 17.14.36301.6 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Foundation", "Foundation", "{2E4B255C-096E-45D0-A27B-2725C7CBE13A}"
 	ProjectSection(SolutionItems) = preProject
-		..\Foundation\README.md = ..\Foundation\README.md
+		Foundation\README.md = Foundation\README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{71C8735D-181F-43FF-8CFF-5DB64B9CC5AE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Assertions", "..\Foundation\Assertions\Foundation.Assertions.csproj", "{873C1C9E-1ECC-4C53-B857-CC893F55EA6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Assertions", "Foundation\Assertions\Foundation.Assertions.csproj", "{873C1C9E-1ECC-4C53-B857-CC893F55EA6A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Collections", "..\Foundation\Collections\Foundation.Collections.csproj", "{976386E0-094B-4383-9443-2FC84ECB0A3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Collections", "Foundation\Collections\Foundation.Collections.csproj", "{976386E0-094B-4383-9443-2FC84ECB0A3F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Configuration", "..\Foundation\Configuration\Foundation.Configuration.csproj", "{4EE76136-D030-452F-95BE-8A63947C2854}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Configuration", "Foundation\Configuration\Foundation.Configuration.csproj", "{4EE76136-D030-452F-95BE-8A63947C2854}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Core", "..\Foundation\Core\Foundation.Core.csproj", "{9D83C864-9571-475D-A79A-84ACF75F1BF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Core", "Foundation\Core\Foundation.Core.csproj", "{9D83C864-9571-475D-A79A-84ACF75F1BF1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Data", "..\Foundation\Data\Foundation.Data.csproj", "{3A9F3290-3A4A-460E-88FE-E4D1EDB9D155}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Data", "Foundation\Data\Foundation.Data.csproj", "{3A9F3290-3A4A-460E-88FE-E4D1EDB9D155}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Data.SqlClient", "..\Foundation\Data.SqlClient\Foundation.Data.SqlClient.csproj", "{8C6E4459-FF09-4EA6-8F0F-6FB8848272C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Data.SqlClient", "Foundation\Data.SqlClient\Foundation.Data.SqlClient.csproj", "{8C6E4459-FF09-4EA6-8F0F-6FB8848272C8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.DefaultLog", "..\Foundation\DefaultLog\Foundation.DefaultLog.csproj", "{A23D8394-BE4C-47DF-9A74-66069CF247A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.DefaultLog", "Foundation\DefaultLog\Foundation.DefaultLog.csproj", "{A23D8394-BE4C-47DF-9A74-66069CF247A7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Deployment", "..\Foundation\Deployment\Foundation.Deployment.csproj", "{E71E5BC3-D023-4A4B-80C4-0B491070CC1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Deployment", "Foundation\Deployment\Foundation.Deployment.csproj", "{E71E5BC3-D023-4A4B-80C4-0B491070CC1A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Diagnostics", "..\Foundation\Diagnostics\Foundation.Diagnostics.csproj", "{6C40945A-979E-4CA2-93D1-FBC8A7E9BE64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Diagnostics", "Foundation\Diagnostics\Foundation.Diagnostics.csproj", "{6C40945A-979E-4CA2-93D1-FBC8A7E9BE64}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.InternalLog", "..\Foundation\InternalLog\Foundation.InternalLog.csproj", "{60813319-C3A3-47B7-ABE7-C52572315443}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.InternalLog", "Foundation\InternalLog\Foundation.InternalLog.csproj", "{60813319-C3A3-47B7-ABE7-C52572315443}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.IO", "..\Foundation\IO\Foundation.IO.csproj", "{E81AA2CE-B8BF-4478-A5A4-3E1CCFD7DF28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.IO", "Foundation\IO\Foundation.IO.csproj", "{E81AA2CE-B8BF-4478-A5A4-3E1CCFD7DF28}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Linq", "..\Foundation\Linq\Foundation.Linq.csproj", "{0680C4D0-DA6D-4CF0-89F3-A9BAA59DCE48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Linq", "Foundation\Linq\Foundation.Linq.csproj", "{0680C4D0-DA6D-4CF0-89F3-A9BAA59DCE48}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Log", "..\Foundation\Log\Foundation.Log.csproj", "{2AF79CD9-A352-49A9-A842-87B0CB1BCBDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Log", "Foundation\Log\Foundation.Log.csproj", "{2AF79CD9-A352-49A9-A842-87B0CB1BCBDD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Text", "..\Foundation\Text\Foundation.Text.csproj", "{493B8277-8ED6-42E3-AD45-4257AFB4C077}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Text", "Foundation\Text\Foundation.Text.csproj", "{493B8277-8ED6-42E3-AD45-4257AFB4C077}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Threading", "..\Foundation\Threading\Foundation.Threading.csproj", "{A8DD8422-3463-4F91-A620-25BCC1127C53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Threading", "Foundation\Threading\Foundation.Threading.csproj", "{A8DD8422-3463-4F91-A620-25BCC1127C53}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Xml", "..\Foundation\Xml\Foundation.Xml.csproj", "{05FCB4BA-781D-4B25-BB86-9E2F5E2FE3D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Xml", "Foundation\Xml\Foundation.Xml.csproj", "{05FCB4BA-781D-4B25-BB86-9E2F5E2FE3D0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Api", "DataCommander.Api\DataCommander.Api.csproj", "{85C955DA-4060-4558-9866-FF660244E33E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander\DataCommander.Api", "DataCommander\DataCommander.Api\DataCommander.Api.csproj", "{85C955DA-4060-4558-9866-FF660244E33E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Application", "DataCommander.Application\DataCommander.Application.csproj", "{13E1283E-F978-4ED3-AF66-5842A29009EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander\DataCommander.Application", "DataCommander\DataCommander.Application\DataCommander.Application.csproj", "{13E1283E-F978-4ED3-AF66-5842A29009EA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Windows.Forms", "..\Foundation\Windows.Forms\Foundation.Windows.Forms.csproj", "{D036893C-779C-43F8-AD54-9EECA847A17F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Windows.Forms", "Foundation\Windows.Forms\Foundation.Windows.Forms.csproj", "{D036893C-779C-43F8-AD54-9EECA847A17F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander", "DataCommander\DataCommander.csproj", "{D2A37383-F42E-4FA1-ABC5-3EC9C091B496}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander\DataCommander", "DataCommander\DataCommander\DataCommander.csproj", "{D2A37383-F42E-4FA1-ABC5-3EC9C091B496}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers.SqlServer", "Providers\DataCommander.Providers.SqlServer\DataCommander.Providers.SqlServer.csproj", "{E72CD2A3-4343-4FED-9DE1-5BBD8B19354E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander\DataCommander.Providers.SqlServer", "Providers\DataCommander.Providers.SqlServer\DataCommander.Providers.SqlServer.csproj", "{E72CD2A3-4343-4FED-9DE1-5BBD8B19354E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers.Tfs", "Providers\DataCommander.Providers.Tfs\DataCommander.Providers.Tfs.csproj", "{7E353C6B-78B1-4CC9-AA86-90EF48AE7239}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander\DataCommander.Providers.Tfs", "Providers\DataCommander.Providers.Tfs\DataCommander.Providers.Tfs.csproj", "{7E353C6B-78B1-4CC9-AA86-90EF48AE7239}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers.OleDb", "Providers\DataCommander.Providers.OleDb\DataCommander.Providers.OleDb.csproj", "{3D5C8866-64E7-4CA8-B5AE-F58AFCA5FE3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander\DataCommander.Providers.OleDb", "Providers\DataCommander.Providers.OleDb\DataCommander.Providers.OleDb.csproj", "{3D5C8866-64E7-4CA8-B5AE-F58AFCA5FE3B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers.SQLite", "Providers\DataCommander.Providers.SQLite\DataCommander.Providers.SQLite.csproj", "{0381F665-EE66-4E83-A4FE-903BC9DAB8FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander\DataCommander.Providers.SQLite", "Providers\DataCommander.Providers.SQLite\DataCommander.Providers.SQLite.csproj", "{0381F665-EE66-4E83-A4FE-903BC9DAB8FE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers.SqlServerCe40", "Providers\DataCommander.Providers.SqlServerCe40\DataCommander.Providers.SqlServerCe40.csproj", "{80BB6D36-97B2-4393-929D-0AF5F7A05FFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander\DataCommander.Providers.SqlServerCe40", "Providers\DataCommander.Providers.SqlServerCe40\DataCommander.Providers.SqlServerCe40.csproj", "{80BB6D36-97B2-4393-929D-0AF5F7A05FFA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander.Providers.MySql", "Providers\DataCommander.Providers.MySql\DataCommander.Providers.MySql.csproj", "{C088FDA9-7991-41DF-A72D-6B7074AC555B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCommander\DataCommander.Providers.MySql", "Providers\DataCommander.Providers.MySql\DataCommander.Providers.MySql.csproj", "{C088FDA9-7991-41DF-A72D-6B7074AC555B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Msi", "Providers\DataCommander.Providers.Msi\DataCommander.Providers.Msi.csproj", "{8321DB29-34C0-4A27-AE1D-C3CE807A9353}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander\DataCommander.Providers.Msi", "Providers\DataCommander.Providers.Msi\DataCommander.Providers.Msi.csproj", "{8321DB29-34C0-4A27-AE1D-C3CE807A9353}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Odp", "Providers\DataCommander.Providers.Odp\DataCommander.Providers.Odp.csproj", "{E6E924FD-41D2-4A5E-909B-AD4BE7AB4084}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander\DataCommander.Providers.Odp", "Providers\DataCommander.Providers.Odp\DataCommander.Providers.Odp.csproj", "{E6E924FD-41D2-4A5E-909B-AD4BE7AB4084}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.Assertions.Test", "..\Foundation\Assertions.Test\Foundation.Assertions.Test.csproj", "{4CCB9E25-FA57-4BDD-AB78-842D7BEFE8F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.Assertions.Test", "Foundation\Assertions.Test\Foundation.Assertions.Test.csproj", "{4CCB9E25-FA57-4BDD-AB78-842D7BEFE8F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.PostgreSql", "Providers\DataCommander.Providers.PostgreSql\DataCommander.Providers.PostgreSql.csproj", "{F4553DD9-F793-4DD1-9D34-98449264018B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander\DataCommander.Providers.PostgreSql", "Providers\DataCommander.Providers.PostgreSql\DataCommander.Providers.PostgreSql.csproj", "{F4553DD9-F793-4DD1-9D34-98449264018B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
 	ProjectSection(SolutionItems) = preProject
 		global.json = global.json
+		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.Diagnostics.Test", "..\Foundation\Diagnostics.Test\Foundation.Diagnostics.Test.csproj", "{33BF19BF-22BE-40C5-9BF2-2A7D65E02D94}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.Diagnostics.Test", "Foundation\Diagnostics.Test\Foundation.Diagnostics.Test.csproj", "{33BF19BF-22BE-40C5-9BF2-2A7D65E02D94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.Diagnostics.Benchmarks", "..\Foundation\Diagnostics.Benchmarks\Foundation.Diagnostics.Benchmarks.csproj", "{E539F80A-186B-4B41-8506-20174B46F143}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.Diagnostics.Benchmarks", "Foundation\Diagnostics.Benchmarks\Foundation.Diagnostics.Benchmarks.csproj", "{E539F80A-186B-4B41-8506-20174B46F143}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -10,8 +10,6 @@
     <Authors>Data Commander</Authors>
     <PackageId>Data Commander</PackageId>
     <Description>Data Commander</Description>
-    <LangVersion>preview</LangVersion>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
