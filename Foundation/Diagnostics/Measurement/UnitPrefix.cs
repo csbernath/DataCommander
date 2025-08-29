@@ -3,7 +3,7 @@
 namespace Foundation.Diagnostics.Measurement;
 
 /// <summary>
-/// https://en.wikipedia.org/wiki/Binary_prefix
+/// https://en.wikipedia.org/wiki/Unit_prefix
 /// </summary>
 [CLSCompliant(false)]
 public class UnitPrefix(string name, string symbol, ulong @base)
