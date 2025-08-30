@@ -1454,8 +1454,8 @@ public sealed partial class QueryForm : Form, IQueryForm
         ArgumentNullException.ThrowIfNull(commandText);
 
         var succeeded = false;
-        Api.QueryConfiguration.Query query = null;
-        ReadOnlyCollection<DbRequestParameter> parameters = null;
+        Api.QueryConfiguration.Query? query = null;
+        ReadOnlyCollection<DbRequestParameter>? parameters = null;
         string? resultCommandText = null;
 
         var configurationStart = commandText.IndexOf("/* Query Configuration");
@@ -1654,7 +1654,7 @@ public sealed partial class QueryForm : Form, IQueryForm
 
     private void ShowDataTableDataGrid(DataTable dataTable)
     {
-        var commandBuilder = Provider.DbProviderFactory.CreateCommandBuilder();
+        var commandBuilder = Provider.DbProviderFactory.CreateCommandBuilder()!;
         var dataTableEditor = new DataTableEditor(this, commandBuilder, _colorTheme)
         {
             ReadOnly = !_openTableMode
@@ -1753,7 +1753,7 @@ public sealed partial class QueryForm : Form, IQueryForm
                 Width = -2
             };
 
-            var type = (Type)dataColumn.ExtendedProperties[0];
+            var type = (Type?)dataColumn.ExtendedProperties[0];
 
             if (type == null)
                 type = dataColumn.DataType;
@@ -1764,7 +1764,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         }
 
         var count = dataTable.Columns.Count;
-        var items = new string[count];
+        var items = new string?[count];
 
         foreach (DataRow dataRow in dataTable.Rows)
         {
@@ -1781,7 +1781,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         ShowTabPage(dataTable.TableName, null, listView);
     }
 
-    private void ShowTabPage(string tabPageName, string toolTipText, Control control)
+    private void ShowTabPage(string tabPageName, string? toolTipText, Control control)
     {
         control.Dock = DockStyle.Fill;
         var tabPage = new TabPage(tabPageName)

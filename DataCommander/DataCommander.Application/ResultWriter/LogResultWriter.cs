@@ -224,7 +224,7 @@ internal sealed class LogResultWriter : IResultWriter
 
     private DataTransferObjectField ToDataTransferObjectField(FoundationDbColumn dbColumn)
     {
-        var name = dbColumn.ColumnName;
+        var name = dbColumn.ColumnName!;
 
         var cSharpType = CSharpTypeArray.CSharpTypes.First(t => t.Type == dbColumn.DataType);
         var stringBuilder = new StringBuilder();

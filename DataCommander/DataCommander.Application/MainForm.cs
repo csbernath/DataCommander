@@ -620,7 +620,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         var applicationData = DataCommanderApplication.Instance.ApplicationData;
         FormPosition.Load(applicationData, this);
         var folder = applicationData.CurrentType;
-        var contains = folder.Attributes.TryGetAttributeValue("RecentFileList", out string[] array);
+        var contains = folder.Attributes.TryGetAttributeValue("RecentFileList", out string[]? array);
 
         if (contains && array != null)
         {
@@ -630,7 +630,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
                 _recentFileList.Add(array[i]);
         }
 
-        contains = folder.Attributes.TryGetAttributeValue("Font", out string base64);
+        contains = folder.Attributes.TryGetAttributeValue("Font", out string? base64);
 
         if (contains)
             SelectedFont = DeserializeFont(base64);
@@ -774,7 +774,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         return serializedFont;
     }
 
-    private static Font DeserializeFont(string serializedFont)
+    private static Font? DeserializeFont(string? serializedFont)
     {
         var font = serializedFont != null
             ? JsonConvert.DeserializeObject<Font>(serializedFont)
@@ -782,7 +782,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         return font;
     }
 
-    public Font SelectedFont { get; private set; }
+    public Font? SelectedFont { get; private set; }
 
     private void btnConnect_Click(object? sender, EventArgs e) => Connect();
 
