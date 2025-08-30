@@ -10,10 +10,6 @@ public sealed class WorkerThreadPoolManager(
     WorkerThreadPool pool,
     IWaitCallbackFactory waitCallbackFactory)
 {
-    private readonly WorkerThreadPool _pool = pool;
-
-    private readonly IWaitCallbackFactory _waitCallbackFactory = waitCallbackFactory;
-
     private Timer? _timer;
 
     public void Start() => _timer = new Timer(ManagePoolDequeuers, null, 10000, 10000);
@@ -22,16 +18,16 @@ public sealed class WorkerThreadPoolManager(
 
     private void ManagePoolDequeuers(object? state)
     {
-        if (_pool.QueuedItemCount > 0)
+        if (pool.QueuedItemCount > 0)
         {
-            var addableThreadCount = _pool.MaxThreadCount - _pool.Dequeuers.Count;
+            var addableThreadCount = pool.MaxThreadCount - pool.Dequeuers.Count;
             var count = Math.Min(addableThreadCount, 5);
 
             for (var i = 0; i < count; i++)
             {
-                var callback = _waitCallbackFactory.CreateWaitCallback();
+                var callback = waitCallbackFactory.CreateWaitCallback();
                 var dequeuer = new WorkerThreadPoolDequeuer(callback);
-                _pool.Dequeuers.Add(dequeuer);
+                pool.Dequeuers.Add(dequeuer);
                 dequeuer.Thread.Start();
             }
         }
@@ -41,7 +37,7 @@ public sealed class WorkerThreadPoolManager(
             List<WorkerThreadPoolDequeuer> dequeuers = [];
             WorkerThreadCollection threads = [];
 
-            foreach (var dequeuer in _pool.Dequeuers)
+            foreach (var dequeuer in pool.Dequeuers)
             {
                 var milliseconds = StopwatchTimeSpan.ToInt32(timestamp - dequeuer.LastActivityTimestamp, 1000);
 
@@ -54,7 +50,7 @@ public sealed class WorkerThreadPoolManager(
 
             foreach (var dequeuer in dequeuers)
             {
-                _pool.Dequeuers.Remove(dequeuer);
+                pool.Dequeuers.Remove(dequeuer);
             }
 
             var stopEvent = new ManualResetEvent(false);

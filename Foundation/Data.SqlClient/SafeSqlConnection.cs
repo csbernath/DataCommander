@@ -67,7 +67,7 @@ public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
     {
         var separator = new string('-', 80);
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendFormat("SafeSqlConnection.HandleException(connection), elapsed: {0}, exception:\r\n{1}", elapsed, exception.ToLogString());
+        stringBuilder.Append($"SafeSqlConnection.HandleException(connection), elapsed: {elapsed}, exception:\r\n{exception.ToLogString()}");
         var handled = false;
         var timeout = 1 * 60 * 1000; // 1 minutes
 
@@ -134,14 +134,14 @@ public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
         var p = parameters.ToLogString();
         var database = command.Connection!.Database;
 
-        stringBuilder.AppendFormat("Database: {0}\r\n", database);
-        stringBuilder.AppendFormat("Command: {0}\r\n{1}\r\n{2}\r\n", command.CommandText, p, separator);
-        stringBuilder.AppendFormat("Exception:{0}\r\n{1}\r\n", exception, separator);
+        stringBuilder.Append($"Database: {database}\r\n");
+        stringBuilder.Append($"Command: {command.CommandText}\r\n{p}\r\n{separator}\r\n");
+        stringBuilder.Append($"Exception:{exception}\r\n{separator}\r\n");
         var handled = false;
 
         if (exception is SqlException sqlEx)
         {
-            stringBuilder.AppendFormat("{0}\r\n{1}\r\n", sqlEx.Errors.ToLogString(), separator);
+            stringBuilder.Append($"{sqlEx.Errors.ToLogString()}\r\n{separator}\r\n");
 
             switch (sqlEx.Number)
             {

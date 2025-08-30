@@ -33,8 +33,8 @@ internal static class ColorThemeApplier
 
         public void Apply(Control control)
         {
-            control.ForeColor = colorTheme.ForeColor.Value;
-            control.BackColor = colorTheme.BackColor.Value;
+            control.ForeColor = colorTheme.ForeColor!.Value;
+            control.BackColor = colorTheme.BackColor!.Value;
 
             foreach (Control childControl in control.Controls)
                 colorTheme.Apply(childControl);
@@ -42,8 +42,8 @@ internal static class ColorThemeApplier
 
         public void Apply(ToolStripItem toolStripItem)
         {
-            toolStripItem.ForeColor = colorTheme.ForeColor.Value;
-            toolStripItem.BackColor = colorTheme.BackColor.Value;
+            toolStripItem.ForeColor = colorTheme.ForeColor!.Value;
+            toolStripItem.BackColor = colorTheme.BackColor!.Value;
         }
     }
 }

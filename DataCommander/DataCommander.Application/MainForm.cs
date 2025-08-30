@@ -71,7 +71,6 @@ public class MainForm : Form
         switch (colorMode)
         {
             case SystemColorMode.Classic:
-                break;
             case SystemColorMode.System:
                 break;
             case SystemColorMode.Dark:
@@ -118,8 +117,8 @@ public class MainForm : Form
 
         if (_colorTheme != null)
         {
-            ForeColor = _colorTheme.ForeColor.Value;
-            BackColor = _colorTheme.BackColor.Value;
+            ForeColor = _colorTheme.ForeColor!.Value;
+            BackColor = _colorTheme.BackColor!.Value;
             
             foreach (Control control in Controls)
             {

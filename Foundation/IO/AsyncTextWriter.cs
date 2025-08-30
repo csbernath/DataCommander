@@ -10,7 +10,7 @@ public class AsyncTextWriter
 {
     private readonly TextWriter _textWriter;
     private readonly List<AsyncTextWriterListItem> _list = [];
-    private readonly object _syncObject = new();
+    private readonly Lock _syncObject = new();
     private readonly ManualResetEvent _waitHandle = new(false);
     private RegisteredWaitHandle? _registeredWaitHandle;
 

@@ -37,7 +37,7 @@ public class SegmentedCollection<T> : ICollection<T>
 
     IEnumerator IEnumerable.GetEnumerator()
     {
-        var enumerable = (IEnumerable<T>) this;
+        IEnumerable<T> enumerable = this;
         return enumerable.GetEnumerator();
     }
 
@@ -59,15 +59,11 @@ public class SegmentedCollection<T> : ICollection<T>
             };
 
             if (Count == 0)
-            {
                 _first = newSegment;
-                _last = newSegment;
-            }
             else
-            {
                 _last!.Next = newSegment;
-                _last = newSegment;
-            }
+
+            _last = newSegment;
         }
 
         _last!.Items![index] = item;

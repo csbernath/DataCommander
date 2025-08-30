@@ -27,10 +27,8 @@ public static class SqlCommandExtensions
                     if (parameters.Count > 0)
                     {
                         var parametersString = GetSpExecuteSqlParameters(parameters);
-                        stringBuilder.AppendFormat(
-                            "exec sp_executesql {0},{1}",
-                            command.CommandText.ToNullableNVarChar(),
-                            parametersString.ToNullableNVarChar());
+                        stringBuilder.Append(
+                            $"exec sp_executesql {command.CommandText.ToNullableNVarChar()},{parametersString.ToNullableNVarChar()}");
 
                         stringBuilder.Append(',');
                         stringBuilder.Append(command.Parameters.ToLogString());
@@ -62,7 +60,7 @@ public static class SqlCommandExtensions
             }
 
             var dataTypeName = parameter.GetDataTypeName();
-            sb.AppendFormat("{0} {1}", parameter.ParameterName, dataTypeName);
+            sb.Append($"{parameter.ParameterName} {dataTypeName}");
         }
         return sb.ToString();
     }

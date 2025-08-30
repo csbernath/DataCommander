@@ -52,7 +52,7 @@ exec MethodProfilerApplication_Add {0},{1}",
             applicationName.ToNullableNVarChar(),
             now.ToSqlConstant()
         );
-        sb.AppendFormat(",{0},{1}\r\n", beginTime, Stopwatch.Frequency);
+        sb.Append($",{beginTime},{Stopwatch.Frequency}\r\n");
         sb.Append("set @applicationId    = @@identity\r\n");
         TextWriter.Write(sb.ToString());
     }

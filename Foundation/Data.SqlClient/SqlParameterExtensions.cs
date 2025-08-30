@@ -17,9 +17,9 @@ public static class SqlParameterExtensions
             {
                 case SqlDbType.Decimal:
                     if (parameter.Scale == 0)
-                        stringBuilder.AppendFormat("({0})", parameter.Precision);
+                        stringBuilder.Append($"({parameter.Precision})");
                     else
-                        stringBuilder.AppendFormat("({0},{1})", parameter.Precision, parameter.Scale);
+                        stringBuilder.Append($"({parameter.Precision},{parameter.Scale})");
                     break;
 
                 case SqlDbType.Char:
@@ -34,7 +34,7 @@ public static class SqlParameterExtensions
                     else
                         sizeString = size.ToString();
 
-                    stringBuilder.AppendFormat("({0})", sizeString);
+                    stringBuilder.Append($"({sizeString})");
                     break;
             }
 

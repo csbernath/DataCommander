@@ -56,9 +56,7 @@ public sealed class LimitedThreadPool<T>(int maxThreadCount)
     {
         try
         {
-            var item = (Tuple<Action<T>, T>)stateObject!;
-            var waitCallback = item.Item1;
-            var state = item.Item2;
+            var (waitCallback, state) = (Tuple<Action<T>, T>)stateObject!;
             waitCallback(state);
         }
         finally

@@ -11,10 +11,10 @@ internal sealed class OpenConnectionFormHelper
         var connectionStringBuilder = provider.CreateConnectionStringBuilder();
         connectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
         var dataSource = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject)
-            ? (string)dataSourceObject
+            ? (string?)dataSourceObject
             : null;
         var host = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.Host, out var hostObject)
-            ? (string)hostObject
+            ? (string?)hostObject
             : null;
         var containsIntegratedSecurity = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
         var stringBuilder = new StringBuilder();

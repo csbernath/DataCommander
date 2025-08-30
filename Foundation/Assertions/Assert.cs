@@ -45,7 +45,7 @@ public static class Assert
     public static void IsNotNull([NotNull] object? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null) =>
         ArgumentNullException.ThrowIfNull(argument, paramName);
 
-    public static void IsNull<T>(T argument, [CallerArgumentExpression(nameof(argument))] string? argumentString = null) where T : class
+    public static void IsNull(object? argument, [CallerArgumentExpression(nameof(argument))] string? argumentString = null)
     {
         if (argument != null)
         {

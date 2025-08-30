@@ -102,7 +102,7 @@ TempPath:               {Path.GetTempPath()}");
         try
         {
             var friendlyName = appDomain.FriendlyName;
-            stringBuilder.AppendFormat("FriendlyName: {0}\r\n", friendlyName);
+            stringBuilder.Append($"FriendlyName: {friendlyName}\r\n");
             var assemblies = appDomain.GetAssemblies();
             stringBuilder.AppendLine("Assemblies:");
 

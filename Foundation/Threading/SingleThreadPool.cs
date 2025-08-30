@@ -49,9 +49,7 @@ public sealed class SingleThreadPool
 
         for (var i = 0; i < array.Length; i++)
         {
-            var workItem = array[i];
-            var callback = workItem.Item1;
-            var state = workItem.Item2;
+            var (callback, state) = array[i];
 
             try
             {

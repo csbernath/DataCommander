@@ -40,7 +40,7 @@ public sealed class CircularBuffer<T> : IList<T>
 
     IEnumerator IEnumerable.GetEnumerator()
     {
-        var enumerable = (IEnumerable<T>) this;
+        IEnumerable<T> enumerable = this;
         return enumerable.GetEnumerator();
     }
 

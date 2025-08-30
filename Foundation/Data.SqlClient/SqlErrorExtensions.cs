@@ -15,20 +15,20 @@ public static class SqlErrorExtensions
         if (error.Number == 0 && error.Class == 0 && error.State == 1)
         {
             if (hasProcedure)
-                stringBuilder.AppendFormat("Server: Procedure {0}, Line {1}", error.Procedure, error.LineNumber);
+                stringBuilder.Append($"Server: Procedure {error.Procedure}, Line {error.LineNumber}");
             else
-                stringBuilder.AppendFormat("Server: Line {0}", error.LineNumber);
+                stringBuilder.Append($"Server: Line {error.LineNumber}");
         }
         else if (error.Class == 0 && error.State == 1 && error.LineNumber == 1)
-            stringBuilder.AppendFormat("Server: Msg {0}", error.Number);
+            stringBuilder.Append($"Server: Msg {error.Number}");
         else
         {
-            stringBuilder.AppendFormat("Server: Msg {0}, Level {1}, State {2}", error.Number, error.Class, error.State);
+            stringBuilder.Append($"Server: Msg {error.Number}, Level {error.Class}, State {error.State}");
 
             if (hasProcedure)
-                stringBuilder.AppendFormat(", Procedure: {0}", error.Procedure);
+                stringBuilder.Append($", Procedure: {error.Procedure}");
 
-            stringBuilder.AppendFormat(", Line {0}", error.LineNumber);
+            stringBuilder.Append($", Line {error.LineNumber}");
         }
 
         return stringBuilder.ToString();

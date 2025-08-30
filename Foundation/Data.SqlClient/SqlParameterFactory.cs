@@ -49,7 +49,7 @@ public static class SqlParameterFactory
 
     public static SqlParameter CreateChar(string parameterName, int size, string value)
     {
-        var parameterValue = value != null ? (object)value : DBNull.Value;
+        object parameterValue = value != null ? value : DBNull.Value;
         var parameter = new SqlParameter(parameterName, SqlDbType.Char, size)
         {
             Value = parameterValue
@@ -61,7 +61,7 @@ public static class SqlParameterFactory
 
     public static SqlParameter CreateNVarChar(string parameterName, int size, string value)
     {
-        var parameterValue = value != null ? (object)value : DBNull.Value;
+        object parameterValue = value != null ? value : DBNull.Value;
         var parameter = new SqlParameter(parameterName, SqlDbType.NVarChar, size)
         {
             Value = parameterValue
@@ -87,7 +87,7 @@ public static class SqlParameterFactory
 
     public static SqlParameter CreateVarChar(string parameterName, int size, string? value)
     {
-        var parameterValue = value != null ? (object)value : DBNull.Value;
+        object parameterValue = value != null ? value : DBNull.Value;
         var parameter = new SqlParameter(parameterName, SqlDbType.VarChar, size)
         {
             Value = parameterValue

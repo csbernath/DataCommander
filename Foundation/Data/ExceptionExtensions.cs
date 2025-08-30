@@ -17,14 +17,14 @@ public static class ExceptionExtensions
     private static void Append(StringBuilder sb, Win32Exception win32Exception)
     {
         sb.AppendLine(win32Exception.ToString());
-        sb.AppendFormat("Win32Excpetion.NativeErrorCode: {0}", win32Exception.NativeErrorCode);
+        sb.Append($"Win32Excpetion.NativeErrorCode: {win32Exception.NativeErrorCode}");
     }
 
     private static void Append(StringBuilder sb, SocketException socketException)
     {
         Win32Exception win32Exception = socketException;
         Append(sb, win32Exception);
-        sb.AppendFormat("\r\nSocketException.SocketErrorCode: {0}", socketException.SocketErrorCode);
+        sb.Append($"\r\nSocketException.SocketErrorCode: {socketException.SocketErrorCode}");
     }
 
     // private static void Append(StringBuilder sb, SqlException sqlException)

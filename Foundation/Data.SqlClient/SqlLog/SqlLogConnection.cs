@@ -21,15 +21,8 @@ internal sealed class SqlLogConnection(
         {
             var microseconds = StopwatchTimeSpan.ToInt32(duration, 1000000);
             var sb = new StringBuilder();
-            sb.AppendFormat(
-                "exec LogConnectionOpen {0},{1},{2},{3},{4},{5},{6}",
-                ApplicationId,
-                ConnectionNo,
-                name.ToNullableVarChar(),
-                userName.ToNullableVarChar(),
-                hostName.ToNullableVarChar(),
-                startDate.ToSqlConstant(),
-                microseconds);
+            sb.Append(
+                $"exec LogConnectionOpen {ApplicationId},{ConnectionNo},{name.ToNullableVarChar()},{userName.ToNullableVarChar()},{hostName.ToNullableVarChar()},{startDate.ToSqlConstant()},{microseconds}");
 
             if (exception != null)
             {

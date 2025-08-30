@@ -42,7 +42,7 @@ public class ListIndex<T> : ICollectionIndex<T>, IList<T>
 
         set
         {
-            Assert.IsTrue(index < Count);
+            Assert.IsLessThan(index, Count);
             _list![index] = value;
         }
     }

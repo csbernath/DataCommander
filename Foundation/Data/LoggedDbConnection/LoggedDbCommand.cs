@@ -139,7 +139,7 @@ internal sealed class LoggedDbCommand : IDbCommand
 
     IDataReader IDbCommand.ExecuteReader()
     {
-        var dbCommand = (IDbCommand)this;
+        IDbCommand dbCommand = this;
         return dbCommand.ExecuteReader(CommandBehavior.Default);
     }
 

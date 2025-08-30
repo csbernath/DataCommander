@@ -71,7 +71,7 @@ public static class IDataParameterCollectionExtensions
                             stringBuilder.AppendLine(",");
                         }
 
-                        stringBuilder.AppendFormat("  {0} = {1}", parameter.ParameterName, valueString);
+                        stringBuilder.Append($"  {parameter.ParameterName} = {valueString}");
                     }
                 }
             }

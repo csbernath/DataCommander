@@ -41,30 +41,28 @@ public sealed partial class QueryForm : Form, IQueryForm
         NumberFormat = new NumberFormatInfo { NumberDecimalSeparator = "." };
     }
 
-    public QueryForm(MainForm mainForm,
-        ProviderInfo providerInfo,
-        IProvider provider, ConnectionInfo connectionInfo, ConnectionBase connection,
+    public QueryForm(MainForm mainForm, ProviderInfo providerInfo, IProvider provider, ConnectionInfo connectionInfo, ConnectionBase connection,
         StatusStrip parentStatusBar, ColorTheme? colorTheme)
     {
         Log.Trace(CallerInformation.Create(), "Queryform.ctor...");
         GarbageMonitor.Default.Add("QueryForm", this);
-        
+
         ArgumentNullException.ThrowIfNull(providerInfo);
         ArgumentNullException.ThrowIfNull(provider);
 
         _providerInfo = providerInfo;
         Provider = provider;
-        
+
         _mainForm = mainForm;
         _connectionInfo = connectionInfo;
         _parentStatusBar = parentStatusBar;
         _colorTheme = colorTheme;
 
         Connection = connection;
-        
+
         connection.InfoMessage += Connection_InfoMessage;
         connection.DatabaseChanged += Connection_DatabaseChanged;
-        
+
         _timer.Tick += Timer_Tick;
 
         var task = new Task(ConsumeInfoMessages);
@@ -125,7 +123,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         var objectExplorer = provider.CreateObjectExplorer();
         if (objectExplorer != null)
         {
-            var startTimestamp = Stopwatch.GetTimestamp();            
+            var startTimestamp = Stopwatch.GetTimestamp();
             objectExplorer.SetConnectionStringAndCredential(_connectionInfo.ConnectionStringAndCredential);
             var cancellationTokenSource = new CancellationTokenSource();
             var cancelableOperationForm = new CancelableOperationForm(mainForm, cancellationTokenSource, TimeSpan.FromSeconds(1), "Getting children...",
@@ -175,9 +173,9 @@ public sealed partial class QueryForm : Form, IQueryForm
                 @object =>
                 {
                     if (@object is MenuStrip menuStrip)
-                        _colorTheme.Apply(menuStrip);
+                        _colorTheme!.Apply(menuStrip);
                     else if (@object is ToolStripItem toolStripItem)
-                        _colorTheme.Apply(toolStripItem);
+                        _colorTheme!.Apply(toolStripItem);
                 });
         }
 
@@ -459,7 +457,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         _mnuClearCache.MergeIndex = 1;
         _mnuClearCache.Name = "_mnuClearCache";
         _mnuClearCache.ShortcutKeys = ((Keys)(((Keys.Control | Keys.Shift)
-                                                                         | Keys.C)));
+                                               | Keys.C)));
         _mnuClearCache.Size = new Size(211, 22);
         _mnuClearCache.Text = "&Clear Cache";
         // 
@@ -617,7 +615,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         _mnuExecuteQueryXml.MergeIndex = 9;
         _mnuExecuteQueryXml.Name = "_mnuExecuteQueryXml";
         _mnuExecuteQueryXml.ShortcutKeys = ((Keys)(((Keys.Control | Keys.Shift)
-                                                                              | Keys.X)));
+                                                    | Keys.X)));
         _mnuExecuteQueryXml.Size = new Size(298, 22);
         _mnuExecuteQueryXml.Text = "Execute Query (XML)";
         _mnuExecuteQueryXml.Click += new EventHandler(mnuXml_Click);
@@ -627,7 +625,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         _mnuOpenTable.MergeIndex = 10;
         _mnuOpenTable.Name = "_mnuOpenTable";
         _mnuOpenTable.ShortcutKeys = ((Keys)(((Keys.Control | Keys.Shift)
-                                                                        | Keys.O)));
+                                              | Keys.O)));
         _mnuOpenTable.Size = new Size(298, 22);
         _mnuOpenTable.Text = "Edit Rows";
         _mnuOpenTable.Click += new EventHandler(EditRows_Click);
@@ -756,7 +754,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         _mnuGotoQueryEditor.MergeIndex = 15;
         _mnuGotoQueryEditor.Name = "_mnuGotoQueryEditor";
         _mnuGotoQueryEditor.ShortcutKeys = ((Keys)(((Keys.Control | Keys.Shift)
-                                                                              | Keys.Q)));
+                                                    | Keys.Q)));
         _mnuGotoQueryEditor.Size = new Size(298, 22);
         _mnuGotoQueryEditor.Text = "Goto &Query Editor";
         _mnuGotoQueryEditor.Click += new EventHandler(mnuGotoQueryEditor_Click);
@@ -783,7 +781,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         _mnuCloseAllTabPages.MergeIndex = 18;
         _mnuCloseAllTabPages.Name = "_mnuCloseAllTabPages";
         _mnuCloseAllTabPages.ShortcutKeys = ((Keys)(((Keys.Control | Keys.Shift)
-                                                                               | Keys.F4)));
+                                                     | Keys.F4)));
         _mnuCloseAllTabPages.Size = new Size(298, 22);
         _mnuCloseAllTabPages.Text = "Close &All TabPages";
         _mnuCloseAllTabPages.Click += new EventHandler(mnuCloseAllTabPages_Click);
@@ -845,7 +843,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         createCCommandQueryToolStripMenuItem.Name = "createCCommandQueryToolStripMenuItem";
         createCCommandQueryToolStripMenuItem.ShortcutKeys =
             ((Keys)(((Keys.Control | Keys.Shift)
-                                          | Keys.Q)));
+                     | Keys.Q)));
         createCCommandQueryToolStripMenuItem.Size = new Size(298, 22);
         createCCommandQueryToolStripMenuItem.Text = "Create C# Command/Query";
         createCCommandQueryToolStripMenuItem.Click += new EventHandler(createCCommandQueryToolStripMenuItem_Click);
@@ -1220,7 +1218,7 @@ public sealed partial class QueryForm : Form, IQueryForm
                 var connectionStringAndCredential = new ConnectionStringAndCredential(connectionStringBuilder.ConnectionString,
                     _connectionInfo.ConnectionStringAndCredential.Credential);
                 var connection = Provider.CreateConnection(connectionStringAndCredential);
-                
+
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
                 var text = OpenConnectionFormHelper.CreateOpenConnectionFormText(_connectionInfo, _providerInfo, Provider);
@@ -1234,10 +1232,10 @@ public sealed partial class QueryForm : Form, IQueryForm
 
                 connection.InfoMessage += Connection_InfoMessage;
                 connection.DatabaseChanged += Connection_DatabaseChanged;
-                
-                Connection.Connection.Dispose();                
+
+                Connection.Connection.Dispose();
                 Connection = connection;
-                
+
                 AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Opening connection succeeded."));
             }
             catch (Exception exception)
@@ -1246,6 +1244,7 @@ public sealed partial class QueryForm : Form, IQueryForm
                 AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Error, null, $"Opening connection failed.\r\n{exception.Message}"));
             }
         }
+
         return succeeded;
     }
 
@@ -1580,7 +1579,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         ShowTabPage("TextResult", GetToolTipText(null), textBox);
 
         TextWriter textWriter = new TextBoxWriter(textBox);
-        var resultWriter = (IResultWriter)new TextResultWriter(AddInfoMessage, textWriter, this);
+        IResultWriter resultWriter = new TextResultWriter(AddInfoMessage, textWriter, this);
 
         resultWriter.Begin(Provider);
 

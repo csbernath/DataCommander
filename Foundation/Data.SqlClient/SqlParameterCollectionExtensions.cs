@@ -179,7 +179,7 @@ public static class SqlParameterCollectionExtensions
                             }
                         }
 
-                        stringBuilder.AppendFormat("{0} = {1}", parameter.ParameterName, s);
+                        stringBuilder.Append($"{parameter.ParameterName} = {s}");
                         break;
                 }
             }

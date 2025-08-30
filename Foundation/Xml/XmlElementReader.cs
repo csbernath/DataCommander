@@ -2,16 +2,7 @@
 using System.Xml;
 
 namespace Foundation.Xml;
-#if DEBUG
-#endif
 
-/// <summary>
-/// 
-/// </summary>
-/// <remarks>
-/// 
-/// </remarks>
-/// <param name="xmlReader"></param>
 public class XmlElementReader(XmlReader xmlReader)
 {
     private readonly XmlReader _xmlReader = xmlReader;

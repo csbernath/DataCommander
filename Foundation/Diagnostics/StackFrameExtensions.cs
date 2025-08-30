@@ -17,7 +17,7 @@ internal static class StackFrameExtensions
             var type = method.DeclaringType!;
             var typeName = type.FullName;
             var name = method.Name;
-            stringBuilder.AppendFormat("   at {0}.{1}(", typeName, name);
+            stringBuilder.Append($"   at {typeName}.{name}(");
             var parameters = method.GetParameters();
 
             for (var j = 0; j < parameters.Length; j++)
@@ -30,7 +30,7 @@ internal static class StackFrameExtensions
                 typeName = type.Name;
                 name = parameter.Name;
 
-                stringBuilder.AppendFormat("{0} {1}", typeName, name);
+                stringBuilder.Append($"{typeName} {name}");
             }
 
             stringBuilder.Append(')');
@@ -41,7 +41,7 @@ internal static class StackFrameExtensions
             {
                 var fileLineNumber = frame.GetFileLineNumber();
                 var fileColumnNumber = frame.GetFileColumnNumber();
-                stringBuilder.AppendFormat(" in {0}:line {1},column {2}", fileName, fileLineNumber, fileColumnNumber);
+                stringBuilder.Append($" in {fileName}:line {fileLineNumber},column {fileColumnNumber}");
             }
 
             return stringBuilder.ToString();

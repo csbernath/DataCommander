@@ -17,13 +17,10 @@ public static class DictionaryExtensions
             ref var valueReference = ref CollectionsMarshal.GetValueRefOrAddDefault(dictionary, key, out var exists);
             TValue? result;
 
-            if (exists)
-                result = valueReference;
-            else
-            {
+            if (!exists)
                 valueReference = valueFactory(key);
-                result = valueReference;
-            }
+
+            result = valueReference;
 
             return result;
         }
