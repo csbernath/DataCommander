@@ -31,7 +31,7 @@ public static class IListExtensions
     public static T Last<T>(this IList<T> source)
     {
         ArgumentNullException.ThrowIfNull(source);
-        Assert.IsTrue(source.Count > 0);
+        Assert.IsGreaterThan(source.Count, 0);
 
         var lastIndex = source.Count - 1;
         var last = source[lastIndex];

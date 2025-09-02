@@ -10,7 +10,7 @@ public sealed class Line
 
     public Line(int indentation, string text)
     {
-        Assert.IsInRange(indentation >= 0);
+        Assert.IsGreaterThanOrEqual(indentation, 0);
 
         Indentation = indentation;
         Text = text;

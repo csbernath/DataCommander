@@ -64,7 +64,7 @@ public sealed class CircularBuffer<T> : IList<T>
 
     private void AddTail(T item)
     {
-        Assert.IsTrue(Count < _array!.Length);
+        Assert.IsLessThan(Count, _array!.Length);
 
         if (_head == -1)
         {

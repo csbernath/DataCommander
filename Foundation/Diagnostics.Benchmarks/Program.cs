@@ -6,6 +6,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        var summary = BenchmarkRunner.Run<IntegerDigitCountBenchmark>();        
+        //var summary = BenchmarkRunner.Run<IntegerDigitCountBenchmark>();
+        var summary = BenchmarkRunner.Run<ClockAggregateBenchmark>();        
     }
 }

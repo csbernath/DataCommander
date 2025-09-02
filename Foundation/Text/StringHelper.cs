@@ -39,8 +39,8 @@ public static class StringHelper
 
     public static unsafe void SetChar(string s, int index, char ch)
     {
-        Assert.IsTrue(index >= 0);
-        Assert.IsTrue(index < s.Length);
+        Assert.IsGreaterThanOrEqual(index, 0);
+        Assert.IsLessThan(index, s.Length);
 
         fixed (char* p = s)
         {
