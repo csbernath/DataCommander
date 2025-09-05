@@ -9,6 +9,7 @@ using Foundation.Configuration;
 using Foundation.Data.MethodProfiler;
 using Foundation.InternalLog;
 using Foundation.Log;
+using Foundation.Windows.Forms;
 using Microsoft.Win32;
 using LogLevel = Foundation.Log.LogLevel;
 
@@ -63,7 +64,7 @@ internal static class EntryPoint
             var message = e.ToString();
             var log = LogFactory.Instance.GetCurrentMethodLog();
             log.Error(message);
-            MessageBox.Show(message, "Fatal Application Error in Data Commander!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            FoundationMessageBox.Show(message, "Fatal Application Error in Data Commander!", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

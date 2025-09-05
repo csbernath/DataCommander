@@ -13,12 +13,14 @@ using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.Query;
 using DataCommander.Application.ResultWriter;
+using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
 using Foundation.Threading;
+using Foundation.Windows.Forms;
 using ContextMenu = DataCommander.Api.ContextMenu;
 using MenuItem = DataCommander.Api.MenuItem;
 
@@ -57,9 +59,9 @@ public sealed partial class QueryForm
         var length = QueryTextBox.Text.Length;
         if (length > 0)
         {
+            const string caption = "Data Commander";
             var text = $"The text in {Text} has been changed.\r\nDo you want to save the changes?";
-            var caption = DataCommanderApplication.Instance.Name;
-            var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+            var result = FoundationMessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
             switch (result)
             {
                 case DialogResult.Yes:
@@ -87,9 +89,9 @@ public sealed partial class QueryForm
         var cancel = false;
         if (_dataAdapter != null)
         {
+            const string caption = "Data Commander";            
             var text = "Are you sure you wish to cancel this query?";
-            var caption = DataCommanderApplication.Instance.Name;
-            var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+            var result = FoundationMessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
             if (result == DialogResult.Yes)
             {
                 CancelCommandQuery();
@@ -107,7 +109,7 @@ public sealed partial class QueryForm
         var cancel = false;
         var text = "There are uncommitted transaction(s). Do you wish to commit these transaction(s) before closing the window?";
         var caption = DataCommanderApplication.Instance.Name;
-        var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+        var result = FoundationMessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
         switch (result)
         {
             case DialogResult.Yes:
@@ -141,10 +143,11 @@ public sealed partial class QueryForm
             catch (Exception exception)
             {
                 AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Error, null, exception.ToString()));
-                var text = exception.Message;
-                var caption = "Getting transaction count failed. Close window?";
-                var dialogResult = MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-                if (dialogResult == DialogResult.No)
+                const string caption = "Data Commander";                
+                var text = @$"Getting transaction count failed. Close window?
+
+{exception.Message}";
+                if (FoundationMessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.No)
                     cancel = true;
             }
         }
@@ -268,7 +271,7 @@ public sealed partial class QueryForm
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.Message);
+                FoundationMessageBox.Show(exception.Message);
             }
         });
         var dropdownItems = source.DropDownItems
@@ -409,7 +412,7 @@ public sealed partial class QueryForm
         if (!found)
         {
             var message = $"The specified text was not found.\r\n\r\nText: {text}\r\nControl: {control.Name}";
-            MessageBox.Show(this, message, DataCommanderApplication.Instance.Name);
+            FoundationMessageBox.Show(this, message, DataCommanderApplication.Instance.Name);
         }
     }
 

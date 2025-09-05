@@ -5,6 +5,7 @@
     <Project Path="Foundation/Assertions/Foundation.Assertions.csproj" />
     <Project Path="Foundation/Collections/Foundation.Collections.csproj" />
     <Project Path="Foundation/Configuration/Foundation.Configuration.csproj" />
+    <Project Path="Foundation/Core.Tests/Foundation.Core.Tests.csproj" />
     <Project Path="Foundation/Core/Foundation.Core.csproj" />
     <Project Path="Foundation/Data.SqlClient/Foundation.Data.SqlClient.csproj" />
     <Project Path="Foundation/Data/Foundation.Data.csproj" />
@@ -23,15 +24,15 @@
     <Project Path="Foundation/Xml/Foundation.Xml.csproj" />
   </Folder>
   <Folder Name="/Providers/">
-    <Project Path="Providers/DataCommander.Providers.Msi/DataCommander.Providers.Msi.csproj" />
-    <Project Path="Providers/DataCommander.Providers.MySql/DataCommander.Providers.MySql.csproj" />
-    <Project Path="Providers/DataCommander.Providers.Odp/DataCommander.Providers.Odp.csproj" />
-    <Project Path="Providers/DataCommander.Providers.OleDb/DataCommander.Providers.OleDb.csproj" />
-    <Project Path="Providers/DataCommander.Providers.PostgreSql/DataCommander.Providers.PostgreSql.csproj" />
-    <Project Path="Providers/DataCommander.Providers.SQLite/DataCommander.Providers.SQLite.csproj" />
-    <Project Path="Providers/DataCommander.Providers.SqlServer/DataCommander.Providers.SqlServer.csproj" />
-    <Project Path="Providers/DataCommander.Providers.SqlServerCe40/DataCommander.Providers.SqlServerCe40.csproj" />
-    <Project Path="Providers/DataCommander.Providers.Tfs/DataCommander.Providers.Tfs.csproj" />
+    <Project Path="DataCommander/Providers/DataCommander.Providers.Msi/DataCommander.Providers.Msi.csproj" />
+    <Project Path="DataCommander/Providers/DataCommander.Providers.MySql/DataCommander.Providers.MySql.csproj" />
+    <Project Path="DataCommander/Providers/DataCommander.Providers.Odp/DataCommander.Providers.Odp.csproj" />
+    <Project Path="DataCommander/Providers/DataCommander.Providers.OleDb/DataCommander.Providers.OleDb.csproj" />
+    <Project Path="DataCommander/Providers/DataCommander.Providers.PostgreSql/DataCommander.Providers.PostgreSql.csproj" />
+    <Project Path="DataCommander/Providers/DataCommander.Providers.SQLite/DataCommander.Providers.SQLite.csproj" />
+    <Project Path="DataCommander/Providers/DataCommander.Providers.SqlServer/DataCommander.Providers.SqlServer.csproj" />
+    <Project Path="DataCommander/Providers/DataCommander.Providers.SqlServerCe40/DataCommander.Providers.SqlServerCe40.csproj" />
+    <Project Path="DataCommander/Providers/DataCommander.Providers.Tfs/DataCommander.Providers.Tfs.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="Directory.Build.props" />

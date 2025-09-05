@@ -16,6 +16,7 @@ using DataCommander.Application.Connection;
 using DataCommander.Application.Query;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
+using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Diagnostics;
@@ -119,28 +120,28 @@ public class MainForm : Form
         {
             ForeColor = _colorTheme.ForeColor!.Value;
             BackColor = _colorTheme.BackColor!.Value;
-            
+
             foreach (Control control in Controls)
             {
                 control.ForeColor = _colorTheme.ForeColor.Value;
                 control.BackColor = _colorTheme.BackColor.Value;
             }
-            
+
             _toolStripPanel!.BackColor = _colorTheme.BackColor.Value;
-            
+
             _mainMenu!.ForeColor = _colorTheme.ForeColor.Value;
             _mainMenu.BackColor = _colorTheme.BackColor.Value;
-            
+
             foreach (var menuItem in _mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
             foreach (ToolStripItem x in menuItem.DropDownItems)
                 _colorTheme.Apply(x);
-            
+
             _toolStrip!.BackColor = _colorTheme.BackColor.Value;
             _toolStrip.ForeColor = _colorTheme.ForeColor.Value;
-            
+
             foreach (ToolStripItem item in _toolStrip.Items)
                 _colorTheme.Apply(item);
-            
+
             foreach (ToolStripItem item in _statusBar!.Items)
                 _colorTheme.Apply(item);
         }
@@ -557,7 +558,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         }
         catch (Exception exception)
         {
-            MessageBox.Show(this, exception.Message);
+            FoundationMessageBox.Show(this, exception.Message);
         }
     }
 
@@ -744,7 +745,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         catch (Exception ex)
         {
             Log.Write(LogLevel.Error, ex.ToLogString());
-            MessageBox.Show(this, ex.ToString());
+            FoundationMessageBox.Show(this, ex.ToString());
         }
     }
 

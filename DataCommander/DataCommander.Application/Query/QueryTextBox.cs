@@ -14,6 +14,7 @@ using Foundation.Core;
 using Foundation.Data.MethodProfiler;
 using Foundation.Linq;
 using Foundation.Text;
+using Foundation.Windows.Forms;
 using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Application.Query;
@@ -206,7 +207,7 @@ public sealed class QueryTextBox : UserControl
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                FoundationMessageBox.Show(ex.ToString());
             }
             finally
             {
@@ -475,7 +476,7 @@ public sealed class QueryTextBox : UserControl
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.ToString());
+            FoundationMessageBox.Show(ex.ToString());
         }
         finally
         {
@@ -581,7 +582,7 @@ public sealed class QueryTextBox : UserControl
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.ToString());
+            FoundationMessageBox.Show(ex.ToString());
         }
         finally
         {

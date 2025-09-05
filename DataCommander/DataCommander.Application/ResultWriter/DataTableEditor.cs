@@ -285,7 +285,7 @@ internal class DataTableEditor : UserControl
 
     private void DataGrid_DataError(object? sender, DataGridViewDataErrorEventArgs e)
     {
-        MessageBox.Show(e.Exception!.ToString());
+        FoundationMessageBox.Show(e.Exception!.ToString());
         e.ThrowException = false;
         e.Cancel = true;
     }
@@ -671,7 +671,7 @@ internal class DataTableEditor : UserControl
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.ToString());
+                    FoundationMessageBox.Show(ex.ToString());
                 }
                 finally
                 {
@@ -856,7 +856,7 @@ internal class DataTableEditor : UserControl
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.ToString());
+            FoundationMessageBox.Show(ex.ToString());
         }
     }
 

@@ -10,9 +10,11 @@ using System.Windows.Forms;
 using DataCommander.Application.ResultWriter;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
+using Foundation.Assertions;
 using Foundation.Log;
 using Foundation.Windows.Forms;
 using Newtonsoft.Json;
+using OfficeOpenXml.FormulaParsing.Exceptions;
 
 namespace DataCommander.Application.Connection;
 
@@ -203,9 +205,9 @@ internal sealed class ConnectionListForm : Form
 
         if (_isDirty)
         {
-            const string text = "Do you want to save changes ?";
             const string caption = "Data Commander";
-            var dialogResult = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            const string text = "Do you want to save changes ?";
+            var dialogResult = FoundationMessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
                 ConnectionInfoRepository.Save(_connectionInfos);
         }
@@ -287,14 +289,19 @@ internal sealed class ConnectionListForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, ex.ToString(), null, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            const string caption = "Data Commander";
+            var text = ex.ToString();
+            FoundationMessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
     private void Delete()
     {
-        if (MessageBox.Show(this, "Do you want to delete the selected item(s)?", DataCommanderApplication.Instance.Name, MessageBoxButtons.YesNoCancel,
-                MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+        const string caption = "Data Commander";
+        const string text = "Do you want to delete the selected item(s)?";
+        
+        if (FoundationMessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) ==
+            DialogResult.Yes)
         {
             var index = SelectedIndex;
             _connectionInfos.RemoveAt(index);
@@ -474,7 +481,7 @@ internal sealed class ConnectionListForm : Form
                 cancelableOperationForm.Execute(openConnectionTask);
                 if (openConnectionTask.Exception != null)
                     throw openConnectionTask.Exception;
-                ElapsedTicks = Stopwatch.GetTimestamp() - startTimestamp;                
+                ElapsedTicks = Stopwatch.GetTimestamp() - startTimestamp;
                 _connectionInfo = connectionInfo;
                 _connection = connection;
                 DialogResult = DialogResult.OK;
@@ -482,9 +489,11 @@ internal sealed class ConnectionListForm : Form
         }
         catch (Exception exception)
         {
-            var text = exception.Message;
-            var caption = "Opening connection failed.";
-            MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            const string caption = "Data Commander";
+            var text = $@"Opening connection failed.
+
+{exception.Message}";
+            FoundationMessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

@@ -15,6 +15,7 @@ using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Linq;
+using Foundation.Windows.Forms;
 
 namespace DataCommander.Application.Connection;
 
@@ -130,7 +131,7 @@ internal partial class ConnectionStringBuilderForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, ex.ToString());
+            FoundationMessageBox.Show(this, ex.ToString());
         }
     }
 
@@ -349,7 +350,7 @@ internal partial class ConnectionStringBuilderForm : Form
             var dataSource = (string)dataSourceObject!;
             var containsIntegratedSecurity = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
             var stringBuilder = new StringBuilder();
-            var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);            
+            var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
             stringBuilder.Append($@"Connection name: {connectionInfo.ConnectionName}
 Provider name: {providerInfo.Name}
 {ConnectionStringKeyword.DataSource}: {dataSource}");
@@ -361,7 +362,7 @@ Provider name: {providerInfo.Name}
 
             var cancelableOperationForm =
                 new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), "Opening connection...", text, _colorTheme);
-            var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);            
+            var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
             using (var connection = provider.CreateConnection(connectionInfo.ConnectionStringAndCredential))
             {
                 var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
@@ -370,14 +371,16 @@ Provider name: {providerInfo.Name}
                     throw openConnectionTask.Exception;
             }
 
-            MessageBox.Show("The connection was tested successfully.", DataCommanderApplication.Instance.Name, MessageBoxButtons.OK,
+            FoundationMessageBox.Show("The connection was tested successfully.", DataCommanderApplication.Instance.Name, MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
         }
         catch (Exception exception)
         {
-            var text = exception.Message;
-            var caption = "Opening connection failed.";
-            MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            const string caption = "Data Commander";
+            var text = $@"Opening connection failed.
+
+{exception.Message}";
+            FoundationMessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

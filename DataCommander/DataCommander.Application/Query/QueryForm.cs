@@ -30,6 +30,7 @@ using Foundation.Diagnostics;
 using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Threading;
+using Foundation.Windows.Forms;
 using Newtonsoft.Json;
 
 namespace DataCommander.Application.Query;
@@ -1943,7 +1944,9 @@ public sealed partial class QueryForm : Form, IQueryForm
     {
         QueryTextBox.Focus();
         Cursor = Cursors.Default;
-        MessageBox.Show(ex.ToString());
+        const string caption = "Data Commander";
+        var text = ex.ToString();
+        FoundationMessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
 
     private void SetGui(CommandState buttonState)
