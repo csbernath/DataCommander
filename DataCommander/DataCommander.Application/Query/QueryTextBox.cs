@@ -207,7 +207,7 @@ public sealed class QueryTextBox : UserControl
             }
             catch (Exception ex)
             {
-                FoundationMessageBox.Show(ex.ToString());
+                DataCommanderMessageBox.MessageBox.Show(ex.ToString());
             }
             finally
             {
@@ -476,7 +476,7 @@ public sealed class QueryTextBox : UserControl
         }
         catch (Exception ex)
         {
-            FoundationMessageBox.Show(ex.ToString());
+            DataCommanderMessageBox.MessageBox.Show(ex.ToString());
         }
         finally
         {
@@ -582,7 +582,7 @@ public sealed class QueryTextBox : UserControl
         }
         catch (Exception ex)
         {
-            FoundationMessageBox.Show(ex.ToString());
+            DataCommanderMessageBox.MessageBox.Show(ex.ToString());
         }
         finally
         {

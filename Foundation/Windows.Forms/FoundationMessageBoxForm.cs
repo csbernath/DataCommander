@@ -19,7 +19,10 @@ internal class FoundationMessageBoxForm : Form
         {
             var myCp = base.CreateParams;
     
-            if (_messageBoxButtons != MessageBoxButtons.OK &&
+            if (_messageBoxButtons != MessageBoxButtons.CancelTryContinue &&
+                _messageBoxButtons != MessageBoxButtons.OK &&
+                _messageBoxButtons != MessageBoxButtons.OKCancel &&
+                _messageBoxButtons != MessageBoxButtons.RetryCancel &&
                 _messageBoxButtons != MessageBoxButtons.YesNoCancel)
                 myCp.ClassStyle |= CP_NOCLOSE_BUTTON;
     

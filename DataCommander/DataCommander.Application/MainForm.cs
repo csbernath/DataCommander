@@ -558,7 +558,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         }
         catch (Exception exception)
         {
-            FoundationMessageBox.Show(this, exception.Message);
+            DataCommanderMessageBox.MessageBox.Show(this, exception.Message);
         }
     }
 
@@ -745,7 +745,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         catch (Exception ex)
         {
             Log.Write(LogLevel.Error, ex.ToLogString());
-            FoundationMessageBox.Show(this, ex.ToString());
+            DataCommanderMessageBox.MessageBox.Show(this, ex.ToString());
         }
     }
 

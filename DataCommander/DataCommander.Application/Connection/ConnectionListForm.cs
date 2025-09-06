@@ -207,7 +207,7 @@ internal sealed class ConnectionListForm : Form
         {
             const string caption = "Data Commander";
             const string text = "Do you want to save changes ?";
-            var dialogResult = FoundationMessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var dialogResult = DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
                 ConnectionInfoRepository.Save(_connectionInfos);
         }
@@ -291,7 +291,7 @@ internal sealed class ConnectionListForm : Form
         {
             const string caption = "Data Commander";
             var text = ex.ToString();
-            FoundationMessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -299,8 +299,11 @@ internal sealed class ConnectionListForm : Form
     {
         const string caption = "Data Commander";
         const string text = "Do you want to delete the selected item(s)?";
+
+        MessageBox.Show(this, text, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+        DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
         
-        if (FoundationMessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) ==
+        if (DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) ==
             DialogResult.Yes)
         {
             var index = SelectedIndex;
@@ -493,7 +496,7 @@ internal sealed class ConnectionListForm : Form
             var text = $@"Opening connection failed.
 
 {exception.Message}";
-            FoundationMessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            DataCommanderMessageBox.MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

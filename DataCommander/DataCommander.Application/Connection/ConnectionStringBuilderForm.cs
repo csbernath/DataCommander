@@ -131,7 +131,7 @@ internal partial class ConnectionStringBuilderForm : Form
         }
         catch (Exception ex)
         {
-            FoundationMessageBox.Show(this, ex.ToString());
+            DataCommanderMessageBox.MessageBox.Show(this, ex.ToString());
         }
     }
 
@@ -371,7 +371,7 @@ Provider name: {providerInfo.Name}
                     throw openConnectionTask.Exception;
             }
 
-            FoundationMessageBox.Show("The connection was tested successfully.", DataCommanderApplication.Instance.Name, MessageBoxButtons.OK,
+            DataCommanderMessageBox.MessageBox.Show("The connection was tested successfully.", DataCommanderApplication.Instance.Name, MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
         }
         catch (Exception exception)
@@ -380,7 +380,7 @@ Provider name: {providerInfo.Name}
             var text = $@"Opening connection failed.
 
 {exception.Message}";
-            FoundationMessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            DataCommanderMessageBox.MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

@@ -4,21 +4,22 @@ using System.Drawing;
 using System.Linq;
 using System.Media;
 using System.Windows.Forms;
+using Foundation.Assertions;
 using Foundation.Log;
 
 namespace Foundation.Windows.Forms;
 
-public static class FoundationMessageBox
+public class FoundationMessageBox : IMessageBox
 {
     private static ILog Log = LogFactory.Instance.GetCurrentTypeLog();
 
-    public static DialogResult Show(string? text) =>
+    public DialogResult Show(string? text) =>
         ShowCore(null, text, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
 
-    public static DialogResult Show(IWin32Window? owner, string? text, string? caption) => ShowCore(owner, text, caption, MessageBoxButtons.OK,
+    public DialogResult Show(IWin32Window? owner, string? text, string? caption) => ShowCore(owner, text, caption, MessageBoxButtons.OK,
         MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
 
-    public static DialogResult Show(
+    public DialogResult Show(
         IWin32Window? owner,
         string? text,
         string? caption,
@@ -27,14 +28,14 @@ public static class FoundationMessageBox
         MessageBoxDefaultButton defaultButton) =>
         ShowCore(owner, text, caption, buttons, icon, defaultButton, 0, false);
 
-    public static DialogResult Show(
+    public DialogResult Show(
         string? text,
         string? caption,
         MessageBoxButtons buttons,
         MessageBoxIcon icon) =>
         ShowCore(null, text, caption, buttons, icon, MessageBoxDefaultButton.Button1, 0, false);
 
-    public static DialogResult Show(
+    public DialogResult Show(
         IWin32Window? owner,
         string? text,
         string? caption,
@@ -42,7 +43,7 @@ public static class FoundationMessageBox
         MessageBoxIcon icon) =>
         ShowCore(owner, text, caption, buttons, icon, MessageBoxDefaultButton.Button1, 0, false);
 
-    public static DialogResult Show(IWin32Window? owner, string? text) => ShowCore(owner, text, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.None,
+    public DialogResult Show(IWin32Window? owner, string? text) => ShowCore(owner, text, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.None,
         MessageBoxDefaultButton.Button1, 0, false);
 
     private static DialogResult ShowCore(
@@ -110,7 +111,7 @@ public static class FoundationMessageBox
 
         var bottomPanel = new Panel
         {
-            BackColor = Color.DarkSlateGray,
+            BackColor = SystemColors.ControlLight,
             Dock = DockStyle.Bottom,
             Height = 49
         };
@@ -190,13 +191,13 @@ public static class FoundationMessageBox
     {
         var clipboardButtonsText = messageBoxButtons switch
         {
-            MessageBoxButtons.OK => "OK",
-            MessageBoxButtons.OKCancel => "OKCancel",
-            MessageBoxButtons.AbortRetryIgnore => "AbortRetryIgnore",
+            MessageBoxButtons.OK => "OK   ",
+            MessageBoxButtons.OKCancel => "OK   Cancel   ",
+            MessageBoxButtons.AbortRetryIgnore => "Abort   Retry   Ignore   ",
             MessageBoxButtons.YesNoCancel => "Yes   No   Cancel   ",
-            MessageBoxButtons.YesNo => "YesNo",
-            MessageBoxButtons.RetryCancel => "RetryCancel",
-            MessageBoxButtons.CancelTryContinue => "CancelTryContinue",
+            MessageBoxButtons.YesNo => "Yes   No   ",
+            MessageBoxButtons.RetryCancel => "Retry   Cancel   ",
+            MessageBoxButtons.CancelTryContinue => "Cancel   TryContinue   ",
             _ => throw new ArgumentOutOfRangeException(nameof(messageBoxButtons), messageBoxButtons, null)
         };
         return clipboardButtonsText;
@@ -276,6 +277,11 @@ public static class FoundationMessageBox
                 ]);
                 break;
             case MessageBoxButtons.CancelTryContinue:
+                buttons.AddRange([
+                    CreateCancelButton(),
+                    CreateTryAgainButton(),
+                    CreateContinueButton()
+                ]);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(messageBoxButtons), messageBoxButtons, null);
@@ -304,6 +310,8 @@ public static class FoundationMessageBox
 
     private static Button CreateCancelButton() => CreateButton("Cancel", DialogResult.Cancel);
 
+    private static Button CreateContinueButton() => CreateButton("&Continue", DialogResult.Continue);    
+
     private static Button CreateIgnoreButton() =>
         new()
         {
@@ -328,6 +336,8 @@ public static class FoundationMessageBox
         button.UseMnemonic = true;
         return button;
     }
+
+    private static Button CreateTryAgainButton() => CreateButton("&Try Again", DialogResult.TryAgain);    
 
     private static Button CreateYesButton()
     {
@@ -354,10 +364,10 @@ public static class FoundationMessageBox
     {
         int? cancelButtonIndex = messageBoxButtons switch
         {
-            MessageBoxButtons.OKCancel => 1,
-            MessageBoxButtons.YesNoCancel => 2,
-            MessageBoxButtons.RetryCancel => 2,
             MessageBoxButtons.CancelTryContinue => 0,
+            MessageBoxButtons.OKCancel => 1,
+            MessageBoxButtons.RetryCancel => 1,
+            MessageBoxButtons.YesNoCancel => 2,
             _ => null
         };
         if (cancelButtonIndex != null)

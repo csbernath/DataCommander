@@ -1946,7 +1946,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         Cursor = Cursors.Default;
         const string caption = "Data Commander";
         var text = ex.ToString();
-        FoundationMessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        DataCommanderMessageBox.MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
 
     private void SetGui(CommandState buttonState)

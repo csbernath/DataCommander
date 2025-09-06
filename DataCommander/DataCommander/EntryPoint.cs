@@ -32,6 +32,10 @@ internal static class EntryPoint
 
         if (colorMode != SystemColorMode.System)
             System.Windows.Forms.Application.SetColorMode(colorMode);
+        
+        DataCommanderMessageBox.MessageBox = colorMode != SystemColorMode.System
+            ? new FoundationMessageBox()
+            : new SystemMessageBox();
 #pragma warning restore WFO5001
         
         ApplicationConfiguration.Initialize();
@@ -64,7 +68,7 @@ internal static class EntryPoint
             var message = e.ToString();
             var log = LogFactory.Instance.GetCurrentMethodLog();
             log.Error(message);
-            FoundationMessageBox.Show(message, "Fatal Application Error in Data Commander!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            DataCommanderMessageBox.MessageBox.Show(message, "Fatal Application Error in Data Commander!", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

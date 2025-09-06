@@ -248,7 +248,7 @@ Please wait...",
         }
         catch (Exception ex)
         {
-            FoundationMessageBox.Show(ex.ToString());
+            DataCommanderMessageBox.MessageBox.Show(ex.ToString());
         }
     }
 

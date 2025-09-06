@@ -61,7 +61,7 @@ public sealed partial class QueryForm
         {
             const string caption = "Data Commander";
             var text = $"The text in {Text} has been changed.\r\nDo you want to save the changes?";
-            var result = FoundationMessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+            var result = DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
             switch (result)
             {
                 case DialogResult.Yes:
@@ -91,7 +91,7 @@ public sealed partial class QueryForm
         {
             const string caption = "Data Commander";            
             var text = "Are you sure you wish to cancel this query?";
-            var result = FoundationMessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+            var result = DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
             if (result == DialogResult.Yes)
             {
                 CancelCommandQuery();
@@ -109,7 +109,7 @@ public sealed partial class QueryForm
         var cancel = false;
         var text = "There are uncommitted transaction(s). Do you wish to commit these transaction(s) before closing the window?";
         var caption = DataCommanderApplication.Instance.Name;
-        var result = FoundationMessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+        var result = DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
         switch (result)
         {
             case DialogResult.Yes:
@@ -147,7 +147,7 @@ public sealed partial class QueryForm
                 var text = @$"Getting transaction count failed. Close window?
 
 {exception.Message}";
-                if (FoundationMessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.No)
+                if (DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.No)
                     cancel = true;
             }
         }
@@ -271,7 +271,7 @@ public sealed partial class QueryForm
             }
             catch (Exception exception)
             {
-                FoundationMessageBox.Show(exception.Message);
+                DataCommanderMessageBox.MessageBox.Show(exception.Message);
             }
         });
         var dropdownItems = source.DropDownItems
@@ -412,7 +412,7 @@ public sealed partial class QueryForm
         if (!found)
         {
             var message = $"The specified text was not found.\r\n\r\nText: {text}\r\nControl: {control.Name}";
-            FoundationMessageBox.Show(this, message, DataCommanderApplication.Instance.Name);
+            DataCommanderMessageBox.MessageBox.Show(this, message, DataCommanderApplication.Instance.Name);
         }
     }
 

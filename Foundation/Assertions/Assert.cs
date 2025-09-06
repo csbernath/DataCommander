@@ -10,7 +10,7 @@ public static class Assert
     public static void AreEqual<T>(T value, T other, [CallerArgumentExpression(nameof(value))] string? paramName = null) where T : IEquatable<T>? =>
         ArgumentOutOfRangeException.ThrowIfNotEqual(value, other, paramName);
 
-    public static void ComparableAreEqual<T>(
+    public static void CompareToAreEqual<T>(
         T expected,
         T actual,
         [CallerArgumentExpression(nameof(expected))]
@@ -21,7 +21,7 @@ public static class Assert
     {
         if (expected.CompareTo(actual) != 0)
         {
-            var message = $"Assert.ArEqual failed. {expectedName} (expected): {expected}, {actualName} (actual): {actual}";
+            var message = $"Assert.CompareToAreEqual failed. {expectedName} (expected): {expected}, {actualName} (actual): {actual}";
             throw new Exception(message);
         }
     }
