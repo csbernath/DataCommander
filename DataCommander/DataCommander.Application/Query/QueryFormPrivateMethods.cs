@@ -13,14 +13,12 @@ using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.Query;
 using DataCommander.Application.ResultWriter;
-using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
 using Foundation.Threading;
-using Foundation.Windows.Forms;
 using ContextMenu = DataCommander.Api.ContextMenu;
 using MenuItem = DataCommander.Api.MenuItem;
 

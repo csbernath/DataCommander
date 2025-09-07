@@ -14,7 +14,6 @@ using Foundation.Assertions;
 using Foundation.Log;
 using Foundation.Windows.Forms;
 using Newtonsoft.Json;
-using OfficeOpenXml.FormulaParsing.Exceptions;
 
 namespace DataCommander.Application.Connection;
 

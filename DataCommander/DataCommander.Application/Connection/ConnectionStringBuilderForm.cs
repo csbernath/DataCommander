@@ -15,7 +15,6 @@ using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Linq;
-using Foundation.Windows.Forms;
 
 namespace DataCommander.Application.Connection;
 

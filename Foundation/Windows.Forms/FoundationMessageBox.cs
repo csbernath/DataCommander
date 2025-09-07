@@ -4,14 +4,26 @@ using System.Drawing;
 using System.Linq;
 using System.Media;
 using System.Windows.Forms;
-using Foundation.Assertions;
 using Foundation.Log;
 
 namespace Foundation.Windows.Forms;
 
 public class FoundationMessageBox : IMessageBox
 {
-    private static ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly Dictionary<ButtonId, ButtonInfo> ButtonInfosById = new ButtonInfo[]
+    {
+        new(ButtonId.Abort, "Abort", true, "&Abort", DialogResult.Abort),
+        new(ButtonId.Cancel, "Cancel", false, "Cancel", DialogResult.Cancel),
+        new(ButtonId.Continue, "Continue", true, "&Continue", DialogResult.Continue),
+        new(ButtonId.Ignore, "Ignore", true, "&Ignore", DialogResult.Ignore),
+        new(ButtonId.No, "No", true, "&No", DialogResult.No),
+        new(ButtonId.Ok, "OK", false, "OK", DialogResult.OK),
+        new(ButtonId.Retry, "Retry", true, "&Retry", DialogResult.Retry),
+        new(ButtonId.TryAgain, "Try Again", true, "&Try Again", DialogResult.TryAgain),
+        new(ButtonId.Yes, "Yes", true, "&Yes", DialogResult.Yes)
+    }.ToDictionary(i => i.ButtonId);
+    
+    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
 
     public DialogResult Show(string? text) =>
         ShowCore(null, text, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
@@ -57,29 +69,10 @@ public class FoundationMessageBox : IMessageBox
         bool showHelp)
     {
         Log.Trace(CallerInformation.Create(), $"Caption: {caption}, Text: {text}");
+
+        var form = CreateForm(owner, caption, messageBoxButtons);
         
-        var form = new FoundationMessageBoxForm(messageBoxButtons)
-        {
-            FormBorderStyle = FormBorderStyle.FixedDialog,
-#pragma warning disable WFO5001
-            FormCornerPreference = FormCornerPreference.DoNotRound,
-#pragma warning restore WFO5001
-            KeyPreview = true,            
-            MaximizeBox = false,
-            MinimizeBox = false,
-            Text = caption,
-            ShowInTaskbar = false,
-            StartPosition = FormStartPosition.CenterParent            
-        };
-
-        if (owner is Form ownerForm)
-            form.Owner = ownerForm;
-
-        const int borderY = 24;
-        const int paddingY = 28;
-        
-        var height = 0;
-
+        const int borderY = 26;
         PictureBox? pictureBox = null;
         if (messageBoxIcon != MessageBoxIcon.None)
         {
@@ -88,47 +81,55 @@ public class FoundationMessageBox : IMessageBox
             form.Controls.Add(pictureBox);
         }
 
-        var textLabel = CreateTextLabel(text);
-        form.Controls.Add(textLabel);
- 
+        Label? textLabel = null;
+        if (text != null)
+        {
+            textLabel = CreateTextLabel(text);
+            form.Controls.Add(textLabel);
+        }
+
         if (messageBoxIcon == MessageBoxIcon.None)
         {
-            textLabel.Location = new Point(10, borderY);
-            height += paddingY + textLabel.Height;
-            height = Math.Max(height, 43);
+            if (textLabel != null)
+                textLabel.Location = new Point(9, borderY);
         }
         else
         {
-            var textLabelTop = textLabel.Height < pictureBox!.Height
-                ? borderY + (pictureBox.Height - textLabel.Height) / 2
-                : borderY;
-            textLabel.Location = new Point(pictureBox.Right + 5, textLabelTop);
-            height += paddingY + textLabel.Height;
-            height = Math.Max(height, 64);
+            if (textLabel != null)
+            {
+                var textLabelTop = textLabel.Height < pictureBox!.Height
+                    ? borderY + (pictureBox.Height - textLabel.Height) / 2
+                    : borderY;
+                textLabel.Location = new Point(pictureBox.Right + 5, textLabelTop);
+            }
         }
 
-        var iconAndTextWidth = textLabel.Right + 25;
+        var iconAndTextHeight = 2 * borderY + Math.Max(pictureBox?.Height ?? 0, textLabel?.Height ?? 0);
+
+        var iconAndTextWidth = (textLabel != null ? textLabel.Right : 0) + 34;
+        iconAndTextWidth = Math.Max(iconAndTextWidth, 138);
 
         var bottomPanel = new Panel
         {
             BackColor = SystemColors.ControlLight,
             Dock = DockStyle.Bottom,
-            Height = 49
+            Height = 50
         };
         form.Controls.Add(bottomPanel);
-        
-        var buttons = CreateButtons(messageBoxButtons);
-        const int buttonBorderX = 19;
-        const int buttonPaddingX = 9;
-        var buttonsWidth = 2 * buttonBorderX + buttons.Sum(c => c.Width) + (buttons.Count - 1) * buttonPaddingX;
+
+        var buttonIds = GetButtonIds(messageBoxButtons);
+        var buttons = CreateButtons(buttonIds);
+        const int buttonLeftBorderX = 32;        
+        const int buttonRightBorderX = 19;
+        const int buttonPaddingX = 10;
+        var buttonsWidth = buttonLeftBorderX + buttons.Sum(c => c.Width) + (buttons.Length - 1) * buttonPaddingX + buttonRightBorderX;
         var width = Math.Max(iconAndTextWidth, buttonsWidth);
-        width = Math.Max(width, 333);
-        
-        SetButtonLocation(width, buttonsWidth, buttonBorderX, buttons, bottomPanel, buttonPaddingX);
+
+        AddButtonsToBottomPanel(buttons, bottomPanel, width, buttonsWidth, buttonLeftBorderX, buttonPaddingX);
         SetFormAcceptButton(defaultButton, form, buttons);
         SetFormCancelButton(messageBoxButtons, form, buttons);
 
-        height += bottomPanel.Height + borderY;
+        var height = iconAndTextHeight + bottomPanel.Height;
         form.ClientSize = new Size(width, height);
 
         AddFormEventHandlers(form, text, caption, messageBoxButtons);
@@ -137,9 +138,31 @@ public class FoundationMessageBox : IMessageBox
         return form.ShowDialog();
     }
 
-    private static void SetButtonLocation(int width, int buttonsWidth, int buttonBorderX, List<Button> buttons, Panel bottomPanel, int buttonPaddingX)
+    private static FoundationMessageBoxForm CreateForm(IWin32Window? owner, string? caption, MessageBoxButtons messageBoxButtons)
     {
-        var left = width - buttonsWidth + buttonBorderX;
+        var text = caption ?? "Error";
+        var form = new FoundationMessageBoxForm(messageBoxButtons)
+        {
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+#pragma warning disable WFO5001
+            FormCornerPreference = FormCornerPreference.DoNotRound,
+#pragma warning restore WFO5001
+            KeyPreview = true,
+            MaximizeBox = false,
+            MinimizeBox = false,
+            Text = text,
+            ShowInTaskbar = false,
+            StartPosition = FormStartPosition.CenterParent
+        };
+
+        if (owner is Form ownerForm)
+            form.Owner = ownerForm;
+        return form;
+    }
+
+    private static void AddButtonsToBottomPanel(Button[] buttons, Panel bottomPanel, int width, int buttonsWidth, int buttonLeftBorderX, int buttonPaddingX)
+    {
+        var left = width - buttonsWidth + buttonLeftBorderX;
         foreach (var button in buttons)
         {
             button.Location = new Point(left, 10);
@@ -168,7 +191,7 @@ public class FoundationMessageBox : IMessageBox
 
         form.FormClosed += (_, _) =>
         {
-            if (messageBoxButtons == MessageBoxButtons.OK) 
+            if (messageBoxButtons == MessageBoxButtons.OK)
                 form.DialogResult = DialogResult.OK;
         };
     }
@@ -189,25 +212,18 @@ public class FoundationMessageBox : IMessageBox
 
     private static string GetClipboardButtonsText(MessageBoxButtons messageBoxButtons)
     {
-        var clipboardButtonsText = messageBoxButtons switch
-        {
-            MessageBoxButtons.OK => "OK   ",
-            MessageBoxButtons.OKCancel => "OK   Cancel   ",
-            MessageBoxButtons.AbortRetryIgnore => "Abort   Retry   Ignore   ",
-            MessageBoxButtons.YesNoCancel => "Yes   No   Cancel   ",
-            MessageBoxButtons.YesNo => "Yes   No   ",
-            MessageBoxButtons.RetryCancel => "Retry   Cancel   ",
-            MessageBoxButtons.CancelTryContinue => "Cancel   TryContinue   ",
-            _ => throw new ArgumentOutOfRangeException(nameof(messageBoxButtons), messageBoxButtons, null)
-        };
-        return clipboardButtonsText;
+        var buttonIds = GetButtonIds(messageBoxButtons);
+        var buttonInfos = buttonIds.Select(buttonId => ButtonInfosById[buttonId]);
+        var buttonTexts = buttonInfos.Select(buttonInfo => buttonInfo.Text + "   ");
+        var clipboardButtonTexts = string.Concat(buttonTexts);
+        return clipboardButtonTexts;
     }
 
     private static PictureBox CreatePictureBox(MessageBoxIcon messageBoxIcon)
     {
         var stockIconId = messageBoxIcon switch
         {
-            MessageBoxIcon.Asterisk => StockIconId.Info,                
+            MessageBoxIcon.Asterisk => StockIconId.Info,
             MessageBoxIcon.Error => StockIconId.Error,
             MessageBoxIcon.Warning => StockIconId.Warning,
             MessageBoxIcon.Question => StockIconId.Help,
@@ -228,125 +244,52 @@ public class FoundationMessageBox : IMessageBox
         var screenHeight = screen != null ? screen.Bounds.Height : 768;
         var textLabel = new Label
         {
+            AutoSize = true,            
             Font = font,
+            MaximumSize = new Size(382, screenHeight - 300),            
             Text = text,
-            AutoSize = true,
-            MaximumSize = new Size(434, screenHeight - 300),
         };
         return textLabel;
     }
 
-    private static List<Button> CreateButtons(MessageBoxButtons messageBoxButtons)
+    private static Button[] CreateButtons(ButtonId[] buttonIds)
     {
-        var buttons = new List<Button>();
-        switch (messageBoxButtons)
-        {
-            case MessageBoxButtons.OK:
-                buttons.Add(CreateOkButton());
-                break;
-            case MessageBoxButtons.OKCancel:
-                buttons.AddRange([
-                    CreateOkButton(),
-                    CreateCancelButton()
-                ]);
-                break;
-            case MessageBoxButtons.AbortRetryIgnore:
-                buttons.AddRange([
-                    CreateAbortButton(),
-                    CreateRetryButton(),
-                    CreateIgnoreButton()
-                ]);
-                break;
-            case MessageBoxButtons.YesNoCancel:
-                buttons.AddRange([
-                    CreateYesButton(),
-                    CreateNoButton(),
-                    CreateCancelButton()
-                ]);
-                break;
-            case MessageBoxButtons.YesNo:
-                buttons.AddRange([
-                    CreateYesButton(),
-                    CreateNoButton()
-                ]);
-                break;
-            case MessageBoxButtons.RetryCancel:
-                buttons.AddRange([
-                    CreateRetryButton(),
-                    CreateCancelButton()
-                ]);
-                break;
-            case MessageBoxButtons.CancelTryContinue:
-                buttons.AddRange([
-                    CreateCancelButton(),
-                    CreateTryAgainButton(),
-                    CreateContinueButton()
-                ]);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(messageBoxButtons), messageBoxButtons, null);
-        }
-
-        for (var index = 0; index < buttons.Count; index++)
+        var buttons = buttonIds.Select(CreateButton).ToArray();
+        for (var index = 0; index < buttons.Length; ++index)
             buttons[index].TabIndex = index;
 
         return buttons;
     }
 
-    private static Button CreateButton(string text, DialogResult dialogResult) =>
-        new()
+    private static ButtonId[] GetButtonIds(MessageBoxButtons messageBoxButtons)
+    {
+        var buttonIds = messageBoxButtons switch
         {
-            Size = new Size(88, 28),
-            Text = text,
-            DialogResult = dialogResult
+            MessageBoxButtons.OK => new[] { ButtonId.Ok },
+            MessageBoxButtons.OKCancel => [ButtonId.Ok, ButtonId.Cancel],
+            MessageBoxButtons.AbortRetryIgnore => [ButtonId.Abort, ButtonId.Retry, ButtonId.Ignore],
+            MessageBoxButtons.YesNoCancel => [ButtonId.Yes, ButtonId.No, ButtonId.Cancel],
+            MessageBoxButtons.YesNo => [ButtonId.Yes, ButtonId.No],
+            MessageBoxButtons.RetryCancel => [ButtonId.Retry, ButtonId.Cancel],
+            MessageBoxButtons.CancelTryContinue => [ButtonId.Cancel, ButtonId.TryAgain, ButtonId.Continue],
+            _ => throw new ArgumentOutOfRangeException(nameof(messageBoxButtons), messageBoxButtons, null)
         };
-
-    private static Button CreateAbortButton()
-    {
-        var button = CreateButton("&Abort", DialogResult.Abort);
-        button.UseMnemonic = true;
-        return button;
+        return buttonIds;
     }
 
-    private static Button CreateCancelButton() => CreateButton("Cancel", DialogResult.Cancel);
-
-    private static Button CreateContinueButton() => CreateButton("&Continue", DialogResult.Continue);    
-
-    private static Button CreateIgnoreButton() =>
-        new()
+    private static Button CreateButton(ButtonId buttonId)
+    {
+        var buttonInfo = ButtonInfosById[buttonId];
+        return new Button
         {
-            Size = new Size(90, 28),
-            UseMnemonic = true,
-            Text = "&Ignore",
-            DialogResult = DialogResult.Retry
+            DialogResult = buttonInfo.DialogResult,
+            Size = new Size(88, 28),            
+            Text = buttonInfo.TextWithMnemonic,
+            UseMnemonic = buttonInfo.UseMnemonic
         };
-
-    private static Button CreateNoButton()
-    {
-        var button = CreateButton("&No", DialogResult.No);
-        button.UseMnemonic = true;
-        return button;
-    }
- 
-    private static Button CreateOkButton() => CreateButton("OK", DialogResult.OK);
-
-    private static Button CreateRetryButton()
-    {
-        var button = CreateButton("&Retry", DialogResult.Retry);
-        button.UseMnemonic = true;
-        return button;
     }
 
-    private static Button CreateTryAgainButton() => CreateButton("&Try Again", DialogResult.TryAgain);    
-
-    private static Button CreateYesButton()
-    {
-        var button = CreateButton("&Yes", DialogResult.Yes);
-        button.UseMnemonic = true;
-        return button;
-    }
-
-    private static void SetFormAcceptButton(MessageBoxDefaultButton messageBoxDefaultButton, Form form, List<Button> buttonControls)
+    private static void SetFormAcceptButton(MessageBoxDefaultButton messageBoxDefaultButton, Form form, Button[] buttonControls)
     {
         var defaultButtonIndex = messageBoxDefaultButton switch
         {
@@ -360,7 +303,7 @@ public class FoundationMessageBox : IMessageBox
         buttonControls[defaultButtonIndex].Select();
     }
 
-    private static void SetFormCancelButton(MessageBoxButtons messageBoxButtons, Form form, List<Button> buttons)
+    private static void SetFormCancelButton(MessageBoxButtons messageBoxButtons, Form form, Button[] buttons)
     {
         int? cancelButtonIndex = messageBoxButtons switch
         {
@@ -372,5 +315,36 @@ public class FoundationMessageBox : IMessageBox
         };
         if (cancelButtonIndex != null)
             form.CancelButton = buttons[cancelButtonIndex.Value];
+    }
+
+    private enum ButtonId
+    {
+        Abort,
+        Cancel,
+        Continue,
+        Ignore,
+        No,
+        Ok,
+        Retry,
+        TryAgain,
+        Yes
+    }
+
+    private class ButtonInfo
+    {
+        public readonly ButtonId ButtonId;
+        public readonly string Text;
+        public readonly bool UseMnemonic;
+        public readonly string TextWithMnemonic;
+        public readonly DialogResult DialogResult;
+
+        public ButtonInfo(ButtonId buttonId, string text, bool useMnemonic, string textWithMnemonic, DialogResult dialogResult)
+        {
+            ButtonId = buttonId;
+            Text = text;
+            TextWithMnemonic = textWithMnemonic;
+            DialogResult = dialogResult;
+            UseMnemonic = useMnemonic;
+        }
     }
 }

@@ -16,7 +16,6 @@ using DataCommander.Application.Connection;
 using DataCommander.Application.Query;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
-using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Diagnostics;
