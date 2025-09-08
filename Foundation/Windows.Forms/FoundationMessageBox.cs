@@ -71,6 +71,7 @@ public class FoundationMessageBox : IMessageBox
         Log.Trace(CallerInformation.Create(), $"Caption: {caption}, Text: {text}");
 
         var form = CreateForm(owner, caption, messageBoxButtons);
+        var captionWidth = form.CreateGraphics().MeasureString(caption, form.Font).Width;
         
         const int borderY = 26;
         PictureBox? pictureBox = null;
@@ -124,6 +125,7 @@ public class FoundationMessageBox : IMessageBox
         const int buttonPaddingX = 10;
         var buttonsWidth = buttonLeftBorderX + buttons.Sum(c => c.Width) + (buttons.Length - 1) * buttonPaddingX + buttonRightBorderX;
         var width = Math.Max(iconAndTextWidth, buttonsWidth);
+        width = Math.Max(width, captionWidth);
 
         AddButtonsToBottomPanel(buttons, bottomPanel, width, buttonsWidth, buttonLeftBorderX, buttonPaddingX);
         SetFormAcceptButton(defaultButton, form, buttons);
@@ -133,14 +135,17 @@ public class FoundationMessageBox : IMessageBox
         form.ClientSize = new Size(width, height);
 
         AddFormEventHandlers(form, text, caption, messageBoxButtons);
-
-        SystemSounds.Beep.Play();
+        Beep(messageBoxIcon);
+        
         return form.ShowDialog();
     }
 
     private static FoundationMessageBoxForm CreateForm(IWin32Window? owner, string? caption, MessageBoxButtons messageBoxButtons)
     {
         var text = caption ?? "Error";
+        var startPosition = owner != null
+            ? FormStartPosition.CenterParent
+            : FormStartPosition.CenterScreen;
         var form = new FoundationMessageBoxForm(messageBoxButtons)
         {
             FormBorderStyle = FormBorderStyle.FixedDialog,
@@ -152,8 +157,10 @@ public class FoundationMessageBox : IMessageBox
             MinimizeBox = false,
             Text = text,
             ShowInTaskbar = false,
-            StartPosition = FormStartPosition.CenterParent
+            StartPosition = startPosition
         };
+        
+        
 
         if (owner is Form ownerForm)
             form.Owner = ownerForm;
@@ -299,6 +306,10 @@ public class FoundationMessageBox : IMessageBox
             MessageBoxDefaultButton.Button4 => 3,
             _ => throw new ArgumentOutOfRangeException(nameof(messageBoxDefaultButton), messageBoxDefaultButton, null)
         };
+
+        if (defaultButtonIndex > buttonControls.Length - 1)
+            defaultButtonIndex = 0;
+        
         form.AcceptButton = buttonControls[defaultButtonIndex];
         buttonControls[defaultButtonIndex].Select();
     }
@@ -317,6 +328,22 @@ public class FoundationMessageBox : IMessageBox
             form.CancelButton = buttons[cancelButtonIndex.Value];
     }
 
+    private static void Beep(MessageBoxIcon messageBoxIcon)
+    {
+        switch (messageBoxIcon)
+        {
+            case MessageBoxIcon.Hand:
+                SystemSounds.Hand.Play();
+                break;
+            case MessageBoxIcon.Asterisk:
+                SystemSounds.Asterisk.Play();
+                break;
+            case MessageBoxIcon.Exclamation:
+                SystemSounds.Exclamation.Play();
+                break;
+        }
+    }
+
     private enum ButtonId
     {
         Abort,
@@ -330,21 +357,12 @@ public class FoundationMessageBox : IMessageBox
         Yes
     }
 
-    private class ButtonInfo
+    private class ButtonInfo(ButtonId buttonId, string text, bool useMnemonic, string textWithMnemonic, DialogResult dialogResult)
     {
-        public readonly ButtonId ButtonId;
-        public readonly string Text;
-        public readonly bool UseMnemonic;
-        public readonly string TextWithMnemonic;
-        public readonly DialogResult DialogResult;
-
-        public ButtonInfo(ButtonId buttonId, string text, bool useMnemonic, string textWithMnemonic, DialogResult dialogResult)
-        {
-            ButtonId = buttonId;
-            Text = text;
-            TextWithMnemonic = textWithMnemonic;
-            DialogResult = dialogResult;
-            UseMnemonic = useMnemonic;
-        }
+        public readonly ButtonId ButtonId = buttonId;
+        public readonly string Text = text;
+        public readonly bool UseMnemonic = useMnemonic;
+        public readonly string TextWithMnemonic = textWithMnemonic;
+        public readonly DialogResult DialogResult = dialogResult;
     }
 }

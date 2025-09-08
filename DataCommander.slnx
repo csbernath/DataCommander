@@ -1,6 +1,5 @@
 <Solution>
   <Folder Name="/Foundation/">
-    <File Path="Foundation/README.md" />
     <Project Path="Foundation/Assertions.Test/Foundation.Assertions.Test.csproj" />
     <Project Path="Foundation/Assertions/Foundation.Assertions.csproj" />
     <Project Path="Foundation/Collections/Foundation.Collections.csproj" />
@@ -22,6 +21,8 @@
     <Project Path="Foundation/Threading/Foundation.Threading.csproj" />
     <Project Path="Foundation/Windows.Forms/Foundation.Windows.Forms.csproj" />
     <Project Path="Foundation/Xml/Foundation.Xml.csproj" />
+    <Project Path="Foundation\Windows.Forms.Tests\Foundation.Windows.Forms.Tests.csproj" Type="Classic C#" />
+    <File Path="Foundation/README.md" />
   </Folder>
   <Folder Name="/Providers/">
     <Project Path="DataCommander/Providers/DataCommander.Providers.Msi/DataCommander.Providers.Msi.csproj" />
