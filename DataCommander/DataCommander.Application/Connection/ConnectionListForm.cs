@@ -299,7 +299,7 @@ internal sealed class ConnectionListForm : Form
         DataCommanderMessageBox.MessageBox.Show(
             this,
             null,
-            @"11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+            @"arvizturo tukorfurogep arvizturo tukorfurogep arvizturo tukorfurogep arvizturo",
             MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button4);
         
         const string caption = "Data Commander";

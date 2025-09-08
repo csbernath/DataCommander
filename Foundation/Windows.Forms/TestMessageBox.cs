@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Foundation.Assertions;
 using Foundation.Windows.Forms;
 
@@ -15,7 +14,13 @@ public class TestMessageBox : IMessageBox
         return dialogResult1;
     }
 
-    public DialogResult Show(IWin32Window? owner, string? text, string? caption) => throw new NotImplementedException();
+    public DialogResult Show(IWin32Window? owner, string? text, string? caption)
+    {
+        var dialogResult0 = MessageBox.Show(owner, text, caption);
+        var dialogResult1 = _foundationMessageBox.Show(owner, text, caption);
+        Assert.CompareToEquals(dialogResult0, dialogResult1);
+        return dialogResult1;
+    }
 
     public DialogResult Show(IWin32Window? owner, string? text, string? caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
     {
@@ -25,9 +30,21 @@ public class TestMessageBox : IMessageBox
         return dialogResult1;
     }
 
-    public DialogResult Show(string? text, string? caption, MessageBoxButtons buttons, MessageBoxIcon icon) => throw new NotImplementedException();
+    public DialogResult Show(string? text, string? caption, MessageBoxButtons buttons, MessageBoxIcon icon)
+    {
+        var dialogResult0 = MessageBox.Show(text, caption, buttons, icon);
+        var dialogResult1 = _foundationMessageBox.Show(text, caption, buttons, icon);
+        Assert.CompareToEquals(dialogResult0, dialogResult1);
+        return dialogResult1;
+    }
 
-    public DialogResult Show(IWin32Window? owner, string? text, string? caption, MessageBoxButtons buttons, MessageBoxIcon icon) => throw new NotImplementedException();
+    public DialogResult Show(IWin32Window? owner, string? text, string? caption, MessageBoxButtons buttons, MessageBoxIcon icon)
+    {
+        var dialogResult0 = MessageBox.Show(owner, text, caption, buttons, icon);
+        var dialogResult1 = _foundationMessageBox.Show(owner, text, caption, buttons, icon);
+        Assert.CompareToEquals(dialogResult0, dialogResult1);
+        return dialogResult1;
+    }
 
     public DialogResult Show(IWin32Window? owner, string? text)
     {

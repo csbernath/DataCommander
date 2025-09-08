@@ -71,7 +71,8 @@ public class FoundationMessageBox : IMessageBox
         Log.Trace(CallerInformation.Create(), $"Caption: {caption}, Text: {text}");
 
         var form = CreateForm(owner, caption, messageBoxButtons);
-        var captionWidth = form.CreateGraphics().MeasureString(caption, form.Font).Width;
+        var captionWidth = (int)form.CreateGraphics().MeasureString(caption, form.Font).Width + 40; 
+        captionWidth = Math.Min(captionWidth, 481);
         
         const int borderY = 26;
         PictureBox? pictureBox = null;
