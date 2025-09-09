@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using DataCommander.Application.ResultWriter;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
-using Foundation.Assertions;
 using Foundation.Log;
 using Foundation.Windows.Forms;
 using Newtonsoft.Json;
@@ -298,9 +297,15 @@ internal sealed class ConnectionListForm : Form
     {
         DataCommanderMessageBox.MessageBox.Show(
             this,
-            null,
-            @"arvizturo tukorfurogep arvizturo tukorfurogep arvizturo tukorfurogep arvizturo",
-            MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button4);
+            @"ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ
+ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ
+ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ
+ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ
+ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            @"ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            MessageBoxButtons.YesNoCancel,
+            MessageBoxIcon.Hand,
+            MessageBoxDefaultButton.Button1);
         
         const string caption = "Data Commander";
         const string text = "Do you want to delete the selected item(s)?";
