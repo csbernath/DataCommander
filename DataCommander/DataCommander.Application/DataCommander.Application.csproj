@@ -12,9 +12,9 @@
 
   <ItemGroup>
     <PackageReference Include="ADODB" Version="7.10.3077" />
-    <PackageReference Include="EPPlus" Version="8.1.0" />
+    <PackageReference Include="EPPlus" Version="8.1.1" />
     <PackageReference Include="HtmlTextWriter" Version="3.0.1" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.0-preview.7.25380.108" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.0-rc.1.25451.107" />
     <PackageReference Include="Microsoft.Office.Interop.Word" Version="15.0.4797.1004" />
     <PackageReference Include="Microsoft.SqlServer.Compact" Version="4.0.8876.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />   
