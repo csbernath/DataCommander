@@ -491,7 +491,7 @@ internal sealed class ConnectionListForm : Form
             var text = $@"Opening connection failed.
 
 {exception.Message}";
-            DataCommanderMessageBox.MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

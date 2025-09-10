@@ -336,50 +336,62 @@ internal partial class ConnectionStringBuilderForm : Form
 
     private void HandleTestButtonClicked(object? sender, EventArgs e)
     {
-        try
+        var valid = true;
+        if (providersComboBox.SelectedIndex == -1)
         {
-            var connectionInfo = SaveDialogToConnectionInfo();
-            var cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = cancellationTokenSource.Token;
-            var dbConnectionStringBuilder = new DbConnectionStringBuilder
+            valid = false;
+            const string caption = "Data Commander";
+            const string text = "A provider must be selected.";
+            DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        if (valid)
+        {
+            try
             {
-                ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString
-            };
-            dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
-            var dataSource = (string)dataSourceObject!;
-            var containsIntegratedSecurity = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
-            var stringBuilder = new StringBuilder();
-            var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
-            stringBuilder.Append($@"Connection name: {connectionInfo.ConnectionName}
+                var connectionInfo = SaveDialogToConnectionInfo();
+                var cancellationTokenSource = new CancellationTokenSource();
+                var cancellationToken = cancellationTokenSource.Token;
+                var dbConnectionStringBuilder = new DbConnectionStringBuilder
+                {
+                    ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString
+                };
+                dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
+                var dataSource = (string)dataSourceObject!;
+                var containsIntegratedSecurity = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
+                var stringBuilder = new StringBuilder();
+                var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
+                stringBuilder.Append($@"Connection name: {connectionInfo.ConnectionName}
 Provider name: {providerInfo.Name}
 {ConnectionStringKeyword.DataSource}: {dataSource}");
-            if (containsIntegratedSecurity)
-                stringBuilder.Append($"\r\n{ConnectionStringKeyword.IntegratedSecurity}: {integratedSecurity}");
-            if (connectionInfo.ConnectionStringAndCredential.Credential != null)
-                stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {connectionInfo.ConnectionStringAndCredential.Credential.UserId}");
-            var text = stringBuilder.ToString();
+                if (containsIntegratedSecurity)
+                    stringBuilder.Append($"\r\n{ConnectionStringKeyword.IntegratedSecurity}: {integratedSecurity}");
+                if (connectionInfo.ConnectionStringAndCredential.Credential != null)
+                    stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {connectionInfo.ConnectionStringAndCredential.Credential.UserId}");
+                var text = stringBuilder.ToString();
 
-            var cancelableOperationForm =
-                new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), "Opening connection...", text, _colorTheme);
-            var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
-            using (var connection = provider.CreateConnection(connectionInfo.ConnectionStringAndCredential))
-            {
-                var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
-                cancelableOperationForm.Execute(openConnectionTask);
-                if (openConnectionTask.Exception != null)
-                    throw openConnectionTask.Exception;
+                var cancelableOperationForm =
+                    new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), "Opening connection...", text, _colorTheme);
+                var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
+                using (var connection = provider.CreateConnection(connectionInfo.ConnectionStringAndCredential))
+                {
+                    var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
+                    cancelableOperationForm.Execute(openConnectionTask);
+                    if (openConnectionTask.Exception != null)
+                        throw openConnectionTask.Exception;
+                }
+
+                DataCommanderMessageBox.MessageBox.Show("The connection was tested successfully.", DataCommanderApplication.Instance.Name, MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
             }
-
-            DataCommanderMessageBox.MessageBox.Show("The connection was tested successfully.", DataCommanderApplication.Instance.Name, MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
-        }
-        catch (Exception exception)
-        {
-            const string caption = "Data Commander";
-            var text = $@"Opening connection failed.
+            catch (Exception exception)
+            {
+                const string caption = "Data Commander";
+                var text = $@"Opening connection failed.
 
 {exception.Message}";
-            DataCommanderMessageBox.MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DataCommanderMessageBox.MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 
