@@ -295,18 +295,6 @@ internal sealed class ConnectionListForm : Form
 
     private void Delete()
     {
-        DataCommanderMessageBox.MessageBox.Show(
-            this,
-            @"ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ
-ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ
-ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ
-ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ
-ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ",
-            @"ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-            MessageBoxButtons.YesNoCancel,
-            MessageBoxIcon.Hand,
-            MessageBoxDefaultButton.Button1);
-        
         const string caption = "Data Commander";
         const string text = "Do you want to delete the selected item(s)?";
         

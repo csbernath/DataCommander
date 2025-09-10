@@ -44,8 +44,7 @@ internal class FoundationMessageBoxForm : Form
             : FormStartPosition.CenterScreen;
         
         SuspendLayout();
-
-        AutoScaleDimensions = new SizeF(7F, 15F);
+        AutoScaleDimensions = new SizeF(6F, 13F);        
         AutoScaleMode = AutoScaleMode.Font;
         
         var messageBoxFont = SystemFonts.MessageBoxFont!;
@@ -53,9 +52,9 @@ internal class FoundationMessageBoxForm : Form
         Font = font;
         
         FormBorderStyle = FormBorderStyle.FixedDialog;
-#pragma warning disable WFO5001
-        FormCornerPreference = FormCornerPreference.DoNotRound;
-#pragma warning restore WFO5001
+// #pragma warning disable WFO5001
+//         FormCornerPreference = FormCornerPreference.DoNotRound;
+// #pragma warning restore WFO5001
         KeyPreview = true;
         MaximizeBox = false;
         MinimizeBox = false;
@@ -67,11 +66,11 @@ internal class FoundationMessageBoxForm : Form
             Owner = ownerForm;  
         
         var stringSize = CreateGraphics().MeasureString(caption, Font);
-        var captionWidth = (int)stringSize.Width + 40; 
-        captionWidth = Math.Min(captionWidth, 481);
+        var captionWidth = (int)stringSize.Width + 74; 
+        captionWidth = Math.Min(captionWidth, 411);
 
-        var borderX = 25;
-        var borderY = 26;
+        var borderX = 21;
+        var borderY = 23;
         PictureBox? pictureBox = null;
         if (messageBoxIcon != MessageBoxIcon.None)
         {
@@ -105,7 +104,7 @@ internal class FoundationMessageBoxForm : Form
 
         var iconAndTextHeight = 2 * borderY + Math.Max(pictureBox?.Height ?? 0, textLabel?.Height ?? 0);
 
-        var iconAndTextWidth = (textLabel != null ? textLabel.Right : 0) + 34;
+        var iconAndTextWidth = (textLabel != null ? textLabel.Right : 0) + 26;
         iconAndTextWidth = Math.Max(iconAndTextWidth, 138);
 
         var bottomPanel = new Panel
@@ -279,7 +278,7 @@ internal class FoundationMessageBoxForm : Form
         return new Button
         {
             DialogResult = buttonInfo.DialogResult,
-            Size = new Size(76, 28),            
+            Size = new Size(75, 24),            
             Text = buttonInfo.TextWithMnemonic,
             UseMnemonic = buttonInfo.UseMnemonic
         };

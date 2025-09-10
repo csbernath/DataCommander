@@ -33,11 +33,9 @@ internal static class EntryPoint
         if (colorMode != SystemColorMode.System)
             System.Windows.Forms.Application.SetColorMode(colorMode);
         
-        // DataCommanderMessageBox.MessageBox = colorMode != SystemColorMode.System
-        //     ? new FoundationMessageBox()
-        //     : new SystemMessageBox();
-
-        DataCommanderMessageBox.MessageBox = new TestMessageBox();
+        DataCommanderMessageBox.MessageBox = colorMode != SystemColorMode.System
+            ? new FoundationMessageBox()
+            : new SystemMessageBox();
 #pragma warning restore WFO5001
         
         ApplicationConfiguration.Initialize();
