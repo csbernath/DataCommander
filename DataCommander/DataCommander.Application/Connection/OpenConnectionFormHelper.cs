@@ -18,7 +18,9 @@ internal sealed class OpenConnectionFormHelper
             : null;
         var containsIntegratedSecurity = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
         var stringBuilder = new StringBuilder();
-        stringBuilder.Append($@"Connection name: {connectionInfo.ConnectionName}
+        stringBuilder.Append($@"Opening connection...
+
+Connection name: {connectionInfo.ConnectionName}
 Provider name: {providerInfo.Name}");
         if (dataSource != null)
             stringBuilder.Append($"\r\n{ConnectionStringKeyword.DataSource}: {dataSource}");
