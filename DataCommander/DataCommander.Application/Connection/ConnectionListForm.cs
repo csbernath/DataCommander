@@ -203,7 +203,7 @@ internal sealed class ConnectionListForm : Form
 
         if (_isDirty)
         {
-            const string caption = "Data Commander";
+            var caption = DataCommanderApplication.MessageBoxCaption;
             const string text = "Do you want to save changes ?";
             var dialogResult = DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
@@ -287,7 +287,7 @@ internal sealed class ConnectionListForm : Form
         }
         catch (Exception ex)
         {
-            const string caption = "Data Commander";
+            var caption = DataCommanderApplication.MessageBoxCaption;
             var text = ex.ToString();
             DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
@@ -295,7 +295,7 @@ internal sealed class ConnectionListForm : Form
 
     private void Delete()
     {
-        const string caption = "Data Commander";
+        var caption = DataCommanderApplication.MessageBoxCaption;
         const string text = "Do you want to delete the selected item(s)?";
         
         if (DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) ==
@@ -487,7 +487,7 @@ internal sealed class ConnectionListForm : Form
         }
         catch (Exception exception)
         {
-            const string caption = "Data Commander";
+            var caption = DataCommanderApplication.MessageBoxCaption;
             var text = $@"Opening connection failed.
 
 {exception.Message}";

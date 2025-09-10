@@ -37,6 +37,7 @@ public sealed class DataCommanderApplication
     }
 
     public static DataCommanderApplication Instance { get; } = new();
+    public static readonly string MessageBoxCaption = "Data Commander"; 
 
     public string Name { get; }
 

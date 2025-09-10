@@ -340,7 +340,7 @@ internal partial class ConnectionStringBuilderForm : Form
         if (providersComboBox.SelectedIndex == -1)
         {
             valid = false;
-            const string caption = "Data Commander";
+            var caption = DataCommanderApplication.MessageBoxCaption;
             const string text = "A provider must be selected.";
             DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
@@ -386,7 +386,7 @@ Provider name: {providerInfo.Name}
             }
             catch (Exception exception)
             {
-                const string caption = "Data Commander";
+                var caption = DataCommanderApplication.MessageBoxCaption;
                 var text = $@"Opening connection failed.
 
 {exception.Message}";

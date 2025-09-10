@@ -57,7 +57,7 @@ public sealed partial class QueryForm
         var length = QueryTextBox.Text.Length;
         if (length > 0)
         {
-            const string caption = "Data Commander";
+            var caption = DataCommanderApplication.MessageBoxCaption;
             var text = $"The text in {Text} has been changed.\r\nDo you want to save the changes?";
             var result = DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
             switch (result)
@@ -87,7 +87,7 @@ public sealed partial class QueryForm
         var cancel = false;
         if (_dataAdapter != null)
         {
-            const string caption = "Data Commander";            
+            var caption = DataCommanderApplication.MessageBoxCaption;            
             var text = "Are you sure you wish to cancel this query?";
             var result = DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
             if (result == DialogResult.Yes)
@@ -105,8 +105,8 @@ public sealed partial class QueryForm
     private bool AskUserToCommitTransactions()
     {
         var cancel = false;
-        var text = "There are uncommitted transaction(s). Do you wish to commit these transaction(s) before closing the window?";
-        var caption = DataCommanderApplication.Instance.Name;
+        var caption = DataCommanderApplication.MessageBoxCaption;
+        const string text = "There are uncommitted transaction(s). Do you wish to commit these transaction(s) before closing the window?";
         var result = DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
         switch (result)
         {
@@ -132,7 +132,7 @@ public sealed partial class QueryForm
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
                 var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
-                    "Getting transaction count...", string.Empty, _colorTheme);
+                    DataCommanderApplication.MessageBoxCaption, "Getting transaction count...", _colorTheme);
                 var transactionCount = cancelableOperationForm.Execute(new Task<int>(() => Connection.GetTransactionCountAsync(cancellationToken).Result));
                 var hasTransactions = transactionCount > 0;
                 if (hasTransactions)
@@ -141,7 +141,7 @@ public sealed partial class QueryForm
             catch (Exception exception)
             {
                 AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Error, null, exception.ToString()));
-                const string caption = "Data Commander";                
+                var caption = DataCommanderApplication.MessageBoxCaption;                
                 var text = @$"Getting transaction count failed. Close window?
 
 {exception.Message}";

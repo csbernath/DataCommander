@@ -1943,7 +1943,7 @@ public sealed partial class QueryForm : Form, IQueryForm
     {
         QueryTextBox.Focus();
         Cursor = Cursors.Default;
-        const string caption = "Data Commander";
+        var caption = DataCommanderApplication.MessageBoxCaption;
         var text = ex.ToString();
         DataCommanderMessageBox.MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
