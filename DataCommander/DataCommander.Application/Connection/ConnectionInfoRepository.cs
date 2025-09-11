@@ -63,6 +63,11 @@ public static class ConnectionInfoRepository
         var connectionDtos = connectionInfos
             .Select(connectionProperties => connectionProperties.ToConnectionDto());
         var path = GetPath();
+        
+        var directory = Path.GetDirectoryName(path);
+        if (!Directory.Exists(directory))
+            Directory.CreateDirectory(directory);
+        
         using var streamWriter = new StreamWriter(path, false, Encoding.UTF8);
         var serializer = new JsonSerializer
         {
