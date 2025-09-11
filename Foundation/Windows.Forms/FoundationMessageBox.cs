@@ -57,24 +57,8 @@ public class FoundationMessageBox : IMessageBox
     {
         Log.Trace(CallerInformation.Create(), $"Caption: {caption}, Text: {text}");
 
-        Beep(messageBoxIcon);
+        MessageBoxBuilder.Beep(messageBoxIcon);
         var foundationMessageBoxForm = new FoundationMessageBoxForm(owner, text, caption, messageBoxButtons, messageBoxIcon, defaultButton, options, showHelp);
         return foundationMessageBoxForm.ShowDialog();
-    }
-
-    private static void Beep(MessageBoxIcon messageBoxIcon)
-    {
-        switch (messageBoxIcon)
-        {
-            case MessageBoxIcon.Hand:
-                SystemSounds.Hand.Play();
-                break;
-            case MessageBoxIcon.Asterisk:
-                SystemSounds.Asterisk.Play();
-                break;
-            case MessageBoxIcon.Exclamation:
-                SystemSounds.Exclamation.Play();
-                break;
-        }
     }
 }

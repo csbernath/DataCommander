@@ -352,27 +352,11 @@ internal partial class ConnectionStringBuilderForm : Form
                 var connectionInfo = SaveDialogToConnectionInfo();
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
-                var dbConnectionStringBuilder = new DbConnectionStringBuilder
-                {
-                    ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString
-                };
-                dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
-                var dataSource = (string)dataSourceObject!;
-                var containsIntegratedSecurity = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
-                var stringBuilder = new StringBuilder();
                 var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
-                stringBuilder.Append($@"Connection name: {connectionInfo.ConnectionName}
-Provider name: {providerInfo.Name}
-{ConnectionStringKeyword.DataSource}: {dataSource}");
-                if (containsIntegratedSecurity)
-                    stringBuilder.Append($"\r\n{ConnectionStringKeyword.IntegratedSecurity}: {integratedSecurity}");
-                if (connectionInfo.ConnectionStringAndCredential.Credential != null)
-                    stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {connectionInfo.ConnectionStringAndCredential.Credential.UserId}");
-                var text = stringBuilder.ToString();
-
-                var cancelableOperationForm =
-                    new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), "Opening connection...", text, _colorTheme);
                 var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
+                var text = OpenConnectionFormHelper.CreateOpenConnectionFormText(connectionInfo, providerInfo, provider);
+                var cancelableOperationForm =
+                    new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), DataCommanderApplication.MessageBoxCaption, text, _colorTheme);
                 using (var connection = provider.CreateConnection(connectionInfo.ConnectionStringAndCredential))
                 {
                     var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
@@ -381,8 +365,8 @@ Provider name: {providerInfo.Name}
                         throw openConnectionTask.Exception;
                 }
 
-                DataCommanderMessageBox.MessageBox.Show("The connection was tested successfully.", DataCommanderApplication.Instance.Name, MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                DataCommanderMessageBox.MessageBox.Show(this, "The connection was tested successfully.", DataCommanderApplication.MessageBoxCaption,
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception exception)
             {
@@ -390,7 +374,7 @@ Provider name: {providerInfo.Name}
                 var text = $@"Opening connection failed.
 
 {exception.Message}";
-                DataCommanderMessageBox.MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

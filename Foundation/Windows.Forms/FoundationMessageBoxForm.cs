@@ -8,20 +8,7 @@ using System.Windows.Forms;
 namespace Foundation.Windows.Forms;
 
 internal class FoundationMessageBoxForm : Form
-{
-    private static readonly Dictionary<ButtonId, ButtonInfo> ButtonInfosById = new ButtonInfo[]
-    {
-        new(ButtonId.Abort, "Abort", true, "&Abort", DialogResult.Abort),
-        new(ButtonId.Cancel, "Cancel", false, "Cancel", DialogResult.Cancel),
-        new(ButtonId.Continue, "Continue", true, "&Continue", DialogResult.Continue),
-        new(ButtonId.Ignore, "Ignore", true, "&Ignore", DialogResult.Ignore),
-        new(ButtonId.No, "No", true, "&No", DialogResult.No),
-        new(ButtonId.Ok, "OK", false, "OK", DialogResult.OK),
-        new(ButtonId.Retry, "Retry", true, "&Retry", DialogResult.Retry),
-        new(ButtonId.TryAgain, "Try Again", true, "&Try Again", DialogResult.TryAgain),
-        new(ButtonId.Yes, "Yes", true, "&Yes", DialogResult.Yes)
-    }.ToDictionary(i => i.ButtonId);
-    
+{    
     private const int CP_NOCLOSE_BUTTON = 0x200;
 
     private readonly MessageBoxButtons _messageBoxButtons;
@@ -115,7 +102,7 @@ internal class FoundationMessageBoxForm : Form
         };
         Controls.Add(bottomPanel);
 
-        var buttonIds = GetButtonIds(messageBoxButtons);
+        var buttonIds = MessageBoxBuilder.GetButtonIds(messageBoxButtons);
         var buttons = CreateButtons(buttonIds);
         const int buttonLeftBorderX = 32;        
         const int buttonRightBorderX = 19;
@@ -183,7 +170,7 @@ internal class FoundationMessageBoxForm : Form
             if (e is { Control: true, KeyCode: Keys.C })
             {
                 SystemSounds.Beep.Play();
-                var clipboardText = GetClipboardText(text, caption, messageBoxButtons);
+                var clipboardText = MessageBoxBuilder.GetClipboardText(text, caption, messageBoxButtons);
                 Clipboard.SetText(clipboardText);
                 e.Handled = true;
             }
@@ -199,29 +186,6 @@ internal class FoundationMessageBoxForm : Form
             if (messageBoxButtons == MessageBoxButtons.OK)
                 DialogResult = DialogResult.OK;
         };
-    }
-
-    private static string GetClipboardText(string? text, string? caption, MessageBoxButtons messageBoxButtons)
-    {
-        var separator = new string('-', 27);
-        var buttonsText = GetClipboardButtonsText(messageBoxButtons);
-        var clipboardText = $@"{separator}
-{caption}
-{separator}
-{text}
-{separator}
-{buttonsText}
-{separator}";
-        return clipboardText;
-    }
-
-    private static string GetClipboardButtonsText(MessageBoxButtons messageBoxButtons)
-    {
-        var buttonIds = GetButtonIds(messageBoxButtons);
-        var buttonInfos = buttonIds.Select(buttonId => ButtonInfosById[buttonId]);
-        var buttonTexts = buttonInfos.Select(buttonInfo => buttonInfo.Text + "   ");
-        var clipboardButtonTexts = string.Concat(buttonTexts);
-        return clipboardButtonTexts;
     }
 
     private static PictureBox CreatePictureBox(MessageBoxIcon messageBoxIcon)
@@ -247,7 +211,7 @@ internal class FoundationMessageBoxForm : Form
         return textLabel;
     }
 
-    private static Button[] CreateButtons(ButtonId[] buttonIds)
+    private static Button[] CreateButtons(MessageBoxButtonId[] buttonIds)
     {
         var buttons = buttonIds.Select(CreateButton).ToArray();
         for (var index = 0; index < buttons.Length; ++index)
@@ -256,25 +220,9 @@ internal class FoundationMessageBoxForm : Form
         return buttons;
     }
 
-    private static ButtonId[] GetButtonIds(MessageBoxButtons messageBoxButtons)
+    private static Button CreateButton(MessageBoxButtonId buttonId)
     {
-        var buttonIds = messageBoxButtons switch
-        {
-            MessageBoxButtons.OK => new[] { ButtonId.Ok },
-            MessageBoxButtons.OKCancel => [ButtonId.Ok, ButtonId.Cancel],
-            MessageBoxButtons.AbortRetryIgnore => [ButtonId.Abort, ButtonId.Retry, ButtonId.Ignore],
-            MessageBoxButtons.YesNoCancel => [ButtonId.Yes, ButtonId.No, ButtonId.Cancel],
-            MessageBoxButtons.YesNo => [ButtonId.Yes, ButtonId.No],
-            MessageBoxButtons.RetryCancel => [ButtonId.Retry, ButtonId.Cancel],
-            MessageBoxButtons.CancelTryContinue => [ButtonId.Cancel, ButtonId.TryAgain, ButtonId.Continue],
-            _ => throw new ArgumentOutOfRangeException(nameof(messageBoxButtons), messageBoxButtons, null)
-        };
-        return buttonIds;
-    }
-
-    private static Button CreateButton(ButtonId buttonId)
-    {
-        var buttonInfo = ButtonInfosById[buttonId];
+        var buttonInfo = MessageBoxBuilder.ButtonInfosById[buttonId];
         return new Button
         {
             DialogResult = buttonInfo.DialogResult,
@@ -315,26 +263,4 @@ internal class FoundationMessageBoxForm : Form
         if (cancelButtonIndex != null)
             CancelButton = buttons[cancelButtonIndex.Value];
     }
-
-    private enum ButtonId
-    {
-        Abort,
-        Cancel,
-        Continue,
-        Ignore,
-        No,
-        Ok,
-        Retry,
-        TryAgain,
-        Yes
-    }
-
-    private class ButtonInfo(ButtonId buttonId, string text, bool useMnemonic, string textWithMnemonic, DialogResult dialogResult)
-    {
-        public readonly ButtonId ButtonId = buttonId;
-        public readonly string Text = text;
-        public readonly bool UseMnemonic = useMnemonic;
-        public readonly string TextWithMnemonic = textWithMnemonic;
-        public readonly DialogResult DialogResult = dialogResult;
-    }    
 }
