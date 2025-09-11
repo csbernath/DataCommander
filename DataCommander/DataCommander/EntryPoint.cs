@@ -81,10 +81,15 @@ internal static class EntryPoint
         var sectionName = Settings.SectionName;
         applicationData.Load(fileName, sectionName);
         var node = applicationData.RootNode.SelectNode("DataCommander/Application/MainForm");
-        var attributes = node.Attributes;
-        attributes.TryGetAttributeValue("ColorMode", SystemColorMode.System, out var colorMode);
-        attributes.TryGetAttributeValue("InitializeApplicationConfiguration", true, out var initializeApplicationConfiguration);
-        
+        var colorMode = SystemColorMode.System;
+        var initializeApplicationConfiguration = true;
+        if (node != null)
+        {
+            var attributes = node.Attributes;
+            attributes.TryGetAttributeValue("ColorMode", SystemColorMode.System, out colorMode);
+            attributes.TryGetAttributeValue("InitializeApplicationConfiguration", true, out initializeApplicationConfiguration);
+        }
+
 #pragma warning disable WFO5001
         if (colorMode == SystemColorMode.System && !AppsUseLightTheme())
             colorMode = SystemColorMode.Dark;
