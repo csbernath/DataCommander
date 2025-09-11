@@ -492,18 +492,20 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
 
     private void optionsMenuItem_Click(object? sender, EventArgs e)
     {
-        // TODO
-        // var optionsForm = new OptionsForm(_colorTheme != null, SelectedFont, _colorTheme);
-        // if (optionsForm.ShowDialog() == DialogResult.OK)
-        // {
-        //     var darkColorTheme = optionsForm.DarkColorTheme;
-        //     SetColorTheme(darkColorTheme);
-        //     SelectedFont = optionsForm.SelectedFont;
-        //
-        //     var attributes = DataCommanderApplication.Instance.ApplicationData.CurrentType.Attributes;
-        //     attributes.SetAttributeValue("DarkColorTheme", darkColorTheme);
-        //     attributes.SetAttributeValue("Font", Serialize(SelectedFont));
-        // }
+        var attributes = DataCommanderApplication.Instance.ApplicationData.CurrentType.Attributes;
+        attributes.TryGetAttributeValue("ColorMode", SystemColorMode.System, out var colorMode);
+        attributes.TryGetAttributeValue("InitializeApplicationConfiguration", false, out var initializeApplicationConfiguration);
+
+        var optionsForm = new OptionsForm(colorMode, initializeApplicationConfiguration, SelectedFont!);
+        if (optionsForm.ShowDialog() == DialogResult.OK)
+        {
+            // TODO SetColorTheme(darkColorTheme);
+            SelectedFont = optionsForm.SelectedFont;
+
+            attributes.SetAttributeValue("ColorMode", colorMode);
+            attributes.SetAttributeValue("InitializeApplicationConfiguration", initializeApplicationConfiguration);            
+            attributes.SetAttributeValue("Font", Serialize(SelectedFont));
+        }
     }
 
     private void Connect()

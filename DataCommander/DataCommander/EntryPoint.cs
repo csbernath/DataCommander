@@ -22,24 +22,6 @@ internal static class EntryPoint
     {
         LogFactory.Set(InternalLogFactory.Instance);
         
-#pragma warning disable WFO5001
-        var colorMode = SystemColorMode.System;
-        // if (!ApplicationData.CurrentType.Attributes.TryGetAttributeValue("ColorMode", out _colorMode))
-        //     _colorMode = SystemColorMode.System;
-
-        if (colorMode == SystemColorMode.System && !AppsUseLightTheme())
-            colorMode = SystemColorMode.Dark;
-
-        if (colorMode != SystemColorMode.System)
-            System.Windows.Forms.Application.SetColorMode(colorMode);
-        
-        DataCommanderMessageBox.MessageBox = colorMode != SystemColorMode.System
-            ? new FoundationMessageBox()
-            : new SystemMessageBox();
-#pragma warning restore WFO5001
-        
-        ApplicationConfiguration.Initialize();
-        
         try
         {
             //var updateStarted = Update();
@@ -51,9 +33,9 @@ internal static class EntryPoint
 
                 try
                 {
-                    Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-                    Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
-                    Run(colorMode);
+                    // Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+                    // Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+                    Run();
                 }
                 finally
                 {
@@ -88,15 +70,37 @@ internal static class EntryPoint
     //}
 
 #pragma warning disable WFO5001    
-    private static void Run(SystemColorMode colorMode)
+    private static void Run()
     {
-        using var methodLog = LogFactory.Instance.GetCurrentMethodLog();
         var applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(false);
+        var applicationData = new ApplicationData();
         var fileName = Path.Combine(applicationDataFolderPath, "ApplicationData.xml");
-        methodLog.Write(LogLevel.Trace, "fileName: {0}", fileName);
         var sectionName = Settings.SectionName;
+        applicationData.Load(fileName, sectionName);
+        var node = applicationData.RootNode.SelectNode("DataCommander/Application/MainForm");
+        var attributes = node.Attributes;
+        attributes.TryGetAttributeValue("ColorMode", SystemColorMode.System, out var colorMode);
+        attributes.TryGetAttributeValue("InitializeApplicationConfiguration", true, out var initializeApplicationConfiguration);
+        
+#pragma warning disable WFO5001
+        if (colorMode == SystemColorMode.System && !AppsUseLightTheme())
+            colorMode = SystemColorMode.Dark;
+
+        if (colorMode != SystemColorMode.System)
+            System.Windows.Forms.Application.SetColorMode(colorMode);
+
+        if (initializeApplicationConfiguration)
+            ApplicationConfiguration.Initialize();
+        
+        DataCommanderMessageBox.MessageBox = colorMode != SystemColorMode.System
+            ? new FoundationMessageBox()
+            : new SystemMessageBox();
+#pragma warning restore WFO5001
+        
+        using var methodLog = LogFactory.Instance.GetCurrentMethodLog();
+        methodLog.Write(LogLevel.Trace, "fileName: {0}", fileName);
         var dataCommanderApplication = DataCommanderApplication.Instance;
-        dataCommanderApplication.LoadApplicationData(fileName, sectionName);
+        dataCommanderApplication.SetApplicationData(applicationData, fileName, sectionName);
         dataCommanderApplication.Run(colorMode);
         dataCommanderApplication.SaveApplicationData();
     }

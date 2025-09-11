@@ -41,13 +41,13 @@ public sealed class DataCommanderApplication
 
     public string Name { get; }
 
-    public ApplicationData ApplicationData { get; } = new();
+    public ApplicationData ApplicationData { get; private set; }
 
     public string? ApplicationDataFileName { get; private set; }
     
 #pragma warning disable WFO5001
     public SystemColorMode ColorMode => _colorMode;
-#pragma warning restore WFO5001    
+#pragma warning restore WFO5001
 
     public MainForm? MainForm { get; private set; }
 
@@ -78,9 +78,9 @@ public sealed class DataCommanderApplication
         Log.Write(LogLevel.Trace, "MoveFileEx succeeded: {0}", succeeded);
     }
 
-    public void LoadApplicationData(string fileName, string sectionName)
+    public void SetApplicationData(ApplicationData applicationData, string fileName, string sectionName)
     {
-        ApplicationData.Load(fileName, sectionName);
+        ApplicationData = applicationData;
         ApplicationDataFileName = fileName;
         _sectionName = sectionName;
     }
