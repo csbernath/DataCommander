@@ -21,7 +21,7 @@ internal static class EntryPoint
     public static void Main()
     {
         LogFactory.Set(InternalLogFactory.Instance);
-        
+
         try
         {
             //var updateStarted = Update();
@@ -50,7 +50,10 @@ internal static class EntryPoint
             var message = e.ToString();
             var log = LogFactory.Instance.GetCurrentMethodLog();
             log.Error(message);
-            DataCommanderMessageBox.MessageBox.Show(message, "Fatal Application Error in Data Commander!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            var text = $@"Fatal Application Error in Data Commander!
+
+{message}";
+            DataCommanderMessageBox.MessageBox.Show(text, DataCommanderApplication.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

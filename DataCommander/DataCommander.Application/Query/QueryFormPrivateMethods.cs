@@ -269,7 +269,8 @@ public sealed partial class QueryForm
             }
             catch (Exception exception)
             {
-                DataCommanderMessageBox.MessageBox.Show(exception.Message);
+                DataCommanderMessageBox.MessageBox.Show(this, exception.Message, DataCommanderApplication.MessageBoxCaption, MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         });
         var dropdownItems = source.DropDownItems

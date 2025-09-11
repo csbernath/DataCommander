@@ -206,7 +206,8 @@ public sealed class QueryTextBox : UserControl
             }
             catch (Exception ex)
             {
-                DataCommanderMessageBox.MessageBox.Show(ex.ToString());
+                DataCommanderMessageBox.MessageBox.Show(this, ex.ToString(), DataCommanderApplication.MessageBoxCaption, MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
             finally
             {
@@ -475,7 +476,8 @@ public sealed class QueryTextBox : UserControl
         }
         catch (Exception ex)
         {
-            DataCommanderMessageBox.MessageBox.Show(ex.ToString());
+            DataCommanderMessageBox.MessageBox.Show(this, ex.ToString(), DataCommanderApplication.MessageBoxCaption, MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
         }
         finally
         {
@@ -581,7 +583,8 @@ public sealed class QueryTextBox : UserControl
         }
         catch (Exception ex)
         {
-            DataCommanderMessageBox.MessageBox.Show(ex.ToString());
+            DataCommanderMessageBox.MessageBox.Show(this, ex.ToString(), DataCommanderApplication.MessageBoxCaption, MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
         }
         finally
         {

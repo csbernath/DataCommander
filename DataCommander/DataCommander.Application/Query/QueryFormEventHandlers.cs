@@ -248,7 +248,8 @@ Please wait...",
         }
         catch (Exception ex)
         {
-            DataCommanderMessageBox.MessageBox.Show(ex.ToString());
+            DataCommanderMessageBox.MessageBox.Show(this, ex.ToString(), DataCommanderApplication.MessageBoxCaption, MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
         }
     }
 
