@@ -33,8 +33,8 @@ internal static class EntryPoint
 
                 try
                 {
-                    // Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-                    // Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+                    Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+                    Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
                     Run();
                 }
                 finally

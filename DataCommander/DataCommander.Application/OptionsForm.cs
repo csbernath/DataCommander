@@ -16,10 +16,14 @@ public partial class OptionsForm : Form
         _colorMode = colorMode;
         _initializeApplicationConfiguration = initializeApplicationConfiguration;
         _font = font;
-        
+
         InitializeComponent();
 
-        // colorThemeComboBox.SelectedIndex = _colorMode ? 1 : 0;
+        colorThemeComboBox.DataSource = System.Enum.GetValues(typeof(SystemColorMode));
+        colorThemeComboBox.SelectedItem = _colorMode;
+
+        initializeApplicationConfigurationCheckBox.Checked = _initializeApplicationConfiguration;
+
         // colorTheme?.Apply(this);
     }
 
@@ -29,7 +33,8 @@ public partial class OptionsForm : Form
 
     private void okButton_Click(object? sender, System.EventArgs e)
     {
-        // _darkColorTheme = colorThemeComboBox.SelectedIndex != 0;
+        _colorMode = (SystemColorMode)colorThemeComboBox.SelectedItem!;
+        _initializeApplicationConfiguration = initializeApplicationConfigurationCheckBox.Checked;
     }
 
     private void changeFontButton_Click(object? sender, System.EventArgs e)
@@ -42,5 +47,10 @@ public partial class OptionsForm : Form
 
         if (dialogResult == DialogResult.OK)
             _font = fontDialog.Font;
+    }
+
+    private void initializeApplicationConfigurationCheckBox_CheckedChanged(object sender, System.EventArgs e)
+    {
+
     }
 }

@@ -494,16 +494,15 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
     {
         var attributes = DataCommanderApplication.Instance.ApplicationData.CurrentType.Attributes;
         attributes.TryGetAttributeValue("ColorMode", SystemColorMode.System, out var colorMode);
-        attributes.TryGetAttributeValue("InitializeApplicationConfiguration", false, out var initializeApplicationConfiguration);
+        attributes.TryGetAttributeValue("InitializeApplicationConfiguration", true, out var initializeApplicationConfiguration);
 
         var optionsForm = new OptionsForm(colorMode, initializeApplicationConfiguration, SelectedFont!);
         if (optionsForm.ShowDialog() == DialogResult.OK)
         {
-            // TODO SetColorTheme(darkColorTheme);
-            SelectedFont = optionsForm.SelectedFont;
+            attributes.SetAttributeValue("ColorMode", optionsForm.ColorMode);
+            attributes.SetAttributeValue("InitializeApplicationConfiguration", optionsForm.InitializeApplicationConfiguration);
 
-            attributes.SetAttributeValue("ColorMode", colorMode);
-            attributes.SetAttributeValue("InitializeApplicationConfiguration", initializeApplicationConfiguration);            
+            SelectedFont = optionsForm.SelectedFont;
             attributes.SetAttributeValue("Font", Serialize(SelectedFont));
         }
     }
