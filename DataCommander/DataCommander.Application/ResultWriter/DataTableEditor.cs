@@ -107,7 +107,7 @@ internal class DataTableEditor : UserControl
                     }
 
                     textBoxColumn.HeaderText = columnName;
-                    var maxWidth = graphics.MeasureString(columnName, font).Width;
+                    var maxWidth = graphics.MeasureString(columnName, font).Width + 6;
                     var type = (Type?)dataColumn.ExtendedProperties[0];
 
                     if (type == null)
@@ -147,7 +147,7 @@ internal class DataTableEditor : UserControl
 
                             if (length <= 256)
                             {
-                                var width = graphics.MeasureString(s, font).Width;
+                                var width = graphics.MeasureString(s, font).Width + 16;
                                 if (width > maxWidth)
                                     maxWidth = width;
                             }
