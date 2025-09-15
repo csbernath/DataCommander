@@ -4,7 +4,9 @@ namespace DataCommander.Application;
 
 public static class DataCommanderMessageBox
 {
-    public static IMessageBox MessageBox = null;
+    private static IMessageBox _messageBox;
 
-    public static void Set(IMessageBox messageBox) => MessageBox = messageBox;
+    public static IMessageBox MessageBox => _messageBox;
+
+    public static void Set(IMessageBox messageBox) => _messageBox = messageBox;
 }

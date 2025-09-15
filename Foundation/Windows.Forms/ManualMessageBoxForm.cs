@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace Foundation.Windows.Forms
 {
@@ -21,6 +15,16 @@ namespace Foundation.Windows.Forms
 
             var icon = MessageBoxBuilder.GetIcon(messageBoxIcon);
             pictureBox.Image = icon.ToBitmap();
+        }
+
+        private void button1_Click(object sender, System.EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, System.EventArgs e)
+        {
+
         }
     }
 }

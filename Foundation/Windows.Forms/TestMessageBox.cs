@@ -27,8 +27,8 @@ namespace Foundation.Windows.Forms
         {
             var dialogResult0 = MessageBox.Show(owner, text, caption, buttons, icon, defaultButton);
 
-            // var manualMessageBoxForm = new ManualMessageBoxForm(owner, text, caption, buttons, icon, defaultButton);
-            // manualMessageBoxForm.ShowDialog();
+            //var manualMessageBoxForm = new ManualMessageBoxForm(owner, text, caption, buttons, icon, defaultButton);
+            //manualMessageBoxForm.ShowDialog();
 
             var dialogResult1 = _foundationMessageBox.Show(owner, text, caption, buttons, icon, defaultButton);
             Assert.CompareToEquals(dialogResult0, dialogResult1);

@@ -32,12 +32,11 @@ internal class FoundationMessageBoxForm : Form
         
         SuspendLayout();
         AutoScaleDimensions = new SizeF(6F, 13F);        
+        //AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         
-        var messageBoxFont = SystemFonts.MessageBoxFont!;
-        var font = new Font(messageBoxFont.Name, messageBoxFont.Size - 1, FontStyle.Regular);
-        Font = font;
-        
+        Font = new Font("Segoe UI", 8);
+
         FormBorderStyle = FormBorderStyle.FixedDialog;
 // #pragma warning disable WFO5001
 //         FormCornerPreference = FormCornerPreference.DoNotRound;
@@ -62,6 +61,7 @@ internal class FoundationMessageBoxForm : Form
         if (messageBoxIcon != MessageBoxIcon.None)
         {
             pictureBox = CreatePictureBox(messageBoxIcon);
+            pictureBox.SuspendLayout();
             pictureBox.Location = new Point(borderX, borderY);
             Controls.Add(pictureBox);
         }
@@ -104,6 +104,9 @@ internal class FoundationMessageBoxForm : Form
 
         var buttonIds = MessageBoxBuilder.GetButtonIds(messageBoxButtons);
         var buttons = CreateButtons(buttonIds);
+        foreach (var button in buttons)
+            bottomPanel.Controls.Add(button);
+        
         const int buttonLeftBorderX = 32;        
         const int buttonRightBorderX = 19;
         const int buttonPaddingX = 10;
@@ -117,7 +120,10 @@ internal class FoundationMessageBoxForm : Form
 
         var height = iconAndTextHeight + bottomPanel.Height;
         ClientSize = new Size(width, height);
-        
+
+        if (pictureBox != null)
+            pictureBox.ResumeLayout(false);
+
         ResumeLayout(false);
         PerformLayout();
         
@@ -158,7 +164,6 @@ internal class FoundationMessageBoxForm : Form
         foreach (var button in buttons)
         {
             button.Location = new Point(left, 10);
-            bottomPanel.Controls.Add(button);
             left += button.Width + buttonPaddingX;
         }
     }
@@ -228,7 +233,8 @@ internal class FoundationMessageBoxForm : Form
             DialogResult = buttonInfo.DialogResult,
             Size = new Size(75, 24),            
             Text = buttonInfo.TextWithMnemonic,
-            UseMnemonic = buttonInfo.UseMnemonic
+            UseMnemonic = buttonInfo.UseMnemonic,
+            UseVisualStyleBackColor = true
         };
     }
 

@@ -100,9 +100,12 @@ internal static class EntryPoint
         if (initializeApplicationConfiguration)
             ApplicationConfiguration.Initialize();
         
-        DataCommanderMessageBox.MessageBox = colorMode != SystemColorMode.System
-            ? new FoundationMessageBox()
+        var messageBox = colorMode != SystemColorMode.System
+            //? new FoundationMessageBox()
+            ? (IMessageBox)new TestMessageBox()
             : new SystemMessageBox();
+        DataCommanderMessageBox.Set(messageBox);
+        
 #pragma warning restore WFO5001
         
         using var methodLog = LogFactory.Instance.GetCurrentMethodLog();
