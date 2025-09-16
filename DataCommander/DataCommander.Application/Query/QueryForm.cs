@@ -126,8 +126,11 @@ public sealed partial class QueryForm : Form, IQueryForm
             var startTimestamp = Stopwatch.GetTimestamp();
             objectExplorer.SetConnectionStringAndCredential(_connectionInfo.ConnectionStringAndCredential);
             var cancellationTokenSource = new CancellationTokenSource();
-            var cancelableOperationForm = new CancelableOperationForm(mainForm, cancellationTokenSource, TimeSpan.FromSeconds(1), "Getting children...",
-                "Please wait...", colorTheme);
+            const string textBoxText = @"Getting children...
+
+Please wait...";
+            var cancelableOperationForm = new CancelableOperationForm(mainForm, cancellationTokenSource, TimeSpan.FromSeconds(1),
+                DataCommanderApplication.MessageBoxCaption, textBoxText, colorTheme);
             var cancellationToken = cancellationTokenSource.Token;
             var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result));
             AddNodes(_tvObjectExplorer!.Nodes, children, objectExplorer.Sortable, startTimestamp);

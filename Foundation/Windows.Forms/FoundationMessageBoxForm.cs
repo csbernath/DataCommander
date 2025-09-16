@@ -108,7 +108,7 @@ internal class FoundationMessageBoxForm : Form
             bottomPanel.Controls.Add(button);
         
         const int buttonLeftBorderX = 32;        
-        const int buttonRightBorderX = 19;
+        const int buttonRightBorderX = 15;
         const int buttonPaddingX = 10;
         var buttonsWidth = buttonLeftBorderX + buttons.Sum(c => c.Width) + (buttons.Length - 1) * buttonPaddingX + buttonRightBorderX;
         var width = Math.Max(iconAndTextWidth, buttonsWidth);
