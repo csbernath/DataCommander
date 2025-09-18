@@ -285,7 +285,7 @@ internal class DataTableEditor : UserControl
 
     private void DataGrid_DataError(object? sender, DataGridViewDataErrorEventArgs e)
     {
-        DataCommanderMessageBox.MessageBox.Show(this, e.Exception!.ToString(), DataCommanderApplication.MessageBoxCaption, MessageBoxButtons.OK,
+        DataCommanderMessageBox.MessageBox.Show(this, e.Exception!.ToString(), MessageBoxCaption.Value, MessageBoxButtons.OK,
             MessageBoxIcon.Error);
         e.ThrowException = false;
         e.Cancel = true;
@@ -672,7 +672,7 @@ internal class DataTableEditor : UserControl
                 }
                 catch (Exception ex)
                 {
-                    DataCommanderMessageBox.MessageBox.Show(this, ex.ToString(), DataCommanderApplication.MessageBoxCaption, MessageBoxButtons.OK,
+                    DataCommanderMessageBox.MessageBox.Show(this, ex.ToString(), MessageBoxCaption.Value, MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
                 }
                 finally
@@ -858,7 +858,7 @@ internal class DataTableEditor : UserControl
         }
         catch (Exception ex)
         {
-            DataCommanderMessageBox.MessageBox.Show(this, ex.ToString(), DataCommanderApplication.MessageBoxCaption, MessageBoxButtons.OK,
+            DataCommanderMessageBox.MessageBox.Show(this, ex.ToString(), MessageBoxCaption.Value, MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
         }
     }

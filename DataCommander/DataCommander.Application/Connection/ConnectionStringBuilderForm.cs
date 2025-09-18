@@ -340,7 +340,7 @@ internal partial class ConnectionStringBuilderForm : Form
         if (providersComboBox.SelectedIndex == -1)
         {
             valid = false;
-            var caption = DataCommanderApplication.MessageBoxCaption;
+            var caption = MessageBoxCaption.Value;
             const string text = "A provider must be selected.";
             DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
@@ -356,7 +356,7 @@ internal partial class ConnectionStringBuilderForm : Form
                 var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
                 var text = OpenConnectionFormHelper.CreateOpenConnectionFormText(connectionInfo, providerInfo, provider);
                 var cancelableOperationForm =
-                    new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), DataCommanderApplication.MessageBoxCaption, text, _colorTheme);
+                    new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value, text, _colorTheme);
                 using (var connection = provider.CreateConnection(connectionInfo.ConnectionStringAndCredential))
                 {
                     var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
@@ -365,12 +365,12 @@ internal partial class ConnectionStringBuilderForm : Form
                         throw openConnectionTask.Exception;
                 }
 
-                DataCommanderMessageBox.MessageBox.Show(this, "The connection was tested successfully.", DataCommanderApplication.MessageBoxCaption,
+                DataCommanderMessageBox.MessageBox.Show(this, "The connection was tested successfully.", MessageBoxCaption.Value,
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception exception)
             {
-                var caption = DataCommanderApplication.MessageBoxCaption;
+                var caption = MessageBoxCaption.Value;
                 var text = $@"Opening connection failed.
 
 {exception.Message}";

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using DataCommander.Api;
 using DataCommander.Application;
 //using DataCommander.Updater;
 using Foundation.Configuration;
@@ -53,7 +54,7 @@ internal static class EntryPoint
             var text = $@"Fatal Application Error in Data Commander!
 
 {message}";
-            DataCommanderMessageBox.MessageBox.Show(text, DataCommanderApplication.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            DataCommanderMessageBox.MessageBox.Show(text, MessageBoxCaption.Value, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

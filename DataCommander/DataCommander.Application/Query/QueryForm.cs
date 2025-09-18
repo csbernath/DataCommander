@@ -130,7 +130,7 @@ public sealed partial class QueryForm : Form, IQueryForm
 
 Please wait...";
             var cancelableOperationForm = new CancelableOperationForm(mainForm, cancellationTokenSource, TimeSpan.FromSeconds(1),
-                DataCommanderApplication.MessageBoxCaption, textBoxText, colorTheme);
+                MessageBoxCaption.Value, textBoxText, colorTheme);
             var cancellationToken = cancellationTokenSource.Token;
             var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result));
             AddNodes(_tvObjectExplorer!.Nodes, children, objectExplorer.Sortable, startTimestamp);
@@ -1199,11 +1199,11 @@ Please wait...";
 
     private void SetText()
     {
-        var text = Provider.GetConnectionName(Connection!.Connection);
-        Text = text;
+        var connectionName = Provider.GetConnectionName(Connection!.Connection);
+        Text = $"{_connectionInfo.ConnectionName} - {connectionName}";
 
-        var mainForm = DataCommanderApplication.Instance.MainForm!;
-        mainForm.ActiveMdiChildToolStripTextBox.Text = text;
+        // var mainForm = DataCommanderApplication.Instance.MainForm!;
+        // mainForm.ActiveMdiChildToolStripTextBox.Text = connectionName;
     }
 
     private bool EnsureConnectionIsOpen()
@@ -1226,7 +1226,7 @@ Please wait...";
                 var cancellationToken = cancellationTokenSource.Token;
                 var text = OpenConnectionFormHelper.CreateOpenConnectionFormText(_connectionInfo, _providerInfo, Provider);
                 var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
-                    DataCommanderApplication.MessageBoxCaption, text, _colorTheme);
+                    MessageBoxCaption.Value, text, _colorTheme);
                 var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
                 cancelableOperationForm.Execute(openConnectionTask);
                 if (openConnectionTask.Exception != null)
@@ -1945,7 +1945,7 @@ Please wait...";
     {
         QueryTextBox.Focus();
         Cursor = Cursors.Default;
-        var caption = DataCommanderApplication.MessageBoxCaption;
+        var caption = MessageBoxCaption.Value;
         var text = ex.ToString();
         DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
     }

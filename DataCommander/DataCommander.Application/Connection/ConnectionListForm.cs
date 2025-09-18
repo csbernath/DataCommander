@@ -203,9 +203,8 @@ internal sealed class ConnectionListForm : Form
 
         if (_isDirty)
         {
-            var caption = DataCommanderApplication.MessageBoxCaption;
             const string text = "Do you want to save changes ?";
-            var dialogResult = DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var dialogResult = DataCommanderMessageBox.MessageBox.Show(this, text, MessageBoxCaption.Value, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
                 ConnectionInfoRepository.Save(_connectionInfos);
         }
@@ -287,7 +286,7 @@ internal sealed class ConnectionListForm : Form
         }
         catch (Exception ex)
         {
-            var caption = DataCommanderApplication.MessageBoxCaption;
+            var caption = MessageBoxCaption.Value;
             var text = ex.ToString();
             DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
@@ -295,7 +294,7 @@ internal sealed class ConnectionListForm : Form
 
     private void Delete()
     {
-        var caption = DataCommanderApplication.MessageBoxCaption;
+        var caption = MessageBoxCaption.Value;
         const string text = "Do you want to delete the selected item(s)?";
         
         if (DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) ==
@@ -473,7 +472,7 @@ internal sealed class ConnectionListForm : Form
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
                 var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
-                    DataCommanderApplication.MessageBoxCaption, text, _colorTheme);
+                    MessageBoxCaption.Value, text, _colorTheme);
                 var startTimestamp = Stopwatch.GetTimestamp();
                 var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
                 cancelableOperationForm.Execute(openConnectionTask);
@@ -487,7 +486,7 @@ internal sealed class ConnectionListForm : Form
         }
         catch (Exception exception)
         {
-            var caption = DataCommanderApplication.MessageBoxCaption;
+            var caption = MessageBoxCaption.Value;
             var text = $@"Opening connection failed.
 
 {exception.Message}";
