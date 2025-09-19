@@ -153,8 +153,12 @@ internal class FoundationMessageBoxForm : Form
 
     protected override void WndProc(ref Message m)
     {
-        if (m.Msg == WM_UPDATEUISTATE)
-            m.WParam = (UISF_HIDEACCEL & 0x0000FFFF) | (UIS_CLEAR << 16);        
+        if (_messageBoxButtons == MessageBoxButtons.YesNoCancel)
+        {
+            if (m.Msg == WM_UPDATEUISTATE)
+                m.WParam = (UISF_HIDEACCEL & 0x0000FFFF) | (UIS_CLEAR << 16);
+        }
+
         base.WndProc(ref m);
     }
 
