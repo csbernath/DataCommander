@@ -102,8 +102,8 @@ internal static class EntryPoint
             ApplicationConfiguration.Initialize();
         
         var messageBox = colorMode != SystemColorMode.System
-            //? new FoundationMessageBox()
-            ? (IMessageBox)new TestMessageBox()
+            ? (IMessageBox)new FoundationMessageBox()
+            // ? (IMessageBox)new TestMessageBox()
             : new SystemMessageBox();
         DataCommanderMessageBox.Set(messageBox);
         
