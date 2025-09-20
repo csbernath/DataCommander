@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,6 +37,8 @@ internal sealed class ConnectionListForm : Form
         _colorTheme = colorTheme;
 
         InitializeComponent();
+        
+        SuspendLayout();
 
         _dataTable.Columns.Add(ConnectionFormColumnName.ConnectionName, typeof(string));
         _dataTable.Columns.Add(ConnectionFormColumnName.ProviderName, typeof(string));
@@ -98,6 +101,8 @@ internal sealed class ConnectionListForm : Form
             ForeColor = colorTheme.ForeColor!.Value;
             colorTheme.Apply(_dataGrid);
         }
+        
+        ResumeLayout(false);
     }
 
     public ConnectionInfo ConnectionInfo => _connectionInfo!;
@@ -183,7 +188,8 @@ internal sealed class ConnectionListForm : Form
         Controls.Add(_btnCancel);
         Controls.Add(_dataGrid);
         Controls.Add(_btnOk);
-        Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+        //Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+        Font = new Font("Microsoft Sans Serif", 8);
         MaximizeBox = false;
         MinimizeBox = false;
         Name = "ConnectionListForm";
