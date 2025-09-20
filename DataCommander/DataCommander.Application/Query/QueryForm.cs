@@ -1755,7 +1755,7 @@ Please wait...";
                 Width = -2
             };
 
-            var type = (Type?)dataColumn.ExtendedProperties[0];
+            var type = (Type?)dataColumn.ExtendedProperties["DataType"];
 
             if (type == null)
                 type = dataColumn.DataType;

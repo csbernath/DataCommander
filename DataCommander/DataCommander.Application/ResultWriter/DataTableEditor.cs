@@ -108,7 +108,7 @@ internal class DataTableEditor : UserControl
 
                     textBoxColumn.HeaderText = columnName;
                     var maxWidth = graphics.MeasureString(columnName, font).Width + 6;
-                    var type = (Type?)dataColumn.ExtendedProperties[0];
+                    var type = (Type?)dataColumn.ExtendedProperties["DataType"];
 
                     if (type == null)
                     {
@@ -117,23 +117,24 @@ internal class DataTableEditor : UserControl
 
                     var typeCode = Type.GetTypeCode(type);
 
-                    if (typeCode == TypeCode.Byte ||
-                        typeCode == TypeCode.SByte ||
-                        typeCode == TypeCode.Int16 ||
-                        typeCode == TypeCode.Int32 ||
-                        typeCode == TypeCode.Int64 ||
-                        typeCode == TypeCode.UInt16 ||
-                        typeCode == TypeCode.UInt32 ||
-                        typeCode == TypeCode.UInt64 ||
-                        typeCode == TypeCode.Decimal ||
-                        typeCode == TypeCode.Single ||
-                        typeCode == TypeCode.Double)
+                    switch (typeCode)
                     {
-                        textBoxColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                    }
-                    else if (typeCode == TypeCode.DateTime)
-                    {
-                        textBoxColumn.DefaultCellStyle.Format = "yyyy.MM.dd HH:mm:ss.fff";
+                        case TypeCode.Byte:
+                        case TypeCode.SByte:
+                        case TypeCode.Int16:
+                        case TypeCode.Int32:
+                        case TypeCode.Int64:
+                        case TypeCode.UInt16:
+                        case TypeCode.UInt32:
+                        case TypeCode.UInt64:
+                        case TypeCode.Decimal:
+                        case TypeCode.Single:
+                        case TypeCode.Double:
+                            textBoxColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                            break;
+                        case TypeCode.DateTime:
+                            textBoxColumn.DefaultCellStyle.Format = "yyyy.MM.dd HH:mm:ss.fff";
+                            break;
                     }
 
                     if (true)
@@ -299,7 +300,7 @@ internal class DataTableEditor : UserControl
             valueString = "null";
         else
         {
-            var type = (Type)column.ExtendedProperties[0];
+            var type = (Type?)column.ExtendedProperties["DataType"];
 
             if (type == null)
                 type = column.DataType;

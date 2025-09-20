@@ -83,7 +83,7 @@ internal static class QueryFormStaticMethods
                 Text = dataColumn.ColumnName,
                 Width = -2
             };
-            var type = (Type?)dataColumn.ExtendedProperties[0] ?? dataColumn.DataType;
+            var type = (Type?)dataColumn.ExtendedProperties["DataType"] ?? dataColumn.DataType;
             columnHeader.TextAlign = GetHorizontalAlignment(type);
             listView.Columns.Add(columnHeader);
         }

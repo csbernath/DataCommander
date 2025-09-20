@@ -327,8 +327,7 @@ internal sealed class ConnectionListForm : Form
             _isDirty = true;
             var rowIndex = _dataGrid!.CurrentCell!.RowIndex;
             var row = _dataTable.DefaultView[rowIndex].Row;
-            LoadConnection(connectionInfo, row);           
-
+            LoadConnection(connectionInfo, row);
         }
     }
 
@@ -435,8 +434,6 @@ internal sealed class ConnectionListForm : Form
     {
         get
         {
-            var count = _dataTable.Rows.Count;
-            var dataView = _dataTable.DefaultView;
             var selectedCount = 0;
 
             foreach (DataGridViewRow dataGridViewRow in _dataGrid!.SelectedRows)
@@ -449,9 +446,7 @@ internal sealed class ConnectionListForm : Form
             }
 
             if (selectedCount == 0)
-            {
                 yield return SelectedIndex;
-            }
         }
     }
 
@@ -514,12 +509,8 @@ internal sealed class ConnectionListForm : Form
 
             default:
                 var folder = SelectedConnectionInfo;
-
                 if (folder != null)
-                {
                     Connect(folder);
-                }
-
                 break;
         }
     }
