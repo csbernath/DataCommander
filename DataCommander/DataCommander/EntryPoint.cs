@@ -116,7 +116,6 @@ internal static class EntryPoint
         dataCommanderApplication.Run(colorMode);
         dataCommanderApplication.SaveApplicationData();
     }
-#pragma warning restore WFO5001    
     
     private static bool AppsUseLightTheme()
     {
