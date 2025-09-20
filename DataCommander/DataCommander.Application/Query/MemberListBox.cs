@@ -18,7 +18,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
     private string _prefix = string.Empty;
     private readonly Container? _components = null;
 
-    public MemberListBox(CompletionForm completionForm, QueryTextBox textBox, ColorTheme colorTheme)
+    public MemberListBox(CompletionForm completionForm, QueryTextBox textBox, ColorTheme? colorTheme)
     {
         // This call is required by the Windows.Forms Form Designer.
         InitializeComponent();

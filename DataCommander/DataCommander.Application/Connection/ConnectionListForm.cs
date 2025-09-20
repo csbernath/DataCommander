@@ -198,7 +198,6 @@ internal sealed class ConnectionListForm : Form
         Text = "Connect to database";
         ((ISupportInitialize)(_dataGrid)).EndInit();
         ResumeLayout(false);
-
     }
 
     public long ElapsedTicks { get; private set; }
@@ -323,10 +322,13 @@ internal sealed class ConnectionListForm : Form
         var dialogResult = form.ShowDialog();
         if (dialogResult == DialogResult.OK)
         {
-            _connectionInfos[SelectedIndex] = form.ConnectionInfo;
+            connectionInfo = form.ConnectionInfo;
+            _connectionInfos[SelectedIndex] = connectionInfo;
             _isDirty = true;
-            var row = _dataTable.DefaultView[_dataGrid!.CurrentCell!.RowIndex].Row;
-            LoadConnection(connectionInfo, row);
+            var rowIndex = _dataGrid!.CurrentCell!.RowIndex;
+            var row = _dataTable.DefaultView[rowIndex].Row;
+            LoadConnection(connectionInfo, row);           
+
         }
     }
 

@@ -1180,15 +1180,15 @@ Please wait...";
 
     private string GetToolTipText(DataTable? dataTable)
     {
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         if (_command != null)
-            sb.Append(_command.CommandText + "\n");
+            stringBuilder.Append(_command.CommandText + "\n");
 
         if (dataTable != null)
-            sb.Append(dataTable.Rows.Count + " row(s)");
+            stringBuilder.Append(dataTable.Rows.Count + " row(s)");
 
-        return sb.ToString();
+        return stringBuilder.ToString();
     }
 
     private void SettingsChanged(object? sender, EventArgs e)
@@ -1502,7 +1502,7 @@ Please wait...";
         SqlDbType sqlDbType;
         var size = 0;
         bool isNullable;
-        string csharpValue = null;
+        string? csharpValue = null;
 
         var sqlDataType = SqlDataTypeRepository.SqlDataTypes.FirstOrDefault(i => i.SqlDataTypeName == dataTypeLower);
         if (sqlDataType != null)

@@ -47,7 +47,7 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
         var sb = new StringBuilder();
         var schemaRows = schemaTable.Rows;
         var schemaRowCount = schemaRows.Count;
-        string insertStatement = null;
+        string? insertStatement = null;
         var insertValues = new StringBuilder();
         _insertCommand = new SqliteCommand();
         var st = new StringTable(3);
