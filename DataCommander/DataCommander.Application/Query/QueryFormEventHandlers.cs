@@ -112,12 +112,13 @@ public sealed partial class QueryForm
                         var cancellationTokenSource = new CancellationTokenSource();
                         var cancellationToken = cancellationTokenSource.Token;
                         treeNode2 = (ITreeNode)treeNode.Tag!;
-                        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
-                            "Getting tree node children...",
-                            $@"Parent node type: {treeNode2.GetType().Name}
+                        var textBoxText = $@"Getting tree node children...
+
+Parent node type: {treeNode2.GetType().Name}
 Parent node name: {treeNode2.Name}
-Please wait...",
-                            _colorTheme);
+Please wait...";
+                        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
+                            MessageBoxCaption.Value, textBoxText, _colorTheme);
                         var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() =>
                             treeNode2.GetChildren(false, cancellationToken).Result));
                         treeNode.Nodes.Clear();
@@ -176,8 +177,11 @@ Please wait...",
             var startTimestamp = Stopwatch.GetTimestamp();
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
-            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
-                "Getting tree node children...", "Please wait...", _colorTheme);
+            const string textBoxText = @"Getting tree node children...
+
+Please wait...";
+            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
+                textBoxText, _colorTheme);
             var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => treeNode!.GetChildren(true, cancellationToken).Result));
             AddNodes(treeNodeV.Nodes, children, treeNode.Sortable, startTimestamp);
         }
@@ -193,8 +197,11 @@ Please wait...",
                 var startTimestamp = Stopwatch.GetTimestamp();
                 objectExplorer.SetConnectionStringAndCredential(_connectionInfo.ConnectionStringAndCredential);
                 var cancellationTokenSource = new CancellationTokenSource();
-                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), "Getting children...",
-                    "Please wait...", _colorTheme);
+                const string textBoxText = @"Getting children...
+
+Please wait...";
+                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
+                    textBoxText, _colorTheme);
                 var cancellationToken = cancellationTokenSource.Token;
                 var children = cancelableOperationForm.Execute(
                     new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result));
@@ -629,8 +636,8 @@ Please wait...",
         //connection.ConnectionName = Connection.ConnectionName;
         var cancellationTokenSource = new CancellationTokenSource();
         var cancellationToken = cancellationTokenSource.Token;
-        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
-            "Opening connection...", string.Empty, _colorTheme);
+        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
+            "Opening connection...", _colorTheme);
         var stopwatch = Stopwatch.StartNew();
         cancelableOperationForm.Execute(new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken)));
         var elapsedTicks = stopwatch.ElapsedTicks;
@@ -885,8 +892,11 @@ Please wait...",
         {
             var treeNode = (ITreeNode)selectedNode.Tag!;
             var cancellationTokenSource = new CancellationTokenSource();
-            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), "Getting query...",
-                "Please wait...", _colorTheme);
+            const string textBoxText = @"Getting query...
+
+Please wait...";
+            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
+                textBoxText, _colorTheme);
             var cancellationToken = cancellationTokenSource.Token;
             var query = cancelableOperationForm.Execute(new Task<string?>(() => treeNode.GetQuery(cancellationToken).Result));
             if (query != null)

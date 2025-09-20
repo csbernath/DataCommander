@@ -1224,9 +1224,9 @@ Please wait...";
 
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
-                var text = OpenConnectionFormHelper.CreateOpenConnectionFormText(_connectionInfo, _providerInfo, Provider);
+                var textBoxText = OpenConnectionFormHelper.CreateOpenConnectionFormText(_connectionInfo, _providerInfo, Provider);
                 var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
-                    MessageBoxCaption.Value, text, _colorTheme);
+                    MessageBoxCaption.Value, textBoxText, _colorTheme);
                 var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
                 cancelableOperationForm.Execute(openConnectionTask);
                 if (openConnectionTask.Exception != null)

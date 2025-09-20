@@ -467,12 +467,12 @@ internal sealed class ConnectionListForm : Form
             {
                 var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
                 var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
-                var text = OpenConnectionFormHelper.CreateOpenConnectionFormText(connectionInfo, providerInfo, provider);
+                var textBoxText = OpenConnectionFormHelper.CreateOpenConnectionFormText(connectionInfo, providerInfo, provider);
                 var connection = provider.CreateConnection(connectionInfo.ConnectionStringAndCredential);
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
                 var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
-                    MessageBoxCaption.Value, text, _colorTheme);
+                    MessageBoxCaption.Value, textBoxText, _colorTheme);
                 var startTimestamp = Stopwatch.GetTimestamp();
                 var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
                 cancelableOperationForm.Execute(openConnectionTask);

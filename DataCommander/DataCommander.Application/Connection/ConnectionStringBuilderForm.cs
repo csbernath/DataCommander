@@ -354,9 +354,9 @@ internal partial class ConnectionStringBuilderForm : Form
                 var cancellationToken = cancellationTokenSource.Token;
                 var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
                 var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
-                var text = OpenConnectionFormHelper.CreateOpenConnectionFormText(connectionInfo, providerInfo, provider);
+                var textBoxText = OpenConnectionFormHelper.CreateOpenConnectionFormText(connectionInfo, providerInfo, provider);
                 var cancelableOperationForm =
-                    new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value, text, _colorTheme);
+                    new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value, textBoxText, _colorTheme);
                 using (var connection = provider.CreateConnection(connectionInfo.ConnectionStringAndCredential))
                 {
                     var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));

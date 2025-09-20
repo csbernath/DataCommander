@@ -39,8 +39,11 @@ internal sealed class StoredProcedureNode(DatabaseNode database, string owner, s
         var queryForm = (IQueryForm)sender!;
         var cancellationTokenSource = new CancellationTokenSource();
         var cancellationToken = cancellationTokenSource.Token;
-        var cancelableOperationForm = queryForm.CreateCancelableOperationForm(cancellationTokenSource, TimeSpan.FromSeconds(1),
-            "Getting stored procedure text...", "Please wait...");
+        const string textBoxText = @"Getting stored procedure text...
+
+Please wait...";
+        var cancelableOperationForm =
+            queryForm.CreateCancelableOperationForm(cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value, textBoxText);
         var text = cancelableOperationForm.Execute(new Task<string?>(() => GetText(cancellationToken).Result));
         if (!string.IsNullOrEmpty(text))
         {

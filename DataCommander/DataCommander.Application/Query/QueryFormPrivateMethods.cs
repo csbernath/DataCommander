@@ -467,9 +467,11 @@ public sealed partial class QueryForm
         var position = textBox.SelectionStart;
         var cancellationTokenSource = new CancellationTokenSource();
         var showDialogDelay = TimeSpan.FromSeconds(1);
-        const string formText = "Getting completion result...";
-        const string textBoxText = "Please wait...";
-        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, showDialogDelay, formText, textBoxText, _colorTheme);
+        const string textBoxText = @"Getting completion result...
+
+Please wait...";
+        var cancelableOperationForm =
+            new CancelableOperationForm(this, cancellationTokenSource, showDialogDelay, MessageBoxCaption.Value, textBoxText, _colorTheme);
         var startTimestamp = Stopwatch.GetTimestamp();
         var response = cancelableOperationForm.Execute(new Task<GetCompletionResult>(() =>
             Provider.GetCompletion(Connection!, _transaction, text, position, cancellationTokenSource.Token).Result));
