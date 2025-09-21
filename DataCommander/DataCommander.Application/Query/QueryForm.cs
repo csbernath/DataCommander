@@ -1755,10 +1755,8 @@ Please wait...";
                 Width = -2
             };
 
-            var type = (Type?)dataColumn.ExtendedProperties["DataType"];
-
-            if (type == null)
-                type = dataColumn.DataType;
+            var dataType = dataColumn.ExtendedProperties["DataType"];
+            var type = dataType as Type ?? dataColumn.DataType;
 
             columnHeader.TextAlign = QueryFormStaticMethods.GetHorizontalAlignment(type);
 

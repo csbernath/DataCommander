@@ -268,7 +268,7 @@ internal sealed class SqlServerProvider : IProvider
         return typeName;
     }
 
-    Type IProvider.GetColumnType(FoundationDbColumn column)
+    Type? IProvider.GetColumnType(FoundationDbColumn column)
     {
         var dbType = (SqlDbType)column.ProviderType;
         var columnSize = column.ColumnSize;
@@ -308,6 +308,10 @@ internal sealed class SqlServerProvider : IProvider
 
             case SqlDbType.SmallInt:
                 type = typeof(short);
+                break;
+            
+            case SqlDbType.Udt:
+                type = null;
                 break;
 
             default:

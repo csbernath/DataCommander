@@ -210,7 +210,7 @@ internal sealed class OleDbProvider : IProvider
 
     public static XmlReader ExecuteXmlReader(IDbCommand command) => throw new NotImplementedException();
 
-    Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
+    Type? IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
     {
         var dbType = (OleDbType)dataColumnSchema.ProviderType;
         var type = dbType switch

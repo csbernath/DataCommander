@@ -37,7 +37,7 @@ internal sealed class PostgreSqlProvider : IProvider
 
     void IProvider.DeriveParameters(IDbCommand command) => throw new NotImplementedException();
 
-    Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema) =>
+    Type? IProvider.GetColumnType(FoundationDbColumn dataColumnSchema) =>
         // TODO
         typeof(object);
 

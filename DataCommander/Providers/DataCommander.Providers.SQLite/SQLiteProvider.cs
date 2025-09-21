@@ -97,7 +97,7 @@ public sealed class SQLiteProvider : IProvider
         return table;
     }
 
-    Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema) =>
+    Type? IProvider.GetColumnType(FoundationDbColumn dataColumnSchema) =>
         // 11   INT     int
         // 12	BIGINT	long
         // 16	TEXT	string

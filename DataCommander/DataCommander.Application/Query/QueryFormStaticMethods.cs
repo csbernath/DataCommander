@@ -113,7 +113,8 @@ internal static class QueryFormStaticMethods
         var typeCode = Type.GetTypeCode(type);
         var align = typeCode switch
         {
-            TypeCode.SByte or TypeCode.Int16 or TypeCode.Int32 or TypeCode.Int64 or TypeCode.Byte or TypeCode.UInt16 or TypeCode.UInt32 or TypeCode.UInt64 or TypeCode.Decimal => HorizontalAlignment.Right,
+            TypeCode.SByte or TypeCode.Int16 or TypeCode.Int32 or TypeCode.Int64 or TypeCode.Byte or TypeCode.UInt16 or TypeCode.UInt32 or TypeCode.UInt64
+                or TypeCode.Decimal => HorizontalAlignment.Right,
             _ => HorizontalAlignment.Left,
         };
         return align;

@@ -108,13 +108,8 @@ internal class DataTableEditor : UserControl
 
                     textBoxColumn.HeaderText = columnName;
                     var maxWidth = graphics.MeasureString(columnName, font).Width + 6;
-                    var type = (Type?)dataColumn.ExtendedProperties["DataType"];
 
-                    if (type == null)
-                    {
-                        type = dataColumn.DataType;
-                    }
-
+                    var type = dataColumn.ExtendedProperties["DataType"] as Type ?? dataColumn.DataType;
                     var typeCode = Type.GetTypeCode(type);
 
                     switch (typeCode)

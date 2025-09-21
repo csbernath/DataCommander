@@ -30,7 +30,7 @@ public interface IProvider
 
     void DeriveParameters(IDbCommand command);
 
-    Type GetColumnType(FoundationDbColumn column);
+    Type? GetColumnType(FoundationDbColumn column);
     string GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName);
 
     Task<GetCompletionResult> GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position,

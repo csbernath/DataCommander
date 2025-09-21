@@ -106,7 +106,9 @@ internal sealed class DataSetResultWriter(Action<InfoMessage> addInfoMessage, bo
                         dataColumn = _dataTable.Columns.Add(columnName);
 
                     dataColumn.ExtendedProperties.Add("ColumnName", dataColumnSchema.ColumnName);
-                    dataColumn.ExtendedProperties.Add("DataType", schemaRow["DataType"]);
+                    
+                    var schemaRowDataType = schemaRow["DataType"];
+                    dataColumn.ExtendedProperties.Add("DataType", schemaRowDataType);
                     break;
                 }
             }
