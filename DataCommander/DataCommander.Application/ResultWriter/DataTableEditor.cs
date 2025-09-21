@@ -82,6 +82,8 @@ internal class DataTableEditor : UserControl
                     _dataGrid.DataError += DataGrid_DataError;
                 }
 
+                _dataGrid.CellFormatting += DataGrid_CellFormatting;
+
                 var graphics = CreateGraphics();
                 var font = _dataGrid.Font;
 
@@ -1240,4 +1242,10 @@ internal class DataTableEditor : UserControl
             menu.Show(_dataGrid, pos);
         }
     }
+    
+    private void DataGrid_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
+    {
+        if (e.Value == DBNull.Value)
+            e.CellStyle.BackColor = Color.FromArgb(67, 53, 25);
+    }    
 }
