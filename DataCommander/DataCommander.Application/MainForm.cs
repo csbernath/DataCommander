@@ -234,10 +234,10 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         _mainMenu.Dock = DockStyle.None;
         _mainMenu.ImageScalingSize = new Size(20, 20);
         _mainMenu.Items.AddRange(new ToolStripItem[] { _menuItem1, optionsMenuItem, _mnuWindow, _mnuHelp });
-        _mainMenu.Location = new Point(0, 27);
+        _mainMenu.Location = new Point(0, 0);
         _mainMenu.MdiWindowListItem = _mnuWindow;
         _mainMenu.Name = "_mainMenu";
-        _mainMenu.Size = new Size(982, 24);
+        _mainMenu.Size = new Size(982, 25);
         _mainMenu.TabIndex = 1;
         // 
         // _menuItem1
@@ -245,47 +245,47 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         _menuItem1.DropDownItems.AddRange(new ToolStripItem[] { _newToolStripMenuItem, _mnuConnect, _mnuOpen, _recentConnectionsToolStripMenuItem, _saveAllToolStripMenuItem, _mnuRecentFileList, _mnuExit });
         _menuItem1.MergeIndex = 1;
         _menuItem1.Name = "_menuItem1";
-        _menuItem1.Size = new Size(67, 20);
+        _menuItem1.Size = new Size(75, 21);
         _menuItem1.Text = "&Database";
         // 
         // _newToolStripMenuItem
         // 
         _newToolStripMenuItem.Name = "_newToolStripMenuItem";
-        _newToolStripMenuItem.Size = new Size(191, 26);
+        _newToolStripMenuItem.Size = new Size(207, 26);
         _newToolStripMenuItem.Text = "&Create";
         _newToolStripMenuItem.Click += CreateMenuItem_Click;
         // 
         // _mnuConnect
         // 
-        _mnuConnect.Image = (Image)resources.GetObject("_mnuConnect.Image");
+        _mnuConnect.Image = ((Image)resources.GetObject("_mnuConnect.Image"));
         _mnuConnect.MergeIndex = 0;
         _mnuConnect.Name = "_mnuConnect";
-        _mnuConnect.ShortcutKeys = Keys.Control | Keys.N;
-        _mnuConnect.Size = new Size(191, 26);
+        _mnuConnect.ShortcutKeys = ((Keys)(Keys.Control | Keys.N));
+        _mnuConnect.Size = new Size(207, 26);
         _mnuConnect.Text = "&Connect";
         _mnuConnect.Click += MnuConnect_Click;
         // 
         // _mnuOpen
         // 
-        _mnuOpen.Image = (Image)resources.GetObject("_mnuOpen.Image");
+        _mnuOpen.Image = ((Image)resources.GetObject("_mnuOpen.Image"));
         _mnuOpen.MergeIndex = 1;
         _mnuOpen.Name = "_mnuOpen";
-        _mnuOpen.ShortcutKeys = Keys.Control | Keys.O;
-        _mnuOpen.Size = new Size(191, 26);
+        _mnuOpen.ShortcutKeys = ((Keys)(Keys.Control | Keys.O));
+        _mnuOpen.Size = new Size(207, 26);
         _mnuOpen.Text = "&Open";
         _mnuOpen.Click += mnuOpen_Click;
         // 
         // _recentConnectionsToolStripMenuItem
         // 
         _recentConnectionsToolStripMenuItem.Name = "_recentConnectionsToolStripMenuItem";
-        _recentConnectionsToolStripMenuItem.Size = new Size(191, 26);
+        _recentConnectionsToolStripMenuItem.Size = new Size(207, 26);
         _recentConnectionsToolStripMenuItem.Text = "Recent connections";
         // 
         // _saveAllToolStripMenuItem
         // 
         _saveAllToolStripMenuItem.Name = "_saveAllToolStripMenuItem";
-        _saveAllToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
-        _saveAllToolStripMenuItem.Size = new Size(191, 26);
+        _saveAllToolStripMenuItem.ShortcutKeys = ((Keys)((Keys.Control | Keys.Shift) | Keys.S));
+        _saveAllToolStripMenuItem.Size = new Size(207, 26);
         _saveAllToolStripMenuItem.Text = "Save All";
         _saveAllToolStripMenuItem.Click += saveAllToolStripMenuItem_Click;
         // 
@@ -293,14 +293,14 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         // 
         _mnuRecentFileList.MergeIndex = 2;
         _mnuRecentFileList.Name = "_mnuRecentFileList";
-        _mnuRecentFileList.Size = new Size(191, 26);
+        _mnuRecentFileList.Size = new Size(207, 26);
         _mnuRecentFileList.Text = "Recent &File List";
         // 
         // _mnuExit
         // 
         _mnuExit.Name = "_mnuExit";
-        _mnuExit.ShortcutKeys = Keys.Alt | Keys.F4;
-        _mnuExit.Size = new Size(191, 26);
+        _mnuExit.ShortcutKeys = ((Keys)(Keys.Alt | Keys.F4));
+        _mnuExit.Size = new Size(207, 26);
         _mnuExit.Text = "Exit";
         _mnuExit.Click += MnuExit_Click;
         // 
@@ -308,7 +308,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         // 
         optionsMenuItem.MergeIndex = 5;
         optionsMenuItem.Name = "optionsMenuItem";
-        optionsMenuItem.Size = new Size(61, 20);
+        optionsMenuItem.Size = new Size(66, 21);
         optionsMenuItem.Text = "Options";
         optionsMenuItem.Click += optionsMenuItem_Click;
         // 
@@ -317,13 +317,13 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         _mnuWindow.DropDownItems.AddRange(new ToolStripItem[] { _closeAllDocumentsMenuItem });
         _mnuWindow.MergeIndex = 6;
         _mnuWindow.Name = "_mnuWindow";
-        _mnuWindow.Size = new Size(63, 20);
+        _mnuWindow.Size = new Size(67, 21);
         _mnuWindow.Text = "&Window";
         // 
         // _closeAllDocumentsMenuItem
         // 
         _closeAllDocumentsMenuItem.Name = "_closeAllDocumentsMenuItem";
-        _closeAllDocumentsMenuItem.Size = new Size(184, 22);
+        _closeAllDocumentsMenuItem.Size = new Size(201, 24);
         _closeAllDocumentsMenuItem.Text = "Close All Documents";
         _closeAllDocumentsMenuItem.Click += CloseAllDocumentsMenuItem_Click;
         // 
@@ -332,14 +332,14 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         _mnuHelp.DropDownItems.AddRange(new ToolStripItem[] { _contentsToolStripMenuItem, _checkForToolStripMenuItem, _mnuAbout });
         _mnuHelp.MergeIndex = 7;
         _mnuHelp.Name = "_mnuHelp";
-        _mnuHelp.Size = new Size(44, 20);
+        _mnuHelp.Size = new Size(47, 21);
         _mnuHelp.Text = "&Help";
         // 
         // _contentsToolStripMenuItem
         // 
         _contentsToolStripMenuItem.Name = "_contentsToolStripMenuItem";
         _contentsToolStripMenuItem.ShortcutKeys = Keys.F1;
-        _contentsToolStripMenuItem.Size = new Size(198, 22);
+        _contentsToolStripMenuItem.Size = new Size(220, 24);
         _contentsToolStripMenuItem.Text = "Contents";
         _contentsToolStripMenuItem.Click += contentsToolStripMenuItem_Click;
         // 
@@ -347,7 +347,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         // 
         _checkForToolStripMenuItem.Name = "_checkForToolStripMenuItem";
         _checkForToolStripMenuItem.ShortcutKeys = Keys.F12;
-        _checkForToolStripMenuItem.Size = new Size(198, 22);
+        _checkForToolStripMenuItem.Size = new Size(220, 24);
         _checkForToolStripMenuItem.Text = "Check for updates ";
         _checkForToolStripMenuItem.Click += CheckForToolStripMenuItem_Click;
         // 
@@ -355,7 +355,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         // 
         _mnuAbout.MergeIndex = 0;
         _mnuAbout.Name = "_mnuAbout";
-        _mnuAbout.Size = new Size(198, 22);
+        _mnuAbout.Size = new Size(220, 24);
         _mnuAbout.Text = "About...";
         // 
         // _toolStrip
@@ -364,36 +364,31 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         _toolStrip.ImageList = _imageList;
         _toolStrip.ImageScalingSize = new Size(20, 20);
         _toolStrip.Items.AddRange(new ToolStripItem[] { _btnConnect, _openButton, _saveButton, _toolStripSeparator1, _helpButton, _toolStripSeparator2, _activeMdiChildToolStripTextBox });
-        _toolStrip.Location = new Point(3, 0);
+        _toolStrip.Location = new Point(3, 25);
         _toolStrip.Name = "_toolStrip";
-        _toolStrip.Size = new Size(558, 27);
+        _toolStrip.Size = new Size(650, 27);
         _toolStrip.TabIndex = 2;
         // 
         // _imageList
         // 
-        _imageList.ColorDepth = ColorDepth.Depth8Bit;
-        _imageList.ImageStream = (ImageListStreamer)resources.GetObject("_imageList.ImageStream");
+        _imageList.ImageStream = ((ImageListStreamer)resources.GetObject("_imageList.ImageStream"));
         _imageList.TransparentColor = Color.Transparent;
-        _imageList.Images.SetKeyName(0, "");
-        _imageList.Images.SetKeyName(1, "");
-        _imageList.Images.SetKeyName(2, "");
-        _imageList.Images.SetKeyName(3, "");
         // 
         // _btnConnect
         // 
-        _btnConnect.Image = (Image)resources.GetObject("_btnConnect.Image");
+        _btnConnect.Image = ((Image)resources.GetObject("_btnConnect.Image"));
         _btnConnect.Name = "_btnConnect";
-        _btnConnect.Size = new Size(24, 24);
+        _btnConnect.Size = new Size(25, 24);
         _btnConnect.ToolTipText = "Connect to database";
         _btnConnect.Click += btnConnect_Click;
         // 
         // _openButton
         // 
         _openButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        _openButton.Image = (Image)resources.GetObject("_openButton.Image");
+        _openButton.Image = ((Image)resources.GetObject("_openButton.Image"));
         _openButton.ImageTransparentColor = Color.Magenta;
         _openButton.Name = "_openButton";
-        _openButton.Size = new Size(24, 24);
+        _openButton.Size = new Size(25, 24);
         _openButton.Text = "toolStripButton1";
         _openButton.ToolTipText = "Open database";
         _openButton.Click += openButton_Click;
@@ -402,10 +397,10 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         // 
         _saveButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
         _saveButton.Enabled = false;
-        _saveButton.Image = (Image)resources.GetObject("_saveButton.Image");
+        _saveButton.Image = ((Image)resources.GetObject("_saveButton.Image"));
         _saveButton.ImageTransparentColor = Color.Magenta;
         _saveButton.Name = "_saveButton";
-        _saveButton.Size = new Size(24, 24);
+        _saveButton.Size = new Size(25, 24);
         _saveButton.ToolTipText = "Save Query";
         _saveButton.Click += saveButton_Click;
         // 
@@ -417,10 +412,10 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         // _helpButton
         // 
         _helpButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        _helpButton.Image = (Image)resources.GetObject("_helpButton.Image");
+        _helpButton.Image = ((Image)resources.GetObject("_helpButton.Image"));
         _helpButton.ImageTransparentColor = Color.Magenta;
         _helpButton.Name = "_helpButton";
-        _helpButton.Size = new Size(24, 24);
+        _helpButton.Size = new Size(25, 24);
         _helpButton.Text = "Help";
         // 
         // _toolStripSeparator2
@@ -433,22 +428,22 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         _activeMdiChildToolStripTextBox.Font = new Font("Segoe UI", 8.830189F);
         _activeMdiChildToolStripTextBox.Name = "_activeMdiChildToolStripTextBox";
         _activeMdiChildToolStripTextBox.ReadOnly = true;
-        _activeMdiChildToolStripTextBox.Size = new Size(436, 27);
+        _activeMdiChildToolStripTextBox.Size = new Size(523, 27);
         // 
         // _statusBar
         // 
         _statusBar.ImageScalingSize = new Size(20, 20);
         _statusBar.Items.AddRange(new ToolStripItem[] { _toolStripStatusLabel, _managedMemoryToolStripStatusLabel });
-        _statusBar.Location = new Point(0, 731);
+        _statusBar.Location = new Point(0, 730);
         _statusBar.Name = "_statusBar";
         _statusBar.ShowItemToolTips = true;
-        _statusBar.Size = new Size(982, 22);
+        _statusBar.Size = new Size(982, 23);
         _statusBar.TabIndex = 3;
         // 
         // _toolStripStatusLabel
         // 
         _toolStripStatusLabel.Name = "_toolStripStatusLabel";
-        _toolStripStatusLabel.Size = new Size(827, 17);
+        _toolStripStatusLabel.Size = new Size(793, 18);
         _toolStripStatusLabel.Spring = true;
         _toolStripStatusLabel.TextAlign = ContentAlignment.MiddleLeft;
         // 
@@ -457,7 +452,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         _managedMemoryToolStripStatusLabel.AutoSize = false;
         _managedMemoryToolStripStatusLabel.DisplayStyle = ToolStripItemDisplayStyle.Text;
         _managedMemoryToolStripStatusLabel.Name = "_managedMemoryToolStripStatusLabel";
-        _managedMemoryToolStripStatusLabel.Size = new Size(140, 17);
+        _managedMemoryToolStripStatusLabel.Size = new Size(140, 18);
         _managedMemoryToolStripStatusLabel.TextAlign = ContentAlignment.MiddleRight;
         _managedMemoryToolStripStatusLabel.MouseUp += managedMemoryToolStripStatusLabel_MouseUp;
         // 
@@ -470,19 +465,18 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         _toolStripPanel.Name = "_toolStripPanel";
         _toolStripPanel.Orientation = Orientation.Horizontal;
         _toolStripPanel.RowMargin = new Padding(3, 0, 0, 0);
-        _toolStripPanel.Size = new Size(982, 51);
+        _toolStripPanel.Size = new Size(982, 52);
         // 
         // MainForm
         // 
-        AutoScaleBaseSize = new Size(5, 14);
+        AutoScaleBaseSize = new Size(6, 15);
         ClientSize = new Size(982, 753);
         Controls.Add(_toolStripPanel);
         Controls.Add(_statusBar);
-        Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 238);
-        Icon = (Icon)resources.GetObject("$this.Icon");
+        Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)238));
+        Icon = ((Icon)resources.GetObject("$this.Icon"));
         IsMdiContainer = true;
         MainMenuStrip = _mainMenu;
-        Name = "MainForm";
         StartPosition = FormStartPosition.Manual;
         _mainMenu.ResumeLayout(false);
         _mainMenu.PerformLayout();
