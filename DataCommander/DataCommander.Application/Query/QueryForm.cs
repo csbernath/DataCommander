@@ -1902,12 +1902,12 @@ Please wait...";
         }
     }
 
-    private void WriteEnd(IAsyncDataAdapter dataAdapter)
+    private void WriteEnd(IAsyncDataAdapter? dataAdapter)
     {
         _timer.Stop();
 
         if (dataAdapter != null)
-            WriteRows(dataAdapter.RowCount, 3);
+            WriteRowCount(dataAdapter.RowCount, 3);
 
         _stopwatch.Reset();
 
@@ -1976,7 +1976,7 @@ Please wait...";
             InfoMessageSeverity.Error => LogLevel.Error,
             InfoMessageSeverity.Information => LogLevel.Information,
             InfoMessageSeverity.Verbose => LogLevel.Trace,
-            _ => throw new Exception(),
+            _ => throw new ArgumentException(),
         };
         Log.Write(logLevel, infoMessage.Message);
     }

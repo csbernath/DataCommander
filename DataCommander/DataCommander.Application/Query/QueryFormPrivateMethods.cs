@@ -215,15 +215,16 @@ public sealed partial class QueryForm
         _dataAdapter!.Cancel();
     }
 
-    private void WriteRows(long rowCount, int scale)
+    private void WriteRowCount(long rowCount, int scale)
     {
         var ticks = _stopwatch.ElapsedTicks;
         _sbPanelTimer.Text = StopwatchTimeSpan.ToString(ticks, scale);
-        var text = rowCount + " rows.";
+        var text = $"{rowCount:N0} rows.";
         if (rowCount > 0)
         {
             var seconds = (double)ticks / Stopwatch.Frequency;
-            text += " (" + Math.Round(rowCount / seconds, 0) + " rows/sec)";
+            var rowsPerSecond = Math.Round(rowCount / seconds, 0);
+            text += $" ({rowsPerSecond:N0} rows/sec)";
         }
 
         _sbPanelRows.Text = text;
@@ -234,7 +235,7 @@ public sealed partial class QueryForm
         if (_dataAdapter != null)
         {
             var rowCount = _dataAdapter.RowCount;
-            WriteRows(rowCount, 0);
+            WriteRowCount(rowCount, 0);
         }
     }
 

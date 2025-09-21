@@ -1241,7 +1241,7 @@ internal class DataTableEditor : UserControl
         menuItem = new ToolStripMenuItem("Edit dataview properties", null, EditDataViewProperties_Click);
         menu.Items.Add(menuItem);
 
-        var any = _dataGrid.Columns.Cast<DataGridViewColumn>().Any(c => !c.Visible);
+        var any = _dataGrid!.Columns.Cast<DataGridViewColumn>().Any(c => !c.Visible);
         if (any)
         {
             menuItem = new ToolStripMenuItem("Unhide all columns", null, UnhideAllColumns_Click);
