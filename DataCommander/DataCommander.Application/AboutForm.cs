@@ -57,7 +57,8 @@ Credits:
     <li><a href=""https://github.com/JanKallman/EPPlus"">EPPlus Excel generator</a></li>
     <li><a href=""https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/?tabs=net-cli"">Microsoft SQLite provider</a></li>
     <li><a href=""https://www.nuget.org/packages/MySql.Data/"">MySQL provider</a></li>
-    <li><a href=""https://github.com/npgsql/npgsql"">PostgreSQL provider</a></li>  
+    <li><a href=""https://github.com/npgsql/npgsql"">PostgreSQL provider</a></li>
+    <li><a href=""https://icon-icons.com/icon/sql-racer-game-database-sql/1025"">App icon</a></li>  
 </ul>
 </div>";
 
