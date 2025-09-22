@@ -76,7 +76,7 @@ internal static class EntryPoint
 #pragma warning disable WFO5001    
     private static void Run()
     {
-        var applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(false);
+        var applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(true);
         var applicationData = new ApplicationData();
         var fileName = Path.Combine(applicationDataFolderPath, "ApplicationData.xml");
         var sectionName = Settings.SectionName;

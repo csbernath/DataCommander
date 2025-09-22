@@ -56,14 +56,16 @@ public sealed class ApplicationData
             stringBuilder.Append(company);
         }
 
-        stringBuilder.Append(Path.DirectorySeparatorChar);
-        stringBuilder.Append(product);
+        if (product != company)
+        {
+            stringBuilder.Append(Path.DirectorySeparatorChar);
+            stringBuilder.Append(product);
+        }
 
         if (versioned)
         {
-            stringBuilder.Append(" (");
+            stringBuilder.Append(Path.DirectorySeparatorChar);
             stringBuilder.Append(name.Version);
-            stringBuilder.Append(')');
         }
 
         return stringBuilder.ToString();

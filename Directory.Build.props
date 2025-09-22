@@ -6,5 +6,6 @@
         <Company>Data Commander</Company>
         <Product>Data Commander</Product>
         <Description>Data Commander</Description>
+        <AssemblyVersion>10.0</AssemblyVersion>        
     </PropertyGroup>
 </Project>

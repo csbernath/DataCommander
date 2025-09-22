@@ -78,7 +78,7 @@ public static class ConnectionInfoRepository
 
     private static string GetPath()
     {
-        var applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(false);
+        var applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(true);
         var path = applicationDataFolderPath + Path.DirectorySeparatorChar + "ConnectionInfoRepository.json";
         return path;
     }
