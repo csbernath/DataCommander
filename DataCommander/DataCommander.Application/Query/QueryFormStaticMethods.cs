@@ -206,7 +206,7 @@ internal static class QueryFormStaticMethods
         return found;
     }
 
-    public static void AddInfoMessageToQueryForm(QueryForm queryForm, long elapsedTicks, string connectionName, string providerName,
+    public static void AddConnectionOpenedInfoMessageToQueryForm(QueryForm queryForm, long elapsedTicks, string? connectionName, string providerName,
         ConnectionBase connection)
     {
         var message = $@"Connection opened in {StopwatchTimeSpan.ToString(elapsedTicks, 3)} seconds.

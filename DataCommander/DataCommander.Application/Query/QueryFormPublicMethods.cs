@@ -124,7 +124,6 @@ public sealed partial class QueryForm
             _queryTextBox.RichTextBox.SelectionTabs = tabs;
             //_queryTextBox.EnableChangeEvent(true);
 
-            _messagesTextBox.Font = value;
             _messagesTextBox.SelectionTabs = tabs;
         }
     }

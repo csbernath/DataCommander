@@ -657,7 +657,7 @@ Please wait...";
         queryForm.Show();
 
         var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == _connectionInfo.ProviderIdentifier);
-        QueryFormStaticMethods.AddInfoMessageToQueryForm(queryForm, elapsedTicks, _connectionInfo.ConnectionName, providerInfo.Name, connection);
+        QueryFormStaticMethods.AddConnectionOpenedInfoMessageToQueryForm(queryForm, elapsedTicks, _connectionInfo.ConnectionName, providerInfo.Name, connection);
     }
 
     private void sQLiteDatabaseToolStripMenuItem_Click(object? sender, EventArgs e) => SetResultWriterType(ResultWriterType.SqLite);

@@ -552,7 +552,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
                 var connectionStringBuilder = provider.CreateConnectionStringBuilder();
                 connectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
                 var connection = connectionForm.Connection;
-                QueryFormStaticMethods.AddInfoMessageToQueryForm(queryForm, connectionForm.ElapsedTicks, connectionInfo.ConnectionName, providerInfo.Name,
+                QueryFormStaticMethods.AddConnectionOpenedInfoMessageToQueryForm(queryForm, connectionForm.ElapsedTicks, connectionInfo.ConnectionName, providerInfo.Name,
                     connection);
                 queryForm.Show();
 

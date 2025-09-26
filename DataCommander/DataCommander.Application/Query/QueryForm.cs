@@ -68,13 +68,16 @@ public sealed partial class QueryForm : Form, IQueryForm
         var task = new Task(ConsumeInfoMessages);
         task.Start(_scheduler);
 
-        _messagesTextBox = new RichTextBox();
+        _messagesTextBox = new RichTextBox
+        {
+            Dock = DockStyle.Fill,
+            Font = new Font("Consolas", 9),
+            Multiline = true,
+            ScrollBars = RichTextBoxScrollBars.Both,
+            WordWrap = false,
+        };
         components.Add(_messagesTextBox);
-        GarbageMonitor.Default.Add("QueryForm._messagesTextBox", _messagesTextBox);
-        _messagesTextBox.Multiline = true;
-        _messagesTextBox.WordWrap = false;
-        _messagesTextBox.Dock = DockStyle.Fill;
-        _messagesTextBox.ScrollBars = RichTextBoxScrollBars.Both;
+        GarbageMonitor.Default.Add("QueryForm._messagesTextBox", _messagesTextBox);        
 
         _messagesTabPage = new TabPage("Messages");
         _messagesTabPage.Controls.Add(_messagesTextBox);
