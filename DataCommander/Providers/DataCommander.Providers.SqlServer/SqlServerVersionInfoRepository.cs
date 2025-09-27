@@ -5,12 +5,13 @@ namespace DataCommander.Providers.SqlServer;
 
 internal static class SqlServerVersionInfoRepository
 {
-    private static readonly Dictionary<string, SqlServerVersionInfo> SqlServerVersionInfosByVersion = Init();
+    private static readonly Dictionary<string, SqlServerVersionInfo>
+        SqlServerVersionInfosByVersion = CreateDictionary();
 
     public static bool TryGetByVersion(string version, out SqlServerVersionInfo? sqlServerVersionInfo) =>
         SqlServerVersionInfosByVersion.TryGetValue(version, out sqlServerVersionInfo);
 
-    private static Dictionary<string, SqlServerVersionInfo> Init() => new SqlServerVersionInfo[]
+    private static Dictionary<string, SqlServerVersionInfo> CreateDictionary() => new SqlServerVersionInfo[]
     {
         new("08.00.0194", "SQL Server 2000 RTM"),
         new("08.00.0760", "SQL Server 2000 SP3"),
@@ -58,6 +59,7 @@ internal static class SqlServerVersionInfoRepository
         new("16.00.1110", "5032968 Security update for SQL Server 2022 GDR: January 9, 2024"),
         new("16.00.1125", "5042211 Security update for SQL Server 2022 GDR: September 10, 2024"),
         new("16.00.1135", "5046861 Security update for SQL Server 2022 GDR: November 12, 2024 "),
-        new("16.00.4100", "5033592 Security update for SQL Server 2022 CU10: January 9, 2024")
+        new("16.00.1150", "5065221 Security update for SQL Server 2022 GDR: September 9, 2025"),
+        new("16.00.4100", "5033592 Security update for SQL Server 2022 CU10: January 9, 2024"),
     }.ToDictionary(i => i.Version);
 }

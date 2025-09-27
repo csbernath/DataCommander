@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api.Connection;
@@ -40,10 +41,14 @@ internal sealed class Connection : ConnectionBase
             var version = (string)executor.ExecuteScalar(new CreateCommandRequest(commandText))!;
             var serverVersion = _sqlConnection.ServerVersion;
             var contains = SqlServerVersionInfoRepository.TryGetByVersion(serverVersion, out var sqlServerVersionInfo);
-            var description = contains ? sqlServerVersionInfo!.Name : null;
-            return @$"Server name:     {_serverName}
-{version}
-{description}";
+            var description = contains ? sqlServerVersionInfo!.Name : "(not found)";
+
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine($"Server name:     {_serverName}");
+            stringBuilder.Append(version);
+            stringBuilder.AppendLine($"Description:     {description}");
+            stringBuilder.Append($"ServerProcessId: {_serverProcessId}");
+            return stringBuilder.ToString();
         }
     }
 

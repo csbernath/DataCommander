@@ -21,9 +21,9 @@ public static class SqlObjectScripter
             PacketSize = csb.PacketSize,
             Pooled = csb.Pooling,
             ServerName = csb.DataSource,
+            TrustServerCertificate = csb.TrustServerCertificate,            
             UseIntegratedSecurity = csb.IntegratedSecurity,
-            WorkstationId = csb.WorkstationID,
-            TrustServerCertificate = csb.TrustServerCertificate
+            WorkstationId = csb.WorkstationID
         };
 
         var credential = connectionStringAndCredential.Credential;
