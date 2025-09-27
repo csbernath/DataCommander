@@ -9,9 +9,8 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 internal sealed class SequenceNode(SequenceCollectionNode sequenceCollectionNode, string? name) : ITreeNode
 {
     private readonly SequenceCollectionNode _sequenceCollectionNode = sequenceCollectionNode;
-    private readonly string? _name = name;
 
-    string? ITreeNode.Name => _name;
+    string? ITreeNode.Name => name;
 
     bool ITreeNode.IsLeaf => true;
 

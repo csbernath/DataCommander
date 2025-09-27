@@ -5,7 +5,5 @@ namespace DataCommander.Providers.PostgreSql;
 
 internal sealed class PostgreSqlDataReaderHelper(NpgsqlDataReader dataReader) : IDataReaderHelper
 {
-    private readonly NpgsqlDataReader _dataReader = dataReader;
-
-    int IDataReaderHelper.GetValues(object[] values) => _dataReader.GetValues(values);
+    int IDataReaderHelper.GetValues(object[] values) => dataReader.GetValues(values);
 }

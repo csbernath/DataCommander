@@ -9,12 +9,9 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer;
 
 internal sealed class IndexNode(TableNode tableNode, string? name) : ITreeNode
 {
-    private readonly TableNode _tableNode = tableNode;
-    private readonly string? _name = name;
-
     #region ITreeNode Members
 
-    string? ITreeNode.Name => _name;
+    string? ITreeNode.Name => name;
 
     bool ITreeNode.IsLeaf => true;
 
@@ -28,9 +25,9 @@ internal sealed class IndexNode(TableNode tableNode, string? name) : ITreeNode
 from main.sqlite_master
 where
     type = 'index'
-    and name = '{_name}'";
+    and name = '{name}'";
         var scalar = await Db.ExecuteScalarAsync(
-            () => ConnectionFactory.CreateConnection(_tableNode.DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
+            () => ConnectionFactory.CreateConnection(tableNode.DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
             new CreateCommandRequest(commandText),
             cancellationToken);
         var sql = (string?)scalar;

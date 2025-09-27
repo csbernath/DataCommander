@@ -7,9 +7,7 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer;
 
 sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string? name) : ITreeNode
 {
-    private readonly DatabaseCollectionNode _databaseCollectionNode = databaseCollectionNode;
-
-    public DatabaseCollectionNode DatabaseCollectionNode => _databaseCollectionNode;
+    public DatabaseCollectionNode DatabaseCollectionNode => databaseCollectionNode;
 
     #region ITreeNode Members
     public string? Name { get; } = name;

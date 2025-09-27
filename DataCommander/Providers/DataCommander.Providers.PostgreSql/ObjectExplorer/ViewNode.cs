@@ -8,9 +8,7 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
 internal sealed class ViewNode(string? name) : ITreeNode
 {
-    private readonly string? _name = name;
-
-    string? ITreeNode.Name => _name;
+    string? ITreeNode.Name => name;
     bool ITreeNode.IsLeaf => true;
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) =>

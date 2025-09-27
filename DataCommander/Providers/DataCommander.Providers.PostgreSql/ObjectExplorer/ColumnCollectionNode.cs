@@ -9,15 +9,13 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
 internal sealed class ColumnCollectionNode(TableNode tableNode) : ITreeNode
 {
-    private readonly TableNode _tableNode = tableNode;
-
     string? ITreeNode.Name => "Columns";
 
     bool ITreeNode.IsLeaf => false;
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var schemaNode = _tableNode.TableCollectionNode.SchemaNode;
+        var schemaNode = tableNode.TableCollectionNode.SchemaNode;
 
         return await Db.ExecuteReaderAsync(
             schemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection,
@@ -30,8 +28,8 @@ internal sealed class ColumnCollectionNode(TableNode tableNode) : ITreeNode
     ,c.numeric_scale
 from information_schema.columns c
 where
-    c.table_schema = '{_tableNode.TableCollectionNode.SchemaNode.Name}'
-    and c.table_name = '{_tableNode.Name}'
+    c.table_schema = '{tableNode.TableCollectionNode.SchemaNode.Name}'
+    and c.table_name = '{tableNode.Name}'
 order by c.ordinal_position"),
             128,
             ReadRecord,

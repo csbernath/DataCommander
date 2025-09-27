@@ -9,9 +9,7 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer;
 
 internal sealed class DatabaseCollectionNode(ConnectionStringAndCredential connectionStringAndCredential) : ITreeNode
 {
-    private readonly ConnectionStringAndCredential _connectionStringAndCredential = connectionStringAndCredential;
-
-    public ConnectionStringAndCredential ConnectionStringAndCredential => _connectionStringAndCredential;
+    public ConnectionStringAndCredential ConnectionStringAndCredential => connectionStringAndCredential;
 
     #region ITreeNode Members
 
@@ -24,7 +22,7 @@ internal sealed class DatabaseCollectionNode(ConnectionStringAndCredential conne
         const string commandText = @"PRAGMA database_list;";
         
         return await Db.ExecuteReaderAsync(
-            () => ConnectionFactory.CreateConnection(_connectionStringAndCredential),
+            () => ConnectionFactory.CreateConnection(connectionStringAndCredential),
             new ExecuteReaderRequest(commandText),
             1,
             dataRecord =>

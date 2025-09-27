@@ -9,10 +9,8 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 internal sealed class ColumnNode(ColumnCollectionNode columnCollectionNode, string name, string dataType) : ITreeNode
 {
     private readonly ColumnCollectionNode _columnCollectionNode = columnCollectionNode;
-    private readonly string _name = name;
-    private readonly string _dataType = dataType;
 
-    string? ITreeNode.Name => $"{_name} {_dataType}";
+    string? ITreeNode.Name => $"{name} {dataType}";
 
     bool ITreeNode.IsLeaf => true;
 
