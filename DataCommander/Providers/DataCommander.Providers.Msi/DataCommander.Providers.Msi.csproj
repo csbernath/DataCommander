@@ -2,8 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0-windows7.0</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
-    <LangVersion>preview</LangVersion>
+    <UseWindowsForms>true</UseWindowsForms>    
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

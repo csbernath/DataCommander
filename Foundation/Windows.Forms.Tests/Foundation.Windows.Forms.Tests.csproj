@@ -4,7 +4,6 @@
         <TargetFramework>net10.0-windows7.0</TargetFramework>
         <UseWindowsForms>true</UseWindowsForms>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <RootNamespace>Windows.Forms.Tests</RootNamespace>
         <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
