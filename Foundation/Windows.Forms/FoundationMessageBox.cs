@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Media;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Foundation.Log;
 
 namespace Foundation.Windows.Forms;

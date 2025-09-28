@@ -1,7 +1,5 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
-using DataCommander.Api;
-using DataCommander.Application.Connection;
 
 namespace DataCommander.Application;
 
