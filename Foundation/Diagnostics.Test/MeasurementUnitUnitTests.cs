@@ -12,8 +12,8 @@ public class MeasurementUnitUnitTests
         var value = 0;
 
         // Act
-        var binaryMetricString = MeasurementUnit.ToBinaryMetricString(value, 2, "B");
-        var decimalMetricString = MeasurementUnit.ToDecimalMetricString(value, 2, "B");
+        var binaryMetricString = MeasurementUnit.ToBinaryMetricString(value, 2, UnitSymbol.Byte);
+        var decimalMetricString = MeasurementUnit.ToDecimalMetricString(value, 2, UnitSymbol.Byte);
 
         // Assert
         Assert.Equal("0 B", binaryMetricString);
@@ -27,7 +27,7 @@ public class MeasurementUnitUnitTests
         var value = 123.456789d * 1000 * 1000;
 
         // Act
-        var decimalMetricString = MeasurementUnit.ToDecimalMetricString(value, 2, "B");
+        var decimalMetricString = MeasurementUnit.ToDecimalMetricString(value, 2, UnitSymbol.Byte);
 
         // Assert
         Assert.Equal("123.46 MB", decimalMetricString);
@@ -40,7 +40,7 @@ public class MeasurementUnitUnitTests
         var value = (long)(1000 * 1000 * 1.23456789);
 
         // Act
-        var metricString = MeasurementUnit.ToDecimalMetricString(value, 2, "B");
+        var metricString = MeasurementUnit.ToDecimalMetricString(value, 2, UnitSymbol.Byte);
 
         // Assert
         Assert.Equal("1.2346 MB", metricString);
@@ -53,7 +53,7 @@ public class MeasurementUnitUnitTests
         var value = (long)(1000 * 1000 * 1.23456789);
 
         // Act
-        var metricString = MeasurementUnit.ToDecimalMetricString(value, 2, "B");
+        var metricString = MeasurementUnit.ToDecimalMetricString(value, 2, UnitSymbol.Byte);
 
         // Assert
         Assert.Equal("1.23 MB", metricString);
@@ -66,7 +66,7 @@ public class MeasurementUnitUnitTests
         var value = (long)(1000 * 1000 * 1.23456789);
 
         // Act
-        var metricString = MeasurementUnit.ToDecimalMetricString(value, 2, "B");
+        var metricString = MeasurementUnit.ToDecimalMetricString(value, 2, UnitSymbol.Byte);
 
         // Assert
         Assert.Equal("1.2 MB", metricString);
@@ -79,7 +79,7 @@ public class MeasurementUnitUnitTests
         var value = (long)(1000 * 1000 * 1.23456789);
 
         // Act
-        var metricString = MeasurementUnit.ToDecimalMetricString(value, 0, "B");
+        var metricString = MeasurementUnit.ToDecimalMetricString(value, 0, UnitSymbol.Byte);
 
         // Assert
         Assert.Equal("1 MB", metricString);
@@ -92,7 +92,7 @@ public class MeasurementUnitUnitTests
         var value = (long)(1000 * 1000 * 12.3456789);
 
         // Act
-        var metricString = MeasurementUnit.ToDecimalMetricString(value, 2, "B");
+        var metricString = MeasurementUnit.ToDecimalMetricString(value, 2, UnitSymbol.Byte);
 
         // Assert
         Assert.Equal("12.3 MB", metricString);
@@ -105,7 +105,7 @@ public class MeasurementUnitUnitTests
         var value = 123.456789 * 1024 * 1024;
 
         // Act
-        var binaryMetricString = MeasurementUnit.ToBinaryMetricString(value, 2, "B");
+        var binaryMetricString = MeasurementUnit.ToBinaryMetricString(value, 2, UnitSymbol.Byte);
 
         // Assert
         Assert.Equal("123.46 MiB", binaryMetricString);
@@ -118,7 +118,7 @@ public class MeasurementUnitUnitTests
         var value = 123d * 1024;
 
         // Act
-        var binaryMetricString = MeasurementUnit.ToBinaryMetricString(value, 2, "B");
+        var binaryMetricString = MeasurementUnit.ToBinaryMetricString(value, 2, UnitSymbol.Byte);
 
         // Assert
         Assert.Equal("123 KiB", binaryMetricString);

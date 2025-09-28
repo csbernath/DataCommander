@@ -72,7 +72,7 @@ CommandLine:            {Environment.CommandLine}
 GC IsServerGC:          {GCSettings.IsServerGC}
 GC LargeObjectHeapCompactionMode: {GCSettings.LargeObjectHeapCompactionMode}
 GC LatencyMode:         {GCSettings.LatencyMode}
-WorkingSet:             {(double)workingSet / (1024 * 1024):N} MB ({workingSet} bytes)
+WorkingSet:             {MeasurementUnit.ToBinaryMetricString(workingSet, 2, UnitSymbol.Byte)} ({workingSet:N0} bytes)
 TickCount64:            {tickCountString}
 Stopwatch.Frequency:    {stopwatchFrequency}
 TimeZoneInfo.Local.Id:  {TimeZoneInfo.Local.Id}

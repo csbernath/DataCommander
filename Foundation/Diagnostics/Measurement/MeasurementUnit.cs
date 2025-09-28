@@ -6,19 +6,20 @@ namespace Foundation.Diagnostics.Measurement;
 
 public static class MeasurementUnit
 {
-    public static string ToDecimalMetricString(double value, int numberDecimalDigits, string symbol)
+    public static string ToDecimalMetricString(double value, int numberDecimalDigits, string unitSymbol)
     {
         const int @base = PowersOf1000.Power1;
-        return ToMetricString(value, numberDecimalDigits, @base, DecimalUnitPrefixes.Value, symbol);
+        return ToMetricString(value, numberDecimalDigits, @base, DecimalUnitPrefixes.Value, unitSymbol);
     }
 
-    public static string ToBinaryMetricString(double value, int numberDecimalDigits, string symbol)
+    public static string ToBinaryMetricString(double value, int numberDecimalDigits, string unitSymbol)
     {
         const int @base = PowersOf1024.Power1;
-        return ToMetricString(value, numberDecimalDigits, @base, BinaryUnitPrefixes.Value, symbol);
+        return ToMetricString(value, numberDecimalDigits, @base, BinaryUnitPrefixes.Value, unitSymbol);
     }
 
-    private static string ToMetricString(double value, int numberDecimalDigits, int @base, IReadOnlyList<UnitPrefix> unitPrefixes, string symbol)
+    private static string ToMetricString(double value, int numberDecimalDigits, int @base,
+        IReadOnlyList<UnitPrefix> unitPrefixes, string unitSymbol)
     {
         var index = GetUnitPrefixIndex(value, @base);
         double quotient;
@@ -40,7 +41,7 @@ public static class MeasurementUnit
             NumberDecimalDigits = numberDecimalDigits
         };
         var rounded = quotient.ToString("N", numberFormatInfo);
-        var decimalMetricString = $"{rounded} {unitPrefixSymbol}{symbol}";
+        var decimalMetricString = $"{rounded} {unitPrefixSymbol}{unitSymbol}";
         return decimalMetricString;
     }
 
