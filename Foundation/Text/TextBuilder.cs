@@ -52,7 +52,7 @@ public sealed class TextBuilder
         return new Disposer(() => _indentation -= indentation);
     }
 
-    public ReadOnlyCollection<Line> ToLines() => _lines.ToReadOnlyCollection();
+    public IReadOnlyCollection<Line> ToLines() => _lines;
 
     private string DebuggerDisplay => _lines.ToIndentedString("    ");
 }

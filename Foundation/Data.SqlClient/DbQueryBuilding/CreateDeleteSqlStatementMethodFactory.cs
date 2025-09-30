@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Foundation.Text;
 
@@ -7,7 +6,7 @@ namespace Foundation.Data.SqlClient.DbQueryBuilding;
 
 public static class CreateDeleteSqlStatementMethodFactory
 {
-    public static ReadOnlyCollection<Line> Create(string schema, string table, Column identifierColumn, Column versionColumn)
+    public static IReadOnlyCollection<Line> Create(string schema, string table, Column identifierColumn, Column versionColumn)
     {
         List<string> arguments = [];
         var csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == identifierColumn.SqlDataTypeName).CSharpTypeName;

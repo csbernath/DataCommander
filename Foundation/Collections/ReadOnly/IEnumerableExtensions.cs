@@ -35,7 +35,7 @@ public static class IEnumerableExtensions
         }
 
         [Pure]
-        public ReadOnlySortedSet<T> ToReadOnlySortedSet() => new(source.ToReadOnlyCollection());
+        public ReadOnlySortedSet<T> ToReadOnlySortedSet() => new(source.ToArray());
     }
 
     [Pure]

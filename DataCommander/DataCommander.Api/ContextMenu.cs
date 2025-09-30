@@ -1,8 +1,8 @@
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace DataCommander.Api;
 
-public class ContextMenu(ReadOnlyCollection<MenuItem> menuItems)
+public class ContextMenu(IReadOnlyCollection<MenuItem> menuItems)
 {
-    public readonly ReadOnlyCollection<MenuItem> MenuItems = menuItems;
+    public readonly IReadOnlyCollection<MenuItem> MenuItems = menuItems;
 }

@@ -7,7 +7,7 @@ namespace Foundation.Text;
 
 public static class StringExtensions
 {
-    public static ReadOnlyCollection<Line> ToLines(this string text, string indentation)
+    public static IReadOnlyCollection<Line> ToLines(this string text, string indentation)
     {
         List<Line> lines = [];
         using (var stringReader = new StringReader(text))

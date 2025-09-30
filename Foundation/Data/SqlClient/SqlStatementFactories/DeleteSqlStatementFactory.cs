@@ -9,7 +9,7 @@ namespace Foundation.Data.SqlClient.SqlStatementFactories;
 
 public static class DeleteSqlStatementFactory
 {
-    public static ReadOnlyCollection<Line> Create(string table, IReadOnlyCollection<ColumnNameValue> whereColumns)
+    public static IReadOnlyCollection<Line> Create(string table, IReadOnlyCollection<ColumnNameValue> whereColumns)
     {
         Assert.IsTrue(!table.IsNullOrEmpty());
         ArgumentNullException.ThrowIfNull(whereColumns);

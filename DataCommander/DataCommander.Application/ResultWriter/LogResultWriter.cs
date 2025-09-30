@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -279,8 +278,8 @@ internal sealed class LogResultWriter : IResultWriter
 
     private static DbQueryResultField ToField(FoundationDbColumn column) => new(column.ColumnName, column.DataType, column.AllowDbNull == true);
 
-    private class Result(ReadOnlyCollection<DbQueryResultField> fields)
+    private class Result(IReadOnlyCollection<DbQueryResultField> fields)
     {
-        public readonly ReadOnlyCollection<DbQueryResultField> Fields = fields;
+        public readonly IReadOnlyCollection<DbQueryResultField> Fields = fields;
     }
 }

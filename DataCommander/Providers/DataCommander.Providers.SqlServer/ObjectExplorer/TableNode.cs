@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
@@ -633,8 +632,8 @@ order by c.column_id";
             .FirstOrDefault();
         var versionColumn = columns.FirstOrDefault(i => i.ColumnName == "Version");
 
-        ReadOnlyCollection<Line>? createUpdateSqlStatementMethod;            
-        ReadOnlyCollection<Line>? createDeleteSqlStatementMethod;
+        IReadOnlyCollection<Line>? createUpdateSqlStatementMethod;            
+        IReadOnlyCollection<Line>? createDeleteSqlStatementMethod;
 
         if (identifierColumn != null)
         {
