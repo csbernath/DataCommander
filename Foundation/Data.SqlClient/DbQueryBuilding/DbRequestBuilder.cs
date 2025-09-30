@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
@@ -341,7 +342,7 @@ namespace {_request.Namespace}
         return stringBuilder.ToString();
     }
 
-    private string GetQueryResultClassConstructor(ReadOnlyCollection<DbQueryResult> results)
+    private string GetQueryResultClassConstructor(IReadOnlyCollection<DbQueryResult> results)
     {
         var stringBuilder = new StringBuilder();
         stringBuilder.Append($"public {_request.Name}DbQueryResult(");

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
-using Foundation.Collections.ReadOnly;
 using Microsoft.Data.SqlClient;
 using Microsoft.Data.SqlClient.Server;
 
@@ -93,5 +91,5 @@ public class SqlParameterCollectionBuilder
         Add(parameter);
     }
 
-    public ReadOnlyCollection<object> ToReadOnlyCollection() => _parameters.Cast<object>().ToReadOnlyCollection();
+    public IReadOnlyCollection<object> ToReadOnlyCollection() => _parameters.Cast<object>().ToArray();
 }

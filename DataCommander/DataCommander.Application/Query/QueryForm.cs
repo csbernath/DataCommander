@@ -1319,7 +1319,7 @@ Please wait...";
                                 Connection!.Connection.CreateCommand(new CreateCommandRequest(statement.CommandText, null, CommandType.Text, _commandTimeout,
                                     _transaction)), null, null, null)
                         )
-                        .ToReadOnlyCollection();
+                        .ToArray();
 
                 int maxRecords;
                 IResultWriter? resultWriter = null;
@@ -1445,12 +1445,12 @@ Please wait...";
     private sealed class GetQueryConfigurationResult(
         bool succeeded,
         Api.QueryConfiguration.Query query,
-        ReadOnlyCollection<DbRequestParameter> parameters,
+        IReadOnlyCollection<DbRequestParameter> parameters,
         string commandText)
     {
         public readonly bool Succeeded = succeeded;
         public readonly Api.QueryConfiguration.Query Query = query;
-        public readonly ReadOnlyCollection<DbRequestParameter> Parameters = parameters;
+        public readonly IReadOnlyCollection<DbRequestParameter> Parameters = parameters;
         public readonly string CommandText = commandText;
     }
 
@@ -1460,7 +1460,7 @@ Please wait...";
 
         var succeeded = false;
         Api.QueryConfiguration.Query? query = null;
-        ReadOnlyCollection<DbRequestParameter>? parameters = null;
+        IReadOnlyCollection<DbRequestParameter>? parameters = null;
         string? resultCommandText = null;
 
         var configurationStart = commandText.IndexOf("/* Query Configuration");
@@ -1543,10 +1543,10 @@ Please wait...";
         return new DbRequestParameter(name, dataType, sqlDbType, size, isNullable, csharpValue);
     }
 
-    private static ReadOnlyCollection<DbRequestParameter> ToDbQueryParameters(List<Token> tokens)
+    private static IReadOnlyCollection<DbRequestParameter> ToDbQueryParameters(List<Token> tokens)
     {
         var declarations = GetDeclarations(tokens);
-        return declarations.Select(ToDbRequestParameter).ToReadOnlyCollection();
+        return declarations.Select(ToDbRequestParameter).ToArray();
     }
 
     private static List<List<Token>> GetDeclarations(List<Token> tokens)

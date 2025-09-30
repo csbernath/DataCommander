@@ -37,7 +37,7 @@ internal sealed class LogResultWriter : IResultWriter
 
     private string? _fileName;
     private Api.QueryConfiguration.Query? _query;
-    private ReadOnlyCollection<DbRequestParameter>? _parameters;
+    private IReadOnlyCollection<DbRequestParameter>? _parameters;
     private string? _commandText;
     private List<Result>? _results;
 

@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using Foundation.Assertions;
-using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Text;
 
@@ -13,7 +11,7 @@ public static class ColumnNameValueExtensions
 {
     extension(IReadOnlyCollection<ColumnNameValue> columns)
     {
-        public ReadOnlyCollection<Line> Join(string separator)
+        public IReadOnlyCollection<Line> Join(string separator)
         {
             Assert.IsTrue(columns.All(column => !column.Value.IsNullOrEmpty()));
 
@@ -27,7 +25,7 @@ public static class ColumnNameValueExtensions
                         stringBuilder.Append(separator);
                     return new Line(0, stringBuilder.ToString());
                 })
-                .ToReadOnlyCollection();
+                .ToArray();
             return items;
         }
     }

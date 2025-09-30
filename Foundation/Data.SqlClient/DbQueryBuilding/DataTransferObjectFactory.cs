@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Foundation.Text;
 
@@ -6,7 +7,8 @@ namespace Foundation.Data.SqlClient.DbQueryBuilding;
 
 public static class DataTransferObjectFactory
 {
-    public static ReadOnlyCollection<Line> CreateDataTransferObject(string name, ReadOnlyCollection<DataTransferObjectField> fields)
+    public static ReadOnlyCollection<Line> CreateDataTransferObject(string name,
+        IReadOnlyCollection<DataTransferObjectField> fields)
     {
         var textBuilder = new TextBuilder();
 
@@ -24,7 +26,8 @@ public static class DataTransferObjectFactory
         return textBuilder.ToLines();
     }
 
-    private static ReadOnlyCollection<Line> GetConstructor(string name, ReadOnlyCollection<DataTransferObjectField> fields)
+    private static ReadOnlyCollection<Line> GetConstructor(string name,
+        IReadOnlyCollection<DataTransferObjectField> fields)
     {
         var textBuilder = new TextBuilder();
 

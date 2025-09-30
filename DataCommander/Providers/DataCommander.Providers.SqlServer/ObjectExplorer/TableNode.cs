@@ -619,7 +619,7 @@ order by c.column_id";
 
                 return new DataTransferObjectField(name, csharpTypeName);
             })
-            .ToReadOnlyCollection();
+            .ToArray();
         var dataTransferObject = DataTransferObjectFactory.CreateDataTransferObject(name, dataTransferObjectFields).ToIndentedString("    ");
 
         var columns = getTableSchemaResult.Columns
@@ -699,14 +699,15 @@ order by c.column_id";
                 var name = column.ColumnName;
                 var typeName = column.TypeName;
                 var isNullable = column.IsNullable;
-                var csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == typeName).CSharpTypeName;
+                var csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == typeName)
+                    .CSharpTypeName;
                 var csharpType = CSharpTypeArray.CSharpTypes.First(i => i.Name == csharpTypeName);
                 if (isNullable == true && csharpType.Type.IsValueType)
                     csharpTypeName += "?";
 
                 return new DataTransferObjectField(name, csharpTypeName);
             })
-            .ToReadOnlyCollection();
+            .ToArray();
 
         var classWithProperties = DataTransferObjectWithPropertiesFactory.Create(name, dataTransferObjectFields).ToIndentedString("    ");
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
@@ -11,7 +10,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
-using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Linq;
@@ -23,7 +21,7 @@ internal partial class ConnectionStringBuilderForm : Form
     private string? _selectedProviderName;
     private ConnectionInfo? _connectionInfo;
     private bool _passwordChanged;
-    private readonly ReadOnlyCollection<ProviderInfo> _providers;
+    private readonly IReadOnlyList<ProviderInfo> _providers;
     private DbProviderFactory? _dbProviderFactory;
     private DataTable? _dataSources;
     private List<string>? _initialCatalogs;
@@ -44,7 +42,7 @@ internal partial class ConnectionStringBuilderForm : Form
 
         _providers = ProviderInfoRepository.GetProviderInfos()
             .OrderBy(i => i.Name)
-            .ToReadOnlyCollection();
+            .ToArray();
 
         foreach (var provider in _providers)
             providersComboBox.Items.Add(provider.Name);
@@ -59,8 +57,8 @@ internal partial class ConnectionStringBuilderForm : Form
             _connectionInfo = value;
             connectionNameTextBox.Text = _connectionInfo!.ConnectionName;
             var providerIdentifier = _connectionInfo.ProviderIdentifier;
-            var index = _providers.IndexOf(i => i.Identifier == providerIdentifier);
-            providersComboBox.SelectedIndex = index;
+            var indexedItem = _providers.FirstIndexedItem(i => i.Identifier == providerIdentifier);
+            providersComboBox.SelectedIndex = indexedItem.Index;
             var provider = ProviderFactory.CreateProvider(providerIdentifier);
             var connectionStringBuilder = provider.CreateConnectionStringBuilder();
             connectionStringBuilder.ConnectionString = _connectionInfo.ConnectionStringAndCredential.ConnectionString;
