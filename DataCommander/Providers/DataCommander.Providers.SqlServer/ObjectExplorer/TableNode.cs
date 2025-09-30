@@ -541,7 +541,7 @@ order by c.column_id";
 
         var textBuilder = new TextBuilder();
 
-        textBuilder.Add($"update {Name}");
+        textBuilder.Add($"update {name}");
         textBuilder.Add("set");
         using (textBuilder.Indent(1))
         {
