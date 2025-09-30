@@ -7,5 +7,6 @@
         <Product>Data Commander</Product>
         <Description>Data Commander</Description>
         <AssemblyVersion>10.0</AssemblyVersion>        
+        <RepositoryUrl>https://github.com/csbernath/DataCommander</RepositoryUrl>
     </PropertyGroup>
 </Project>
