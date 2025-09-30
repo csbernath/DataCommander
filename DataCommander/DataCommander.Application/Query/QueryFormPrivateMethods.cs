@@ -161,9 +161,9 @@ public sealed partial class QueryForm
         {
             var dataSource = Connection.DataSource;
             _parentStatusBar.Items[0].Text = $"Closing connection to data source {dataSource}'....";
-            Connection.Close();
+            Connection!.Connection!.Close();
             _parentStatusBar.Items[0].Text = $"Connection to data source {dataSource} closed.";
-            Connection!.Connection!.Dispose();
+            Connection!.Connection.Dispose();
             Connection = null;
         }
 
