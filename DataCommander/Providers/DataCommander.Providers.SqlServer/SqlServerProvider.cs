@@ -867,23 +867,26 @@ from
         return target;
     }
 
-    private static bool IsBatchSeparator(string commandText, Token token)
+    private static bool IsBatchSeparator(ReadOnlySpan<char> commandText, Token token)
     {
+        const char newLine = '\n'; 
+        const string batchSeparator = "GO";
+        
         var isBatchSeparator =
             token.Type == TokenType.KeyWord &&
-            string.Compare(token.Value, "GO", StringComparison.InvariantCultureIgnoreCase) == 0;
+            string.Compare(token.Value, batchSeparator, StringComparison.InvariantCultureIgnoreCase) == 0;
 
         if (isBatchSeparator)
         {
-            var lineStartIndex = commandText.LastIndexOf('\n', token.StartPosition);
+            var lineStartIndex = commandText.LastIndexOf(newLine, token.StartPosition);
             lineStartIndex++;
-            var lineEndIndex = commandText.IndexOf('\n', token.EndPosition + 1);
-            if (lineEndIndex == -1) lineEndIndex = commandText.Length - 1;
-
+            var lineEndIndex = commandText.IndexOf(newLine, token.EndPosition + 1);
+            if (lineEndIndex == -1)
+                lineEndIndex = commandText.Length - 1;
             var lineLength = lineEndIndex - lineStartIndex + 1;
-            var line = commandText.Substring(lineStartIndex, lineLength);
+            var line = commandText.Slice(lineStartIndex, lineLength);
             line = line.Trim();
-            isBatchSeparator = string.Compare(line, "GO", StringComparison.InvariantCultureIgnoreCase) == 0;
+            isBatchSeparator = line.CompareTo(batchSeparator, StringComparison.InvariantCultureIgnoreCase) == 0;
         }
 
         return isBatchSeparator;
