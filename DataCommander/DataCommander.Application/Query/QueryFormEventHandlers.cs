@@ -887,38 +887,51 @@ Please wait...";
 
     private void tvObjectBrowser_DoubleClick(object? sender, EventArgs e)
     {
-        var selectedNode = _tvObjectExplorer.SelectedNode;
-        if (selectedNode != null)
+        try
         {
-            var treeNode = (ITreeNode)selectedNode.Tag!;
-            var cancellationTokenSource = new CancellationTokenSource();
-            const string textBoxText = @"Getting query...
+            var selectedNode = _tvObjectExplorer.SelectedNode;
+            if (selectedNode != null)
+            {
+                var treeNode = (ITreeNode)selectedNode.Tag!;
+                var cancellationTokenSource = new CancellationTokenSource();
+                const string textBoxText = @"Getting query...
 
 Please wait...";
-            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
-                textBoxText, _colorTheme);
-            var cancellationToken = cancellationTokenSource.Token;
-            var query = cancelableOperationForm.Execute(new Task<string?>(() => treeNode.GetQuery(cancellationToken).Result));
-            if (query != null)
-            {
-                var text0 = QueryTextBox.Text;
-                string? append = null;
-                var selectionStart = QueryTextBox.RichTextBox.TextLength;
-
-                if (!string.IsNullOrEmpty(text0))
+                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource,
+                    TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
+                    textBoxText, _colorTheme);
+                var cancellationToken = cancellationTokenSource.Token;
+                var query = cancelableOperationForm.Execute(new Task<string?>(() =>
+                    treeNode.GetQuery(cancellationToken).Result));
+                if (query != null)
                 {
-                    append = Environment.NewLine + Environment.NewLine;
-                    selectionStart += 2;
+                    var text0 = QueryTextBox.Text;
+                    string? append = null;
+                    var selectionStart = QueryTextBox.RichTextBox.TextLength;
+
+                    if (!string.IsNullOrEmpty(text0))
+                    {
+                        append = Environment.NewLine + Environment.NewLine;
+                        selectionStart += 2;
+                    }
+
+                    append += query;
+
+                    QueryTextBox.RichTextBox.AppendText(append);
+                    QueryTextBox.RichTextBox.SelectionStart = selectionStart;
+                    QueryTextBox.RichTextBox.SelectionLength = query.Length;
+
+                    QueryTextBox.Focus();
                 }
-
-                append += query;
-
-                QueryTextBox.RichTextBox.AppendText(append);
-                QueryTextBox.RichTextBox.SelectionStart = selectionStart;
-                QueryTextBox.RichTextBox.SelectionLength = query.Length;
-
-                QueryTextBox.Focus();
             }
+        }
+        catch (Exception exception)
+        {
+            var caption = MessageBoxCaption.Value;
+            var text = $@"Operation failed.
+
+{exception.Message}";
+            DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

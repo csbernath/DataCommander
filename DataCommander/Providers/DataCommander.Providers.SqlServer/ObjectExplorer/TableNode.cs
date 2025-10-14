@@ -104,10 +104,10 @@ where
 
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        var name1 = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
+        var multipartName = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
         using var connection = DatabaseNode.Databases.Server.CreateConnection();
         connection.Open();
-        var text = GetSelectStatement(connection, name1);
+        var text = GetSelectStatement(connection, multipartName);
         return Task.FromResult(text);
     }
 
@@ -140,10 +140,10 @@ where
         ArgumentNullException.ThrowIfNull(databaseObjectMultipartName);
 
         var commandText = $@"select  c.name
-from    [{databaseObjectMultipartName.Database}].sys.schemas s (nolock)
-join    [{databaseObjectMultipartName.Database}].sys.objects o (nolock)
+from [{databaseObjectMultipartName.Database}].sys.schemas s (nolock)
+join [{databaseObjectMultipartName.Database}].sys.objects o (nolock)
     on s.schema_id = o.schema_id
-join    [{databaseObjectMultipartName.Database}].sys.columns c (nolock)
+join [{databaseObjectMultipartName.Database}].sys.columns c (nolock)
     on o.object_id = c.object_id
 where
     s.name = '{databaseObjectMultipartName.Schema}'
@@ -377,11 +377,11 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
 
     private void SelectScript_Click(object? sender, EventArgs e)
     {
-        var name1 = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
+        var multipartName = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
         string selectStatement;
         using (var connection = DatabaseNode.Databases.Server.CreateConnection())
         {
-            selectStatement = GetSelectStatement(connection, name1);
+            selectStatement = GetSelectStatement(connection, multipartName);
         }
 
         var queryForm = (IQueryForm)sender!;
