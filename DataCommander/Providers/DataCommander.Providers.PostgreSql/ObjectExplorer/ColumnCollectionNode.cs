@@ -18,7 +18,7 @@ internal sealed class ColumnCollectionNode(TableNode tableNode) : ITreeNode
         var schemaNode = tableNode.TableCollectionNode.SchemaNode;
 
         return await Db.ExecuteReaderAsync(
-            schemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection,
+            schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection,
             new ExecuteReaderRequest($@"select
      c.column_name
     ,c.is_nullable

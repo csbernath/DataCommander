@@ -16,7 +16,7 @@ internal sealed class TableCollectionNode(SchemaNode schemaNode) : ITreeNode
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        using var connection = SchemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection();
+        using var connection = SchemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection();
         connection.Open();
         var executor = connection.CreateCommandExecutor();
         var commandText = $@"select table_name

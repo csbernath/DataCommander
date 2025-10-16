@@ -14,7 +14,7 @@ internal sealed class ViewCollectionNode(SchemaNode schemaNode) : ITreeNode
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        using var connection = schemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection();
+        using var connection = schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection();
         connection.Open();
         var executor = connection.CreateCommandExecutor();
         return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(new ExecuteReaderRequest($@"select table_name

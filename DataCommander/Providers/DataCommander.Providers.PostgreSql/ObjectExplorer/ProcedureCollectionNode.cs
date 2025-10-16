@@ -6,12 +6,10 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class SchemaCollectionNode(DatabaseNode databaseNode) : ITreeNode
+internal sealed class ProcedureCollectionNode(SchemaNode schemaNode) : ITreeNode
 {
-    public readonly DatabaseNode DatabaseNode = databaseNode;
-    
     bool ITreeNode.IsLeaf => false;
-    string ITreeNode.Name => "Schemas";
+    string ITreeNode.Name => "Procedure";
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 
@@ -19,21 +17,21 @@ internal sealed class SchemaCollectionNode(DatabaseNode databaseNode) : ITreeNod
 
     public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        const string commandText = @"select oid,nspname
-from pg_namespace
-where nspname not in('information_schema','pg_catalog','pg_toast')
-order by 2";
-        var databaseNodes = await Db.ExecuteReaderAsync(
-            databaseNode.CreateConnection,
+        var commandText = @$"select proname
+from pg_proc
+where prokind = 'p' and pronamespace = {schemaNode.Oid}
+order by 1";
+        var procedureNodes = await Db.ExecuteReaderAsync(
+            schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
             dataRecord =>
             {
-                var oid = (uint)dataRecord.GetValue(0);
-                var name = dataRecord.GetString(1);
-                return new SchemaNode(this, oid, name);
+                var name = dataRecord.GetString(0);
+                return new ProcedureNode(schemaNode, name);
             },
             cancellationToken);
-        return databaseNodes;
+
+        return procedureNodes;
     }
 }

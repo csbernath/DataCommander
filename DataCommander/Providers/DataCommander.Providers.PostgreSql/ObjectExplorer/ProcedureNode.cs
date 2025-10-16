@@ -5,24 +5,14 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class SchemaNode(SchemaCollectionNode schemaCollectionNode, uint oid, string? name) : ITreeNode
+internal sealed class ProcedureNode(SchemaNode schemaNode, string? name) : ITreeNode
 {
-    public readonly uint Oid = oid;
-    
-    public SchemaCollectionNode SchemaCollectionNode { get; } = schemaCollectionNode;
-
     public string? Name { get; } = name;
 
-    bool ITreeNode.IsLeaf => false;
+    bool ITreeNode.IsLeaf => true;
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>(
-        [
-            new ProcedureCollectionNode(this),
-            new SequenceCollectionNode(this),
-            new TableCollectionNode(this),
-            new ViewCollectionNode(this),
-        ]);
+        Task.FromResult<IEnumerable<ITreeNode>>([]);
 
     bool ITreeNode.Sortable => false;
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);

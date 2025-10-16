@@ -27,7 +27,13 @@ internal sealed class PostgreSqlProvider : IProvider
     public IObjectExplorer? CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
     void IProvider.ClearCompletionCache() => throw new NotImplementedException();
     string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
-    public string? GetConnectionName(IDbConnection connection) => null;
+    
+    public string? GetConnectionName(IDbConnection connection)
+    {
+        var npgsqlConnection = (NpgsqlConnection)connection;
+        return $"{npgsqlConnection.Database}/{npgsqlConnection.UserName}@{npgsqlConnection.Host}:{npgsqlConnection.Port}";
+    }
+
     ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(connectionStringAndCredential);
     public string GetConnectionName(string connectionString) => throw new NotImplementedException();
     IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader) => new PostgreSqlDataReaderHelper((NpgsqlDataReader)dataReader);
@@ -319,7 +325,8 @@ order by 1", name.Database);
     DataParameterBase IProvider.GetDataParameter(IDataParameter parameter) => throw new NotImplementedException();
     public string GetExceptionMessage(Exception exception) => exception.ToString();
     DataTable IProvider.GetParameterTable(IDataParameterCollection parameters) => throw new NotImplementedException();
-    DataTable IProvider.GetSchemaTable(IDataReader dataReader) => throw new NotImplementedException();
+    
+    DataTable IProvider.GetSchemaTable(IDataReader dataReader) => dataReader.GetSchemaTable()!;
 
     List<Statement> IProvider.GetStatements(string commandText) =>
     [
