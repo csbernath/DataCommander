@@ -2,6 +2,7 @@
 
 public static class ConnectionStringKeyword
 {
+    public const string Database = "Database";
     public const string DataSource = "Data Source";
     public const string Host = "Host";
     public const string InitialCatalog = "Initial Catalog";

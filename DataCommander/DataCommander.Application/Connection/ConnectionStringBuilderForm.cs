@@ -70,6 +70,8 @@ internal partial class ConnectionStringBuilderForm : Form
 
             if (connectionStringBuilder.IsKeywordSupportedAndTryGetValue(ConnectionStringKeyword.InitialCatalog, out string? initialCatalog))
                 initialCatalogComboBox.Text = initialCatalog;
+            else if (connectionStringBuilder.IsKeywordSupportedAndTryGetValue(ConnectionStringKeyword.Database, out string? database))
+                initialCatalogComboBox.Text = database;
 
             if (connectionStringBuilder.IsKeywordSupportedAndTryGetValue(ConnectionStringKeyword.IntegratedSecurity, out bool integratedSecurity))
                 integratedSecurityCheckBox.Checked = integratedSecurity;
@@ -122,6 +124,9 @@ internal partial class ConnectionStringBuilderForm : Form
 
             if (connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.Host))
                 dataSourceLabel.Text = $"{ConnectionStringKeyword.Host}:";
+
+            if (connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.Database))
+                initialCatalogLabel.Text = $"{ConnectionStringKeyword.Database}:";
             
             integratedSecurityCheckBox.Enabled = connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity);
             trustServerCertificateCheckBox.Enabled = connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.TrustServerCertificate);
@@ -304,6 +309,8 @@ internal partial class ConnectionStringBuilderForm : Form
 
             if (connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.InitialCatalog))
                 SetValue(connectionStringBuilder, ConnectionStringKeyword.InitialCatalog, initialCatalogComboBox.Text);
+            else if (connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.Database))
+                SetValue(connectionStringBuilder, ConnectionStringKeyword.Database, initialCatalogComboBox.Text);
 
             if (connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity))
                 connectionStringBuilder.SetValue(ConnectionStringKeyword.IntegratedSecurity, integratedSecurityCheckBox.Checked);

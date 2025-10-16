@@ -234,6 +234,8 @@ internal sealed class ConnectionListForm : Form
 
         if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.InitialCatalog, out value))
             row[ConnectionStringKeyword.InitialCatalog] = (string)value!;
+        else if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.Database, out value))
+            row[ConnectionStringKeyword.InitialCatalog] = (string)value!;
 
         if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out value))
         {
