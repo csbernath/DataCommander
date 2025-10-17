@@ -6,35 +6,39 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class TableCollectionNode(SchemaNode schemaNode) : ITreeNode
+internal sealed class TypeCollectionNode(SchemaNode schemaNode) : ITreeNode
 {
     public SchemaNode SchemaNode { get; } = schemaNode;
 
-    string? ITreeNode.Name => "Tables";
+    string? ITreeNode.Name => "Types";
 
     bool ITreeNode.IsLeaf => false;
 
     public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var commandText = $@"select
-	tablename
-from pg_tables
+	t.typname
+from pg_type t
+join pg_class c
+	on t.typrelid = c.oid
 where
-	schemaname = '{SchemaNode.Name}'
-order by tablename";
+    t.typnamespace = {schemaNode.Oid} and
+	c.relkind = 'c'
+order by
+	t.typname";
 
-        var tableNodes = await Db.ExecuteReaderAsync(
+        var typeNodes = await Db.ExecuteReaderAsync(
             schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
             dataRecord =>
             {
                 var name = dataRecord.GetString(0);
-                return new TableNode(schemaNode, name);
+                return new TypeNode(schemaNode, name);
             },
             cancellationToken);
 
-        return tableNodes;
+        return typeNodes;
     }
 
     bool ITreeNode.Sortable => false;

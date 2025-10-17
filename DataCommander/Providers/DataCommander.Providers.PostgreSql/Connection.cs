@@ -1,7 +1,10 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api.Connection;
+using Foundation.Data;
 using Npgsql;
 
 namespace DataCommander.Providers.PostgreSql;
@@ -22,7 +25,14 @@ internal sealed class Connection : ConnectionBase
     public override string DataSource => _npgsqlConnection!.DataSource;
     public override string ServerVersion => _npgsqlConnection!.ServerVersion;
 
-    public override string? ConnectionInformation => null;
+    public override string ConnectionInformation
+    {
+        get
+        {
+            ArgumentNullException.ThrowIfNull(_npgsqlConnection);
+            return $"ProcessID: {_npgsqlConnection.ProcessID}";
+        }
+    }
 
     public override Task<int> GetTransactionCountAsync(CancellationToken cancellationToken) => Task.FromResult(0);
 

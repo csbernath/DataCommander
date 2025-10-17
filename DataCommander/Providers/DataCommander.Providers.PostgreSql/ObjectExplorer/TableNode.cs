@@ -5,10 +5,10 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class TableNode(TableCollectionNode tableCollectionNode, string? name) : ITreeNode
+internal sealed class TableNode(SchemaNode schemaNode, string? name) : ITreeNode
 {
-    public TableCollectionNode TableCollectionNode { get; } = tableCollectionNode;
-
+    public readonly SchemaNode SchemaNode = schemaNode;
+    
     public string? Name { get; } = name;
 
     bool ITreeNode.IsLeaf => false;

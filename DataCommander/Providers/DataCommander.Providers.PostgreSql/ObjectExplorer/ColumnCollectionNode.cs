@@ -15,7 +15,7 @@ internal sealed class ColumnCollectionNode(TableNode tableNode) : ITreeNode
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var schemaNode = tableNode.TableCollectionNode.SchemaNode;
+        var schemaNode = tableNode.SchemaNode;
 
         return await Db.ExecuteReaderAsync(
             schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection,
@@ -28,7 +28,7 @@ internal sealed class ColumnCollectionNode(TableNode tableNode) : ITreeNode
     ,c.numeric_scale
 from information_schema.columns c
 where
-    c.table_schema = '{tableNode.TableCollectionNode.SchemaNode.Name}'
+    c.table_schema = '{schemaNode.Name}'
     and c.table_name = '{tableNode.Name}'
 order by c.ordinal_position"),
             128,
