@@ -224,13 +224,25 @@ internal sealed class LogResultWriter : IResultWriter
     private DataTransferObjectField ToDataTransferObjectField(FoundationDbColumn dbColumn)
     {
         var name = dbColumn.ColumnName!;
+        var dataType = dbColumn.DataType!;
+        var isArray = dataType.IsArray;
+        CSharpType cSharpType;
+        if (isArray)
+        {
+            var elementType = dataType.GetElementType();
+            cSharpType = CSharpTypeArray.CSharpTypes.First(t => t.Type == elementType);
+        }
+        else
+            cSharpType = CSharpTypeArray.CSharpTypes.First(t => t.Type == dbColumn.DataType);
 
-        var cSharpType = CSharpTypeArray.CSharpTypes.First(t => t.Type == dbColumn.DataType);
         var stringBuilder = new StringBuilder();
         stringBuilder.Append(cSharpType.Name);
 
         if (dbColumn.AllowDbNull == true && cSharpType == CSharpTypeArray.String)
             stringBuilder.Append('?');
+
+        if (isArray)
+            stringBuilder.Append("[]");
 
         var type = stringBuilder.ToString();
         

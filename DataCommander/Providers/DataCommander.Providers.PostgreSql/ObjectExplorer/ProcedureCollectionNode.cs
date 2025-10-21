@@ -17,10 +17,14 @@ internal sealed class ProcedureCollectionNode(SchemaNode schemaNode) : ITreeNode
 
     public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var commandText = @$"select proname
+        var commandText = @$"select
+    proname,
+	proargnames
 from pg_proc
-where prokind = 'p' and pronamespace = {schemaNode.Oid}
-order by 1";
+where
+    prokind = 'p' and
+    pronamespace = {schemaNode.Oid}
+order by proname";
         var procedureNodes = await Db.ExecuteReaderAsync(
             schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection,
             new ExecuteReaderRequest(commandText),
@@ -28,7 +32,10 @@ order by 1";
             dataRecord =>
             {
                 var name = dataRecord.GetString(0);
-                return new ProcedureNode(schemaNode, name);
+                var argnames = dataRecord.IsDBNull(1)
+                    ? null
+                    : (string[])dataRecord.GetValue(1);
+                return new ProcedureNode(schemaNode, name, argnames);
             },
             cancellationToken);
 

@@ -30,7 +30,7 @@ internal sealed class Connection : ConnectionBase
         get
         {
             ArgumentNullException.ThrowIfNull(_npgsqlConnection);
-            return $"ProcessID: {_npgsqlConnection.ProcessID}";
+            return $"ProcessID:       {_npgsqlConnection.ProcessID}";
         }
     }
 

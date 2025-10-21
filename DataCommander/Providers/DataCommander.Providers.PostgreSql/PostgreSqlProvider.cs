@@ -41,7 +41,11 @@ internal sealed class PostgreSqlProvider : IProvider
     void IProvider.CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationconnection,
         string? destinationTableName, out IDbCommand insertCommand, out Converter<object, object>[] converters) => throw new NotImplementedException();
 
-    void IProvider.DeriveParameters(IDbCommand command) => throw new NotImplementedException();
+    void IProvider.DeriveParameters(IDbCommand command)
+    {
+        var npgsqlCommand = (NpgsqlCommand)command;
+        NpgsqlCommandBuilder.DeriveParameters(npgsqlCommand);
+    }
 
     Type? IProvider.GetColumnType(FoundationDbColumn dataColumnSchema) =>
         // TODO
