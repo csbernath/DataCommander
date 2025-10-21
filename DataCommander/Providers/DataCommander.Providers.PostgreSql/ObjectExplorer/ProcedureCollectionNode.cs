@@ -19,7 +19,9 @@ internal sealed class ProcedureCollectionNode(SchemaNode schemaNode) : ITreeNode
     {
         var commandText = @$"select
     proname,
-	proargnames
+    proargmodes,
+	proargnames,
+    proallargtypes 
 from pg_proc
 where
     prokind = 'p' and
@@ -32,10 +34,10 @@ order by proname";
             dataRecord =>
             {
                 var name = dataRecord.GetString(0);
-                var argnames = dataRecord.IsDBNull(1)
-                    ? null
-                    : (string[])dataRecord.GetValue(1);
-                return new ProcedureNode(schemaNode, name, argnames);
+                var argmodes = dataRecord.GetNullableCharArray(1);
+                var argnames = dataRecord.GetNullableStringArray(2);
+                var allargtypes = dataRecord.GetNullableUInt32Array(3);
+                return new ProcedureNode(schemaNode, name, argmodes, argnames, allargtypes);
             },
             cancellationToken);
 

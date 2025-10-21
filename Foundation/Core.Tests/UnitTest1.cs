@@ -1,5 +1,4 @@
 using Foundation.Core;
-using Newtonsoft.Json.Linq;
 
 namespace Core.Tests;
 

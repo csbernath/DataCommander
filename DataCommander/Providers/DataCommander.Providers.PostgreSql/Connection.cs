@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Data.Common;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api.Connection;
-using Foundation.Data;
 using Npgsql;
 
 namespace DataCommander.Providers.PostgreSql;

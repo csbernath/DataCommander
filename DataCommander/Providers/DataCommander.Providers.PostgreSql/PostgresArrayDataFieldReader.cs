@@ -1,8 +1,5 @@
-﻿using System;
-using System.Data;
-using DataCommander.Api.FieldReaders;
+﻿using DataCommander.Api.FieldReaders;
 using Npgsql;
-using Npgsql.Replication;
 
 namespace DataCommander.Providers.PostgreSql;
 

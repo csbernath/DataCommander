@@ -6,7 +6,7 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class ProcedureNode(SchemaNode schemaNode, string? name, string[]? argnames) : ITreeNode
+internal sealed class ProcedureNode(SchemaNode schemaNode, string? name, char[]? argmodes, string[]? argnames, uint[]? allargtypes) : ITreeNode
 {
     public string? Name
     {
@@ -18,13 +18,42 @@ internal sealed class ProcedureNode(SchemaNode schemaNode, string? name, string[
             if (argnames != null)
             {
                 stringBuilder.Append('(');
-                var args = string.Join(",", argnames!);
-                stringBuilder.Append(args);
+                for (var index = 0; index < argnames.Length; ++index)
+                {
+                    if (index > 0)
+                        stringBuilder.Append(", ");
+
+                    var mode = GetMode(index);
+
+                    stringBuilder.Append(mode);
+                    stringBuilder.Append(' ');
+                    stringBuilder.Append(argnames[index]);
+                    stringBuilder.Append(' ');
+
+                    var argtypeOid = allargtypes[index];
+                    if (PostgresSqlTypeRepository.TryGetByOid(argtypeOid, out var postgresSqlType))
+                        stringBuilder.Append(postgresSqlType!.Name);
+                    else
+                        stringBuilder.Append(argtypeOid);
+                }
+
                 stringBuilder.Append(')');
             }
 
             return stringBuilder.ToString();
         }
+    }
+
+    private string? GetMode(int index)
+    {
+        var mode = argmodes![index] switch
+        {
+            'i' => "IN",
+            'b' => "INOUT",
+            'o' => "OUT",
+            _ => null
+        };
+        return mode;
     }
 
     bool ITreeNode.IsLeaf => true;

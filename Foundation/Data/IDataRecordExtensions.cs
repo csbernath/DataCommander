@@ -27,8 +27,16 @@ public static class IDataRecordExtensions
         {
             ArgumentNullException.ThrowIfNull(dataRecord);
             return dataRecord.IsDBNull(fieldIndex)
-                ? (byte?)null
+                ? null
                 : dataRecord.GetByte(fieldIndex);
+        }
+
+        public char[]? GetNullableCharArray(int fieldIndex)
+        {
+            ArgumentNullException.ThrowIfNull(dataRecord);
+            return dataRecord.IsDBNull(fieldIndex)
+                ? null
+                : (char[])dataRecord.GetValue(fieldIndex);
         }
 
         public DateTime? GetNullableDateTime(int fieldIndex)
@@ -85,6 +93,23 @@ public static class IDataRecordExtensions
             return dataRecord.IsDBNull(fieldIndex)
                 ? (long?)null
                 : dataRecord.GetInt64(fieldIndex);
+        }
+
+        public string[]? GetNullableStringArray(int fieldIndex)
+        {
+            ArgumentNullException.ThrowIfNull(dataRecord);
+            return dataRecord.IsDBNull(fieldIndex)
+                ? null
+                : (string[])dataRecord.GetValue(fieldIndex);
+        }
+
+        [CLSCompliant(false)]
+        public uint[]? GetNullableUInt32Array(int fieldIndex)
+        {
+            ArgumentNullException.ThrowIfNull(dataRecord);
+            return dataRecord.IsDBNull(fieldIndex)
+                ? null
+                : (uint[])dataRecord.GetValue(fieldIndex);
         }
 
         public string? GetStringOrDefault(int fieldIndex)
