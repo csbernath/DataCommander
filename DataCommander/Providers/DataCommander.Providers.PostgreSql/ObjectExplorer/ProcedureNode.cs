@@ -23,7 +23,7 @@ internal sealed class ProcedureNode(SchemaNode schemaNode, string? name, char[]?
                     if (index > 0)
                         stringBuilder.Append(", ");
 
-                    var mode = GetMode(index);
+                    var mode = GetMode(argmodes![index]);
 
                     stringBuilder.Append(mode);
                     stringBuilder.Append(' ');
@@ -33,6 +33,8 @@ internal sealed class ProcedureNode(SchemaNode schemaNode, string? name, char[]?
                     var argtypeOid = allargtypes[index];
                     if (PostgresSqlTypeRepository.TryGetByOid(argtypeOid, out var postgresSqlType))
                         stringBuilder.Append(postgresSqlType!.Name);
+                    else if (schemaNode.SchemaCollectionNode.DatabaseNode.PostgresSqlTypes!.TryGetValue(argtypeOid, out postgresSqlType))
+                        stringBuilder.Append(postgresSqlType.Name);
                     else
                         stringBuilder.Append(argtypeOid);
                 }
@@ -44,9 +46,9 @@ internal sealed class ProcedureNode(SchemaNode schemaNode, string? name, char[]?
         }
     }
 
-    private string? GetMode(int index)
+    private string? GetMode(char argmode)
     {
-        var mode = argmodes![index] switch
+        var mode = argmode switch
         {
             'i' => "IN",
             'b' => "INOUT",

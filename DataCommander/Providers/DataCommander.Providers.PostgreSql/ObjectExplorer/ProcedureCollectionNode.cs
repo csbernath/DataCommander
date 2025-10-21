@@ -9,7 +9,7 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 internal sealed class ProcedureCollectionNode(SchemaNode schemaNode) : ITreeNode
 {
     bool ITreeNode.IsLeaf => false;
-    string ITreeNode.Name => "Procedure";
+    string ITreeNode.Name => "Procedures";
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 
@@ -40,7 +40,6 @@ order by proname";
                 return new ProcedureNode(schemaNode, name, argmodes, argnames, allargtypes);
             },
             cancellationToken);
-
         return procedureNodes;
     }
 }
