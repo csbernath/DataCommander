@@ -102,6 +102,8 @@ where
 
     public bool Sortable => false;
 
+    public bool DynamicChildCount => false;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
         var multipartName = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);

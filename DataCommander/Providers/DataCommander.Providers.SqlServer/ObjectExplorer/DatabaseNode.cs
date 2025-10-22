@@ -49,6 +49,9 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
     }
 
     public bool Sortable => false;
+
+    public bool DynamicChildCount => false;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
     public ContextMenu? GetContextMenu()

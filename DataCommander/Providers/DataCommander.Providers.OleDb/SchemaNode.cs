@@ -32,6 +32,9 @@ internal sealed class SchemaNode(CatalogNode catalog, string name) : ITreeNode
     }
 
     public bool Sortable => false;
+
+    public bool DynamicChildCount => true;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public CatalogNode Catalog { get; } = catalog;
     public string Name { get; } = name;

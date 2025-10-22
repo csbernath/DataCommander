@@ -13,6 +13,9 @@ internal sealed class ExtendedStoreProcedureNode(DatabaseNode database, string s
     string? ITreeNode.Name => $"{schema}.{name}";
     bool ITreeNode.IsLeaf => true;
     bool ITreeNode.Sortable => false;
+
+    public bool DynamicChildCount => true;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 

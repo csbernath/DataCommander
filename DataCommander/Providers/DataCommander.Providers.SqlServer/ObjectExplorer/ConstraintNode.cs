@@ -19,6 +19,8 @@ internal sealed class ConstraintNode(DatabaseNode databaseNode, string? name)
 
     public bool Sortable => false;
 
+    public bool DynamicChildCount => true;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
     //private void menuItemScriptObject_Click(object? sender, EventArgs e)

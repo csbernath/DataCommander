@@ -14,6 +14,9 @@ internal class KeyNode(string? name) : ITreeNode
         Task.FromResult<IEnumerable<ITreeNode>>([]);
 
     public bool Sortable => false;
+
+    public bool DynamicChildCount => true;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 }

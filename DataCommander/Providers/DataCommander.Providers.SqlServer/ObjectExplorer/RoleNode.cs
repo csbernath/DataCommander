@@ -16,6 +16,8 @@ internal sealed class RoleNode(DatabaseNode database, string? name) : ITreeNode
     
     public bool Sortable => false;
 
+    public bool DynamicChildCount => true;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
         var query = string.Format(@"declare @uid smallint

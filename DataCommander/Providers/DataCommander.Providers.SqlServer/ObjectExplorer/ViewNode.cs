@@ -23,6 +23,8 @@ internal sealed class ViewNode(DatabaseNode database, int id, string? schema, st
 
     public bool Sortable => false;
 
+    public bool DynamicChildCount => true;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
         var name1 = new DatabaseObjectMultipartName(null, database.Name, schema, name);

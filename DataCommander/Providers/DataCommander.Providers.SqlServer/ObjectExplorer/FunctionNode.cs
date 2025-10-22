@@ -24,6 +24,8 @@ internal sealed class FunctionNode(
 
     public bool Sortable => false;
 
+    public bool DynamicChildCount => true;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
         //string query = string.Format("select {0}.{1}.[{2}]()",database.Name,owner,name);

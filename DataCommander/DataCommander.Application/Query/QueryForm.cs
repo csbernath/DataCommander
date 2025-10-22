@@ -1142,7 +1142,8 @@ Please wait...";
         if (parentTreeNode != null && count > 0)
         {
             var treeNode = (ITreeNode)parentTreeNode.Tag!;
-            parentTreeNode.Text = $"{treeNode.Name} ({count})";
+            if (treeNode.DynamicChildCount)
+                parentTreeNode.Text = $"{treeNode.Name} ({count})";
         }
 
         var items = ResultWriter.StringExtensions.SingularOrPlural(count, "item", "items");

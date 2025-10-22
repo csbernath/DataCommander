@@ -31,6 +31,8 @@ sealed class TableNode(SchemaNode schema, string? name) : ITreeNode
 
     public bool Sortable => false;
 
+    public bool DynamicChildCount => true;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
         string? query;

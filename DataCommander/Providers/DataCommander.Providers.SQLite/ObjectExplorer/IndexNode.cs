@@ -19,6 +19,8 @@ internal sealed class IndexNode(TableNode tableNode, string? name) : ITreeNode
 
     bool ITreeNode.Sortable => false;
 
+    public bool DynamicChildCount => true;
+
     async Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
         var commandText = $@"select sql

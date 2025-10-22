@@ -12,6 +12,9 @@ internal sealed class SchemaCollectionNode(DatabaseNode databaseNode) : ITreeNod
     
     bool ITreeNode.IsLeaf => false;
     string ITreeNode.Name => "Schemas";
+
+    public bool DynamicChildCount => true;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 

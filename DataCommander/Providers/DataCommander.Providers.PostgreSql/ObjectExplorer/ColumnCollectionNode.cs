@@ -46,6 +46,9 @@ order by attnum";
     }
 
     bool ITreeNode.Sortable => false;
+
+    public bool DynamicChildCount => true;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 }

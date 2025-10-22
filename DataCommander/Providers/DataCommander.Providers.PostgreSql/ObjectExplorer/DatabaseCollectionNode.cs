@@ -11,6 +11,9 @@ internal sealed class DatabaseCollectionNode(ObjectExplorer objectExplorer) : IT
     public ObjectExplorer ObjectExplorer { get; } = objectExplorer;
     bool ITreeNode.IsLeaf => false;
     string ITreeNode.Name => "Databases";
+
+    public bool DynamicChildCount => true;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 

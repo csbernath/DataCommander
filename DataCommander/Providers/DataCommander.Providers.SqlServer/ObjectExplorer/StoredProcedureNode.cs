@@ -19,6 +19,8 @@ internal sealed class StoredProcedureNode(DatabaseNode database, string owner, s
 
     public bool Sortable => false;
 
+    public bool DynamicChildCount => true;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
         var query = $"exec {owner}.{name}";

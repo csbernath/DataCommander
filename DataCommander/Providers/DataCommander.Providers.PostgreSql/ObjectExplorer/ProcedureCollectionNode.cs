@@ -10,6 +10,9 @@ internal sealed class ProcedureCollectionNode(SchemaNode schemaNode) : ITreeNode
 {
     bool ITreeNode.IsLeaf => false;
     string ITreeNode.Name => "Procedures";
+
+    public bool DynamicChildCount => true;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 

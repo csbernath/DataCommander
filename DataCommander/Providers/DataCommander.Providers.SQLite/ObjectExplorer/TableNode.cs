@@ -28,6 +28,8 @@ internal sealed class TableNode(DatabaseNode databaseNode, string? name) : ITree
     
     bool ITreeNode.Sortable => false;
 
+    public bool DynamicChildCount => true;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult($"select\t*\r\nfrom\t{DatabaseNode.Name}.{Name}");
 
     private static string GetScript(

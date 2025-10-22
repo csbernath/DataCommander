@@ -28,6 +28,9 @@ order by table_name"), 128, dataReader =>
     }
 
     bool ITreeNode.Sortable => false;
+
+    public bool DynamicChildCount => true;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 }

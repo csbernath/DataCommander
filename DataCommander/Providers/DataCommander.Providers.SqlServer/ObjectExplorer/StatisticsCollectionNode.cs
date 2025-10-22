@@ -8,7 +8,7 @@ using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class StatisticsCollectionNode(DatabaseNode databaseNode, int id) : ITreeNode
+internal sealed class StatisticsCollectionNode(DatabaseNode databaseNode, int id) : DataCommander.Api.ITreeNode
 {
     public string? Name => "Statistics";
     public bool IsLeaf => false;
@@ -38,6 +38,9 @@ order by s.name";
     }
 
     public bool Sortable => false;
+
+    public bool DynamicChildCount => true;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
     public ContextMenu? GetContextMenu() => null;

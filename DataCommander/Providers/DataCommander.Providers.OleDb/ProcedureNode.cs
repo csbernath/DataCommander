@@ -28,6 +28,8 @@ internal sealed class ProcedureNode(string? name) : ITreeNode
 
     public bool Sortable => false;
 
+    public bool DynamicChildCount => true;
+
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
         var query = name != null
