@@ -1,16 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class ColumnNode(ColumnCollectionNode columnCollectionNode, string name, string dataType) : ITreeNode
+internal sealed class ColumnNode(
+    ColumnCollectionNode columnCollectionNode,
+    string name,
+    uint typeOid,
+    bool notNull) : ITreeNode
 {
-    private readonly ColumnCollectionNode _columnCollectionNode = columnCollectionNode;
+    string? ITreeNode.Name
+    {
+        get
+        {
+            if (!PostgresSqlTypeRepository.TryGetByOid(typeOid, out var type))
+            {
+                var types = columnCollectionNode.TableNode.SchemaNode.SchemaCollectionNode.DatabaseNode.PostgresSqlTypes;
+                types.TryGetValue(typeOid, out type);
+            }
 
-    string? ITreeNode.Name => $"{name} {dataType}";
+            var dataTypeName = type != null
+                ? type.Name
+                : typeOid.ToString();
+            
+            var sb = new StringBuilder();
+            sb.Append($"{name} ({dataTypeName}");
+
+            if (notNull)
+                sb.Append(", not null");
+
+            sb.Append(')');
+            return sb.ToString();
+        }
+    }
 
     bool ITreeNode.IsLeaf => true;
 

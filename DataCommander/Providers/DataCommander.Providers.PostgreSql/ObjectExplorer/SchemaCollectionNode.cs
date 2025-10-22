@@ -29,7 +29,7 @@ order by 2";
             128,
             dataRecord =>
             {
-                var oid = (uint)dataRecord.GetValue(0);
+                var oid = dataRecord.GetUInt32(0);
                 var name = dataRecord.GetString(1);
                 return new SchemaNode(this, oid, name);
             },

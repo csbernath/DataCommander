@@ -17,11 +17,13 @@ internal sealed class TableCollectionNode(SchemaNode schemaNode) : ITreeNode
     public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
         var commandText = $@"select
-	tablename
-from pg_tables
+	oid,
+	relname
+from pg_class
 where
-	schemaname = '{SchemaNode.Name}'
-order by tablename";
+	relnamespace = {schemaNode.Oid} and
+	relkind = 'r'
+order by relname";
 
         var tableNodes = await Db.ExecuteReaderAsync(
             schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection,
@@ -29,8 +31,9 @@ order by tablename";
             128,
             dataRecord =>
             {
-                var name = dataRecord.GetString(0);
-                return new TableNode(schemaNode, name);
+                var oid = dataRecord.GetUInt32(0);
+                var name = dataRecord.GetString(1);
+                return new TableNode(schemaNode, oid, name);
             },
             cancellationToken);
 

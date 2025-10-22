@@ -135,7 +135,7 @@ Please wait...";
                 MessageBoxCaption.Value, textBoxText, colorTheme);
             var cancellationToken = cancellationTokenSource.Token;
             var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result));
-            AddNodes(_tvObjectExplorer!.Nodes, children, objectExplorer.Sortable, startTimestamp);
+            AddNodes(null, _tvObjectExplorer!.Nodes, children, objectExplorer.Sortable, startTimestamp);
         }
         else
         {
@@ -1096,7 +1096,12 @@ Please wait...";
 
     }
 
-    private void AddNodes(TreeNodeCollection parent, IEnumerable<ITreeNode> children, bool sortable, long startTimestamp)
+    private void AddNodes(
+        TreeNode? parentTreeNode, 
+        TreeNodeCollection treeNodeCollection,
+        IEnumerable<ITreeNode> children,
+        bool sortable,
+        long startTimestamp)
     {
         ArgumentNullException.ThrowIfNull(children);
         IEnumerable<ITreeNode> enumerableChildren;
@@ -1127,12 +1132,19 @@ Please wait...";
                 if (!child.IsLeaf)
                     treeNode.Nodes.Add(new TreeNode());
 
-                parent.Add(treeNode);
+                treeNodeCollection.Add(treeNode);
                 count++;
             }
         }
 
         var ticks = Stopwatch.GetTimestamp() - startTimestamp;
+
+        if (parentTreeNode != null && count > 0)
+        {
+            var treeNode = (ITreeNode)parentTreeNode.Tag!;
+            parentTreeNode.Text = $"{treeNode.Name} ({count})";
+        }
+
         var items = ResultWriter.StringExtensions.SingularOrPlural(count, "item", "items");
         SetStatusbarPanelText($"{items} added to Object Explorer in {StopwatchTimeSpan.ToString(ticks, 3)}.");
     }

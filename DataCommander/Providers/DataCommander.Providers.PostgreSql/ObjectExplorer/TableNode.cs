@@ -5,9 +5,11 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class TableNode(SchemaNode schemaNode, string? name) : ITreeNode
+internal sealed class TableNode(SchemaNode schemaNode, uint oid, string? name) : ITreeNode
 {
     public readonly SchemaNode SchemaNode = schemaNode;
+
+    public readonly uint Oid = oid;
     
     public string? Name { get; } = name;
 

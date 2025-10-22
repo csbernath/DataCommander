@@ -9,6 +9,8 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
 internal sealed class ColumnCollectionNode(TableNode tableNode) : ITreeNode
 {
+    public readonly TableNode TableNode = tableNode;
+    
     string? ITreeNode.Name => "Columns";
 
     bool ITreeNode.IsLeaf => false;
@@ -17,20 +19,19 @@ internal sealed class ColumnCollectionNode(TableNode tableNode) : ITreeNode
     {
         var schemaNode = tableNode.SchemaNode;
 
+        var commandText = $@"select
+    attname,
+    atttypid, 
+	attnotnull
+from pg_attribute
+where
+    attrelid  = {tableNode.Oid} and
+	attnum >= 1
+order by attnum";
+
         return await Db.ExecuteReaderAsync(
             schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection,
-            new ExecuteReaderRequest($@"select
-     c.column_name
-    ,c.is_nullable
-    ,c.data_type
-    ,c.character_maximum_length
-    ,c.numeric_precision
-    ,c.numeric_scale
-from information_schema.columns c
-where
-    c.table_schema = '{schemaNode.Name}'
-    and c.table_name = '{tableNode.Name}'
-order by c.ordinal_position"),
+            new ExecuteReaderRequest(commandText),
             128,
             ReadRecord,
             cancellationToken);
@@ -39,8 +40,9 @@ order by c.ordinal_position"),
     private ColumnNode ReadRecord(IDataRecord dataRecord)
     {
         var columnName = dataRecord.GetString(0);
-        var dataType = dataRecord.GetString(2);
-        return new ColumnNode(this, columnName, dataType);
+        var typeOid = dataRecord.GetUInt32(1);
+        var notNull = dataRecord.GetBoolean(2);
+        return new ColumnNode(this, columnName, typeOid, notNull);
     }
 
     bool ITreeNode.Sortable => false;

@@ -119,5 +119,8 @@ public static class IDataRecordExtensions
                 ? null
                 : dataRecord.GetString(fieldIndex);
         }
+
+        [CLSCompliant(false)]
+        public uint GetUInt32(int fieldIndex) => (uint)dataRecord.GetValue(fieldIndex);
     }
 }

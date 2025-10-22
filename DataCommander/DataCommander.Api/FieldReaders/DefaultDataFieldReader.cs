@@ -17,10 +17,11 @@ public sealed class DefaultDataFieldReader(IDataRecord dataRecord, int columnOrd
             }
             catch (Exception e)
             {
+                value = null;
+                
                 var name = dataRecord.GetName(columnOrdinal);
                 var dataTypeName = dataRecord.GetDataTypeName(columnOrdinal);
                 var message = $"dataRecord.GetValue(columnordinal) failed. Column name: {name}, column dataTypeName: {dataTypeName}";
-                throw new Exception(message, e);
             }
 
             return value;

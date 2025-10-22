@@ -28,7 +28,7 @@ from pg_type";
             128,
             dataRecord =>
             {
-                var oid = (uint)dataRecord.GetValue(0);
+                var oid = dataRecord.GetUInt32(0);
                 var typname = dataRecord.GetString(1);
                 return new PostgresSqlType(oid, typname);
             },

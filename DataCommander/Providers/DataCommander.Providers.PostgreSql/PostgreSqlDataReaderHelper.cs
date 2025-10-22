@@ -41,7 +41,7 @@ internal sealed class PostgreSqlDataReaderHelper : IDataReaderHelper
             PostgresEnumType postgresEnumType => throw new NotImplementedException(),
             PostgresMultirangeType postgresMultirangeType => throw new NotImplementedException(),
             PostgresRangeType postgresRangeType => throw new NotImplementedException(),
-            UnknownBackendType unknownBackendType => throw new NotImplementedException(),
+            UnknownBackendType unknownBackendType => new DefaultDataFieldReader(npgsqlDataReader, npgsqlDbColumn.ColumnOrdinal.Value),
             _ => new DefaultDataFieldReader(npgsqlDataReader, npgsqlDbColumn.ColumnOrdinal.Value)
         };
 

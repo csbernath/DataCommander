@@ -122,7 +122,7 @@ Please wait...";
                         var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() =>
                             treeNode2.GetChildren(false, cancellationToken).Result));
                         treeNode.Nodes.Clear();
-                        AddNodes(treeNode.Nodes, children, treeNode2.Sortable, startTimestamp);
+                        AddNodes(treeNode, treeNode.Nodes, children, treeNode2.Sortable, startTimestamp);
                     }
                     catch (Exception ex)
                     {
@@ -183,7 +183,7 @@ Please wait...";
             var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
                 textBoxText, _colorTheme);
             var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => treeNode!.GetChildren(true, cancellationToken).Result));
-            AddNodes(treeNodeV.Nodes, children, treeNode.Sortable, startTimestamp);
+            AddNodes(treeNodeV, treeNodeV.Nodes, children, treeNode.Sortable, startTimestamp);
         }
     }
 
@@ -207,7 +207,7 @@ Please wait...";
                     new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result));
                 var rootNodes = _tvObjectExplorer.Nodes;
                 rootNodes.Clear();
-                AddNodes(_tvObjectExplorer.Nodes, children, objectExplorer.Sortable, startTimestamp);
+                AddNodes(null, _tvObjectExplorer.Nodes, children, objectExplorer.Sortable, startTimestamp);
             }
         }
     }
