@@ -23,7 +23,7 @@ internal sealed class TableNode(SchemaNode schemaNode, uint oid, string? name) :
 
     bool ITreeNode.Sortable => false;
 
-    public bool DynamicChildCount => true;
+    public bool DynamicChildCount => false;
 
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
