@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
-using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
@@ -25,8 +24,8 @@ internal sealed class TriggerNode(DatabaseNode databaseNode, int id, string? nam
 
     public ContextMenu? GetContextMenu()
     {
-        var menuItemScriptObject = new MenuItem("Script Object", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        var items = new[] { menuItemScriptObject }.ToReadOnlyCollection();
+        var menuItemScriptObject = new MenuItem("Script Object", menuItemScriptObject_Click, []);
+        var items = new[] { menuItemScriptObject };
         var contextMenu = new ContextMenu(items);
         return contextMenu;
     }

@@ -37,7 +37,8 @@ public sealed class TextBuilder
 
     public void AddToLastLine(string text)
     {
-        Assert.IsValidOperation(_lines.Count > 0);
+        Assert.IsGreaterThan(_lines.Count, 0);
+        
         var last = _lines.Count - 1;
         var line = _lines[last];
         var modifiedLine = new Line(line.Indentation, line.Text + text);

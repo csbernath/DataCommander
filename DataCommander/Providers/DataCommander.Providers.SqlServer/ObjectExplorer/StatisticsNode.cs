@@ -6,8 +6,7 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class StatisticsNode(DatabaseNode databaseNode, string? name)
-    : ITreeNode
+internal sealed class StatisticsNode(DatabaseNode databaseNode, string? name) : ITreeNode
 {
     private readonly DatabaseNode _databaseNode = databaseNode;
 

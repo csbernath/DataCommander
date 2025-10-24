@@ -67,22 +67,10 @@ public sealed class QueryTextBox : UserControl
         }
     }
 
-    public void AddKeyWords(string[]? keyWords, Color color)
+    public void AddKeyWords(IReadOnlySet<string> keyWords, Color color)
     {
-        if (keyWords != null)
-        {
-            var keyWordList = new KeyWordList
-            {
-                KeyWords = new string[keyWords.Length]
-            };
-
-            for (var i = 0; i < keyWords.Length; ++i)
-                keyWordList.KeyWords[i] = keyWords[i].ToUpper();
-
-            keyWordList.Color = color;
-
-            _keyWordLists.Add(keyWordList);
-        }
+        var keyWordList = new KeyWordList(keyWords, color);
+        _keyWordLists.Add(keyWordList);
     }
 
     public ToolStripStatusLabel CaretPositionPanel
@@ -363,7 +351,7 @@ public sealed class QueryTextBox : UserControl
                         var keyWord = token.Value.ToUpper();
                         foreach (var keyWordList in _keyWordLists)
                         {
-                            if (Array.BinarySearch(keyWordList.KeyWords, keyWord) >= 0)
+                            if (keyWordList.KeyWords.Contains(keyWord))
                             {
                                 color = keyWordList.Color;
                                 break;
@@ -743,9 +731,9 @@ public sealed class QueryTextBox : UserControl
         //});
     }
 
-    private sealed class KeyWordList
+    private sealed class KeyWordList(IReadOnlySet<string> keyWords, Color color)
     {
-        public string[] KeyWords;
-        public Color Color;
+        public readonly IReadOnlySet<string> KeyWords = keyWords;
+        public readonly Color Color = color;
     }
 }

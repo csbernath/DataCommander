@@ -239,7 +239,7 @@ internal sealed class OleDbProvider : IProvider
     ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) =>
         new Connection(connectionStringAndCredential.ConnectionString);
 
-    string[] IProvider.KeyWords => null;
+    IReadOnlySet<string> IProvider.KeyWords => null;
 
     void IProvider.DeriveParameters(IDbCommand command) => throw new NotImplementedException();
 

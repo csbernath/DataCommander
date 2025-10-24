@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Foundation.Collections.ReadOnly;
 
 namespace Foundation.Text;
 
@@ -22,7 +21,7 @@ public static class StringExtensions
             }
         }
 
-        return lines.ToReadOnlyCollection();
+        return lines.ToArray();
     }
 
     private static Line ToLine(this string lineString, string indentation)

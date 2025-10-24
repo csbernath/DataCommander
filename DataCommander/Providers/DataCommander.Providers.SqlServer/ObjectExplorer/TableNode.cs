@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Collections;
-using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
@@ -115,24 +114,21 @@ where
 
     public ContextMenu? GetContextMenu()
     {
-        var editRows = new MenuItem("Edit Rows", EditRows, EmptyReadOnlyCollection<MenuItem>.Value);
+        var editRows = new MenuItem("Edit Rows", EditRows, []);
 
         var dropdownItems = new[]
         {
-            new MenuItem("CREATE to clipboard", CreateTableScriptToClipboard, Array.Empty<MenuItem>()),
-            new MenuItem("SELECT to clipboard", SelectScript_Click, Array.Empty<MenuItem>()),
-            new MenuItem("INSERT to clipboard", InsertScript_Click, Array.Empty<MenuItem>()),
-            new MenuItem("UPDATE to clipboard", UpdateScript_Click, Array.Empty<MenuItem>()),
-            new MenuItem("C# ORM to clipboard", CsharpOrm_Click, Array.Empty<MenuItem>()),
-            new MenuItem("C# DTO with properties to clipboard", DataTransferObjectWithProperties_Click, Array.Empty<MenuItem>())
+            new MenuItem("CREATE to clipboard", CreateTableScriptToClipboard, []),
+            new MenuItem("SELECT to clipboard", SelectScript_Click, []),
+            new MenuItem("INSERT to clipboard", InsertScript_Click, []),
+            new MenuItem("UPDATE to clipboard", UpdateScript_Click, []),
+            new MenuItem("C# ORM to clipboard", CsharpOrm_Click, []),
+            new MenuItem("C# DTO with properties to clipboard", DataTransferObjectWithProperties_Click, [])
         };
         var scriptTableAs = new MenuItem("Script Table as", null, dropdownItems);
-        var schema = new MenuItem("Schema", Schema_Click, Array.Empty<MenuItem>());
-        var indexes = new MenuItem("Indexes", Indexes_Click, Array.Empty<MenuItem>());
-
-        var items = new[] { editRows, scriptTableAs, schema, indexes }.ToReadOnlyCollection();
-        var menu = new ContextMenu(items);
-
+        var schema = new MenuItem("Schema", Schema_Click, []);
+        var indexes = new MenuItem("Indexes", Indexes_Click, []);
+        var menu = new ContextMenu([editRows, scriptTableAs, schema, indexes]);
         return menu;
     }
 

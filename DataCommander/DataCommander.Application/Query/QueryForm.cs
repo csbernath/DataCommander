@@ -89,11 +89,12 @@ public sealed partial class QueryForm : Form, IQueryForm
         _mnuGoTo!.Click += mnuGoTo_Click;
         _mnuClearCache!.Click += mnuClearCache_Click;
 
-        var sqlKeyWords = Settings.CurrentType!.Attributes["SqlReservedWords"].GetValue<string[]>();
+        var sqlKeyWords = Settings.CurrentType!.Attributes["SqlReservedWords"].GetValue<string[]>()!
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
         var providerKeyWords = provider.KeyWords;
 
         _queryTextBox!.SetColorTheme(colorTheme);
-        _queryTextBox.AddKeyWords(["exec"], colorTheme != null
+        _queryTextBox.AddKeyWords(new HashSet<string>(["exec"]), colorTheme != null
             ? colorTheme.ExecKeyWordColor
             : Color.Green);
         _queryTextBox.AddKeyWords(sqlKeyWords, colorTheme != null

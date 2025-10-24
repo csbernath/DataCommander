@@ -9,7 +9,6 @@ using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.QueryConfiguration;
 using Foundation.Collections;
-using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
@@ -102,7 +101,7 @@ internal sealed class LogResultWriter : IResultWriter
         if (_query != null)
         {
             var directory = _fileName != null ? Path.GetDirectoryName(_fileName) : Path.GetTempPath();
-            var results = _query.Results.EmptyIfNull().Zip(_results, ToResult).ToReadOnlyCollection();
+            var results = _query.Results.EmptyIfNull().Zip(_results, ToResult).ToArray();
             var query = new DbRequest(directory, _query.Name, _query.Using, _query.Namespace, _commandText, 0, _parameters, results);
 
             var queryBuilder = new DbRequestBuilder(query);
@@ -150,7 +149,7 @@ internal sealed class LogResultWriter : IResultWriter
 
         if (_query != null)
         {
-            var fields = dbColumns.Select(ToField).ToReadOnlyCollection();
+            var fields = dbColumns.Select(ToField).ToArray();
             var result = new Result(fields);
             _results!.Add(result);
         }

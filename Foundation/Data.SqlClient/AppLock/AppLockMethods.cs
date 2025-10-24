@@ -32,7 +32,7 @@ public static class AppLockMethods
             Direction = ParameterDirection.ReturnValue
         };
         builder.Add(returnCodeParameter);
-        var parameters = builder.ToReadOnlyCollection();
+        var parameters = builder.ToArray();
 
         var createCommandRequest = new CreateCommandRequest(commandText, parameters, CommandType.StoredProcedure, null, transaction);
         connection.CreateCommandExecutor().ExecuteNonQuery(createCommandRequest);

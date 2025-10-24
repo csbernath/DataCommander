@@ -26,12 +26,13 @@ public sealed class SQLiteProvider : IProvider
 
     public ConnectionBase CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(connectionStringAndCredential);
 
-    string[] IProvider.KeyWords
+    IReadOnlySet<string> IProvider.KeyWords
     {
         get
         {
             var node = Settings.CurrentType!;
-            var keyWords = node.Attributes["SQLiteKeyWords"].GetValue<string[]>()!;
+            var keyWords = node.Attributes["SQLiteKeyWords"].GetValue<string[]>()!
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
             return keyWords;
         }
     }

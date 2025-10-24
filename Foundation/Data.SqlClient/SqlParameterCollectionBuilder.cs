@@ -91,5 +91,7 @@ public class SqlParameterCollectionBuilder
         Add(parameter);
     }
 
+    public object[] ToArray() => _parameters.Cast<object>().ToArray();
+
     public IReadOnlyCollection<object> ToReadOnlyCollection() => _parameters.Cast<object>().ToArray();
 }

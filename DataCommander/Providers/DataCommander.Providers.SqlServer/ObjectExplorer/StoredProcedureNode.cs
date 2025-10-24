@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data.SqlClient;
 
@@ -29,9 +28,8 @@ internal sealed class StoredProcedureNode(DatabaseNode database, string owner, s
 
     public ContextMenu? GetContextMenu()
     {
-        var scriptObjectMenuItem = new MenuItem("Script Object", ScriptObjectMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        var menuItems = new[] { scriptObjectMenuItem }.ToReadOnlyCollection();
-        var contextMenu = new ContextMenu(menuItems);
+        var scriptObjectMenuItem = new MenuItem("Script Object", ScriptObjectMenuItem_Click, []);
+        var contextMenu = new ContextMenu([scriptObjectMenuItem]);
         return contextMenu;
     }
 

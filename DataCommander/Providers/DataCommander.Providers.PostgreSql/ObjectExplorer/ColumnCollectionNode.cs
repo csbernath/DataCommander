@@ -42,7 +42,11 @@ order by attnum";
         var columnName = dataRecord.GetString(0);
         var typeOid = dataRecord.GetUInt32(1);
         var notNull = dataRecord.GetBoolean(2);
-        return new ColumnNode(this, columnName, typeOid, notNull);
+
+        var typeRepository = TableNode.SchemaNode.SchemaCollectionNode.DatabaseNode.TypeRepository;
+        typeRepository.TryGetByOid(typeOid, out var type);
+        
+        return new ColumnNode(this, columnName, type!, notNull);
     }
 
     bool ITreeNode.Sortable => false;

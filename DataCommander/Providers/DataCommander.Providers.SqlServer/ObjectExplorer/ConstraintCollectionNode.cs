@@ -29,7 +29,7 @@ order by 1";
 
         var parameters = new SqlParameterCollectionBuilder();
         parameters.Add("object_id", id);
-        var request = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
+        var request = new ExecuteReaderRequest(commandText, parameters.ToArray());
         var executor = new SqlCommandExecutor(databaseNode.Databases.Server.CreateConnection);
         return await executor.ExecuteReaderAsync(
             request,

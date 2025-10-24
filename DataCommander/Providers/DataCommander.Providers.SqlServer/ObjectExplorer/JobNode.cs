@@ -4,7 +4,6 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 
@@ -36,10 +35,10 @@ internal sealed class JobNode : ITreeNode
 
     public ContextMenu? GetContextMenu()
     {
-        var menuItems = new[]
+        var menuItems = new MenuItem[]
         {
-            new MenuItem("HelpJob", OnHelpJobClick, EmptyReadOnlyCollection<MenuItem>.Value)
-        }.ToReadOnlyCollection();
+            new("HelpJob", OnHelpJobClick, [])
+        };
         var contextMenu = new ContextMenu(menuItems);
 
         return contextMenu;

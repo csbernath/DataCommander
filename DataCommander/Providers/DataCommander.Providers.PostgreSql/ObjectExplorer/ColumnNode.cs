@@ -10,25 +10,19 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 internal sealed class ColumnNode(
     ColumnCollectionNode columnCollectionNode,
     string name,
-    uint typeOid,
+    PostgresSqlType type,
     bool notNull) : ITreeNode
 {
     string? ITreeNode.Name
     {
         get
         {
-            if (!PostgresSqlTypeRepository.TryGetByOid(typeOid, out var type))
-            {
-                var types = columnCollectionNode.TableNode.SchemaNode.SchemaCollectionNode.DatabaseNode.PostgresSqlTypes;
-                types.TryGetValue(typeOid, out type);
-            }
-
-            var dataTypeName = type != null
-                ? type.Name
-                : typeOid.ToString();
-            
+            var typeRepository = columnCollectionNode.TableNode.SchemaNode.SchemaCollectionNode.DatabaseNode.TypeRepository!;
+            var typeName = typeRepository.TryGetPostgresSqlTypeName(type.Oid, out var postgresSqlTypeName)
+                ? postgresSqlTypeName!.Name
+                : type.Name;
             var sb = new StringBuilder();
-            sb.Append($"{name} ({dataTypeName}");
+            sb.Append($"{name} ({typeName}");
 
             if (notNull)
                 sb.Append(", not null");

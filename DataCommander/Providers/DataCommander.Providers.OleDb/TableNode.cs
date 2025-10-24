@@ -5,7 +5,6 @@ using System.Data.OleDb;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Foundation.Collections.ReadOnly;
 
 namespace DataCommander.Providers.OleDb;
 
@@ -53,8 +52,7 @@ sealed class TableNode(SchemaNode schema, string? name) : ITreeNode
     public ContextMenu? GetContextMenu()
     {
         var menuItem = new MenuItem("Columns", Columns_Click, []);
-        var items = new[] { menuItem }.ToReadOnlyCollection();
-        var contextMenu = new ContextMenu(items);
+        var contextMenu = new ContextMenu([menuItem]);
         return contextMenu;
     }
 

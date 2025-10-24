@@ -63,7 +63,7 @@ drop table #catalog";
         parameters.Add("@getSystemCatalogs", false);
 
         var executor = connection.CreateCommandExecutor();
-        var executeReaderRequest = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
+        var executeReaderRequest = new ExecuteReaderRequest(commandText, parameters.ToArray());
         return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(executeReaderRequest, 128,
             dataRecord => new LinkedServerCatalogNode(_linkedServer, dataRecord.GetString(0))));
     }

@@ -17,7 +17,6 @@ using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.FieldReaders;
 using DataCommander.Api.ResultWriter;
-using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
@@ -341,9 +340,9 @@ internal class DataTableEditor : UserControl
         var columns = _tableSchema.Columns;
         var stringBuilder = new StringBuilder();
         var first = true;
-        var uniqueIndexColumns = UniqueIndexColumns.ToReadOnlyCollection();
-        if (uniqueIndexColumns.Count == 0)
-            uniqueIndexColumns = columns.ToReadOnlyCollection();
+        var uniqueIndexColumns = UniqueIndexColumns.ToArray();
+        if (uniqueIndexColumns.Length == 0)
+            uniqueIndexColumns = columns.ToArray();
 
         foreach (var uniqueIndexColumn in uniqueIndexColumns)
         {

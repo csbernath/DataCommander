@@ -67,7 +67,7 @@ internal sealed class SqlServerProvider : IProvider
 
     ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(connectionStringAndCredential);
 
-    string[] IProvider.KeyWords => KeyWordRepository.Get();
+    IReadOnlySet<string> IProvider.KeyWords => KeyWordRepository.Get();
 
     bool IProvider.CanConvertCommandToString => true;
 

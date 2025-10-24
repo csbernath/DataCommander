@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
-using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 using Microsoft.Data.SqlClient;
 
@@ -48,8 +47,8 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
     {
         var menuItems = new MenuItem[]
         {
-            new("Properties", Properties_OnClick, EmptyReadOnlyCollection<MenuItem>.Value)
-        }.ToReadOnlyCollection();
+            new("Properties", Properties_OnClick, [])
+        };
         return new ContextMenu(menuItems);
     }
 

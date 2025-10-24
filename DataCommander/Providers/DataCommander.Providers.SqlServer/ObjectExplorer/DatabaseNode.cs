@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 using Foundation.Text;
@@ -56,10 +55,10 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
 
     public ContextMenu? GetContextMenu()
     {
-        var getInformationMenuItem = new MenuItem("Get information", GetInformationMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
+        var getInformationMenuItem = new MenuItem("Get information", GetInformationMenuItem_Click, []);
         var createDatabaseSnapshotMenuItem =
-            new MenuItem("Create database snapshot script to clipboard", CreateDatabaseSnapshotScriptToClipboardMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        var menuItems = new[] { getInformationMenuItem, createDatabaseSnapshotMenuItem }.ToReadOnlyCollection();
+            new MenuItem("Create database snapshot script to clipboard", CreateDatabaseSnapshotScriptToClipboardMenuItem_Click, []);
+        var menuItems = new[] { getInformationMenuItem, createDatabaseSnapshotMenuItem };
         var contextMenu = new ContextMenu(menuItems);
         return contextMenu;
     }

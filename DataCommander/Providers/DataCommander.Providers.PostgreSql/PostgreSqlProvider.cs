@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
+using Foundation.Configuration;
 using Foundation.Data;
 using Foundation.Log;
 using Npgsql;
@@ -21,7 +22,19 @@ internal sealed class PostgreSqlProvider : IProvider
 
     string IProvider.Identifier => "PostgreSql";
     DbProviderFactory IProvider.DbProviderFactory => NpgsqlFactory.Instance;
-    string[] IProvider.KeyWords => [];
+    
+    IReadOnlySet<string> IProvider.KeyWords
+    {
+        get
+        {
+            var path = ConfigurationNodeName.FromType(typeof(PostgreSqlProvider));
+            var node = Settings.SelectNode(path, true);
+            var keyWords = node.Attributes["KeyWords"].GetValue<string[]>()!
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            return keyWords;
+        }
+    }
+
     bool IProvider.CanConvertCommandToString => throw new NotImplementedException();
     bool IProvider.IsCommandCancelable => true;
     public IObjectExplorer? CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();

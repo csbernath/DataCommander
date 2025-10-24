@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 using Microsoft.Data.Sqlite;
 
@@ -66,9 +65,8 @@ where	name	= '{name}'";
 
         if (Name != "sqlite_master")
         {
-            var item = new MenuItem("Script", Script_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-            var items = new[] { item }.ToReadOnlyCollection();
-            contextMenu = new ContextMenu(items);
+            var item = new MenuItem("Script", Script_Click, []);
+            contextMenu = new ContextMenu([item]);
         }
 
         return contextMenu;

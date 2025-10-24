@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Foundation.Collections.ReadOnly;
 using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
@@ -36,9 +35,8 @@ internal sealed class ViewNode(DatabaseNode database, int id, string? schema, st
 
     public ContextMenu? GetContextMenu()
     {
-        var menuItemScriptObject = new MenuItem("Script View as CREATE to clipboard", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        var items = new[] { menuItemScriptObject }.ToReadOnlyCollection();
-        var contextMenu = new ContextMenu(items);
+        var menuItemScriptObject = new MenuItem("Script View as CREATE to clipboard", menuItemScriptObject_Click, []);
+        var contextMenu = new ContextMenu([menuItemScriptObject]);
         return contextMenu;
     }
 
