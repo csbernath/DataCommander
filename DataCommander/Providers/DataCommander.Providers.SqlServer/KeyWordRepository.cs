@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DataCommander.Api;
 using Foundation.Configuration;
 
 namespace DataCommander.Providers.SqlServer;
@@ -15,8 +16,9 @@ internal static class KeyWordRepository
         {
             var path = ConfigurationNodeName.FromType(typeof(SqlServerProvider));
             var folder = Settings.SelectNode(path, true);
-            _keyWords = folder.Attributes["TSqlKeyWords"].GetValue<string[]>()!
-                    .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var transactSqlKeyWordsArray = folder.Attributes["TSqlKeyWords"].GetValue<string[]>()!;
+            Words.AssertOrder(transactSqlKeyWordsArray);
+            _keyWords = transactSqlKeyWordsArray.ToHashSet(StringComparer.OrdinalIgnoreCase);
         }
 
         return _keyWords;

@@ -348,7 +348,7 @@ public sealed class QueryTextBox : UserControl
                         color = _colorTheme != null
                             ? _colorTheme.ForeColor
                             : Color.Black;
-                        var keyWord = token.Value.ToUpper();
+                        var keyWord = token.Value;
                         foreach (var keyWordList in _keyWordLists)
                         {
                             if (keyWordList.KeyWords.Contains(keyWord))

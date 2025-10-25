@@ -460,11 +460,10 @@ Please wait...";
     {
         try
         {
-            var sqlKeyWords = Settings.CurrentType.Attributes["SqlReservedWords"].GetValue<string[]>()!;
+            var sqlReservedWords = SqlReservedWordsRepository.Get();
             var providerKeyWords = Provider.KeyWords;
-            var keyWordHashSet = sqlKeyWords.Concat(providerKeyWords)
-                .Select(keyWord => keyWord.ToUpper())
-                .ToHashSet();
+            var keyWordHashSet = sqlReservedWords.Concat(providerKeyWords)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
             _sqlStatement = new SqlParser(Query);
             _command = _sqlStatement.CreateCommand(Provider, Connection, CommandType.Text, _commandTimeout);
@@ -730,7 +729,7 @@ Please wait...";
         if (sender != null && e.Button == MouseButtons.Middle)
         {
             var tabControl = (TabControl)sender;
-            var hitTestInfo = new Tchittestinfo(e.X, e.Y);
+            var hitTestInfo = new QueryForm.Tchittestinfo(e.X, e.Y);
             var index = SendMessage(tabControl.Handle, TcmHittest, IntPtr.Zero, ref hitTestInfo);
             if (index >= 0)
             {

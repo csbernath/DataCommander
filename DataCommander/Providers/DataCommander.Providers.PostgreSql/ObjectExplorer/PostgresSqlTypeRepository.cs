@@ -13,7 +13,7 @@ public class PostgresSqlTypeRepository
     public readonly PostgresSqlTypeName TimestampWithTimeZone;
     public readonly PostgresSqlTypeName RefCursor;
     public readonly PostgresSqlTypeName Uuid;
-    
+
     private readonly Dictionary<uint, PostgresSqlTypeName> _postgresSqlTypeNames;
 
     public PostgresSqlTypeRepository(Dictionary<uint, PostgresSqlType> postgresSqlTypes)
@@ -42,16 +42,4 @@ public class PostgresSqlTypeRepository
 
     public bool TryGetPostgresSqlTypeName(uint oid, out PostgresSqlTypeName? postgresSqlTypeName) =>
         _postgresSqlTypeNames.TryGetValue(oid, out postgresSqlTypeName);
-
-    // private static readonly PostgresSqlType[] Array =
-    // [
-    //     Boolean,
-    //     Integer,
-    //     CharacterVarying,
-    //     RefCursor,
-    //     TimestampWithTimeZone,
-    //     Uuid
-    // ];
-
-    // private static readonly Dictionary<uint, PostgresSqlType> ByOid = Array.ToDictionary(t => t.Oid);
 }
