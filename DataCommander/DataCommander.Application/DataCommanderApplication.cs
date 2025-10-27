@@ -17,10 +17,7 @@ public sealed class DataCommanderApplication
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private string? _sectionName;
     private readonly bool _updaterStarted = false;
-    
-#pragma warning disable WFO5001
     private SystemColorMode _colorMode;
-#pragma warning restore WFO5001
 
     private DataCommanderApplication()
     {
@@ -43,14 +40,11 @@ public sealed class DataCommanderApplication
     public ApplicationData ApplicationData { get; private set; }
 
     public string? ApplicationDataFileName { get; private set; }
-    
-#pragma warning disable WFO5001
+
     public SystemColorMode ColorMode => _colorMode;
-#pragma warning restore WFO5001
 
     public MainForm? MainForm { get; private set; }
 
-#pragma warning disable WFO5001    
     public void Run(SystemColorMode colorMode)
     {
         _colorMode = colorMode;
@@ -67,7 +61,6 @@ public sealed class DataCommanderApplication
             System.Windows.Forms.Application.Run(MainForm);
         }
     }
-#pragma warning restore WFO5001    
 
     public void SaveApplicationData()
     {

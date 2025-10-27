@@ -65,7 +65,6 @@ public class MainForm : Form
     private readonly System.Windows.Forms.Timer _timer;
     private ColorTheme? _colorTheme;
 
-#pragma warning disable WFO5001
     private void SetColorTheme(SystemColorMode colorMode)
     {
         switch (colorMode)
@@ -86,7 +85,6 @@ public class MainForm : Form
                 throw new ArgumentOutOfRangeException(nameof(colorMode), colorMode, null);
         }
     }
-#pragma warning enable WFO5001
 
     public MainForm()
     {

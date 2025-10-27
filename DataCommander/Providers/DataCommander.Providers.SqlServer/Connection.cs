@@ -45,7 +45,7 @@ internal sealed class Connection : ConnectionBase
 
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine($"Server name:     {_serverName}");
-            stringBuilder.Append(version);
+            stringBuilder.AppendLine(version);
             stringBuilder.AppendLine($"Description:     {description}");
             stringBuilder.Append($"ServerProcessId: {_serverProcessId}");
             return stringBuilder.ToString();

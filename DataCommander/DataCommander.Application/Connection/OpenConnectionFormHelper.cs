@@ -4,7 +4,7 @@ using DataCommander.Api.Connection;
 
 namespace DataCommander.Application.Connection;
 
-internal sealed class OpenConnectionFormHelper
+internal static class OpenConnectionFormHelper
 {
     public static string CreateOpenConnectionFormText(ConnectionInfo connectionInfo, ProviderInfo providerInfo, IProvider provider)
     {
@@ -16,21 +16,27 @@ internal sealed class OpenConnectionFormHelper
         var host = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.Host, out var hostObject)
             ? (string?)hostObject
             : null;
-        var containsIntegratedSecurity = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
+        bool? integratedSecurity = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurityObject)
+            ? (bool)integratedSecurityObject!
+            : null;
         var stringBuilder = new StringBuilder();
         stringBuilder.Append($@"Opening connection...
 
 Connection name: {connectionInfo.ConnectionName}
 Provider name: {providerInfo.Name}");
+        
         if (dataSource != null)
             stringBuilder.Append($"\r\n{ConnectionStringKeyword.DataSource}: {dataSource}");
         else if (host != null)
             stringBuilder.Append($"\r\n{ConnectionStringKeyword.Host}: {host}");
-        if (containsIntegratedSecurity)
+        
+        if (integratedSecurity == true)
             stringBuilder.Append($"\r\n{ConnectionStringKeyword.IntegratedSecurity}: {integratedSecurity}");
+        
         var credential = connectionInfo.ConnectionStringAndCredential.Credential;
         if (credential != null)
             stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {credential.UserId}");
+        
         var text = stringBuilder.ToString();
         return text;
     }

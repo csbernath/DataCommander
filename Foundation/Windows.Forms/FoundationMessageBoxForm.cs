@@ -37,9 +37,7 @@ internal class FoundationMessageBoxForm : Form
         Font = new Font("Segoe UI", 8);
 
         FormBorderStyle = FormBorderStyle.FixedDialog;
-// #pragma warning disable WFO5001
-//         FormCornerPreference = FormCornerPreference.DoNotRound;
-// #pragma warning restore WFO5001
+        //FormCornerPreference = FormCornerPreference.DoNotRound;
         KeyPreview = true;
         MaximizeBox = false;
         MinimizeBox = false;

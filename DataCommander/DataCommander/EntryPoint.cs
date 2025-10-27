@@ -73,7 +73,6 @@ internal static class EntryPoint
     //    return updateStarted;
     //}
 
-#pragma warning disable WFO5001    
     private static void Run()
     {
         var applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(true);
@@ -91,7 +90,6 @@ internal static class EntryPoint
             attributes.TryGetAttributeValue("InitializeApplicationConfiguration", true, out initializeApplicationConfiguration);
         }
 
-#pragma warning disable WFO5001
         if (colorMode == SystemColorMode.System && !AppsUseLightTheme())
             colorMode = SystemColorMode.Dark;
 
@@ -106,9 +104,6 @@ internal static class EntryPoint
             // ? (IMessageBox)new TestMessageBox()
             : new SystemMessageBox();
         DataCommanderMessageBox.Set(messageBox);
-        
-#pragma warning restore WFO5001
-        
         using var methodLog = LogFactory.Instance.GetCurrentMethodLog();
         methodLog.Write(LogLevel.Trace, "fileName: {0}", fileName);
         var dataCommanderApplication = DataCommanderApplication.Instance;
