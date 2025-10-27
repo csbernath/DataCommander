@@ -1,5 +1,8 @@
-﻿namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
+﻿using System;
 
+namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
+
+[CLSCompliant(false)]
 public static class PostgresSqlTypeOid
 {
     public const uint Boolean = 16;

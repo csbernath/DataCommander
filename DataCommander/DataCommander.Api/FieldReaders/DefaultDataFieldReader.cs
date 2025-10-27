@@ -5,17 +5,17 @@ namespace DataCommander.Api.FieldReaders;
 
 public sealed class DefaultDataFieldReader(IDataRecord dataRecord, int columnOrdinal) : IDataFieldReader
 {
-    object IDataFieldReader.Value
+    object? IDataFieldReader.Value
     {
         get
         {
-            object value;
+            object? value;
 
             try
             {
                 value = dataRecord.GetValue(columnOrdinal);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 value = null;
                 

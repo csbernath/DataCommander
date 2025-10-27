@@ -1,5 +1,8 @@
-﻿namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
+﻿using System;
 
+namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
+
+[CLSCompliant(false)]
 public class PostgresSqlNamespace(uint oid, string name)
 {
     public readonly uint Oid = oid;

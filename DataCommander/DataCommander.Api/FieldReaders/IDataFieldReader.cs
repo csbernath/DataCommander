@@ -2,5 +2,5 @@
 
 public interface IDataFieldReader
 {
-    object Value { get; }
+    object? Value { get; }
 }

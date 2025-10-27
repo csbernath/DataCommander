@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
+[CLSCompliant(false)]
 public class PostgresSqlTypeRepository
 {
     private readonly Dictionary<uint, PostgresSqlType> _postgresSqlTypes;
