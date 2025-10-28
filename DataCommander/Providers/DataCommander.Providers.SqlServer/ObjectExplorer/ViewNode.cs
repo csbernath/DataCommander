@@ -30,7 +30,7 @@ internal sealed class ViewNode(DatabaseNode database, int id, string? schema, st
         string? text;
         using (var connection = database.Databases.Server.CreateConnection())
             text = TableNode.GetSelectStatement(connection, name1);
-        return Task.FromResult(text);
+        return Task.FromResult(text)!;
     }
 
     public ContextMenu? GetContextMenu()

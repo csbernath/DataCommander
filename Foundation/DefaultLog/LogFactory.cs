@@ -52,7 +52,7 @@ internal sealed class LogFactory : ILogFactory
     {
         var logWriter = new LogWriter(new TextLogWriter(TraceWriter.Instance, new TextLogFormatter()), LogLevel.Debug);
         _dateTimeProvider = LocalTime.Default;
-        _multipeLog = new MultipleLog(logWriter.ItemToArray());
+        _multipeLog = new MultipleLog([logWriter]);
     }
 
     string? ILogFactory.FileName

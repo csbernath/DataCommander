@@ -19,7 +19,7 @@ internal sealed class FunctionCollectionNode(DatabaseNode database) : ITreeNode
 
     public bool Sortable => false;
 
-    public bool DynamicChildCount => true;
+    public bool DynamicChildCount => false;
 
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 

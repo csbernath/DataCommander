@@ -9,13 +9,13 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class ObjectExplorer : IObjectExplorer
 {
-    private ConnectionStringAndCredential _connectionStringAndCredential;
+    private ConnectionStringAndCredential? _connectionStringAndCredential;
 
     void IObjectExplorer.SetConnectionStringAndCredential(ConnectionStringAndCredential connectionStringAndCredential) =>
         _connectionStringAndCredential = connectionStringAndCredential;
 
     Task<IEnumerable<ITreeNode>> IObjectExplorer.GetChildren(bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>(new ServerNode(_connectionStringAndCredential).ItemToArray());
+        Task.FromResult<IEnumerable<ITreeNode>>([new ServerNode(_connectionStringAndCredential!)]);
 
     bool IObjectExplorer.Sortable => false;
 }

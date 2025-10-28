@@ -31,7 +31,7 @@ join {database.Name}..sysusers u
 where memberuid = @uid
 group by u.name";
 
-        return Task.FromResult(query);
+        return Task.FromResult(query)!;
     }
 
     public ContextMenu? GetContextMenu() => null;

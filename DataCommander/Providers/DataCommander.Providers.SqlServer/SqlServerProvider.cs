@@ -272,7 +272,7 @@ internal sealed class SqlServerProvider : IProvider
     {
         var dbType = (SqlDbType)column.ProviderType;
         var columnSize = column.ColumnSize;
-        Type type;
+        Type? type;
 
         switch (dbType)
         {
@@ -419,12 +419,12 @@ internal sealed class SqlServerProvider : IProvider
                                 break;
 
                             case 2:
-                                if (nameParts[0] != null)
+                                if (nameParts![0] != null)
                                 {
-                                    statements.Add(SqlServerObject.GetSchemas(nameParts[0]));
+                                    statements.Add(SqlServerObject.GetSchemas(nameParts[0]!));
 
                                     var objectTypes = sqlObject.Type.ToObjectTypes();
-                                    statements.Add(SqlServerObject.GetObjects(nameParts[0], objectTypes));
+                                    statements.Add(SqlServerObject.GetObjects(nameParts[0]!, objectTypes));
                                 }
 
                                 break;
@@ -670,7 +670,7 @@ from
         return dataTable;
     }
 
-    DataTable IProvider.GetSchemaTable(IDataReader dataReader)
+    DataTable? IProvider.GetSchemaTable(IDataReader dataReader)
     {
         DataTable? table = null;
         var schemaTable = dataReader.GetSchemaTable();

@@ -28,8 +28,8 @@ public static class IDbCommandExecutorExtensions
             ArgumentNullException.ThrowIfNull(executor);
             ArgumentNullException.ThrowIfNull(request);
 
-            var requests = new ExecuteCommandRequest(request, execute).ItemToArray();
-            executor.Execute(requests);
+            var executeCommandRequest = new ExecuteCommandRequest(request, execute);
+            executor.Execute([executeCommandRequest]);
         }
 
         public int ExecuteNonQuery(CreateCommandRequest request)

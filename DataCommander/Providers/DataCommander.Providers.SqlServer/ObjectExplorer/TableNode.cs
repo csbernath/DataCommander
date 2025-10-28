@@ -109,7 +109,7 @@ where
         using var connection = DatabaseNode.Databases.Server.CreateConnection();
         connection.Open();
         var text = GetSelectStatement(connection, multipartName);
-        return Task.FromResult(text);
+        return Task.FromResult(text)!;
     }
 
     public ContextMenu? GetContextMenu()

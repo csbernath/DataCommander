@@ -29,7 +29,7 @@ on m.memberuid = u.uid
 where m.groupuid = @uid
 order by u.name", database.Name, Name);
 
-        return Task.FromResult(query);
+        return Task.FromResult(query)!;
     }
 
     public ContextMenu? GetContextMenu() => null;

@@ -22,11 +22,11 @@ internal sealed class SecurityNode : ITreeNode
     bool ITreeNode.IsLeaf => false;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>(new LoginCollectionNode(_server).ItemToArray());
+        Task.FromResult<IEnumerable<ITreeNode>>([new LoginCollectionNode(_server)]);
 
     bool ITreeNode.Sortable => false;
 
-    public bool DynamicChildCount => true;
+    public bool DynamicChildCount => false;
 
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
