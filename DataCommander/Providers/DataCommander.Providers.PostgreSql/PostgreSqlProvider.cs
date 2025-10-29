@@ -28,7 +28,7 @@ internal sealed class PostgreSqlProvider : IProvider
         get
         {
             var path = ConfigurationNodeName.FromType(typeof(PostgreSqlProvider));
-            var node = Settings.SelectNode(path, true);
+            var node = Settings.SelectNode(path, true)!;
             var keyWords = node.Attributes["KeyWords"].GetValue<string[]>()!
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
             return keyWords;

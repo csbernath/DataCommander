@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Foundation.Windows.Forms;
+using Xunit;
 
 namespace Windows.Forms.Tests;
 
@@ -9,7 +10,7 @@ public class UnitTest1
     {
         Application.SetColorMode(SystemColorMode.Dark);
         const string? text = null;
-        // var testMessageBox = new TestMessageBox();
-        // testMessageBox.Show(text);
+        var testMessageBox = new TestMessageBox();
+        testMessageBox.Show(text);
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Foundation.Linq;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 

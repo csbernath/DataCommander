@@ -22,7 +22,7 @@ internal sealed class StoredProcedureNode(DatabaseNode database, string owner, s
 
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        var query = $"exec {owner}.{name}";
+        var query = $"exec {ObjectName.QuoteIdentifier(owner)}.{ObjectName.QuoteIdentifier(name)}";
         return Task.FromResult(query)!;
     }
 

@@ -21,7 +21,7 @@ using Sequence = Foundation.Core.Sequence;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class TableNode(DatabaseNode databaseNode, string? owner, string? name, int id, TemporalType type)
+internal sealed class TableNode(DatabaseNode databaseNode, string owner, string name, int id, TemporalType type)
     : ITreeNode
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
@@ -84,7 +84,7 @@ where
                     historyTableObjectId = dataReader.GetInt32(2);
                 },
                 cancellationToken);
-            treeNodes.Add(new TableNode(DatabaseNode, historyTableSchemaName, historyTableName, historyTableObjectId, TemporalType.HistoryTable));
+            treeNodes.Add(new TableNode(DatabaseNode, historyTableSchemaName!, historyTableName!, historyTableObjectId, TemporalType.HistoryTable));
         }
 
         treeNodes.AddRange([
@@ -399,7 +399,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
 
     private static Column ReadColumn(IDataRecord dataRecord)
     {
-        var columnName = dataRecord.GetStringOrDefault(0);
+        var columnName = dataRecord.GetString(0);
         var typeName = dataRecord.GetString(1);
         var maxLength = dataRecord.GetInt16(2);
         var precision = dataRecord.GetByte(3);

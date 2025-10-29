@@ -42,7 +42,7 @@ order by i.name";
             128,
             dataRecord =>
             {
-                var name = dataRecord.GetStringOrDefault(0);
+                var name = dataRecord.GetString(0);
                 var indexId = dataRecord.GetInt32(1);
                 var type = dataRecord.GetByte(2);
                 var isUnique = dataRecord.GetBoolean(3);

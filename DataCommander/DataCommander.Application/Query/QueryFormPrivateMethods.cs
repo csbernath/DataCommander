@@ -15,7 +15,6 @@ using DataCommander.Api.Query;
 using DataCommander.Application.ResultWriter;
 using Foundation.Core;
 using Foundation.Data;
-using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
 using Foundation.Threading;

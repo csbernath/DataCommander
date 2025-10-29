@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -15,8 +16,11 @@ internal sealed class ObjectExplorer : IObjectExplorer
 
     public NpgsqlConnection CreateConnection(string database)
     {
-        var connectionStringBuilder = new NpgsqlConnectionStringBuilder(_connectionStringAndCredential.ConnectionString);
-        connectionStringBuilder.Database = database;
+        ArgumentNullException.ThrowIfNull(_connectionStringAndCredential);
+        var connectionStringBuilder = new NpgsqlConnectionStringBuilder(_connectionStringAndCredential.ConnectionString)
+        {
+            Database = database
+        };
         var connectionString = connectionStringBuilder.ConnectionString;
         var connectionStringAndCredential = new ConnectionStringAndCredential(connectionString, _connectionStringAndCredential.Credential);
         return ConnectionFactory.CreateConnection(connectionStringAndCredential);

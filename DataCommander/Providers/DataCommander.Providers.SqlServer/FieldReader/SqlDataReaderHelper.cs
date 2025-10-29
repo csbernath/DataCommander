@@ -25,7 +25,7 @@ internal sealed class SqlDataReaderHelper : IDataReaderHelper
         }
     }
 
-    int IDataReaderHelper.GetValues(object[] values)
+    int IDataReaderHelper.GetValues(object?[] values)
     {
         for (var i = 0; i < _dataFieldReaders!.Length; i++)
             values[i] = _dataFieldReaders[i].Value;

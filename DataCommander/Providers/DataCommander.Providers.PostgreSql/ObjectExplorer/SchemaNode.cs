@@ -18,6 +18,7 @@ internal sealed class SchemaNode(SchemaCollectionNode schemaCollectionNode, uint
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) =>
         Task.FromResult<IEnumerable<ITreeNode>>(
         [
+            new FunctionCollectionNode(this),
             new ProcedureCollectionNode(this),
             new SequenceCollectionNode(this),
             new TableCollectionNode(this),

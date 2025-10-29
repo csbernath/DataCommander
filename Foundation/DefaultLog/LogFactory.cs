@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using Foundation.Configuration;
 using Foundation.Core;
-using Foundation.Linq;
 using Foundation.Log;
 
 namespace Foundation.DefaultLog;

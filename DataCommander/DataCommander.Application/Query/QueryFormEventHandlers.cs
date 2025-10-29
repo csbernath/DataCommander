@@ -18,11 +18,9 @@ using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.Query;
 using DataCommander.Application.ResultWriter;
-using Foundation.Configuration;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Diagnostics;
-using Foundation.Linq;
 using Foundation.Windows.Forms;
 using Microsoft.Data.SqlClient;
 

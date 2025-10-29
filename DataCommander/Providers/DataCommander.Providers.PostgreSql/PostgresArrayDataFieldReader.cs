@@ -7,5 +7,5 @@ namespace DataCommander.Providers.PostgreSql;
 [CLSCompliant(false)]
 public class PostgresArrayDataFieldReader(NpgsqlDataReader dataRecord, int ordinal) : IDataFieldReader
 {
-    public object Value => null;
+    public object? Value => null;
 }

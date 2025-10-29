@@ -17,7 +17,7 @@ internal sealed class ColumnCollectionNode(TableNode tableNode) : ITreeNode
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var schemaNode = tableNode.SchemaNode;
+        var schemaNode = TableNode.SchemaNode;
 
         var commandText = $@"select
     attname,
@@ -25,7 +25,7 @@ internal sealed class ColumnCollectionNode(TableNode tableNode) : ITreeNode
 	attnotnull
 from pg_attribute
 where
-    attrelid  = {tableNode.Oid} and
+    attrelid  = {TableNode.Oid} and
 	attnum >= 1
 order by attnum";
 

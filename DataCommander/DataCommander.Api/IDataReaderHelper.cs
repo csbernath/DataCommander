@@ -2,5 +2,5 @@
 
 public interface IDataReaderHelper
 {
-    int GetValues(object[] values);
+    int GetValues(object?[] values);
 }

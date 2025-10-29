@@ -10,7 +10,6 @@ using DataCommander.Api.Connection;
 using DataCommander.Api.Query;
 using DataCommander.Application.ResultWriter;
 using Foundation.Diagnostics;
-using Foundation.Linq;
 using Foundation.Log;
 
 namespace DataCommander.Application.Query;

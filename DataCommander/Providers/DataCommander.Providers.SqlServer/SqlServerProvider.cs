@@ -353,7 +353,7 @@ internal sealed class SqlServerProvider : IProvider
                 }
                 else
                 {
-                    SortedList<string, object> list = [];
+                    SortedList<string, object?> list = [];
 
                     for (var i = 0; i < tokens.Count; i++)
                     {
@@ -494,7 +494,7 @@ end", name.Database, ownersString, name.Name);
                         if (name.Schema == null)
                             name.Schema = "dbo";
 
-                        commandText = SqlServerObject.GetObjectsByDatabase(name.Database, ["P", "X"]);
+                        commandText = SqlServerObject.GetObjectsByDatabase(name.Database!, ["P", "X"]);
                         break;
 
                     case SqlObjectTypes.Trigger:
@@ -507,7 +507,7 @@ end", name.Database, ownersString, name.Name);
                         var sqlCommandBuilder = new SqlCommandBuilder();
                         var columnName = sqlCommandBuilder.QuoteIdentifier(items[i]);
 
-                        string tableNameOrAlias = null;
+                        string? tableNameOrAlias = null;
                         if (i > 0)
                         {
                             i--;
@@ -606,8 +606,10 @@ from
                 array = list;
             }
         }
+        
+        ArgumentNullException.ThrowIfNull(array);
 
-        return new GetCompletionResult(startPosition, length, array, fromCache);
+        return new GetCompletionResult(startPosition, length, array!, fromCache);
     }
 
     DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)

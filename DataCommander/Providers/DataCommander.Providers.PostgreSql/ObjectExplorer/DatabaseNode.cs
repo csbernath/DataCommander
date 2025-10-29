@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,14 +9,32 @@ using Npgsql;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string? name) : ITreeNode
+internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string name) : ITreeNode
 {
-    public PostgresSqlNamespaceRepository? NamespaceRepository;
-    public PostgresSqlTypeRepository? TypeRepository;
-    
+    private PostgresSqlNamespaceRepository? _namespaceRepository;
+    private PostgresSqlTypeRepository? _typeRepository;
+
+    public PostgresSqlNamespaceRepository NamespaceRepository
+    {
+        get
+        {
+            ArgumentNullException.ThrowIfNull(_namespaceRepository);
+            return _namespaceRepository;
+        }
+    }
+
+    public PostgresSqlTypeRepository TypeRepository
+    {
+        get
+        {
+            ArgumentNullException.ThrowIfNull(_typeRepository);
+            return _typeRepository;
+        }
+    }
+
     public DatabaseCollectionNode DatabaseCollectionNode { get; } = databaseCollectionNode;
 
-    public string? Name { get; } = name;
+    public string Name { get; } = name;
 
     bool ITreeNode.IsLeaf => false;
 
@@ -52,25 +71,25 @@ from pg_type";
                 var oid = dataRecord.GetUInt32(0);
                 var typname = dataRecord.GetString(1);
                 var typnamespace = dataRecord.GetUInt32(2);
-                NamespaceRepository!.TryGetByOid(typnamespace, out var @namespace);
+                _namespaceRepository!.TryGetByOid(typnamespace, out var @namespace);
                 var typcategory = dataRecord.GetChar(3);
                 var category = ToTypeCategory(typcategory);
                 var typelem = dataRecord.GetUInt32(4);
                 return new
                 {
-                    PostgresSqlType = new PostgresSqlType(oid, typname, @namespace, category, null),
+                    PostgresSqlType = new PostgresSqlType(oid, typname, @namespace!, category, null),
                     typelem
                 };
             },
             cancellationToken);
 
-        TypeRepository = new PostgresSqlTypeRepository(
+        _typeRepository = new PostgresSqlTypeRepository(
             types.Select(i => i.PostgresSqlType)
                 .ToDictionary(t => t.Oid));
             
         foreach (var t in types.Where(i => i.typelem != 0))
         {
-            TypeRepository.TryGetByOid(t.typelem, out var elementType);
+            _typeRepository.TryGetByOid(t.typelem, out var elementType);
             t.PostgresSqlType.ElementType = elementType;
         }
     }
@@ -92,7 +111,7 @@ from pg_namespace";
             },
             cancellationToken);
 
-        NamespaceRepository = new PostgresSqlNamespaceRepository(
+        _namespaceRepository = new PostgresSqlNamespaceRepository(
             namespaces.ToDictionary(n => n.Oid));
     }
 
@@ -115,5 +134,5 @@ from pg_namespace";
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 
-    public NpgsqlConnection CreateConnection() => DatabaseCollectionNode.ObjectExplorer.CreateConnection(name);
+    public NpgsqlConnection CreateConnection() => DatabaseCollectionNode.ObjectExplorer.CreateConnection(Name);
 }

@@ -5,7 +5,7 @@ namespace Foundation.Windows.Forms
 {
     public class TestMessageBox : IMessageBox
     {
-        private readonly FoundationMessageBox _foundationMessageBox = new FoundationMessageBox();
+        private readonly FoundationMessageBox _foundationMessageBox = new();
 
         public DialogResult Show(string? text)
         {

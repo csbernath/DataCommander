@@ -10,7 +10,7 @@ using Foundation.Text;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class ProcedureNode(
+internal sealed class FunctionNode(
     SchemaNode schemaNode,
     uint oid,
     string name, 
@@ -38,6 +38,7 @@ internal sealed class ProcedureNode(
     private async void CreatScriptClicked(object? sender, EventArgs e)
     {
         var typeRepository = schemaNode.SchemaCollectionNode.DatabaseNode.TypeRepository;
+        
         var commandText = $@"select prosrc
 from pg_proc
 where oid = {oid}";
@@ -48,7 +49,7 @@ where oid = {oid}";
         var prosrc = (string)scalar!;
 
         var textBuilder = new TextBuilder();
-        textBuilder.Add($"CREATE OR REPLACE PROCEDURE \"{schemaNode.Name}\".\"{name}\"(");
+        textBuilder.Add($"CREATE OR REPLACE FUNCTION \"{schemaNode.Name}\".\"{name}\"(");
 
         using (textBuilder.Indent(1))
         {

@@ -22,12 +22,15 @@ internal sealed class SchemaCollectionNode(DatabaseNode databaseNode) : ITreeNod
 
     public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        const string commandText = @"select oid,nspname
+        const string commandText = @"select
+    oid,
+    nspname
 from pg_namespace
-where nspname not in('information_schema','pg_catalog','pg_toast')
-order by 2";
+where
+    nspname not in('information_schema','pg_catalog','pg_toast')
+order by nspname";
         var databaseNodes = await Db.ExecuteReaderAsync(
-            databaseNode.CreateConnection,
+            DatabaseNode.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
             dataRecord =>
