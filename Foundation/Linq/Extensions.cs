@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
@@ -23,9 +22,6 @@ public static class Extensions
         ArgumentNullException.ThrowIfNull(collection, nameof(collection));
         return collection.Contains(item);
     }
-
-    public static T[] ItemToArray<T>(this T item) => [item];
-    public static IEnumerable<T> ItemAsEnumerable<T>(this T item) => [item];
 
     public static string? ToLogXmlString(this object source)
     {

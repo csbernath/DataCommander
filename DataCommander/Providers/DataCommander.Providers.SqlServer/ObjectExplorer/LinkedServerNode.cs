@@ -20,7 +20,10 @@ internal sealed class LinkedServerNode : ITreeNode
     public string? Name { get; }
     string? ITreeNode.Name => Name;
     bool ITreeNode.IsLeaf => false;
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>(new LinkedServerCatalogCollectionNode(this).ItemAsEnumerable());
+
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
+        Task.FromResult<IEnumerable<ITreeNode>>([new LinkedServerCatalogCollectionNode(this)]);
+    
     bool ITreeNode.Sortable => false;
 
     public bool DynamicChildCount => true;
