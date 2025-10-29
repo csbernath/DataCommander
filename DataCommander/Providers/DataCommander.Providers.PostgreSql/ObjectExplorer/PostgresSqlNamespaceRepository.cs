@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Npgsql.Internal.Postgres;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 

@@ -21,19 +21,19 @@ internal sealed class TableCollectionNode(SchemaNode schemaNode) : ITreeNode
 	relname
 from pg_class
 where
-	relnamespace = {schemaNode.Oid} and
+	relnamespace = {SchemaNode.Oid} and
 	relkind = 'r'
 order by relname";
 
         var tableNodes = await Db.ExecuteReaderAsync(
-            schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection,
+            SchemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
             dataRecord =>
             {
                 var oid = dataRecord.GetUInt32(0);
                 var name = dataRecord.GetString(1);
-                return new TableNode(schemaNode, oid, name);
+                return new TableNode(SchemaNode, oid, name);
             },
             cancellationToken);
 
