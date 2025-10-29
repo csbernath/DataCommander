@@ -669,7 +669,7 @@ Please wait...";
         var tableName = sqlStatement.FindTableName();
         var sqlCeResultWriter = new SqlCeResultWriter(_textBoxWriter, tableName);
         var asyncDataAdapter = new AsyncDataAdapter(Provider, maxRecords, _rowBlockSize, sqlCeResultWriter, EndFillInvoker, WriteEndInvoker);
-        asyncDataAdapter.Start(new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray());
+        asyncDataAdapter.Start([new AsyncDataAdapterCommand(null, 0, _command, null, null, null)]);
     }
 
     private void beginTransactionToolStripMenuItem_Click(object? sender, EventArgs e)

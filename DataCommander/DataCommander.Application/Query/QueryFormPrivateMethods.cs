@@ -721,7 +721,7 @@ Please wait...";
             _stopwatch.Start();
             _timer.Start();
             _dataAdapter = new AsyncDataAdapter(Provider, maxRecords, rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
-            _dataAdapter.Start(new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray());
+            _dataAdapter.Start([new AsyncDataAdapterCommand(null, 0, _command, null, null, null)]);
         }
         else
             AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Please open a destination connection."));

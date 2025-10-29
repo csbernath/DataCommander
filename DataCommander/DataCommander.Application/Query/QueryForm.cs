@@ -1318,10 +1318,13 @@ Please wait...";
                     }
 
                     command.Transaction = _transaction;
-                    commands = new AsyncDataAdapterCommand(_fileName, 0, command,
-                        getQueryConfigurationResult.Succeeded ? getQueryConfigurationResult.Query : null,
-                        getQueryConfigurationResult.Succeeded ? getQueryConfigurationResult.Parameters : null,
-                        getQueryConfigurationResult.Succeeded ? getQueryConfigurationResult.CommandText : null).ItemToArray();
+                    commands =
+                    [
+                        new AsyncDataAdapterCommand(_fileName, 0, command,
+                            getQueryConfigurationResult.Succeeded ? getQueryConfigurationResult.Query : null,
+                            getQueryConfigurationResult.Succeeded ? getQueryConfigurationResult.Parameters : null,
+                            getQueryConfigurationResult.Succeeded ? getQueryConfigurationResult.CommandText : null)
+                    ];
                 }
                 else
                     commands =

@@ -26,7 +26,7 @@ internal partial class ConnectionStringBuilderForm : Form
     private DataTable? _dataSources;
     private List<string>? _initialCatalogs;
     private List<OleDbProviderInfo>? _oleDbProviders;
-    private readonly ColorTheme _colorTheme;
+    private readonly ColorTheme? _colorTheme;
 
     public ConnectionStringBuilderForm(ColorTheme? colorTheme)
     {

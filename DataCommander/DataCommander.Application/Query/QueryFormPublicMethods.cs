@@ -239,7 +239,7 @@ public sealed partial class QueryForm
                 _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
                 var resultWriter = _dataSetResultWriter;
                 _dataAdapter = new AsyncDataAdapter(Provider, maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
-                _dataAdapter.Start(new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray());
+                _dataAdapter.Start([new AsyncDataAdapterCommand(null, 0, _command, null, null, null)]);
             }
             catch (Exception ex)
             {

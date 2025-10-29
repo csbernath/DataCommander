@@ -614,13 +614,13 @@ public sealed class QueryTextBox : UserControl
             var path = text;
 
             if (File.Exists(path))
-                DataCommanderApplication.Instance.MainForm!.LoadFiles(path.ItemToArray());
+                DataCommanderApplication.Instance.MainForm!.LoadFiles([path]);
             else if (Uri.TryCreate(path, UriKind.Absolute, out var uri))
             {
                 if (uri.Scheme == "file")
                 {
                     path = uri.LocalPath;
-                    DataCommanderApplication.Instance.MainForm!.LoadFiles(path.ItemToArray());
+                    DataCommanderApplication.Instance.MainForm!.LoadFiles([path]);
                 }
             }
             else
@@ -634,7 +634,7 @@ public sealed class QueryTextBox : UserControl
         }
         else if (GetDataPresent(dataObject, DataFormats.FileDrop))
         {
-            var fileNames = (string[])dataObject.GetData(DataFormats.FileDrop);
+            var fileNames = (string[])dataObject.GetData(DataFormats.FileDrop)!;
             var fileName = fileNames![0];
             var extension = Path.GetExtension(fileName);
             if (extension.In(".sql", ".txt"))
