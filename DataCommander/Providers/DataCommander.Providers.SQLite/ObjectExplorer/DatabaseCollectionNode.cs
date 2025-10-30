@@ -19,7 +19,7 @@ internal sealed class DatabaseCollectionNode(ConnectionStringAndCredential conne
 
     public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        const string commandText = @"PRAGMA database_list;";
+        const string commandText = "PRAGMA database_list;";
         
         return await Db.ExecuteReaderAsync(
             () => ConnectionFactory.CreateConnection(connectionStringAndCredential),

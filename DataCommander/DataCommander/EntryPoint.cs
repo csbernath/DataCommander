@@ -80,7 +80,7 @@ internal static class EntryPoint
         var fileName = Path.Combine(applicationDataFolderPath, "ApplicationData.xml");
         var sectionName = Settings.SectionName;
         applicationData.Load(fileName, sectionName);
-        var node = applicationData.RootNode.SelectNode("DataCommander/Application/MainForm");
+        var node = applicationData.RootNode!.SelectNode("DataCommander/Application/MainForm");
         var colorMode = SystemColorMode.System;
         var initializeApplicationConfiguration = true;
         if (node != null)

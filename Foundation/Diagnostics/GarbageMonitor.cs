@@ -47,7 +47,10 @@ public sealed class GarbageMonitor(string garbageMonitorName)
                 var listItemStates = _monitoredObjects.Select(i => new MonitoredObjectState(i, timestamp));
                 var stringTable = listItemStates.ToString(Columns);
                 var totalSize = _monitoredObjects.Sum(s => s.Size);
-                state = $"GarbageMonitor.State:\r\nid: {garbageMonitorName}r\ntotalSize: {totalSize}\r\n{stringTable}";
+                state = @$"GarbageMonitor.State:
+id: {garbageMonitorName}
+totalSize: {totalSize}
+{stringTable}";
             }
 
             _monitoredObjectsLock.TryLock(RemoveGarbageCollectedObjects);
