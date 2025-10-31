@@ -148,7 +148,7 @@ internal sealed class PostgreSqlProvider : IProvider
                             case 1:
                             {
                                 // statements.Add(SqlServerObject.GetDatabases());
-                                statements.Add(SqlServerObject.GetSchemas());
+                                statements.Add(SqlServerObject.GetSchemas);
 
                                 //var objectTypes = sqlObject.Type.ToObjectTypes();
                                 //statements.Add(SqlServerObject.GetObjects(schema: "dbo", objectTypes: objectTypes));

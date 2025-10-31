@@ -19,7 +19,7 @@ internal sealed class FunctionNode(
     public bool IsLeaf => true;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
+        Task.FromResult<IEnumerable<ITreeNode>>([]);
 
     public bool Sortable => false;
 
@@ -27,13 +27,10 @@ internal sealed class FunctionNode(
 
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        //string query = string.Format("select {0}.{1}.[{2}]()",database.Name,owner,name);
         var query = xtype switch
         {
-            //Scalar function
-            "FN" => $"select {database.Name}.{owner}.[{name}]()",
-            //Table function
-            "TF" or "IF" => $@"select	*
+            SqlServerObjectType.ScalarFunction => $"select {database.Name}.{owner}.[{name}]()",
+            SqlServerObjectType.TableValuedFunction or SqlServerObjectType.InlineTableValuedFunction => $@"select	*
 from	{database.Name}.{owner}.[{name}]()",
             _ => null,
         };
@@ -42,12 +39,12 @@ from	{database.Name}.{owner}.[{name}]()",
 
     public ContextMenu? GetContextMenu()
     {
-        var scriptObjectMenuItem = new MenuItem("Script Object", menuItemScriptObject_Click, []);
+        var scriptObjectMenuItem = new MenuItem("Script Object", ScriptObjectClicked, []);
         var contextMenu = new ContextMenu([scriptObjectMenuItem]);
         return contextMenu;
     }
 
-    private void menuItemScriptObject_Click(object? sender, EventArgs e)
+    private void ScriptObjectClicked(object? sender, EventArgs e)
     {
         string text;
         using (var connection = database.Databases.Server.CreateConnection())

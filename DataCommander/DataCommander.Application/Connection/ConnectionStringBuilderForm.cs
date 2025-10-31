@@ -21,7 +21,7 @@ internal partial class ConnectionStringBuilderForm : Form
     private string? _selectedProviderName;
     private ConnectionInfo? _connectionInfo;
     private bool _passwordChanged;
-    private readonly IReadOnlyList<ProviderInfo> _providers;
+    private readonly ProviderInfo[] _providers;
     private DbProviderFactory? _dbProviderFactory;
     private DataTable? _dataSources;
     private List<string>? _initialCatalogs;
@@ -37,8 +37,7 @@ internal partial class ConnectionStringBuilderForm : Form
         oleDbProviderLabel.Visible = false;
         oleDbProvidersComboBox.Visible = false;
 
-        if (colorTheme != null)
-            colorTheme.Apply(this);
+        colorTheme?.Apply(this);
 
         _providers = ProviderInfoRepository.GetProviderInfos()
             .OrderBy(i => i.Name)
@@ -93,7 +92,7 @@ internal partial class ConnectionStringBuilderForm : Form
         oleDbProvidersComboBox.Visible = true;
         _oleDbProviders = [];
 
-        using IDataReader dataReader = OleDbEnumerator.GetRootEnumerator();
+        using var dataReader = OleDbEnumerator.GetRootEnumerator();
         var sourceName = dataReader.GetOrdinal("SOURCES_NAME");
         var sourceDescription = dataReader.GetOrdinal("SOURCES_DESCRIPTION");
 

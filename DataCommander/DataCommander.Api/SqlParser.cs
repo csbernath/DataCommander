@@ -248,9 +248,7 @@ public sealed class SqlParser
             if (previousToken.Type == TokenType.KeyWord)
             {
                 var value = previousToken.Value!.ToLower();
-                var name = currentToken != null
-                    ? currentToken.Value
-                    : null;
+                var name = currentToken?.Value;
 
                 switch (value)
                 {

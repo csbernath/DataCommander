@@ -9,22 +9,29 @@ namespace DataCommander.Providers.PostgreSql;
 
 internal static class SqlServerObject
 {
-    public static string GetSchemas() => @"select schema_name
+    public static string GetSchemas = @"select schema_name
 from information_schema.schemata
 order by schema_name";
 
-    public static string GetTables(string schema, IEnumerable<string> tableTypes) => $@"select table_name
+    public static string GetTables(string schema, IEnumerable<string> tableTypes)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(schema);
+        ArgumentNullException.ThrowIfNull(tableTypes);
+
+        return $@"select table_name
 from information_schema.tables
 where
     table_schema = '{schema}'
     and table_type in({string.Join(",", tableTypes.Select(o => o.ToNullableVarChar()))})
 order by table_name";
+    }
 
     public static string GetObjects(string schema, IEnumerable<string> objectTypes)
     {
         Assert.IsNotWhiteSpace(schema);
         ArgumentNullException.ThrowIfNull(objectTypes);
         Assert.IsTrue(objectTypes.Any());
+
         var enumerable = objectTypes.Select(o => o.ToNullableVarChar());
         return
             $@"declare @schema_id int
@@ -50,8 +57,8 @@ end";
         string schema,
         IEnumerable<string> objectTypes)
     {
-        Assert.IsTrue(!database.IsNullOrWhiteSpace());
-        Assert.IsTrue(!schema.IsNullOrWhiteSpace());
+        ArgumentException.ThrowIfNullOrEmpty(database);
+        ArgumentException.ThrowIfNullOrEmpty(schema);
         ArgumentNullException.ThrowIfNull(objectTypes);
         Assert.IsTrue(objectTypes.Any());
 

@@ -12,7 +12,7 @@ internal sealed class RoleNode(DatabaseNode database, string? name) : ITreeNode
     public bool IsLeaf => true;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
+        Task.FromResult<IEnumerable<ITreeNode>>([]);
     
     public bool Sortable => false;
 

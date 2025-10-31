@@ -189,7 +189,7 @@ Please wait...";
 
     private void ResultSetsTabControl_MouseUp(object? sender, MouseEventArgs e)
     {
-        var hitTestInfo = new QueryForm.Tchittestinfo(e.X, e.Y);
+        var hitTestInfo = new Tchittestinfo(e.X, e.Y);
         var index = SendMessage(_resultSetsTabControl.Handle, TcmHittest, IntPtr.Zero, ref hitTestInfo);
         var hotTab = index >= 0 ? _resultSetsTabControl.TabPages[index] : null;
 
@@ -1469,7 +1469,7 @@ Please wait...";
         public readonly string CommandText = commandText;
     }
 
-    private static QueryForm.GetQueryConfigurationResult GetQueryConfiguration(string commandText)
+    private static GetQueryConfigurationResult GetQueryConfiguration(string commandText)
     {
         ArgumentNullException.ThrowIfNull(commandText);
 
@@ -1508,7 +1508,7 @@ Please wait...";
             }
         }
 
-        return new QueryForm.GetQueryConfigurationResult(succeeded, query, parameters, resultCommandText);
+        return new GetQueryConfigurationResult(succeeded, query, parameters, resultCommandText);
     }
 
     private static DbRequestParameter ToDbRequestParameter(List<Token> declaration)
@@ -2135,11 +2135,11 @@ Please wait...";
     private readonly struct Tchittestinfo(int x, int y)
     {
         public readonly Point pt = new(x, y);
-        public readonly Tchittestflags flags = QueryForm.Tchittestflags.TchtOnitem;
+        public readonly Tchittestflags flags = Tchittestflags.TchtOnitem;
     }
 
     [DllImport("user32.dll")]
-    private static extern int SendMessage(IntPtr hwnd, int msg, IntPtr wParam, ref QueryForm.Tchittestinfo lParam);
+    private static extern int SendMessage(IntPtr hwnd, int msg, IntPtr wParam, ref Tchittestinfo lParam);
 
     private void SetStatusbarPanelText(string? text, Color color)
     {

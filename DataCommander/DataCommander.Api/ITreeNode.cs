@@ -11,6 +11,6 @@ public interface ITreeNode
     Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken);
     bool Sortable { get; }
     bool DynamicChildCount { get; }
-    Task<string?> GetQuery(CancellationToken cancellation);
+    Task<string?> GetQuery(CancellationToken cancellationToken);
     ContextMenu? GetContextMenu();
 }

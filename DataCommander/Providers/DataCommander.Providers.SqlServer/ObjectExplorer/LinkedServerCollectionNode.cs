@@ -35,9 +35,10 @@ internal sealed class LinkedServerCollectionNode : ITreeNode
 
     private static string CreateCommandText()
     {
-        const string commandText = @"select  s.name
-from    sys.servers s (nolock)
-where   s.is_linked = 1
+        const string commandText = @"select
+    s.name
+from sys.servers s (nolock)
+where s.is_linked = 1
 order by s.name";
         return commandText;
     }

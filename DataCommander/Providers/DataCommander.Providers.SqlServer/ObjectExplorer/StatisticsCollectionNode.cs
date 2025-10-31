@@ -8,7 +8,7 @@ using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class StatisticsCollectionNode(DatabaseNode databaseNode, int id) : DataCommander.Api.ITreeNode
+internal sealed class StatisticsCollectionNode(DatabaseNode databaseNode, int id) : ITreeNode
 {
     public string? Name => "Statistics";
     public bool IsLeaf => false;

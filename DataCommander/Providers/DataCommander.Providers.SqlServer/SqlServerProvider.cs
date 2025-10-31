@@ -349,7 +349,7 @@ internal sealed class SqlServerProvider : IProvider
             {
                 if (value.StartsWith("@@"))
                 {
-                    array = KeyWordRepository.Get().Where(k => k.StartsWith(value)).Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
+                    array = [.. KeyWordRepository.Get().Where(k => k.StartsWith(value)).Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord))];
                 }
                 else
                 {
@@ -491,8 +491,7 @@ end", name.Database, ownersString, name.Name);
                     case SqlObjectTypes.Procedure:
                         name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
 
-                        if (name.Schema == null)
-                            name.Schema = "dbo";
+                        name.Schema ??= "dbo";
 
                         commandText = SqlServerObject.GetObjectsByDatabase(name.Database!, ["P", "X"]);
                         break;
@@ -657,11 +656,7 @@ from
             row[5] = parameter.Precision;
             row[6] = parameter.Scale;
             row[7] = parameter.Direction.ToString("G");
-
-            row[8] = parameter.Value == null
-                ? DBNull.Value
-                : parameter.Value;
-
+            row[8] = parameter.Value ?? DBNull.Value;
             row[9] = parameter.TypeName;
 
             dataTable.Rows.Add(row);

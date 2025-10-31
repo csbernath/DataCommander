@@ -15,7 +15,7 @@ internal sealed class IndexNode(TableNode tableNode, string? name) : ITreeNode
 
     bool ITreeNode.IsLeaf => true;
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
+    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>([]);
 
     bool ITreeNode.Sortable => false;
 

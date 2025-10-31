@@ -132,9 +132,9 @@ internal sealed class ConnectionListForm : Form
         // btnOK
         // 
         _btnOk.Anchor = AnchorStyles.Bottom;
-        _btnOk.Location = new System.Drawing.Point(402, 637);
+        _btnOk.Location = new Point(402, 637);
         _btnOk.Name = "_btnOk";
-        _btnOk.Size = new System.Drawing.Size(75, 24);
+        _btnOk.Size = new Size(75, 24);
         _btnOk.TabIndex = 0;
         _btnOk.Text = "&Connect";
         _btnOk.Click += new EventHandler(BtnOK_Click);
@@ -143,9 +143,9 @@ internal sealed class ConnectionListForm : Form
         // 
         _btnCancel.Anchor = AnchorStyles.Bottom;
         _btnCancel.DialogResult = DialogResult.Cancel;
-        _btnCancel.Location = new System.Drawing.Point(490, 637);
+        _btnCancel.Location = new Point(490, 637);
         _btnCancel.Name = "_btnCancel";
-        _btnCancel.Size = new System.Drawing.Size(75, 24);
+        _btnCancel.Size = new Size(75, 24);
         _btnCancel.TabIndex = 7;
         _btnCancel.Text = "Cancel";
         // 
@@ -153,9 +153,9 @@ internal sealed class ConnectionListForm : Form
         // 
         _newButton.Anchor =
             ((AnchorStyles)(AnchorStyles.Bottom | AnchorStyles.Left));
-        _newButton.Location = new System.Drawing.Point(12, 637);
+        _newButton.Location = new Point(12, 637);
         _newButton.Name = "_newButton";
-        _newButton.Size = new System.Drawing.Size(75, 24);
+        _newButton.Size = new Size(75, 24);
         _newButton.TabIndex = 8;
         _newButton.Text = "&New";
         _newButton.Click += new EventHandler(NewButton_Click);
@@ -167,11 +167,11 @@ internal sealed class ConnectionListForm : Form
                                                                        | AnchorStyles.Left)
                                                                       | AnchorStyles.Right));
         _dataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-        _dataGrid.Location = new System.Drawing.Point(8, 8);
+        _dataGrid.Location = new Point(8, 8);
         _dataGrid.Name = "_dataGrid";
         _dataGrid.PublicDoubleBuffered = true;
         _dataGrid.ReadOnly = true;
-        _dataGrid.Size = new System.Drawing.Size(944, 621);
+        _dataGrid.Size = new Size(944, 621);
         _dataGrid.TabIndex = 6;
         _dataGrid.UserDeletingRow += new DataGridViewRowCancelEventHandler(DataGrid_UserDeletingRow);
         _dataGrid.DoubleClick += new EventHandler(DataGrid_DoubleClick);
@@ -181,9 +181,9 @@ internal sealed class ConnectionListForm : Form
         // ConnectionListForm
         // 
         AcceptButton = _btnOk;
-        AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+        AutoScaleBaseSize = new Size(5, 14);
         CancelButton = _btnCancel;
-        ClientSize = new System.Drawing.Size(954, 668);
+        ClientSize = new Size(954, 668);
         Controls.Add(_newButton);
         Controls.Add(_btnCancel);
         Controls.Add(_dataGrid);

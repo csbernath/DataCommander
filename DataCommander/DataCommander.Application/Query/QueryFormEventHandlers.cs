@@ -727,7 +727,7 @@ Please wait...";
         if (sender != null && e.Button == MouseButtons.Middle)
         {
             var tabControl = (TabControl)sender;
-            var hitTestInfo = new QueryForm.Tchittestinfo(e.X, e.Y);
+            var hitTestInfo = new Tchittestinfo(e.X, e.Y);
             var index = SendMessage(tabControl.Handle, TcmHittest, IntPtr.Zero, ref hitTestInfo);
             if (index >= 0)
             {

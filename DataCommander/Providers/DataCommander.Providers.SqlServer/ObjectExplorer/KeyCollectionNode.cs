@@ -27,8 +27,10 @@ internal class KeyCollectionNode(DatabaseNode databaseNode, int id) : ITreeNode
     private string CreateCommandText()
     {
         var sqlCommandBuilder = new SqlCommandBuilder();
+        var database = sqlCommandBuilder.QuoteIdentifier(databaseNode.Name);
+
         var commandText = @$"select name
-from {sqlCommandBuilder.QuoteIdentifier(databaseNode.Name)}.sys.objects o
+from {database}.sys.objects o
 where
     o.type in('PK','F','UQ') and
     o.parent_object_id = {id}
@@ -38,13 +40,8 @@ order by
         when 'F' then 1
         when 'UQ' then 2
     end";
-        return commandText;
-    }
 
-    private KeyNode ReadRecord(IDataRecord dataRecord)
-    {
-        var name = dataRecord.GetString(0);
-        return new KeyNode(name);
+        return commandText;
     }
 
     public bool Sortable => false;
@@ -53,4 +50,10 @@ order by
 
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
+
+    private static KeyNode ReadRecord(IDataRecord dataRecord)
+    {
+        var name = dataRecord.GetString(0);
+        return new KeyNode(name);
+    }
 }

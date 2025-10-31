@@ -83,7 +83,7 @@ namespace Foundation.Windows.Forms
 
         private static string GetClipboardButtonsText(MessageBoxButtons messageBoxButtons)
         {
-            var buttonIds = MessageBoxBuilder.GetButtonIds(messageBoxButtons);
+            var buttonIds = GetButtonIds(messageBoxButtons);
             var buttonInfos = buttonIds.Select(buttonId => ButtonInfosById[buttonId]);
             var buttonTexts = buttonInfos.Select(buttonInfo => buttonInfo.Text + "   ");
             var clipboardButtonTexts = string.Concat(buttonTexts);

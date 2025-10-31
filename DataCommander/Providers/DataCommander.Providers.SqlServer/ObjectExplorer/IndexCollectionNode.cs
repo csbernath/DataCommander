@@ -15,9 +15,9 @@ internal sealed class IndexCollectionNode(DatabaseNode databaseNode, int id) : I
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var cb = new SqlCommandBuilder();
+        var sqlCommandBuilder = new SqlCommandBuilder();
+        var database = sqlCommandBuilder.QuoteIdentifier(databaseNode.Name);
 
-        var database = cb.QuoteIdentifier(databaseNode.Name);
         var commandText = $@"select
     i.name,
     i.index_id,
