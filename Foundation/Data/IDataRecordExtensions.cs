@@ -121,6 +121,12 @@ public static class IDataRecordExtensions
         }
 
         [CLSCompliant(false)]
-        public uint GetUInt32(int fieldIndex) => (uint)dataRecord.GetValue(fieldIndex);
+        public uint GetUInt32(int fieldIndex)
+        {
+            ArgumentNullException.ThrowIfNull(dataRecord);
+            var valueObject = dataRecord.GetValue(fieldIndex);
+            var value = (uint)valueObject;
+            return value;
+        }
     }
 }

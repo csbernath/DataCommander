@@ -24,7 +24,7 @@ internal class FoundationMessageBoxForm : Form
     {
         _messageBoxButtons = messageBoxButtons;
         
-        caption = caption ?? "Error";
+        caption ??= "Error";
         var startPosition = owner != null
             ? FormStartPosition.CenterParent
             : FormStartPosition.CenterScreen;
@@ -72,8 +72,7 @@ internal class FoundationMessageBoxForm : Form
 
         if (messageBoxIcon == MessageBoxIcon.None)
         {
-            if (textLabel != null)
-                textLabel.Location = new Point(9, borderY);
+            textLabel?.Location = new Point(9, borderY);
         }
         else
         {
@@ -111,15 +110,14 @@ internal class FoundationMessageBoxForm : Form
         var width = Math.Max(iconAndTextWidth, buttonsWidth);
         width = Math.Max(width, captionWidth);
 
-        AddButtonsToBottomPanel(buttons, bottomPanel, width, buttonsWidth, buttonLeftBorderX, buttonPaddingX);
+        SetButtonsLocation(buttons, width, buttonsWidth, buttonLeftBorderX, buttonPaddingX);
         SetFormAcceptButton(defaultButton, buttons);
         SetFormCancelButton(messageBoxButtons, buttons);
 
         var height = iconAndTextHeight + bottomPanel.Height;
         ClientSize = new Size(width, height);
 
-        if (pictureBox != null)
-            pictureBox.ResumeLayout(false);
+        pictureBox?.ResumeLayout(false);
 
         ResumeLayout(false);
         PerformLayout();
@@ -159,7 +157,7 @@ internal class FoundationMessageBoxForm : Form
         base.WndProc(ref m);
     }
 
-    private static void AddButtonsToBottomPanel(Button[] buttons, Panel bottomPanel, int width, int buttonsWidth, int buttonLeftBorderX, int buttonPaddingX)
+    private static void SetButtonsLocation(Button[] buttons, int width, int buttonsWidth, int buttonLeftBorderX, int buttonPaddingX)
     {
         var left = width - buttonsWidth + buttonLeftBorderX;
         foreach (var button in buttons)
@@ -197,9 +195,11 @@ internal class FoundationMessageBoxForm : Form
     private static PictureBox CreatePictureBox(MessageBoxIcon messageBoxIcon)
     {
         var icon = MessageBoxBuilder.GetIcon(messageBoxIcon);
-        var pictureBox = new PictureBox();
-        pictureBox.Image = icon.ToBitmap();
-        pictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
+        var pictureBox = new PictureBox
+        {
+            Image = icon.ToBitmap(),
+            SizeMode = PictureBoxSizeMode.AutoSize
+        };
         return pictureBox;
     }
 

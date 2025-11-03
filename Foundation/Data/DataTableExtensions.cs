@@ -16,7 +16,7 @@ public static class DataTableExtensions
         /// <returns></returns>
         public string ToStringTableString()
         {
-            ArgumentNullException.ThrowIfNull(dataTable, nameof(dataTable));
+            ArgumentNullException.ThrowIfNull(dataTable);
             var rows = dataTable.Rows.Cast<DataRow>()!.Where(dataRow => dataRow.RowState != DataRowState.Deleted);
             var columns = dataTable.Columns.Cast<DataColumn>()!.Select(ToStringTableColumnInfo).ToArray();
             return rows.ToString(columns);

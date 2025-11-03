@@ -8,7 +8,8 @@ using System.Windows.Forms;
 namespace Foundation.Windows.Forms
 {
     internal static class MessageBoxBuilder
-    {        public static void Beep(MessageBoxIcon messageBoxIcon)
+    {        
+        public static void Beep(MessageBoxIcon messageBoxIcon)
         {
             switch (messageBoxIcon)
             {
