@@ -16,6 +16,12 @@ internal static class OpenConnectionFormHelper
         var host = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.Host, out var hostObject)
             ? (string?)hostObject
             : null;
+        var initialCatalog = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.InitialCatalog, out var initialCatalogObject)
+            ? (string?)initialCatalogObject
+            : null;
+        var database = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.Database, out var databaseObject)
+            ? (string?)databaseObject
+            : null;
         bool? integratedSecurity = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurityObject)
             ? (bool)integratedSecurityObject!
             : null;
@@ -29,6 +35,11 @@ Provider name: {providerInfo.Name}");
             stringBuilder.Append($"\r\n{ConnectionStringKeyword.DataSource}: {dataSource}");
         else if (host != null)
             stringBuilder.Append($"\r\n{ConnectionStringKeyword.Host}: {host}");
+
+        if (initialCatalog != null)
+            stringBuilder.Append($"\r\n{ConnectionStringKeyword.InitialCatalog}: {initialCatalog}");
+        else if (database != null)
+            stringBuilder.Append($"\r\n{ConnectionStringKeyword.Database}: {database}");
         
         if (integratedSecurity == true)
             stringBuilder.Append($"\r\n{ConnectionStringKeyword.IntegratedSecurity}: {integratedSecurity}");

@@ -473,6 +473,7 @@ internal sealed class ConnectionListForm : Form
                 var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
                 var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
                 var textBoxText = OpenConnectionFormHelper.CreateOpenConnectionFormText(connectionInfo, providerInfo, provider);
+                Log.Trace(CallerInformation.Create(), textBoxText);
                 var connection = provider.CreateConnection(connectionInfo.ConnectionStringAndCredential);
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
