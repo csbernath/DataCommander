@@ -10,6 +10,7 @@ public class AsyncTextWriter
 {
     private readonly TextWriter _textWriter;
     private readonly List<AsyncTextWriterListItem> _list = [];
+    private readonly Lock _listLock = new();
     private readonly Lock _syncObject = new();
     private readonly ManualResetEvent _waitHandle = new(false);
     private RegisteredWaitHandle? _registeredWaitHandle;
@@ -27,7 +28,7 @@ public class AsyncTextWriter
         while (_list.Count > 0)
         {
             AsyncTextWriterListItem[] items;
-            lock (_list)
+            using (_listLock.EnterScope())
             {
                 var count = _list.Count;
                 items = new AsyncTextWriterListItem[count];
@@ -45,7 +46,7 @@ public class AsyncTextWriter
 
     private void Unregister()
     {
-        lock (_syncObject)
+        using (_syncObject.EnterScope())
         {
             if (_registeredWaitHandle != null)
             {
@@ -67,12 +68,12 @@ public class AsyncTextWriter
 
     private void Write(AsyncTextWriterListItem item)
     {
-        lock (_list)
+        using (_listLock.EnterScope())
             _list.Add(item);
 
         const int timeout = 10000; // 10 seconds
 
-        lock (_syncObject)
+        using (_syncObject.EnterScope())
         {
             if (_registeredWaitHandle == null)
             {

@@ -8,6 +8,7 @@ namespace Foundation.Threading;
 public sealed class WorkerThreadCollection : IList<WorkerThread>
 {
     private readonly List<WorkerThread> _threads = [];
+    private readonly Lock _threadsLock = new();
 
     int IList<WorkerThread>.IndexOf(WorkerThread item)
     {
@@ -17,18 +18,14 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
 
     public void Insert(int index, WorkerThread item)
     {
-        lock (_threads)
-        {
+        using (_threadsLock.EnterScope())
             _threads.Insert(index, item);
-        }
     }
 
     public void RemoveAt(int index)
     {
-        lock (_threads)
-        {
+        using (_threadsLock.EnterScope())
             _threads.RemoveAt(index);
-        }
     }
 
     WorkerThread IList<WorkerThread>.this[int index]
@@ -40,10 +37,8 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
 
     public void Add(WorkerThread item)
     {
-        lock (_threads)
-        {
+        using (_threadsLock.EnterScope())
             _threads.Add(item);
-        }
     }
 
     void ICollection<WorkerThread>.Clear() => throw new Exception("The method or operation is not implemented.");
@@ -64,7 +59,7 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
 
     public void Start()
     {
-        lock (_threads)
+        using (_threadsLock.EnterScope())
         {
             foreach (var thread in _threads)
             {
@@ -75,7 +70,7 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
 
     public void Stop()
     {
-        lock (_threads)
+        using (_threadsLock.EnterScope())
         {
             foreach (var thread in _threads)
             {
@@ -94,10 +89,11 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
     private sealed class Stopper(IList<WorkerThread> threads, EventWaitHandle stopEvent)
     {
         private int _count;
+        private readonly Lock _threadsLock = new();
 
         public void Stop()
         {
-            lock (threads)
+            using (_threadsLock.EnterScope())
             {
                 foreach (var thread in threads)
                 {

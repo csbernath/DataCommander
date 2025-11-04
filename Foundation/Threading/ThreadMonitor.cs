@@ -14,7 +14,7 @@ namespace Foundation.Threading;
 public static class ThreadMonitor
 {
     private static readonly SortedDictionary<int, WorkerThread> Threads = [];
-    private static readonly System.Threading.Lock ThreadsLock = new();
+    private static readonly Lock ThreadsLock = new();
 
     private static readonly StringTableColumnInfo<WorkerThread>[] ThreadColumns =
     [
