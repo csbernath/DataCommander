@@ -156,31 +156,33 @@ public static class IDbCommandExtensions
         {
             ArgumentNullException.ThrowIfNull(command);
 
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
             switch (command.CommandType)
             {
                 case CommandType.StoredProcedure:
-                    sb.Append("exec ");
+                    stringBuilder.Append("exec ");
                     break;
 
                 default:
                     break;
             }
 
-            sb.Append(command.CommandText);
+            stringBuilder.Append(command.CommandText);
 
             if (command.Parameters.Count > 0)
             {
-                sb.AppendLine();
-                sb.Append(command.Parameters.ToLogString());
+                stringBuilder.AppendLine();
+                stringBuilder.Append(command.Parameters.ToLogString());
             }
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
 
         internal void Initialize(CreateCommandRequest request)
         {
+            ArgumentNullException.ThrowIfNull(request);
+
             command.CommandType = request.CommandType;
             command.CommandText = request.CommandText;
 

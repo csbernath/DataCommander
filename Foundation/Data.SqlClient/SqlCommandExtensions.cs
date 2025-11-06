@@ -51,13 +51,9 @@ public static class SqlCommandExtensions
         foreach (SqlParameter parameter in parameters)
         {
             if (first)
-            {
                 first = false;
-            }
             else
-            {
                 sb.Append(',');
-            }
 
             var dataTypeName = parameter.GetDataTypeName();
             sb.Append($"{parameter.ParameterName} {dataTypeName}");

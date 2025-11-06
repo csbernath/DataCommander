@@ -50,7 +50,7 @@ internal sealed class SqlServerProvider : IProvider
 
             var header = sqlError.GetHeader();
             var message = sqlError.Message;
-            messages.Add(InfoMessageFactory.Create(severity, header, message));
+            messages.Add(new InfoMessage(creationTime, severity, header, message));
         }
 
         return messages;
@@ -309,7 +309,7 @@ internal sealed class SqlServerProvider : IProvider
             case SqlDbType.SmallInt:
                 type = typeof(short);
                 break;
-            
+
             case SqlDbType.Udt:
                 type = null;
                 break;
@@ -605,7 +605,7 @@ from
                 array = list;
             }
         }
-        
+
         ArgumentNullException.ThrowIfNull(array);
 
         return new GetCompletionResult(startPosition, length, array!, fromCache);
@@ -866,9 +866,9 @@ from
 
     private static bool IsBatchSeparator(ReadOnlySpan<char> commandText, Token token)
     {
-        const char newLine = '\n'; 
+        const char newLine = '\n';
         const string batchSeparator = "GO";
-        
+
         var isBatchSeparator =
             token.Type == TokenType.KeyWord &&
             string.Compare(token.Value, batchSeparator, StringComparison.InvariantCultureIgnoreCase) == 0;

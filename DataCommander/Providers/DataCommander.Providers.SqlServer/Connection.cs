@@ -20,7 +20,6 @@ internal sealed class Connection : ConnectionBase
     private readonly ConnectionStringAndCredential _connectionStringAndCredential;
     private SqlConnection? _sqlConnection;
     private string? _serverName;
-    private short _serverProcessId;
 
     public Connection(ConnectionStringAndCredential connectionStringAndCredential)
     {
@@ -47,7 +46,7 @@ internal sealed class Connection : ConnectionBase
             stringBuilder.AppendLine($"Server name:     {_serverName}");
             stringBuilder.AppendLine(version);
             stringBuilder.AppendLine($"Description:     {description}");
-            stringBuilder.Append($"ServerProcessId: {_serverProcessId}");
+            stringBuilder.Append($"ServerProcessId: {_sqlConnection.ServerProcessId}");
             return stringBuilder.ToString();
         }
     }
@@ -85,8 +84,6 @@ internal sealed class Connection : ConnectionBase
 
         if (!cancellationToken.IsCancellationRequested)
         {
-            _serverProcessId = (short)_sqlConnection.ServerProcessId;
-
             const string commandText = @"select @@servername
 set arithabort on";
 
