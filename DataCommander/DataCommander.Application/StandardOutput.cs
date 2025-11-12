@@ -14,23 +14,23 @@ internal sealed class StandardOutput(TextWriter textWriter, QueryForm queryForm)
 
     public void WriteLine(params object[] args)
     {
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         for (var i = 0; i < args.Length; i++)
         {
             if (args[i] != null)
             {
                 var s = args[i].ToString();
-                sb.Append(s);
+                stringBuilder.Append(s);
 
                 if (i != args.Length - 1)
                 {
-                    sb.Append(' ');
+                    stringBuilder.Append(' ');
                 }
             }
         }
 
-        TextWriter.WriteLine(sb.ToString());
+        TextWriter.WriteLine(stringBuilder.ToString());
     }
 
     public void Write(object arg)

@@ -10,16 +10,16 @@ internal sealed class ObjectName(string? schemaName, string objectName) : IObjec
     {
         get
         {
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             if (schemaName != null)
             {
-                sb.Append(schemaName);
-                sb.Append('.');
+                stringBuilder.Append(schemaName);
+                stringBuilder.Append('.');
             }
 
-            sb.Append(objectName);
+            stringBuilder.Append(objectName);
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
     }
 

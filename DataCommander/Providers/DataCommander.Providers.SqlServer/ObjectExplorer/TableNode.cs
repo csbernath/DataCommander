@@ -222,9 +222,9 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
             else
                 identity = string.Empty;
 
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             var dbType = column["col_typename"].ToString();
-            sb.Append(dbType);
+            stringBuilder.Append(dbType);
 
             switch (dbType)
             {
@@ -234,9 +234,9 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
                     var scale = Convert.ToInt32(column["col_scale"]);
 
                     if (scale == 0)
-                        sb.AppendFormat("({0})", precision);
+                        stringBuilder.AppendFormat("({0})", precision);
                     else
-                        sb.AppendFormat("({0},{1})", precision, scale);
+                        stringBuilder.AppendFormat("({0},{1})", precision, scale);
 
                     break;
 
@@ -253,18 +253,18 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
                     else
                         columnlengthString = columnLength.ToString();
 
-                    sb.AppendFormat("({0})", columnlengthString);
+                    stringBuilder.AppendFormat("({0})", columnlengthString);
                     break;
             }
 
-            if (!Convert.ToBoolean(column["col_null"])) sb.Append(" not null");
+            if (!Convert.ToBoolean(column["col_null"])) stringBuilder.Append(" not null");
 
             var collation = ValueReader.GetValue(column["collation"], string.Empty);
             var formula = string.Empty;
 
             if (column["text"] != DBNull.Value) formula = column["text"].ToString();
 
-            schema.Rows.Add(column["col_id"], identity, column["col_name"], sb.ToString(), collation, formula);
+            schema.Rows.Add(column["col_id"], identity, column["col_name"], stringBuilder.ToString(), collation, formula);
         }
 
         if (keys.Rows.Count > 0)

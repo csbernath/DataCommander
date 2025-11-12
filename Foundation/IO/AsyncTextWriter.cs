@@ -23,7 +23,7 @@ public class AsyncTextWriter
 
     private void Flush()
     {
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         while (_list.Count > 0)
         {
@@ -37,10 +37,10 @@ public class AsyncTextWriter
             }
 
             for (var i = 0; i < items.Length; ++i)
-                items[i].AppendTo(sb);
+                items[i].AppendTo(stringBuilder);
         }
 
-        _textWriter.Write(sb);
+        _textWriter.Write(stringBuilder);
         _textWriter.Flush();
     }
 

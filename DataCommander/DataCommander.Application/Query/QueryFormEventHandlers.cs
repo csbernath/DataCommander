@@ -479,7 +479,7 @@ Please wait...";
 
                     var dataReaderHelper = Provider.CreateDataReaderHelper(dataReader);
                     var schemaTable = dataReader.GetSchemaTable();
-                    var sb = new StringBuilder();
+                    var stringBuilder = new StringBuilder();
 
                     if (schemaTable != null)
                     {
@@ -491,12 +491,12 @@ Please wait...";
                         _standardOutput.WriteLine(InsertScriptFileWriter.GetCreateTableStatement(schemaTable));
                         var schemaRows = schemaTable.Rows;
                         var columnCount = schemaRows.Count;
-                        sb.AppendFormat("insert into {0}(", tableName);
+                        stringBuilder.AppendFormat("insert into {0}(", tableName);
 
                         for (var i = 0; i < columnCount; i++)
                         {
                             if (i > 0)
-                                sb.Append(',');
+                                stringBuilder.Append(',');
 
                             var schemaRow = schemaRows[i];
                             var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
@@ -504,43 +504,43 @@ Please wait...";
                             if (keyWordHashSet.Contains((columnName.ToUpper())))
                                 columnName = new SqlCommandBuilder().QuoteIdentifier(columnName);
 
-                            sb.Append(columnName);
+                            stringBuilder.Append(columnName);
                         }
                     }
 
-                    sb.Append(") values(");
-                    var insertInto = sb.ToString();
+                    stringBuilder.Append(") values(");
+                    var insertInto = stringBuilder.ToString();
                     var fieldCount = dataReader.FieldCount;
-                    sb.Length = 0;
+                    stringBuilder.Length = 0;
                     var statementCount = 0;
 
                     while (dataReader.Read())
                     {
                         var values = new object[fieldCount];
                         dataReaderHelper.GetValues(values);
-                        sb.Append(insertInto);
+                        stringBuilder.Append(insertInto);
 
                         for (var i = 0; i < fieldCount; i++)
                         {
                             if (i > 0)
-                                sb.Append(',');
+                                stringBuilder.Append(',');
 
                             var s = InsertScriptFileWriter.ToString(values[i]);
-                            sb.Append(s);
+                            stringBuilder.Append(s);
                         }
 
-                        sb.AppendLine(");");
+                        stringBuilder.AppendLine(");");
                         ++statementCount;
 
                         if (statementCount % 100 == 0)
                         {
-                            _standardOutput.Write(sb);
-                            sb.Length = 0;
+                            _standardOutput.Write(stringBuilder);
+                            stringBuilder.Length = 0;
                         }
                     }
 
                     if (statementCount % 100 != 0)
-                        _standardOutput.Write(sb);
+                        _standardOutput.Write(stringBuilder);
 
                     if (!dataReader.NextResult())
                     {
@@ -574,40 +574,40 @@ Please wait...";
                 var schemaTable = dataReader.GetSchemaTable()!;
                 var schemaRows = schemaTable.Rows;
                 var columnCount = schemaRows.Count;
-                var sb = new StringBuilder();
-                sb.AppendFormat("insert into {0}(", tableName);
+                var stringBuilder = new StringBuilder();
+                stringBuilder.AppendFormat("insert into {0}(", tableName);
 
                 for (var i = 0; i < columnCount; ++i)
                 {
                     if (i > 0)
-                        sb.Append(',');
+                        stringBuilder.Append(',');
 
                     var schemaRow = schemaRows[i];
                     var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
-                    sb.Append(columnName);
+                    stringBuilder.Append(columnName);
                 }
 
-                sb.Append(")\r\nselect\r\n");
-                var insertInto = sb.ToString();
+                stringBuilder.Append(")\r\nselect\r\n");
+                var insertInto = stringBuilder.ToString();
                 var fieldCount = dataReader.FieldCount;
 
                 while (dataReader.Read())
                 {
                     var values = new object[fieldCount];
                     dataReaderHelper.GetValues(values);
-                    sb = new StringBuilder();
-                    sb.Append(insertInto);
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.Append(insertInto);
 
                     for (var i = 0; i < fieldCount; i++)
                     {
                         if (i > 0)
-                            sb.Append(",\r\n");
+                            stringBuilder.Append(",\r\n");
 
                         var s = InsertScriptFileWriter.ToString(values[i]);
-                        sb.AppendFormat("    {0} as {1}", s, dataReader.GetName(i));
+                        stringBuilder.AppendFormat("    {0} as {1}", s, dataReader.GetName(i));
                     }
 
-                    _standardOutput.WriteLine(sb);
+                    _standardOutput.WriteLine(stringBuilder);
                 }
             }
         }

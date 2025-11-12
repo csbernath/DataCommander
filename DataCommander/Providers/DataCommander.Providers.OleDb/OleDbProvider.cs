@@ -163,8 +163,8 @@ internal sealed class OleDbProvider : IProvider
             var allowDBNull = (bool)row["AllowDBNull"];
 
             var dataTypeName = dataReader.GetDataTypeName(i);
-            var sb = new StringBuilder();
-            sb.Append(dataReader.GetDataTypeName(i));
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append(dataReader.GetDataTypeName(i));
 
             switch (dbType)
             {
@@ -174,7 +174,7 @@ internal sealed class OleDbProvider : IProvider
                 case OleDbType.VarWChar:
                 case OleDbType.Binary:
                 case OleDbType.VarBinary:
-                    sb.AppendFormat("({0})", columnSize);
+                    stringBuilder.AppendFormat("({0})", columnSize);
                     break;
 
                 case OleDbType.Decimal:
@@ -182,9 +182,9 @@ internal sealed class OleDbProvider : IProvider
                     var scale = (short)row["NumericScale"];
 
                     if (scale == 0)
-                        sb.AppendFormat("({0})", precision);
+                        stringBuilder.AppendFormat("({0})", precision);
                     else
-                        sb.AppendFormat("({0},{1})", precision, scale);
+                        stringBuilder.AppendFormat("({0},{1})", precision, scale);
                     break;
 
                 default:
@@ -192,14 +192,14 @@ internal sealed class OleDbProvider : IProvider
             }
 
             if (!allowDBNull)
-                sb.Append(" NOT NULL");
+                stringBuilder.Append(" NOT NULL");
 
             table.Rows.Add([
                 columnOrdinal,
                 pk,
                 row[SchemaTableColumn.ColumnName],
                 columnSize,
-                sb.ToString(),
+                stringBuilder.ToString(),
                 row["DataType"],
                 row["ProviderType"]
             ]);

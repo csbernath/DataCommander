@@ -117,10 +117,10 @@ internal sealed class InsertScriptFileWriter : IResultWriter
 
                 case FieldType.BinaryField:
                     var binaryField = (BinaryField)value;
-                    var sb = new StringBuilder();
-                    sb.Append("0x");
-                    sb.Append(Hex.Encode(binaryField.Value, true));
-                    s = sb.ToString();
+                    var stringBuilder = new StringBuilder();
+                    stringBuilder.Append("0x");
+                    stringBuilder.Append(Hex.Encode(binaryField.Value, true));
+                    s = stringBuilder.ToString();
                     break;
 
                 case FieldType.StringField:
@@ -229,23 +229,23 @@ internal sealed class InsertScriptFileWriter : IResultWriter
     {
         var schemaRows = schemaTable.Rows;
         var columnCount = schemaRows.Count;
-        var sb = new StringBuilder();
-        sb.AppendFormat("insert into {0}(", tableName);
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendFormat("insert into {0}(", tableName);
 
         for (var columnIndex = 0; columnIndex < columnCount; columnIndex++)
         {
             if (columnIndex > 0)
             {
-                sb.Append(',');
+                stringBuilder.Append(',');
             }
 
             var schemaRow = schemaRows[columnIndex];
             var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
-            sb.Append(columnName);
+            stringBuilder.Append(columnName);
         }
 
-        sb.Append(") values(");
-        return sb.ToString();
+        stringBuilder.Append(") values(");
+        return stringBuilder.ToString();
     }
 
     void IResultWriter.WriteTableBegin(DataTable schemaTable)
@@ -271,7 +271,7 @@ internal sealed class InsertScriptFileWriter : IResultWriter
     void IResultWriter.WriteRows(object[][] rows, int rowCount)
     {
         var fieldCount = _schemaTable.Rows.Count;
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
         {
@@ -281,31 +281,31 @@ internal sealed class InsertScriptFileWriter : IResultWriter
             }
             else
             {
-                sb.AppendLine();
+                stringBuilder.AppendLine();
             }
 
             var values = rows[rowIndex];
-            sb.Append(_sqlStatementPrefix);
+            stringBuilder.Append(_sqlStatementPrefix);
 
             for (var i = 0; i < fieldCount; i++)
             {
                 if (i > 0)
                 {
-                    sb.Append(',');
+                    stringBuilder.Append(',');
                 }
 
                 var s = ToString(values[i]);
-                sb.Append(s);
+                stringBuilder.Append(s);
             }
 
-            sb.Append(");");
+            stringBuilder.Append(");");
         }
 
         if (rowCount > 0)
         {
-            sb.AppendLine();
-            sb.Append("GO");
-            _streamWriter!.Write(sb);
+            stringBuilder.AppendLine();
+            stringBuilder.Append("GO");
+            _streamWriter!.Write(stringBuilder);
         }
     }
 

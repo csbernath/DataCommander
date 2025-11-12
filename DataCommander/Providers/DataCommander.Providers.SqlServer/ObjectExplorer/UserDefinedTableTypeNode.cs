@@ -48,18 +48,18 @@ internal sealed class UserDefinedTableTypeNode(DatabaseNode database, int id, st
         var userDefinedTableType = database1.UserDefinedTableTypes[name, schema];
         var stringCollection = userDefinedTableType.Script();
 
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         var first = true;
         foreach (var s in stringCollection)
         {
             if (first)
                 first = false;
             else
-                sb.AppendLine("GO");
+                stringBuilder.AppendLine("GO");
 
-            sb.AppendLine(s);
+            stringBuilder.AppendLine(s);
         }
 
-        queryForm.SetClipboardText(sb.ToString());
+        queryForm.SetClipboardText(stringBuilder.ToString());
     }
 }

@@ -46,18 +46,18 @@ public static class SqlCommandExtensions
 
     private static string GetSpExecuteSqlParameters(SqlParameterCollection parameters)
     {
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         var first = true;
         foreach (SqlParameter parameter in parameters)
         {
             if (first)
                 first = false;
             else
-                sb.Append(',');
+                stringBuilder.Append(',');
 
             var dataTypeName = parameter.GetDataTypeName();
-            sb.Append($"{parameter.ParameterName} {dataTypeName}");
+            stringBuilder.Append($"{parameter.ParameterName} {dataTypeName}");
         }
-        return sb.ToString();
+        return stringBuilder.ToString();
     }
 }

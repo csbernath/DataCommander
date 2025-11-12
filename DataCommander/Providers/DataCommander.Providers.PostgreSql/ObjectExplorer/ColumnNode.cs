@@ -21,14 +21,14 @@ internal sealed class ColumnNode(
             var typeName = typeRepository.TryGetPostgresSqlTypeName(type.Oid, out var postgresSqlTypeName)
                 ? postgresSqlTypeName!.Name
                 : type.Name;
-            var sb = new StringBuilder();
-            sb.Append($"{name} ({typeName}");
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append($"{name} ({typeName}");
 
             if (notNull)
-                sb.Append(", not null");
+                stringBuilder.Append(", not null");
 
-            sb.Append(')');
-            return sb.ToString();
+            stringBuilder.Append(')');
+            return stringBuilder.ToString();
         }
     }
 

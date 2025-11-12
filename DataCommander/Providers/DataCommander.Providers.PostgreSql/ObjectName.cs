@@ -12,16 +12,16 @@ internal sealed class ObjectName(SqlObject sqlObject, string schemaName, string 
     {
         get
         {
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             if (schemaName != null)
             {
-                sb.Append(schemaName);
-                sb.Append('.');
+                stringBuilder.Append(schemaName);
+                stringBuilder.Append('.');
             }
 
-            sb.Append(objectName);
+            stringBuilder.Append(objectName);
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
     }
 
@@ -29,13 +29,13 @@ internal sealed class ObjectName(SqlObject sqlObject, string schemaName, string 
     {
         get
         {
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             var sqlCommandBuilder = new SqlCommandBuilder();
 
             if (schemaName != null)
             {
-                sb.Append(QuoteIdentifier(schemaName));
-                sb.Append('.');
+                stringBuilder.Append(QuoteIdentifier(schemaName));
+                stringBuilder.Append('.');
             }
             //else if (this.sqlObject.ParentAlias != null)
             //{
@@ -43,9 +43,9 @@ internal sealed class ObjectName(SqlObject sqlObject, string schemaName, string 
             //    sb.Append('.');
             //}
 
-            sb.Append(QuoteIdentifier(objectName));
+            stringBuilder.Append(QuoteIdentifier(objectName));
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
     }
 

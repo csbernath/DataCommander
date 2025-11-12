@@ -164,7 +164,7 @@ public sealed class TokenIterator
 
     private string ReadDigit()
     {
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         while (_index < _length)
         {
@@ -173,9 +173,9 @@ public sealed class TokenIterator
                 break;
             else
                 _index++;
-            sb.Append(c);
+            stringBuilder.Append(c);
         }
 
-        return sb.ToString();
+        return stringBuilder.ToString();
     }
 }

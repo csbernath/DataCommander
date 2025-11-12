@@ -22,13 +22,13 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
     {
         get
         {
-            var sb = new StringBuilder();
-            sb.Append(name);
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append(name);
 
             if (state == 6)
-                sb.Append(" (Offline)");
+                stringBuilder.Append(" (Offline)");
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
     }
 

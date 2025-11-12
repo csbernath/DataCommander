@@ -322,7 +322,11 @@ internal sealed class SqlServerProvider : IProvider
         return type;
     }
 
-    async Task<GetCompletionResult> IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position,
+    async Task<GetCompletionResult> IProvider.GetCompletion(
+        ConnectionBase connection,
+        IDbTransaction transaction,
+        string text,
+        int position,
         CancellationToken cancellationToken)
     {
         var fromCache = false;
@@ -489,15 +493,15 @@ internal sealed class SqlServerProvider : IProvider
         else
             owners = ["dbo", "sys"];
 
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         for (i = 0; i < owners.Length; i++)
         {
-            if (i > 0) sb.Append(',');
+            if (i > 0) stringBuilder.Append(',');
 
-            sb.AppendFormat("'{0}'", owners[i]);
+            stringBuilder.AppendFormat("'{0}'", owners[i]);
         }
 
-        var ownersString = sb.ToString();
+        var ownersString = stringBuilder.ToString();
         commandText = string.Format(@"declare @schema_id int
 select  top 1 @schema_id = s.schema_id
 from    [{0}].sys.schemas s
@@ -743,8 +747,8 @@ from
                 var columnSize = dataColumnSchema.ColumnSize;
                 var dbType = (SqlDbType)dataColumnSchema.ProviderType;
                 var dataTypeName = dataReader.GetDataTypeName(columnIndex);
-                var sb = new StringBuilder();
-                sb.Append(dataTypeName);
+                var stringBuilder = new StringBuilder();
+                stringBuilder.Append(dataTypeName);
 
                 switch (dbType)
                 {
@@ -761,7 +765,7 @@ from
                         else
                             columnSizeString = columnSize.ToString();
 
-                        sb.AppendFormat("({0})", columnSizeString);
+                        stringBuilder.AppendFormat("({0})", columnSizeString);
                         break;
 
                     case SqlDbType.Decimal:
@@ -769,9 +773,9 @@ from
                         var scale = dataColumnSchema.NumericScale.GetValueOrDefault();
 
                         if (scale == 0)
-                            sb.AppendFormat("({0})", precision);
+                            stringBuilder.AppendFormat("({0})", precision);
                         else
-                            sb.AppendFormat("({0},{1})", precision, scale);
+                            stringBuilder.AppendFormat("({0},{1})", precision, scale);
 
                         if (precision <= 9)
                             columnSize = 5;
@@ -785,9 +789,9 @@ from
                 }
 
                 var allowDbNull = dataColumnSchema.AllowDbNull.GetValueOrDefault();
-                if (!allowDbNull) sb.Append(" not null");
+                if (!allowDbNull) stringBuilder.Append(" not null");
 
-                table.Rows.Add(columnOrdinal + columnOrdinalAddition, primaryKey, dataColumnSchema.ColumnName, columnSize, sb.ToString(),
+                table.Rows.Add(columnOrdinal + columnOrdinalAddition, primaryKey, dataColumnSchema.ColumnName, columnSize, stringBuilder.ToString(),
                     dataColumnSchema.DataType);
 
                 columnIndex++;

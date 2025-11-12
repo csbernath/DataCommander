@@ -55,29 +55,29 @@ public static class LogFactoryExtensions
         if (parameters.Length > 0)
         {
             var parameterInfos = method.GetParameters();
-            var sb = new StringBuilder();
-            sb.Append($"Entering method {method.Name}(");
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append($"Entering method {method.Name}(");
             var count = Math.Min(parameterInfos.Length, parameters.Length);
 
             for (var i = 0; i < count; i++)
             {
                 var parameterInfo = parameterInfos[i];
-                sb.Append($"\r\n{parameterInfo.ParameterType.Name} {parameterInfo.Name}");
+                stringBuilder.Append($"\r\n{parameterInfo.ParameterType.Name} {parameterInfo.Name}");
                 if (i < parameters.Length)
                 {
-                    sb.Append(" = ");
+                    stringBuilder.Append(" = ");
                     var parameterString = ParameterValueToString(parameters[i]);
-                    sb.Append(parameterString);
+                    stringBuilder.Append(parameterString);
                 }
 
                 if (i < count - 1)
                 {
-                    sb.Append(',');
+                    stringBuilder.Append(',');
                 }
             }
 
-            sb.Append(')');
-            var message = sb.ToString();
+            stringBuilder.Append(')');
+            var message = stringBuilder.ToString();
             log.Trace(message);
         }
 
