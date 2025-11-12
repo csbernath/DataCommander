@@ -439,10 +439,9 @@ Please wait...";
         // _mnuCodeCompletion
         // 
         _mnuCodeCompletion.DropDownItems.AddRange(
-        [
             _mnuListMembers,
             _mnuClearCache
-        ]);
+        );
         _mnuCodeCompletion.MergeIndex = 3;
         _mnuCodeCompletion.Name = "_mnuCodeCompletion";
         _mnuCodeCompletion.Size = new Size(166, 22);
