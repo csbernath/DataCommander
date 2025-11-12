@@ -10,6 +10,10 @@ public sealed class InternalLogFactory : ILogFactory
     public static readonly InternalLogFactory Instance = new();
     public static readonly InternalLogWriter InternalLogWriter = new();
 
+    private InternalLogFactory()
+    {
+    }
+
     void IDisposable.Dispose()
     {
     }
@@ -18,7 +22,7 @@ public sealed class InternalLogFactory : ILogFactory
 
     ILog ILogFactory.GetLog(string? name) => new InternalLog(InternalLogWriter, LocalTime.Default, name);
     
-    void ILogFactory.Write(IEnumerable<LogEntry> logEntries)
+    void ILogFactory.Write(IReadOnlyCollection<LogEntry> logEntries)
     {
         throw new NotImplementedException();
     }

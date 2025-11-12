@@ -50,11 +50,13 @@
             elapsedTimeTextBox.Location = new System.Drawing.Point(91, 191);
             elapsedTimeTextBox.Name = "elapsedTimeTextBox";
             elapsedTimeTextBox.ReadOnly = true;
-            elapsedTimeTextBox.Size = new System.Drawing.Size(44, 20);
+            elapsedTimeTextBox.Size = new System.Drawing.Size(46, 20);
             elapsedTimeTextBox.TabIndex = 1;
+            elapsedTimeTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // cancelButton
             // 
+            cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             cancelButton.Location = new System.Drawing.Point(245, 190);
             cancelButton.Name = "cancelButton";
             cancelButton.Size = new System.Drawing.Size(94, 29);
@@ -68,13 +70,13 @@
             label1.AutoSize = true;
             label1.Location = new System.Drawing.Point(3, 190);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(98, 20);
+            label1.Size = new System.Drawing.Size(86, 17);
             label1.TabIndex = 3;
             label1.Text = "Elapsed time:";
             // 
             // CancelableOperationForm
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             CancelButton = cancelButton;
             ClientSize = new System.Drawing.Size(586, 231);
@@ -86,7 +88,6 @@
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "CancelableOperationForm";
             ShowIcon = false;
             ShowInTaskbar = false;
             StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

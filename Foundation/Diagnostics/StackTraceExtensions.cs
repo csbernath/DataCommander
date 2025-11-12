@@ -6,19 +6,22 @@ namespace Foundation.Diagnostics;
 
 public static class StackTraceExtensions
 {
-    public static string ToLogString(this StackTrace trace)
+    extension(StackTrace trace)
     {
-        ArgumentNullException.ThrowIfNull(trace);
-
-        var stringBuilder = new StringBuilder();
-        var count = trace.FrameCount;
-        for (var i = 0; i < count; ++i)
+        public string ToLogString()
         {
-            var frame = trace.GetFrame(i)!;
-            stringBuilder.AppendLine(frame.ToLogString());
-        }
+            ArgumentNullException.ThrowIfNull(trace);
 
-        return stringBuilder.ToString();
+            var stringBuilder = new StringBuilder();
+            var count = trace.FrameCount;
+            for (var i = 0; i < count; ++i)
+            {
+                var frame = trace.GetFrame(i)!;
+                stringBuilder.AppendLine(frame.ToLogString());
+            }
+
+            return stringBuilder.ToString();
+        }
     }
 
     public static string GetTrace(int skipFrames)

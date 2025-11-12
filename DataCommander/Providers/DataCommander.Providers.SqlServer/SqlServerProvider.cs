@@ -50,7 +50,7 @@ internal sealed class SqlServerProvider : IProvider
 
             var header = sqlError.GetHeader();
             var message = sqlError.Message;
-            messages.Add(InfoMessageFactory.Create(severity, header, message));
+            messages.Add(new InfoMessage(creationTime, severity, header, message));
         }
 
         return messages;
@@ -67,13 +67,13 @@ internal sealed class SqlServerProvider : IProvider
 
     ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(connectionStringAndCredential);
 
-    string[] IProvider.KeyWords => KeyWordRepository.Get();
+    IReadOnlySet<string> IProvider.KeyWords => KeyWordRepository.Get();
 
     bool IProvider.CanConvertCommandToString => true;
 
     bool IProvider.IsCommandCancelable => true;
 
-    public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
+    public IObjectExplorer? CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
 
     public void ClearCompletionCache()
     {
@@ -268,11 +268,11 @@ internal sealed class SqlServerProvider : IProvider
         return typeName;
     }
 
-    Type IProvider.GetColumnType(FoundationDbColumn column)
+    Type? IProvider.GetColumnType(FoundationDbColumn column)
     {
         var dbType = (SqlDbType)column.ProviderType;
         var columnSize = column.ColumnSize;
-        Type type;
+        Type? type;
 
         switch (dbType)
         {
@@ -310,6 +310,10 @@ internal sealed class SqlServerProvider : IProvider
                 type = typeof(short);
                 break;
 
+            case SqlDbType.Udt:
+                type = null;
+                break;
+
             default:
                 type = typeof(object);
                 break;
@@ -345,11 +349,14 @@ internal sealed class SqlServerProvider : IProvider
             {
                 if (value.StartsWith("@@"))
                 {
-                    array = KeyWordRepository.Get().Where(k => k.StartsWith(value)).Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
+                    var keywords = KeyWordRepository.Get(); 
+                    array = [.. keywords
+                        .Where(k => k.StartsWith(value, StringComparison.InvariantCultureIgnoreCase))
+                        .Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord))];
                 }
                 else
                 {
-                    SortedList<string, object> list = [];
+                    SortedList<string, object?> list = [];
 
                     for (var i = 0; i < tokens.Count; i++)
                     {
@@ -415,12 +422,12 @@ internal sealed class SqlServerProvider : IProvider
                                 break;
 
                             case 2:
-                                if (nameParts[0] != null)
+                                if (nameParts![0] != null)
                                 {
-                                    statements.Add(SqlServerObject.GetSchemas(nameParts[0]));
+                                    statements.Add(SqlServerObject.GetSchemas(nameParts[0]!));
 
                                     var objectTypes = sqlObject.Type.ToObjectTypes();
-                                    statements.Add(SqlServerObject.GetObjects(nameParts[0], objectTypes));
+                                    statements.Add(SqlServerObject.GetObjects(nameParts[0]!, objectTypes));
                                 }
 
                                 break;
@@ -487,10 +494,9 @@ end", name.Database, ownersString, name.Name);
                     case SqlObjectTypes.Procedure:
                         name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
 
-                        if (name.Schema == null)
-                            name.Schema = "dbo";
+                        name.Schema ??= "dbo";
 
-                        commandText = SqlServerObject.GetObjectsByDatabase(name.Database, ["P", "X"]);
+                        commandText = SqlServerObject.GetObjectsByDatabase(name.Database!, ["P", "X"]);
                         break;
 
                     case SqlObjectTypes.Trigger:
@@ -503,7 +509,7 @@ end", name.Database, ownersString, name.Name);
                         var sqlCommandBuilder = new SqlCommandBuilder();
                         var columnName = sqlCommandBuilder.QuoteIdentifier(items[i]);
 
-                        string tableNameOrAlias = null;
+                        string? tableNameOrAlias = null;
                         if (i > 0)
                         {
                             i--;
@@ -603,7 +609,9 @@ from
             }
         }
 
-        return new GetCompletionResult(startPosition, length, array, fromCache);
+        ArgumentNullException.ThrowIfNull(array);
+
+        return new GetCompletionResult(startPosition, length, array!, fromCache);
     }
 
     DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
@@ -651,11 +659,7 @@ from
             row[5] = parameter.Precision;
             row[6] = parameter.Scale;
             row[7] = parameter.Direction.ToString("G");
-
-            row[8] = parameter.Value == null
-                ? DBNull.Value
-                : parameter.Value;
-
+            row[8] = parameter.Value ?? DBNull.Value;
             row[9] = parameter.TypeName;
 
             dataTable.Rows.Add(row);
@@ -666,7 +670,7 @@ from
         return dataTable;
     }
 
-    DataTable IProvider.GetSchemaTable(IDataReader dataReader)
+    DataTable? IProvider.GetSchemaTable(IDataReader dataReader)
     {
         DataTable? table = null;
         var schemaTable = dataReader.GetSchemaTable();
@@ -863,23 +867,26 @@ from
         return target;
     }
 
-    private static bool IsBatchSeparator(string commandText, Token token)
+    private static bool IsBatchSeparator(ReadOnlySpan<char> commandText, Token token)
     {
+        const char newLine = '\n';
+        const string batchSeparator = "GO";
+
         var isBatchSeparator =
             token.Type == TokenType.KeyWord &&
-            string.Compare(token.Value, "GO", StringComparison.InvariantCultureIgnoreCase) == 0;
+            string.Compare(token.Value, batchSeparator, StringComparison.InvariantCultureIgnoreCase) == 0;
 
         if (isBatchSeparator)
         {
-            var lineStartIndex = commandText.LastIndexOf('\n', token.StartPosition);
+            var lineStartIndex = commandText.LastIndexOf(newLine, token.StartPosition);
             lineStartIndex++;
-            var lineEndIndex = commandText.IndexOf('\n', token.EndPosition + 1);
-            if (lineEndIndex == -1) lineEndIndex = commandText.Length - 1;
-
+            var lineEndIndex = commandText.IndexOf(newLine, token.EndPosition + 1);
+            if (lineEndIndex == -1)
+                lineEndIndex = commandText.Length - 1;
             var lineLength = lineEndIndex - lineStartIndex + 1;
-            var line = commandText.Substring(lineStartIndex, lineLength);
+            var line = commandText.Slice(lineStartIndex, lineLength);
             line = line.Trim();
-            isBatchSeparator = string.Compare(line, "GO", StringComparison.InvariantCultureIgnoreCase) == 0;
+            isBatchSeparator = line.CompareTo(batchSeparator, StringComparison.InvariantCultureIgnoreCase) == 0;
         }
 
         return isBatchSeparator;

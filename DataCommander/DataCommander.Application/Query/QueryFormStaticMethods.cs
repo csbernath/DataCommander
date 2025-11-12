@@ -83,7 +83,7 @@ internal static class QueryFormStaticMethods
                 Text = dataColumn.ColumnName,
                 Width = -2
             };
-            var type = (Type?)dataColumn.ExtendedProperties[0] ?? dataColumn.DataType;
+            var type = (Type?)dataColumn.ExtendedProperties["DataType"] ?? dataColumn.DataType;
             columnHeader.TextAlign = GetHorizontalAlignment(type);
             listView.Columns.Add(columnHeader);
         }
@@ -113,7 +113,8 @@ internal static class QueryFormStaticMethods
         var typeCode = Type.GetTypeCode(type);
         var align = typeCode switch
         {
-            TypeCode.SByte or TypeCode.Int16 or TypeCode.Int32 or TypeCode.Int64 or TypeCode.Byte or TypeCode.UInt16 or TypeCode.UInt32 or TypeCode.UInt64 or TypeCode.Decimal => HorizontalAlignment.Right,
+            TypeCode.SByte or TypeCode.Int16 or TypeCode.Int32 or TypeCode.Int64 or TypeCode.Byte or TypeCode.UInt16 or TypeCode.UInt32 or TypeCode.UInt64
+                or TypeCode.Decimal => HorizontalAlignment.Right,
             _ => HorizontalAlignment.Left,
         };
         return align;
@@ -205,7 +206,7 @@ internal static class QueryFormStaticMethods
         return found;
     }
 
-    public static void AddInfoMessageToQueryForm(QueryForm queryForm, long elapsedTicks, string connectionName, string providerName,
+    public static void AddConnectionOpenedInfoMessageToQueryForm(QueryForm queryForm, long elapsedTicks, string? connectionName, string providerName,
         ConnectionBase connection)
     {
         var message = $@"Connection opened in {StopwatchTimeSpan.ToString(elapsedTicks, 3)} seconds.

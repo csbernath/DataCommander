@@ -14,7 +14,6 @@ namespace DataCommander.Application.ResultWriter;
 
 public class JsonResultWriter(Action<InfoMessage> addInfoMessage) : IResultWriter
 {
-    private readonly Action<InfoMessage> _addInfoMessage = addInfoMessage;
     private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage, false);
     private Guid? _guid;
     private int _tableIndex;    
@@ -40,7 +39,7 @@ public class JsonResultWriter(Action<InfoMessage> addInfoMessage) : IResultWrite
             _guid = Guid.NewGuid();
 
         var path = Path.Combine(Path.GetTempPath(), $"JsonResult {_guid} {_tableIndex}.json");
-        _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, $"Creating file {path}..."));
+        addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, $"Creating file {path}..."));
         
         _utf8JsonStream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
         _utf8JsonWriter = new Utf8JsonWriter(_utf8JsonStream, new JsonWriterOptions { Indented = true });

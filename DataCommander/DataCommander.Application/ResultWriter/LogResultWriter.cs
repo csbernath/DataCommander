@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -10,7 +9,6 @@ using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.QueryConfiguration;
 using Foundation.Collections;
-using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
@@ -37,7 +35,7 @@ internal sealed class LogResultWriter : IResultWriter
 
     private string? _fileName;
     private Api.QueryConfiguration.Query? _query;
-    private ReadOnlyCollection<DbRequestParameter>? _parameters;
+    private IReadOnlyCollection<DbRequestParameter>? _parameters;
     private string? _commandText;
     private List<Result>? _results;
 
@@ -103,7 +101,7 @@ internal sealed class LogResultWriter : IResultWriter
         if (_query != null)
         {
             var directory = _fileName != null ? Path.GetDirectoryName(_fileName) : Path.GetTempPath();
-            var results = _query.Results.EmptyIfNull().Zip(_results, ToResult).ToReadOnlyCollection();
+            var results = _query.Results.EmptyIfNull().Zip(_results, ToResult).ToArray();
             var query = new DbRequest(directory, _query.Name, _query.Using, _query.Namespace, _commandText, 0, _parameters, results);
 
             var queryBuilder = new DbRequestBuilder(query);
@@ -151,7 +149,7 @@ internal sealed class LogResultWriter : IResultWriter
 
         if (_query != null)
         {
-            var fields = dbColumns.Select(ToField).ToReadOnlyCollection();
+            var fields = dbColumns.Select(ToField).ToArray();
             var result = new Result(fields);
             _results!.Add(result);
         }
@@ -224,14 +222,26 @@ internal sealed class LogResultWriter : IResultWriter
 
     private DataTransferObjectField ToDataTransferObjectField(FoundationDbColumn dbColumn)
     {
-        var name = dbColumn.ColumnName;
+        var name = dbColumn.ColumnName!;
+        var dataType = dbColumn.DataType!;
+        var isArray = dataType.IsArray;
+        CSharpType cSharpType;
+        if (isArray)
+        {
+            var elementType = dataType.GetElementType();
+            cSharpType = CSharpTypeArray.CSharpTypes.First(t => t.Type == elementType);
+        }
+        else
+            cSharpType = CSharpTypeArray.CSharpTypes.First(t => t.Type == dbColumn.DataType);
 
-        var cSharpType = CSharpTypeArray.CSharpTypes.First(t => t.Type == dbColumn.DataType);
         var stringBuilder = new StringBuilder();
         stringBuilder.Append(cSharpType.Name);
 
         if (dbColumn.AllowDbNull == true && cSharpType == CSharpTypeArray.String)
             stringBuilder.Append('?');
+
+        if (isArray)
+            stringBuilder.Append("[]");
 
         var type = stringBuilder.ToString();
         
@@ -279,8 +289,8 @@ internal sealed class LogResultWriter : IResultWriter
 
     private static DbQueryResultField ToField(FoundationDbColumn column) => new(column.ColumnName, column.DataType, column.AllowDbNull == true);
 
-    private class Result(ReadOnlyCollection<DbQueryResultField> fields)
+    private class Result(IReadOnlyCollection<DbQueryResultField> fields)
     {
-        public readonly ReadOnlyCollection<DbQueryResultField> Fields = fields;
+        public readonly IReadOnlyCollection<DbQueryResultField> Fields = fields;
     }
 }

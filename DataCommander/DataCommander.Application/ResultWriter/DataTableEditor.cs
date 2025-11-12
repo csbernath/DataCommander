@@ -17,7 +17,6 @@ using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.FieldReaders;
 using DataCommander.Api.ResultWriter;
-using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
@@ -54,7 +53,7 @@ internal class DataTableEditor : UserControl
         // This call is required by the Windows.Forms Form Designer.
         InitializeComponent();
 
-        _dataGrid!.Font = new Font("Microsoft Sans Serif", 7);
+        _dataGrid!.Font = new Font("Microsoft Sans Serif", 8);
 
         // TODO: Add any initialization after the InitForm call
         GarbageMonitor.Default.Add("DataTableEditor", this);
@@ -82,6 +81,8 @@ internal class DataTableEditor : UserControl
                     _dataGrid.DataError += DataGrid_DataError;
                 }
 
+                _dataGrid.CellFormatting += DataGrid_CellFormatting;
+
                 var graphics = CreateGraphics();
                 var font = _dataGrid.Font;
 
@@ -107,33 +108,29 @@ internal class DataTableEditor : UserControl
                     }
 
                     textBoxColumn.HeaderText = columnName;
-                    var maxWidth = graphics.MeasureString(columnName, font).Width;
-                    var type = (Type?)dataColumn.ExtendedProperties[0];
+                    var maxWidth = graphics.MeasureString(columnName, font).Width + 6;
 
-                    if (type == null)
-                    {
-                        type = dataColumn.DataType;
-                    }
-
+                    var type = dataColumn.ExtendedProperties["DataType"] as Type ?? dataColumn.DataType;
                     var typeCode = Type.GetTypeCode(type);
 
-                    if (typeCode == TypeCode.Byte ||
-                        typeCode == TypeCode.SByte ||
-                        typeCode == TypeCode.Int16 ||
-                        typeCode == TypeCode.Int32 ||
-                        typeCode == TypeCode.Int64 ||
-                        typeCode == TypeCode.UInt16 ||
-                        typeCode == TypeCode.UInt32 ||
-                        typeCode == TypeCode.UInt64 ||
-                        typeCode == TypeCode.Decimal ||
-                        typeCode == TypeCode.Single ||
-                        typeCode == TypeCode.Double)
+                    switch (typeCode)
                     {
-                        textBoxColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                    }
-                    else if (typeCode == TypeCode.DateTime)
-                    {
-                        textBoxColumn.DefaultCellStyle.Format = "yyyy.MM.dd HH:mm:ss.fff";
+                        case TypeCode.Byte:
+                        case TypeCode.SByte:
+                        case TypeCode.Int16:
+                        case TypeCode.Int32:
+                        case TypeCode.Int64:
+                        case TypeCode.UInt16:
+                        case TypeCode.UInt32:
+                        case TypeCode.UInt64:
+                        case TypeCode.Decimal:
+                        case TypeCode.Single:
+                        case TypeCode.Double:
+                            textBoxColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                            break;
+                        case TypeCode.DateTime:
+                            textBoxColumn.DefaultCellStyle.Format = "yyyy.MM.dd HH:mm:ss.fff";
+                            break;
                     }
 
                     if (true)
@@ -147,7 +144,7 @@ internal class DataTableEditor : UserControl
 
                             if (length <= 256)
                             {
-                                var width = graphics.MeasureString(s, font).Width;
+                                var width = graphics.MeasureString(s, font).Width + 16;
                                 if (width > maxWidth)
                                     maxWidth = width;
                             }
@@ -285,7 +282,8 @@ internal class DataTableEditor : UserControl
 
     private void DataGrid_DataError(object? sender, DataGridViewDataErrorEventArgs e)
     {
-        MessageBox.Show(e.Exception!.ToString());
+        DataCommanderMessageBox.MessageBox.Show(this, e.Exception!.ToString(), MessageBoxCaption.Value, MessageBoxButtons.OK,
+            MessageBoxIcon.Error);
         e.ThrowException = false;
         e.Cancel = true;
     }
@@ -298,7 +296,7 @@ internal class DataTableEditor : UserControl
             valueString = "null";
         else
         {
-            var type = (Type)column.ExtendedProperties[0];
+            var type = (Type?)column.ExtendedProperties["DataType"];
 
             if (type == null)
                 type = column.DataType;
@@ -342,9 +340,9 @@ internal class DataTableEditor : UserControl
         var columns = _tableSchema.Columns;
         var stringBuilder = new StringBuilder();
         var first = true;
-        var uniqueIndexColumns = UniqueIndexColumns.ToReadOnlyCollection();
-        if (uniqueIndexColumns.Count == 0)
-            uniqueIndexColumns = columns.ToReadOnlyCollection();
+        var uniqueIndexColumns = UniqueIndexColumns.ToArray();
+        if (uniqueIndexColumns.Length == 0)
+            uniqueIndexColumns = columns.ToArray();
 
         foreach (var uniqueIndexColumn in uniqueIndexColumns)
         {
@@ -577,7 +575,7 @@ internal class DataTableEditor : UserControl
         {
             Title = "Save table",
             Filter =
-            "HTML (*.htm)|*.htm|Fixed Width Columns (*.txt)|*.txt|Tab Separated Values (*.tsv)|*.tsv|XML Spreadsheet 2007(*.xlsx)|*.xlsx",
+                "HTML (*.htm)|*.htm|Fixed Width Columns (*.txt)|*.txt|Tab Separated Values (*.tsv)|*.tsv|XML Spreadsheet 2007(*.xlsx)|*.xlsx",
             FilterIndex = 5,
             AddExtension = true,
             OverwritePrompt = true
@@ -671,7 +669,8 @@ internal class DataTableEditor : UserControl
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.ToString());
+                    DataCommanderMessageBox.MessageBox.Show(this, ex.ToString(), MessageBoxCaption.Value, MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -856,7 +855,8 @@ internal class DataTableEditor : UserControl
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.ToString());
+            DataCommanderMessageBox.MessageBox.Show(this, ex.ToString(), MessageBoxCaption.Value, MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
         }
     }
 
@@ -956,7 +956,7 @@ internal class DataTableEditor : UserControl
                             //        if (value is Guid)
                             //        {
                             //            Guid guid = (Guid)value;
-                            //            value = guid.ToString();
+                            //            value = guid.ToDecimalMetricString();
                             //        }
                             //        else
                             //        {
@@ -1025,7 +1025,7 @@ internal class DataTableEditor : UserControl
 
     private void UnhideRows_Click(object? sender, EventArgs e)
     {
-        foreach (var row in _dataGrid!.Rows.Cast<DataGridViewRow>().Where(r => !r.Visible)) 
+        foreach (var row in _dataGrid!.Rows.Cast<DataGridViewRow>().Where(r => !r.Visible))
             row.Visible = true;
     }
 
@@ -1046,189 +1046,15 @@ internal class DataTableEditor : UserControl
             switch (hitTestInfo.Type)
             {
                 case DataGridViewHitTestType.TopLeftHeader:
-                    menuItem = new ToolStripMenuItem("Copy column names", null, CopyColumnNames_Click);
-                    menu.Items.Add(menuItem);
-
-                    menuItem = new ToolStripMenuItem("&Save table as", null, SaveTableAs_Click);
-                    menu.Items.Add(menuItem);
-
-                    menuItem = new ToolStripMenuItem("&Copy table", null, CopyTable_Click);
-                    menu.Items.Add(menuItem);
-
-                    menuItem = new ToolStripMenuItem("Copy table as XML", null, CopyTableAsXml_Click);
-                    menu.Items.Add(menuItem);
-
-                    menuItem = new ToolStripMenuItem("Edit dataview properties", null, EditDataViewProperties_Click);
-                    menu.Items.Add(menuItem);
-
-                    var any = _dataGrid.Columns.Cast<DataGridViewColumn>().Any(c => !c.Visible);
-                    if (any)
-                    {
-                        menuItem = new ToolStripMenuItem("Unhide all columns", null, UnhideAllColumns_Click);
-                        menu.Items.Add(menuItem);
-                    }
-
-                    any = _dataGrid.Rows.Cast<DataGridViewRow>().Any(r => !r.Visible);
-                    if (any)
-                    {
-                        menuItem = new ToolStripMenuItem("Unhide all rows", null, UnhideRows_Click);
-                        menu.Items.Add(menuItem);
-                    }
-
+                    HandleTopLeftHeaderClicked(menu);
                     break;
 
                 case DataGridViewHitTestType.ColumnHeader:
-                {
-                    _columnIndex = hitTestInfo.ColumnIndex;
-                    _columnName = _dataTable.Columns[_columnIndex].ColumnName;
-                    menuItem = new ToolStripMenuItem($"Copy column name '{_columnName}'", null, CopyColumnName_Click);
-                    menu.Items.Add(menuItem);
-                    menuItem = new ToolStripMenuItem("Hide column", null, HideColumn_Click);
-                    menu.Items.Add(menuItem);
-                }
-
+                    HandleColumnHeaderClicked(hitTestInfo, menu);
                     break;
 
                 case DataGridViewHitTestType.Cell:
-                {
-                    rowFilter = null;
-                        var rowNumber = hitTestInfo.RowIndex;
-                        var columnNumber = hitTestInfo.ColumnIndex;
-
-                        var dataRow = _dataTable.DefaultView[rowNumber].Row;
-                    _columnName = _dataTable.Columns[columnNumber].ColumnName;
-
-                    if (_columnName.Contains('!'))
-                    {
-                        _columnName = $"[{_columnName}]";
-                    }
-
-                    menuItem = new ToolStripMenuItem("&Find", null, Find_Click);
-                    menu.Items.Add(menuItem);
-
-                    _cellValue = dataRow[columnNumber];
-                        var type = _cellValue.GetType();
-                        var fieldType = FieldTypeDictionary.Instance.GetValueOrDefault(type);
-
-                    switch (fieldType)
-                    {
-                        case FieldType.StringField:
-                                var value = ((StringField)_cellValue).Value;
-                            if (value != null && value.Length < 256)
-                                rowFilter = $"[{_columnName}] = '{value}'";
-                            break;
-
-                        case FieldType.DateTimeField:
-                            rowFilter = null;
-                            break;
-
-                        default:
-                            if (_cellValue == DBNull.Value)
-                                rowFilter = $"[{_columnName}] is null";
-                            else
-                            {
-                                    var typeCode = Type.GetTypeCode(type);
-                                string valueStr;
-
-                                switch (typeCode)
-                                {
-                                    case TypeCode.String:
-                                        valueStr = (string)_cellValue;
-
-                                        if (valueStr.Length < 256)
-                                        {
-                                            valueStr = $"'{_cellValue}'";
-                                            rowFilter = $"[{_columnName}] = {valueStr}";
-                                        }
-
-                                        break;
-
-                                    case TypeCode.Object:
-                                        if (type == typeof(Guid))
-                                        {
-                                            valueStr = $"'{_cellValue}'";
-                                        }
-                                        else
-                                        {
-                                            valueStr = _cellValue.ToString()!;
-                                        }
-
-                                        rowFilter = $"[{_columnName}] = {valueStr}";
-                                        break;
-
-                                    default:
-                                        valueStr = _cellValue.ToString()!;
-                                        rowFilter = $"[{_columnName}] = {valueStr}";
-                                        break;
-                                }
-                            }
-
-                            break;
-                    }
-
-                    if (rowFilter != null)
-                    {
-                        menuItem = new ToolStripMenuItem(rowFilter, null, RowFilter_Click);
-                        menu.Items.Add(menuItem);
-                    }
-
-                    if (_cellValue != DBNull.Value)
-                    {
-                        switch (fieldType)
-                        {
-                            case FieldType.BinaryField:
-                                menuItem = new ToolStripMenuItem("Save binary field as", null, SaveBinaryField_Click);
-                                menu.Items.Add(menuItem);
-                                menuItem = new ToolStripMenuItem("Open as Excel file", null, OpenAsExcelFile_Click);
-                                menu.Items.Add(menuItem);
-                                break;
-
-                            case FieldType.StreamField:
-                                menuItem = new ToolStripMenuItem("Save stream field as", null, SaveStreamField_Click);
-                                menu.Items.Add(menuItem);
-                                break;
-
-                            case FieldType.StringField:
-                            {
-                                        var stringField = (StringField)_cellValue;
-                                        var value = stringField.Value;
-                                        var length = value != null ? value.Length : 0;
-                                menuItem = new ToolStripMenuItem("Copy string field", null, CopyStringField_Click);
-                                menu.Items.Add(menuItem);
-
-                                menuItem = new ToolStripMenuItem(
-                                    $"Save string field (length: {length}) as",
-                                    null,
-                                    SaveStringField_Click);
-
-                                menu.Items.Add(menuItem);
-                            }
-                                break;
-
-                            case FieldType.String:
-                            {
-                                        var value = (string)_cellValue;
-                                        var length = value.Length;
-
-                                menuItem = new ToolStripMenuItem("Copy string field", null, CopyStringField_Click);
-                                menu.Items.Add(menuItem);
-
-                                menuItem = new ToolStripMenuItem(
-                                    $"Save string field (length: {length}) as",
-                                    null,
-                                    SaveStringField_Click);
-
-                                menu.Items.Add(menuItem);
-                            }
-                                break;
-
-                            case FieldType.StringArray:
-                                menuItem = new ToolStripMenuItem("Copy string[] field", null, CopyArrayField_Click);
-                                menu.Items.Add(menuItem);
-                                break;
-                        }
-                    }
-                }
+                    HandleCellClicked(hitTestInfo, menu);
                     break;
 
                 case DataGridViewHitTestType.RowHeader:
@@ -1240,5 +1066,198 @@ internal class DataTableEditor : UserControl
             var pos = new Point(e.X, e.Y);
             menu.Show(_dataGrid, pos);
         }
+    }
+
+    private void HandleCellClicked(DataGridView.HitTestInfo hitTestInfo, ContextMenuStrip menu)
+    {
+        string? rowFilter;
+        ToolStripMenuItem menuItem;
+        rowFilter = null;
+        var rowNumber = hitTestInfo.RowIndex;
+        var columnNumber = hitTestInfo.ColumnIndex;
+
+        var dataRow = _dataTable.DefaultView[rowNumber].Row;
+        _columnName = _dataTable.Columns[columnNumber].ColumnName;
+
+        if (_columnName.Contains('!'))
+        {
+            _columnName = $"[{_columnName}]";
+        }
+
+        menuItem = new ToolStripMenuItem("&Find", null, Find_Click);
+        menu.Items.Add(menuItem);
+
+        _cellValue = dataRow[columnNumber];
+        var type = _cellValue.GetType();
+        var fieldType = FieldTypeDictionary.Instance.GetValueOrDefault(type);
+
+        switch (fieldType)
+        {
+            case FieldType.StringField:
+                var value = ((StringField)_cellValue).Value;
+                if (value != null && value.Length < 256)
+                    rowFilter = $"[{_columnName}] = '{value}'";
+                break;
+
+            case FieldType.DateTimeField:
+                rowFilter = null;
+                break;
+
+            default:
+                if (_cellValue == DBNull.Value)
+                    rowFilter = $"[{_columnName}] is null";
+                else
+                {
+                    var typeCode = Type.GetTypeCode(type);
+                    string valueStr;
+
+                    switch (typeCode)
+                    {
+                        case TypeCode.String:
+                            valueStr = (string)_cellValue;
+
+                            if (valueStr.Length < 256)
+                            {
+                                valueStr = $"'{_cellValue}'";
+                                rowFilter = $"[{_columnName}] = {valueStr}";
+                            }
+
+                            break;
+
+                        case TypeCode.Object:
+                            if (type == typeof(Guid))
+                            {
+                                valueStr = $"'{_cellValue}'";
+                            }
+                            else
+                            {
+                                valueStr = _cellValue.ToString()!;
+                            }
+
+                            rowFilter = $"[{_columnName}] = {valueStr}";
+                            break;
+
+                        default:
+                            valueStr = _cellValue.ToString()!;
+                            rowFilter = $"[{_columnName}] = {valueStr}";
+                            break;
+                    }
+                }
+
+                break;
+        }
+
+        if (rowFilter != null)
+        {
+            menuItem = new ToolStripMenuItem(rowFilter, null, RowFilter_Click);
+            menu.Items.Add(menuItem);
+        }
+
+        if (_cellValue != DBNull.Value)
+        {
+            switch (fieldType)
+            {
+                case FieldType.BinaryField:
+                    menuItem = new ToolStripMenuItem("Save binary field as", null, SaveBinaryField_Click);
+                    menu.Items.Add(menuItem);
+                    menuItem = new ToolStripMenuItem("Open as Excel file", null, OpenAsExcelFile_Click);
+                    menu.Items.Add(menuItem);
+                    break;
+
+                case FieldType.StreamField:
+                    menuItem = new ToolStripMenuItem("Save stream field as", null, SaveStreamField_Click);
+                    menu.Items.Add(menuItem);
+                    break;
+
+                case FieldType.StringField:
+                {
+                    var stringField = (StringField)_cellValue;
+                    var value = stringField.Value;
+                    var length = value != null ? value.Length : 0;
+                    menuItem = new ToolStripMenuItem("Copy string field", null, CopyStringField_Click);
+                    menu.Items.Add(menuItem);
+
+                    menuItem = new ToolStripMenuItem(
+                        $"Save string field (length: {length}) as",
+                        null,
+                        SaveStringField_Click);
+
+                    menu.Items.Add(menuItem);
+                }
+                    break;
+
+                case FieldType.String:
+                {
+                    var value = (string)_cellValue;
+                    var length = value.Length;
+
+                    menuItem = new ToolStripMenuItem("Copy string field", null, CopyStringField_Click);
+                    menu.Items.Add(menuItem);
+
+                    menuItem = new ToolStripMenuItem(
+                        $"Save string field (length: {length}) as",
+                        null,
+                        SaveStringField_Click);
+
+                    menu.Items.Add(menuItem);
+                }
+                    break;
+
+                case FieldType.StringArray:
+                    menuItem = new ToolStripMenuItem("Copy string[] field", null, CopyArrayField_Click);
+                    menu.Items.Add(menuItem);
+                    break;
+            }
+        }
+    }
+
+    private void HandleColumnHeaderClicked(DataGridView.HitTestInfo hitTestInfo, ContextMenuStrip menu)
+    {
+        ToolStripMenuItem menuItem;
+        _columnIndex = hitTestInfo.ColumnIndex;
+        _columnName = _dataTable.Columns[_columnIndex].ColumnName;
+        menuItem = new ToolStripMenuItem($"Copy column name '{_columnName}'", null, CopyColumnName_Click);
+        menu.Items.Add(menuItem);
+        menuItem = new ToolStripMenuItem("Hide column", null, HideColumn_Click);
+        menu.Items.Add(menuItem);
+    }
+
+    private void HandleTopLeftHeaderClicked(ContextMenuStrip menu)
+    {
+        ToolStripMenuItem menuItem;
+        menuItem = new ToolStripMenuItem("Copy column names", null, CopyColumnNames_Click);
+        menu.Items.Add(menuItem);
+
+        menuItem = new ToolStripMenuItem("&Save table as", null, SaveTableAs_Click);
+        menu.Items.Add(menuItem);
+
+        menuItem = new ToolStripMenuItem("&Copy table", null, CopyTable_Click);
+        menu.Items.Add(menuItem);
+
+        menuItem = new ToolStripMenuItem("Copy table as XML", null, CopyTableAsXml_Click);
+        menu.Items.Add(menuItem);
+
+        menuItem = new ToolStripMenuItem("Edit dataview properties", null, EditDataViewProperties_Click);
+        menu.Items.Add(menuItem);
+
+        var any = _dataGrid!.Columns.Cast<DataGridViewColumn>().Any(c => !c.Visible);
+        if (any)
+        {
+            menuItem = new ToolStripMenuItem("Unhide all columns", null, UnhideAllColumns_Click);
+            menu.Items.Add(menuItem);
+        }
+
+        any = _dataGrid.Rows.Cast<DataGridViewRow>().Any(r => !r.Visible);
+        if (any)
+        {
+            menuItem = new ToolStripMenuItem("Unhide all rows", null, UnhideRows_Click);
+            menu.Items.Add(menuItem);
+        }
+    }
+
+    private void DataGrid_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
+    {
+        if (e.Value == DBNull.Value)
+            e.CellStyle.BackColor = Color.FromArgb(67, 53, 25);
     }
 }

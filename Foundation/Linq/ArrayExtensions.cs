@@ -6,7 +6,7 @@ namespace Foundation.Linq;
 
 public static class ArrayExtensions
 {
-    public static T[]? Concat<T>(this IEnumerable<T[]> arrays)
+    public static T[]? Concat<T>(this IEnumerable<T[]>? arrays)
     {
         T[]? result;
 

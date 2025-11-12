@@ -8,8 +8,8 @@ public static class QueueExtensions
 {
     public static T DequeueTail<T>(this Queue<T> queue)
     {
-        ArgumentNullException.ThrowIfNull(queue, nameof(queue));
-        Assert.IsTrue(queue.Count > 0);
+        ArgumentNullException.ThrowIfNull(queue);
+        Assert.IsGreaterThan(queue.Count, 0);
 
         var array = new T[queue.Count];
         queue.CopyTo(array, 0);

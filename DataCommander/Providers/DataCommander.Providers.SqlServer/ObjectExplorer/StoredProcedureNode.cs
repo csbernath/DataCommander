@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data.SqlClient;
 
@@ -19,20 +18,18 @@ internal sealed class StoredProcedureNode(DatabaseNode database, string owner, s
 
     public bool Sortable => false;
 
-    public string? Query
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        get
-        {
-            var query = $"exec {owner}.{name}";
-            return query;
-        }
+        var query = $"exec {ObjectName.QuoteIdentifier(owner)}.{ObjectName.QuoteIdentifier(name)}";
+        return Task.FromResult(query)!;
     }
 
     public ContextMenu? GetContextMenu()
     {
-        var scriptObjectMenuItem = new MenuItem("Script Object", ScriptObjectMenuItem_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        var menuItems = new[] { scriptObjectMenuItem }.ToReadOnlyCollection();
-        var contextMenu = new ContextMenu(menuItems);
+        var scriptObjectMenuItem = new MenuItem("Script Object", ScriptObjectMenuItem_Click, []);
+        var contextMenu = new ContextMenu([scriptObjectMenuItem]);
         return contextMenu;
     }
 
@@ -42,8 +39,11 @@ internal sealed class StoredProcedureNode(DatabaseNode database, string owner, s
         var queryForm = (IQueryForm)sender!;
         var cancellationTokenSource = new CancellationTokenSource();
         var cancellationToken = cancellationTokenSource.Token;
-        var cancelableOperationForm = queryForm.CreateCancelableOperationForm(cancellationTokenSource, TimeSpan.FromSeconds(1),
-            "Getting stored procedure text...", "Please wait...");
+        const string textBoxText = @"Getting stored procedure text...
+
+Please wait...";
+        var cancelableOperationForm =
+            queryForm.CreateCancelableOperationForm(cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value, textBoxText);
         var text = cancelableOperationForm.Execute(new Task<string?>(() => GetText(cancellationToken).Result));
         if (!string.IsNullOrEmpty(text))
         {

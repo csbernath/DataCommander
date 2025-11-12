@@ -15,10 +15,11 @@ using DataCommander.Api.Query;
 using DataCommander.Application.ResultWriter;
 using Foundation.Core;
 using Foundation.Data;
-using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
 using Foundation.Threading;
+using ContextMenu = DataCommander.Api.ContextMenu;
+using MenuItem = DataCommander.Api.MenuItem;
 
 namespace DataCommander.Application.Query;
 
@@ -55,9 +56,9 @@ public sealed partial class QueryForm
         var length = QueryTextBox.Text.Length;
         if (length > 0)
         {
+            var caption = MessageBoxCaption.Value;
             var text = $"The text in {Text} has been changed.\r\nDo you want to save the changes?";
-            var caption = DataCommanderApplication.Instance.Name;
-            var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+            var result = DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
             switch (result)
             {
                 case DialogResult.Yes:
@@ -85,9 +86,9 @@ public sealed partial class QueryForm
         var cancel = false;
         if (_dataAdapter != null)
         {
+            var caption = MessageBoxCaption.Value;            
             var text = "Are you sure you wish to cancel this query?";
-            var caption = DataCommanderApplication.Instance.Name;
-            var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+            var result = DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
             if (result == DialogResult.Yes)
             {
                 CancelCommandQuery();
@@ -103,9 +104,9 @@ public sealed partial class QueryForm
     private bool AskUserToCommitTransactions()
     {
         var cancel = false;
-        var text = "There are uncommitted transaction(s). Do you wish to commit these transaction(s) before closing the window?";
-        var caption = DataCommanderApplication.Instance.Name;
-        var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+        var caption = MessageBoxCaption.Value;
+        const string text = "There are uncommitted transaction(s). Do you wish to commit these transaction(s) before closing the window?";
+        var result = DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
         switch (result)
         {
             case DialogResult.Yes:
@@ -130,7 +131,7 @@ public sealed partial class QueryForm
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
                 var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
-                    "Getting transaction count...", string.Empty, _colorTheme);
+                    MessageBoxCaption.Value, "Getting transaction count...", _colorTheme);
                 var transactionCount = cancelableOperationForm.Execute(new Task<int>(() => Connection.GetTransactionCountAsync(cancellationToken).Result));
                 var hasTransactions = transactionCount > 0;
                 if (hasTransactions)
@@ -139,10 +140,11 @@ public sealed partial class QueryForm
             catch (Exception exception)
             {
                 AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Error, null, exception.ToString()));
-                var text = exception.Message;
-                var caption = "Getting transaction count failed. Close window?";
-                var dialogResult = MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-                if (dialogResult == DialogResult.No)
+                var caption = MessageBoxCaption.Value;                
+                var text = @$"Getting transaction count failed. Close window?
+
+{exception.Message}";
+                if (DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.No)
                     cancel = true;
             }
         }
@@ -158,9 +160,9 @@ public sealed partial class QueryForm
         {
             var dataSource = Connection.DataSource;
             _parentStatusBar.Items[0].Text = $"Closing connection to data source {dataSource}'....";
-            Connection.Close();
+            Connection!.Connection!.Close();
             _parentStatusBar.Items[0].Text = $"Connection to data source {dataSource} closed.";
-            Connection!.Connection!.Dispose();
+            Connection!.Connection.Dispose();
             Connection = null;
         }
 
@@ -212,15 +214,16 @@ public sealed partial class QueryForm
         _dataAdapter!.Cancel();
     }
 
-    private void WriteRows(long rowCount, int scale)
+    private void WriteRowCount(long rowCount, int scale)
     {
         var ticks = _stopwatch.ElapsedTicks;
         _sbPanelTimer.Text = StopwatchTimeSpan.ToString(ticks, scale);
-        var text = rowCount + " rows.";
+        var text = $"{rowCount:N0} rows.";
         if (rowCount > 0)
         {
             var seconds = (double)ticks / Stopwatch.Frequency;
-            text += " (" + Math.Round(rowCount / seconds, 0) + " rows/sec)";
+            var rowsPerSecond = Math.Round(rowCount / seconds, 0);
+            text += $" ({rowsPerSecond:N0} rows/sec)";
         }
 
         _sbPanelRows.Text = text;
@@ -231,7 +234,7 @@ public sealed partial class QueryForm
         if (_dataAdapter != null)
         {
             var rowCount = _dataAdapter.RowCount;
-            WriteRows(rowCount, 0);
+            WriteRowCount(rowCount, 0);
         }
     }
 
@@ -266,7 +269,8 @@ public sealed partial class QueryForm
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.Message);
+                DataCommanderMessageBox.MessageBox.Show(this, exception.Message, MessageBoxCaption.Value, MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         });
         var dropdownItems = source.DropDownItems
@@ -407,7 +411,7 @@ public sealed partial class QueryForm
         if (!found)
         {
             var message = $"The specified text was not found.\r\n\r\nText: {text}\r\nControl: {control.Name}";
-            MessageBox.Show(this, message, DataCommanderApplication.Instance.Name);
+            DataCommanderMessageBox.MessageBox.Show(this, message, DataCommanderApplication.Instance.Name);
         }
     }
 
@@ -463,9 +467,11 @@ public sealed partial class QueryForm
         var position = textBox.SelectionStart;
         var cancellationTokenSource = new CancellationTokenSource();
         var showDialogDelay = TimeSpan.FromSeconds(1);
-        const string formText = "Getting completion result...";
-        const string textBoxText = "Please wait...";
-        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, showDialogDelay, formText, textBoxText, _colorTheme);
+        const string textBoxText = @"Getting completion result...
+
+Please wait...";
+        var cancelableOperationForm =
+            new CancelableOperationForm(this, cancellationTokenSource, showDialogDelay, MessageBoxCaption.Value, textBoxText, _colorTheme);
         var startTimestamp = Stopwatch.GetTimestamp();
         var response = cancelableOperationForm.Execute(new Task<GetCompletionResult>(() =>
             Provider.GetCompletion(Connection!, _transaction, text, position, cancellationTokenSource.Token).Result));
@@ -714,7 +720,7 @@ public sealed partial class QueryForm
             _stopwatch.Start();
             _timer.Start();
             _dataAdapter = new AsyncDataAdapter(Provider, maxRecords, rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
-            _dataAdapter.Start(new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray());
+            _dataAdapter.Start([new AsyncDataAdapterCommand(null, 0, _command, null, null, null)]);
         }
         else
             AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Please open a destination connection."));

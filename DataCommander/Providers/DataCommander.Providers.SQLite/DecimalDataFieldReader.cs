@@ -6,9 +6,6 @@ namespace DataCommander.Providers.SQLite;
 
 internal sealed class DecimalDataFieldReader(SqliteDataReader dataReader, int columnOrdinal) : IDataFieldReader
 {
-    readonly SqliteDataReader _dataReader = dataReader;
-    readonly int _columnOrdinal = columnOrdinal;
-
     #region IDataFieldReader Members
 
     object IDataFieldReader.Value
@@ -16,7 +13,7 @@ internal sealed class DecimalDataFieldReader(SqliteDataReader dataReader, int co
         get
         {
             object value;
-            var isDbNull = _dataReader.IsDBNull(_columnOrdinal);
+            var isDbNull = dataReader.IsDBNull(columnOrdinal);
 
             if (isDbNull)
             {
@@ -35,7 +32,7 @@ internal sealed class DecimalDataFieldReader(SqliteDataReader dataReader, int co
                 //    value = new DecimalField( null, decimalValue, null );
                 //}
 
-                var decimalValue = _dataReader.GetDecimal(_columnOrdinal);
+                var decimalValue = dataReader.GetDecimal(columnOrdinal);
                 value = new DecimalField(null, decimalValue);
             }
 

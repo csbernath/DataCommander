@@ -40,7 +40,7 @@ public sealed class CircularBuffer<T> : IList<T>
 
     IEnumerator IEnumerable.GetEnumerator()
     {
-        var enumerable = (IEnumerable<T>) this;
+        IEnumerable<T> enumerable = this;
         return enumerable.GetEnumerator();
     }
 
@@ -64,7 +64,7 @@ public sealed class CircularBuffer<T> : IList<T>
 
     private void AddTail(T item)
     {
-        Assert.IsTrue(Count < _array!.Length);
+        Assert.IsLessThan(Count, _array!.Length);
 
         if (_head == -1)
         {

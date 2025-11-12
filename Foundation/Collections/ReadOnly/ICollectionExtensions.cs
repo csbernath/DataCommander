@@ -6,11 +6,14 @@ namespace Foundation.Collections.ReadOnly;
 
 public static class ICollectionExtensions
 {
-    public static ReadOnlyArray<T> ToReadOnlyArray<T>(this ICollection<T> source)
+    extension<T>(ICollection<T> source)
     {
-        ArgumentNullException.ThrowIfNull(source);
+        public ReadOnlyArray<T> ToReadOnlyArray()
+        {
+            ArgumentNullException.ThrowIfNull(source);
 
-        var items = source.ToArray();
-        return new ReadOnlyArray<T>(items);
+            var items = source.ToArray();
+            return new ReadOnlyArray<T>(items);
+        }
     }
 }

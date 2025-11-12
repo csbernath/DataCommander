@@ -63,13 +63,16 @@ drop table #catalog";
         parameters.Add("@getSystemCatalogs", false);
 
         var executor = connection.CreateCommandExecutor();
-        var executeReaderRequest = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
+        var executeReaderRequest = new ExecuteReaderRequest(commandText, parameters.ToArray());
         return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(executeReaderRequest, 128,
             dataRecord => new LinkedServerCatalogNode(_linkedServer, dataRecord.GetString(0))));
     }
 
     bool ITreeNode.Sortable => false;
-    string? ITreeNode.Query => null;
+
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
     public ContextMenu? GetContextMenu() => null;
 }

@@ -8,8 +8,6 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer;
 
 internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
 {
-    private readonly DatabaseNode _databaseNode = databaseNode;
-
     #region ITreeNode Members
 
     string? ITreeNode.Name => "Tables";
@@ -22,7 +20,7 @@ internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
 from
 (
 	select	name
-	from	{_databaseNode.Name}.sqlite_master
+	from	{databaseNode.Name}.sqlite_master
 	where	type	= 'table'
 	union
 	select	'sqlite_master'
@@ -30,21 +28,23 @@ from
 order by name collate nocase";
 
         var list = await Db.ExecuteReaderAsync(
-            () => ConnectionFactory.CreateConnection(_databaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
+            () => ConnectionFactory.CreateConnection(databaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
             new ExecuteReaderRequest(commandText),
             128,
             dataRecord =>
             {
                 var name = dataRecord.GetString(0);
-                return (ITreeNode)new TableNode(_databaseNode, name);
+                return (ITreeNode)new TableNode(databaseNode, name);
             },
             cancellationToken);
         return list;
     }
 
     bool ITreeNode.Sortable => false;
-    string? ITreeNode.Query => null;
 
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => throw new System.NotImplementedException();
 
     #endregion

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 using Microsoft.Data.Sqlite;
 
@@ -28,7 +27,9 @@ internal sealed class TableNode(DatabaseNode databaseNode, string? name) : ITree
     
     bool ITreeNode.Sortable => false;
 
-    string? ITreeNode.Query => $"select\t*\r\nfrom\t{DatabaseNode.Name}.{Name}";
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult($"select\t*\r\nfrom\t{DatabaseNode.Name}.{Name}")!;
 
     private static string GetScript(
         SqliteConnection connection,
@@ -64,9 +65,8 @@ where	name	= '{name}'";
 
         if (Name != "sqlite_master")
         {
-            var item = new MenuItem("Script", Script_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-            var items = new[] { item }.ToReadOnlyCollection();
-            contextMenu = new ContextMenu(items);
+            var item = new MenuItem("Script", Script_Click, []);
+            contextMenu = new ContextMenu([item]);
         }
 
         return contextMenu;

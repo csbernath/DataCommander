@@ -4,7 +4,7 @@ using Foundation.Core;
 
 namespace Foundation.Threading;
 
-internal sealed class Lock
+internal sealed class FoundationLock
 {
     private readonly object _lockObject = new();
     private int _counter;

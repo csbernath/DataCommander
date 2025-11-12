@@ -24,20 +24,19 @@ internal sealed class ProcedureNode(string? name) : ITreeNode
     public bool IsLeaf => true;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
+        Task.FromResult<IEnumerable<ITreeNode>>([]);
 
     public bool Sortable => false;
 
-    public string? Query
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        get
-        {
-            var query = name != null
-                ? "exec " + name
-                : null;
-            return query;
-        }
+        var query = name != null
+            ? "exec " + name
+            : null;
+        return Task.FromResult(query);
     }
 
-    public ContextMenu? GetContextMenu() => throw new System.NotImplementedException();
+    public ContextMenu? GetContextMenu() => throw new NotImplementedException();
 }

@@ -5,6 +5,8 @@ internal enum SqlServerSystemType
     Image = 34,
     Text = 35,
     UniqueIdentifier = 36,
+    DateTime2 = 42,
+    DateTimeOffset = 43,
     TinyInt = 48,
     SmallInt = 52,
     Int = 56,

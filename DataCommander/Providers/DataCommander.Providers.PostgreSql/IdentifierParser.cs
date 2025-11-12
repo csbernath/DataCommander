@@ -6,15 +6,13 @@ namespace DataCommander.Providers.PostgreSql;
 
 internal sealed class IdentifierParser(TextReader textReader)
 {
-    private readonly TextReader _textReader = textReader;
-
     public IEnumerable<string?> Parse()
     {
         var peekChar = default(char);
 
         while (true)
         {
-            var peek = _textReader.Peek();
+            var peek = textReader.Peek();
 
             if (peek == -1)
             {
@@ -25,7 +23,7 @@ internal sealed class IdentifierParser(TextReader textReader)
 
             if (peekChar == '.')
             {
-                _textReader.Read();
+                textReader.Read();
             }
             else if (peekChar == '[')
             {
@@ -47,12 +45,12 @@ internal sealed class IdentifierParser(TextReader textReader)
 
     private string ReadQuotedIdentifier()
     {
-        _textReader.Read();
+        textReader.Read();
         var identifier = new StringBuilder();
 
         while (true)
         {
-            var peek = _textReader.Peek();
+            var peek = textReader.Peek();
 
             if (peek == -1)
                 break;
@@ -61,13 +59,13 @@ internal sealed class IdentifierParser(TextReader textReader)
 
             if (peekChar == ']')
             {
-                _textReader.Read();
+                textReader.Read();
                 break;
             }
             else
             {
                 identifier.Append(peekChar);
-                _textReader.Read();
+                textReader.Read();
             }
         }
 
@@ -80,7 +78,7 @@ internal sealed class IdentifierParser(TextReader textReader)
 
         while (true)
         {
-            var peek = _textReader.Peek();
+            var peek = textReader.Peek();
 
             if (peek == -1)
                 break;
@@ -94,7 +92,7 @@ internal sealed class IdentifierParser(TextReader textReader)
             else
             {
                 identifier.Append(peekChar);
-                _textReader.Read();
+                textReader.Read();
             }
         }
 

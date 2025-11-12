@@ -12,6 +12,7 @@ public static class TaskMonitor
 {
     private static readonly ILog _log = LogFactory.Instance.GetCurrentTypeLog();
     private static readonly HashSet<TaskInfo> Tasks = [];
+    private static Lock TasksLock = new();
 
     private static readonly StringTableColumnInfo<TaskInfo>[] Columns =
     [
@@ -46,10 +47,8 @@ public static class TaskMonitor
         var taskInfo = new TaskInfo(task, name);
         monitoredTaskState.TaskInfo = taskInfo;
 
-        lock (Tasks)
-        {
-            Tasks.Add(taskInfo);
-        }
+        using (TasksLock.EnterScope())
+            Tasks.Add(taskInfo);        
 
         return new CreateTaskResponse(task, taskInfo);
     }
@@ -71,10 +70,8 @@ public static class TaskMonitor
         var taskInfo = new TaskInfo(task, name);
         monitoredTaskState.TaskInfo = taskInfo;
 
-        lock (Tasks)
-        {
-            Tasks.Add(taskInfo);
-        }
+        using (TasksLock.EnterScope())
+            Tasks.Add(taskInfo);        
 
         return new CreateTaskResponse<TResult>(task, taskInfo);
     }
@@ -83,10 +80,8 @@ public static class TaskMonitor
     {
         string stringTableString;
 
-        lock (Tasks)
-        {
+        using (TasksLock.EnterScope())        
             stringTableString = Tasks.ToString(Columns);
-        }
 
         return stringTableString;
     }
@@ -95,10 +90,8 @@ public static class TaskMonitor
     {
         int count;
 
-        lock (Tasks)
-        {
-            count = Tasks.RemoveWhere(s => !s.IsAlive);
-        }
+        using (TasksLock.EnterScope())        
+            count = Tasks.RemoveWhere(s => !s.IsAlive);        
 
         return count;
     }

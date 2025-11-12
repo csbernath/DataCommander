@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using Microsoft.Data.SqlClient;
-using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
@@ -15,15 +14,18 @@ internal sealed class TriggerNode(DatabaseNode databaseNode, int id, string? nam
     public bool IsLeaf => true;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
+        Task.FromResult<IEnumerable<ITreeNode>>([]);
     
     public bool Sortable => false;
-    public string? Query => null;
+
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
     public ContextMenu? GetContextMenu()
     {
-        var menuItemScriptObject = new MenuItem("Script Object", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        var items = new[] { menuItemScriptObject }.ToReadOnlyCollection();
+        var menuItemScriptObject = new MenuItem("Script Object", menuItemScriptObject_Click, []);
+        var items = new[] { menuItemScriptObject };
         var contextMenu = new ContextMenu(items);
         return contextMenu;
     }

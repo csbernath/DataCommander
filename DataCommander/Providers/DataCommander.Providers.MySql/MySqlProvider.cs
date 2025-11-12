@@ -28,11 +28,11 @@ internal sealed class MySqlProvider : IProvider
 
     #region IProvider Members
 
-    string IProvider.Name => "MySql";
+    string IProvider.Identifier => "MySql";
 
     DbProviderFactory IProvider.DbProviderFactory => MySqlClientFactory.Instance;
 
-    string[] IProvider.KeyWords
+    IReadOnlySet<string> IProvider.KeyWords
     {
         get
         {
@@ -49,6 +49,10 @@ internal sealed class MySqlProvider : IProvider
     bool IProvider.CanConvertCommandToString => throw new NotImplementedException();
 
     bool IProvider.IsCommandCancelable => true;
+
+    public string Identifier => throw new NotImplementedException();
+
+    public IReadOnlySet<string> KeyWords => throw new NotImplementedException();
 
     public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
 
@@ -357,6 +361,16 @@ internal sealed class MySqlProvider : IProvider
     GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string? tableName) => throw new NotImplementedException();
     List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
     IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder() => new ConnectionStringBuilder();
+
+    public string? GetConnectionName(IDbConnection connection)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ConnectionBase CreateConnection(ConnectionStringAndCredential connectionStringAndCredential)
+    {
+        throw new NotImplementedException();
+    }
 
     #endregion
 }

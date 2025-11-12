@@ -1,11 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0-windows7.0</TargetFramework>
+    <TargetFramework>net10.0-windows7.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <LangVersion>13</LangVersion>
-    <Nullable>enable</Nullable>
-    <NoWarn>$(NoWarn);WFO1000</NoWarn>    
+    <NoWarn>$(NoWarn);WFO1000</NoWarn>
+    <ApplicationIcon>sql_racer_gamedatabase_sql_1526.ico</ApplicationIcon>    
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -13,15 +12,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="sql_racer_gamedatabase_sql_1526.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ADODB" Version="7.10.3077" />
-    <PackageReference Include="EPPlus" Version="8.0.6" />
-    <PackageReference Include="HtmlTextWriter" Version="3.0.1" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.6" />
+    <PackageReference Include="EPPlus" Version="8.2.1" />
+    <PackageReference Include="HtmlTextWriter" Version="3.0.2" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.0-rc.2.25502.107" />
     <PackageReference Include="Microsoft.Office.Interop.Word" Version="15.0.4797.1004" />
     <PackageReference Include="Microsoft.SqlServer.Compact" Version="4.0.8876.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="System.Formats.Asn1" Version="9.0.6" />
-    <PackageReference Include="System.Text.Json" Version="9.0.6" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />   
+
   </ItemGroup>
 
   <ItemGroup>

@@ -41,59 +41,42 @@ public static class BinarySearch
         return result;
     }
 
-    public static void Search(int minIndex, int maxIndex, Func<int, bool> lessThan, Func<int, bool> equals)
+    public static BinarySearchResult Search(int minIndex, int maxIndex, Func<int, bool> greaterThan, Func<int, bool> equals)
     {
-        var currentMinIndex = minIndex;
-        var currentMaxIndex = maxIndex;
+        var greaterThanIndex = minIndex - 1;
+        var lessThanOrEqualIndex = maxIndex + 1;
 
-        while (currentMinIndex < currentMaxIndex)
+        while (greaterThanIndex + 1 < lessThanOrEqualIndex)
         {
-            var midIndex = currentMinIndex + (currentMaxIndex - currentMinIndex) / 2;
-
-            if (lessThan(midIndex))
-            {
-                Debug.WriteLine($"[{midIndex}] < key");
-                currentMinIndex = midIndex + 1;
-            }
+            var midIndex = greaterThanIndex + (lessThanOrEqualIndex - greaterThanIndex) / 2;
+            if (greaterThan(midIndex))
+                greaterThanIndex = midIndex;
             else
-            {
-                Debug.WriteLine($"key <= [{midIndex}]");
-                currentMaxIndex = midIndex;
-            }
+                lessThanOrEqualIndex = midIndex;
+
+            Debug.WriteLine($"[{greaterThanIndex}] < value <= [{lessThanOrEqualIndex}]");
         }
 
-        if (currentMinIndex == currentMaxIndex)
-        {
-            if (currentMinIndex == minIndex)
-            {
-                if (equals(minIndex))
-                    Debug.WriteLine($"key = [{minIndex}]");
-                else
-                    Debug.WriteLine($"key < [{minIndex}]");
-            }
-            else if (currentMaxIndex == maxIndex)
-            {
-                if (lessThan(maxIndex))
-                {
-                    Debug.WriteLine($"[{maxIndex}] < key");
-                }
-                else
-                {
-                    Debug.WriteLine($"key <= [{maxIndex}]");
+        BinarySearchResultRelation resultRelation;
+        int index;
+        var areEqual = lessThanOrEqualIndex <= maxIndex && equals(lessThanOrEqualIndex);
 
-                    if (equals(maxIndex))
-                        Debug.WriteLine($"key = [{maxIndex}]");
-                    else
-                        Debug.WriteLine($"key < [{maxIndex}]");
-                }
-            }
-            else
-            {
-                if (equals(minIndex))
-                    Debug.WriteLine($"key = [{minIndex}]");
-                else
-                    Debug.WriteLine($"key != [{minIndex}]");
-            }
+        if (areEqual)
+        {
+            resultRelation = BinarySearchResultRelation.Equals;
+            index = lessThanOrEqualIndex;
         }
+        else if (greaterThanIndex < minIndex)
+        {
+            resultRelation = BinarySearchResultRelation.LessThanFirst;
+            index = 0;
+        }
+        else
+        {
+            resultRelation = BinarySearchResultRelation.GreaterThan;
+            index = greaterThanIndex;
+        }
+
+        return new BinarySearchResult(resultRelation, index);
     }
 }

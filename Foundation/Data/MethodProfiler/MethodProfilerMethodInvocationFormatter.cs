@@ -11,11 +11,7 @@ internal sealed class MethodProfilerMethodInvocationFormatter : IFormatter
         var item = (MethodInvocation)args[0];
         var parent = item.Parent;
         var parentId = parent != null ? parent.Id : (int?)null;
-        sb.AppendFormat("exec MethodProfilerMethodInvocation_Add @applicationId,{0},{1},{2},{3},{4}\r\n",
-            item.Id,
-            parentId.ToSqlConstant(),
-            item.MethodId,
-            item.BeginTime,
-            item.EndTime);
+        sb.Append(
+            $"exec MethodProfilerMethodInvocation_Add @applicationId,{item.Id},{parentId.ToSqlConstant()},{item.MethodId},{item.BeginTime},{item.EndTime}\r\n");
     }
 }

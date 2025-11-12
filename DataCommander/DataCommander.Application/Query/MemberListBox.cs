@@ -18,7 +18,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
     private string _prefix = string.Empty;
     private readonly Container? _components = null;
 
-    public MemberListBox(CompletionForm completionForm, QueryTextBox textBox, ColorTheme colorTheme)
+    public MemberListBox(CompletionForm completionForm, QueryTextBox textBox, ColorTheme? colorTheme)
     {
         // This call is required by the Windows.Forms Form Designer.
         InitializeComponent();
@@ -29,8 +29,9 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
 
         if (colorTheme != null)
         {
-            ListBox!.ForeColor = colorTheme.ForeColor;
-            ListBox.BackColor = colorTheme.BackColor;
+            // TODO
+            // ListBox!.ForeColor = colorTheme.ForeColor;
+            // ListBox.BackColor = colorTheme.BackColor;
         }
     }
 
@@ -180,17 +181,22 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
         if (e.KeyCode.In(Keys.Down, Keys.Up, Keys.PageDown, Keys.PageUp, Keys.Home, Keys.End))
         {
             handled = true;
-            if (e.KeyCode == Keys.Down && e.Shift)
+            switch (e.KeyCode)
             {
-                var startIndex = ListBox.SelectedIndex + 1;
-                if (startIndex < ListBox.Items.Count - 1)
-                    FindNext(startIndex);
-            }
-            else if (e.KeyCode == Keys.Up && e.Shift)
-            {
-                var startIndex = ListBox.SelectedIndex - 1;
-                if (startIndex > 0)
-                    FindPrevious(startIndex);
+                case Keys.Down when e.Shift:
+                {
+                    var startIndex = ListBox.SelectedIndex + 1;
+                    if (startIndex < ListBox.Items.Count - 1)
+                        FindNext(startIndex);
+                    break;
+                }
+                case Keys.Up when e.Shift:
+                {
+                    var startIndex = ListBox.SelectedIndex - 1;
+                    if (startIndex > 0)
+                        FindPrevious(startIndex);
+                    break;
+                }
             }
         }
         else if (e.KeyCode.In(Keys.Subtract, Keys.OemMinus) && e.Control)
@@ -304,33 +310,35 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
     {
         var handled = false;
 
-        if (e.KeyChar == '\r' || e.KeyChar == '\n')
+        switch (e.KeyChar)
         {
-            // Enter
-            handled = true;
-            SelectItem();
-            Close();
-        }
-        else if (e.KeyChar == '\x1B')
-        {
-            // Escape
-            handled = true;
-            Close();
-        }
-        else
-        {
-            if (e.KeyChar == '\x08')
+            case '\r' or '\n':
+                // Enter
+                handled = true;
+                SelectItem();
+                Close();
+                break;
+            case '\x1B':
+                // Escape
+                handled = true;
+                Close();
+                break;
+            default:
             {
-                // Backspace
-                var length = _prefix.Length;
-                if (length > 0)
-                    _prefix = _prefix[..(length - 1)];
-            }
-            else
-                _prefix += char.ToLower(e.KeyChar);
+                if (e.KeyChar == '\x08')
+                {
+                    // Backspace
+                    var length = _prefix.Length;
+                    if (length > 0)
+                        _prefix = _prefix[..(length - 1)];
+                }
+                else
+                    _prefix += char.ToLower(e.KeyChar);
 
-            LoadItems();
-            Find(_prefix, 0);
+                LoadItems();
+                Find(_prefix, 0);
+                break;
+            }
         }
 
         return handled;

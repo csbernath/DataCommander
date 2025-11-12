@@ -5,8 +5,6 @@ namespace Foundation.Data.SqlClient;
 
 public sealed class SqlSequence(int id)
 {
-    private readonly int _id = id;
-
     public static void CreateSchema(IDbConnection connection)
     {
         var commandText = @"create table dbo.Sequence
@@ -61,7 +59,7 @@ end";
         var command = connection.CreateCommand();
         command.CommandType = CommandType.StoredProcedure;
         command.CommandText = "GetNextSequenceValue";
-        var parameter = new SqlParameter("@id", SqlDbType.Int) { Value = _id };
+        var parameter = new SqlParameter("@id", SqlDbType.Int) { Value = id };
         command.Parameters.Add(parameter);
         var scalar = command.ExecuteScalar()!;
         var value = (int)scalar;

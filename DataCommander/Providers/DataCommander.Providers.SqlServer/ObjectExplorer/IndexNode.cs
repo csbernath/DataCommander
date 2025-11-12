@@ -48,7 +48,9 @@ internal sealed class IndexNode(DatabaseNode databaseNode, int parentId, int id,
 
     public bool Sortable => false;
 
-    public string? Query => null;
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
     //private void menuItemScriptObject_Click(object? sender, EventArgs e)
     //{

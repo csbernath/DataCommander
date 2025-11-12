@@ -5,11 +5,10 @@ using System.Data.OleDb;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Foundation.Collections.ReadOnly;
 
 namespace DataCommander.Providers.OleDb;
 
-sealed class TableNode(SchemaNode schema, string? name) : ITreeNode
+internal sealed class TableNode(SchemaNode schema, string? name) : ITreeNode
 {
     public string? Name
     {
@@ -27,46 +26,44 @@ sealed class TableNode(SchemaNode schema, string? name) : ITreeNode
     public bool IsLeaf => true;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
+        Task.FromResult<IEnumerable<ITreeNode>>([]);
 
     public bool Sortable => false;
 
-    public string? Query
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        get
+        string? query;
+
+        if (name != null)
         {
-            string? query;
-
-            if (name != null)
-            {
-                var name2 = name.Contains(' ')
-                    ? "[" + name + "]"
-                    : name;
-                query = "select * from " + name2;
-            }
-            else
-                query = null;
-
-            return query;
+            var name2 = name.Contains(' ')
+                ? "[" + name + "]"
+                : name;
+            query = "select * from " + name2;
         }
+        else
+            query = null;
+
+        return Task.FromResult(query);
     }
 
     public ContextMenu? GetContextMenu()
     {
-        var menuItem = new MenuItem("Columns", Columns_Click, []);
-        var items = new[] { menuItem }.ToReadOnlyCollection();
-        var contextMenu = new ContextMenu(items);
+        var menuItem = new MenuItem("Columns", ColumnsClicked, []);
+        var contextMenu = new ContextMenu([menuItem]);
         return contextMenu;
     }
 
-    private void Columns_Click(object? sender, EventArgs e)
+    private void ColumnsClicked(object? sender, EventArgs e)
     {
         DataTable dataTable;
         using (var connection = ConnectionFactory.CreateConnection(schema.Catalog.CatalogsNode.ConnectionStringAndCredential))
         {
             connection.Open();
             var restrictions = new object[] { schema.Catalog.Name, schema.Name, name };
-            dataTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, restrictions);
+            dataTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, restrictions)!;
         }
 
         var dataSet = new DataSet();

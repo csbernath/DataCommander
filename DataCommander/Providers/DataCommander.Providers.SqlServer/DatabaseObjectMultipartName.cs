@@ -51,7 +51,7 @@ internal sealed class DatabaseObjectMultipartName
             }
         }
 
-        if (Database == null) Database = currentDatabase;
+        Database ??= currentDatabase;
 
         if (string.IsNullOrEmpty(Schema)) Schema = null;
 
@@ -75,18 +75,22 @@ internal sealed class DatabaseObjectMultipartName
 
     public override string ToString()
     {
-        var sb = new StringBuilder();
-        if (Database != null) sb.Append(Database);
+        var stringBuilder = new StringBuilder();
+
+        if (Database != null)
+            stringBuilder.Append(Database);
 
         if (Schema != null)
         {
-            if (sb.Length > 0) sb.Append('.');
-            sb.Append(Schema);
+            if (stringBuilder.Length > 0)
+                stringBuilder.Append('.');
+            stringBuilder.Append(Schema);
         }
 
-        if (sb.Length > 0) sb.Append('.');
+        if (stringBuilder.Length > 0)
+            stringBuilder.Append('.');
 
-        sb.Append(Name);
-        return sb.ToString();
+        stringBuilder.Append(Name);
+        return stringBuilder.ToString();
     }
 }

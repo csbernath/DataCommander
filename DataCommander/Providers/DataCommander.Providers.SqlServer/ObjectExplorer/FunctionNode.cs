@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Foundation.Collections.ReadOnly;
 using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
@@ -20,37 +19,32 @@ internal sealed class FunctionNode(
     public bool IsLeaf => true;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
+        Task.FromResult<IEnumerable<ITreeNode>>([]);
 
     public bool Sortable => false;
 
-    public string? Query
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        get
+        var query = xtype switch
         {
-            //string query = string.Format("select {0}.{1}.[{2}]()",database.Name,owner,name);
-            var query = xtype switch
-            {
-                //Scalar function
-                "FN" => $"select {database.Name}.{owner}.[{name}]()",
-                //Table function
-                "TF" or "IF" => $@"select	*
+            SqlServerObjectType.ScalarFunction => $"select {database.Name}.{owner}.[{name}]()",
+            SqlServerObjectType.TableValuedFunction or SqlServerObjectType.InlineTableValuedFunction => $@"select	*
 from	{database.Name}.{owner}.[{name}]()",
-                _ => null,
-            };
-            return query;
-        }
+            _ => null,
+        };
+        return Task.FromResult(query);
     }
 
     public ContextMenu? GetContextMenu()
     {
-        var scriptObjectMenuItem = new MenuItem("Script Object", menuItemScriptObject_Click, EmptyReadOnlyCollection<MenuItem>.Value);
-        var menuItems = new[] { scriptObjectMenuItem }.ToReadOnlyCollection();
-        var contextMenu = new ContextMenu(menuItems);
+        var scriptObjectMenuItem = new MenuItem("Script Object", ScriptObjectClicked, []);
+        var contextMenu = new ContextMenu([scriptObjectMenuItem]);
         return contextMenu;
     }
 
-    private void menuItemScriptObject_Click(object? sender, EventArgs e)
+    private void ScriptObjectClicked(object? sender, EventArgs e)
     {
         string text;
         using (var connection = database.Databases.Server.CreateConnection())

@@ -12,15 +12,15 @@ internal sealed class UserNode(DatabaseNode database, string? name) : ITreeNode
     public bool IsLeaf => true;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
+        Task.FromResult<IEnumerable<ITreeNode>>([]);
 
     public bool Sortable => false;
 
-    public string? Query
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        get
-        {
-            var query = $@"declare @uid smallint
+        var query = $@"declare @uid smallint
 select @uid = uid
 from {database.Name}..sysusers
 where name = '{Name}'
@@ -31,8 +31,7 @@ join {database.Name}..sysusers u
 where memberuid = @uid
 group by u.name";
 
-            return query;
-        }
+        return Task.FromResult(query)!;
     }
 
     public ContextMenu? GetContextMenu() => null;

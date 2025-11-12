@@ -5,11 +5,14 @@ namespace Foundation.Data.LoggedDbConnection;
 
 public static class LoggedDbConnectionFactory
 {
-    public static IDbConnection ToLoggedDbConnection(this IDbConnection connection)
+    extension(IDbConnection connection)
     {
-        ArgumentNullException.ThrowIfNull(connection);
-        var loggedDbConnection = new LoggedDbConnection(connection);
-        var logger = new DbConnectionLogger(loggedDbConnection);
-        return loggedDbConnection;
+        public IDbConnection ToLoggedDbConnection()
+        {
+            ArgumentNullException.ThrowIfNull(connection);
+            var loggedDbConnection = new LoggedDbConnection(connection);
+            var logger = new DbConnectionLogger(loggedDbConnection);
+            return loggedDbConnection;
+        }
     }
 }

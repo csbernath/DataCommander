@@ -7,21 +7,19 @@ namespace DataCommander.Providers.PostgreSql;
 internal sealed class ObjectName(SqlObject sqlObject, string schemaName, string objectName) : IObjectName
 {
     private readonly SqlObject _sqlObject = sqlObject;
-    private readonly string _schemaName = schemaName;
-    private readonly string _objectName = objectName;
 
     string IObjectName.UnquotedName
     {
         get
         {
             var sb = new StringBuilder();
-            if (_schemaName != null)
+            if (schemaName != null)
             {
-                sb.Append(_schemaName);
+                sb.Append(schemaName);
                 sb.Append('.');
             }
 
-            sb.Append(_objectName);
+            sb.Append(objectName);
 
             return sb.ToString();
         }
@@ -34,9 +32,9 @@ internal sealed class ObjectName(SqlObject sqlObject, string schemaName, string 
             var sb = new StringBuilder();
             var sqlCommandBuilder = new SqlCommandBuilder();
 
-            if (_schemaName != null)
+            if (schemaName != null)
             {
-                sb.Append(QuoteIdentifier(_schemaName));
+                sb.Append(QuoteIdentifier(schemaName));
                 sb.Append('.');
             }
             //else if (this.sqlObject.ParentAlias != null)
@@ -45,7 +43,7 @@ internal sealed class ObjectName(SqlObject sqlObject, string schemaName, string 
             //    sb.Append('.');
             //}
 
-            sb.Append(QuoteIdentifier(_objectName));
+            sb.Append(QuoteIdentifier(objectName));
 
             return sb.ToString();
         }

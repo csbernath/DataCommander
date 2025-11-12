@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
-using Foundation.Collections.ReadOnly;
 using Foundation.Data;
 using Microsoft.Data.SqlClient;
 
@@ -39,14 +38,17 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
     }
 
     bool ITreeNode.Sortable => false;
-    string? ITreeNode.Query => null;
+
+    public bool DynamicChildCount => false;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
     public ContextMenu? GetContextMenu()
     {
         var menuItems = new MenuItem[]
         {
-            new("Properties", Properties_OnClick, EmptyReadOnlyCollection<MenuItem>.Value)
-        }.ToReadOnlyCollection();
+            new("Properties", Properties_OnClick, [])
+        };
         return new ContextMenu(menuItems);
     }
 

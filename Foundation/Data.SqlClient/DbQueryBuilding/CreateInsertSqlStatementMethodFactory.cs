@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Foundation.Linq;
 using Foundation.Text;
 
@@ -7,7 +6,7 @@ namespace Foundation.Data.SqlClient.DbQueryBuilding;
 
 public static class CreateInsertSqlStatementMethodFactory
 {
-    public static ReadOnlyCollection<Line> Create(string schema, string table, IReadOnlyCollection<Column> columns)
+    public static IReadOnlyCollection<Line> Create(string schema, string table, IReadOnlyCollection<Column> columns)
     {
         var textBuilder = new TextBuilder();
         textBuilder.Add($"public static ReadOnlyCollection<Line> CreateInsertSqlStatement(IEnumerable<{table}> records)");

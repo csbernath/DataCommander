@@ -9,9 +9,7 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer;
 
 internal sealed class DatabaseCollectionNode(ConnectionStringAndCredential connectionStringAndCredential) : ITreeNode
 {
-    private readonly ConnectionStringAndCredential _connectionStringAndCredential = connectionStringAndCredential;
-
-    public ConnectionStringAndCredential ConnectionStringAndCredential => _connectionStringAndCredential;
+    public ConnectionStringAndCredential ConnectionStringAndCredential => connectionStringAndCredential;
 
     #region ITreeNode Members
 
@@ -21,10 +19,10 @@ internal sealed class DatabaseCollectionNode(ConnectionStringAndCredential conne
 
     public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        const string commandText = @"PRAGMA database_list;";
+        const string commandText = "PRAGMA database_list;";
         
         return await Db.ExecuteReaderAsync(
-            () => ConnectionFactory.CreateConnection(_connectionStringAndCredential),
+            () => ConnectionFactory.CreateConnection(connectionStringAndCredential),
             new ExecuteReaderRequest(commandText),
             1,
             dataRecord =>
@@ -35,8 +33,10 @@ internal sealed class DatabaseCollectionNode(ConnectionStringAndCredential conne
     }
 
     bool ITreeNode.Sortable => false;
-    string? ITreeNode.Query => null;
 
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => throw new System.NotImplementedException();
 
     #endregion

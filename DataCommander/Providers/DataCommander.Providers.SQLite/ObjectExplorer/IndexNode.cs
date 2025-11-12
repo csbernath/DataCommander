@@ -9,34 +9,31 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer;
 
 internal sealed class IndexNode(TableNode tableNode, string? name) : ITreeNode
 {
-    private readonly TableNode _tableNode = tableNode;
-    private readonly string? _name = name;
-
     #region ITreeNode Members
 
-    string? ITreeNode.Name => _name;
+    string? ITreeNode.Name => name;
 
     bool ITreeNode.IsLeaf => true;
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
+    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>([]);
 
     bool ITreeNode.Sortable => false;
 
-    string? ITreeNode.Query
+    public bool DynamicChildCount => true;
+
+    async Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        get
-        {
-            var commandText = $@"select sql
+        var commandText = $@"select sql
 from main.sqlite_master
 where
     type = 'index'
-    and name = '{_name}'";
-            var scalar = Db.ExecuteScalar(
-                () => ConnectionFactory.CreateConnection(_tableNode.DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
-                new CreateCommandRequest(commandText));
-            var sql = (string?)scalar;
-            return sql;
-        }
+    and name = '{name}'";
+        var scalar = await Db.ExecuteScalarAsync(
+            () => ConnectionFactory.CreateConnection(tableNode.DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
+            new CreateCommandRequest(commandText),
+            cancellationToken);
+        var sql = (string?)scalar;
+        return sql;
     }
 
     public ContextMenu? GetContextMenu() => throw new NotImplementedException();

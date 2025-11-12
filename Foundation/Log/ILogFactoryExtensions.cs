@@ -12,11 +12,14 @@ public static class LogFactoryExtensions
         ArgumentNullException.ThrowIfNull(type);
 
         var name = type.FullName;
-
         var log = logFactory.GetLog(name);
-        //if (log is DefaultLog.Log foundationLog)
-        //    foundationLog.LoggedName = type.Name;
+        return log;
+    }
 
+    public static ILog GetTypeLog<T>(this ILogFactory logFactory)
+    {
+        var name = typeof(T).FullName;
+        var log = logFactory.GetLog(name);
         return log;
     }
 
@@ -53,13 +56,13 @@ public static class LogFactoryExtensions
         {
             var parameterInfos = method.GetParameters();
             var sb = new StringBuilder();
-            sb.AppendFormat("Entering method {0}(", method.Name);
+            sb.Append($"Entering method {method.Name}(");
             var count = Math.Min(parameterInfos.Length, parameters.Length);
 
             for (var i = 0; i < count; i++)
             {
                 var parameterInfo = parameterInfos[i];
-                sb.AppendFormat("\r\n{0} {1}", parameterInfo.ParameterType.Name, parameterInfo.Name);
+                sb.Append($"\r\n{parameterInfo.ParameterType.Name} {parameterInfo.Name}");
                 if (i < parameters.Length)
                 {
                     sb.Append(" = ");

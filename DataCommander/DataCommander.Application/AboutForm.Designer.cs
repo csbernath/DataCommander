@@ -50,7 +50,7 @@ namespace DataCommander.Application
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(584, 519);
+            ClientSize = new System.Drawing.Size(584, 569);
             Controls.Add(webBrowser1);
             Margin = new Padding(4);
             MaximizeBox = false;

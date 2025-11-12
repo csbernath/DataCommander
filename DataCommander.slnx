@@ -1,0 +1,45 @@
+<Solution>
+  <Folder Name="/Foundation/">
+    <Project Path="Foundation/Assertions.Test/Foundation.Assertions.Test.csproj" />
+    <Project Path="Foundation/Assertions/Foundation.Assertions.csproj" />
+    <Project Path="Foundation/Collections/Foundation.Collections.csproj" />
+    <Project Path="Foundation/Configuration/Foundation.Configuration.csproj" />
+    <Project Path="Foundation/Core.Tests/Foundation.Core.Tests.csproj" />
+    <Project Path="Foundation/Core/Foundation.Core.csproj" />
+    <Project Path="Foundation/Data.SqlClient/Foundation.Data.SqlClient.csproj" />
+    <Project Path="Foundation/Data/Foundation.Data.csproj" />
+    <Project Path="Foundation/DefaultLog/Foundation.DefaultLog.csproj" />
+    <Project Path="Foundation/Deployment/Foundation.Deployment.csproj" />
+    <Project Path="Foundation/Diagnostics.Benchmarks/Foundation.Diagnostics.Benchmarks.csproj" />
+    <Project Path="Foundation/Diagnostics.Test/Foundation.Diagnostics.Test.csproj" />
+    <Project Path="Foundation/Diagnostics/Foundation.Diagnostics.csproj" />
+    <Project Path="Foundation/InternalLog/Foundation.InternalLog.csproj" />
+    <Project Path="Foundation/IO/Foundation.IO.csproj" />
+    <Project Path="Foundation/Linq/Foundation.Linq.csproj" />
+    <Project Path="Foundation/Log/Foundation.Log.csproj" />
+    <Project Path="Foundation/Text/Foundation.Text.csproj" />
+    <Project Path="Foundation/Threading/Foundation.Threading.csproj" />
+    <Project Path="Foundation/Windows.Forms/Foundation.Windows.Forms.csproj" />
+    <Project Path="Foundation/Xml/Foundation.Xml.csproj" />
+    <Project Path="Foundation\Windows.Forms.Tests\Foundation.Windows.Forms.Tests.csproj" Type="Classic C#" />
+    <File Path="Foundation/README.md" />
+  </Folder>
+  <Folder Name="/Providers/">
+    <Project Path="DataCommander/Providers/DataCommander.Providers.Msi/DataCommander.Providers.Msi.csproj" />
+    <Project Path="DataCommander/Providers/DataCommander.Providers.MySql/DataCommander.Providers.MySql.csproj" />
+    <Project Path="DataCommander/Providers/DataCommander.Providers.Odp/DataCommander.Providers.Odp.csproj" />
+    <Project Path="DataCommander/Providers/DataCommander.Providers.OleDb/DataCommander.Providers.OleDb.csproj" />
+    <Project Path="DataCommander/Providers/DataCommander.Providers.PostgreSql/DataCommander.Providers.PostgreSql.csproj" />
+    <Project Path="DataCommander/Providers/DataCommander.Providers.SQLite/DataCommander.Providers.SQLite.csproj" />
+    <Project Path="DataCommander/Providers/DataCommander.Providers.SqlServer/DataCommander.Providers.SqlServer.csproj" />
+    <Project Path="DataCommander/Providers/DataCommander.Providers.SqlServerCe40/DataCommander.Providers.SqlServerCe40.csproj" />
+    <Project Path="DataCommander/Providers/DataCommander.Providers.Tfs/DataCommander.Providers.Tfs.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="global.json" />
+  </Folder>
+  <Project Path="DataCommander/DataCommander.Api/DataCommander.Api.csproj" />
+  <Project Path="DataCommander/DataCommander.Application/DataCommander.Application.csproj" />
+  <Project Path="DataCommander/DataCommander/DataCommander.csproj" />
+</Solution>

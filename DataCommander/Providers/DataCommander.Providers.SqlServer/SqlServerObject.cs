@@ -14,7 +14,7 @@ internal static class SqlServerObject
 
     public static string GetSchemas(string database)
     {
-        Assert.IsTrue(!database.IsNullOrWhiteSpace());
+        ArgumentException.ThrowIfNullOrWhiteSpace(database);
 
         return $@"if exists(select * from sys.databases (nolock) where name = '{database}')
 begin
@@ -26,7 +26,7 @@ end";
 
     public static string GetObjects(string schema, IEnumerable<string> objectTypes)
     {
-        Assert.IsTrue(!schema.IsNullOrWhiteSpace());
+        ArgumentException.ThrowIfNullOrWhiteSpace(schema);
         ArgumentNullException.ThrowIfNull(objectTypes);
         Assert.IsTrue(objectTypes.Any());
 
@@ -49,8 +49,8 @@ end";
 
     public static string GetObjects(string database, string schema, IEnumerable<string> objectTypes)
     {
-        Assert.IsTrue(!database.IsNullOrWhiteSpace());
-        Assert.IsTrue(!schema.IsNullOrWhiteSpace());
+        ArgumentException.ThrowIfNullOrWhiteSpace(database);
+        ArgumentException.ThrowIfNullOrWhiteSpace(schema);
         ArgumentNullException.ThrowIfNull(objectTypes);
         Assert.IsTrue(objectTypes.Any());
 
@@ -76,7 +76,7 @@ end";
 
     public static string GetObjectsByDatabase(string database, IEnumerable<string> objectTypes)
     {
-        Assert.IsTrue(!database.IsNullOrWhiteSpace());
+        ArgumentException.ThrowIfNullOrWhiteSpace(database);
         ArgumentNullException.ThrowIfNull(objectTypes);
         Assert.IsTrue(objectTypes.Any());
 

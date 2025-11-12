@@ -284,7 +284,7 @@ public sealed class SimpleXmlTextWriter(TextWriter textWriter) : XmlWriter
 
         if (parent != null)
         {
-            if (parent.HasAttributes && !parent.HasChildNodes)
+            if (parent is { HasAttributes: true, HasChildNodes: false })
             {
                 _textWriter.WriteLine();
                 _textWriter.WriteLine('>');

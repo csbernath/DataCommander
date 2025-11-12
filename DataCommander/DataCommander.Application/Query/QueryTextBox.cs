@@ -57,32 +57,20 @@ public sealed class QueryTextBox : UserControl
 
         if (colorTheme != null)
         {
-            BackColor = colorTheme.BackColor;
-            ForeColor = colorTheme.ForeColor;
-
+            ForeColor = colorTheme.ForeColor.Value;            
+            BackColor = colorTheme.BackColor.Value;
+            
             //EnableChangeEvent(false);
-            RichTextBox.BackColor = colorTheme.BackColor;
-            RichTextBox.ForeColor = colorTheme.ForeColor;
+            RichTextBox.ForeColor = colorTheme.ForeColor.Value;            
+            RichTextBox.BackColor = colorTheme.BackColor.Value;
             //EnableChangeEvent(true);
         }
     }
 
-    public void AddKeyWords(string[]? keyWords, Color color)
+    public void AddKeyWords(IReadOnlySet<string> keyWords, Color color)
     {
-        if (keyWords != null)
-        {
-            var keyWordList = new KeyWordList
-            {
-                KeyWords = new string[keyWords.Length]
-            };
-
-            for (var i = 0; i < keyWords.Length; ++i)
-                keyWordList.KeyWords[i] = keyWords[i].ToUpper();
-
-            keyWordList.Color = color;
-
-            _keyWordLists.Add(keyWordList);
-        }
+        var keyWordList = new KeyWordList(keyWords, color);
+        _keyWordLists.Add(keyWordList);
     }
 
     public ToolStripStatusLabel CaretPositionPanel
@@ -206,7 +194,8 @@ public sealed class QueryTextBox : UserControl
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                DataCommanderMessageBox.MessageBox.Show(this, ex.ToString(), MessageBoxCaption.Value, MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
             finally
             {
@@ -325,9 +314,10 @@ public sealed class QueryTextBox : UserControl
             {
                 RichTextBox.SelectionStart = startIndex;
                 RichTextBox.SelectionLength = endIndex - startIndex + 1;
-                RichTextBox.SelectionColor = _colorTheme != null
-                    ? _colorTheme.ForeColor
-                    : SystemColors.ControlText;
+                // TODO
+                // RichTextBox.SelectionColor = _colorTheme != null
+                //     ? _colorTheme.ForeColor
+                //     : SystemColors.ControlText;
             }
             finally
             {
@@ -358,10 +348,10 @@ public sealed class QueryTextBox : UserControl
                         color = _colorTheme != null
                             ? _colorTheme.ForeColor
                             : Color.Black;
-                        var keyWord = token.Value.ToUpper();
+                        var keyWord = token.Value;
                         foreach (var keyWordList in _keyWordLists)
                         {
-                            if (Array.BinarySearch(keyWordList.KeyWords, keyWord) >= 0)
+                            if (keyWordList.KeyWords.Contains(keyWord))
                             {
                                 color = keyWordList.Color;
                                 break;
@@ -371,7 +361,7 @@ public sealed class QueryTextBox : UserControl
                         break;
 
                     case TokenType.String:
-                        color = Color.Red;
+                        color = _colorTheme?.ProviderKeyWordColor;
                         break;
                 }
 
@@ -474,7 +464,8 @@ public sealed class QueryTextBox : UserControl
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.ToString());
+            DataCommanderMessageBox.MessageBox.Show(this, ex.ToString(), MessageBoxCaption.Value, MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
         }
         finally
         {
@@ -580,7 +571,8 @@ public sealed class QueryTextBox : UserControl
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.ToString());
+            DataCommanderMessageBox.MessageBox.Show(this, ex.ToString(), MessageBoxCaption.Value, MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
         }
         finally
         {
@@ -622,13 +614,13 @@ public sealed class QueryTextBox : UserControl
             var path = text;
 
             if (File.Exists(path))
-                DataCommanderApplication.Instance.MainForm!.LoadFiles(path.ItemToArray());
+                DataCommanderApplication.Instance.MainForm!.LoadFiles([path]);
             else if (Uri.TryCreate(path, UriKind.Absolute, out var uri))
             {
                 if (uri.Scheme == "file")
                 {
                     path = uri.LocalPath;
-                    DataCommanderApplication.Instance.MainForm!.LoadFiles(path.ItemToArray());
+                    DataCommanderApplication.Instance.MainForm!.LoadFiles([path]);
                 }
             }
             else
@@ -642,7 +634,7 @@ public sealed class QueryTextBox : UserControl
         }
         else if (GetDataPresent(dataObject, DataFormats.FileDrop))
         {
-            var fileNames = (string[])dataObject.GetData(DataFormats.FileDrop);
+            var fileNames = (string[])dataObject.GetData(DataFormats.FileDrop)!;
             var fileName = fileNames![0];
             var extension = Path.GetExtension(fileName);
             if (extension.In(".sql", ".txt"))
@@ -739,9 +731,9 @@ public sealed class QueryTextBox : UserControl
         //});
     }
 
-    private sealed class KeyWordList
+    private sealed class KeyWordList(IReadOnlySet<string> keyWords, Color color)
     {
-        public string[] KeyWords;
-        public Color Color;
+        public readonly IReadOnlySet<string> KeyWords = keyWords;
+        public readonly Color Color = color;
     }
 }

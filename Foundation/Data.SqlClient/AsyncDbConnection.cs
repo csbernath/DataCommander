@@ -89,7 +89,7 @@ public sealed class AsyncDbConnection : IDbConnection
         {
             case CommandType.StoredProcedure:
                 var sb = new StringBuilder();
-                sb.AppendFormat("exec {0}", command.CommandText);
+                sb.Append($"exec {command.CommandText}");
                 var parameters = (SqlParameterCollection)command.Parameters;
                 var parametersString = IDataParameterCollectionExtensions.ToLogString(parameters);
 

@@ -1,11 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using Foundation.Text;
 
 namespace Foundation.Data.SqlClient.DbQueryBuilding;
 
 public static class ValidationFactory
 {
-    public static ReadOnlyCollection<Line> Create(string message)
+    public static IReadOnlyCollection<Line> Create(string message)
     {
         var textBuilder = new TextBuilder();
         textBuilder.Add("textBuilder.Add(\"if @@rowcount = 0\");");

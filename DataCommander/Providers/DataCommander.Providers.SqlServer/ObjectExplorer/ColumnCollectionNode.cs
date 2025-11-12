@@ -11,21 +11,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : ITreeNode
 {
-    private static ColumnNode ToColumnNode(IDataRecord dataRecord)
-    {
-        var id = dataRecord.GetInt32(0);
-        var columnName = dataRecord.GetString(1);
-        var systemTypeId = dataRecord.GetByte(2);
-        var maxLength = dataRecord.GetInt16(3);
-        var precision = dataRecord.GetByte(4);
-        var scale = dataRecord.GetByte(5);
-        var isNullable = dataRecord.GetBoolean(6);
-        var isComputed = dataRecord.GetBoolean(7);
-        var userTypeName = dataRecord.GetString(8);
-
-        return new ColumnNode(id, columnName, systemTypeId, maxLength, precision, scale, isNullable, isComputed, userTypeName);
-    }
-
     string? ITreeNode.Name => "Columns";
 
     bool ITreeNode.IsLeaf => false;
@@ -101,6 +86,25 @@ order by fkc.parent_column_id";
     }
 
     bool ITreeNode.Sortable => false;
-    string? ITreeNode.Query => null;
+
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
+
     public ContextMenu? GetContextMenu() => null;
+
+    private static ColumnNode ToColumnNode(IDataRecord dataRecord)
+    {
+        var id = dataRecord.GetInt32(0);
+        var columnName = dataRecord.GetString(1);
+        var systemTypeId = dataRecord.GetByte(2);
+        var maxLength = dataRecord.GetInt16(3);
+        var precision = dataRecord.GetByte(4);
+        var scale = dataRecord.GetByte(5);
+        var isNullable = dataRecord.GetBoolean(6);
+        var isComputed = dataRecord.GetBoolean(7);
+        var userTypeName = dataRecord.GetString(8);
+
+        return new ColumnNode(id, columnName, systemTypeId, maxLength, precision, scale, isNullable, isComputed, userTypeName);
+    }
 }

@@ -27,86 +27,105 @@ namespace DataCommander.Application
         /// </summary>
         private void InitializeComponent()
         {
-            this.colorThemeLabel = new System.Windows.Forms.Label();
-            this.okButton = new System.Windows.Forms.Button();
-            this.cancelButton = new System.Windows.Forms.Button();
-            this.colorThemeComboBox = new System.Windows.Forms.ComboBox();
-            this.changeFontButton = new System.Windows.Forms.Button();
-            this.SuspendLayout();
+            colorThemeLabel = new System.Windows.Forms.Label();
+            okButton = new System.Windows.Forms.Button();
+            cancelButton = new System.Windows.Forms.Button();
+            colorThemeComboBox = new System.Windows.Forms.ComboBox();
+            changeFontButton = new System.Windows.Forms.Button();
+            initializeApplicationConfigurationCheckBox = new System.Windows.Forms.CheckBox();
+            SuspendLayout();
             // 
             // colorThemeLabel
             // 
-            this.colorThemeLabel.AutoSize = true;
-            this.colorThemeLabel.Location = new System.Drawing.Point(25, 27);
-            this.colorThemeLabel.Name = "colorThemeLabel";
-            this.colorThemeLabel.Size = new System.Drawing.Size(66, 13);
-            this.colorThemeLabel.TabIndex = 1;
-            this.colorThemeLabel.Text = "Color theme:";
+            colorThemeLabel.AutoSize = true;
+            colorThemeLabel.Location = new System.Drawing.Point(13, 12);
+            colorThemeLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            colorThemeLabel.Name = "colorThemeLabel";
+            colorThemeLabel.Size = new System.Drawing.Size(76, 15);
+            colorThemeLabel.TabIndex = 1;
+            colorThemeLabel.Text = "Color theme:";
             // 
             // okButton
             // 
-            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(225, 93);
-            this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 2;
-            this.okButton.Text = "OK";
-            this.okButton.UseVisualStyleBackColor = true;
-            this.okButton.Click += new System.EventHandler(this.okButton_Click);
+            okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            okButton.Location = new System.Drawing.Point(262, 107);
+            okButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            okButton.Name = "okButton";
+            okButton.Size = new System.Drawing.Size(88, 27);
+            okButton.TabIndex = 2;
+            okButton.Text = "OK";
+            okButton.UseVisualStyleBackColor = true;
+            okButton.Click += okButton_Click;
             // 
             // cancelButton
             // 
-            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(306, 93);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 3;
-            this.cancelButton.Text = "Cancel";
-            this.cancelButton.UseVisualStyleBackColor = true;
+            cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            cancelButton.Location = new System.Drawing.Point(357, 107);
+            cancelButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            cancelButton.Name = "cancelButton";
+            cancelButton.Size = new System.Drawing.Size(88, 27);
+            cancelButton.TabIndex = 3;
+            cancelButton.Text = "Cancel";
+            cancelButton.UseVisualStyleBackColor = true;
             // 
             // colorThemeComboBox
             // 
-            this.colorThemeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.colorThemeComboBox.FormattingEnabled = true;
-            this.colorThemeComboBox.Items.AddRange(new object[] {
-            "Light",
-            "Dark"});
-            this.colorThemeComboBox.Location = new System.Drawing.Point(106, 27);
-            this.colorThemeComboBox.Name = "colorThemeComboBox";
-            this.colorThemeComboBox.Size = new System.Drawing.Size(121, 21);
-            this.colorThemeComboBox.TabIndex = 4;
+            colorThemeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            colorThemeComboBox.FormattingEnabled = true;
+            colorThemeComboBox.Items.AddRange(new object[] { "Light", "Dark" });
+            colorThemeComboBox.Location = new System.Drawing.Point(210, 9);
+            colorThemeComboBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            colorThemeComboBox.Name = "colorThemeComboBox";
+            colorThemeComboBox.Size = new System.Drawing.Size(140, 23);
+            colorThemeComboBox.TabIndex = 4;
             // 
             // changeFontButton
             // 
-            this.changeFontButton.Location = new System.Drawing.Point(106, 55);
-            this.changeFontButton.Name = "changeFontButton";
-            this.changeFontButton.Size = new System.Drawing.Size(88, 23);
-            this.changeFontButton.TabIndex = 5;
-            this.changeFontButton.Text = "Change Font";
-            this.changeFontButton.UseVisualStyleBackColor = true;
-            this.changeFontButton.Click += new System.EventHandler(this.changeFontButton_Click);
+            changeFontButton.Location = new System.Drawing.Point(13, 64);
+            changeFontButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            changeFontButton.Name = "changeFontButton";
+            changeFontButton.Size = new System.Drawing.Size(103, 27);
+            changeFontButton.TabIndex = 5;
+            changeFontButton.Text = "Change Font";
+            changeFontButton.UseVisualStyleBackColor = true;
+            changeFontButton.Click += changeFontButton_Click;
+            // 
+            // initializeApplicationConfigurationCheckBox
+            // 
+            initializeApplicationConfigurationCheckBox.AutoSize = true;
+            initializeApplicationConfigurationCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            initializeApplicationConfigurationCheckBox.Location = new System.Drawing.Point(13, 39);
+            initializeApplicationConfigurationCheckBox.Name = "initializeApplicationConfigurationCheckBox";
+            initializeApplicationConfigurationCheckBox.Size = new System.Drawing.Size(210, 19);
+            initializeApplicationConfigurationCheckBox.TabIndex = 6;
+            initializeApplicationConfigurationCheckBox.Text = "Initialize Application Configuration";
+            initializeApplicationConfigurationCheckBox.UseVisualStyleBackColor = true;
+            initializeApplicationConfigurationCheckBox.CheckedChanged += initializeApplicationConfigurationCheckBox_CheckedChanged;
             // 
             // OptionsForm
             // 
-            this.AcceptButton = this.okButton;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(392, 128);
-            this.Controls.Add(this.changeFontButton);
-            this.Controls.Add(this.colorThemeComboBox);
-            this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.okButton);
-            this.Controls.Add(this.colorThemeLabel);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "OptionsForm";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.Text = "Data Commander options";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AcceptButton = okButton;
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            CancelButton = cancelButton;
+            ClientSize = new System.Drawing.Size(457, 148);
+            Controls.Add(initializeApplicationConfigurationCheckBox);
+            Controls.Add(changeFontButton);
+            Controls.Add(colorThemeComboBox);
+            Controls.Add(cancelButton);
+            Controls.Add(okButton);
+            Controls.Add(colorThemeLabel);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "OptionsForm";
+            ShowIcon = false;
+            ShowInTaskbar = false;
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            Text = "Data Commander options";
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 
@@ -115,5 +134,6 @@ namespace DataCommander.Application
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.ComboBox colorThemeComboBox;
         private System.Windows.Forms.Button changeFontButton;
+        private System.Windows.Forms.CheckBox initializeApplicationConfigurationCheckBox;
     }
 }

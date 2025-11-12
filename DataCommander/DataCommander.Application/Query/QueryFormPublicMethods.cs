@@ -10,7 +10,6 @@ using DataCommander.Api.Connection;
 using DataCommander.Api.Query;
 using DataCommander.Application.ResultWriter;
 using Foundation.Diagnostics;
-using Foundation.Linq;
 using Foundation.Log;
 
 namespace DataCommander.Application.Query;
@@ -100,7 +99,7 @@ public sealed partial class QueryForm
 
     public void SetStatusbarPanelText(string? text)
     {
-        var color = _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText;
+        var color = _colorTheme != null ? _colorTheme.ForeColor.Value : SystemColors.ControlText;
         SetStatusbarPanelText(text, color);
     }
 
@@ -124,7 +123,6 @@ public sealed partial class QueryForm
             _queryTextBox.RichTextBox.SelectionTabs = tabs;
             //_queryTextBox.EnableChangeEvent(true);
 
-            _messagesTextBox.Font = value;
             _messagesTextBox.SelectionTabs = tabs;
         }
     }
@@ -146,7 +144,7 @@ public sealed partial class QueryForm
             else
             {
                 ResultSetCount++;
-                text = $"Initialize {ResultSetCount}";
+                text = $"Result {ResultSetCount}";
             }
 
             var resultSetTabPage = new TabPage(text);
@@ -240,7 +238,7 @@ public sealed partial class QueryForm
                 _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
                 var resultWriter = _dataSetResultWriter;
                 _dataAdapter = new AsyncDataAdapter(Provider, maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
-                _dataAdapter.Start(new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray());
+                _dataAdapter.Start([new AsyncDataAdapterCommand(null, 0, _command, null, null, null)]);
             }
             catch (Exception ex)
             {

@@ -1,11 +1,50 @@
-﻿using DataCommander.Api;
+﻿using System;
+using System.Linq;
+using DataCommander.Api;
+using DataCommander.Api.FieldReaders;
 using Npgsql;
+using Npgsql.PostgresTypes;
+using Npgsql.Schema;
 
 namespace DataCommander.Providers.PostgreSql;
 
-internal sealed class PostgreSqlDataReaderHelper(NpgsqlDataReader dataReader) : IDataReaderHelper
+internal sealed class PostgreSqlDataReaderHelper : IDataReaderHelper
 {
-    private readonly NpgsqlDataReader _dataReader = dataReader;
+    private readonly IDataFieldReader[] _dataFieldReaders;
 
-    int IDataReaderHelper.GetValues(object[] values) => _dataReader.GetValues(values);
+    public PostgreSqlDataReaderHelper(NpgsqlDataReader dataReader)
+    {
+        var columnSchema = dataReader.GetColumnSchema();
+        _dataFieldReaders = columnSchema
+            .Select(c => CreateDataFieldReader(dataReader, c))
+            .ToArray();
+    }
+
+    int IDataReaderHelper.GetValues(object?[] values)
+    {
+        for (var i = 0; i < _dataFieldReaders.Length; i++)
+            values[i] = _dataFieldReaders[i].Value;
+
+        return _dataFieldReaders.Length;
+    }
+
+    private static IDataFieldReader CreateDataFieldReader(
+        NpgsqlDataReader npgsqlDataReader,
+        NpgsqlDbColumn npgsqlDbColumn)
+    {
+        IDataFieldReader dataFieldReader = npgsqlDbColumn.PostgresType switch
+        {
+            PostgresArrayType postgresArrayType => new PostgresArrayDataFieldReader(npgsqlDataReader, npgsqlDbColumn.ColumnOrdinal.Value),
+            PostgresBaseType postgresBaseType => new DefaultDataFieldReader(npgsqlDataReader, npgsqlDbColumn.ColumnOrdinal.Value),
+            PostgresCompositeType postgresCompositeType => throw new NotImplementedException(),
+            PostgresDomainType postgresDomainType => throw new NotImplementedException(),
+            PostgresEnumType postgresEnumType => throw new NotImplementedException(),
+            PostgresMultirangeType postgresMultirangeType => throw new NotImplementedException(),
+            PostgresRangeType postgresRangeType => throw new NotImplementedException(),
+            UnknownBackendType unknownBackendType => new DefaultDataFieldReader(npgsqlDataReader, npgsqlDbColumn.ColumnOrdinal.Value),
+            _ => new DefaultDataFieldReader(npgsqlDataReader, npgsqlDbColumn.ColumnOrdinal.Value)
+        };
+
+        return dataFieldReader;
+    }
 }

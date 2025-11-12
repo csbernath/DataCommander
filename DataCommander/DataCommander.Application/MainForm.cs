@@ -19,6 +19,7 @@ using DataCommander.Api.Connection;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Diagnostics;
+using Foundation.Diagnostics.Measurement;
 using Foundation.Log;
 using Foundation.Threading;
 using Foundation.Windows.Forms;
@@ -35,7 +36,7 @@ public class MainForm : Form
     private ToolStripMenuItem? _menuItem1;
     private ToolStripMenuItem? _mnuConnect;
     private ImageList? _imageList;
-    private StatusStrip? _statusBar;
+    private StatusStrip _statusBar;
     private ToolStrip? _toolStrip;
     private ToolStripMenuItem? _mnuExit;
     private ToolStripMenuItem? _mnuHelp;
@@ -52,30 +53,37 @@ public class MainForm : Form
     private ToolStripMenuItem? _newToolStripMenuItem;
     private ToolStripMenuItem? _contentsToolStripMenuItem;
     private ToolStripSeparator? _toolStripSeparator2;
-    private ToolStripPanel? _toolStripPanel;
+    private ToolStripPanel _toolStripPanel;
     private ToolStripMenuItem? _closeAllDocumentsMenuItem;
     private IContainer? components;
     private ToolStripStatusLabel? _toolStripStatusLabel;
     private ToolStripMenuItem? _saveAllToolStripMenuItem;
     private ToolStripMenuItem? _recentConnectionsToolStripMenuItem;
     private ToolStripMenuItem? _checkForToolStripMenuItem;
-    private ToolStripStatusLabel? _managedMemoryToolStripStatusLabel;
+    private ToolStripStatusLabel _managedMemoryToolStripStatusLabel;
     private ToolStrip? _queryFormToolStrip;
     private readonly System.Windows.Forms.Timer _timer;
     private ColorTheme? _colorTheme;
 
-    private void SetColorTheme(bool darkColorTheme)
+    private void SetColorTheme(SystemColorMode colorMode)
     {
-        var colorTheme = darkColorTheme
-            ? new ColorTheme(
-                Color.FromArgb(220, 220, 220),
-                Color.FromArgb(30, 30, 30),
-                Color.DarkOliveGreen,
-                Color.FromArgb(86, 156, 214),
-                Color.FromArgb(203, 65, 65))
-            : null;
-
-        _colorTheme = colorTheme;
+        switch (colorMode)
+        {
+            case SystemColorMode.Classic:
+            case SystemColorMode.System:
+                break;
+            case SystemColorMode.Dark:
+                _colorTheme = new ColorTheme(
+                    Color.FromArgb(220, 220, 220),
+                    //Color.White,
+                    Color.FromArgb(30, 30, 30),
+                    Color.DarkOliveGreen,
+                    Color.FromArgb(86, 156, 214),
+                    Color.FromArgb(0xb1, 0x4b, 0x4b));
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(colorMode), colorMode, null);
+        }
     }
 
     public MainForm()
@@ -85,7 +93,7 @@ public class MainForm : Form
         //
         InitializeComponent();
 
-        Text = "Data Commander";
+        Text = $"Data Commander (.NET {Environment.Version.Major})";
 
         _helpButton!.Click += HelpButton_Click;
         _mnuAbout!.Click += mnuAbout_Click;
@@ -103,33 +111,30 @@ public class MainForm : Form
         _toolStripStatusLabel!.Text = message;
         Log.Trace(message);
 
-        if (!DataCommanderApplication.Instance.ApplicationData.CurrentType.Attributes.TryGetAttributeValue<bool>("DarkColorTheme", out var darkColorTheme))
-            darkColorTheme = false;
-
-        SetColorTheme(darkColorTheme);
+        SetColorTheme(DataCommanderApplication.Instance.ColorMode);
 
         if (_colorTheme != null)
         {
-            ForeColor = _colorTheme.ForeColor;
-            BackColor = _colorTheme.BackColor;
+            ForeColor = _colorTheme.ForeColor!.Value;
+            BackColor = _colorTheme.BackColor!.Value;
 
             foreach (Control control in Controls)
             {
-                control.ForeColor = _colorTheme.ForeColor;
-                control.BackColor = _colorTheme.BackColor;
+                control.ForeColor = _colorTheme.ForeColor.Value;
+                control.BackColor = _colorTheme.BackColor.Value;
             }
 
-            _toolStripPanel!.BackColor = _colorTheme.BackColor;
+            _toolStripPanel!.BackColor = _colorTheme.BackColor.Value;
 
-            _mainMenu!.ForeColor = _colorTheme.ForeColor;
-            _mainMenu.BackColor = _colorTheme.BackColor;
+            _mainMenu!.ForeColor = _colorTheme.ForeColor.Value;
+            _mainMenu.BackColor = _colorTheme.BackColor.Value;
 
             foreach (var menuItem in _mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
             foreach (ToolStripItem x in menuItem.DropDownItems)
                 _colorTheme.Apply(x);
 
-            _toolStrip!.BackColor = _colorTheme.BackColor;
-            _toolStrip.ForeColor = _colorTheme.ForeColor;
+            _toolStrip!.BackColor = _colorTheme.BackColor.Value;
+            _toolStrip.ForeColor = _colorTheme.ForeColor.Value;
 
             foreach (ToolStripItem item in _toolStrip.Items)
                 _colorTheme.Apply(item);
@@ -153,18 +158,18 @@ public class MainForm : Form
     public void UpdateTotalMemory()
     {
         var totalMemory = GC.GetTotalMemory(false);
-        var workingSet = Environment.WorkingSet;
-
-        _managedMemoryToolStripStatusLabel!.Text = $"{BytesToText(totalMemory)} / {BytesToText(workingSet)}";
-
-        _managedMemoryToolStripStatusLabel.ForeColor = totalMemory <= 256 * 1024 * 1024
+        var text = BytesToText(totalMemory);
+        _managedMemoryToolStripStatusLabel.Text = text;
+        _managedMemoryToolStripStatusLabel.ForeColor = totalMemory <= 256 * 1000 * 1000
             ? _colorTheme != null
-                ? _colorTheme.ForeColor
+                ? _colorTheme.ForeColor.Value
                 : SystemColors.ControlText
-            : Color.Red;
+            : _colorTheme!.ProviderKeyWordColor;
+        _managedMemoryToolStripStatusLabel.ToolTipText = $@"Managed memory: {text} ({totalMemory:N0} bytes)
+GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.CollectionCount(2)} gen2";
     }
 
-    private static string BytesToText(long bytes) => MeasurementUnit.ToString(bytes, 0, "B");
+    private static string BytesToText(long bytes) => MeasurementUnit.ToBinaryMetricString(bytes, 2, UnitSymbol.Byte);
 
     private void Timer_Tick(object? sender, EventArgs e) => UpdateTotalMemory();
 
@@ -186,7 +191,7 @@ public class MainForm : Form
     private void InitializeComponent()
     {
         components = new Container();
-        var resources = new ComponentResourceManager(typeof(MainForm));
+        ComponentResourceManager resources = new ComponentResourceManager(typeof(MainForm));
         _mainMenu = new MenuStrip();
         _menuItem1 = new ToolStripMenuItem();
         _newToolStripMenuItem = new ToolStripMenuItem();
@@ -226,25 +231,25 @@ public class MainForm : Form
         // 
         _mainMenu.Dock = DockStyle.None;
         _mainMenu.ImageScalingSize = new Size(20, 20);
-        _mainMenu.Items.AddRange([_menuItem1, optionsMenuItem, _mnuWindow, _mnuHelp]);
-        _mainMenu.Location = new Point(0, 27);
+        _mainMenu.Items.AddRange(new ToolStripItem[] { _menuItem1, optionsMenuItem, _mnuWindow, _mnuHelp });
+        _mainMenu.Location = new Point(0, 0);
         _mainMenu.MdiWindowListItem = _mnuWindow;
         _mainMenu.Name = "_mainMenu";
-        _mainMenu.Size = new Size(982, 28);
+        _mainMenu.Size = new Size(982, 24);
         _mainMenu.TabIndex = 1;
         // 
         // _menuItem1
         // 
-        _menuItem1.DropDownItems.AddRange([_newToolStripMenuItem, _mnuConnect, _mnuOpen, _recentConnectionsToolStripMenuItem, _saveAllToolStripMenuItem, _mnuRecentFileList, _mnuExit]);
+        _menuItem1.DropDownItems.AddRange(new ToolStripItem[] { _newToolStripMenuItem, _mnuConnect, _mnuOpen, _recentConnectionsToolStripMenuItem, _saveAllToolStripMenuItem, _mnuRecentFileList, _mnuExit });
         _menuItem1.MergeIndex = 1;
         _menuItem1.Name = "_menuItem1";
-        _menuItem1.Size = new Size(86, 24);
+        _menuItem1.Size = new Size(67, 20);
         _menuItem1.Text = "&Database";
         // 
         // _newToolStripMenuItem
         // 
         _newToolStripMenuItem.Name = "_newToolStripMenuItem";
-        _newToolStripMenuItem.Size = new Size(235, 26);
+        _newToolStripMenuItem.Size = new Size(191, 26);
         _newToolStripMenuItem.Text = "&Create";
         _newToolStripMenuItem.Click += CreateMenuItem_Click;
         // 
@@ -254,7 +259,7 @@ public class MainForm : Form
         _mnuConnect.MergeIndex = 0;
         _mnuConnect.Name = "_mnuConnect";
         _mnuConnect.ShortcutKeys = Keys.Control | Keys.N;
-        _mnuConnect.Size = new Size(235, 26);
+        _mnuConnect.Size = new Size(191, 26);
         _mnuConnect.Text = "&Connect";
         _mnuConnect.Click += MnuConnect_Click;
         // 
@@ -264,21 +269,21 @@ public class MainForm : Form
         _mnuOpen.MergeIndex = 1;
         _mnuOpen.Name = "_mnuOpen";
         _mnuOpen.ShortcutKeys = Keys.Control | Keys.O;
-        _mnuOpen.Size = new Size(235, 26);
+        _mnuOpen.Size = new Size(191, 26);
         _mnuOpen.Text = "&Open";
         _mnuOpen.Click += mnuOpen_Click;
         // 
         // _recentConnectionsToolStripMenuItem
         // 
         _recentConnectionsToolStripMenuItem.Name = "_recentConnectionsToolStripMenuItem";
-        _recentConnectionsToolStripMenuItem.Size = new Size(235, 26);
+        _recentConnectionsToolStripMenuItem.Size = new Size(191, 26);
         _recentConnectionsToolStripMenuItem.Text = "Recent connections";
         // 
         // _saveAllToolStripMenuItem
         // 
         _saveAllToolStripMenuItem.Name = "_saveAllToolStripMenuItem";
         _saveAllToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
-        _saveAllToolStripMenuItem.Size = new Size(235, 26);
+        _saveAllToolStripMenuItem.Size = new Size(191, 26);
         _saveAllToolStripMenuItem.Text = "Save All";
         _saveAllToolStripMenuItem.Click += saveAllToolStripMenuItem_Click;
         // 
@@ -286,14 +291,14 @@ public class MainForm : Form
         // 
         _mnuRecentFileList.MergeIndex = 2;
         _mnuRecentFileList.Name = "_mnuRecentFileList";
-        _mnuRecentFileList.Size = new Size(235, 26);
+        _mnuRecentFileList.Size = new Size(191, 26);
         _mnuRecentFileList.Text = "Recent &File List";
         // 
         // _mnuExit
         // 
         _mnuExit.Name = "_mnuExit";
         _mnuExit.ShortcutKeys = Keys.Alt | Keys.F4;
-        _mnuExit.Size = new Size(235, 26);
+        _mnuExit.Size = new Size(191, 26);
         _mnuExit.Text = "Exit";
         _mnuExit.Click += MnuExit_Click;
         // 
@@ -301,38 +306,38 @@ public class MainForm : Form
         // 
         optionsMenuItem.MergeIndex = 5;
         optionsMenuItem.Name = "optionsMenuItem";
-        optionsMenuItem.Size = new Size(75, 24);
+        optionsMenuItem.Size = new Size(61, 20);
         optionsMenuItem.Text = "Options";
         optionsMenuItem.Click += optionsMenuItem_Click;
         // 
         // _mnuWindow
         // 
-        _mnuWindow.DropDownItems.AddRange([_closeAllDocumentsMenuItem]);
+        _mnuWindow.DropDownItems.AddRange(new ToolStripItem[] { _closeAllDocumentsMenuItem });
         _mnuWindow.MergeIndex = 6;
         _mnuWindow.Name = "_mnuWindow";
-        _mnuWindow.Size = new Size(78, 24);
+        _mnuWindow.Size = new Size(63, 20);
         _mnuWindow.Text = "&Window";
         // 
         // _closeAllDocumentsMenuItem
         // 
         _closeAllDocumentsMenuItem.Name = "_closeAllDocumentsMenuItem";
-        _closeAllDocumentsMenuItem.Size = new Size(229, 26);
+        _closeAllDocumentsMenuItem.Size = new Size(184, 22);
         _closeAllDocumentsMenuItem.Text = "Close All Documents";
         _closeAllDocumentsMenuItem.Click += CloseAllDocumentsMenuItem_Click;
         // 
         // _mnuHelp
         // 
-        _mnuHelp.DropDownItems.AddRange([_contentsToolStripMenuItem, _checkForToolStripMenuItem, _mnuAbout]);
+        _mnuHelp.DropDownItems.AddRange(new ToolStripItem[] { _contentsToolStripMenuItem, _checkForToolStripMenuItem, _mnuAbout });
         _mnuHelp.MergeIndex = 7;
         _mnuHelp.Name = "_mnuHelp";
-        _mnuHelp.Size = new Size(55, 24);
+        _mnuHelp.Size = new Size(44, 20);
         _mnuHelp.Text = "&Help";
         // 
         // _contentsToolStripMenuItem
         // 
         _contentsToolStripMenuItem.Name = "_contentsToolStripMenuItem";
         _contentsToolStripMenuItem.ShortcutKeys = Keys.F1;
-        _contentsToolStripMenuItem.Size = new Size(247, 26);
+        _contentsToolStripMenuItem.Size = new Size(198, 22);
         _contentsToolStripMenuItem.Text = "Contents";
         _contentsToolStripMenuItem.Click += contentsToolStripMenuItem_Click;
         // 
@@ -340,7 +345,7 @@ public class MainForm : Form
         // 
         _checkForToolStripMenuItem.Name = "_checkForToolStripMenuItem";
         _checkForToolStripMenuItem.ShortcutKeys = Keys.F12;
-        _checkForToolStripMenuItem.Size = new Size(247, 26);
+        _checkForToolStripMenuItem.Size = new Size(198, 22);
         _checkForToolStripMenuItem.Text = "Check for updates ";
         _checkForToolStripMenuItem.Click += CheckForToolStripMenuItem_Click;
         // 
@@ -348,7 +353,7 @@ public class MainForm : Form
         // 
         _mnuAbout.MergeIndex = 0;
         _mnuAbout.Name = "_mnuAbout";
-        _mnuAbout.Size = new Size(247, 26);
+        _mnuAbout.Size = new Size(198, 22);
         _mnuAbout.Text = "About...";
         // 
         // _toolStrip
@@ -356,10 +361,10 @@ public class MainForm : Form
         _toolStrip.Dock = DockStyle.None;
         _toolStrip.ImageList = _imageList;
         _toolStrip.ImageScalingSize = new Size(20, 20);
-        _toolStrip.Items.AddRange([_btnConnect, _openButton, _saveButton, _toolStripSeparator1, _helpButton, _toolStripSeparator2, _activeMdiChildToolStripTextBox]);
-        _toolStrip.Location = new Point(4, 0);
+        _toolStrip.Items.AddRange(new ToolStripItem[] { _btnConnect, _openButton, _saveButton, _toolStripSeparator1, _helpButton, _toolStripSeparator2, _activeMdiChildToolStripTextBox });
+        _toolStrip.Location = new Point(3, 24);
         _toolStrip.Name = "_toolStrip";
-        _toolStrip.Size = new Size(792, 27);
+        _toolStrip.Size = new Size(558, 27);
         _toolStrip.TabIndex = 2;
         // 
         // _imageList
@@ -376,7 +381,7 @@ public class MainForm : Form
         // 
         _btnConnect.Image = (Image)resources.GetObject("_btnConnect.Image");
         _btnConnect.Name = "_btnConnect";
-        _btnConnect.Size = new Size(29, 24);
+        _btnConnect.Size = new Size(24, 24);
         _btnConnect.ToolTipText = "Connect to database";
         _btnConnect.Click += btnConnect_Click;
         // 
@@ -386,7 +391,7 @@ public class MainForm : Form
         _openButton.Image = (Image)resources.GetObject("_openButton.Image");
         _openButton.ImageTransparentColor = Color.Magenta;
         _openButton.Name = "_openButton";
-        _openButton.Size = new Size(29, 24);
+        _openButton.Size = new Size(24, 24);
         _openButton.Text = "toolStripButton1";
         _openButton.ToolTipText = "Open database";
         _openButton.Click += openButton_Click;
@@ -398,7 +403,7 @@ public class MainForm : Form
         _saveButton.Image = (Image)resources.GetObject("_saveButton.Image");
         _saveButton.ImageTransparentColor = Color.Magenta;
         _saveButton.Name = "_saveButton";
-        _saveButton.Size = new Size(29, 24);
+        _saveButton.Size = new Size(24, 24);
         _saveButton.ToolTipText = "Save Query";
         _saveButton.Click += saveButton_Click;
         // 
@@ -413,7 +418,7 @@ public class MainForm : Form
         _helpButton.Image = (Image)resources.GetObject("_helpButton.Image");
         _helpButton.ImageTransparentColor = Color.Magenta;
         _helpButton.Name = "_helpButton";
-        _helpButton.Size = new Size(29, 24);
+        _helpButton.Size = new Size(24, 24);
         _helpButton.Text = "Help";
         // 
         // _toolStripSeparator2
@@ -423,24 +428,25 @@ public class MainForm : Form
         // 
         // _activeMdiChildToolStripTextBox
         // 
+        _activeMdiChildToolStripTextBox.Font = new Font("Segoe UI", 8.830189F);
         _activeMdiChildToolStripTextBox.Name = "_activeMdiChildToolStripTextBox";
         _activeMdiChildToolStripTextBox.ReadOnly = true;
-        _activeMdiChildToolStripTextBox.Size = new Size(610, 27);
+        _activeMdiChildToolStripTextBox.Size = new Size(436, 27);
         // 
         // _statusBar
         // 
         _statusBar.ImageScalingSize = new Size(20, 20);
-        _statusBar.Items.AddRange([_toolStripStatusLabel, _managedMemoryToolStripStatusLabel]);
-        _statusBar.Location = new Point(0, 727);
+        _statusBar.Items.AddRange(new ToolStripItem[] { _toolStripStatusLabel, _managedMemoryToolStripStatusLabel });
+        _statusBar.Location = new Point(0, 731);
         _statusBar.Name = "_statusBar";
         _statusBar.ShowItemToolTips = true;
-        _statusBar.Size = new Size(982, 26);
+        _statusBar.Size = new Size(982, 22);
         _statusBar.TabIndex = 3;
         // 
         // _toolStripStatusLabel
         // 
         _toolStripStatusLabel.Name = "_toolStripStatusLabel";
-        _toolStripStatusLabel.Size = new Size(867, 20);
+        _toolStripStatusLabel.Size = new Size(827, 17);
         _toolStripStatusLabel.Spring = true;
         _toolStripStatusLabel.TextAlign = ContentAlignment.MiddleLeft;
         // 
@@ -449,25 +455,24 @@ public class MainForm : Form
         _managedMemoryToolStripStatusLabel.AutoSize = false;
         _managedMemoryToolStripStatusLabel.DisplayStyle = ToolStripItemDisplayStyle.Text;
         _managedMemoryToolStripStatusLabel.Name = "_managedMemoryToolStripStatusLabel";
-        _managedMemoryToolStripStatusLabel.Size = new Size(100, 20);
+        _managedMemoryToolStripStatusLabel.Size = new Size(140, 17);
         _managedMemoryToolStripStatusLabel.TextAlign = ContentAlignment.MiddleRight;
-        _managedMemoryToolStripStatusLabel.ToolTipText = "Managed memory / Working set";
         _managedMemoryToolStripStatusLabel.MouseUp += managedMemoryToolStripStatusLabel_MouseUp;
         // 
         // _toolStripPanel
         // 
-        _toolStripPanel.Controls.Add(_toolStrip);
         _toolStripPanel.Controls.Add(_mainMenu);
+        _toolStripPanel.Controls.Add(_toolStrip);
         _toolStripPanel.Dock = DockStyle.Top;
         _toolStripPanel.Location = new Point(0, 0);
         _toolStripPanel.Name = "_toolStripPanel";
         _toolStripPanel.Orientation = Orientation.Horizontal;
         _toolStripPanel.RowMargin = new Padding(3, 0, 0, 0);
-        _toolStripPanel.Size = new Size(982, 55);
+        _toolStripPanel.Size = new Size(982, 51);
         // 
         // MainForm
         // 
-        AutoScaleBaseSize = new Size(7, 17);
+        AutoScaleBaseSize = new Size(5, 14);
         ClientSize = new Size(982, 753);
         Controls.Add(_toolStripPanel);
         Controls.Add(_statusBar);
@@ -491,15 +496,17 @@ public class MainForm : Form
 
     private void optionsMenuItem_Click(object? sender, EventArgs e)
     {
-        var optionsForm = new OptionsForm(_colorTheme != null, SelectedFont, _colorTheme);
+        var attributes = DataCommanderApplication.Instance.ApplicationData.CurrentType.Attributes;
+        attributes.TryGetAttributeValue("ColorMode", SystemColorMode.System, out var colorMode);
+        attributes.TryGetAttributeValue("InitializeApplicationConfiguration", true, out var initializeApplicationConfiguration);
+
+        var optionsForm = new OptionsForm(colorMode, initializeApplicationConfiguration, SelectedFont!);
         if (optionsForm.ShowDialog() == DialogResult.OK)
         {
-            var darkColorTheme = optionsForm.DarkColorTheme;
-            SetColorTheme(darkColorTheme);
-            SelectedFont = optionsForm.SelectedFont;
+            attributes.SetAttributeValue("ColorMode", optionsForm.ColorMode);
+            attributes.SetAttributeValue("InitializeApplicationConfiguration", optionsForm.InitializeApplicationConfiguration);
 
-            var attributes = DataCommanderApplication.Instance.ApplicationData.CurrentType.Attributes;
-            attributes.SetAttributeValue("DarkColorTheme", darkColorTheme);
+            SelectedFont = optionsForm.SelectedFont;
             attributes.SetAttributeValue("Font", Serialize(SelectedFont));
         }
     }
@@ -516,7 +523,7 @@ public class MainForm : Form
                 var connectionInfo = connectionForm.ConnectionInfo;
                 var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
                 var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
-                var queryForm = new QueryForm(this, provider, connectionInfo, connectionForm.Connection, _statusBar, _colorTheme)
+                var queryForm = new QueryForm(this, providerInfo, provider, connectionInfo, connectionForm.Connection, _statusBar, _colorTheme)
                 {
                     MdiParent = this
                 };
@@ -543,7 +550,8 @@ public class MainForm : Form
                 var connectionStringBuilder = provider.CreateConnectionStringBuilder();
                 connectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
                 var connection = connectionForm.Connection;
-                QueryFormStaticMethods.AddInfoMessageToQueryForm(queryForm, connectionForm.ElapsedTicks, connectionInfo.ConnectionName, providerInfo.Name, connection);
+                QueryFormStaticMethods.AddConnectionOpenedInfoMessageToQueryForm(queryForm, connectionForm.ElapsedTicks, connectionInfo.ConnectionName, providerInfo.Name,
+                    connection);
                 queryForm.Show();
 
                 if (WindowState == FormWindowState.Maximized)
@@ -554,7 +562,7 @@ public class MainForm : Form
         }
         catch (Exception exception)
         {
-            MessageBox.Show(this, exception.Message);
+            DataCommanderMessageBox.MessageBox.Show(this, exception.Message);
         }
     }
 
@@ -617,7 +625,7 @@ public class MainForm : Form
         var applicationData = DataCommanderApplication.Instance.ApplicationData;
         FormPosition.Load(applicationData, this);
         var folder = applicationData.CurrentType;
-        var contains = folder.Attributes.TryGetAttributeValue("RecentFileList", out string[] array);
+        var contains = folder.Attributes.TryGetAttributeValue("RecentFileList", out string[]? array);
 
         if (contains && array != null)
         {
@@ -627,7 +635,7 @@ public class MainForm : Form
                 _recentFileList.Add(array[i]);
         }
 
-        contains = folder.Attributes.TryGetAttributeValue("Font", out string base64);
+        contains = folder.Attributes.TryGetAttributeValue("Font", out string? base64);
 
         if (contains)
             SelectedFont = DeserializeFont(base64);
@@ -646,7 +654,7 @@ public class MainForm : Form
             var fileDialog = new OpenFileDialog
             {
                 Filter =
-                "SQL script files(*.sql)|*.sql|Access Files(*.mdb)|*.mdb|Access 2007 Files(*.accdb)|*.accdb|Excel files (*.xls;*.xlsx)|*.xls;*.xlsx|Microsoft.ACE.OLEDB.16.0|*.*|MSI files (*.msi)|*.msi|SQLite files (*.*)|*.*|SQL Server Compact files (*.sdf)|*.sdf|SQL Server Compact 4.0 files (*.sdf)|*.sdf",
+                    "SQL script files(*.sql)|*.sql|Access Files(*.mdb)|*.mdb|Access 2007 Files(*.accdb)|*.accdb|Excel files (*.xls;*.xlsx)|*.xls;*.xlsx|Microsoft.ACE.OLEDB.16.0|*.*|MSI files (*.msi)|*.msi|SQLite files (*.*)|*.*|SQL Server Compact files (*.sdf)|*.sdf|SQL Server Compact 4.0 files (*.sdf)|*.sdf",
                 RestoreDirectory = true
             };
             var currentDirectory = Environment.CurrentDirectory;
@@ -687,7 +695,7 @@ public class MainForm : Form
 
                         provider = ProviderFactory.CreateProvider(ProviderIdentifier.OleDb);
                         break;
-                    
+
                     case 5:
                         connectionString = $"Provider=Microsoft.ACE.OLEDB.16.0;Data Source={fileName}";
                         provider = ProviderFactory.CreateProvider(ProviderIdentifier.OleDb);
@@ -728,7 +736,8 @@ public class MainForm : Form
                     connectionInfos.Add(connectionInfo);
                     ConnectionInfoRepository.Save(connectionInfos);
 
-                    var queryForm = new QueryForm(this, provider, connectionInfo, connection, _statusBar, _colorTheme)
+                    var providerInfo = ProviderInfoRepository.GetProviderInfos().First(p => p.Identifier == provider.Identifier);
+                    var queryForm = new QueryForm(this, providerInfo, provider, connectionInfo, connection, _statusBar, _colorTheme)
                     {
                         MdiParent = this,
                         Font = SelectedFont
@@ -740,7 +749,7 @@ public class MainForm : Form
         catch (Exception ex)
         {
             Log.Write(LogLevel.Error, ex.ToLogString());
-            MessageBox.Show(this, ex.ToString());
+            DataCommanderMessageBox.MessageBox.Show(this, ex.ToString());
         }
     }
 
@@ -770,7 +779,7 @@ public class MainForm : Form
         return serializedFont;
     }
 
-    private static Font DeserializeFont(string serializedFont)
+    private static Font? DeserializeFont(string? serializedFont)
     {
         var font = serializedFont != null
             ? JsonConvert.DeserializeObject<Font>(serializedFont)
@@ -778,7 +787,7 @@ public class MainForm : Form
         return font;
     }
 
-    public Font SelectedFont { get; private set; }
+    public Font? SelectedFont { get; private set; }
 
     private void btnConnect_Click(object? sender, EventArgs e) => Connect();
 
@@ -837,8 +846,9 @@ public class MainForm : Form
             var connectionInfo = new ConnectionInfo(null, providerIdentifier, connectionStringAndCredential);
             var connection = provider.CreateConnection(connectionStringAndCredential);
             await connection.OpenAsync(CancellationToken.None);
-
-            var queryForm = new QueryForm(this, provider, connectionInfo, connection, _statusBar, _colorTheme)
+            
+            var providerInfo = ProviderInfoRepository.GetProviderInfos().First(p => p.Identifier == provider.Identifier);
+            var queryForm = new QueryForm(this, providerInfo, provider, connectionInfo, connection, _statusBar, _colorTheme)
             {
                 MdiParent = this,
                 Font = SelectedFont
@@ -937,7 +947,7 @@ public class MainForm : Form
 
     private void saveAllToolStripMenuItem_Click(object? sender, EventArgs e) => SaveAll();
 
-    private ToolStripTextBox? _activeMdiChildToolStripTextBox;
+    private ToolStripTextBox _activeMdiChildToolStripTextBox;
     public ToolStripTextBox ActiveMdiChildToolStripTextBox => _activeMdiChildToolStripTextBox!;
 
     private void CheckForToolStripMenuItem_Click(object? sender, EventArgs e)
@@ -982,13 +992,13 @@ public class MainForm : Form
 
         ThreadMonitor.Join(0);
     }
-    
+
     private void ToolbarOrientationChanged()
     {
         int iY = 0;
         int iX = 0;
 
-        foreach (ToolStrip ts in Controls.OfType<ToolStrip>().OrderBy( t => t.TabIndex))
+        foreach (ToolStrip ts in Controls.OfType<ToolStrip>().OrderBy(t => t.TabIndex))
         {
             ts.Location = new Point(iX, iY);
 
@@ -1003,5 +1013,5 @@ public class MainForm : Form
             else
                 iY += ts.Height;
         }
-    }    
+    }
 }

@@ -26,12 +26,13 @@ public sealed class SQLiteProvider : IProvider
 
     public ConnectionBase CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(connectionStringAndCredential);
 
-    string[] IProvider.KeyWords
+    IReadOnlySet<string> IProvider.KeyWords
     {
         get
         {
             var node = Settings.CurrentType!;
-            var keyWords = node.Attributes["SQLiteKeyWords"].GetValue<string[]>()!;
+            var keyWords = node.Attributes["SQLiteKeyWords"].GetValue<string[]>()!
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
             return keyWords;
         }
     }
@@ -97,7 +98,7 @@ public sealed class SQLiteProvider : IProvider
         return table;
     }
 
-    Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema) =>
+    Type? IProvider.GetColumnType(FoundationDbColumn dataColumnSchema) =>
         // 11   INT     int
         // 12	BIGINT	long
         // 16	TEXT	string
@@ -105,7 +106,7 @@ public sealed class SQLiteProvider : IProvider
 
     IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader) => new SQLiteDataReaderHelper(dataReader);
 
-    public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
+    public IObjectExplorer? CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
 
     public Task<GetCompletionResult> GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position,
         CancellationToken cancellationToken)

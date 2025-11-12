@@ -36,13 +36,13 @@ public class ListIndex<T> : ICollectionIndex<T>, IList<T>
     {
         get
         {
-            Assert.IsTrue(index < Count);
+            Assert.IsLessThan(index, Count);
             return _list![index];
         }
 
         set
         {
-            Assert.IsTrue(index < Count);
+            Assert.IsLessThan(index, Count);
             _list![index] = value;
         }
     }

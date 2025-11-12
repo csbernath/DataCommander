@@ -14,6 +14,7 @@ namespace Foundation.Threading;
 public static class ThreadMonitor
 {
     private static readonly SortedDictionary<int, WorkerThread> Threads = [];
+    private static readonly Lock ThreadsLock = new();
 
     private static readonly StringTableColumnInfo<WorkerThread>[] ThreadColumns =
     [
@@ -37,7 +38,8 @@ public static class ThreadMonitor
     public static string ToStringTableString()
     {
         string stringTableString;
-        lock (Threads)
+
+        using (ThreadsLock.EnterScope())
             stringTableString = Threads.Values.ToString(ThreadColumns);
 
         return stringTableString;
@@ -47,7 +49,7 @@ public static class ThreadMonitor
     {
         ArgumentNullException.ThrowIfNull(thread);
 
-        lock (Threads)
+        using (ThreadsLock.EnterScope())
             Threads.Add(thread.ManagedThreadId, thread);
     }
 
@@ -59,7 +61,8 @@ public static class ThreadMonitor
         List<WorkerThread> removableThreads = [];
 
         WorkerThread[] currentThreads;
-        lock (Threads)
+
+        using (ThreadsLock.EnterScope())
             currentThreads = Threads.Values.ToArray();
 
         var remaining = TimeSpan.FromMilliseconds(millisecondsTimeout);
@@ -85,7 +88,7 @@ public static class ThreadMonitor
         }
 
         if (removableThreads.Count > 0)
-            lock (Threads)
+            using (ThreadsLock.EnterScope())
                 foreach (var thread in removableThreads)
                     Threads.Remove(thread.ManagedThreadId);
     }

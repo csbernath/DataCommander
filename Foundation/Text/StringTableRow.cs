@@ -21,7 +21,7 @@ public sealed class StringTableRow
     {
         get
         {
-            Assert.IsTrue(0 <= columnIndex && columnIndex < Table.Columns.Count);
+            Assert.ArgumentConditionIsTrue(0 <= columnIndex && columnIndex < Table.Columns.Count);
             return _cells[columnIndex];
         }
 

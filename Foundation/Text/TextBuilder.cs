@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using Foundation.Assertions;
-using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 
 namespace Foundation.Text;
@@ -39,7 +37,8 @@ public sealed class TextBuilder
 
     public void AddToLastLine(string text)
     {
-        Assert.IsValidOperation(_lines.Count > 0);
+        Assert.IsGreaterThan(_lines.Count, 0);
+        
         var last = _lines.Count - 1;
         var line = _lines[last];
         var modifiedLine = new Line(line.Indentation, line.Text + text);
@@ -52,7 +51,7 @@ public sealed class TextBuilder
         return new Disposer(() => _indentation -= indentation);
     }
 
-    public ReadOnlyCollection<Line> ToLines() => _lines.ToReadOnlyCollection();
+    public IReadOnlyCollection<Line> ToLines() => _lines;
 
     private string DebuggerDisplay => _lines.ToIndentedString("    ");
 }

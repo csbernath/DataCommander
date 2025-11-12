@@ -82,7 +82,7 @@ public class SortedArray<TKey, TValue>(TValue[] values, Func<TValue, TKey> keySe
         var originalValue = values[index];
         var originalKey = keySelector(originalValue);
 
-        Assert.IsTrue(comparison(originalKey, key) == 0);
+        Assert.AreEqual(comparison(originalKey, key), 0);
 
         values[index] = value;
     }

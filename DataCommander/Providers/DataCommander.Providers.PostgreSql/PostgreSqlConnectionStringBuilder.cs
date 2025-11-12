@@ -21,6 +21,7 @@ internal sealed class PostgreSqlConnectionStringBuilder : IDbConnectionStringBui
     {
         var supportedKeywords = new[]
         {
+            ConnectionStringKeyword.Database,
             ConnectionStringKeyword.Host
         };
         return supportedKeywords.Contains(keyword);

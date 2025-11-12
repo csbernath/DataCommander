@@ -1,0 +1,12 @@
+﻿<Project>
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <LangVersion>14.0</LangVersion>
+        <Nullable>enable</Nullable>
+        <Company>Data Commander</Company>
+        <Product>Data Commander</Product>
+        <Description>Data Commander</Description>
+        <AssemblyVersion>10.0</AssemblyVersion>        
+        <RepositoryUrl>https://github.com/csbernath/DataCommander</RepositoryUrl>
+    </PropertyGroup>
+</Project>

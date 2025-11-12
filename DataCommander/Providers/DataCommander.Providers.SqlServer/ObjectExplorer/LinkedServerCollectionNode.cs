@@ -35,9 +35,10 @@ internal sealed class LinkedServerCollectionNode : ITreeNode
 
     private static string CreateCommandText()
     {
-        const string commandText = @"select  s.name
-from    sys.servers s (nolock)
-where   s.is_linked = 1
+        const string commandText = @"select
+    s.name
+from sys.servers s (nolock)
+where s.is_linked = 1
 order by s.name";
         return commandText;
     }
@@ -50,7 +51,9 @@ order by s.name";
 
     bool ITreeNode.Sortable => false;
 
-    string? ITreeNode.Query => null;
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
     public ContextMenu? GetContextMenu() => null;
 }

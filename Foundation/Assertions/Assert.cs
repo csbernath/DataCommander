@@ -10,6 +10,22 @@ public static class Assert
     public static void AreEqual<T>(T value, T other, [CallerArgumentExpression(nameof(value))] string? paramName = null) where T : IEquatable<T>? =>
         ArgumentOutOfRangeException.ThrowIfNotEqual(value, other, paramName);
 
+    public static void CompareToEquals<T>(
+        T expected,
+        T actual,
+        [CallerArgumentExpression(nameof(expected))]
+        string? expectedName = null,
+        [CallerArgumentExpression(nameof(actual))]
+        string? actualName = null)
+        where T : IComparable
+    {
+        if (expected.CompareTo(actual) != 0)
+        {
+            var message = $"Assert.CompareToEquals failed. {expectedName} (expected): {expected}, {actualName} (actual): {actual}";
+            throw new Exception(message);
+        }
+    }
+
     public static void AreNotEqual<T>(T value, T other, [CallerArgumentExpression(nameof(value))] string? paramName = null) where T : IEquatable<T>? =>
         ArgumentOutOfRangeException.ThrowIfEqual(value, other, paramName);    
 
@@ -22,8 +38,7 @@ public static class Assert
     public static void IsGreaterThan<T>(T value, T other, [CallerArgumentExpression(nameof(value))] string? paramName = null) where T : IComparable<T> =>
         ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(value, other, paramName);
 
-    public static void IsGreaterThanOrEqual<T>(T value, T other, [CallerArgumentExpression(nameof(value))] string? paramName = null) where T : IComparable<T> =>
-        ArgumentOutOfRangeException.ThrowIfLessThan(value, other, paramName);
+    public static void IsGreaterThanOrEqual<T>(T value, T other, [CallerArgumentExpression(nameof(value))] string? paramName = null) where T : IComparable<T> => ArgumentOutOfRangeException.ThrowIfLessThan(value, other, paramName);
 
     public static void IsInRange(bool condition, [CallerArgumentExpression(nameof(condition))] string? conditionString = null)
     {
@@ -46,7 +61,7 @@ public static class Assert
     public static void IsNotNull([NotNull] object? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null) =>
         ArgumentNullException.ThrowIfNull(argument, paramName);
 
-    public static void IsNull<T>(T argument, [CallerArgumentExpression(nameof(argument))] string? argumentString = null) where T : class
+    public static void IsNull(object? argument, [CallerArgumentExpression(nameof(argument))] string? argumentString = null)
     {
         if (argument != null)
         {
@@ -61,10 +76,10 @@ public static class Assert
     public static void IsPositiveOrZero<T>(T value, [CallerArgumentExpression(nameof(value))] string? paramName = null) where T : INumberBase<T> =>
         ArgumentOutOfRangeException.ThrowIfNegative(value, paramName);
 
-    public static void IsTrue(bool condition)
+    public static void IsTrue(bool condition, [CallerArgumentExpression(nameof(condition))] string? conditionString = null)
     {
         if (!condition)
-            throw new ArgumentException("Assert.IsTrue failed.");
+            throw new ArgumentException("Assert.IsTrue failed. Condition: {conditionString}");
     }
 
     public static void IsValidOperation(bool condition, [CallerArgumentExpression(nameof(condition))] string? conditionString = null)

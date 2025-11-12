@@ -106,7 +106,7 @@ public static class ICollectionExtensions
             }
             else
             {
-                var enumerable = (IEnumerable) _source;
+                IEnumerable enumerable = _source;
                 var enumerableT = enumerable.Cast<TResult>();
                 contains = enumerableT.Contains(item);
             }

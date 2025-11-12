@@ -16,12 +16,6 @@ public abstract class ConnectionBase : IDisposable, IAsyncDisposable
     
     public abstract Task OpenAsync(CancellationToken cancellationToken);
 
-    public void Close()
-    {
-        if (_connection != null)
-            Connection.Close();
-    }
-
     public abstract DbCommand CreateCommand();
     public abstract string DataSource { get; }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
@@ -9,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Collections;
-using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
@@ -23,7 +21,7 @@ using Sequence = Foundation.Core.Sequence;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class TableNode(DatabaseNode databaseNode, string? owner, string? name, int id, TemporalType type)
+internal sealed class TableNode(DatabaseNode databaseNode, string owner, string name, int id, TemporalType type)
     : ITreeNode
 {
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
@@ -57,8 +55,13 @@ internal sealed class TableNode(DatabaseNode databaseNode, string? owner, string
 
         if (type == TemporalType.SystemVersionedTemporalTable)
         {
-            var commandText = @$"select t.name,t.object_id
+            var commandText = @$"select
+    s.name as HistoryTableSchemaName,
+    t.name as HistoryTableName,
+    t.object_id as HistoryTableObjectId
 from [{DatabaseNode.Name}].sys.tables t
+join [{DatabaseNode.Name}].sys.schemas s
+    on t.schema_id = s.schema_id
 where
     t.object_id in
     (
@@ -66,8 +69,9 @@ where
         from [{DatabaseNode.Name}].sys.tables t
         where object_id = {id}
     )";
+            string? historyTableSchemaName = null;
             string? historyTableName = null;
-            var historyTableId = 0;
+            var historyTableObjectId = 0;
             var request = new ExecuteReaderRequest(commandText);
             await Db.ExecuteReaderAsync(
                 DatabaseNode.Databases.Server.CreateConnection,
@@ -75,18 +79,21 @@ where
                 async (dataReader, _) =>
                 {
                     await dataReader.ReadAsync(cancellationToken);
-                    historyTableName = dataReader.GetString(0);
-                    historyTableId = dataReader.GetInt32(1);
+                    historyTableSchemaName = dataReader.GetString(0);
+                    historyTableName = dataReader.GetString(1);
+                    historyTableObjectId = dataReader.GetInt32(2);
                 },
                 cancellationToken);
-            treeNodes.Add(new TableNode(DatabaseNode, owner, historyTableName, historyTableId, TemporalType.HistoryTable));
+            treeNodes.Add(new TableNode(DatabaseNode, historyTableSchemaName!, historyTableName!, historyTableObjectId, TemporalType.HistoryTable));
         }
 
         treeNodes.AddRange([
             new ColumnCollectionNode(DatabaseNode, Id),
             new KeyCollectionNode(DatabaseNode, Id),
+            new ConstraintCollectionNode(DatabaseNode, Id),
             new TriggerCollectionNode(DatabaseNode, Id),
-            new IndexCollectionNode(DatabaseNode, Id)
+            new IndexCollectionNode(DatabaseNode, Id),
+            new StatisticsCollectionNode(DatabaseNode, Id)
         ]);
 
         return treeNodes;
@@ -94,38 +101,34 @@ where
 
     public bool Sortable => false;
 
-    public string? Query
+    public bool DynamicChildCount => false;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {
-        get
-        {
-            var name1 = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
-            using var connection = DatabaseNode.Databases.Server.CreateConnection();
-            connection.Open();
-            var text = GetSelectStatement(connection, name1);
-            return text;
-        }
+        var multipartName = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
+        using var connection = DatabaseNode.Databases.Server.CreateConnection();
+        connection.Open();
+        var text = GetSelectStatement(connection, multipartName);
+        return Task.FromResult(text)!;
     }
 
     public ContextMenu? GetContextMenu()
     {
-        var editRows = new MenuItem("Edit Rows", EditRows, EmptyReadOnlyCollection<MenuItem>.Value);
+        var editRows = new MenuItem("Edit Rows", EditRows, []);
 
         var dropdownItems = new[]
         {
-            new MenuItem("CREATE to clipboard", CreateTableScriptToClipboard, Array.Empty<MenuItem>()),
-            new MenuItem("SELECT to clipboard", SelectScript_Click, Array.Empty<MenuItem>()),
-            new MenuItem("INSERT to clipboard", InsertScript_Click, Array.Empty<MenuItem>()),
-            new MenuItem("UPDATE to clipboard", UpdateScript_Click, Array.Empty<MenuItem>()),
-            new MenuItem("C# ORM to clipboard", CsharpOrm_Click, Array.Empty<MenuItem>()),
-            new MenuItem("C# DTO with properties to clipboard", DataTransferObjectWithProperties_Click, Array.Empty<MenuItem>())
+            new MenuItem("CREATE to clipboard", CreateTableScriptToClipboard, []),
+            new MenuItem("SELECT to clipboard", SelectScript_Click, []),
+            new MenuItem("INSERT to clipboard", InsertScript_Click, []),
+            new MenuItem("UPDATE to clipboard", UpdateScript_Click, []),
+            new MenuItem("C# ORM to clipboard", CsharpOrm_Click, []),
+            new MenuItem("C# DTO with properties to clipboard", DataTransferObjectWithProperties_Click, [])
         };
         var scriptTableAs = new MenuItem("Script Table as", null, dropdownItems);
-        var schema = new MenuItem("Schema", Schema_Click, Array.Empty<MenuItem>());
-        var indexes = new MenuItem("Indexes", Indexes_Click, Array.Empty<MenuItem>());
-
-        var items = new[] { editRows, scriptTableAs, schema, indexes }.ToReadOnlyCollection();
-        var menu = new ContextMenu(items);
-
+        var schema = new MenuItem("Schema", Schema_Click, []);
+        var indexes = new MenuItem("Indexes", Indexes_Click, []);
+        var menu = new ContextMenu([editRows, scriptTableAs, schema, indexes]);
         return menu;
     }
 
@@ -135,10 +138,10 @@ where
         ArgumentNullException.ThrowIfNull(databaseObjectMultipartName);
 
         var commandText = $@"select  c.name
-from    [{databaseObjectMultipartName.Database}].sys.schemas s (nolock)
-join    [{databaseObjectMultipartName.Database}].sys.objects o (nolock)
+from [{databaseObjectMultipartName.Database}].sys.schemas s (nolock)
+join [{databaseObjectMultipartName.Database}].sys.objects o (nolock)
     on s.schema_id = o.schema_id
-join    [{databaseObjectMultipartName.Database}].sys.columns c (nolock)
+join [{databaseObjectMultipartName.Database}].sys.columns c (nolock)
     on o.object_id = c.object_id
 where
     s.name = '{databaseObjectMultipartName.Schema}'
@@ -299,8 +302,8 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
         var queryForm = (IQueryForm)sender!;
         queryForm.SetStatusbarPanelText("Copying table script to clipboard...");
         var cancellationTokenSource = new CancellationTokenSource();
-        var cancelableOperationForm = queryForm.CreateCancelableOperationForm(cancellationTokenSource, TimeSpan.FromSeconds(1),
-            "Copying table script to clipboard...", string.Empty);
+        var cancelableOperationForm = queryForm.CreateCancelableOperationForm(cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
+            "Copying table script to clipboard...");
         var stopwatch = Stopwatch.StartNew();
         var text = cancelableOperationForm.Execute(new Task<string>(GetCreateTableScript));
         var elapsedTicks = stopwatch.ElapsedTicks;
@@ -372,11 +375,11 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
 
     private void SelectScript_Click(object? sender, EventArgs e)
     {
-        var name1 = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
+        var multipartName = new DatabaseObjectMultipartName(null, DatabaseNode.Name, owner, name);
         string selectStatement;
         using (var connection = DatabaseNode.Databases.Server.CreateConnection())
         {
-            selectStatement = GetSelectStatement(connection, name1);
+            selectStatement = GetSelectStatement(connection, multipartName);
         }
 
         var queryForm = (IQueryForm)sender!;
@@ -396,7 +399,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
 
     private static Column ReadColumn(IDataRecord dataRecord)
     {
-        var columnName = dataRecord.GetStringOrDefault(0);
+        var columnName = dataRecord.GetString(0);
         var typeName = dataRecord.GetString(1);
         var maxLength = dataRecord.GetInt16(2);
         var precision = dataRecord.GetByte(3);
@@ -536,7 +539,7 @@ order by c.column_id";
 
         var textBuilder = new TextBuilder();
 
-        textBuilder.Add($"update {Name}");
+        textBuilder.Add($"update {name}");
         textBuilder.Add("set");
         using (textBuilder.Indent(1))
         {
@@ -613,7 +616,7 @@ order by c.column_id";
 
                 return new DataTransferObjectField(name, csharpTypeName);
             })
-            .ToReadOnlyCollection();
+            .ToArray();
         var dataTransferObject = DataTransferObjectFactory.CreateDataTransferObject(name, dataTransferObjectFields).ToIndentedString("    ");
 
         var columns = getTableSchemaResult.Columns
@@ -627,8 +630,8 @@ order by c.column_id";
             .FirstOrDefault();
         var versionColumn = columns.FirstOrDefault(i => i.ColumnName == "Version");
 
-        ReadOnlyCollection<Line>? createUpdateSqlStatementMethod;            
-        ReadOnlyCollection<Line>? createDeleteSqlStatementMethod;
+        IReadOnlyCollection<Line>? createUpdateSqlStatementMethod;            
+        IReadOnlyCollection<Line>? createDeleteSqlStatementMethod;
 
         if (identifierColumn != null)
         {
@@ -693,14 +696,15 @@ order by c.column_id";
                 var name = column.ColumnName;
                 var typeName = column.TypeName;
                 var isNullable = column.IsNullable;
-                var csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == typeName).CSharpTypeName;
+                var csharpTypeName = SqlDataTypeRepository.SqlDataTypes.First(i => i.SqlDataTypeName == typeName)
+                    .CSharpTypeName;
                 var csharpType = CSharpTypeArray.CSharpTypes.First(i => i.Name == csharpTypeName);
                 if (isNullable == true && csharpType.Type.IsValueType)
                     csharpTypeName += "?";
 
                 return new DataTransferObjectField(name, csharpTypeName);
             })
-            .ToReadOnlyCollection();
+            .ToArray();
 
         var classWithProperties = DataTransferObjectWithPropertiesFactory.Create(name, dataTransferObjectFields).ToIndentedString("    ");
 

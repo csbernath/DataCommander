@@ -2,19 +2,9 @@
 using System.Xml;
 
 namespace Foundation.Xml;
-#if DEBUG
-#endif
 
-/// <summary>
-/// 
-/// </summary>
-/// <remarks>
-/// 
-/// </remarks>
-/// <param name="xmlReader"></param>
 public class XmlElementReader(XmlReader xmlReader)
 {
-    private readonly XmlReader _xmlReader = xmlReader;
     private readonly XmlDocument _xmlDocument = new();
 
     private static void ReadAttributes(
@@ -60,15 +50,15 @@ public class XmlElementReader(XmlReader xmlReader)
     public XmlElement? ReadStartElement()
     {
         XmlElement? xmlElement = null;
-        var found = MoveToElement(_xmlReader);
+        var found = MoveToElement(xmlReader);
 
         if (found)
         {
             var xmlDocument = new XmlDocument();
-            var name = _xmlReader.Name;
+            var name = xmlReader.Name;
             xmlElement = xmlDocument.CreateElement( name );
             var attributes = xmlElement.Attributes;
-            ReadAttributes(_xmlReader, xmlDocument, attributes );
+            ReadAttributes(xmlReader, xmlDocument, attributes );
         }
 
         return xmlElement;
@@ -155,7 +145,7 @@ public class XmlElementReader(XmlReader xmlReader)
     public XmlElement? ReadElement()
     {
 #if DEBUG
-        var xmlLineInfo = _xmlReader as IXmlLineInfo;
+        var xmlLineInfo = xmlReader as IXmlLineInfo;
 
         if (xmlLineInfo != null)
         {
@@ -165,18 +155,18 @@ public class XmlElementReader(XmlReader xmlReader)
 
         XmlElement? xmlElement = null;
 
-        while (_xmlReader.Read())
+        while (xmlReader.Read())
         {
 #if DEBUG
-            Trace.WriteLine($"{_xmlReader.Name},{_xmlReader.NodeType}");
+            Trace.WriteLine($"{xmlReader.Name},{xmlReader.NodeType}");
 #endif
-            var nodeType = _xmlReader.NodeType;
+            var nodeType = xmlReader.NodeType;
             var breakable = false;
 
             switch (nodeType)
             {
                 case XmlNodeType.Element:
-                    xmlElement = ReadElement(_xmlReader, _xmlDocument, 0 );
+                    xmlElement = ReadElement(xmlReader, _xmlDocument, 0 );
                     breakable = true;
                     break;
 

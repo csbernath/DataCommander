@@ -95,7 +95,7 @@ internal sealed class OleDbProvider : IProvider
         //      foreach (DataRow dataRow in dataTable.Rows)
         //      { 
         //        OleDbType oleDbType = (OleDbType)dataRow[providerType];
-        //        dataRow[name] = oleDbType.ToString("G");
+        //        dataRow[name] = oleDbType.ToDecimalMetricString("G");
         //
         //        ColumnType columnType;
         //
@@ -210,7 +210,7 @@ internal sealed class OleDbProvider : IProvider
 
     public static XmlReader ExecuteXmlReader(IDbCommand command) => throw new NotImplementedException();
 
-    Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
+    Type? IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
     {
         var dbType = (OleDbType)dataColumnSchema.ProviderType;
         var type = dbType switch
@@ -226,7 +226,7 @@ internal sealed class OleDbProvider : IProvider
         return new OleDbDataReaderHelper(oleDbDataReader);
     }
 
-    public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer(this);
+    public IObjectExplorer? CreateObjectExplorer() => new ObjectExplorer(this);
 
     GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string? tableName) => throw new NotImplementedException();
     List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
@@ -239,7 +239,7 @@ internal sealed class OleDbProvider : IProvider
     ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) =>
         new Connection(connectionStringAndCredential.ConnectionString);
 
-    string[] IProvider.KeyWords => null;
+    IReadOnlySet<string> IProvider.KeyWords => null;
 
     void IProvider.DeriveParameters(IDbCommand command) => throw new NotImplementedException();
 

@@ -5,12 +5,10 @@ using System.Threading;
 
 namespace Foundation.Threading;
 
-/// <summary>
-/// 
-/// </summary>
 public sealed class WorkerThreadCollection : IList<WorkerThread>
 {
     private readonly List<WorkerThread> _threads = [];
+    private readonly Lock _threadsLock = new();
 
     int IList<WorkerThread>.IndexOf(WorkerThread item)
     {
@@ -18,29 +16,16 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
         return index;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="index"></param>
-    /// <param name="item"></param>
     public void Insert(int index, WorkerThread item)
     {
-        lock (_threads)
-        {
+        using (_threadsLock.EnterScope())
             _threads.Insert(index, item);
-        }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="index"></param>
     public void RemoveAt(int index)
     {
-        lock (_threads)
-        {
+        using (_threadsLock.EnterScope())
             _threads.RemoveAt(index);
-        }
     }
 
     WorkerThread IList<WorkerThread>.this[int index]
@@ -50,16 +35,10 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
         set => throw new Exception("The method or operation is not implemented.");
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="item"></param>
     public void Add(WorkerThread item)
     {
-        lock (_threads)
-        {
+        using (_threadsLock.EnterScope())
             _threads.Add(item);
-        }
     }
 
     void ICollection<WorkerThread>.Clear() => throw new Exception("The method or operation is not implemented.");
@@ -68,9 +47,6 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
 
     void ICollection<WorkerThread>.CopyTo(WorkerThread[] array, int arrayIndex) => throw new Exception("The method or operation is not implemented.");
 
-    /// <summary>
-    /// 
-    /// </summary>
     public int Count => _threads.Count;
 
     bool ICollection<WorkerThread>.IsReadOnly => throw new Exception("The method or operation is not implemented.");
@@ -81,12 +57,9 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
 
     IEnumerator IEnumerable.GetEnumerator() => throw new Exception("The method or operation is not implemented.");
 
-    /// <summary>
-    /// 
-    /// </summary>
     public void Start()
     {
-        lock (_threads)
+        using (_threadsLock.EnterScope())
         {
             foreach (var thread in _threads)
             {
@@ -95,12 +68,9 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public void Stop()
     {
-        lock (_threads)
+        using (_threadsLock.EnterScope())
         {
             foreach (var thread in _threads)
             {
@@ -109,10 +79,6 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="stopEvent"></param>
     public void Stop(EventWaitHandle stopEvent)
     {
         ArgumentNullException.ThrowIfNull(stopEvent);
@@ -123,10 +89,11 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
     private sealed class Stopper(IList<WorkerThread> threads, EventWaitHandle stopEvent)
     {
         private int _count;
+        private readonly Lock _threadsLock = new();
 
         public void Stop()
         {
-            lock (threads)
+            using (_threadsLock.EnterScope())
             {
                 foreach (var thread in threads)
                 {
@@ -141,9 +108,7 @@ public sealed class WorkerThreadCollection : IList<WorkerThread>
             Interlocked.Increment(ref _count);
 
             if (_count == threads.Count)
-            {
                 stopEvent.Set();
-            }
         }
     }
 }

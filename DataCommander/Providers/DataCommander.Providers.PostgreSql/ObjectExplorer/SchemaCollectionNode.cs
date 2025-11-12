@@ -6,27 +6,40 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class SchemaCollectionNode(ObjectExplorer objectExplorer) : ITreeNode
+internal sealed class SchemaCollectionNode(DatabaseNode databaseNode) : ITreeNode
 {
-    public ObjectExplorer ObjectExplorer { get; } = objectExplorer;
+    public readonly DatabaseNode DatabaseNode = databaseNode;
+    
     bool ITreeNode.IsLeaf => false;
     string ITreeNode.Name => "Schemas";
-    string? ITreeNode.Query => null;
+
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 
     bool ITreeNode.Sortable => false;
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        using var connection = ObjectExplorer.CreateConnection();
-        connection.Open();
-        var executor = connection.CreateCommandExecutor();
-        return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(new ExecuteReaderRequest(@"select schema_name
-from information_schema.schemata
-order by schema_name"), 128, dataReader =>
-        {
-            var name = dataReader.GetString(0);
-            return new SchemaNode(this, name);
-        }));
+        const string commandText = @"select
+    oid,
+    nspname
+from pg_namespace
+where
+    nspname not in('information_schema','pg_catalog','pg_toast')
+order by nspname";
+        var databaseNodes = await Db.ExecuteReaderAsync(
+            DatabaseNode.CreateConnection,
+            new ExecuteReaderRequest(commandText),
+            128,
+            dataRecord =>
+            {
+                var oid = dataRecord.GetUInt32(0);
+                var name = dataRecord.GetString(1);
+                return new SchemaNode(this, oid, name);
+            },
+            cancellationToken);
+        return databaseNodes;
     }
 }

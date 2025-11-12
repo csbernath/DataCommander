@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 
 namespace Foundation.Data.SqlClient.DbQueryBuilding;
 
@@ -9,8 +9,8 @@ public class DbRequest(
     string @namespace,
     string commandText,
     int? commandTimeout,
-    ReadOnlyCollection<DbRequestParameter> parameters,
-    ReadOnlyCollection<DbQueryResult> results)
+    IReadOnlyCollection<DbRequestParameter> parameters,
+    IReadOnlyCollection<DbQueryResult> results)
 {
     public readonly string Directory = directory;
     public readonly string Name = name;
@@ -18,6 +18,6 @@ public class DbRequest(
     public readonly string Namespace = @namespace;
     public readonly string CommandText = commandText;
     public readonly int? CommandTimeout = commandTimeout;
-    public readonly ReadOnlyCollection<DbRequestParameter> Parameters = parameters;
-    public readonly ReadOnlyCollection<DbQueryResult> Results = results;
+    public readonly IReadOnlyCollection<DbRequestParameter> Parameters = parameters;
+    public readonly IReadOnlyCollection<DbQueryResult> Results = results;
 }

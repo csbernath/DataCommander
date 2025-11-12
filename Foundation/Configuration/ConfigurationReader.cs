@@ -9,7 +9,6 @@ using System.Threading;
 using System.Xml;
 using Foundation.Collections;
 using Foundation.Core;
-using Foundation.InternalLog;
 using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
@@ -23,7 +22,6 @@ namespace Foundation.Configuration;
 /// </summary>
 public sealed class ConfigurationReader
 {
-    private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(ConfigurationReader));
     private string? _fileName;
     private string? _sectionName;
     private XmlReader? _xmlReader;
@@ -33,7 +31,8 @@ public sealed class ConfigurationReader
 
     private static Stream OpenStream(string configFileName)
     {
-        Log.Trace("ConfigurationReader.OpenStream({0})...", configFileName);
+        var log = LogFactory.Instance.GetTypeLog<ConfigurationReader>();
+        log.Trace("ConfigurationReader.OpenStream({0})...", configFileName);
         Stream? stream = null;
 
         if (true)
@@ -47,13 +46,13 @@ public sealed class ConfigurationReader
                     if (File.Exists(configFileName))
                         stream = File.OpenRead(configFileName);
                     else
-                        Log.Trace("{0} not found.", configFileName);
+                        log.Trace("{0} not found.", configFileName);
 
                     break;
                 }
                 catch (FileNotFoundException e)
                 {
-                    Log.Trace(e.ToString());
+                    log.Trace(e.ToString());
                     break;
                 }
                 catch (Exception e)
@@ -61,7 +60,7 @@ public sealed class ConfigurationReader
                     if (count == 3)
                         throw;
 
-                    Log.Write(LogLevel.Warning, e.ToString());
+                    log.Write(LogLevel.Warning, e.ToString());
                     Thread.Sleep(200);
                     count++;
                 }
@@ -425,7 +424,8 @@ public sealed class ConfigurationReader
 
     public ConfigurationNode Read(XmlReader xmlReader, string? configFilename, string? sectionName, StringCollection? fileNames)
     {
-        Log.Trace("ConfigurationReader.Read({0},{1})...", configFilename, sectionName);
+        var log =LogFactory.Instance.GetTypeLog<ConfigurationReader>();
+        log.Trace("ConfigurationReader.Read({0},{1})...", configFilename, sectionName);
         var startTick = Stopwatch.GetTimestamp();
         _xmlReader = xmlReader;
         _fileName = configFilename!;
@@ -481,7 +481,7 @@ public sealed class ConfigurationReader
             logLevel = enumerable.Any() ? LogLevel.Warning : LogLevel.Trace;
         }
 
-        Log.Write(logLevel, "ConfigurationReader.Read finished.\r\nthis.errors.Count: {0}\r\n{1}", _errors.Count, _errors.ToString());
+        log.Write(logLevel, "ConfigurationReader.Read finished.\r\nthis.errors.Count: {0}\r\n{1}", _errors.Count, _errors.ToString());
         return node!;
     }
 

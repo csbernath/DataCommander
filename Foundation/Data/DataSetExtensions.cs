@@ -6,22 +6,25 @@ namespace Foundation.Data;
 
 public static class DataSetExtensions
 {
-    public static void SetDataTableNames(this DataSet dataSet, IEnumerable<string> dataTableNames)
+    extension(DataSet dataSet)
     {
-        ArgumentNullException.ThrowIfNull(dataSet);
-        ArgumentNullException.ThrowIfNull(dataTableNames);
-
-        var dataTables = dataSet.Tables;
-        var count = dataTables.Count;
-        var i = 0;
-
-        using var enumerator = dataTableNames.GetEnumerator();
-        while (i < count && enumerator.MoveNext())
+        public void SetDataTableNames(IEnumerable<string> dataTableNames)
         {
-            var dataTable = dataTables[i];
-            var dataTableName = enumerator.Current;
-            dataTable.TableName = dataTableName;
-            i++;
+            ArgumentNullException.ThrowIfNull(dataSet);
+            ArgumentNullException.ThrowIfNull(dataTableNames);
+
+            var dataTables = dataSet.Tables;
+            var count = dataTables.Count;
+            var i = 0;
+
+            using var enumerator = dataTableNames.GetEnumerator();
+            while (i < count && enumerator.MoveNext())
+            {
+                var dataTable = dataTables[i];
+                var dataTableName = enumerator.Current;
+                dataTable.TableName = dataTableName;
+                i++;
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Foundation.Configuration;
 using Foundation.Diagnostics;
 using Foundation.Log;
@@ -16,6 +17,7 @@ public sealed class DataCommanderApplication
     private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
     private string? _sectionName;
     private readonly bool _updaterStarted = false;
+    private SystemColorMode _colorMode;
 
     private DataCommanderApplication()
     {
@@ -35,14 +37,18 @@ public sealed class DataCommanderApplication
 
     public string Name { get; }
 
-    public ApplicationData ApplicationData { get; } = new();
+    public ApplicationData ApplicationData { get; private set; }
 
     public string? ApplicationDataFileName { get; private set; }
 
+    public SystemColorMode ColorMode => _colorMode;
+
     public MainForm? MainForm { get; private set; }
 
-    public void Run()
+    public void Run(SystemColorMode colorMode)
     {
+        _colorMode = colorMode;
+        
         if (!_updaterStarted)
         {
             ExcelPackage.License.SetNonCommercialOrganization("My Noncommercial organization");
@@ -64,9 +70,9 @@ public sealed class DataCommanderApplication
         Log.Write(LogLevel.Trace, "MoveFileEx succeeded: {0}", succeeded);
     }
 
-    public void LoadApplicationData(string fileName, string sectionName)
+    public void SetApplicationData(ApplicationData applicationData, string fileName, string sectionName)
     {
-        ApplicationData.Load(fileName, sectionName);
+        ApplicationData = applicationData;
         ApplicationDataFileName = fileName;
         _sectionName = sectionName;
     }

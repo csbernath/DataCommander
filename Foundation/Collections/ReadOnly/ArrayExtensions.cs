@@ -5,14 +5,17 @@ namespace Foundation.Collections.ReadOnly;
 
 public static class ArrayExtensions
 {
-    [Pure]
-    public static ReadOnlyArray<T> ToReadOnlyArray<T>(this T[] items)
+    extension<T>(T[] items)
     {
-        ArgumentNullException.ThrowIfNull(items);
+        [Pure]
+        public ReadOnlyArray<T> ToReadOnlyArray()
+        {
+            ArgumentNullException.ThrowIfNull(items);
 
-        return items.Length > 0
-            ? new ReadOnlyArray<T>(items)
-            : ReadOnlyArray<T>.Empty;
+            return items.Length > 0
+                ? new ReadOnlyArray<T>(items)
+                : ReadOnlyArray<T>.Empty;
+        }
     }
 
     [Pure]

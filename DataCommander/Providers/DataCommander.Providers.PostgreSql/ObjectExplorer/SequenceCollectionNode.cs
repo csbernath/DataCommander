@@ -8,20 +8,18 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
 internal sealed class SequenceCollectionNode(SchemaNode schemaNode) : ITreeNode
 {
-    private readonly SchemaNode _schemaNode = schemaNode;
-
     string? ITreeNode.Name => "Sequences";
 
     bool ITreeNode.IsLeaf => false;
 
     public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        using var connection = _schemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection();
+        using var connection = schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection();
         connection.Open();
         var executor = connection.CreateCommandExecutor();
         var commandText = $@"select sequence_name
 from information_schema.sequences
-where sequence_schema = '{_schemaNode.Name}'
+where sequence_schema = '{schemaNode.Name}'
 order by sequence_name";
         return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataReader =>
         {
@@ -31,6 +29,9 @@ order by sequence_name";
     }
 
     bool ITreeNode.Sortable => false;
-    string? ITreeNode.Query => null;
+
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 }

@@ -58,7 +58,7 @@ public sealed class ConfigurationNode(string? name)
 
     public void AddChildNode(ConfigurationNode childNode)
     {
-        Assert.IsTrue(childNode.Parent == null);
+        Assert.IsNull(childNode.Parent);
 
         if (childNode.Name == null)
         {

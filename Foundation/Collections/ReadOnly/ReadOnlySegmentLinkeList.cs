@@ -13,7 +13,7 @@ public class ReadOnlySegmentLinkedList<T> : IReadOnlyCollection<T>
     internal ReadOnlySegmentLinkedList(LinkedList<T[]> linkedList, int count)
     {
         ArgumentNullException.ThrowIfNull(linkedList);
-        Assert.IsInRange(count >= 0);
+        Assert.IsGreaterThanOrEqual(count, 0);
 
         _linkedList = linkedList;
         _count = count;

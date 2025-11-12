@@ -11,7 +11,7 @@ internal sealed class MethodFormatter : IFormatter
     {
         var method = (MethodBase)args[0];
         var methodId = (int)args[1];
-        stringBuilder.AppendFormat("exec MethodProfilerMethod_Add @applicationId,{0},", methodId);
+        stringBuilder.Append($"exec MethodProfilerMethod_Add @applicationId,{methodId},");
         var type = method.DeclaringType!;
         var assembly = type.Assembly;
         var assemblyName = assembly.GetName().Name!;

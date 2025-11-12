@@ -8,32 +8,39 @@ namespace Foundation.Collections.ReadOnly;
 
 public static class IEnumerableExtensions
 {
-    [Pure]
-    public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> source)
+    extension<T>(IEnumerable<T> source)
     {
-        ArgumentNullException.ThrowIfNull(source);
+        [Pure]
+        public ReadOnlyCollection<T> ToReadOnlyCollection()
+        {
+            ArgumentNullException.ThrowIfNull(source);
 
-        var list = source.ToList();
-        var readOnlyCollection = list.ToReadOnlyCollection();
+            var list = source.ToList();
+            var readOnlyCollection = list.ToReadOnlyCollection();
 
-        return readOnlyCollection;
+            return readOnlyCollection;
+        }
+
+        [Pure]
+        public ReadOnlySegmentLinkedList<T> ToReadOnlySegmentLinkedList(int segmentLength)
+        {
+            ArgumentNullException.ThrowIfNull(source);
+            var segmentLinkedListBuilder = new SegmentLinkedListBuilder<T>(segmentLength);
+
+            foreach (var item in source)
+                segmentLinkedListBuilder.Add(item);
+
+            var readOnlySegmentLinkedList = segmentLinkedListBuilder.ToReadOnlySegmentLinkedList();
+            return readOnlySegmentLinkedList;
+        }
+
+        [Pure]
+        public ReadOnlySortedSet<T> ToReadOnlySortedSet() => new(source.ToArray());
     }
 
     [Pure]
-    public static ReadOnlySegmentLinkedList<T> ToReadOnlySegmentLinkedList<T>(this IEnumerable<T> source, int segmentLength)
-    {
-        ArgumentNullException.ThrowIfNull(source);
-        var segmentLinkedListBuilder = new SegmentLinkedListBuilder<T>(segmentLength);
-
-        foreach (var item in source)
-            segmentLinkedListBuilder.Add(item);
-
-        var readOnlySegmentLinkedList = segmentLinkedListBuilder.ToReadOnlySegmentLinkedList();
-        return readOnlySegmentLinkedList;
-    }
-
-    [Pure]
-    public static ReadOnlySortedList<TKey, TValue> ToReadOnlySortedList<TKey, TValue>(this IEnumerable<TValue> values, Func<TValue, TKey> keySelector)
+    public static ReadOnlySortedList<TKey, TValue> ToReadOnlySortedList<TKey, TValue>(this IEnumerable<TValue> values,
+        Func<TValue, TKey> keySelector)
     {
         ArgumentNullException.ThrowIfNull(values);
         ArgumentNullException.ThrowIfNull(keySelector);
@@ -42,7 +49,4 @@ public static class IEnumerableExtensions
         var comparer = Comparer<TKey>.Default;
         return new ReadOnlySortedList<TKey, TValue>(items, comparer.Compare);
     }
-
-    [Pure]
-    public static ReadOnlySortedSet<T> ToReadOnlySortedSet<T>(this IEnumerable<T> source) => new(source.ToReadOnlyCollection());
 }

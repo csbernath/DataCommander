@@ -14,25 +14,36 @@ internal sealed class TableCollectionNode(SchemaNode schemaNode) : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        using var connection = SchemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection();
-        connection.Open();
-        var executor = connection.CreateCommandExecutor();
-        var commandText = $@"select table_name
-from information_schema.tables
+        var commandText = $@"select
+	oid,
+	relname
+from pg_class
 where
-    table_schema = '{SchemaNode.Name}'
-    and table_type = 'BASE TABLE'
-order by table_name";
-        return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(new ExecuteReaderRequest(commandText), 128, dataReader =>
-        {
-            var name = dataReader.GetString(0);
-            return new TableNode(this, name);
-        }));
+	relnamespace = {SchemaNode.Oid} and
+	relkind = 'r'
+order by relname";
+
+        var tableNodes = await Db.ExecuteReaderAsync(
+            SchemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection,
+            new ExecuteReaderRequest(commandText),
+            128,
+            dataRecord =>
+            {
+                var oid = dataRecord.GetUInt32(0);
+                var name = dataRecord.GetString(1);
+                return new TableNode(SchemaNode, oid, name);
+            },
+            cancellationToken);
+
+        return tableNodes;
     }
 
     bool ITreeNode.Sortable => false;
-    string? ITreeNode.Query => null;
+
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 }

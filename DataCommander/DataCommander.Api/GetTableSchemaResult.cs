@@ -1,9 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 
 namespace DataCommander.Api;
 
-public class GetTableSchemaResult(ReadOnlyCollection<Column> columns, ReadOnlyCollection<UniqueIndexColumn> uniqueIndexColumns)
+public class GetTableSchemaResult(
+    IReadOnlyCollection<Column> columns,
+    IReadOnlyCollection<UniqueIndexColumn> uniqueIndexColumns)
 {
-    public readonly ReadOnlyCollection<Column> Columns = columns;
-    public readonly ReadOnlyCollection<UniqueIndexColumn> UniqueIndexColumns = uniqueIndexColumns;
+    public readonly IReadOnlyCollection<Column> Columns = columns;
+    public readonly IReadOnlyCollection<UniqueIndexColumn> UniqueIndexColumns = uniqueIndexColumns;
 }

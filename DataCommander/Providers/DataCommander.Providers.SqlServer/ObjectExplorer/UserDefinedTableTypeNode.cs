@@ -4,7 +4,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Foundation.Collections.ReadOnly;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
 
@@ -22,14 +21,17 @@ internal sealed class UserDefinedTableTypeNode(DatabaseNode database, int id, st
         ]);
 
     bool ITreeNode.Sortable => false;
-    string? ITreeNode.Query => null;
+
+    public bool DynamicChildCount => false;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
     public ContextMenu? GetContextMenu()
     {
         var menuItems = new MenuItem[]
         {
-            new("Script", Script_OnClick, EmptyReadOnlyCollection<MenuItem>.Value)
-        }.ToReadOnlyCollection();
+            new("Script", Script_OnClick, [])
+        };
 
         var contextMenu = new ContextMenu(menuItems);
         return contextMenu;

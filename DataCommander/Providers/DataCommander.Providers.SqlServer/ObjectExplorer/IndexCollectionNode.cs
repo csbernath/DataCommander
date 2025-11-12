@@ -15,9 +15,9 @@ internal sealed class IndexCollectionNode(DatabaseNode databaseNode, int id) : I
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var cb = new SqlCommandBuilder();
+        var sqlCommandBuilder = new SqlCommandBuilder();
+        var database = sqlCommandBuilder.QuoteIdentifier(databaseNode.Name);
 
-        var database = cb.QuoteIdentifier(databaseNode.Name);
         var commandText = $@"select
     i.name,
     i.index_id,
@@ -35,14 +35,14 @@ order by i.name";
 
         var parameters = new SqlParameterCollectionBuilder();
         parameters.Add("object_id", id);
-        var request = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
+        var request = new ExecuteReaderRequest(commandText, parameters.ToArray());
         var executor = new SqlCommandExecutor(databaseNode.Databases.Server.CreateConnection);
         return await executor.ExecuteReaderAsync(
             request,
             128,
             dataRecord =>
             {
-                var name = dataRecord.GetStringOrDefault(0);
+                var name = dataRecord.GetString(0);
                 var indexId = dataRecord.GetInt32(1);
                 var type = dataRecord.GetByte(2);
                 var isUnique = dataRecord.GetBoolean(3);
@@ -52,7 +52,10 @@ order by i.name";
     }
 
     public bool Sortable => false;
-    public string? Query => null;
+
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
     public ContextMenu? GetContextMenu() => null;
 }

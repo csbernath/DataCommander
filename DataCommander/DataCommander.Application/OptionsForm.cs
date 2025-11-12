@@ -1,31 +1,39 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
-using DataCommander.Api;
-using DataCommander.Application.Connection;
 
 namespace DataCommander.Application;
 
 public partial class OptionsForm : Form
 {
-    private bool _darkColorTheme;
+    private SystemColorMode _colorMode;
+    private bool _initializeApplicationConfiguration;
     private Font _font;
 
-    public OptionsForm(bool darkColorTheme, Font font, ColorTheme? colorTheme)
+    public OptionsForm(SystemColorMode colorMode, bool initializeApplicationConfiguration, Font font)
     {
-        InitializeComponent();
-
-        _darkColorTheme = darkColorTheme;
+        _colorMode = colorMode;
+        _initializeApplicationConfiguration = initializeApplicationConfiguration;
         _font = font;
 
-        colorThemeComboBox.SelectedIndex = _darkColorTheme ? 1 : 0;
+        InitializeComponent();
 
-        colorTheme?.Apply(this);
+        colorThemeComboBox.DataSource = System.Enum.GetValues(typeof(SystemColorMode));
+        colorThemeComboBox.SelectedItem = _colorMode;
+
+        initializeApplicationConfigurationCheckBox.Checked = _initializeApplicationConfiguration;
+
+        // colorTheme?.Apply(this);
     }
 
-    public bool DarkColorTheme => _darkColorTheme;
+    public SystemColorMode ColorMode => _colorMode;
+    public bool InitializeApplicationConfiguration => _initializeApplicationConfiguration;
     public Font SelectedFont => _font;
 
-    private void okButton_Click(object? sender, System.EventArgs e) => _darkColorTheme = colorThemeComboBox.SelectedIndex != 0;
+    private void okButton_Click(object? sender, System.EventArgs e)
+    {
+        _colorMode = (SystemColorMode)colorThemeComboBox.SelectedItem!;
+        _initializeApplicationConfiguration = initializeApplicationConfigurationCheckBox.Checked;
+    }
 
     private void changeFontButton_Click(object? sender, System.EventArgs e)
     {
@@ -37,5 +45,10 @@ public partial class OptionsForm : Form
 
         if (dialogResult == DialogResult.OK)
             _font = fontDialog.Font;
+    }
+
+    private void initializeApplicationConfigurationCheckBox_CheckedChanged(object sender, System.EventArgs e)
+    {
+
     }
 }

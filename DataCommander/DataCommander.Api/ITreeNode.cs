@@ -10,6 +10,7 @@ public interface ITreeNode
     bool IsLeaf { get; }
     Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken);
     bool Sortable { get; }
-    string? Query { get; }
+    bool DynamicChildCount { get; }
+    Task<string?> GetQuery(CancellationToken cancellationToken);
     ContextMenu? GetContextMenu();
 }

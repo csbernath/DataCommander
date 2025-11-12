@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -37,6 +37,8 @@ internal sealed class ConnectionListForm : Form
         _colorTheme = colorTheme;
 
         InitializeComponent();
+        
+        SuspendLayout();
 
         _dataTable.Columns.Add(ConnectionFormColumnName.ConnectionName, typeof(string));
         _dataTable.Columns.Add(ConnectionFormColumnName.ProviderName, typeof(string));
@@ -95,11 +97,12 @@ internal sealed class ConnectionListForm : Form
         _dataGrid!.DataSource = _dataTable;
         if (colorTheme != null)
         {
-            BackColor = colorTheme.BackColor;
-            ForeColor = colorTheme.ForeColor;
-
+            BackColor = colorTheme.BackColor!.Value;
+            ForeColor = colorTheme.ForeColor!.Value;
             colorTheme.Apply(_dataGrid);
         }
+        
+        ResumeLayout(false);
     }
 
     public ConnectionInfo ConnectionInfo => _connectionInfo!;
@@ -129,9 +132,9 @@ internal sealed class ConnectionListForm : Form
         // btnOK
         // 
         _btnOk.Anchor = AnchorStyles.Bottom;
-        _btnOk.Location = new System.Drawing.Point(402, 637);
+        _btnOk.Location = new Point(402, 637);
         _btnOk.Name = "_btnOk";
-        _btnOk.Size = new System.Drawing.Size(75, 24);
+        _btnOk.Size = new Size(75, 24);
         _btnOk.TabIndex = 0;
         _btnOk.Text = "&Connect";
         _btnOk.Click += new EventHandler(BtnOK_Click);
@@ -140,9 +143,9 @@ internal sealed class ConnectionListForm : Form
         // 
         _btnCancel.Anchor = AnchorStyles.Bottom;
         _btnCancel.DialogResult = DialogResult.Cancel;
-        _btnCancel.Location = new System.Drawing.Point(490, 637);
+        _btnCancel.Location = new Point(490, 637);
         _btnCancel.Name = "_btnCancel";
-        _btnCancel.Size = new System.Drawing.Size(75, 24);
+        _btnCancel.Size = new Size(75, 24);
         _btnCancel.TabIndex = 7;
         _btnCancel.Text = "Cancel";
         // 
@@ -150,9 +153,9 @@ internal sealed class ConnectionListForm : Form
         // 
         _newButton.Anchor =
             ((AnchorStyles)(AnchorStyles.Bottom | AnchorStyles.Left));
-        _newButton.Location = new System.Drawing.Point(12, 637);
+        _newButton.Location = new Point(12, 637);
         _newButton.Name = "_newButton";
-        _newButton.Size = new System.Drawing.Size(75, 24);
+        _newButton.Size = new Size(75, 24);
         _newButton.TabIndex = 8;
         _newButton.Text = "&New";
         _newButton.Click += new EventHandler(NewButton_Click);
@@ -164,11 +167,11 @@ internal sealed class ConnectionListForm : Form
                                                                        | AnchorStyles.Left)
                                                                       | AnchorStyles.Right));
         _dataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-        _dataGrid.Location = new System.Drawing.Point(8, 8);
+        _dataGrid.Location = new Point(8, 8);
         _dataGrid.Name = "_dataGrid";
         _dataGrid.PublicDoubleBuffered = true;
         _dataGrid.ReadOnly = true;
-        _dataGrid.Size = new System.Drawing.Size(944, 621);
+        _dataGrid.Size = new Size(944, 621);
         _dataGrid.TabIndex = 6;
         _dataGrid.UserDeletingRow += new DataGridViewRowCancelEventHandler(DataGrid_UserDeletingRow);
         _dataGrid.DoubleClick += new EventHandler(DataGrid_DoubleClick);
@@ -178,14 +181,15 @@ internal sealed class ConnectionListForm : Form
         // ConnectionListForm
         // 
         AcceptButton = _btnOk;
-        AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+        AutoScaleBaseSize = new Size(5, 14);
         CancelButton = _btnCancel;
-        ClientSize = new System.Drawing.Size(954, 668);
+        ClientSize = new Size(954, 668);
         Controls.Add(_newButton);
         Controls.Add(_btnCancel);
         Controls.Add(_dataGrid);
         Controls.Add(_btnOk);
-        Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+        //Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+        Font = new Font("Microsoft Sans Serif", 8);
         MaximizeBox = false;
         MinimizeBox = false;
         Name = "ConnectionListForm";
@@ -194,7 +198,6 @@ internal sealed class ConnectionListForm : Form
         Text = "Connect to database";
         ((ISupportInitialize)(_dataGrid)).EndInit();
         ResumeLayout(false);
-
     }
 
     public long ElapsedTicks { get; private set; }
@@ -206,8 +209,7 @@ internal sealed class ConnectionListForm : Form
         if (_isDirty)
         {
             const string text = "Do you want to save changes ?";
-            const string caption = "Data Commander";
-            var dialogResult = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var dialogResult = DataCommanderMessageBox.MessageBox.Show(this, text, MessageBoxCaption.Value, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
                 ConnectionInfoRepository.Save(_connectionInfos);
         }
@@ -231,6 +233,8 @@ internal sealed class ConnectionListForm : Form
             row[ConnectionStringKeyword.DataSource] = (string)value!;        
 
         if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.InitialCatalog, out value))
+            row[ConnectionStringKeyword.InitialCatalog] = (string)value!;
+        else if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.Database, out value))
             row[ConnectionStringKeyword.InitialCatalog] = (string)value!;
 
         if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out value))
@@ -289,14 +293,19 @@ internal sealed class ConnectionListForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, ex.ToString(), null, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            var caption = MessageBoxCaption.Value;
+            var text = ex.ToString();
+            DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
     private void Delete()
     {
-        if (MessageBox.Show(this, "Do you want to delete the selected item(s)?", DataCommanderApplication.Instance.Name, MessageBoxButtons.YesNoCancel,
-                MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+        var caption = MessageBoxCaption.Value;
+        const string text = "Do you want to delete the selected item(s)?";
+        
+        if (DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) ==
+            DialogResult.Yes)
         {
             var index = SelectedIndex;
             _connectionInfos.RemoveAt(index);
@@ -315,9 +324,11 @@ internal sealed class ConnectionListForm : Form
         var dialogResult = form.ShowDialog();
         if (dialogResult == DialogResult.OK)
         {
-            _connectionInfos[SelectedIndex] = form.ConnectionInfo;
+            connectionInfo = form.ConnectionInfo;
+            _connectionInfos[SelectedIndex] = connectionInfo;
             _isDirty = true;
-            var row = _dataTable.DefaultView[_dataGrid!.CurrentCell!.RowIndex].Row;
+            var rowIndex = _dataGrid!.CurrentCell!.RowIndex;
+            var row = _dataTable.DefaultView[rowIndex].Row;
             LoadConnection(connectionInfo, row);
         }
     }
@@ -425,8 +436,6 @@ internal sealed class ConnectionListForm : Form
     {
         get
         {
-            var count = _dataTable.Rows.Count;
-            var dataView = _dataTable.DefaultView;
             var selectedCount = 0;
 
             foreach (DataGridViewRow dataGridViewRow in _dataGrid!.SelectedRows)
@@ -439,9 +448,7 @@ internal sealed class ConnectionListForm : Form
             }
 
             if (selectedCount == 0)
-            {
                 yield return SelectedIndex;
-            }
         }
     }
 
@@ -465,41 +472,19 @@ internal sealed class ConnectionListForm : Form
             {
                 var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
                 var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
-                var connectionStringBuilder = provider.CreateConnectionStringBuilder();
-                connectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
-
-                var dataSource = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject)
-                    ? (string)dataSourceObject
-                    : null;
-                var host = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.Host, out var hostObject)
-                    ? (string)hostObject
-                    : null;
-
-                var containsIntegratedSecurity = connectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity);
-                var stringBuilder = new StringBuilder();
-                stringBuilder.Append($@"Connection name: {connectionInfo.ConnectionName}
-Provider name: {providerInfo.Name}");
-                if (dataSource != null)
-                    stringBuilder.Append($"\r\n{ConnectionStringKeyword.DataSource}: {dataSource}");
-                else if (host != null)
-                    stringBuilder.Append($"\r\n{ConnectionStringKeyword.Host}: {host}");
-                if (containsIntegratedSecurity)
-                    stringBuilder.Append($"\r\n{ConnectionStringKeyword.IntegratedSecurity}: {integratedSecurity}");
-                var credential = connectionInfo.ConnectionStringAndCredential.Credential;
-                if (credential != null)
-                    stringBuilder.Append($"\r\n{ConnectionStringKeyword.UserId}: {credential.UserId}");
-                var text = stringBuilder.ToString();
+                var textBoxText = OpenConnectionFormHelper.CreateOpenConnectionFormText(connectionInfo, providerInfo, provider);
+                Log.Trace(CallerInformation.Create(), textBoxText);
                 var connection = provider.CreateConnection(connectionInfo.ConnectionStringAndCredential);
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
-                var cancelableOperationForm =
-                    new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), "Opening connection...", text, _colorTheme);
+                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
+                    MessageBoxCaption.Value, textBoxText, _colorTheme);
                 var startTimestamp = Stopwatch.GetTimestamp();
                 var openConnectionTask = new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken));
                 cancelableOperationForm.Execute(openConnectionTask);
                 if (openConnectionTask.Exception != null)
                     throw openConnectionTask.Exception;
-                ElapsedTicks = Stopwatch.GetTimestamp() - startTimestamp;                
+                ElapsedTicks = Stopwatch.GetTimestamp() - startTimestamp;
                 _connectionInfo = connectionInfo;
                 _connection = connection;
                 DialogResult = DialogResult.OK;
@@ -507,9 +492,11 @@ Provider name: {providerInfo.Name}");
         }
         catch (Exception exception)
         {
-            var text = exception.Message;
-            var caption = "Opening connection failed.";
-            MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            var caption = MessageBoxCaption.Value;
+            var text = $@"Opening connection failed.
+
+{exception.Message}";
+            DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -525,12 +512,8 @@ Provider name: {providerInfo.Name}");
 
             default:
                 var folder = SelectedConnectionInfo;
-
                 if (folder != null)
-                {
                     Connect(folder);
-                }
-
                 break;
         }
     }

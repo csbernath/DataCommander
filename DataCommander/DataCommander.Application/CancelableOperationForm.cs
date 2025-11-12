@@ -12,14 +12,14 @@ namespace DataCommander.Application;
 
 public sealed partial class CancelableOperationForm : Form, ICancelableOperationForm
 {
-    private readonly Control _owner;
+    private readonly IWin32Window _owner;
     private readonly CancellationTokenSource _cancellationTokenSource;
     private readonly TimeSpan _showDialogDelay;
     private System.Threading.Timer? _elapsedTimeTimer;
     private long _startTimestamp;
 
     public CancelableOperationForm(
-        Control owner,
+        IWin32Window owner,
         CancellationTokenSource cancellationTokenSource,
         TimeSpan showDialogDelay,
         string formText,

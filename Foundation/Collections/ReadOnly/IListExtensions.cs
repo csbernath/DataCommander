@@ -6,14 +6,17 @@ namespace Foundation.Collections.ReadOnly;
 
 public static class IListExtensions
 {
-    public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IList<T> list)
+    extension<T>(IList<T> list)
     {
-        ArgumentNullException.ThrowIfNull(list);
+        public ReadOnlyCollection<T> ToReadOnlyCollection()
+        {
+            ArgumentNullException.ThrowIfNull(list);
 
-        var readOnlyCollection = list.Count == 0
-            ? EmptyReadOnlyCollection<T>.Value
-            : new ReadOnlyCollection<T>(list);
+            var readOnlyCollection = list.Count == 0
+                ? EmptyReadOnlyCollection<T>.Value
+                : new ReadOnlyCollection<T>(list);
 
-        return readOnlyCollection;
+            return readOnlyCollection;
+        }
     }
 }

@@ -9,185 +9,190 @@ namespace Foundation.Data;
 
 public static class IDbCommandExtensions
 {
-    public static void AddParameterIfNotNull(this IDbCommand command, string parameterName, object value)
+    extension(IDbCommand command)
     {
-        ArgumentNullException.ThrowIfNull(command);
-
-        if (value != null)
+        public void AddParameterIfNotNull(string parameterName, object value)
         {
-            var parameter = command.CreateParameter();
-            parameter.ParameterName = parameterName;
-            parameter.Value = value;
+            ArgumentNullException.ThrowIfNull(command);
 
-            command.Parameters.Add(parameter);
-        }
-    }
-
-    public static DataSet ExecuteDataSet(this IDbCommand command, CancellationToken cancellationToken)
-    {
-        var dataSet = new DataSet();
-        command.Fill(dataSet, cancellationToken);
-        return dataSet;
-    }
-
-    public static DataTable ExecuteDataTable(this IDbCommand command, CancellationToken cancellationToken)
-    {
-        ArgumentNullException.ThrowIfNull(command);
-
-        var dataTable = new DataTable
-        {
-            Locale = CultureInfo.InvariantCulture
-        };
-
-        command.Fill(dataTable, cancellationToken);
-        return dataTable;
-    }
-
-    public static T? ExecuteScalarValue<T>(this IDbCommand command)
-    {
-        ArgumentNullException.ThrowIfNull(command);
-
-        var scalar = command.ExecuteScalar();
-        Assert.IsTrue(scalar is T);
-        return (T?)scalar;
-    }
-
-    public static T? ExecuteScalarValueOrDefault<T>(this IDbCommand command)
-    {
-        ArgumentNullException.ThrowIfNull(command);
-
-        var scalar = command.ExecuteScalar();
-        return ValueReader.GetValueOrDefault<T>(scalar);
-    }
-
-    public static int Fill(this IDbCommand command, DataSet dataSet, CancellationToken cancellationToken)
-    {
-        ArgumentNullException.ThrowIfNull(command);
-        ArgumentNullException.ThrowIfNull(dataSet);
-
-        var rowCount = 0;
-        var resultIndex = 0;
-        var dataTables = dataSet.Tables;
-
-        if (!cancellationToken.IsCancellationRequested)
-        {
-            var connection = command.Connection!;
-
-            using var connectionStateManager = new ConnectionStateManager(connection);
-            connectionStateManager.Open();
-
-            using var reader = command.ExecuteReader();
-            while (true)
+            if (value != null)
             {
-                var fieldCount = reader.FieldCount;
+                var parameter = command.CreateParameter();
+                parameter.ParameterName = parameterName;
+                parameter.Value = value;
 
-                if (fieldCount > 0)
+                command.Parameters.Add(parameter);
+            }
+        }
+
+        public DataSet ExecuteDataSet(CancellationToken cancellationToken)
+        {
+            var dataSet = new DataSet();
+            command.Fill(dataSet, cancellationToken);
+            return dataSet;
+        }
+
+        public DataTable ExecuteDataTable(CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(command);
+
+            var dataTable = new DataTable
+            {
+                Locale = CultureInfo.InvariantCulture
+            };
+
+            command.Fill(dataTable, cancellationToken);
+            return dataTable;
+        }
+
+        public T? ExecuteScalarValue<T>()
+        {
+            ArgumentNullException.ThrowIfNull(command);
+
+            var scalar = command.ExecuteScalar();
+            Assert.IsTrue(scalar is T);
+            return (T?)scalar;
+        }
+
+        public T? ExecuteScalarValueOrDefault<T>()
+        {
+            ArgumentNullException.ThrowIfNull(command);
+
+            var scalar = command.ExecuteScalar();
+            return ValueReader.GetValueOrDefault<T>(scalar);
+        }
+
+        public int Fill(DataSet dataSet, CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(command);
+            ArgumentNullException.ThrowIfNull(dataSet);
+
+            var rowCount = 0;
+            var resultIndex = 0;
+            var dataTables = dataSet.Tables;
+
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                var connection = command.Connection!;
+
+                using var connectionStateManager = new ConnectionStateManager(connection);
+                connectionStateManager.Open();
+
+                using var reader = command.ExecuteReader();
+                while (true)
                 {
-                    DataTable table;
+                    var fieldCount = reader.FieldCount;
 
-                    if (resultIndex < dataTables.Count)
+                    if (fieldCount > 0)
                     {
-                        table = dataTables[resultIndex];
+                        DataTable table;
+
+                        if (resultIndex < dataTables.Count)
+                        {
+                            table = dataTables[resultIndex];
+                        }
+                        else
+                        {
+                            table = new DataTable
+                            {
+                                Locale = CultureInfo.InvariantCulture
+                            };
+                            dataSet.Tables.Add(table);
+                        }
+
+                        var count = reader.Fill(table, cancellationToken);
+                        rowCount += count;
+                    }
+
+                    if (!cancellationToken.IsCancellationRequested)
+                    {
+                        var nextResult = reader.NextResult();
+
+                        if (!nextResult)
+                        {
+                            break;
+                        }
                     }
                     else
                     {
-                        table = new DataTable
-                        {
-                            Locale = CultureInfo.InvariantCulture
-                        };
-                        dataSet.Tables.Add(table);
-                    }
-
-                    var count = reader.Fill(table, cancellationToken);
-                    rowCount += count;
-                }
-
-                if (!cancellationToken.IsCancellationRequested)
-                {
-                    var nextResult = reader.NextResult();
-
-                    if (!nextResult)
-                    {
                         break;
                     }
+
+                    resultIndex++;
                 }
-                else
+            }
+
+            return rowCount;
+        }
+
+        public int Fill(DataTable dataTable, CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(command);
+
+            var rowCount = 0;
+
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                var connection = command.Connection!;
+
+                using var connectionStateManager = new ConnectionStateManager(connection);
+                connectionStateManager.Open();
+
+                try
                 {
-                    break;
+                    using var dataReader = command.ExecuteReader();
+                    rowCount = dataReader.Fill(dataTable, cancellationToken);
                 }
-
-                resultIndex++;
+                catch (Exception exception)
+                {
+                    throw new DbCommandExecutionException("IDbCommandExtensions.Fill failed.", exception, command);
+                }
             }
+
+            return rowCount;
         }
 
-        return rowCount;
-    }
-
-    public static int Fill(this IDbCommand command, DataTable dataTable, CancellationToken cancellationToken)
-    {
-        ArgumentNullException.ThrowIfNull(command);
-
-        var rowCount = 0;
-
-        if (!cancellationToken.IsCancellationRequested)
+        public string ToLogString()
         {
-            var connection = command.Connection!;
+            ArgumentNullException.ThrowIfNull(command);
 
-            using var connectionStateManager = new ConnectionStateManager(connection);
-            connectionStateManager.Open();
+            var stringBuilder = new StringBuilder();
 
-            try
+            switch (command.CommandType)
             {
-                using var dataReader = command.ExecuteReader();
-                rowCount = dataReader.Fill(dataTable, cancellationToken);
+                case CommandType.StoredProcedure:
+                    stringBuilder.Append("exec ");
+                    break;
+
+                default:
+                    break;
             }
-            catch (Exception exception)
+
+            stringBuilder.Append(command.CommandText);
+
+            if (command.Parameters.Count > 0)
             {
-                throw new DbCommandExecutionException("IDbCommandExtensions.Fill failed.", exception, command);
+                stringBuilder.AppendLine();
+                stringBuilder.Append(command.Parameters.ToLogString());
             }
+
+            return stringBuilder.ToString();
         }
 
-        return rowCount;
-    }
-
-    public static string ToLogString(this IDbCommand command)
-    {
-        ArgumentNullException.ThrowIfNull(command);
-
-        var sb = new StringBuilder();
-
-        switch (command.CommandType)
+        internal void Initialize(CreateCommandRequest request)
         {
-            case CommandType.StoredProcedure:
-                sb.Append("exec ");
-                break;
+            ArgumentNullException.ThrowIfNull(request);
 
-            default:
-                break;
+            command.CommandType = request.CommandType;
+            command.CommandText = request.CommandText;
+
+            if (request.CommandTimeout != null)
+                command.CommandTimeout = request.CommandTimeout.Value;
+
+            command.Transaction = request.Transaction;
+
+            if (request.Parameters != null)
+                command.Parameters.AddRange(request.Parameters);
         }
-
-        sb.Append(command.CommandText);
-
-        if (command.Parameters.Count > 0)
-        {
-            sb.AppendLine();
-            sb.Append(command.Parameters.ToLogString());
-        }
-
-        return sb.ToString();
-    }
-
-    internal static void Initialize(this IDbCommand command, CreateCommandRequest request)
-    {
-        command.CommandType = request.CommandType;
-        command.CommandText = request.CommandText;
-
-        if (request.CommandTimeout != null)
-            command.CommandTimeout = request.CommandTimeout.Value;
-
-        command.Transaction = request.Transaction;
-
-        if (request.Parameters != null)
-            command.Parameters.AddRange(request.Parameters);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
@@ -23,12 +24,7 @@ public partial class AboutForm : Form
         var buildNumber = int.Parse(windowsCurrentVersion.CurrentBuild!);
         var windowsName =
             WindowsNameCalculator.GetWindowsNameFromBuildNumber(buildNumber, windowsCurrentVersion.EditionId, windowsCurrentVersion.DisplayVersion);
-        var brightness = colorTheme?.BackColor.GetBrightness();
-
-        var bodyStyle = brightness < 0.12f
-            ? "body {background-color: #202020;color:#dcdcdc}"
-            : null;
-
+        var bodyStyle = $"body {{background-color:{ToString(SystemColors.Control)};color:{ToString(SystemColors.ControlText)}}}";
         var text =
             $@"
 <style>
@@ -41,7 +37,7 @@ Data Commander Version: {assembly.GetName().Version} ({lastWriteTime:yyyy-MM-dd}
 Copyright © 2002-2025 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Bernáth</a><br/><br/>
 <a href=""https://en.wikipedia.org/wiki/Free_and_open-source_software"">Free and open-source software</a><br/>
 This program is released under the <a href=""https://www.gnu.org/licenses/gpl.txt"">GNU General Public Licence</a>.<br/><br/>
-Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.Net-9.0/README.md"">Foundation Class Library</a><br/><br/>
+Including <a href=""https://github.com/csbernath/DataCommander/blob/Net-10.0/Foundation/README.md"">Foundation Class Library</a><br/><br/>
 <a href=""applicationdatafile://"">Application Data file</a><br/>
 <a href=""logfile://"">Log file</a><br/><br/>
 <table style=""font-family:verdana;font-size:9pt"">
@@ -55,12 +51,14 @@ Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Found
 Credits:
 <ul style=""list-style-type:none"">
     <li><a href=""https://www.jetbrains.com/rider/"">JetBrains Rider</a></li>
-    <li><a href=""https://www.visualstudio.com/vs/community/"">Visual Studio Community</a></li>
+    <li><a href=""https://www.visualstudio.com/vs/community/"">Visual Studio 2022 Community</a></li>
+    <li><a href=""https://visualstudio.microsoft.com/insiders/"">Visual Studio 2026 Insiders</a></li>
     <li><a href=""https://www.jetbrains.com/resharper/"">JetBrains R# ReSharper</a></li>
     <li><a href=""https://github.com/JanKallman/EPPlus"">EPPlus Excel generator</a></li>
     <li><a href=""https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/?tabs=net-cli"">Microsoft SQLite provider</a></li>
     <li><a href=""https://www.nuget.org/packages/MySql.Data/"">MySQL provider</a></li>
-    <li><a href=""https://github.com/npgsql/npgsql"">PostgreSQL provider</a></li>  
+    <li><a href=""https://github.com/npgsql/npgsql"">PostgreSQL provider</a></li>
+    <li><a href=""https://icon-icons.com/icon/sql-racer-game-database-sql/1025"">App icon</a></li>  
 </ul>
 </div>";
 
@@ -131,4 +129,6 @@ Credits:
             e.Cancel = true;
         }
     }
+
+    private static string ToString(Color color) => $"#{color.R:X2}{color.G:X2}{color.B:X2}";
 }

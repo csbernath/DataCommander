@@ -7,6 +7,7 @@ using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Text;
 using Foundation.Core;
+using Foundation.Diagnostics.Measurement;
 using Foundation.Log;
 using Foundation.Text;
 
@@ -16,16 +17,16 @@ public static class AppDomainMonitor
 {
     private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(AppDomainMonitor));
 
-    private static readonly StringTableColumnInfo<AppDomainMonitor.AssemblyInfo>[] Columns =
+    private static readonly StringTableColumnInfo<AssemblyInfo>[] Columns =
     [
         new("Name", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Name),
-        StringTableColumnInfo.Create<AppDomainMonitor.AssemblyInfo, Version?>("FileVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.FileVersion),
-        StringTableColumnInfo.Create<AppDomainMonitor.AssemblyInfo, Version?>("Version", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Version),
+        StringTableColumnInfo.Create<AssemblyInfo, Version?>("FileVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.FileVersion),
+        StringTableColumnInfo.Create<AssemblyInfo, Version?>("Version", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Version),
         new("Date", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Date?.ToString("yyyy-MM-dd HH:mm:ss")),
         new("PublicKeyToken", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.PublicKeyToken),
         new("ImageRuntimeVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.ImageRuntimeVersion),
         new("Location", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Location),
-        StringTableColumnInfo.CreateLeft<AppDomainMonitor.AssemblyInfo, bool>("IsDynamic", i => i.IsDynamic)
+        StringTableColumnInfo.CreateLeft<AssemblyInfo, bool>("IsDynamic", i => i.IsDynamic)
     ];
 
     public static string GetEnvironmentInfo()
@@ -71,7 +72,7 @@ CommandLine:            {Environment.CommandLine}
 GC IsServerGC:          {GCSettings.IsServerGC}
 GC LargeObjectHeapCompactionMode: {GCSettings.LargeObjectHeapCompactionMode}
 GC LatencyMode:         {GCSettings.LatencyMode}
-WorkingSet:             {(double)workingSet / (1024 * 1024):N} MB ({workingSet} bytes)
+WorkingSet:             {MeasurementUnit.ToBinaryMetricString(workingSet, 2, UnitSymbol.Byte)} ({workingSet:N0} bytes)
 TickCount64:            {tickCountString}
 Stopwatch.Frequency:    {stopwatchFrequency}
 TimeZoneInfo.Local.Id:  {TimeZoneInfo.Local.Id}
@@ -82,7 +83,7 @@ TempPath:               {Path.GetTempPath()}");
     private static string GetStopwatchFrequency()
     {
         var frequency = Stopwatch.Frequency;
-        var frequencyString = MeasurementUnit.ToString(frequency, 2, "Hz");
+        var frequencyString = MeasurementUnit.ToDecimalMetricString(frequency, 2, "Hz");
         return
             $"{frequency} ({frequencyString}, 1 tick = {Math.Round(StopwatchConstants.NanosecondsPerTick)} nanoseconds, 1 millisecond = {Math.Round(StopwatchConstants.TicksPerMillisecond)} ticks)";
     }
@@ -101,11 +102,11 @@ TempPath:               {Path.GetTempPath()}");
         try
         {
             var friendlyName = appDomain.FriendlyName;
-            stringBuilder.AppendFormat("FriendlyName: {0}\r\n", friendlyName);
+            stringBuilder.Append($"FriendlyName: {friendlyName}\r\n");
             var assemblies = appDomain.GetAssemblies();
             stringBuilder.AppendLine("Assemblies:");
 
-            List<AppDomainMonitor.AssemblyInfo> assemblyInfos = [];
+            List<AssemblyInfo> assemblyInfos = [];
 
             foreach (var assembly in assemblies)
             {
@@ -130,7 +131,7 @@ TempPath:               {Path.GetTempPath()}");
         }
     }
 
-    private static AppDomainMonitor.AssemblyInfo GetAssemblyInfo(Assembly assembly)
+    private static AssemblyInfo GetAssemblyInfo(Assembly assembly)
     {
         var isDynamic = assembly.IsDynamic;
         string? location = null;
@@ -148,7 +149,7 @@ TempPath:               {Path.GetTempPath()}");
         var publicKeyToken = name.GetPublicKeyToken();
         var publicKeyTokenString = publicKeyToken != null ? Hex.GetString(publicKeyToken, false) : null;
 
-        return new AppDomainMonitor.AssemblyInfo(name.Name, fileVersion, name.Version, date, publicKeyTokenString, assembly.ImageRuntimeVersion, location, isDynamic);
+        return new AssemblyInfo(name.Name, fileVersion, name.Version, date, publicKeyTokenString, assembly.ImageRuntimeVersion, location, isDynamic);
     }
 
     private static Version? GetFileVersion(string fileName)

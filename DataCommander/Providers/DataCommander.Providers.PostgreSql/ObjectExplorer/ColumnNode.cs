@@ -1,25 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class ColumnNode(ColumnCollectionNode columnCollectionNode, string name, string dataType) : ITreeNode
+internal sealed class ColumnNode(
+    ColumnCollectionNode columnCollectionNode,
+    string name,
+    PostgresSqlType type,
+    bool notNull) : ITreeNode
 {
-    private readonly ColumnCollectionNode _columnCollectionNode = columnCollectionNode;
-    private readonly string _name = name;
-    private readonly string _dataType = dataType;
+    string? ITreeNode.Name
+    {
+        get
+        {
+            var typeRepository = columnCollectionNode.TableNode.SchemaNode.SchemaCollectionNode.DatabaseNode.TypeRepository!;
+            var typeName = typeRepository.TryGetPostgresSqlTypeName(type.Oid, out var postgresSqlTypeName)
+                ? postgresSqlTypeName!.Name
+                : type.Name;
+            var sb = new StringBuilder();
+            sb.Append($"{name} ({typeName}");
 
-    string? ITreeNode.Name => $"{_name} {_dataType}";
+            if (notNull)
+                sb.Append(", not null");
+
+            sb.Append(')');
+            return sb.ToString();
+        }
+    }
 
     bool ITreeNode.IsLeaf => true;
 
     Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>(Array.Empty<ITreeNode>());
+        Task.FromResult<IEnumerable<ITreeNode>>([]);
 
     bool ITreeNode.Sortable => false;
-    string? ITreeNode.Query => null;
+
+    public bool DynamicChildCount => false;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 }

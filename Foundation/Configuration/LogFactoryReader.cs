@@ -10,7 +10,7 @@ public static class LogFactoryReader
 {
     public static void Read()
     {
-        var currentLog = InternalLogFactory.Instance.GetTypeLog(typeof(LogFactory));
+        var currentLog = LogFactory.Instance.GetTypeLog(typeof(LogFactory));
         GarbageMonitor.Default.Add(nameof(InternalLogFactory), currentLog);
         
         currentLog.Trace("Reading LogFactory configuration...");

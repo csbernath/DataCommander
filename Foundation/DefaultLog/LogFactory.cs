@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using Foundation.Configuration;
 using Foundation.Core;
-using Foundation.Linq;
 using Foundation.Log;
 
 namespace Foundation.DefaultLog;
@@ -52,7 +51,7 @@ internal sealed class LogFactory : ILogFactory
     {
         var logWriter = new LogWriter(new TextLogWriter(TraceWriter.Instance, new TextLogFormatter()), LogLevel.Debug);
         _dateTimeProvider = LocalTime.Default;
-        _multipeLog = new MultipleLog(logWriter.ItemToArray());
+        _multipeLog = new MultipleLog([logWriter]);
     }
 
     string? ILogFactory.FileName
@@ -67,7 +66,7 @@ internal sealed class LogFactory : ILogFactory
 
     ILog ILogFactory.GetLog(string? name) => new Log(this, name!);
 
-    void ILogFactory.Write(IEnumerable<LogEntry> logEntries)
+    void ILogFactory.Write(IReadOnlyCollection<LogEntry> logEntries)
     {
         if (_multipeLog != null)
             foreach (var logEntry in logEntries)

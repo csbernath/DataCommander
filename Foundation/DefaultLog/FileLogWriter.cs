@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Threading;
 using Foundation.InternalLog;
 using Foundation.Log;
 
@@ -14,6 +15,7 @@ public class FileLogWriter : ILogWriter
     private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(FileLogWriter));
     private readonly bool _async;
     private readonly ILogFile _logFile;
+    private readonly Lock _logFileLock = new();
 
     public FileLogWriter(string path, Encoding encoding, bool async, int bufferSize, TimeSpan timerPeriod, bool autoFlush, FileAttributes fileAttributes,
         DateTimeKind dateTimeKind)
@@ -52,7 +54,7 @@ public class FileLogWriter : ILogWriter
             }
             else
             {
-                lock (_logFile)
+                using (_logFileLock.EnterScope())
                 {
                     _logFile.Write(logEntry);
                 }

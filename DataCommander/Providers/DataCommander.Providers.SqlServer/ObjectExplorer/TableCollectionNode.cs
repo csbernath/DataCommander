@@ -78,7 +78,10 @@ order by 1,2";
     }
 
     public bool Sortable => false;
-    public string? Query => null;
+
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
     public ContextMenu? GetContextMenu() => null;
 }

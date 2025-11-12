@@ -19,7 +19,7 @@ public static class IEnumerableExtensionsTo
             if (stringBuilder.Length > 0)
                 stringBuilder.AppendLine();
 
-            stringBuilder.AppendFormat("[{0}] = {1}", index, toString(item));
+            stringBuilder.Append($"[{index}] = {toString(item)}");
             index++;
         }
 

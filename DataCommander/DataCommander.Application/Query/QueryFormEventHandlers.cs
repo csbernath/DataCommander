@@ -18,11 +18,9 @@ using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.Query;
 using DataCommander.Application.ResultWriter;
-using Foundation.Configuration;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Diagnostics;
-using Foundation.Linq;
 using Foundation.Windows.Forms;
 using Microsoft.Data.SqlClient;
 
@@ -112,16 +110,17 @@ public sealed partial class QueryForm
                         var cancellationTokenSource = new CancellationTokenSource();
                         var cancellationToken = cancellationTokenSource.Token;
                         treeNode2 = (ITreeNode)treeNode.Tag!;
-                        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
-                            "Getting tree node children...",
-                            $@"Parent node type: {treeNode2.GetType().Name}
+                        var textBoxText = $@"Getting tree node children...
+
+Parent node type: {treeNode2.GetType().Name}
 Parent node name: {treeNode2.Name}
-Please wait...",
-                            _colorTheme);
+Please wait...";
+                        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
+                            MessageBoxCaption.Value, textBoxText, _colorTheme);
                         var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() =>
                             treeNode2.GetChildren(false, cancellationToken).Result));
                         treeNode.Nodes.Clear();
-                        AddNodes(treeNode.Nodes, children, treeNode2.Sortable, startTimestamp);
+                        AddNodes(treeNode, treeNode.Nodes, children, treeNode2.Sortable, startTimestamp);
                     }
                     catch (Exception ex)
                     {
@@ -176,10 +175,13 @@ Please wait...",
             var startTimestamp = Stopwatch.GetTimestamp();
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
-            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
-                "Getting tree node children...", "Please wait...", _colorTheme);
+            const string textBoxText = @"Getting tree node children...
+
+Please wait...";
+            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
+                textBoxText, _colorTheme);
             var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => treeNode!.GetChildren(true, cancellationToken).Result));
-            AddNodes(treeNodeV.Nodes, children, treeNode.Sortable, startTimestamp);
+            AddNodes(treeNodeV, treeNodeV.Nodes, children, treeNode.Sortable, startTimestamp);
         }
     }
 
@@ -190,16 +192,20 @@ Please wait...",
         {
             using (new CursorManager(Cursors.WaitCursor))
             {
-                var startTimestamp = Stopwatch.GetTimestamp();            
+                var startTimestamp = Stopwatch.GetTimestamp();
                 objectExplorer.SetConnectionStringAndCredential(_connectionInfo.ConnectionStringAndCredential);
                 var cancellationTokenSource = new CancellationTokenSource();
-                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), "Getting children...",
-                    "Please wait...", _colorTheme);
+                const string textBoxText = @"Getting children...
+
+Please wait...";
+                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
+                    textBoxText, _colorTheme);
                 var cancellationToken = cancellationTokenSource.Token;
-                var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result));
+                var children = cancelableOperationForm.Execute(
+                    new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result));
                 var rootNodes = _tvObjectExplorer.Nodes;
                 rootNodes.Clear();
-                AddNodes(_tvObjectExplorer.Nodes, children, objectExplorer.Sortable, startTimestamp);
+                AddNodes(null, _tvObjectExplorer.Nodes, children, objectExplorer.Sortable, startTimestamp);
             }
         }
     }
@@ -228,8 +234,8 @@ Please wait...",
                     {
                         if (_colorTheme != null)
                         {
-                            contextMenu.ForeColor = _colorTheme.ForeColor;
-                            contextMenu.BackColor = _colorTheme.BackColor;
+                            contextMenu.ForeColor = _colorTheme.ForeColor.Value;
+                            contextMenu.BackColor = _colorTheme.BackColor.Value;
                         }
 
                         var contains = components.Components.Cast<IComponent>().Contains(contextMenu);
@@ -247,7 +253,8 @@ Please wait...",
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.ToString());
+            DataCommanderMessageBox.MessageBox.Show(this, ex.ToString(), MessageBoxCaption.Value, MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
         }
     }
 
@@ -451,11 +458,10 @@ Please wait...",
     {
         try
         {
-            var sqlKeyWords = Settings.CurrentType.Attributes["SqlReservedWords"].GetValue<string[]>()!;
+            var sqlReservedWords = SqlReservedWordsRepository.Get();
             var providerKeyWords = Provider.KeyWords;
-            var keyWordHashSet = sqlKeyWords.Concat(providerKeyWords)
-                .Select(keyWord => keyWord.ToUpper())
-                .ToHashSet();
+            var keyWordHashSet = sqlReservedWords.Concat(providerKeyWords)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
             _sqlStatement = new SqlParser(Query);
             _command = _sqlStatement.CreateCommand(Provider, Connection, CommandType.Text, _commandTimeout);
@@ -627,8 +633,8 @@ Please wait...",
         //connection.ConnectionName = Connection.ConnectionName;
         var cancellationTokenSource = new CancellationTokenSource();
         var cancellationToken = cancellationTokenSource.Token;
-        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
-            "Opening connection...", string.Empty, _colorTheme);
+        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
+            "Opening connection...", _colorTheme);
         var stopwatch = Stopwatch.StartNew();
         cancelableOperationForm.Execute(new Task(() => connection.OpenAsync(cancellationToken).Wait(cancellationToken)));
         var elapsedTicks = stopwatch.ElapsedTicks;
@@ -638,7 +644,7 @@ Please wait...",
         if (connection.Database != Connection.Database)
             connection.Connection!.ChangeDatabase(database);
 
-        var queryForm = new QueryForm(_mainForm, Provider, _connectionInfo, connection, mainForm.StatusBar, _colorTheme);
+        var queryForm = new QueryForm(_mainForm, _providerInfo, Provider, _connectionInfo, connection, mainForm.StatusBar, _colorTheme);
 
         if (mainForm.SelectedFont != null)
             queryForm.Font = mainForm.SelectedFont;
@@ -648,7 +654,7 @@ Please wait...",
         queryForm.Show();
 
         var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == _connectionInfo.ProviderIdentifier);
-        QueryFormStaticMethods.AddInfoMessageToQueryForm(queryForm, elapsedTicks, _connectionInfo.ConnectionName, providerInfo.Name, connection);
+        QueryFormStaticMethods.AddConnectionOpenedInfoMessageToQueryForm(queryForm, elapsedTicks, _connectionInfo.ConnectionName, providerInfo.Name, connection);
     }
 
     private void sQLiteDatabaseToolStripMenuItem_Click(object? sender, EventArgs e) => SetResultWriterType(ResultWriterType.SqLite);
@@ -661,7 +667,7 @@ Please wait...",
         var tableName = sqlStatement.FindTableName();
         var sqlCeResultWriter = new SqlCeResultWriter(_textBoxWriter, tableName);
         var asyncDataAdapter = new AsyncDataAdapter(Provider, maxRecords, _rowBlockSize, sqlCeResultWriter, EndFillInvoker, WriteEndInvoker);
-        asyncDataAdapter.Start(new AsyncDataAdapterCommand(null, 0, _command, null, null, null).ItemToArray());
+        asyncDataAdapter.Start([new AsyncDataAdapterCommand(null, 0, _command, null, null, null)]);
     }
 
     private void beginTransactionToolStripMenuItem_Click(object? sender, EventArgs e)
@@ -878,15 +884,22 @@ Please wait...",
 
     private void tvObjectBrowser_DoubleClick(object? sender, EventArgs e)
     {
-        var selectedNode = _tvObjectExplorer.SelectedNode;
-        if (selectedNode != null)
+        try
         {
-            var treeNode = (ITreeNode)selectedNode.Tag!;
-
-            try
+            var selectedNode = _tvObjectExplorer.SelectedNode;
+            if (selectedNode != null)
             {
-                Cursor = Cursors.WaitCursor;
-                var query = treeNode.Query;
+                var treeNode = (ITreeNode)selectedNode.Tag!;
+                var cancellationTokenSource = new CancellationTokenSource();
+                const string textBoxText = @"Getting query...
+
+Please wait...";
+                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource,
+                    TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
+                    textBoxText, _colorTheme);
+                var cancellationToken = cancellationTokenSource.Token;
+                var query = cancelableOperationForm.Execute(new Task<string?>(() =>
+                    treeNode.GetQuery(cancellationToken).Result));
                 if (query != null)
                 {
                     var text0 = QueryTextBox.Text;
@@ -908,10 +921,14 @@ Please wait...",
                     QueryTextBox.Focus();
                 }
             }
-            finally
-            {
-                Cursor = Cursors.Default;
-            }
+        }
+        catch (Exception exception)
+        {
+            var caption = MessageBoxCaption.Value;
+            var text = $@"Operation failed.
+
+{exception.Message}";
+            DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

@@ -2,24 +2,21 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows7.0</TargetFramework>
+    <TargetFramework>net10.0-windows7.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <Company>Data Commander</Company>    
-    <Product>Data Commander.Net-9.0</Product>    
-    <ApplicationIcon>App.ico</ApplicationIcon>
-    <Authors>Data Commander</Authors>
-    <PackageId>Data Commander</PackageId>
-    <Description>Data Commander</Description>
-    <LangVersion>13</LangVersion>
-    <Nullable>enable</Nullable>
+    <ApplicationIcon>sql_racer_gamedatabase_sql_1526.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
+    <Content Include="sql_racer_gamedatabase_sql_1526.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.2" />
     <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="172.76.0" />
-    <PackageReference Include="Npgsql" Version="9.0.3" />
-    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.8.0" />
-    <PackageReference Include="System.Text.Json" Version="9.0.6" />
+    <PackageReference Include="Microsoft.SqlServer.Types" Version="160.1000.6" />
+    <PackageReference Include="Npgsql" Version="10.0.0-rc.1" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.26.0" />
   </ItemGroup>
 
   <ItemGroup>

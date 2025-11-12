@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Data.Common;
 using Foundation.Data.SqlClient.DbQueryBuilding;
 
@@ -9,13 +9,13 @@ internal sealed class AsyncDataAdapterCommand(
     int? lineIndex,
     DbCommand command,
     Api.QueryConfiguration.Query? query,
-    ReadOnlyCollection<DbRequestParameter>? parameters,
+    IReadOnlyCollection<DbRequestParameter>? parameters,
     string? commandText)
 {
     public readonly string? FileName = fileName;
     public readonly int? LineIndex = lineIndex;
     public readonly DbCommand Command = command;
     public readonly Api.QueryConfiguration.Query? Query = query;
-    public readonly ReadOnlyCollection<DbRequestParameter>? Parameters = parameters;
+    public readonly IReadOnlyCollection<DbRequestParameter>? Parameters = parameters;
     public readonly string? CommandText = commandText;
 }

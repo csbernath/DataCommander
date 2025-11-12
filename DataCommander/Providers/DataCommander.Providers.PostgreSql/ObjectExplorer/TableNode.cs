@@ -5,10 +5,12 @@ using DataCommander.Api;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
-internal sealed class TableNode(TableCollectionNode tableCollectionNode, string? name) : ITreeNode
+internal sealed class TableNode(SchemaNode schemaNode, uint oid, string? name) : ITreeNode
 {
-    public TableCollectionNode TableCollectionNode { get; } = tableCollectionNode;
+    public readonly SchemaNode SchemaNode = schemaNode;
 
+    public readonly uint Oid = oid;
+    
     public string? Name { get; } = name;
 
     bool ITreeNode.IsLeaf => false;
@@ -20,6 +22,9 @@ internal sealed class TableNode(TableCollectionNode tableCollectionNode, string?
         ]);
 
     bool ITreeNode.Sortable => false;
-    string? ITreeNode.Query => null;
+
+    public bool DynamicChildCount => false;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Foundation.Assertions;
 using Foundation.Core;
@@ -11,7 +10,7 @@ namespace Foundation.Data.SqlClient.SqlStatementFactories;
 
 public static class InsertSqlStatementFactory
 {
-    public static ReadOnlyCollection<Line> Create(string table, IReadOnlyCollection<string> columns, IReadOnlyCollection<IReadOnlyCollection<string>> rows)
+    public static IReadOnlyCollection<Line> Create(string table, IReadOnlyCollection<string> columns, IReadOnlyCollection<IReadOnlyCollection<string>> rows)
     {
         Assert.IsTrue(!table.IsNullOrEmpty());
         Assert.IsTrue(!table.IsNullOrEmpty());

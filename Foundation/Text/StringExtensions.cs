@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
-using Foundation.Collections.ReadOnly;
 
 namespace Foundation.Text;
 
 public static class StringExtensions
 {
-    public static ReadOnlyCollection<Line> ToLines(this string text, string indentation)
+    public static IReadOnlyCollection<Line> ToLines(this string text, string indentation)
     {
         List<Line> lines = [];
         using (var stringReader = new StringReader(text))
@@ -23,7 +21,7 @@ public static class StringExtensions
             }
         }
 
-        return lines.ToReadOnlyCollection();
+        return lines.ToArray();
     }
 
     private static Line ToLine(this string lineString, string indentation)

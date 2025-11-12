@@ -11,8 +11,6 @@ public static class Writer
     /// <summary>
     /// writes into CSV file
     /// </summary>
-    /// <param name="dataTable"></param>
-    /// <param name="textWriter"></param>
     public static void Write(DataTable dataTable, TextWriter textWriter)
     {
         ArgumentNullException.ThrowIfNull(dataTable);

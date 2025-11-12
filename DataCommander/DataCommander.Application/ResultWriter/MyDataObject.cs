@@ -9,8 +9,6 @@ namespace DataCommander.Application.ResultWriter;
 
 internal sealed class MyDataObject(DataView dataView, int[] columnIndexes) : IDataObject
 {
-    private readonly int[] _columnIndexes = columnIndexes;
-
     object IDataObject.GetData(Type format) => throw new NotImplementedException();
 
     object IDataObject.GetData(string format)
@@ -29,7 +27,7 @@ internal sealed class MyDataObject(DataView dataView, int[] columnIndexes) : IDa
         else if (format == DataFormats.Html)
         {
             var stringWriter = new StringWriter();
-            HtmlFormatter.Write(dataView, _columnIndexes, stringWriter);
+            HtmlFormatter.Write(dataView, columnIndexes, stringWriter);
             var htmlFragment = stringWriter.ToString();
             stringWriter = new StringWriter();
             WriteHtmlFragment(htmlFragment, stringWriter);

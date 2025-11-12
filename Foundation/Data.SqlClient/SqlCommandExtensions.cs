@@ -7,40 +7,41 @@ namespace Foundation.Data.SqlClient;
 
 public static class SqlCommandExtensions
 {
-    public static string ToLogString(this SqlCommand command)
+    extension(SqlCommand command)
     {
-        ArgumentNullException.ThrowIfNull(command);
-
-        var sb = new StringBuilder();
-        switch (command.CommandType)
+        public string ToLogString()
         {
-            case CommandType.StoredProcedure:
-                sb.Append("exec ");
-                sb.AppendLine(command.CommandText);
-                sb.Append(command.Parameters.ToLogString());
-                break;
+            ArgumentNullException.ThrowIfNull(command);
 
-            case CommandType.Text:
-                var parameters = command.Parameters;
-                if (parameters.Count > 0)
-                {
-                    var parametersString = GetSpExecuteSqlParameters(parameters);
-                    sb.AppendFormat(
-                        "exec sp_executesql {0},{1}",
-                        command.CommandText.ToNullableNVarChar(),
-                        parametersString.ToNullableNVarChar());
+            var stringBuilder = new StringBuilder();
+            switch (command.CommandType)
+            {
+                case CommandType.StoredProcedure:
+                    stringBuilder.Append("exec ");
+                    stringBuilder.AppendLine(command.CommandText);
+                    stringBuilder.Append(command.Parameters.ToLogString());
+                    break;
 
-                    sb.Append(',');
-                    sb.Append(command.Parameters.ToLogString());
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-                break;
+                case CommandType.Text:
+                    var parameters = command.Parameters;
+                    if (parameters.Count > 0)
+                    {
+                        var parametersString = GetSpExecuteSqlParameters(parameters);
+                        stringBuilder.Append(
+                            $"exec sp_executesql {command.CommandText.ToNullableNVarChar()},{parametersString.ToNullableNVarChar()}");
+
+                        stringBuilder.Append(',');
+                        stringBuilder.Append(command.Parameters.ToLogString());
+                    }
+                    else
+                    {
+                        throw new NotImplementedException();
+                    }
+                    break;
+            }
+
+            return stringBuilder.ToString();
         }
-
-        return sb.ToString();
     }
 
     private static string GetSpExecuteSqlParameters(SqlParameterCollection parameters)
@@ -50,16 +51,12 @@ public static class SqlCommandExtensions
         foreach (SqlParameter parameter in parameters)
         {
             if (first)
-            {
                 first = false;
-            }
             else
-            {
                 sb.Append(',');
-            }
 
             var dataTypeName = parameter.GetDataTypeName();
-            sb.AppendFormat("{0} {1}", parameter.ParameterName, dataTypeName);
+            sb.Append($"{parameter.ParameterName} {dataTypeName}");
         }
         return sb.ToString();
     }

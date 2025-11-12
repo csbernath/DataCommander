@@ -25,7 +25,7 @@ public class ColumnCollection : IReadOnlyList<Column>
     
     public IEnumerator<Column> GetEnumerator()
     {
-        var enumerable = (IEnumerable<Column>)_columns;
+        IEnumerable<Column> enumerable = _columns;
         return enumerable.GetEnumerator();
     }
 

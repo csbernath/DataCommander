@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Foundation.Assertions;
 using Foundation.Core;
@@ -10,7 +9,7 @@ namespace Foundation.Data.SqlClient.SqlStatementFactories;
 
 public static class UpdateSqlStatementFactory
 {
-    public static ReadOnlyCollection<Line> Create(string table, IReadOnlyCollection<ColumnNameValue> setColumns,
+    public static IReadOnlyCollection<Line> Create(string table, IReadOnlyCollection<ColumnNameValue> setColumns,
         IReadOnlyCollection<ColumnNameValue> whereColumns)
     {
         Assert.IsTrue(!table.IsNullOrEmpty());

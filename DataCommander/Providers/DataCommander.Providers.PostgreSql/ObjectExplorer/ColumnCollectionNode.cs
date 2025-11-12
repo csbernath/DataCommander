@@ -9,30 +9,29 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 
 internal sealed class ColumnCollectionNode(TableNode tableNode) : ITreeNode
 {
-    private readonly TableNode _tableNode = tableNode;
-
+    public readonly TableNode TableNode = tableNode;
+    
     string? ITreeNode.Name => "Columns";
 
     bool ITreeNode.IsLeaf => false;
 
     async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
     {
-        var schemaNode = _tableNode.TableCollectionNode.SchemaNode;
+        var schemaNode = TableNode.SchemaNode;
+
+        var commandText = $@"select
+    attname,
+    atttypid, 
+	attnotnull
+from pg_attribute
+where
+    attrelid  = {TableNode.Oid} and
+	attnum >= 1
+order by attnum";
 
         return await Db.ExecuteReaderAsync(
-            schemaNode.SchemaCollectionNode.ObjectExplorer.CreateConnection,
-            new ExecuteReaderRequest($@"select
-     c.column_name
-    ,c.is_nullable
-    ,c.data_type
-    ,c.character_maximum_length
-    ,c.numeric_precision
-    ,c.numeric_scale
-from information_schema.columns c
-where
-    c.table_schema = '{_tableNode.TableCollectionNode.SchemaNode.Name}'
-    and c.table_name = '{_tableNode.Name}'
-order by c.ordinal_position"),
+            schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection,
+            new ExecuteReaderRequest(commandText),
             128,
             ReadRecord,
             cancellationToken);
@@ -41,11 +40,19 @@ order by c.ordinal_position"),
     private ColumnNode ReadRecord(IDataRecord dataRecord)
     {
         var columnName = dataRecord.GetString(0);
-        var dataType = dataRecord.GetString(2);
-        return new ColumnNode(this, columnName, dataType);
+        var typeOid = dataRecord.GetUInt32(1);
+        var notNull = dataRecord.GetBoolean(2);
+
+        var typeRepository = TableNode.SchemaNode.SchemaCollectionNode.DatabaseNode.TypeRepository;
+        typeRepository.TryGetByOid(typeOid, out var type);
+        
+        return new ColumnNode(this, columnName, type!, notNull);
     }
 
     bool ITreeNode.Sortable => false;
-    string? ITreeNode.Query => null;
+
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 }

@@ -11,7 +11,7 @@ public static class IReadOnlyListExtensions
     public static TSource First<TSource>(this IReadOnlyList<TSource> source)
     {
         ArgumentNullException.ThrowIfNull(source);
-        Assert.IsTrue(source.Count > 0);
+        Assert.IsGreaterThan(source.Count, 0);
         return source[0];
     }
 

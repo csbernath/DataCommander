@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
+using Foundation.Configuration;
 using Foundation.Data;
 using Foundation.Log;
 using Npgsql;
@@ -21,13 +22,31 @@ internal sealed class PostgreSqlProvider : IProvider
 
     string IProvider.Identifier => "PostgreSql";
     DbProviderFactory IProvider.DbProviderFactory => NpgsqlFactory.Instance;
-    string[] IProvider.KeyWords => [];
+    
+    IReadOnlySet<string> IProvider.KeyWords
+    {
+        get
+        {
+            var path = ConfigurationNodeName.FromType(typeof(PostgreSqlProvider));
+            var node = Settings.SelectNode(path, true)!;
+            var keyWords = node.Attributes["KeyWords"].GetValue<string[]>()!
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            return keyWords;
+        }
+    }
+
     bool IProvider.CanConvertCommandToString => throw new NotImplementedException();
     bool IProvider.IsCommandCancelable => true;
-    public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
+    public IObjectExplorer? CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
     void IProvider.ClearCompletionCache() => throw new NotImplementedException();
     string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
-    public string? GetConnectionName(IDbConnection connection) => null;
+    
+    public string? GetConnectionName(IDbConnection connection)
+    {
+        var npgsqlConnection = (NpgsqlConnection)connection;
+        return $"{npgsqlConnection.Database}/{npgsqlConnection.UserName}@{npgsqlConnection.Host}:{npgsqlConnection.Port}";
+    }
+
     ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(connectionStringAndCredential);
     public string GetConnectionName(string connectionString) => throw new NotImplementedException();
     IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader) => new PostgreSqlDataReaderHelper((NpgsqlDataReader)dataReader);
@@ -35,9 +54,13 @@ internal sealed class PostgreSqlProvider : IProvider
     void IProvider.CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationconnection,
         string? destinationTableName, out IDbCommand insertCommand, out Converter<object, object>[] converters) => throw new NotImplementedException();
 
-    void IProvider.DeriveParameters(IDbCommand command) => throw new NotImplementedException();
+    void IProvider.DeriveParameters(IDbCommand command)
+    {
+        var npgsqlCommand = (NpgsqlCommand)command;
+        NpgsqlCommandBuilder.DeriveParameters(npgsqlCommand);
+    }
 
-    Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema) =>
+    Type? IProvider.GetColumnType(FoundationDbColumn dataColumnSchema) =>
         // TODO
         typeof(object);
 
@@ -125,7 +148,7 @@ internal sealed class PostgreSqlProvider : IProvider
                             case 1:
                             {
                                 // statements.Add(SqlServerObject.GetDatabases());
-                                statements.Add(SqlServerObject.GetSchemas());
+                                statements.Add(SqlServerObject.GetSchemas);
 
                                 //var objectTypes = sqlObject.Type.ToObjectTypes();
                                 //statements.Add(SqlServerObject.GetObjects(schema: "dbo", objectTypes: objectTypes));
@@ -319,7 +342,8 @@ order by 1", name.Database);
     DataParameterBase IProvider.GetDataParameter(IDataParameter parameter) => throw new NotImplementedException();
     public string GetExceptionMessage(Exception exception) => exception.ToString();
     DataTable IProvider.GetParameterTable(IDataParameterCollection parameters) => throw new NotImplementedException();
-    DataTable IProvider.GetSchemaTable(IDataReader dataReader) => throw new NotImplementedException();
+    
+    DataTable IProvider.GetSchemaTable(IDataReader dataReader) => dataReader.GetSchemaTable()!;
 
     List<Statement> IProvider.GetStatements(string commandText) =>
     [

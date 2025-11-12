@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
-using Foundation.Linq;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
@@ -20,9 +19,15 @@ internal sealed class LinkedServerNode : ITreeNode
     public string? Name { get; }
     string? ITreeNode.Name => Name;
     bool ITreeNode.IsLeaf => false;
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>(new LinkedServerCatalogCollectionNode(this).ItemAsEnumerable());
+
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
+        Task.FromResult<IEnumerable<ITreeNode>>([new LinkedServerCatalogCollectionNode(this)]);
+    
     bool ITreeNode.Sortable => false;
-    string? ITreeNode.Query => null;
+
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
     public ContextMenu? GetContextMenu() => null;
 }

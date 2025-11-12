@@ -14,7 +14,6 @@ public class WorkerThread
     private readonly Thread _thread;
     private ThreadStart? _start;
     private readonly WorkerEvent _stopRequest = new(WorkerEventState.NonSignaled);
-    private bool _isStopAccepted;
     private readonly WorkerEvent _pauseRequest = new(WorkerEventState.NonSignaled);
     private readonly WorkerEvent _continueRequest = new(WorkerEventState.NonSignaled);
     private EventHandler? _started;
@@ -49,9 +48,9 @@ public class WorkerThread
         {
             var isStopRequested = _stopRequest.State == WorkerEventState.Signaled;
 
-            if (isStopRequested && !_isStopAccepted)
+            if (isStopRequested && !field)
             {
-                _isStopAccepted = true;
+                field = true;
                 if (Log.IsTraceEnabled())
                 {
                     var stackTrace = new StackTrace(1, true);

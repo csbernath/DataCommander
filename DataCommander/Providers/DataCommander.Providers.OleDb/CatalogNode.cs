@@ -62,7 +62,10 @@ internal class CatalogNode(CatalogsNode catalogsNode, string? name) : ITreeNode
     }
 
     public bool Sortable => false;
-    public string? Query => null;
+
+    public bool DynamicChildCount => true;
+
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public string? Name { get; } = name;
 
     public ContextMenu? GetContextMenu() => null;

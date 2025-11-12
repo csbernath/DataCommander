@@ -1,17 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <LangVersion>13</LangVersion>
-    <TargetFramework>net9.0</TargetFramework>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\..\DataCommander\bin\Debug</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.4.0" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.9.1" />
   </ItemGroup>
 
   <ItemGroup>

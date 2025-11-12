@@ -7,5 +7,5 @@ public interface ILogFactory : IDisposable
 {
     string? FileName { get; }
     ILog GetLog(string? name);
-    void Write(IEnumerable<LogEntry> logEntries);
+    void Write(IReadOnlyCollection<LogEntry> logEntries);
 }

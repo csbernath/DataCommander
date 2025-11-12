@@ -7,9 +7,7 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer;
 
 sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string? name) : ITreeNode
 {
-    private readonly DatabaseCollectionNode _databaseCollectionNode = databaseCollectionNode;
-
-    public DatabaseCollectionNode DatabaseCollectionNode => _databaseCollectionNode;
+    public DatabaseCollectionNode DatabaseCollectionNode => databaseCollectionNode;
 
     #region ITreeNode Members
     public string? Name { get; } = name;
@@ -24,8 +22,9 @@ sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string?
 
     bool ITreeNode.Sortable => false;
 
-    string? ITreeNode.Query => null;
+    public bool DynamicChildCount => true;
 
+    Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => throw new System.NotImplementedException();
 
     #endregion
