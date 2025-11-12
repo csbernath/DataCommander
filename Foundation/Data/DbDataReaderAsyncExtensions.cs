@@ -19,8 +19,10 @@ public static class DbDataReaderAsyncExtensions
                 readRecord();
         }
 
-        public async Task<ReadOnlySegmentLinkedList<T>> ReadResultAsync<T>(int segmentLength,
-            Func<IDataRecord, T> readRecord, CancellationToken cancellationToken)
+        public async Task<ReadOnlySegmentLinkedList<T>> ReadResultAsync<T>(
+            int segmentLength,
+            Func<IDataRecord, T> readRecord,
+            CancellationToken cancellationToken)
         {
             var segmentLinkedListBuilder = new SegmentLinkedListBuilder<T>(segmentLength);
             await dataReader.ReadResultAsync(() =>

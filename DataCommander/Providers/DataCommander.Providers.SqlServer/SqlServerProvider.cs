@@ -349,7 +349,10 @@ internal sealed class SqlServerProvider : IProvider
             {
                 if (value.StartsWith("@@"))
                 {
-                    array = [.. KeyWordRepository.Get().Where(k => k.StartsWith(value)).Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord))];
+                    var keywords = KeyWordRepository.Get(); 
+                    array = [.. keywords
+                        .Where(k => k.StartsWith(value, StringComparison.InvariantCultureIgnoreCase))
+                        .Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord))];
                 }
                 else
                 {
