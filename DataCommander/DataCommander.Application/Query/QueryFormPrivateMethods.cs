@@ -218,7 +218,7 @@ public sealed partial class QueryForm
     {
         var ticks = _stopwatch.ElapsedTicks;
         _sbPanelTimer.Text = StopwatchTimeSpan.ToString(ticks, scale);
-        var text = $"{rowCount:N0} rows.";
+        var text = $"{rowCount:N0} rows";
         if (rowCount > 0)
         {
             var seconds = (double)ticks / Stopwatch.Frequency;

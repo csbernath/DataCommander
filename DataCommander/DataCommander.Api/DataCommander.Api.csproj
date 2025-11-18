@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="System.Data.OleDb" Version="10.0.0-rc.2.25502.107" />
+    <PackageReference Include="System.Data.OleDb" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
