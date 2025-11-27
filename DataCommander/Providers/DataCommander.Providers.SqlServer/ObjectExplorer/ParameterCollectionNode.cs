@@ -57,7 +57,9 @@ order by
                     var name = dataRecord.GetString(0);
                     var userTypeId = dataRecord.GetInt32(1);
                     var sysType = sysTypesByUserTypeId[userTypeId];
-                    return new ParameterNode(name, sysType);
+                    var maxLength = dataRecord.GetInt16(2);
+                    var isOutput = dataRecord.GetBoolean(5);
+                    return new ParameterNode(name, sysType, maxLength, isOutput);
                 }, cancellationToken);
             }, cancellationToken);
         return parameterNodes;
