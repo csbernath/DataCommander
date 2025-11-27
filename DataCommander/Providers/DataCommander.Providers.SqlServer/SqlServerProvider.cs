@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using DataCommander.Providers.SqlServer.FieldReader;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
-using DataCommander.Api.FieldReaders;
 using DataCommander.Providers.SqlServer.ObjectExplorer;
 using Foundation.Configuration;
 using Foundation.Core;

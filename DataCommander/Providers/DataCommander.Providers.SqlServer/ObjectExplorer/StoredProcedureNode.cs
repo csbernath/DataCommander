@@ -9,12 +9,19 @@ using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class StoredProcedureNode(DatabaseNode database, string owner, string name) : ITreeNode
+internal sealed class StoredProcedureNode(DatabaseNode database, int objectId, string owner, string name) : ITreeNode
 {
     public string? Name => owner + '.' + name;
-    public bool IsLeaf => true;
+    public bool IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>([]);
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    {
+        ITreeNode[] children =
+        [
+            new ParameterCollectionNode(database, objectId)
+        ];
+        return Task.FromResult<IEnumerable<ITreeNode>>(children);
+    }
 
     public bool Sortable => false;
 

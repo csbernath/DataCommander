@@ -27,9 +27,10 @@ internal sealed class StoredProcedureCollectionNode(DatabaseNode database, bool 
             128,
             dataRecord =>
             {
-                var owner = dataRecord.GetString(0);
-                var name = dataRecord.GetString(1);
-                return new StoredProcedureNode(database, owner, name);
+                var objectId = dataRecord.GetInt32(0);
+                var owner = dataRecord.GetString(1);
+                var name = dataRecord.GetString(2);
+                return new StoredProcedureNode(database, objectId, owner, name);
             },
             cancellationToken);
         treeNodes.AddRange(rows);
@@ -40,8 +41,10 @@ internal sealed class StoredProcedureCollectionNode(DatabaseNode database, bool 
     private string GetCommandText()
     {
         var commandText = string.Format(@"
-select  s.name as Owner,
-        o.name as Name        
+select
+    o.object_id as ObjectId,
+    s.name as Owner,
+    o.name as Name
 from    [{0}].sys.all_objects o (readpast)
 join    [{0}].sys.schemas s (readpast)
 on      o.schema_id = s.schema_id

@@ -51,7 +51,7 @@ Including <a href=""https://github.com/csbernath/DataCommander/blob/Net-10.0/Fou
 Credits:
 <ul style=""list-style-type:none"">
     <li><a href=""https://www.jetbrains.com/rider/"">JetBrains Rider</a></li>
-    <li><a href=""https://www.visualstudio.com/vs/community/"">Visual Studio 2022 Community</a></li>
+    <li><a href=""https://www.visualstudio.com/vs/community/"">Visual Studio 2026 Community</a></li>
     <li><a href=""https://visualstudio.microsoft.com/insiders/"">Visual Studio 2026 Insiders</a></li>
     <li><a href=""https://www.jetbrains.com/resharper/"">JetBrains R# ReSharper</a></li>
     <li><a href=""https://github.com/JanKallman/EPPlus"">EPPlus Excel generator</a></li>
