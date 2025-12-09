@@ -193,10 +193,20 @@ internal sealed class LogResultWriter : IResultWriter
         {
             case SqlDbType.Char:
             case SqlDbType.NChar:
+                stringBuilder.Append('(');
+                stringBuilder.Append(dbColumn.ColumnSize);
+                stringBuilder.Append(')');
+                break;
+            
             case SqlDbType.NVarChar:
             case SqlDbType.VarChar:
                 stringBuilder.Append('(');
-                stringBuilder.Append(dbColumn.ColumnSize);
+
+                var columnSize = dbColumn.ColumnSize == int.MaxValue
+                    ? "max"
+                    : dbColumn.ColumnSize.ToString();
+                stringBuilder.Append(columnSize);
+                
                 stringBuilder.Append(')');
                 break;
 
