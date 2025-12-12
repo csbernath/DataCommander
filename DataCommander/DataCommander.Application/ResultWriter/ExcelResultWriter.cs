@@ -82,9 +82,9 @@ internal sealed class ExcelResultWriter : IResultWriter
 
     void IResultWriter.End()
     {
-        _logResultWriter.End();
         _excelPackage!.Save();
-        Process.Start(_excelPackage.File.FullName);
+        // Process.Start(_excelPackage.File.FullName);
+        _logResultWriter.End();        
     }
 
     private void CreateTable(DataTable schemaTable)
