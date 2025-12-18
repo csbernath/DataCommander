@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Data;
+using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
@@ -14,13 +17,24 @@ internal sealed class StoredProcedureCollectionNode(DatabaseNode database, bool 
 
     public bool IsLeaf => false;
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [FilterableProperty.Name, FilterableProperty.Schema];
+
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         List<ITreeNode> treeNodes = [];
         if (!isMsShipped)
             treeNodes.Add(new StoredProcedureCollectionNode(database, true));
 
-        var commandText = GetCommandText();
+        string? schemaContains = null;
+        string? nameContains = null;
+        var filterCriterion = filterCriteria.FirstOrDefault(c => c.Property == FilterableProperty.Schema);
+        if (filterCriterion != null)
+            schemaContains = filterCriterion.Value;
+        filterCriterion = filterCriteria.FirstOrDefault(c => c.Property == FilterableProperty.Name);
+        if (filterCriterion != null)
+            nameContains = filterCriterion.Value;
+
+        var commandText = GetCommandText(schemaContains, nameContains);
         var rows = await Db.ExecuteReaderAsync(
             database.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
@@ -38,26 +52,44 @@ internal sealed class StoredProcedureCollectionNode(DatabaseNode database, bool 
         return treeNodes;
     }
 
-    private string GetCommandText()
+    private string GetCommandText(string? schemaContains, string? nameContains)
     {
-        var commandText = string.Format(@"
-select
+        var sb = new StringBuilder();
+        sb.Append($@"select
     o.object_id as ObjectId,
     s.name as Owner,
     o.name as Name
-from    [{0}].sys.all_objects o (readpast)
-join    [{0}].sys.schemas s (readpast)
+from    [{database.Name}].sys.all_objects o (readpast)
+join    [{database.Name}].sys.schemas s (readpast)
 on      o.schema_id = s.schema_id
-left join [{0}].sys.extended_properties p
+left join [{database.Name}].sys.extended_properties p
 on      o.object_id = p.major_id and p.minor_id = 0 and p.class = 1 and p.name = 'microsoft_database_tools_support'
 where
-    o.type = 'P'
-    and o.is_ms_shipped = {1}
-    and p.major_id is null
-order by s.name,o.name", database.Name, isMsShipped
-            ? 1
-            : 0);
-        return commandText;
+    o.type = 'P' and
+    o.is_ms_shipped = {(isMsShipped
+        ? 1
+        : 0)} and
+    p.major_id is null");
+
+        if (schemaContains != null)
+        {
+            var schemaLike = $"%{schemaContains}%".ToNVarChar();
+            sb.Append($@" and
+    s.name like {schemaLike}");
+        }
+
+        if (nameContains != null)
+        {
+            var nameLike = $"%{nameContains}%".ToNVarChar();
+            sb.Append($@" and
+    o.name like {nameLike}");
+        }
+
+        sb.Append(@"
+order by
+    s.name,o.name");
+
+        return sb.ToString();
     }
 
     public bool Sortable => false;

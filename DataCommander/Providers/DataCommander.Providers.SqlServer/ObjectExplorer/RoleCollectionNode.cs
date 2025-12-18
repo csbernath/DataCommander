@@ -12,7 +12,9 @@ internal sealed class RoleCollectionNode(DatabaseNode database) : ITreeNode
     public string? Name => "Roles";
     public bool IsLeaf => false;
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var commandText = $"select name from {database.Name}..sysusers where issqlrole = 1 order by name";
         return await Db.ExecuteReaderAsync(

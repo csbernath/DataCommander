@@ -12,7 +12,9 @@ internal sealed class TableValuedFunctionCollectionNode(DatabaseNode database) :
     public string? Name => "Table-valued Functions";
     public bool IsLeaf => false;
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
         return await Db.ExecuteReaderAsync(

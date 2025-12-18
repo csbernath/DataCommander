@@ -134,7 +134,8 @@ Please wait...";
             var cancelableOperationForm = new CancelableOperationForm(mainForm, cancellationTokenSource, TimeSpan.FromSeconds(1),
                 MessageBoxCaption.Value, textBoxText, colorTheme);
             var cancellationToken = cancellationTokenSource.Token;
-            var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result));
+            var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() =>
+                objectExplorer.GetChildren([], true, cancellationToken).Result));
             AddNodes(null, _tvObjectExplorer!.Nodes, children, objectExplorer.Sortable, startTimestamp);
         }
         else

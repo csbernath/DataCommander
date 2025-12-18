@@ -15,7 +15,9 @@ internal sealed class SchemaNode(SchemaCollectionNode schemaCollectionNode, uint
 
     bool ITreeNode.IsLeaf => false;
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) =>
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    public Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
         Task.FromResult<IEnumerable<ITreeNode>>(
         [
             new FunctionCollectionNode(this),

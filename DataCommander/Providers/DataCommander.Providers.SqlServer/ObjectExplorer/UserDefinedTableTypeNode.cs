@@ -15,7 +15,9 @@ internal sealed class UserDefinedTableTypeNode(DatabaseNode database, int id, st
     string? ITreeNode.Name => $"{schema}.{name}";
     bool ITreeNode.IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>(
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>(
         [
             new ColumnCollectionNode(database, id)
         ]);

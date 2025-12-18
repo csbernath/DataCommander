@@ -20,7 +20,9 @@ internal sealed class JobCollectionNode : ITreeNode
     string? ITreeNode.Name => "Jobs";
     bool ITreeNode.IsLeaf => false;
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         const string commandText = @"select  j.name
 from    msdb.dbo.sysjobs j (nolock)

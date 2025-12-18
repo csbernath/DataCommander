@@ -13,7 +13,9 @@ internal sealed class ViewNode(DatabaseNode database, int id, string? schema, st
     public string? Name => $"{schema}.{name}";
     public bool IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>(
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>(
         [
             new ColumnCollectionNode(database, id),
             new TriggerCollectionNode(database, id),

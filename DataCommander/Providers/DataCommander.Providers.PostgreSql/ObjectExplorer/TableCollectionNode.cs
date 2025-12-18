@@ -14,7 +14,9 @@ internal sealed class TableCollectionNode(SchemaNode schemaNode) : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var commandText = $@"select
 	oid,

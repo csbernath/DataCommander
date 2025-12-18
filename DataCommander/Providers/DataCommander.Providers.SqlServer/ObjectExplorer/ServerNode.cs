@@ -28,7 +28,9 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
 
     bool ITreeNode.IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var node = new DatabaseCollectionNode(this);
         var securityNode = new SecurityNode(this);

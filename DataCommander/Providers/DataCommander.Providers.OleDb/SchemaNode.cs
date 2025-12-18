@@ -22,7 +22,9 @@ internal sealed class SchemaNode(CatalogNode catalog, string name) : ITreeNode
 
     public bool IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var treeNodes = new ITreeNode[2];
         treeNodes[0] = new TableCollectionNode(this);

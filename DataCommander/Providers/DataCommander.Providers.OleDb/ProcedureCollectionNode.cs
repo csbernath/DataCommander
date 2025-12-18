@@ -12,7 +12,9 @@ internal sealed class ProcedureCollectionNode(SchemaNode schema) : ITreeNode
     public string Name => "Procedures";
     public bool IsLeaf => false;
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var restrictions = new object[] { schema.Catalog.Name!, schema.Name };
         DataTable dataTable;

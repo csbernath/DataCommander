@@ -13,7 +13,9 @@ internal sealed class ConstraintCollectionNode(DatabaseNode databaseNode, int id
     public string? Name => "Constraints";
     public bool IsLeaf => false;
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var cb = new SqlCommandBuilder();
 

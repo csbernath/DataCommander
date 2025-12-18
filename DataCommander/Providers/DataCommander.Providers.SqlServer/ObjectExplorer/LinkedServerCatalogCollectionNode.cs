@@ -21,7 +21,9 @@ internal sealed class LinkedServerCatalogCollectionNode : ITreeNode
     string? ITreeNode.Name => "Catalogs";
     bool ITreeNode.IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         const string commandText = @"declare @provider nvarchar(128)
 select  @provider = s.provider

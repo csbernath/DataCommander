@@ -15,7 +15,9 @@ internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
     public string? Name => "Tables";
     public bool IsLeaf => false;
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var tableNodes = await GetTableNodes(cancellationToken);
         var childNodes = new ITreeNode[] { new SystemTableCollectionNode(DatabaseNode) }

@@ -12,7 +12,7 @@ internal sealed class ObjectExplorer : IObjectExplorer
 
     public void SetConnectionStringAndCredential(ConnectionStringAndCredential connectionStringAndCredential) => _connectionStringAndCredential = connectionStringAndCredential;
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) =>
+    public Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
         Task.FromResult<IEnumerable<ITreeNode>>(
         [
             new DatabaseCollectionNode(_connectionStringAndCredential!)

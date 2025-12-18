@@ -18,13 +18,15 @@ internal sealed class TableNode(DatabaseNode databaseNode, string? name) : ITree
 
     bool ITreeNode.IsLeaf => false;
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    public Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var treeNodes = new ITreeNode[1];
         treeNodes[0] = new IndexCollectionNode(this);
         return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
     }
-    
+
     bool ITreeNode.Sortable => false;
 
     public bool DynamicChildCount => true;
@@ -42,7 +44,7 @@ from	{databaseName}.sqlite_master
 where	name	= '{name}'";
         var executor = DbCommandExecutorFactory.Create(connection);
         var scalar = executor.ExecuteScalar(new CreateCommandRequest(commandText));
-        var script = (string) scalar!;
+        var script = (string)scalar!;
         return script;
     }
 

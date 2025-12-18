@@ -10,12 +10,14 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 internal sealed class ColumnCollectionNode(TableNode tableNode) : ITreeNode
 {
     public readonly TableNode TableNode = tableNode;
-    
+
     string? ITreeNode.Name => "Columns";
 
     bool ITreeNode.IsLeaf => false;
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var schemaNode = TableNode.SchemaNode;
 
@@ -45,7 +47,7 @@ order by attnum";
 
         var typeRepository = TableNode.SchemaNode.SchemaCollectionNode.DatabaseNode.TypeRepository;
         typeRepository.TryGetByOid(typeOid, out var type);
-        
+
         return new ColumnNode(this, columnName, type!, notNull);
     }
 

@@ -110,6 +110,11 @@ public sealed partial class QueryForm
                         var cancellationTokenSource = new CancellationTokenSource();
                         var cancellationToken = cancellationTokenSource.Token;
                         treeNode2 = (ITreeNode)treeNode.Tag!;
+                        var filterableProperties = treeNode2!.GetFilterableProperties();
+                        var filterCriteria = filterableProperties
+                            .Where(p => p == "Name")
+                            .Select(p => new FilterCriterion(p, "list"))
+                            .ToArray();                        
                         var textBoxText = $@"Getting tree node children...
 
 Parent node type: {treeNode2.GetType().Name}
@@ -118,7 +123,7 @@ Please wait...";
                         var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
                             MessageBoxCaption.Value, textBoxText, _colorTheme);
                         var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() =>
-                            treeNode2.GetChildren(false, cancellationToken).Result));
+                            treeNode2.GetChildren(filterCriteria, false, cancellationToken).Result));
                         treeNode.Nodes.Clear();
                         AddNodes(treeNode, treeNode.Nodes, children, treeNode2.Sortable, startTimestamp);
                     }
@@ -180,7 +185,7 @@ Please wait...";
 Please wait...";
             var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
                 textBoxText, _colorTheme);
-            var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => treeNode!.GetChildren(true, cancellationToken).Result));
+            var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => treeNode.GetChildren([], true, cancellationToken).Result));
             AddNodes(treeNodeV, treeNodeV.Nodes, children, treeNode.Sortable, startTimestamp);
         }
     }
@@ -202,7 +207,7 @@ Please wait...";
                     textBoxText, _colorTheme);
                 var cancellationToken = cancellationTokenSource.Token;
                 var children = cancelableOperationForm.Execute(
-                    new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result));
+                    new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren([], true, cancellationToken).Result));
                 var rootNodes = _tvObjectExplorer.Nodes;
                 rootNodes.Clear();
                 AddNodes(null, _tvObjectExplorer.Nodes, children, objectExplorer.Sortable, startTimestamp);

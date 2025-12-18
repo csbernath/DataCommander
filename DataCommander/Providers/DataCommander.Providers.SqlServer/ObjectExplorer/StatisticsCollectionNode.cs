@@ -13,7 +13,9 @@ internal sealed class StatisticsCollectionNode(DatabaseNode databaseNode, int id
     public string? Name => "Statistics";
     public bool IsLeaf => false;
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var cb = new SqlCommandBuilder();
         var database = cb.QuoteIdentifier(databaseNode.Name);        

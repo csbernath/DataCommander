@@ -12,7 +12,9 @@ internal sealed class UserCollectionNode(DatabaseNode database) : ITreeNode
     public string? Name => "Users";
     public bool IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var commandText = $"select name from {database.Name}..sysusers where islogin = 1 order by name";
         DataTable dataTable;

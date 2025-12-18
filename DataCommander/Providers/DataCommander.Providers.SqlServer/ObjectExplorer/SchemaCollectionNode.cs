@@ -13,7 +13,9 @@ internal sealed class SchemaCollectionNode(DatabaseNode database) : ITreeNode
     public string? Name => "Schemas";
     public bool IsLeaf => false;
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
         var treeNodes = await Db.ExecuteReaderAsync(

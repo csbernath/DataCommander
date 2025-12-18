@@ -44,7 +44,9 @@ internal sealed class ParameterNode(string name, SysType sysType, short maxLengt
 
     public bool IsLeaf => true;
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) => throw new System.NotImplementedException();
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    public Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) => throw new System.NotImplementedException();
 
     public bool Sortable => false;
 
