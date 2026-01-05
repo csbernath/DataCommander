@@ -38,7 +38,7 @@ internal sealed class StoredProcedureCollectionNode(DatabaseNode database, bool 
         if (filterCriterion != null)
             nameContains = filterCriterion.Value;
 
-        var commandText = GetCommandText(schemaContains, nameContains);
+        var commandText = CreateCommandText(schemaContains, nameContains);
         var rows = await Db.ExecuteReaderAsync(
             database.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
@@ -60,10 +60,10 @@ internal sealed class StoredProcedureCollectionNode(DatabaseNode database, bool 
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => _filterCriteria;
 
-    private string GetCommandText(string? schemaContains, string? nameContains)
+    private string CreateCommandText(string? schemaContains, string? nameContains)
     {
-        var sb = new StringBuilder();
-        sb.Append($@"select
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append($@"select
     o.object_id as ObjectId,
     s.name as Owner,
     o.name as Name
@@ -82,22 +82,22 @@ where
         if (schemaContains != null)
         {
             var schemaLike = $"%{schemaContains}%".ToNVarChar();
-            sb.Append($@" and
+            stringBuilder.Append($@" and
     s.name like {schemaLike}");
         }
 
         if (nameContains != null)
         {
             var nameLike = $"%{nameContains}%".ToNVarChar();
-            sb.Append($@" and
+            stringBuilder.Append($@" and
     o.name like {nameLike}");
         }
 
-        sb.Append(@"
+        stringBuilder.Append(@"
 order by
     s.name,o.name");
 
-        return sb.ToString();
+        return stringBuilder.ToString();
     }
 
     public bool Sortable => false;
