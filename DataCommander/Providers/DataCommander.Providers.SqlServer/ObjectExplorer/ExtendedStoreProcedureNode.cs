@@ -12,6 +12,7 @@ internal sealed class ExtendedStoreProcedureNode(DatabaseNode database, string s
 
     string? ITreeNode.Name => $"{schema}.{name}";
     bool ITreeNode.IsLeaf => true;
+
     bool ITreeNode.Sortable => false;
 
     public bool DynamicChildCount => true;
@@ -21,5 +22,7 @@ internal sealed class ExtendedStoreProcedureNode(DatabaseNode database, string s
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) => throw new NotSupportedException();
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) => throw new NotSupportedException();
+    
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];    
 }

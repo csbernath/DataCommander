@@ -19,7 +19,8 @@ internal sealed class DatabaseCollectionNode(ConnectionStringAndCredential conne
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         const string commandText = "PRAGMA database_list;";
 
@@ -33,6 +34,8 @@ internal sealed class DatabaseCollectionNode(ConnectionStringAndCredential conne
                 return new DatabaseNode(this, name);
             }, cancellationToken);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     bool ITreeNode.Sortable => false;
 

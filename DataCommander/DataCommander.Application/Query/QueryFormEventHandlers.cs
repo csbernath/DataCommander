@@ -1,4 +1,14 @@
-﻿using System;
+﻿using ADODB;
+using DataCommander.Api;
+using DataCommander.Api.Connection;
+using DataCommander.Api.Query;
+using DataCommander.Application.ResultWriter;
+using Foundation.Core;
+using Foundation.Data;
+using Foundation.Diagnostics;
+using Foundation.Windows.Forms;
+using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,16 +23,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
-using ADODB;
-using DataCommander.Api;
-using DataCommander.Api.Connection;
-using DataCommander.Api.Query;
-using DataCommander.Application.ResultWriter;
-using Foundation.Core;
-using Foundation.Data;
-using Foundation.Diagnostics;
-using Foundation.Windows.Forms;
-using Microsoft.Data.SqlClient;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace DataCommander.Application.Query;
 
@@ -110,11 +111,7 @@ public sealed partial class QueryForm
                         var cancellationTokenSource = new CancellationTokenSource();
                         var cancellationToken = cancellationTokenSource.Token;
                         treeNode2 = (ITreeNode)treeNode.Tag!;
-                        var filterableProperties = treeNode2!.GetFilterableProperties();
-                        var filterCriteria = filterableProperties
-                            .Where(p => p == "Name")
-                            .Select(p => new FilterCriterion(p, "list"))
-                            .ToArray();                        
+                        var filterCriteria = treeNode2.GetFilterCriteria();                  
                         var textBoxText = $@"Getting tree node children...
 
 Parent node type: {treeNode2.GetType().Name}
@@ -175,18 +172,7 @@ Please wait...";
         if (treeNodeV != null)
         {
             var treeNode = (ITreeNode)treeNodeV.Tag!;
-            treeNodeV.Nodes.Clear();
-
-            var startTimestamp = Stopwatch.GetTimestamp();
-            var cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = cancellationTokenSource.Token;
-            const string textBoxText = @"Getting tree node children...
-
-Please wait...";
-            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
-                textBoxText, _colorTheme);
-            var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => treeNode.GetChildren([], true, cancellationToken).Result));
-            AddNodes(treeNodeV, treeNodeV.Nodes, children, treeNode.Sortable, startTimestamp);
+            RefreshTreeNode(treeNodeV, treeNode.GetFilterCriteria());
         }
     }
 
@@ -232,6 +218,15 @@ Please wait...";
                         if (contextMenu == null)
                             contextMenu = new ContextMenuStrip(components);
 
+                        if (treeNode.GetFilterableProperties().Count > 0)
+                        {
+                            var filterCriteria = treeNode.GetFilterCriteria();
+                            if (filterCriteria.Count > 0)
+                                contextMenu.Items.Add(new ToolStripMenuItem("Remove Filter", null, RemoveFilterClicked));
+
+                            contextMenu.Items.Add(new ToolStripMenuItem("Filter Settings", null, FilterSettingsClicked));
+                        }
+
                         contextMenu.Items.Add(new ToolStripMenuItem("Refresh", null, MnuRefresh_Click));
                     }
 
@@ -261,6 +256,25 @@ Please wait...";
             DataCommanderMessageBox.MessageBox.Show(this, ex.ToString(), MessageBoxCaption.Value, MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
         }
+    }
+
+    private void RemoveFilterClicked(object? sender, EventArgs e)
+    {
+        var selectedNode = _tvObjectExplorer.SelectedNode!;
+        RefreshTreeNode(selectedNode, []);
+    }
+
+    private void FilterSettingsClicked(object? sender, EventArgs e)
+    {
+        var selectedNode = _tvObjectExplorer.SelectedNode!;
+        var treeNode = (ITreeNode)selectedNode.Tag!;
+        var filterableProperties = treeNode.GetFilterableProperties();
+        var filterCriteria = treeNode.GetFilterCriteria();
+
+        var form = new FilterSettingsForm(_colorTheme, filterableProperties, filterCriteria);
+        var dialogResult = form.ShowDialog();
+        if (dialogResult == DialogResult.OK)
+            RefreshTreeNode(selectedNode, form.FilterCriteria);
     }
 
     private void mnuPaste_Click(object? sender, EventArgs e) => QueryTextBox.Paste();

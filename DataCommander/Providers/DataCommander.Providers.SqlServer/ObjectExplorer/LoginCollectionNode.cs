@@ -23,7 +23,8 @@ internal sealed class LoginCollectionNode : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
         return await Db.ExecuteReaderAsync(
@@ -33,6 +34,8 @@ internal sealed class LoginCollectionNode : ITreeNode
             ReadRecord,
             cancellationToken);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     private static string CreateCommandText()
     {

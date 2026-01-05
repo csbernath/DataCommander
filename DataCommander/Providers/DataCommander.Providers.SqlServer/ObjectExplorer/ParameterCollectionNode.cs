@@ -18,7 +18,8 @@ internal sealed class ParameterCollectionNode(DatabaseNode databaseNode, int obj
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         var commandText = @$"select
     t.name,
@@ -66,6 +67,8 @@ order by
             }, cancellationToken);
         return parameterNodes;
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     public bool Sortable => false;
 

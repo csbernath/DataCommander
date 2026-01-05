@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
@@ -734,6 +735,23 @@ Please wait...";
         //    Trace.WriteLine($"RedoActionName:{actionName}");
         //    _queryTextBox.RichTextBox.Redo();
         //}
-
         QueryTextBox.Redo();
+
+    private void RefreshTreeNode(TreeNode treeNodeV, IReadOnlyCollection<FilterCriterion> filterCriteria)
+    {
+        var treeNode = (ITreeNode)treeNodeV.Tag!;
+        treeNodeV.Nodes.Clear();
+
+        var startTimestamp = Stopwatch.GetTimestamp();
+        var cancellationTokenSource = new CancellationTokenSource();
+        var cancellationToken = cancellationTokenSource.Token;
+        const string textBoxText = @"Getting tree node children...
+
+Please wait...";
+        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
+            textBoxText, _colorTheme);
+        var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() =>
+            treeNode.GetChildren(filterCriteria, true, cancellationToken).Result));
+        AddNodes(treeNodeV, treeNodeV.Nodes, children, treeNode.Sortable, startTimestamp);
+    }
 }

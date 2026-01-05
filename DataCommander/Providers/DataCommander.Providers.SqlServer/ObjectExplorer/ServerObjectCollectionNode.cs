@@ -22,8 +22,10 @@ internal sealed class ServerObjectCollectionNode : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
         Task.FromResult<IEnumerable<ITreeNode>>([new LinkedServerCollectionNode(_server)]);
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     bool ITreeNode.Sortable => false;
 

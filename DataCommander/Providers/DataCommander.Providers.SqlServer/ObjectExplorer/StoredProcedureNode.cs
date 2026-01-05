@@ -16,7 +16,7 @@ internal sealed class StoredProcedureNode(DatabaseNode database, int objectId, s
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         ITreeNode[] children =
         [
@@ -24,6 +24,8 @@ internal sealed class StoredProcedureNode(DatabaseNode database, int objectId, s
         ];
         return Task.FromResult<IEnumerable<ITreeNode>>(children);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     public bool Sortable => false;
 

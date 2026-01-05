@@ -12,7 +12,7 @@ internal sealed class ProgrammabilityNode(DatabaseNode database) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         List<ITreeNode> childNodes =
         [
@@ -27,6 +27,8 @@ internal sealed class ProgrammabilityNode(DatabaseNode database) : ITreeNode
 
         return Task.FromResult<IEnumerable<ITreeNode>>(childNodes);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     bool ITreeNode.Sortable => false;
 

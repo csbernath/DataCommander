@@ -10,7 +10,9 @@ public interface ITreeNode
     bool IsLeaf { get; }
 
     IReadOnlyCollection<string> GetFilterableProperties();
-    Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken);
+    Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken);
+    IReadOnlyCollection<FilterCriterion> GetFilterCriteria();
+    
     bool Sortable { get; }
     bool DynamicChildCount { get; }
     Task<string?> GetQuery(CancellationToken cancellationToken);

@@ -15,7 +15,8 @@ internal sealed class StatisticsCollectionNode(DatabaseNode databaseNode, int id
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         var cb = new SqlCommandBuilder();
         var database = cb.QuoteIdentifier(databaseNode.Name);        
@@ -38,6 +39,8 @@ order by s.name";
             },
             cancellationToken);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     public bool Sortable => false;
 

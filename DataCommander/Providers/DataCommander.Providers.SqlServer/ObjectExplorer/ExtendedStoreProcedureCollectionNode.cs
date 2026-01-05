@@ -11,6 +11,7 @@ internal sealed class ExtendedStoreProcedureCollectionNode(DatabaseNode database
 {
     string? ITreeNode.Name => "Extended Stored Procedures";
     bool ITreeNode.IsLeaf => false;
+
     bool ITreeNode.Sortable => false;
 
     public bool DynamicChildCount => true;
@@ -20,7 +21,7 @@ internal sealed class ExtendedStoreProcedureCollectionNode(DatabaseNode database
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var executor = new SqlCommandExecutor(database.Databases.Server.CreateConnection);
         var commandText = @"select
@@ -40,4 +41,6 @@ order by 1,2";
         });
         return Task.FromResult<IEnumerable<ITreeNode>>(childNodes);
     }
+    
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];    
 }

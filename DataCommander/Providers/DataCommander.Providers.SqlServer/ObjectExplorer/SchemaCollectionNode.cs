@@ -15,7 +15,8 @@ internal sealed class SchemaCollectionNode(DatabaseNode database) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
         var treeNodes = await Db.ExecuteReaderAsync(
@@ -26,6 +27,8 @@ internal sealed class SchemaCollectionNode(DatabaseNode database) : ITreeNode
             cancellationToken);
         return treeNodes;
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     private string CreateCommandText()
     {

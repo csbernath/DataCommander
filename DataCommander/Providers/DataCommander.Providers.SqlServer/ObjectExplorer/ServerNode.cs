@@ -30,7 +30,7 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var node = new DatabaseCollectionNode(this);
         var securityNode = new SecurityNode(this);
@@ -38,6 +38,8 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
         var jobCollectionNode = new JobCollectionNode(this);
         return Task.FromResult<IEnumerable<ITreeNode>>([node, securityNode, serverObjectCollectionNode, jobCollectionNode]);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     bool ITreeNode.Sortable => false;
 

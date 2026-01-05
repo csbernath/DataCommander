@@ -16,11 +16,13 @@ sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string?
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
+    public Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
         Task.FromResult<IEnumerable<ITreeNode>>(
         [
             new TableCollectionNode(this)
         ]);
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     bool ITreeNode.Sortable => false;
 

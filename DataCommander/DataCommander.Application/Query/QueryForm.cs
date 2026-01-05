@@ -1117,7 +1117,7 @@ Please wait...";
             enumerableChildren = children;
         }
 
-        var count = 0;
+        var childCount = 0;
 
         if (children != null)
         {
@@ -1133,20 +1133,42 @@ Please wait...";
                     treeNode.Nodes.Add(new TreeNode());
 
                 treeNodeCollection.Add(treeNode);
-                count++;
+                childCount++;
             }
         }
 
         var ticks = Stopwatch.GetTimestamp() - startTimestamp;
 
-        if (parentTreeNode != null && count > 0)
+        if (parentTreeNode != null)
         {
             var treeNode = (ITreeNode)parentTreeNode.Tag!;
-            if (treeNode.DynamicChildCount)
-                parentTreeNode.Text = $"{treeNode.Name} ({count})";
+            var showFiltered = treeNode.GetFilterCriteria().Count > 0;
+            var showChildCount = childCount > 0 && treeNode.DynamicChildCount;
+
+            if (showFiltered || showChildCount)
+            {
+                var sb = new StringBuilder();
+                sb.Append(treeNode.Name);
+                sb.Append(" (");
+
+                if (showFiltered)
+                    sb.Append("filtered");
+
+                if (showChildCount)
+                {
+                    if (showFiltered)
+                        sb.Append(',');
+
+                    sb.Append(childCount);
+                }
+
+                sb.Append(')');
+
+                parentTreeNode.Text = sb.ToString();
+            }
         }
 
-        var items = ResultWriter.StringExtensions.SingularOrPlural(count, "item", "items");
+        var items = ResultWriter.StringExtensions.SingularOrPlural(childCount, "item", "items");
         SetStatusbarPanelText($"{items} added to Object Explorer in {StopwatchTimeSpan.ToString(ticks, 3)}.");
     }
 

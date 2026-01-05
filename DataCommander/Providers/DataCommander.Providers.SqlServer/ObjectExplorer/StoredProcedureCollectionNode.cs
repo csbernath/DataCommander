@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -11,6 +12,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class StoredProcedureCollectionNode(DatabaseNode database, bool isMsShipped) : ITreeNode
 {
+    private IReadOnlyCollection<FilterCriterion> _filterCriteria = [];
+        
     public string? Name => isMsShipped
         ? "System Stored Procedures"
         : "Stored Procedures";
@@ -19,7 +22,8 @@ internal sealed class StoredProcedureCollectionNode(DatabaseNode database, bool 
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [FilterableProperty.Name, FilterableProperty.Schema];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         List<ITreeNode> treeNodes = [];
         if (!isMsShipped)
@@ -49,8 +53,12 @@ internal sealed class StoredProcedureCollectionNode(DatabaseNode database, bool 
             cancellationToken);
         treeNodes.AddRange(rows);
 
+        _filterCriteria = filterCriteria;
+
         return treeNodes;
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => _filterCriteria;
 
     private string GetCommandText(string? schemaContains, string? nameContains)
     {

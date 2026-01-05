@@ -17,8 +17,10 @@ internal sealed class ConstraintNode(DatabaseNode databaseNode, string? name)
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) => Task.FromResult(Enumerable.Empty<ITreeNode>());
-
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) => Task.FromResult(Enumerable.Empty<ITreeNode>());
+    
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
+    
     public bool Sortable => false;
 
     public bool DynamicChildCount => true;

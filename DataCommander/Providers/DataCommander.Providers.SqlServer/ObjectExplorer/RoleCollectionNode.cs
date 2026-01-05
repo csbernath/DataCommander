@@ -14,7 +14,8 @@ internal sealed class RoleCollectionNode(DatabaseNode database) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         var commandText = $"select name from {database.Name}..sysusers where issqlrole = 1 order by name";
         return await Db.ExecuteReaderAsync(
@@ -24,6 +25,8 @@ internal sealed class RoleCollectionNode(DatabaseNode database) : ITreeNode
             ReadRecord,
             cancellationToken);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     private RoleNode ReadRecord(IDataRecord dataRecord)
     {

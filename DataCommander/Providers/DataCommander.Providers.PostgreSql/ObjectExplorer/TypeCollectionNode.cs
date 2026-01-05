@@ -16,7 +16,8 @@ internal sealed class TypeCollectionNode(SchemaNode schemaNode) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         var commandText = $@"select
 	t.typname
@@ -42,6 +43,8 @@ order by
 
         return typeNodes;
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     bool ITreeNode.Sortable => false;
 

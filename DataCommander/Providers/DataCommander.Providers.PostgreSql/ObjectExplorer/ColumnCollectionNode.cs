@@ -17,7 +17,8 @@ internal sealed class ColumnCollectionNode(TableNode tableNode) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         var schemaNode = TableNode.SchemaNode;
 
@@ -38,6 +39,8 @@ order by attnum";
             ReadRecord,
             cancellationToken);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     private ColumnNode ReadRecord(IDataRecord dataRecord)
     {

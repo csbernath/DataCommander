@@ -24,7 +24,7 @@ internal sealed class SchemaNode(CatalogNode catalog, string name) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var treeNodes = new ITreeNode[2];
         treeNodes[0] = new TableCollectionNode(this);
@@ -32,6 +32,8 @@ internal sealed class SchemaNode(CatalogNode catalog, string name) : ITreeNode
 
         return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     public bool Sortable => false;
 

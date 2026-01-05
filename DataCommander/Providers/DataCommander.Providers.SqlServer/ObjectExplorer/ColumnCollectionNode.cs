@@ -17,7 +17,8 @@ internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : 
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
         SortedDictionary<int, ColumnNode>? columnNodes = null;
@@ -47,6 +48,8 @@ internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : 
             cancellationToken);
         return columnNodes!.Values;
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     private string CreateCommandText()
     {

@@ -24,7 +24,8 @@ internal sealed class DatabaseCollectionNode : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         List<ITreeNode> list =
         [
@@ -42,6 +43,8 @@ internal sealed class DatabaseCollectionNode : ITreeNode
         list.AddRange(databaseNodes);
         return list;
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     private static string CreateCommandText()
     {

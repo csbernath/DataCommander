@@ -14,7 +14,8 @@ internal sealed class DatabaseSnapshotCollectionNode(DatabaseCollectionNode data
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         const string commandText = @"select name
 from sys.databases d
@@ -28,6 +29,8 @@ order by 1";
             ReadDatabaseNode,
             cancellationToken);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     private DatabaseNode ReadDatabaseNode(IDataRecord dataRecord)
     {

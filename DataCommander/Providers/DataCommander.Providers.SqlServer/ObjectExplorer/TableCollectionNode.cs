@@ -17,13 +17,16 @@ internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         var tableNodes = await GetTableNodes(cancellationToken);
         var childNodes = new ITreeNode[] { new SystemTableCollectionNode(DatabaseNode) }
             .Concat(tableNodes);
         return childNodes;
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     private async Task<ReadOnlySegmentLinkedList<TableNode>> GetTableNodes(CancellationToken cancellationToken)
     {

@@ -14,7 +14,7 @@ internal sealed class ViewCollectionNode(SchemaNode schemaNode) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    public Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         using var connection = schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection();
         connection.Open();
@@ -28,6 +28,8 @@ order by table_name"), 128, dataReader =>
             return new ViewNode(name);
         }));
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     bool ITreeNode.Sortable => false;
 

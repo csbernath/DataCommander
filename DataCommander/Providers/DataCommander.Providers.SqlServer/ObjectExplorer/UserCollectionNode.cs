@@ -14,7 +14,7 @@ internal sealed class UserCollectionNode(DatabaseNode database) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var commandText = $"select name from {database.Name}..sysusers where islogin = 1 order by name";
         DataTable dataTable;
@@ -36,6 +36,8 @@ internal sealed class UserCollectionNode(DatabaseNode database) : ITreeNode
 
         return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     public bool Sortable => false;
 

@@ -21,7 +21,8 @@ internal sealed class FunctionCollectionNode(SchemaNode schemaNode) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         var commandText = @$"select
     oid,
@@ -70,6 +71,8 @@ order by proname";
             cancellationToken);
         return procedureNodes;
     }
+    
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];    
 
     private static FunctionArgumentMode ToFunctionArgumentMode(char[]? argmodes, int index)
     {

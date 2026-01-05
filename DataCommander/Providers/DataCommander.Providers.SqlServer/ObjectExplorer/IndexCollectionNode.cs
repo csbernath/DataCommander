@@ -15,7 +15,8 @@ internal sealed class IndexCollectionNode(DatabaseNode databaseNode, int id) : I
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         var sqlCommandBuilder = new SqlCommandBuilder();
         var database = sqlCommandBuilder.QuoteIdentifier(databaseNode.Name);
@@ -52,6 +53,8 @@ order by i.name";
             },
             cancellationToken);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     public bool Sortable => false;
 

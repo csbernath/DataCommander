@@ -40,7 +40,8 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         await using (var connection = CreateConnection())
         {
@@ -55,6 +56,8 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
             new SchemaCollectionNode(this)
         ];
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     private async Task InitializeTypes(IDbCommandAsyncExecutor executor, CancellationToken cancellationToken)
     {

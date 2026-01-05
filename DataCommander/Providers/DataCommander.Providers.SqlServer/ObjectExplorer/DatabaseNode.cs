@@ -36,7 +36,7 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var children = new ITreeNode[]
         {
@@ -48,6 +48,8 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
 
         return Task.FromResult<IEnumerable<ITreeNode>>(children);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     public bool Sortable => false;
 
