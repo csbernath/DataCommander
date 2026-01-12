@@ -13,20 +13,17 @@ namespace DataCommander.Application
 {
     public partial class FilterSettingsForm : Form
     {
-        private readonly IReadOnlyCollection<string> _filterableProperties;
-        private FilterCriterion[] _filterCriteria;
+        private FilterCriterion[]? _filterCriteria;
 
         public FilterSettingsForm(ColorTheme? colorTheme, IReadOnlyCollection<string> filterableProperties, IReadOnlyCollection<FilterCriterion> filterCriteria)
         {
-            _filterableProperties = filterableProperties;
-
             InitializeComponent();
             dataGridView.Font = new Font("Microsoft Sans Serif", 8);
 
             colorTheme!.Apply(this);
             colorTheme!.Apply(dataGridView);
 
-            foreach (var filterableProperty in _filterableProperties)
+            foreach (var filterableProperty in filterableProperties)
             {
                 var filterCriterion = filterCriteria.FirstOrDefault(c => c.Property == filterableProperty);
                 var value = filterCriterion?.Value;
@@ -34,7 +31,7 @@ namespace DataCommander.Application
             }
         }
 
-        public IReadOnlyCollection<FilterCriterion> FilterCriteria => _filterCriteria;
+        public IReadOnlyCollection<FilterCriterion>? FilterCriteria => _filterCriteria;
 
         private void okButton_Click(object sender, EventArgs e)
         {
