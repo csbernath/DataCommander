@@ -78,8 +78,10 @@ public static class ConnectionInfoRepository
 
     private static string GetPath()
     {
-        var applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(true);
-        var path = applicationDataFolderPath + Path.DirectorySeparatorChar + "ConnectionInfoRepository.json";
-        return path;
+        var node = Settings.CurrentType;
+        if (!node.Attributes.TryGetAttributeValue("Path", out string? path))
+            path = ApplicationData.GetApplicationDataFolderPath(true);
+        path = path + Path.DirectorySeparatorChar + "ConnectionInfoRepository.json";
+        return path!;
     }
 }
