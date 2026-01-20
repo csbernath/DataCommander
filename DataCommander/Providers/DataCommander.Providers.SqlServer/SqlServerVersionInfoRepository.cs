@@ -43,6 +43,7 @@ internal static class SqlServerVersionInfoRepository
         new("13.00.5103", "4583460 Security update for SQL Server 2016 SP2 GDR: January 12, 2021"),
         new("13.00.5108", "5014365 Security update for SQL Server 2016 SP2 GDR: June 14, 2022"),
         new("13.00.6300", "Microsoft SQL Server 2016 Service Pack 3 (SP3)"),
+        new("13.00.6430", "5021129 Security update for SQL Server 2016 SP3 GDR: February 14, 2023 "),        
         new("13.00.6435", "5029186 Security update for SQL Server 2016 SP3 GDR: October 10, 2023"),
         new("13.00.6445", "5042207 Security update for SQL Server 2016 SP3 GDR: September 10, 2024"),
         new("13.00.6455", "5046855 Security update for SQL Server 2016 SP3 GDR: November 12, 2024"),
