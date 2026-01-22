@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Diagnostics;
 using System.IO;
 using DataCommander.Api;
 using DataCommander.Api.Connection;

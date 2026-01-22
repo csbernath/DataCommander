@@ -548,16 +548,13 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
                 }
 
                 var connectionStringBuilder = provider.CreateConnectionStringBuilder();
-                connectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
                 var connection = connectionForm.Connection;
-                QueryFormStaticMethods.AddConnectionOpenedInfoMessageToQueryForm(queryForm, connectionForm.ElapsedTicks, connectionInfo.ConnectionName, providerInfo.Name,
-                    connection);
+                QueryFormStaticMethods.AddConnectionOpenedInfoMessageToQueryForm(queryForm, connectionForm.ElapsedTicks, connectionInfo, providerInfo.Name,
+                    connectionStringBuilder, connection);
                 queryForm.Show();
 
                 if (WindowState == FormWindowState.Maximized)
-                {
                     queryForm.WindowState = FormWindowState.Maximized;
-                }
             }
         }
         catch (Exception exception)

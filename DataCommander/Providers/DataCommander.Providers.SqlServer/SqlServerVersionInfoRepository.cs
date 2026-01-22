@@ -62,6 +62,7 @@ internal static class SqlServerVersionInfoRepository
         new("16.00.1125", "5042211 Security update for SQL Server 2022 GDR: September 10, 2024"),
         new("16.00.1135", "5046861 Security update for SQL Server 2022 GDR: November 12, 2024 "),
         new("16.00.1150", "5065221 Security update for SQL Server 2022 GDR: September 9, 2025"),
+        new("16.00.1165", "5073031 Security update for SQL Server 2022 GDR: January 13, 2026"),        
         new("16.00.4100", "5033592 Security update for SQL Server 2022 CU10: January 9, 2024"),
         new("17.00.0925", "Microsoft SQL Server 2025 Release Candidate 1 (RC 1), 2025-09-16"),
         new("17.00.1000", "Microsoft SQL Server 2025 RTM, 2025-11-18")

@@ -36,17 +36,34 @@ internal sealed class Connection : ConnectionBase
         {
             ArgumentNullException.ThrowIfNull(_sqlConnection);
             var executor = _sqlConnection.CreateCommandExecutor();
-            var commandText = "select @@version";
-            var version = (string)executor.ExecuteScalar(new CreateCommandRequest(commandText))!;
+            var commandText = @"select
+    @@version,
+    suser_sname()";
+            string? version = null;
+            string? userName = null;
+            executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
+            {
+                while (dataReader.Read())
+                {
+                    version = dataReader.GetString(0);
+                    userName = dataReader.GetString(1);
+                }
+            });
+            
             var serverVersion = _sqlConnection.ServerVersion;
             var contains = SqlServerVersionInfoRepository.TryGetByVersion(serverVersion, out var sqlServerVersionInfo);
             var description = contains ? sqlServerVersionInfo!.Name : "(not found)";
 
             var stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine($"Server name:     {_serverName}");
+
+            if (_sqlConnection.Credential == null)
+                stringBuilder.AppendLine($"User name:           {userName}");
+            
+            // stringBuilder.AppendLine($"Server name:         {_serverName}");
+            stringBuilder.AppendLine($"Description:         {description}");
+            stringBuilder.AppendLine($"ServerProcessId:     {_sqlConnection.ServerProcessId}");
+
             stringBuilder.AppendLine(version);
-            stringBuilder.AppendLine($"Description:     {description}");
-            stringBuilder.Append($"ServerProcessId: {_sqlConnection.ServerProcessId}");
             return stringBuilder.ToString();
         }
     }

@@ -23,7 +23,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
-using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace DataCommander.Application.Query;
 
@@ -643,7 +642,7 @@ Please wait...";
         _tvObjectExplorer.DoDragDrop(text, DragDropEffects.All);
     }
 
-    private async void mnuDuplicateConnection_Click(object? sender, EventArgs e)
+    private void mnuDuplicateConnection_Click(object? sender, EventArgs e)
     {
         var mainForm = DataCommanderApplication.Instance.MainForm!;
         var index = mainForm.MdiChildren.Length;
@@ -673,7 +672,9 @@ Please wait...";
         queryForm.Show();
 
         var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == _connectionInfo.ProviderIdentifier);
-        QueryFormStaticMethods.AddConnectionOpenedInfoMessageToQueryForm(queryForm, elapsedTicks, _connectionInfo.ConnectionName, providerInfo.Name, connection);
+        var connectionStringBuilder = Provider.CreateConnectionStringBuilder();
+        QueryFormStaticMethods.AddConnectionOpenedInfoMessageToQueryForm(queryForm, elapsedTicks, _connectionInfo, providerInfo.Name, connectionStringBuilder,
+            connection);
     }
 
     private void sQLiteDatabaseToolStripMenuItem_Click(object? sender, EventArgs e) => SetResultWriterType(ResultWriterType.SqLite);
