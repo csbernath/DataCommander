@@ -19,7 +19,6 @@ internal sealed class Connection : ConnectionBase
 {
     private readonly ConnectionStringAndCredential _connectionStringAndCredential;
     private SqlConnection? _sqlConnection;
-    private string? _serverName;
 
     public Connection(ConnectionStringAndCredential connectionStringAndCredential)
     {
@@ -56,10 +55,10 @@ internal sealed class Connection : ConnectionBase
 
             var stringBuilder = new StringBuilder();
 
-            if (_sqlConnection.Credential == null)
+            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_connectionStringAndCredential.ConnectionString);
+            if (sqlConnectionStringBuilder.IntegratedSecurity)
                 stringBuilder.AppendLine($"User name:           {userName}");
-            
-            // stringBuilder.AppendLine($"Server name:         {_serverName}");
+
             stringBuilder.AppendLine($"Description:         {description}");
             stringBuilder.AppendLine($"ServerProcessId:     {_sqlConnection.ServerProcessId}");
 
@@ -98,21 +97,6 @@ internal sealed class Connection : ConnectionBase
     {
         ArgumentNullException.ThrowIfNull(_sqlConnection);
         await _sqlConnection.OpenAsync(cancellationToken);
-
-        if (!cancellationToken.IsCancellationRequested)
-        {
-            const string commandText = @"select @@servername
-set arithabort on";
-
-            var executor = DbCommandExecutorFactory.Create(_sqlConnection);
-            var items = await executor.ExecuteReaderAsync(
-                new ExecuteReaderRequest(commandText),
-                1,
-                dataRecord => new { ServerName = dataRecord.GetString(0) },
-                cancellationToken);
-            var item = items.First();
-            _serverName = item.ServerName;
-        }
     }
 
     private long _createCommandTimestamp;

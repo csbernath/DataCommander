@@ -275,8 +275,20 @@ internal sealed class ConnectionListForm : Form
 
     private void CopyConnectionString_Click(object? sender, EventArgs e)
     {
-        var connectionProperties = SelectedConnectionInfo;
-        var connectionString = connectionProperties!.ConnectionStringAndCredential.ConnectionString;
+        var connectionInfo = SelectedConnectionInfo;
+        var connectionStringAndCredential = connectionInfo!.ConnectionStringAndCredential;
+        var connectionString = connectionStringAndCredential.ConnectionString;
+        if (connectionStringAndCredential.Credential != null)
+        {
+            var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
+            var connectionStringBuilder = provider.CreateConnectionStringBuilder();
+            connectionStringBuilder.ConnectionString = connectionString;
+            var credential = connectionStringAndCredential.Credential;
+            connectionStringBuilder.SetValue(ConnectionStringKeyword.UserId, credential.UserId);
+            connectionStringBuilder.SetValue(ConnectionStringKeyword.Password, PasswordFactory.Unprotect(credential.Password.Protected));
+            connectionString = connectionStringBuilder.ConnectionString;
+        }
+        
         Clipboard.SetText(connectionString);
     }
 
