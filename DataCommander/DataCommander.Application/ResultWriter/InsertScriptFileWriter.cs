@@ -20,7 +20,7 @@ internal sealed class InsertScriptFileWriter : IResultWriter
     private StreamWriter? _streamWriter;
     private DataTable _schemaTable;
     private string _sqlStatementPrefix;
-    private bool _firstRow = true;
+    private bool _firstRow;
 
     public InsertScriptFileWriter(string? tableName, TextWriter messageWriter)
     {
@@ -230,7 +230,7 @@ internal sealed class InsertScriptFileWriter : IResultWriter
         var schemaRows = schemaTable.Rows;
         var columnCount = schemaRows.Count;
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendFormat("insert into {0}(", tableName);
+        stringBuilder.Append($"insert into {tableName}(");
 
         for (var columnIndex = 0; columnIndex < columnCount; columnIndex++)
         {
@@ -253,6 +253,7 @@ internal sealed class InsertScriptFileWriter : IResultWriter
         _schemaTable = schemaTable;
         _messageWriter.WriteLine(GetCreateTableStatement(schemaTable));
         _sqlStatementPrefix = GetSqlStatementPrefix(_tableName, _schemaTable);
+        _firstRow = true;
 
         var path = Path.GetTempFileName();
         _messageWriter.WriteLine("fileName: {0}", path);

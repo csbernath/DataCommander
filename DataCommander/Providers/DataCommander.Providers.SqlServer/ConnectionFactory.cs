@@ -8,7 +8,7 @@ public static class ConnectionFactory
     public static SqlConnection CreateConnection(ConnectionStringAndCredential connectionStringAndCredential)
     {
         var connectionString = CreateCustomizedConnectionString(connectionStringAndCredential.ConnectionString);
-        var sqlCredential = CreateSqlCredential(connectionStringAndCredential);
+        var sqlCredential = CreateSqlCredential(connectionStringAndCredential.Credential);
         var sqlConnection = new SqlConnection(connectionString, sqlCredential);
         return sqlConnection;
     }
@@ -26,10 +26,9 @@ public static class ConnectionFactory
         return sqlConnectionStringBuilder.ConnectionString;
     }
 
-    private static SqlCredential? CreateSqlCredential(ConnectionStringAndCredential connectionStringAndCredential)
+    private static SqlCredential? CreateSqlCredential(Credential? credential)
     {
         SqlCredential? sqlCredential = null;
-        var credential = connectionStringAndCredential.Credential;
         if (credential != null)
         {
             var password = credential.Password.SecureString;
