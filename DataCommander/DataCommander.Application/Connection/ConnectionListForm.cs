@@ -359,6 +359,8 @@ internal sealed class ConnectionListForm : Form
             LoadConnection(connectionInfo, row);
             _dataTable.Rows.InsertAt(row, index + 1);
             _dataGrid!.CurrentCell = _dataGrid[0, index + 1];
+            
+            _isDirty = true;            
         }
     }
 
@@ -379,6 +381,8 @@ internal sealed class ConnectionListForm : Form
             _dataTable.Rows.InsertAt(row, index - 1);
             _dataGrid!.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             _dataGrid.CurrentCell = _dataGrid[0, index - 1];
+            
+            _isDirty = true;            
         }
     }
 
