@@ -247,8 +247,24 @@ internal sealed class LogResultWriter : IResultWriter
         var stringBuilder = new StringBuilder();
         stringBuilder.Append(cSharpType.Name);
 
-        if (dbColumn.AllowDbNull == true && cSharpType == CSharpTypeArray.String)
-            stringBuilder.Append('?');
+        if (dbColumn.AllowDbNull == true)
+        {
+            if (cSharpType.Name is
+                CSharpTypeName.Boolean or
+                CSharpTypeName.DateTime or
+                CSharpTypeName.DateTimeOffset or
+                CSharpTypeName.Decimal or
+                CSharpTypeName.Double or
+                CSharpTypeName.Guid or
+                CSharpTypeName.Int16 or
+                CSharpTypeName.Int32 or
+                CSharpTypeName.Int64 or
+                CSharpTypeName.Single or
+                CSharpTypeName.String)
+                stringBuilder.Append('?');
+            else
+                Debug.WriteLine("");
+        }
 
         if (isArray)
             stringBuilder.Append("[]");
