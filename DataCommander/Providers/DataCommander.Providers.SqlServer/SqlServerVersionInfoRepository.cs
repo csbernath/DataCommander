@@ -49,6 +49,7 @@ internal static class SqlServerVersionInfoRepository
         new("13.00.6455", "5046855 Security update for SQL Server 2016 SP3 GDR: November 12, 2024"),
         new("13.00.6460", "5058718 Security update for SQL Server 2016 SP3 GDR: July 8, 2025"),
         new("13.00.6475", "5068401 Security update for SQL Server 2016 SP3 GDR: November 11, 2025"),
+        new("13.00.6480", "5077474 Security update for SQL Server 2016 SP3 GDR: March 10, 2026"),
         new("13.00.7070", "5068400 Security update for SQL Server 2016 SP3 Azure Connect Feature Pack: November 11, 2025"),
         new("14.00.1000", "Microsoft SQL Server 2017 (RTM)"),
         new("14.00.3045", "Microsoft SQL Server 2017 (RTM-CU12) (KB4464082)"),
