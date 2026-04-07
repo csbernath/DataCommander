@@ -13,7 +13,6 @@
     <ProjectReference Include="..\Configuration\Foundation.Configuration.csproj" />
     <ProjectReference Include="..\Core\Foundation.Core.csproj" />
     <ProjectReference Include="..\InternalLog\Foundation.InternalLog.csproj" />
-    <ProjectReference Include="..\Linq\Foundation.Linq.csproj" />
     <ProjectReference Include="..\Log\Foundation.Log.csproj" />
     <ProjectReference Include="..\Threading\Foundation.Threading.csproj" />
   </ItemGroup>

@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Configuration\Foundation.Configuration.csproj" />
     <ProjectReference Include="..\Data\Foundation.Data.csproj" />
   </ItemGroup>
 
