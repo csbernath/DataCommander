@@ -22,19 +22,21 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
     {
         get
         {
-            var sb = new StringBuilder();
-            sb.Append(name);
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append(name);
 
             if (state == 6)
-                sb.Append(" (Offline)");
+                stringBuilder.Append(" (Offline)");
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
     }
 
     bool ITreeNode.IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var children = new ITreeNode[]
         {
@@ -46,6 +48,8 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
 
         return Task.FromResult<IEnumerable<ITreeNode>>(children);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     public bool Sortable => false;
 

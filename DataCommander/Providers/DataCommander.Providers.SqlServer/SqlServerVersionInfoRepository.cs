@@ -43,15 +43,20 @@ internal static class SqlServerVersionInfoRepository
         new("13.00.5103", "4583460 Security update for SQL Server 2016 SP2 GDR: January 12, 2021"),
         new("13.00.5108", "5014365 Security update for SQL Server 2016 SP2 GDR: June 14, 2022"),
         new("13.00.6300", "Microsoft SQL Server 2016 Service Pack 3 (SP3)"),
+        new("13.00.6430", "5021129 Security update for SQL Server 2016 SP3 GDR: February 14, 2023 "),
         new("13.00.6435", "5029186 Security update for SQL Server 2016 SP3 GDR: October 10, 2023"),
         new("13.00.6445", "5042207 Security update for SQL Server 2016 SP3 GDR: September 10, 2024"),
         new("13.00.6455", "5046855 Security update for SQL Server 2016 SP3 GDR: November 12, 2024"),
         new("13.00.6460", "5058718 Security update for SQL Server 2016 SP3 GDR: July 8, 2025"),
+        new("13.00.6475", "5068401 Security update for SQL Server 2016 SP3 GDR: November 11, 2025"),
+        new("13.00.6480", "5077474 Security update for SQL Server 2016 SP3 GDR: March 10, 2026"),
+        new("13.00.7070", "5068400 Security update for SQL Server 2016 SP3 Azure Connect Feature Pack: November 11, 2025"),
         new("14.00.1000", "Microsoft SQL Server 2017 (RTM)"),
         new("14.00.3045", "Microsoft SQL Server 2017 (RTM-CU12) (KB4464082)"),
         new("14.00.3048", "Microsoft SQL Server 2017 (RTM-CU13) (KB4466404)"),
         new("14.00.3162", "Microsoft SQL Server 2017 (RTM-CU15) (KB4498951)"),
         new("14.00.3490", "5050533 Azure Connect feature pack for SQL Server 2017"),
+        new("14.00.3515", "5068402 Security update for SQL Server 2017 CU31: November 11, 2025"),
         new("15.00.2070", "4517790 Servicing Update (GDR1) for SQL Server 2019 RTM"),
         new("15.00.2080", "Microsoft SQL Server 2019 (RTM-GDR) (KB4583458)"),
         new("16.00.1000", "Microsoft SQL Server 2022 RTM"),
@@ -60,7 +65,9 @@ internal static class SqlServerVersionInfoRepository
         new("16.00.1125", "5042211 Security update for SQL Server 2022 GDR: September 10, 2024"),
         new("16.00.1135", "5046861 Security update for SQL Server 2022 GDR: November 12, 2024 "),
         new("16.00.1150", "5065221 Security update for SQL Server 2022 GDR: September 9, 2025"),
+        new("16.00.1165", "5073031 Security update for SQL Server 2022 GDR: January 13, 2026"),
         new("16.00.4100", "5033592 Security update for SQL Server 2022 CU10: January 9, 2024"),
-        new("17.00.0925", "Microsoft SQL Server 2025 Release Candidate 1 (RC 1), 2025-09-16")
+        new("17.00.0925", "Microsoft SQL Server 2025 Release Candidate 1 (RC 1), 2025-09-16"),
+        new("17.00.1000", "Microsoft SQL Server 2025 RTM, 2025-11-18")
     }.ToDictionary(i => i.Version);
 }

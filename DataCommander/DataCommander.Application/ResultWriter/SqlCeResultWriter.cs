@@ -26,11 +26,11 @@ internal sealed class SqlCeResultWriter(TextWriter messageWriter, string? tableN
     {
         var fileName = Path.GetTempFileName() + ".sdf";
         messageWriter.WriteLine(fileName);
-        var sb = new DbConnectionStringBuilder
+        var dbConnectionStringBuilder = new DbConnectionStringBuilder
         {
             { "Data Source", fileName }
         };
-        var connectionString = sb.ConnectionString;
+        var connectionString = dbConnectionStringBuilder.ConnectionString;
         var sqlCeEngine = new SqlCeEngine(connectionString);
         sqlCeEngine.CreateDatabase();
         _connection = new SqlCeConnection(connectionString);

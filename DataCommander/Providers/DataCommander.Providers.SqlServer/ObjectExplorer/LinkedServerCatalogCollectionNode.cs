@@ -21,7 +21,9 @@ internal sealed class LinkedServerCatalogCollectionNode : ITreeNode
     string? ITreeNode.Name => "Catalogs";
     bool ITreeNode.IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         const string commandText = @"declare @provider nvarchar(128)
 select  @provider = s.provider
@@ -67,6 +69,8 @@ drop table #catalog";
         return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(executeReaderRequest, 128,
             dataRecord => new LinkedServerCatalogNode(_linkedServer, dataRecord.GetString(0))));
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     bool ITreeNode.Sortable => false;
 

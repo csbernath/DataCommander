@@ -2,12 +2,14 @@
 using System.Data;
 using System.Data.Common;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 using DataCommander.Application.ResultWriter;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.FieldReaders;
 using DataCommander.Api.Query;
+using DataCommander.Application.Connection;
 using Foundation.Core;
 
 namespace DataCommander.Application.Query;
@@ -206,16 +208,32 @@ internal static class QueryFormStaticMethods
         return found;
     }
 
-    public static void AddConnectionOpenedInfoMessageToQueryForm(QueryForm queryForm, long elapsedTicks, string? connectionName, string providerName,
-        ConnectionBase connection)
+    public static void AddConnectionOpenedInfoMessageToQueryForm(QueryForm queryForm, long elapsedTicks, ConnectionInfo connectionInfo, string providerName,
+        IDbConnectionStringBuilder connectionStringBuilder, ConnectionBase connection)
     {
-        var message = $@"Connection opened in {StopwatchTimeSpan.ToString(elapsedTicks, 3)} seconds.
-Connection name: {connectionName}
-Provider name:   {providerName}
-Data source:     {connection.DataSource}
-Database:        {connection.Database}
-Server version:  {connection.ServerVersion}
-{connection.ConnectionInformation}";
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append($@"Connection opened in {StopwatchTimeSpan.ToString(elapsedTicks, 3)} seconds.
+Connection name:     {connectionInfo.ConnectionName}
+Provider name:       {providerName}
+Data source:         {connection.DataSource}
+Database:            {connection.Database}
+Server version:      {connection.ServerVersion}
+");
+        
+        connectionStringBuilder.ConnectionString = connectionInfo.ConnectionStringAndCredential.ConnectionString;
+        if (connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity))
+        {
+            if (connectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var integratedSecurity))
+                stringBuilder.AppendLine($@"Integrated Security: {integratedSecurity}");
+        }
+
+        var credential = connectionInfo.ConnectionStringAndCredential.Credential;
+        if (credential != null)
+            stringBuilder.AppendLine($@"User ID:             {credential.UserId}");
+
+        stringBuilder.AppendLine(connection.ConnectionInformation);
+        
+        var message = stringBuilder.ToString();
 
         var infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message);
         queryForm.AddInfoMessage(infoMessage);

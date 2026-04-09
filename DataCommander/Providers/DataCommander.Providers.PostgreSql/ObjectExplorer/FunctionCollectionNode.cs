@@ -19,7 +19,10 @@ internal sealed class FunctionCollectionNode(SchemaNode schemaNode) : ITreeNode
 
     bool ITreeNode.Sortable => false;
 
-    public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         var commandText = @$"select
     oid,
@@ -51,7 +54,7 @@ order by proname";
                 if (proargnames != null)
                 {
                     var typeRepository = schemaNode.SchemaCollectionNode.DatabaseNode.TypeRepository!;
-                    
+
                     for (var index = 0; index < proargnames.Length; ++index)
                     {
                         var mode = ToFunctionArgumentMode(proargmodes, index);
@@ -68,6 +71,8 @@ order by proname";
             cancellationToken);
         return procedureNodes;
     }
+    
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];    
 
     private static FunctionArgumentMode ToFunctionArgumentMode(char[]? argmodes, int index)
     {

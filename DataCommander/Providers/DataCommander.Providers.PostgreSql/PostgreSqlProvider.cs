@@ -187,16 +187,16 @@ internal sealed class PostgreSqlProvider : IProvider
                             ? [name.Schema]
                             : ["dbo", "sys"];
 
-                        var sb = new StringBuilder();
+                        var stringBuilder = new StringBuilder();
                         for (i = 0; i < owners.Length; i++)
                         {
                             if (i > 0)
-                                sb.Append(',');
+                                stringBuilder.Append(',');
 
-                            sb.AppendFormat("'{0}'", owners[i]);
+                            stringBuilder.AppendFormat("'{0}'", owners[i]);
                         }
 
-                        var ownersString = sb.ToString();
+                        var ownersString = stringBuilder.ToString();
                         commandText =
                             $@"select c.column_name
 from information_schema.columns c

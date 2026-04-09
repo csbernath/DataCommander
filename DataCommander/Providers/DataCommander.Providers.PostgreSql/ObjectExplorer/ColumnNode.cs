@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,21 +20,25 @@ internal sealed class ColumnNode(
             var typeName = typeRepository.TryGetPostgresSqlTypeName(type.Oid, out var postgresSqlTypeName)
                 ? postgresSqlTypeName!.Name
                 : type.Name;
-            var sb = new StringBuilder();
-            sb.Append($"{name} ({typeName}");
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append($"{name} ({typeName}");
 
             if (notNull)
-                sb.Append(", not null");
+                stringBuilder.Append(", not null");
 
-            sb.Append(')');
-            return sb.ToString();
+            stringBuilder.Append(')');
+            return stringBuilder.ToString();
         }
     }
 
     bool ITreeNode.IsLeaf => true;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
         Task.FromResult<IEnumerable<ITreeNode>>([]);
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     bool ITreeNode.Sortable => false;
 

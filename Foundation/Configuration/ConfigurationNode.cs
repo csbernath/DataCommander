@@ -207,23 +207,23 @@ public sealed class ConfigurationNode(string? name)
     {
         ArgumentNullException.ThrowIfNull(textWriter);
 
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         var indent = new string(' ', level * 2);
-        sb.Append(indent);
-        sb.Append(Name);
-        sb.Append("\t\t");
-        sb.AppendLine(Description);
+        stringBuilder.Append(indent);
+        stringBuilder.Append(Name);
+        stringBuilder.Append("\t\t");
+        stringBuilder.AppendLine(Description);
 
         if (Attributes.Count > 0)
         {
             foreach (var attribute in Attributes)
             {
-                sb.Append('\t');
-                sb.Append(attribute.Name);
+                stringBuilder.Append('\t');
+                stringBuilder.Append(attribute.Name);
 
-                sb.Append('\t');
-                sb.Append(attribute.Description);
-                sb.Append('\t');
+                stringBuilder.Append('\t');
+                stringBuilder.Append(attribute.Description);
+                stringBuilder.Append('\t');
 
                 var value = attribute.Value;
                 var valueString = value != null ? value.ToString() : null;
@@ -232,21 +232,21 @@ public sealed class ConfigurationNode(string? name)
                 if (multiline)
                 {
                     value = valueString.Replace("\r", string.Empty);
-                    sb.Append('"');
+                    stringBuilder.Append('"');
                 }
 
-                sb.Append(value);
+                stringBuilder.Append(value);
 
                 if (multiline)
                 {
-                    sb.Append('"');
+                    stringBuilder.Append('"');
                 }
 
-                sb.Append(Environment.NewLine);
+                stringBuilder.Append(Environment.NewLine);
             }
         }
 
-        textWriter.Write(sb);
+        textWriter.Write(stringBuilder);
 
         foreach (var childNode in ChildNodes)
         {

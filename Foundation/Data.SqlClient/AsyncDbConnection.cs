@@ -88,18 +88,18 @@ public sealed class AsyncDbConnection : IDbConnection
         switch (command.CommandType)
         {
             case CommandType.StoredProcedure:
-                var sb = new StringBuilder();
-                sb.Append($"exec {command.CommandText}");
+                var stringBuilder = new StringBuilder();
+                stringBuilder.Append($"exec {command.CommandText}");
                 var parameters = (SqlParameterCollection)command.Parameters;
                 var parametersString = IDataParameterCollectionExtensions.ToLogString(parameters);
 
                 if (parametersString.Length > 0)
                 {
-                    sb.Append(' ');
-                    sb.Append(parametersString);
+                    stringBuilder.Append(' ');
+                    stringBuilder.Append(parametersString);
                 }
 
-                commandText = sb.ToString();
+                commandText = stringBuilder.ToString();
                 break;
 
             case CommandType.Text:
@@ -149,19 +149,19 @@ public sealed class AsyncDbConnection : IDbConnection
                     _commands.Clear();
                 }
 
-                var sb = new StringBuilder();
+                var stringBuilder = new StringBuilder();
 
                 for (var i = 0; i < commandTextArray.Length; i++)
                 {
                     if (i > 0)
                     {
-                        sb.Append(Environment.NewLine);
+                        stringBuilder.Append(Environment.NewLine);
                     }
 
-                    sb.Append(commandTextArray[i]);
+                    stringBuilder.Append(commandTextArray[i]);
                 }
 
-                var commandText = sb.ToString();
+                var commandText = stringBuilder.ToString();
                 Exception? exception = null;
 
                 using (var connection = (IDbConnection)_cloneable.Clone())

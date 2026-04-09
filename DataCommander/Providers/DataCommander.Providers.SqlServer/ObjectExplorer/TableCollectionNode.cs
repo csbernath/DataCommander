@@ -1,31 +1,50 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Collections.ReadOnly;
 using Foundation.Data;
+using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
 {
+    private IReadOnlyCollection<FilterCriterion> _filterCriteria = [];
+    
     public DatabaseNode DatabaseNode { get; } = databaseNode;
     public string? Name => "Tables";
     public bool IsLeaf => false;
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [FilterableProperty.Name, FilterableProperty.Schema];
+
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
-        var tableNodes = await GetTableNodes(cancellationToken);
+        string? schemaContains = null;
+        string? nameContains = null;
+        var filterCriterion = filterCriteria.FirstOrDefault(c => c.Property == FilterableProperty.Schema);
+        if (filterCriterion != null)
+            schemaContains = filterCriterion.Value;
+        filterCriterion = filterCriteria.FirstOrDefault(c => c.Property == FilterableProperty.Name);
+        if (filterCriterion != null)
+            nameContains = filterCriterion.Value;
+
+        var tableNodes = await GetTableNodes(schemaContains, nameContains, cancellationToken);
         var childNodes = new ITreeNode[] { new SystemTableCollectionNode(DatabaseNode) }
             .Concat(tableNodes);
+        _filterCriteria = filterCriteria;        
         return childNodes;
     }
 
-    private async Task<ReadOnlySegmentLinkedList<TableNode>> GetTableNodes(CancellationToken cancellationToken)
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => _filterCriteria;
+
+    private async Task<ReadOnlySegmentLinkedList<TableNode>> GetTableNodes(string? schemaContains, string? nameContains, CancellationToken cancellationToken)
     {
-        var commandText = CreateCommandText();
+        var commandText = CreateCommandText(schemaContains, nameContains);
         var tableNodes = await Db.ExecuteReaderAsync(
             DatabaseNode.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
@@ -35,9 +54,10 @@ internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
         return tableNodes;
     }
 
-    private string CreateCommandText()
+    private string CreateCommandText(string? schemaContains, string? nameContains)
     {
-        var commandText = $@"select
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append($@"select
     s.name,
     tbl.name,
     tbl.object_id,
@@ -63,8 +83,25 @@ where
     else 0
 end          
              AS bit)=0) and
-    tbl.temporal_type in(0,2)
-order by 1,2";
+    tbl.temporal_type in(0,2)");
+        
+        if (schemaContains != null)
+        {
+            var schemaLike = $"%{schemaContains}%".ToNVarChar();
+            stringBuilder.Append($@" and
+    s.name like {schemaLike}");
+        }
+
+        if (nameContains != null)
+        {
+            var nameLike = $"%{nameContains}%".ToNVarChar();
+            stringBuilder.Append($@" and
+    tbl.name like {nameLike}");
+        }
+
+        stringBuilder.Append(@"
+order by 1,2");
+        var commandText = stringBuilder.ToString();
         return commandText;
     }
 

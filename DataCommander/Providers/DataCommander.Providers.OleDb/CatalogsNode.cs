@@ -20,7 +20,10 @@ internal class CatalogsNode : ITreeNode
 
     public bool IsLeaf => false;
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         ITreeNode[] treeNodes;
 
@@ -41,6 +44,8 @@ internal class CatalogsNode : ITreeNode
 
         return treeNodes;
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     public bool Sortable => false;
 

@@ -13,7 +13,10 @@ internal sealed class SystemViewCollectionNode(DatabaseNode databaseNode) : ITre
     public string? Name => "System Views";
     public bool IsLeaf => false;
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
         return await Db.ExecuteReaderAsync(
@@ -23,6 +26,8 @@ internal sealed class SystemViewCollectionNode(DatabaseNode databaseNode) : ITre
             ReadRecord,
             cancellationToken);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     private string CreateCommandText()
     {

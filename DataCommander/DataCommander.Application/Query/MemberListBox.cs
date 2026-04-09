@@ -145,19 +145,19 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
             var originalText = _textBox.Text.Substring(startIndex, length);
             var originalItems = originalText.Split('.');
             var newItems = selectedItem.Split('.');
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             for (var i = 0; i < originalItems.Length - newItems.Length; i++)
             {
-                if (sb.Length > 0)
-                    sb.Append('.');
-                sb.Append(originalItems[i]);
+                if (stringBuilder.Length > 0)
+                    stringBuilder.Append('.');
+                stringBuilder.Append(originalItems[i]);
             }
 
             for (var i = 0; i < newItems.Length; i++)
             {
-                if (sb.Length > 0)
-                    sb.Append('.');
-                sb.Append(newItems[i]);
+                if (stringBuilder.Length > 0)
+                    stringBuilder.Append('.');
+                stringBuilder.Append(newItems[i]);
             }
 
             _completionForm.SelectItem(startIndex, length, listBoxItem.Item);

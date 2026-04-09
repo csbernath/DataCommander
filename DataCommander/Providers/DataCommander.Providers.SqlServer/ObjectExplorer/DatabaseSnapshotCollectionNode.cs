@@ -12,7 +12,10 @@ internal sealed class DatabaseSnapshotCollectionNode(DatabaseCollectionNode data
     string? ITreeNode.Name => "Database Snapshots";
     bool ITreeNode.IsLeaf => false;
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         const string commandText = @"select name
 from sys.databases d
@@ -26,6 +29,8 @@ order by 1";
             ReadDatabaseNode,
             cancellationToken);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     private DatabaseNode ReadDatabaseNode(IDataRecord dataRecord)
     {

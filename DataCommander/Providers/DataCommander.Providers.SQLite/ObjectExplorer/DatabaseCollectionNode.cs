@@ -17,10 +17,13 @@ internal sealed class DatabaseCollectionNode(ConnectionStringAndCredential conne
 
     bool ITreeNode.IsLeaf => false;
 
-    public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         const string commandText = "PRAGMA database_list;";
-        
+
         return await Db.ExecuteReaderAsync(
             () => ConnectionFactory.CreateConnection(connectionStringAndCredential),
             new ExecuteReaderRequest(commandText),
@@ -29,8 +32,10 @@ internal sealed class DatabaseCollectionNode(ConnectionStringAndCredential conne
             {
                 var name = dataRecord.GetString(1);
                 return new DatabaseNode(this, name);
-            },cancellationToken);
+            }, cancellationToken);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     bool ITreeNode.Sortable => false;
 

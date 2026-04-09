@@ -20,9 +20,13 @@ internal sealed class LinkedServerNode : ITreeNode
     string? ITreeNode.Name => Name;
     bool ITreeNode.IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
         Task.FromResult<IEnumerable<ITreeNode>>([new LinkedServerCatalogCollectionNode(this)]);
-    
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
+
     bool ITreeNode.Sortable => false;
 
     public bool DynamicChildCount => true;

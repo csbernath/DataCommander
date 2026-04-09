@@ -45,16 +45,16 @@ public static class MethodProfiler
         var streamWriter = new StreamWriter(path, false, Encoding.UTF8, 65536);
         TextWriter = new AsyncTextWriter(streamWriter);
 
-        var sb = new StringBuilder();
-        sb.AppendFormat(@"declare @applicationId int
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendFormat(@"declare @applicationId int
 
 exec MethodProfilerApplication_Add {0},{1}",
             applicationName.ToNullableNVarChar(),
             now.ToSqlConstant()
         );
-        sb.Append($",{beginTime},{Stopwatch.Frequency}\r\n");
-        sb.Append("set @applicationId    = @@identity\r\n");
-        TextWriter.Write(sb.ToString());
+        stringBuilder.Append($",{beginTime},{Stopwatch.Frequency}\r\n");
+        stringBuilder.Append("set @applicationId    = @@identity\r\n");
+        TextWriter.Write(stringBuilder.ToString());
     }
 
     [Conditional(ConditionString)]

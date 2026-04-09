@@ -118,16 +118,16 @@ public sealed class SqlLog
                 _queue.Clear();
             }
 
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
             for (var i = 0; i < array.Length; i++)
             {
                 var item = array[i];
                 var commandText = item.CommandText;
-                sb.Append(commandText);
+                stringBuilder.Append(commandText);
             }
 
-            var cmdText = sb.ToString();
+            var cmdText = stringBuilder.ToString();
             long ticks = 0;
 
             try
@@ -200,12 +200,12 @@ public sealed class SqlLog
 
     public int ApplicationStart(string name, DateTime startDate, bool safe)
     {
-        var sb = new StringBuilder();
-        sb.Append("exec LogApplicationStart ");
-        sb.Append(name.ToNullableVarChar());
-        sb.Append(',');
-        sb.Append(startDate.ToSqlConstant());
-        var commandText = sb.ToString();
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append("exec LogApplicationStart ");
+        stringBuilder.Append(name.ToNullableVarChar());
+        stringBuilder.Append(',');
+        stringBuilder.Append(startDate.ToSqlConstant());
+        var commandText = stringBuilder.ToString();
 
         if (_connection.State != ConnectionState.Open)
         {

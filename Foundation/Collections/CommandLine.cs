@@ -41,7 +41,7 @@ public sealed class CommandLine
 
         Assert.IsTrue(c == '"');
 
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         while (true)
         {
@@ -52,10 +52,10 @@ public sealed class CommandLine
 
             if (c == '"')
                 break;
-            sb.Append(c);
+            stringBuilder.Append(c);
         }
 
-        var value = sb.ToString();
+        var value = stringBuilder.ToString();
         return value;
     }
 
@@ -65,7 +65,7 @@ public sealed class CommandLine
         var c = (char)read;
         Assert.IsTrue(c == '/' || c == '-');
 
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         while (true)
         {
@@ -77,18 +77,18 @@ public sealed class CommandLine
 
             if (c == ':' || c == '=' || char.IsWhiteSpace(c)) break;
 
-            sb.Append(c);
+            stringBuilder.Append(c);
             textReader.Read();
         }
 
-        var name = sb.Length > 0 ? sb.ToString() : null;
+        var name = stringBuilder.Length > 0 ? stringBuilder.ToString() : null;
 
         return name;
     }
 
     private static string ReadValue(TextReader textReader)
     {
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         while (true)
         {
@@ -102,12 +102,12 @@ public sealed class CommandLine
             if (char.IsWhiteSpace(c))
                 break;
 
-            sb.Append(c);
+            stringBuilder.Append(c);
 
             textReader.Read();
         }
 
-        var value = sb.ToString();
+        var value = stringBuilder.ToString();
         return value;
     }
 

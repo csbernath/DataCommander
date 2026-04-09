@@ -20,30 +20,30 @@ public static class Writer
 
         if (columns.Count > 0)
         {
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
             foreach (DataColumn column in columns)
             {
-                sb.Append(column.ColumnName);
-                sb.Append('\t');
+                stringBuilder.Append(column.ColumnName);
+                stringBuilder.Append('\t');
             }
 
-            textWriter.WriteLine(sb);
+            textWriter.WriteLine(stringBuilder);
 
             foreach (DataRow row in dataTable.Rows)
             {
-                sb.Length = 0;
+                stringBuilder.Length = 0;
                 var itemArray = row.ItemArray;
                 var last = itemArray.Length - 1;
 
                 for (var i = 0; i < last; i++)
                 {
-                    sb.Append(itemArray[i]);
-                    sb.Append('\t');
+                    stringBuilder.Append(itemArray[i]);
+                    stringBuilder.Append('\t');
                 }
 
-                sb.Append(itemArray[last]);
-                textWriter.WriteLine(sb);
+                stringBuilder.Append(itemArray[last]);
+                textWriter.WriteLine(stringBuilder);
             }
         }
     }

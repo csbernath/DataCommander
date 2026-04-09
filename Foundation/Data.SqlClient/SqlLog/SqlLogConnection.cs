@@ -20,18 +20,18 @@ internal sealed class SqlLogConnection(
         get
         {
             var microseconds = StopwatchTimeSpan.ToInt32(duration, 1000000);
-            var sb = new StringBuilder();
-            sb.Append(
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append(
                 $"exec LogConnectionOpen {ApplicationId},{ConnectionNo},{name.ToNullableVarChar()},{userName.ToNullableVarChar()},{hostName.ToNullableVarChar()},{startDate.ToSqlConstant()},{microseconds}");
 
             if (exception != null)
             {
                 var error = new SqlLogError(ApplicationId, ConnectionNo, 0, 0, exception);
                 var commandText = error.CommandText;
-                sb.Append(commandText);
+                stringBuilder.Append(commandText);
             }
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
     }
 

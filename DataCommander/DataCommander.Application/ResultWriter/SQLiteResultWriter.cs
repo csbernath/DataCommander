@@ -28,12 +28,12 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
     {
         var fileName = Path.GetTempFileName() + ".sqlite";
         messageWriter.WriteLine(fileName);
-        var sb = new SqliteConnectionStringBuilder
+        var sqliteConnectionStringBuilder = new SqliteConnectionStringBuilder
         {
             DataSource = fileName,
             //DateTimeFormat = SQLiteDateFormats.ISO8601
         };
-        _connection = new SqliteConnection(sb.ConnectionString);
+        _connection = new SqliteConnection(sqliteConnectionStringBuilder.ConnectionString);
         _connection.Open();
     }
 
@@ -44,7 +44,7 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
     void IResultWriter.WriteTableBegin(DataTable schemaTable)
     {
         Trace.WriteLine(schemaTable.ToStringTableString());
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         var schemaRows = schemaTable.Rows;
         var schemaRowCount = schemaRows.Count;
         string? insertStatement = null;
@@ -70,7 +70,7 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
                 name = name.Replace('[', '_');
                 name = name.Replace(']', '_');
 
-                sb.AppendFormat("CREATE TABLE {0}\r\n(\r\n", name);
+                stringBuilder.AppendFormat("CREATE TABLE {0}\r\n(\r\n", name);
                 insertStatement = "INSERT INTO " + name + '(';
                 insertValues.Append("VALUES(");
             }
@@ -165,11 +165,11 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
             _insertCommand.Parameters.Add(parameter);
         }
 
-        sb.Append(st.ToString(4));
-        sb.Append(')');
+        stringBuilder.Append(st.ToString(4));
+        stringBuilder.Append(')');
         insertValues.Append(')');
         insertStatement += ") " + insertValues;
-        var commandText = sb.ToString();
+        var commandText = stringBuilder.ToString();
         Trace.WriteLine(commandText);
         Trace.WriteLine(insertStatement);
         var executor = _connection.CreateCommandExecutor();

@@ -369,6 +369,9 @@ public sealed class SqlParser
                 tableName = token.Value;
         }
 
+        if (tableName == null)
+            tableName = "UnknownTable1";
+
         return tableName;
     }
 

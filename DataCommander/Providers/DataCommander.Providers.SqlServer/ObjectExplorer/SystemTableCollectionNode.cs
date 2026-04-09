@@ -14,7 +14,10 @@ internal sealed class SystemTableCollectionNode(DatabaseNode databaseNode) : ITr
 
     bool ITreeNode.IsLeaf => false;
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
         var tableNodes = await Db.ExecuteReaderAsync(
@@ -32,6 +35,8 @@ internal sealed class SystemTableCollectionNode(DatabaseNode databaseNode) : ITr
             cancellationToken);
         return tableNodes;
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     private string CreateCommandText()
     {

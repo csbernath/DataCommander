@@ -177,8 +177,8 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
                 if (typeCode == TypeCode.Byte)
                 {
                     var bytes = (byte[])value;
-                    var sb = new StringBuilder();
-                    sb.Append("0x");
+                    var stringBuilder = new StringBuilder();
+                    stringBuilder.Append("0x");
 
                     for (var i = 0; i < bytes.Length; i++)
                     {
@@ -187,10 +187,10 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
                         if (s.Length == 1)                        
                             s = "0" + s;                        
 
-                        sb.Append(s);
+                        stringBuilder.Append(s);
                     }
 
-                    stringValue = sb.ToString();
+                    stringValue = stringBuilder.ToString();
                 }
             }
             else
@@ -227,7 +227,7 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
 
         try
         {
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
             for (var i = 0; i < rowCount; i++)
             {
@@ -236,17 +236,17 @@ internal sealed class TextResultWriter(Action<InfoMessage> addInfoMessage, TextW
 
                 for (var j = 0; j < last; j++)
                 {
-                    Write(sb, GetStringValue(row[j], _columnSize![j]), _columnSize[j]);
-                    sb.Append(' ');
+                    Write(stringBuilder, GetStringValue(row[j], _columnSize![j]), _columnSize[j]);
+                    stringBuilder.Append(' ');
                 }
 
-                sb.Append(GetStringValue(row[last], _columnSize![last]));
-                sb.Append(Environment.NewLine);
+                stringBuilder.Append(GetStringValue(row[last], _columnSize![last]));
+                stringBuilder.Append(Environment.NewLine);
             }
 
             _rowIndex += rowCount;
 
-            textWriter.Write(sb.ToString());
+            textWriter.Write(stringBuilder.ToString());
         }
         finally
         {

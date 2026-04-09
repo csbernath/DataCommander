@@ -27,14 +27,14 @@ internal sealed class DbConnectionLogger
 
     private void ConnectionBeforeOpen(object? sender, BeforeOpenDbConnectionEventArgs e)
     {
-        var csb = new DbConnectionStringBuilder { ConnectionString = e.ConnectionString };
+        var dbConnectionStringBuilder = new DbConnectionStringBuilder { ConnectionString = e.ConnectionString };
 
-        if (csb.ContainsKey("Password"))
+        if (dbConnectionStringBuilder.ContainsKey("Password"))
         {
-            csb["Password"] = "<not logged here>";
+            dbConnectionStringBuilder["Password"] = "<not logged here>";
         }
 
-        Log.Trace("Opening connection {0}...", csb.ConnectionString);
+        Log.Trace("Opening connection {0}...", dbConnectionStringBuilder.ConnectionString);
 
         _beforeOpen = e;
     }

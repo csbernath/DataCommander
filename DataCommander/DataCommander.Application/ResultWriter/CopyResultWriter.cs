@@ -62,7 +62,7 @@ internal sealed class CopyResultWriter(
 
     private void InsertItems(IEnumerable<QueueItem> items)
     {
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         foreach (var item in items)
         {
             var rows = item.Rows;
@@ -89,13 +89,13 @@ internal sealed class CopyResultWriter(
 
                 if (_canConvertCommandToString)
                 {
-                    if (sb.Length > 0)
+                    if (stringBuilder.Length > 0)
                     {
-                        sb.AppendLine();
+                        stringBuilder.AppendLine();
                     }
 
                     var commandText = destinationProvider.CommandToString(_insertCommand!);
-                    sb.Append(commandText);
+                    stringBuilder.Append(commandText);
                 }
                 else
                 {
@@ -106,9 +106,9 @@ internal sealed class CopyResultWriter(
             }
         }
 
-        if (sb.Length > 0)
+        if (stringBuilder.Length > 0)
         {
-            var commandText = sb.ToString();
+            var commandText = stringBuilder.ToString();
             try
             {
                 var executor = destinationConnection.Connection.CreateCommandExecutor();

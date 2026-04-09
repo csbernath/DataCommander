@@ -9,5 +9,5 @@ public interface IObjectExplorer
 {
     bool Sortable { get; }
     void SetConnectionStringAndCredential(ConnectionStringAndCredential connectionStringAndCredential);
-    Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken);
+    Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken);
 }

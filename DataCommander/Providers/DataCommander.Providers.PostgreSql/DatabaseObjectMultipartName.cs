@@ -89,27 +89,27 @@ internal sealed class DatabaseObjectMultipartName
 
     public override string ToString()
     {
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         if (Database != null)
         {
-            sb.Append(Database);
+            stringBuilder.Append(Database);
         }
 
         if (Schema != null)
         {
-            if (sb.Length > 0)
+            if (stringBuilder.Length > 0)
             {
-                sb.Append('.');
+                stringBuilder.Append('.');
             }
-            sb.Append(Schema);
+            stringBuilder.Append(Schema);
         }
 
-        if (sb.Length > 0)
+        if (stringBuilder.Length > 0)
         {
-            sb.Append('.');
+            stringBuilder.Append('.');
         }
 
-        sb.Append(Name);
-        return sb.ToString();
+        stringBuilder.Append(Name);
+        return stringBuilder.ToString();
     }
 }

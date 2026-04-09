@@ -19,7 +19,10 @@ internal sealed class DatabaseCollectionNode(ObjectExplorer objectExplorer) : IT
 
     bool ITreeNode.Sortable => false;
 
-    public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         const string commandText = @"select datname
 from pg_database
@@ -37,4 +40,6 @@ order by 1";
 
         return databaseNodes;
     }
+    
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];    
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Diagnostics;
 using System.IO;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
@@ -82,9 +81,9 @@ internal sealed class ExcelResultWriter : IResultWriter
 
     void IResultWriter.End()
     {
-        _logResultWriter.End();
         _excelPackage!.Save();
-        Process.Start(_excelPackage.File.FullName);
+        // Process.Start(_excelPackage.File.FullName);
+        _logResultWriter.End();        
     }
 
     private void CreateTable(DataTable schemaTable)

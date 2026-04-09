@@ -34,7 +34,7 @@ public partial class AboutForm : Form
 <div style=""font-family:verdana;font-size:9pt"">
 Data Commander Version: {assembly.GetName().Version} ({lastWriteTime:yyyy-MM-dd})<br/>
 <a href=""https://github.com/csbernath/DataCommander"">GitHub repository</a><br/>
-Copyright © 2002-2025 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Bernáth</a><br/><br/>
+Copyright © 2002-2026 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Bernáth</a><br/><br/>
 <a href=""https://en.wikipedia.org/wiki/Free_and_open-source_software"">Free and open-source software</a><br/>
 This program is released under the <a href=""https://www.gnu.org/licenses/gpl.txt"">GNU General Public Licence</a>.<br/><br/>
 Including <a href=""https://github.com/csbernath/DataCommander/blob/Net-10.0/Foundation/README.md"">Foundation Class Library</a><br/><br/>
@@ -51,7 +51,7 @@ Including <a href=""https://github.com/csbernath/DataCommander/blob/Net-10.0/Fou
 Credits:
 <ul style=""list-style-type:none"">
     <li><a href=""https://www.jetbrains.com/rider/"">JetBrains Rider</a></li>
-    <li><a href=""https://www.visualstudio.com/vs/community/"">Visual Studio 2022 Community</a></li>
+    <li><a href=""https://www.visualstudio.com/vs/community/"">Visual Studio 2026 Community</a></li>
     <li><a href=""https://visualstudio.microsoft.com/insiders/"">Visual Studio 2026 Insiders</a></li>
     <li><a href=""https://www.jetbrains.com/resharper/"">JetBrains R# ReSharper</a></li>
     <li><a href=""https://github.com/JanKallman/EPPlus"">EPPlus Excel generator</a></li>

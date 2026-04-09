@@ -12,7 +12,9 @@ internal sealed class ViewCollectionNode(SchemaNode schemaNode) : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    public Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         using var connection = schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection();
         connection.Open();
@@ -26,6 +28,8 @@ order by table_name"), 128, dataReader =>
             return new ViewNode(name);
         }));
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     bool ITreeNode.Sortable => false;
 

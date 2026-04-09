@@ -1,60 +1,102 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using Foundation.Data;
+using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class StoredProcedureCollectionNode(DatabaseNode database, bool isMsShipped) : ITreeNode
 {
+    private IReadOnlyCollection<FilterCriterion> _filterCriteria = [];
+        
     public string? Name => isMsShipped
         ? "System Stored Procedures"
         : "Stored Procedures";
 
     public bool IsLeaf => false;
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [FilterableProperty.Name, FilterableProperty.Schema];
+
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         List<ITreeNode> treeNodes = [];
         if (!isMsShipped)
             treeNodes.Add(new StoredProcedureCollectionNode(database, true));
 
-        var commandText = GetCommandText();
+        string? schemaContains = null;
+        string? nameContains = null;
+        var filterCriterion = filterCriteria.FirstOrDefault(c => c.Property == FilterableProperty.Schema);
+        if (filterCriterion != null)
+            schemaContains = filterCriterion.Value;
+        filterCriterion = filterCriteria.FirstOrDefault(c => c.Property == FilterableProperty.Name);
+        if (filterCriterion != null)
+            nameContains = filterCriterion.Value;
+
+        var commandText = CreateCommandText(schemaContains, nameContains);
         var rows = await Db.ExecuteReaderAsync(
             database.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
             128,
             dataRecord =>
             {
-                var owner = dataRecord.GetString(0);
-                var name = dataRecord.GetString(1);
-                return new StoredProcedureNode(database, owner, name);
+                var objectId = dataRecord.GetInt32(0);
+                var owner = dataRecord.GetString(1);
+                var name = dataRecord.GetString(2);
+                return new StoredProcedureNode(database, objectId, owner, name);
             },
             cancellationToken);
         treeNodes.AddRange(rows);
 
+        _filterCriteria = filterCriteria;
+
         return treeNodes;
     }
 
-    private string GetCommandText()
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => _filterCriteria;
+
+    private string CreateCommandText(string? schemaContains, string? nameContains)
     {
-        var commandText = string.Format(@"
-select  s.name as Owner,
-        o.name as Name        
-from    [{0}].sys.all_objects o (readpast)
-join    [{0}].sys.schemas s (readpast)
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append($@"select
+    o.object_id as ObjectId,
+    s.name as Owner,
+    o.name as Name
+from    [{database.Name}].sys.all_objects o (readpast)
+join    [{database.Name}].sys.schemas s (readpast)
 on      o.schema_id = s.schema_id
-left join [{0}].sys.extended_properties p
+left join [{database.Name}].sys.extended_properties p
 on      o.object_id = p.major_id and p.minor_id = 0 and p.class = 1 and p.name = 'microsoft_database_tools_support'
 where
-    o.type = 'P'
-    and o.is_ms_shipped = {1}
-    and p.major_id is null
-order by s.name,o.name", database.Name, isMsShipped
-            ? 1
-            : 0);
-        return commandText;
+    o.type = 'P' and
+    o.is_ms_shipped = {(isMsShipped
+        ? 1
+        : 0)} and
+    p.major_id is null");
+
+        if (schemaContains != null)
+        {
+            var schemaLike = $"%{schemaContains}%".ToNVarChar();
+            stringBuilder.Append($@" and
+    s.name like {schemaLike}");
+        }
+
+        if (nameContains != null)
+        {
+            var nameLike = $"%{nameContains}%".ToNVarChar();
+            stringBuilder.Append($@" and
+    o.name like {nameLike}");
+        }
+
+        stringBuilder.Append(@"
+order by
+    s.name,o.name");
+
+        return stringBuilder.ToString();
     }
 
     public bool Sortable => false;

@@ -14,7 +14,10 @@ internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         var commandText = $@"select	name
 from
@@ -39,6 +42,8 @@ order by name collate nocase";
             cancellationToken);
         return list;
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     bool ITreeNode.Sortable => false;
 

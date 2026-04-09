@@ -13,10 +13,14 @@ internal sealed class TypeNode(SchemaNode schemaNode, string? name) : ITreeNode
 
     bool ITreeNode.IsLeaf => true;
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken) =>
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    public Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
         Task.FromResult<IEnumerable<ITreeNode>>(
         [
         ]);
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     bool ITreeNode.Sortable => false;
 

@@ -9,9 +9,9 @@ public static class ExceptionExtensions
 {
     public static string ToLogString(this Exception e)
     {
-        var sb = new StringBuilder();
-        Append(sb, e);
-        return sb.ToString();
+        var stringBuilder = new StringBuilder();
+        Append(stringBuilder, e);
+        return stringBuilder.ToString();
     }
 
     private static void Append(StringBuilder sb, Win32Exception win32Exception)

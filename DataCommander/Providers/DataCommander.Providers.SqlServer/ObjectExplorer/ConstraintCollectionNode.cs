@@ -13,7 +13,10 @@ internal sealed class ConstraintCollectionNode(DatabaseNode databaseNode, int id
     public string? Name => "Constraints";
     public bool IsLeaf => false;
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         var cb = new SqlCommandBuilder();
 
@@ -41,6 +44,8 @@ order by 1";
             },
             cancellationToken);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     public bool Sortable => false;
 

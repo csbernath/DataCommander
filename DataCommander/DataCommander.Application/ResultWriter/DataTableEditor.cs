@@ -883,16 +883,16 @@ internal class DataTableEditor : UserControl
 
     private void CopyArrayField_Click(object? sender, EventArgs e)
     {
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         var array = (Array)_cellValue;
 
         for (var i = 0; i < array.Length; i++)
         {
             var obj = array.GetValue(i)!;
-            sb.AppendLine(obj.ToString());
+            stringBuilder.AppendLine(obj.ToString());
         }
 
-        Clipboard.SetText(sb.ToString());
+        Clipboard.SetText(stringBuilder.ToString());
     }
 
     private void HideColumn_Click(object? sender, EventArgs e)

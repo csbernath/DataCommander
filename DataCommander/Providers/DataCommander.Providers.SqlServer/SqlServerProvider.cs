@@ -7,12 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
 using DataCommander.Providers.SqlServer.FieldReader;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
-using DataCommander.Api.FieldReaders;
-using DataCommander.Api.Query;
 using DataCommander.Providers.SqlServer.ObjectExplorer;
 using Foundation.Configuration;
 using Foundation.Core;
@@ -192,29 +189,29 @@ internal sealed class SqlServerProvider : IProvider
                 case SqlDataTypeName.Char:
                 case SqlDataTypeName.NChar:
                     parameter.Size = columnSchema.ColumnSize;
-                    converters[i] = ConvertToString;
+                    converters[i] = Converters.ConvertToString;
                     break;
 
                 case SqlDataTypeName.NText:
                     parameter.SqlDbType = SqlDbType.NText;
-                    converters[i] = ConvertToString;
+                    converters[i] = Converters.ConvertToString;
                     break;
 
                 case SqlDataTypeName.Decimal:
                     parameter.SqlDbType = SqlDbType.Decimal;
                     parameter.Precision = (byte)columnSchema.NumericPrecision!.Value;
                     parameter.Scale = (byte)columnSchema.NumericScale!.Value;
-                    converters[i] = ConvertToDecimal;
+                    converters[i] = Converters.ConvertToDecimal;
                     break;
 
                 case SqlDataTypeName.Money:
                     parameter.SqlDbType = SqlDbType.Money;
-                    converters[i] = ConvertToDecimal;
+                    converters[i] = Converters.ConvertToDecimal;
                     break;
 
                 case SqlDataTypeName.Xml:
                     parameter.SqlDbType = SqlDbType.Xml;
-                    converters[i] = ConvertToString;
+                    converters[i] = Converters.ConvertToString;
                     break;
             }
         }
@@ -242,12 +239,6 @@ internal sealed class SqlServerProvider : IProvider
             sqlCommand.Parameters.RemoveAt(0);
             command.Parameters.Add(parameter);
         }
-    }
-
-    public static XmlReader ExecuteXmlReader(IDbCommand command)
-    {
-        var sqlCommand = (SqlCommand)command;
-        return sqlCommand.ExecuteXmlReader();
     }
 
     string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
@@ -322,7 +313,11 @@ internal sealed class SqlServerProvider : IProvider
         return type;
     }
 
-    async Task<GetCompletionResult> IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position,
+    async Task<GetCompletionResult> IProvider.GetCompletion(
+        ConnectionBase connection,
+        IDbTransaction transaction,
+        string text,
+        int position,
         CancellationToken cancellationToken)
     {
         var fromCache = false;
@@ -384,9 +379,6 @@ internal sealed class SqlServerProvider : IProvider
 
             if (sqlObject != null)
             {
-                DatabaseObjectMultipartName name;
-                int i;
-
                 switch (sqlObject.Type)
                 {
                     case SqlObjectTypes.Database:
@@ -398,105 +390,15 @@ internal sealed class SqlServerProvider : IProvider
                     case SqlObjectTypes.Function:
                     case SqlObjectTypes.Table | SqlObjectTypes.View:
                     case SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function:
-                    {
-                        name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
-                        var nameParts = sqlObject.Name != null
-                            ? new IdentifierParser(new StringReader(sqlObject.Name)).Parse().ToList()
-                            : null;
-                        var namePartsCount = nameParts != null
-                            ? nameParts.Count
-                            : 0;
-                        List<string> statements = [];
-
-                        switch (namePartsCount)
-                        {
-                            case 0:
-                            case 1:
-                            {
-                                statements.Add(SqlServerObject.GetDatabases());
-                                statements.Add(SqlServerObject.GetSchemas());
-
-                                var objectTypes = sqlObject.Type.ToObjectTypes();
-                                statements.Add(SqlServerObject.GetObjects("dbo", objectTypes));
-                            }
-                                break;
-
-                            case 2:
-                                if (nameParts![0] != null)
-                                {
-                                    statements.Add(SqlServerObject.GetSchemas(nameParts[0]!));
-
-                                    var objectTypes = sqlObject.Type.ToObjectTypes();
-                                    statements.Add(SqlServerObject.GetObjects(nameParts[0]!, objectTypes));
-                                }
-
-                                break;
-
-                            case 3:
-                            {
-                                if (nameParts![0] != null && nameParts[1] != null)
-                                {
-                                    var objectTypes = sqlObject.Type.ToObjectTypes();
-                                    statements.Add(SqlServerObject.GetObjects(nameParts[0]!, nameParts[1]!, objectTypes));
-                                }
-                            }
-                                break;
-                        }
-
-                        commandText = statements.Count > 0
-                            ? string.Join("\r\n", statements)
-                            : null;
-                    }
+                        commandText = CodeCompletion.GetTableViewFunctionCommandText(sqlObject);
                         break;
 
                     case SqlObjectTypes.Column:
-                        name = new DatabaseObjectMultipartName(connection.Database, sqlObject.ParentName);
-                        string?[] owners;
-
-                        if (name.Schema != null)
-                            owners = [name.Schema];
-                        else
-                            owners = ["dbo", "sys"];
-
-                        var sb = new StringBuilder();
-                        for (i = 0; i < owners.Length; i++)
-                        {
-                            if (i > 0) sb.Append(',');
-
-                            sb.AppendFormat("'{0}'", owners[i]);
-                        }
-
-                        var ownersString = sb.ToString();
-                        commandText = string.Format(@"declare @schema_id int
-select  top 1 @schema_id = s.schema_id
-from    [{0}].sys.schemas s
-where   s.name  in({1})
-
-if @schema_id is not null
-begin
-    declare @object_id int
-    select  @object_id = o.object_id
-    from    [{0}].sys.all_objects o
-    where   o.name = '{2}'
-            and o.schema_id = @schema_id
-            and o.type in('S','U','TF','V')
-
-    if @object_id is not null
-    begin
-        select  name
-        from [{0}].sys.all_columns c
-        where c.object_id = @object_id
-        order by column_id
-    end
-end", name.Database, ownersString, name.Name);
+                        commandText = CodeCompletion.GetColumnCommandText(connection, sqlObject);
                         break;
 
                     case SqlObjectTypes.Procedure:
-                        name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
-
-                        name.Schema ??= "dbo";
-
-                        commandText = SqlServerObject.GetObjectsByDatabase(name.Database!, ["P", "X"]);
+                        commandText = CodeCompletion.GetProcedureCommandText(connection, sqlObject);
                         break;
 
                     case SqlObjectTypes.Trigger:
@@ -504,109 +406,12 @@ end", name.Database, ownersString, name.Name);
                         break;
 
                     case SqlObjectTypes.Value:
-                        var items = sqlObject.ParentName!.Split('.');
-                        i = items.Length - 1;
-                        var sqlCommandBuilder = new SqlCommandBuilder();
-                        var columnName = sqlCommandBuilder.QuoteIdentifier(items[i]);
-
-                        string? tableNameOrAlias = null;
-                        if (i > 0)
-                        {
-                            i--;
-                            tableNameOrAlias = items[i];
-                        }
-
-                        if (tableNameOrAlias != null)
-                        {
-                            var contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out var tableName);
-                            if (contains)
-                            {
-                                string? where;
-                                var tokenIndex = previousToken!.Index + 1;
-                                if (tokenIndex < tokens.Count)
-                                {
-                                    var token = tokens[tokenIndex];
-                                    var tokenValue = token.Value!;
-                                    var indexofAny = tokenValue.IndexOfAny(['\r', '\n']);
-                                    if (indexofAny >= 0) tokenValue = tokenValue[..indexofAny];
-
-                                    string? like;
-                                    if (tokenValue.Length > 0)
-                                    {
-                                        if (tokenValue.Contains('%'))
-                                            like = tokenValue;
-                                        else
-                                            like = tokenValue + '%';
-                                    }
-                                    else
-                                    {
-                                        like = "%";
-                                    }
-
-                                    where = $"where {columnName} like N'{like}'";
-                                }
-                                else
-                                    where = null;
-
-                                commandText = $@"select distinct {columnName}
-from
-(
-    select top 1000 {columnName}
-    from {tableName} (readpast)
-    {where}
-) t";
-                            }
-                        }
-
+                        commandText = CodeCompletion.GetValueCommandText(sqlObject, sqlStatement, previousToken, tokens);
                         break;
                 }
             }
 
-            if (commandText != null)
-            {
-                Log.Write(LogLevel.Trace, "commandText:\r\n{0}", commandText);
-                List<IObjectName> list = [];
-                try
-                {
-                    if (connection.State != ConnectionState.Open)
-                        connection.OpenAsync(CancellationToken.None).Wait();
-
-                    var executor = connection.Connection.CreateCommandAsyncExecutor();
-                    await executor.ExecuteReaderAsync(new ExecuteReaderRequest(commandText, null, transaction), async (dataReader, cancellationToken2) =>
-                    {
-                        while (true)
-                        {
-                            var fieldCount = dataReader.FieldCount;
-                            while (await dataReader.ReadAsync(cancellationToken2))
-                            {
-                                string? schemaName;
-                                string objectName;
-
-                                if (fieldCount == 1)
-                                {
-                                    schemaName = null;
-                                    objectName = dataReader[0].ToString()!;
-                                }
-                                else
-                                {
-                                    schemaName = dataReader.GetStringOrDefault(0);
-                                    objectName = dataReader.GetString(1);
-                                }
-
-                                list.Add(new ObjectName(schemaName, objectName));
-                            }
-
-                            if (!await dataReader.NextResultAsync(cancellationToken2))
-                                break;
-                        }
-                    }, cancellationToken);
-                }
-                catch
-                {
-                }
-
-                array = list;
-            }
+            array = await CodeCompletion.GetObjectNames(connection, transaction, commandText, cancellationToken);
         }
 
         ArgumentNullException.ThrowIfNull(array);
@@ -709,8 +514,8 @@ from
                 var columnSize = dataColumnSchema.ColumnSize;
                 var dbType = (SqlDbType)dataColumnSchema.ProviderType;
                 var dataTypeName = dataReader.GetDataTypeName(columnIndex);
-                var sb = new StringBuilder();
-                sb.Append(dataTypeName);
+                var stringBuilder = new StringBuilder();
+                stringBuilder.Append(dataTypeName);
 
                 switch (dbType)
                 {
@@ -727,7 +532,7 @@ from
                         else
                             columnSizeString = columnSize.ToString();
 
-                        sb.AppendFormat("({0})", columnSizeString);
+                        stringBuilder.AppendFormat("({0})", columnSizeString);
                         break;
 
                     case SqlDbType.Decimal:
@@ -735,9 +540,9 @@ from
                         var scale = dataColumnSchema.NumericScale.GetValueOrDefault();
 
                         if (scale == 0)
-                            sb.AppendFormat("({0})", precision);
+                            stringBuilder.AppendFormat("({0})", precision);
                         else
-                            sb.AppendFormat("({0},{1})", precision, scale);
+                            stringBuilder.AppendFormat("({0},{1})", precision, scale);
 
                         if (precision <= 9)
                             columnSize = 5;
@@ -751,9 +556,9 @@ from
                 }
 
                 var allowDbNull = dataColumnSchema.AllowDbNull.GetValueOrDefault();
-                if (!allowDbNull) sb.Append(" not null");
+                if (!allowDbNull) stringBuilder.Append(" not null");
 
-                table.Rows.Add(columnOrdinal + columnOrdinalAddition, primaryKey, dataColumnSchema.ColumnName, columnSize, sb.ToString(),
+                table.Rows.Add(columnOrdinal + columnOrdinalAddition, primaryKey, dataColumnSchema.ColumnName, columnSize, stringBuilder.ToString(),
                     dataColumnSchema.DataType);
 
                 columnIndex++;
@@ -786,7 +591,7 @@ from
         var tokens = sqlStatement.Tokens;
         List<Statement> statements = [];
 
-        var statementTokenArrays = tokens.Split(token => IsBatchSeparator(commandText, token)).Where(statementTokens => statementTokens.Length > 0);
+        var statementTokenArrays = tokens.Split(token => Converters.IsBatchSeparator(commandText, token)).Where(statementTokens => statementTokens.Length > 0);
 
         foreach (var statementTokens in statementTokenArrays)
         {
@@ -808,7 +613,7 @@ from
         List<InfoMessage> infoMessages;
 
         if (exception is AggregateException aggregateException)
-            exception = UnAggregateException(aggregateException);
+            exception = Converters.UnAggregateException(aggregateException);
 
         if (exception is SqlException sqlException)
             infoMessages = ToInfoMessages(sqlException.Errors, now);
@@ -820,75 +625,5 @@ from
         }
 
         return infoMessages;
-    }
-
-    private static Exception UnAggregateException(AggregateException aggregateException)
-    {
-        Exception unaggregatedException;
-        if (aggregateException.InnerExceptions.Count == 1)
-        {
-            var innerException = aggregateException.InnerExceptions[0];
-            if (innerException is AggregateException aggregateException2)
-                unaggregatedException = UnAggregateException(aggregateException2);
-            else
-                unaggregatedException = innerException;
-        }
-        else
-            unaggregatedException = aggregateException;
-
-        return unaggregatedException;
-    }
-
-    private static object ConvertToString(object? source)
-    {
-        object target;
-        if (source == null || source == DBNull.Value)
-            target = DBNull.Value;
-        else
-        {
-            var convertible = (IConvertible)source;
-            target = convertible.ToString(null);
-        }
-
-        return target;
-    }
-
-    private static object ConvertToDecimal(object source)
-    {
-        object target;
-        if (source == DBNull.Value)
-            target = DBNull.Value;
-        else
-        {
-            var decimalField = (DecimalField)source;
-            target = decimalField.DecimalValue;
-        }
-
-        return target;
-    }
-
-    private static bool IsBatchSeparator(ReadOnlySpan<char> commandText, Token token)
-    {
-        const char newLine = '\n';
-        const string batchSeparator = "GO";
-
-        var isBatchSeparator =
-            token.Type == TokenType.KeyWord &&
-            string.Compare(token.Value, batchSeparator, StringComparison.InvariantCultureIgnoreCase) == 0;
-
-        if (isBatchSeparator)
-        {
-            var lineStartIndex = commandText.LastIndexOf(newLine, token.StartPosition);
-            lineStartIndex++;
-            var lineEndIndex = commandText.IndexOf(newLine, token.EndPosition + 1);
-            if (lineEndIndex == -1)
-                lineEndIndex = commandText.Length - 1;
-            var lineLength = lineEndIndex - lineStartIndex + 1;
-            var line = commandText.Slice(lineStartIndex, lineLength);
-            line = line.Trim();
-            isBatchSeparator = line.CompareTo(batchSeparator, StringComparison.InvariantCultureIgnoreCase) == 0;
-        }
-
-        return isBatchSeparator;
     }
 }

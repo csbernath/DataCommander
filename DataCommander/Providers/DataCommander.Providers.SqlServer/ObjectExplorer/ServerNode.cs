@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
 using Foundation.Data;
+using Foundation.Diagnostics.Measurement;
 using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
@@ -28,7 +29,9 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
 
     bool ITreeNode.IsLeaf => false;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var node = new DatabaseCollectionNode(this);
         var securityNode = new SecurityNode(this);
@@ -36,6 +39,8 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
         var jobCollectionNode = new JobCollectionNode(this);
         return Task.FromResult<IEnumerable<ITreeNode>>([node, securityNode, serverObjectCollectionNode, jobCollectionNode]);
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     bool ITreeNode.Sortable => false;
 
@@ -54,94 +59,110 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
 
     private void Properties_OnClick(object? sender, EventArgs e)
     {
-        var commandText = @"create table #SVer(ID int,  Name  sysname, Internal_Value int, Value nvarchar(512))
-insert #SVer exec master.dbo.xp_msver
-insert #SVer select t.*
-from sys.dm_os_host_info
-CROSS APPLY (
-VALUES
-(1001, 'host_platform', 0, host_platform),
-(1002, 'host_distribution', 0, host_distribution),
-(1003, 'host_release', 0, host_release),
-(1004, 'host_service_pack_level', 0, host_service_pack_level),
-(1005, 'host_sku', host_sku, ''),
-(1006, 'HardwareGeneration', '', ''),
-(1007, 'ServiceTier', '', ''),
-(1008, 'ReservedStorageSizeMB', '0', '0'),
-(1009, 'UsedStorageSizeMB', '0', '0')
-) t(id, [name], internal_value, [value])
+//         var commandText = @"create table #SVer(ID int,  Name  sysname, Internal_Value int, Value nvarchar(512))
+// insert #SVer exec master.dbo.xp_msver
+// insert #SVer select t.*
+// from sys.dm_os_host_info
+// CROSS APPLY (
+// VALUES
+// (1001, 'host_platform', 0, host_platform),
+// (1002, 'host_distribution', 0, host_distribution),
+// (1003, 'host_release', 0, host_release),
+// (1004, 'host_service_pack_level', 0, host_service_pack_level),
+// (1005, 'host_sku', host_sku, ''),
+// (1006, 'HardwareGeneration', '', ''),
+// (1007, 'ServiceTier', '', ''),
+// (1008, 'ReservedStorageSizeMB', '0', '0'),
+// (1009, 'UsedStorageSizeMB', '0', '0')
+// ) t(id, [name], internal_value, [value])
+//
+// -- Managed Instance-specific properties
+// if (SERVERPROPERTY('EngineEdition') = 8)
+// begin
+// DECLARE @gen4memoryPerCoreMB float = 7168.0
+// DECLARE @gen5memoryPerCoreMB float = 5223.0
+// DECLARE @physicalMemory float
+// DECLARE @virtual_core_count int
+// DECLARE @reservedStorageSize bigint
+// DECLARE @usedStorageSize decimal(18,2)
+// DECLARE @hwGeneration nvarchar(128)
+// DECLARE @serviceTier nvarchar(128)
+//
+// SET @physicalMemory = (SELECT TOP 1 [virtual_core_count] *
+//   (
+// 	CASE WHEN [hardware_generation] = 'Gen4' THEN @gen4memoryPerCoreMB
+// 	WHEN [hardware_generation] = 'Gen5' THEN @gen5memoryPerCoreMB
+// 	ELSE 0 END
+//    )
+//    FROM master.sys.server_resource_stats 
+//    ORDER BY start_time DESC)
+//
+// IF (@physicalMemory <> 0) 
+// BEGIN
+//   UPDATE #SVer SET [Internal_Value] =  @physicalMemory WHERE Name = N'PhysicalMemory'
+//   UPDATE #SVer SET [Value] = CONCAT( @physicalMemory, ' (',  @physicalMemory * 1024, ')') WHERE Name = N'PhysicalMemory'
+// END
+//
+// UPDATE #SVer SET [Internal_Value] = (SELECT TOP 1 [virtual_core_count] FROM master.sys.server_resource_stats ORDER BY start_time desc) WHERE Name = N'ProcessorCount'
+// UPDATE #SVer SET [Value] = [Internal_Value] WHERE Name = N'ProcessorCount'
+//
+// SELECT TOP 1
+//   @hwGeneration = [hardware_generation],
+//   @serviceTier =[sku],
+//   @virtual_core_count = [virtual_core_count],
+//   @reservedStorageSize = [reserved_storage_mb],
+//   @usedStorageSize = [storage_space_used_mb]
+// FROM master.sys.server_resource_stats
+// ORDER BY [start_time] DESC
+//
+// UPDATE #SVer SET [Value] = @hwGeneration WHERE Name = N'HardwareGeneration'
+// UPDATE #SVer SET [Value] = @serviceTier WHERE Name = N'ServiceTier'
+// UPDATE #SVer SET [Value] = @reservedStorageSize WHERE Name = N'ReservedStorageSizeMB'
+// UPDATE #SVer SET [Value] = @usedStorageSize WHERE Name = N'UsedStorageSizeMB'
+// end
+//
+//
+//
+// declare @SmoRoot nvarchar(512)
+// exec master.dbo.xp_instance_regread N'HKEY_LOCAL_MACHINE', N'SOFTWARE\Microsoft\MSSQLServer\Setup', N'SQLPath', @SmoRoot OUTPUT
+//
+//
+//
+// SELECT
+// (select Value from #SVer where Name = N'ProductName') AS [Product],
+// SERVERPROPERTY(N'ProductVersion') AS [VersionString],
+// (select Value from #SVer where Name = N'Language') AS [Language],
+// (select Value from #SVer where Name = N'Platform') AS [Platform],
+// CAST(SERVERPROPERTY(N'Edition') AS sysname) AS [Edition],
+// (select Internal_Value from #SVer where Name = N'ProcessorCount') AS [Processors],
+// (select Value from #SVer where Name = N'WindowsVersion') AS [OSVersion],
+// (select Internal_Value from #SVer where Name = N'PhysicalMemory') AS [PhysicalMemory],
+// CAST(ISNULL(SERVERPROPERTY('IsClustered'),N'') AS bit) AS [IsClustered],
+// @SmoRoot AS [RootDirectory],
+// convert(sysname, serverproperty(N'collation')) AS [Collation],
+// ( select Value from #SVer where Name =N'host_platform') AS [HostPlatform],
+// ( select Value from #SVer where Name =N'host_release') AS [HostRelease],
+// ( select Value from #SVer where Name =N'host_service_pack_level') AS [HostServicePackLevel],
+// ( select Value from #SVer where Name =N'host_distribution') AS [HostDistribution]
+//
+// drop table #SVer";
 
--- Managed Instance-specific properties
-if (SERVERPROPERTY('EngineEdition') = 8)
+        var commandText = @$"select
+    serverproperty('MachineName') as Name,
+    serverproperty('ProductVersion') as Version,
+    serverproperty('Collation') as [Server Collation]
+
+select value
+from sys.configurations c
+where c.name = 'max server memory (MB)'
+
+if has_perms_by_name(null, null, 'VIEW SERVER STATE') = 1
 begin
-DECLARE @gen4memoryPerCoreMB float = 7168.0
-DECLARE @gen5memoryPerCoreMB float = 5223.0
-DECLARE @physicalMemory float
-DECLARE @virtual_core_count int
-DECLARE @reservedStorageSize bigint
-DECLARE @usedStorageSize decimal(18,2)
-DECLARE @hwGeneration nvarchar(128)
-DECLARE @serviceTier nvarchar(128)
-
-SET @physicalMemory = (SELECT TOP 1 [virtual_core_count] *
-  (
-	CASE WHEN [hardware_generation] = 'Gen4' THEN @gen4memoryPerCoreMB
-	WHEN [hardware_generation] = 'Gen5' THEN @gen5memoryPerCoreMB
-	ELSE 0 END
-   )
-   FROM master.sys.server_resource_stats 
-   ORDER BY start_time DESC)
-
-IF (@physicalMemory <> 0) 
-BEGIN
-  UPDATE #SVer SET [Internal_Value] =  @physicalMemory WHERE Name = N'PhysicalMemory'
-  UPDATE #SVer SET [Value] = CONCAT( @physicalMemory, ' (',  @physicalMemory * 1024, ')') WHERE Name = N'PhysicalMemory'
-END
-
-UPDATE #SVer SET [Internal_Value] = (SELECT TOP 1 [virtual_core_count] FROM master.sys.server_resource_stats ORDER BY start_time desc) WHERE Name = N'ProcessorCount'
-UPDATE #SVer SET [Value] = [Internal_Value] WHERE Name = N'ProcessorCount'
-
-SELECT TOP 1
-  @hwGeneration = [hardware_generation],
-  @serviceTier =[sku],
-  @virtual_core_count = [virtual_core_count],
-  @reservedStorageSize = [reserved_storage_mb],
-  @usedStorageSize = [storage_space_used_mb]
-FROM master.sys.server_resource_stats
-ORDER BY [start_time] DESC
-
-UPDATE #SVer SET [Value] = @hwGeneration WHERE Name = N'HardwareGeneration'
-UPDATE #SVer SET [Value] = @serviceTier WHERE Name = N'ServiceTier'
-UPDATE #SVer SET [Value] = @reservedStorageSize WHERE Name = N'ReservedStorageSizeMB'
-UPDATE #SVer SET [Value] = @usedStorageSize WHERE Name = N'UsedStorageSizeMB'
-end
-
-
-
-declare @SmoRoot nvarchar(512)
-exec master.dbo.xp_instance_regread N'HKEY_LOCAL_MACHINE', N'SOFTWARE\Microsoft\MSSQLServer\Setup', N'SQLPath', @SmoRoot OUTPUT
-
-
-
-SELECT
-(select Value from #SVer where Name = N'ProductName') AS [Product],
-SERVERPROPERTY(N'ProductVersion') AS [VersionString],
-(select Value from #SVer where Name = N'Language') AS [Language],
-(select Value from #SVer where Name = N'Platform') AS [Platform],
-CAST(SERVERPROPERTY(N'Edition') AS sysname) AS [Edition],
-(select Internal_Value from #SVer where Name = N'ProcessorCount') AS [Processors],
-(select Value from #SVer where Name = N'WindowsVersion') AS [OSVersion],
-(select Internal_Value from #SVer where Name = N'PhysicalMemory') AS [PhysicalMemory],
-CAST(ISNULL(SERVERPROPERTY('IsClustered'),N'') AS bit) AS [IsClustered],
-@SmoRoot AS [RootDirectory],
-convert(sysname, serverproperty(N'collation')) AS [Collation],
-( select Value from #SVer where Name =N'host_platform') AS [HostPlatform],
-( select Value from #SVer where Name =N'host_release') AS [HostRelease],
-( select Value from #SVer where Name =N'host_service_pack_level') AS [HostServicePackLevel],
-( select Value from #SVer where Name =N'host_distribution') AS [HostDistribution]
-
-drop table #SVer";
-
+    select
+        total_physical_memory_kb,
+        available_physical_memory_kb
+    from sys.dm_os_sys_memory
+end";
 
         var dataTable = new DataTable();
         dataTable.Columns.Add("Name");
@@ -156,6 +177,34 @@ drop table #SVer";
                     var name = dataReader.GetName(index);
                     var value = dataReader.GetValue(index);
                     dataTable.Rows.Add([name, value]);
+                }
+            }
+
+            var nextResult = dataReader.NextResult();
+            if (nextResult)
+            {
+                while (dataReader.Read())
+                {
+                    var maxServerMemoryMB = (int)dataReader[0];
+                    var maxServerMemoryB = maxServerMemoryMB * PowersOf1024.Power2; 
+                    var s = MeasurementUnit.ToBinaryMetricString(maxServerMemoryB, 2, UnitSymbol.Byte);
+                    dataTable.Rows.Add("Maximum server memory", s);
+                }
+            }
+            
+            nextResult = dataReader.NextResult();
+            if (nextResult)
+            {
+                while (dataReader.Read())
+                {
+                    var total_physical_memory_kb = dataReader.GetInt64(0);
+                    var available_physical_memory_kb = dataReader.GetInt64(1);
+
+                    var total_physical_memory_b = total_physical_memory_kb * PowersOf1024.Power1;
+                    var available_physical_memory_b = available_physical_memory_kb * PowersOf1024.Power1;
+                    
+                    dataTable.Rows.Add("Total physical memory", MeasurementUnit.ToBinaryMetricString(total_physical_memory_b, 2, UnitSymbol.Byte));
+                    dataTable.Rows.Add("Available physical memory", MeasurementUnit.ToBinaryMetricString(available_physical_memory_b, 2, UnitSymbol.Byte));
                 }
             }
         });

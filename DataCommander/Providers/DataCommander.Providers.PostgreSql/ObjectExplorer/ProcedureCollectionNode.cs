@@ -17,9 +17,14 @@ internal sealed class ProcedureCollectionNode(SchemaNode schemaNode) : ITreeNode
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
     public ContextMenu? GetContextMenu() => null;
 
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
+
     bool ITreeNode.Sortable => false;
 
-    public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         var commandText = @$"select
     oid,

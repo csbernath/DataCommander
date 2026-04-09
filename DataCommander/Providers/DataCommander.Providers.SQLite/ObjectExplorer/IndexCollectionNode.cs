@@ -20,7 +20,10 @@ internal sealed class IndexCollectionNode : ITreeNode
     string? ITreeNode.Name => "Indexes";
     bool ITreeNode.IsLeaf => false;
 
-    public async Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
         var commandText = $"PRAGMA index_list({_tableNode.Name});";
         var list = await Db.ExecuteReaderAsync(
@@ -35,6 +38,8 @@ internal sealed class IndexCollectionNode : ITreeNode
             cancellationToken);
         return list!;
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     bool ITreeNode.Sortable => false;
 

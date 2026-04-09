@@ -8,7 +8,11 @@ public interface ITreeNode
 {
     string? Name { get; }
     bool IsLeaf { get; }
-    Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken);
+
+    IReadOnlyCollection<string> GetFilterableProperties();
+    Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken);
+    IReadOnlyCollection<FilterCriterion> GetFilterCriteria();
+    
     bool Sortable { get; }
     bool DynamicChildCount { get; }
     Task<string?> GetQuery(CancellationToken cancellationToken);

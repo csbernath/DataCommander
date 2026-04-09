@@ -12,7 +12,9 @@ internal sealed class SequenceCollectionNode(SchemaNode schemaNode) : ITreeNode
 
     bool ITreeNode.IsLeaf => false;
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(bool refresh, CancellationToken cancellationToken)
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    public Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         using var connection = schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection();
         connection.Open();
@@ -27,6 +29,8 @@ order by sequence_name";
             return new SequenceNode(this, name);
         }));
     }
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     bool ITreeNode.Sortable => false;
 

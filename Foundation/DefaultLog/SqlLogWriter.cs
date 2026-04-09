@@ -99,16 +99,16 @@ internal sealed class SqlLogWriter : ILogWriter
         try
         {
             var array = (LogEntry[]?)state!;
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             string commandText;
 
             for (var i = 0; i < array.Length; i++)
             {
                 commandText = _logEntryToCommandText(array[i]);
-                sb.AppendLine(commandText);
+                stringBuilder.AppendLine(commandText);
             }
 
-            commandText = sb.ToString();
+            commandText = stringBuilder.ToString();
 
             using var connection = _createConnection();
             connection.Open();

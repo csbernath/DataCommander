@@ -87,15 +87,15 @@ internal sealed class SqlLogCommand : ISqlLogItem
             }
 
             var command = GetCommandExecution(_database, _commandText, out var isNew);
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
             if (isNew)
             {
-                sb.AppendFormat("exec LogCommand {0},{1},{2},{3}\r\n", _applicationId, command.CommandNo, _database.ToNullableVarChar(),
+                stringBuilder.AppendFormat("exec LogCommand {0},{1},{2},{3}\r\n", _applicationId, command.CommandNo, _database.ToNullableVarChar(),
                     _commandText.ToNullableVarChar());
             }
 
-            sb.AppendFormat(
+            stringBuilder.AppendFormat(
                 CultureInfo.InvariantCulture,
                 "exec LogCommandExecute {0},{1},{2},{3},",
                 _applicationId,
@@ -103,20 +103,20 @@ internal sealed class SqlLogCommand : ISqlLogItem
                 command.CommandNo,
                 command.ExecutionNo);
 
-            sb.Append(_parameters.ToNullableVarChar());
-            sb.Append(',');
-            sb.Append(_startDate.ToSqlConstant());
+            stringBuilder.Append(_parameters.ToNullableVarChar());
+            stringBuilder.Append(',');
+            stringBuilder.Append(_startDate.ToSqlConstant());
 
             var microseconds = StopwatchTimeSpan.ToInt32(_duration, 1000000);
-            sb.AppendFormat(",{0}\r\n", microseconds);
+            stringBuilder.AppendFormat(",{0}\r\n", microseconds);
 
             if (_exception != null)
             {
                 var error = new SqlLogError(_applicationId, _connectionNo, command.CommandNo, command.ExecutionNo, _exception);
-                sb.Append(error.CommandText);
+                stringBuilder.Append(error.CommandText);
             }
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
     }
 

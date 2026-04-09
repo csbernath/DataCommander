@@ -1,4 +1,14 @@
-﻿using System;
+﻿using ADODB;
+using DataCommander.Api;
+using DataCommander.Api.Connection;
+using DataCommander.Api.Query;
+using DataCommander.Application.ResultWriter;
+using Foundation.Core;
+using Foundation.Data;
+using Foundation.Diagnostics;
+using Foundation.Windows.Forms;
+using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,16 +23,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
-using ADODB;
-using DataCommander.Api;
-using DataCommander.Api.Connection;
-using DataCommander.Api.Query;
-using DataCommander.Application.ResultWriter;
-using Foundation.Core;
-using Foundation.Data;
-using Foundation.Diagnostics;
-using Foundation.Windows.Forms;
-using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Application.Query;
 
@@ -110,6 +110,7 @@ public sealed partial class QueryForm
                         var cancellationTokenSource = new CancellationTokenSource();
                         var cancellationToken = cancellationTokenSource.Token;
                         treeNode2 = (ITreeNode)treeNode.Tag!;
+                        var filterCriteria = treeNode2.GetFilterCriteria();                  
                         var textBoxText = $@"Getting tree node children...
 
 Parent node type: {treeNode2.GetType().Name}
@@ -118,7 +119,7 @@ Please wait...";
                         var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
                             MessageBoxCaption.Value, textBoxText, _colorTheme);
                         var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() =>
-                            treeNode2.GetChildren(false, cancellationToken).Result));
+                            treeNode2.GetChildren(filterCriteria, false, cancellationToken).Result));
                         treeNode.Nodes.Clear();
                         AddNodes(treeNode, treeNode.Nodes, children, treeNode2.Sortable, startTimestamp);
                     }
@@ -170,18 +171,7 @@ Please wait...";
         if (treeNodeV != null)
         {
             var treeNode = (ITreeNode)treeNodeV.Tag!;
-            treeNodeV.Nodes.Clear();
-
-            var startTimestamp = Stopwatch.GetTimestamp();
-            var cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = cancellationTokenSource.Token;
-            const string textBoxText = @"Getting tree node children...
-
-Please wait...";
-            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
-                textBoxText, _colorTheme);
-            var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() => treeNode!.GetChildren(true, cancellationToken).Result));
-            AddNodes(treeNodeV, treeNodeV.Nodes, children, treeNode.Sortable, startTimestamp);
+            RefreshTreeNode(treeNodeV, treeNode.GetFilterCriteria());
         }
     }
 
@@ -202,7 +192,7 @@ Please wait...";
                     textBoxText, _colorTheme);
                 var cancellationToken = cancellationTokenSource.Token;
                 var children = cancelableOperationForm.Execute(
-                    new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren(true, cancellationToken).Result));
+                    new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren([], true, cancellationToken).Result));
                 var rootNodes = _tvObjectExplorer.Nodes;
                 rootNodes.Clear();
                 AddNodes(null, _tvObjectExplorer.Nodes, children, objectExplorer.Sortable, startTimestamp);
@@ -226,6 +216,15 @@ Please wait...";
                     {
                         if (contextMenu == null)
                             contextMenu = new ContextMenuStrip(components);
+
+                        if (treeNode.GetFilterableProperties().Count > 0)
+                        {
+                            var filterCriteria = treeNode.GetFilterCriteria();
+                            if (filterCriteria.Count > 0)
+                                contextMenu.Items.Add(new ToolStripMenuItem("Remove Filter", null, RemoveFilterClicked));
+
+                            contextMenu.Items.Add(new ToolStripMenuItem("Filter Settings", null, FilterSettingsClicked));
+                        }
 
                         contextMenu.Items.Add(new ToolStripMenuItem("Refresh", null, MnuRefresh_Click));
                     }
@@ -256,6 +255,25 @@ Please wait...";
             DataCommanderMessageBox.MessageBox.Show(this, ex.ToString(), MessageBoxCaption.Value, MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
         }
+    }
+
+    private void RemoveFilterClicked(object? sender, EventArgs e)
+    {
+        var selectedNode = _tvObjectExplorer.SelectedNode!;
+        RefreshTreeNode(selectedNode, []);
+    }
+
+    private void FilterSettingsClicked(object? sender, EventArgs e)
+    {
+        var selectedNode = _tvObjectExplorer.SelectedNode!;
+        var treeNode = (ITreeNode)selectedNode.Tag!;
+        var filterableProperties = treeNode.GetFilterableProperties();
+        var filterCriteria = treeNode.GetFilterCriteria();
+
+        var form = new FilterSettingsForm(_colorTheme, filterableProperties, filterCriteria);
+        var dialogResult = form.ShowDialog();
+        if (dialogResult == DialogResult.OK)
+            RefreshTreeNode(selectedNode, form.FilterCriteria);
     }
 
     private void mnuPaste_Click(object? sender, EventArgs e) => QueryTextBox.Paste();
@@ -479,7 +497,7 @@ Please wait...";
 
                     var dataReaderHelper = Provider.CreateDataReaderHelper(dataReader);
                     var schemaTable = dataReader.GetSchemaTable();
-                    var sb = new StringBuilder();
+                    var stringBuilder = new StringBuilder();
 
                     if (schemaTable != null)
                     {
@@ -491,12 +509,12 @@ Please wait...";
                         _standardOutput.WriteLine(InsertScriptFileWriter.GetCreateTableStatement(schemaTable));
                         var schemaRows = schemaTable.Rows;
                         var columnCount = schemaRows.Count;
-                        sb.AppendFormat("insert into {0}(", tableName);
+                        stringBuilder.AppendFormat("insert into {0}(", tableName);
 
                         for (var i = 0; i < columnCount; i++)
                         {
                             if (i > 0)
-                                sb.Append(',');
+                                stringBuilder.Append(',');
 
                             var schemaRow = schemaRows[i];
                             var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
@@ -504,43 +522,43 @@ Please wait...";
                             if (keyWordHashSet.Contains((columnName.ToUpper())))
                                 columnName = new SqlCommandBuilder().QuoteIdentifier(columnName);
 
-                            sb.Append(columnName);
+                            stringBuilder.Append(columnName);
                         }
                     }
 
-                    sb.Append(") values(");
-                    var insertInto = sb.ToString();
+                    stringBuilder.Append(") values(");
+                    var insertInto = stringBuilder.ToString();
                     var fieldCount = dataReader.FieldCount;
-                    sb.Length = 0;
+                    stringBuilder.Length = 0;
                     var statementCount = 0;
 
                     while (dataReader.Read())
                     {
                         var values = new object[fieldCount];
                         dataReaderHelper.GetValues(values);
-                        sb.Append(insertInto);
+                        stringBuilder.Append(insertInto);
 
                         for (var i = 0; i < fieldCount; i++)
                         {
                             if (i > 0)
-                                sb.Append(',');
+                                stringBuilder.Append(',');
 
                             var s = InsertScriptFileWriter.ToString(values[i]);
-                            sb.Append(s);
+                            stringBuilder.Append(s);
                         }
 
-                        sb.AppendLine(");");
+                        stringBuilder.AppendLine(");");
                         ++statementCount;
 
                         if (statementCount % 100 == 0)
                         {
-                            _standardOutput.Write(sb);
-                            sb.Length = 0;
+                            _standardOutput.Write(stringBuilder);
+                            stringBuilder.Length = 0;
                         }
                     }
 
                     if (statementCount % 100 != 0)
-                        _standardOutput.Write(sb);
+                        _standardOutput.Write(stringBuilder);
 
                     if (!dataReader.NextResult())
                     {
@@ -574,40 +592,40 @@ Please wait...";
                 var schemaTable = dataReader.GetSchemaTable()!;
                 var schemaRows = schemaTable.Rows;
                 var columnCount = schemaRows.Count;
-                var sb = new StringBuilder();
-                sb.AppendFormat("insert into {0}(", tableName);
+                var stringBuilder = new StringBuilder();
+                stringBuilder.AppendFormat("insert into {0}(", tableName);
 
                 for (var i = 0; i < columnCount; ++i)
                 {
                     if (i > 0)
-                        sb.Append(',');
+                        stringBuilder.Append(',');
 
                     var schemaRow = schemaRows[i];
                     var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
-                    sb.Append(columnName);
+                    stringBuilder.Append(columnName);
                 }
 
-                sb.Append(")\r\nselect\r\n");
-                var insertInto = sb.ToString();
+                stringBuilder.Append(")\r\nselect\r\n");
+                var insertInto = stringBuilder.ToString();
                 var fieldCount = dataReader.FieldCount;
 
                 while (dataReader.Read())
                 {
                     var values = new object[fieldCount];
                     dataReaderHelper.GetValues(values);
-                    sb = new StringBuilder();
-                    sb.Append(insertInto);
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.Append(insertInto);
 
                     for (var i = 0; i < fieldCount; i++)
                     {
                         if (i > 0)
-                            sb.Append(",\r\n");
+                            stringBuilder.Append(",\r\n");
 
                         var s = InsertScriptFileWriter.ToString(values[i]);
-                        sb.AppendFormat("    {0} as {1}", s, dataReader.GetName(i));
+                        stringBuilder.AppendFormat("    {0} as {1}", s, dataReader.GetName(i));
                     }
 
-                    _standardOutput.WriteLine(sb);
+                    _standardOutput.WriteLine(stringBuilder);
                 }
             }
         }
@@ -624,7 +642,7 @@ Please wait...";
         _tvObjectExplorer.DoDragDrop(text, DragDropEffects.All);
     }
 
-    private async void mnuDuplicateConnection_Click(object? sender, EventArgs e)
+    private void mnuDuplicateConnection_Click(object? sender, EventArgs e)
     {
         var mainForm = DataCommanderApplication.Instance.MainForm!;
         var index = mainForm.MdiChildren.Length;
@@ -654,7 +672,9 @@ Please wait...";
         queryForm.Show();
 
         var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == _connectionInfo.ProviderIdentifier);
-        QueryFormStaticMethods.AddConnectionOpenedInfoMessageToQueryForm(queryForm, elapsedTicks, _connectionInfo.ConnectionName, providerInfo.Name, connection);
+        var connectionStringBuilder = Provider.CreateConnectionStringBuilder();
+        QueryFormStaticMethods.AddConnectionOpenedInfoMessageToQueryForm(queryForm, elapsedTicks, _connectionInfo, providerInfo.Name, connectionStringBuilder,
+            connection);
     }
 
     private void sQLiteDatabaseToolStripMenuItem_Click(object? sender, EventArgs e) => SetResultWriterType(ResultWriterType.SqLite);

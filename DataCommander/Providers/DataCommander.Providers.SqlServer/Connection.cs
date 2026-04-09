@@ -19,7 +19,6 @@ internal sealed class Connection : ConnectionBase
 {
     private readonly ConnectionStringAndCredential _connectionStringAndCredential;
     private SqlConnection? _sqlConnection;
-    private string? _serverName;
 
     public Connection(ConnectionStringAndCredential connectionStringAndCredential)
     {
@@ -36,17 +35,34 @@ internal sealed class Connection : ConnectionBase
         {
             ArgumentNullException.ThrowIfNull(_sqlConnection);
             var executor = _sqlConnection.CreateCommandExecutor();
-            var commandText = "select @@version";
-            var version = (string)executor.ExecuteScalar(new CreateCommandRequest(commandText))!;
+            var commandText = @"select
+    @@version,
+    suser_sname()";
+            string? version = null;
+            string? userName = null;
+            executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
+            {
+                while (dataReader.Read())
+                {
+                    version = dataReader.GetString(0);
+                    userName = dataReader.GetString(1);
+                }
+            });
+            
             var serverVersion = _sqlConnection.ServerVersion;
             var contains = SqlServerVersionInfoRepository.TryGetByVersion(serverVersion, out var sqlServerVersionInfo);
             var description = contains ? sqlServerVersionInfo!.Name : "(not found)";
 
             var stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine($"Server name:     {_serverName}");
+
+            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_connectionStringAndCredential.ConnectionString);
+            if (sqlConnectionStringBuilder.IntegratedSecurity)
+                stringBuilder.AppendLine($"User name:           {userName}");
+
+            stringBuilder.AppendLine($"Description:         {description}");
+            stringBuilder.AppendLine($"ServerProcessId:     {_sqlConnection.ServerProcessId}");
+
             stringBuilder.AppendLine(version);
-            stringBuilder.AppendLine($"Description:     {description}");
-            stringBuilder.Append($"ServerProcessId: {_sqlConnection.ServerProcessId}");
             return stringBuilder.ToString();
         }
     }
@@ -81,21 +97,6 @@ internal sealed class Connection : ConnectionBase
     {
         ArgumentNullException.ThrowIfNull(_sqlConnection);
         await _sqlConnection.OpenAsync(cancellationToken);
-
-        if (!cancellationToken.IsCancellationRequested)
-        {
-            const string commandText = @"select @@servername
-set arithabort on";
-
-            var executor = DbCommandExecutorFactory.Create(_sqlConnection);
-            var items = await executor.ExecuteReaderAsync(
-                new ExecuteReaderRequest(commandText),
-                1,
-                dataRecord => new { ServerName = dataRecord.GetString(0) },
-                cancellationToken);
-            var item = items.First();
-            _serverName = item.ServerName;
-        }
     }
 
     private long _createCommandTimestamp;

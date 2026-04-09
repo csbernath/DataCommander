@@ -9,11 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.0-rc.2.25502.107" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Configuration\Foundation.Configuration.csproj" />
     <ProjectReference Include="..\IO\Foundation.IO.csproj" />
     <ProjectReference Include="..\Log\Foundation.Log.csproj" />
     <ProjectReference Include="..\Threading\Foundation.Threading.csproj" />

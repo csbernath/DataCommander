@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -11,9 +10,13 @@ internal sealed class RoleNode(DatabaseNode database, string? name) : ITreeNode
     public string? Name { get; } = name;
     public bool IsLeaf => true;
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(bool refresh, CancellationToken cancellationToken) =>
+    public IReadOnlyCollection<string> GetFilterableProperties() => [];
+
+    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
         Task.FromResult<IEnumerable<ITreeNode>>([]);
-    
+
+    public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
+
     public bool Sortable => false;
 
     public bool DynamicChildCount => true;

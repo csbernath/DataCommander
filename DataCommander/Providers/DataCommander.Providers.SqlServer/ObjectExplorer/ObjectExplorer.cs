@@ -13,7 +13,7 @@ internal sealed class ObjectExplorer : IObjectExplorer
     void IObjectExplorer.SetConnectionStringAndCredential(ConnectionStringAndCredential connectionStringAndCredential) =>
         _connectionStringAndCredential = connectionStringAndCredential;
 
-    Task<IEnumerable<ITreeNode>> IObjectExplorer.GetChildren(bool refresh, CancellationToken cancellationToken) =>
+    Task<IEnumerable<ITreeNode>> IObjectExplorer.GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
         Task.FromResult<IEnumerable<ITreeNode>>([new ServerNode(_connectionStringAndCredential!)]);
 
     bool IObjectExplorer.Sortable => false;
