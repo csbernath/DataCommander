@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.0" />
-    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="181.15.0" />
+    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="181.19.0" />
   </ItemGroup>
 
   <ItemGroup>
