@@ -1,0 +1,6 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=01cf9c65_002D26ad_002D06b3_002D39ef_002D192ab588695a_0023DataCommander_002EProviders_002EMsi/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=03d066fe_002D625d_002De988_002Da1bc_002D88c47a9d0864_0023DataCommander_002EProviders_002EOdp/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=1d1f598f_002Db122_002De4a5_002Dafdc_002D8f881e4ee6b7_0023DataCommander_002EProviders_002ESqlServerCe40/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=66f369bc_002Da2c0_002D900a_002D786f_002D70f58cc1cd0a_0023DataCommander_002EProviders_002ETfs/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=ad6fb56e_002Dc97e_002Dafb2_002D6e3e_002D5766a85b9d7f_0023DataCommander_002EProviders_002EMySql/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
