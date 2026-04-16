@@ -8,5 +8,6 @@
         <Description>Data Commander</Description>
         <AssemblyVersion>11.0</AssemblyVersion>        
         <RepositoryUrl>https://github.com/csbernath/DataCommander</RepositoryUrl>
+        <Features>runtime-async=on</Features>        
     </PropertyGroup>
 </Project>
