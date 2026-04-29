@@ -1953,8 +1953,9 @@ Please wait...";
 
         if (_cancel)
         {
-            AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Query was cancelled by user."));
-            SetStatusbarPanelText("Query was cancelled by user.");
+            const string message = "Query was canceled by user.";
+            AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, message));
+            SetStatusbarPanelText(message);
             _cancel = false;
         }
         else
