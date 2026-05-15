@@ -213,7 +213,7 @@ from
                             string? schemaName;
                             string objectName;
 
-                            if (fieldCount == 1)
+                            if (fieldCount is 1 or 7)
                             {
                                 schemaName = null;
                                 objectName = dataReader[0].ToString()!;
