@@ -261,7 +261,7 @@ internal sealed class ConnectionListForm : Form
 
     private void Connect_Click(object? sender, EventArgs e)
     {
-        var connectionInfo = SelectedConnectionInfo;
+        var connectionInfo = SelectedConnectionInfo!;
         Connect(connectionInfo);
     }
 

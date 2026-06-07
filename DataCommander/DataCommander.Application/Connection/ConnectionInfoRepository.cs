@@ -64,7 +64,7 @@ public static class ConnectionInfoRepository
             .Select(connectionProperties => connectionProperties.ToConnectionDto());
         var path = GetPath();
         
-        var directory = Path.GetDirectoryName(path);
+        var directory = Path.GetDirectoryName(path)!;
         if (!Directory.Exists(directory))
             Directory.CreateDirectory(directory);
         

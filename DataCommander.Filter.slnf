@@ -1,0 +1,36 @@
+﻿{
+  "solution": {
+    "path": "DataCommander.slnx",
+    "projects": [
+      "DataCommander\\DataCommander.Api\\DataCommander.Api.csproj",
+      "DataCommander\\DataCommander.Application\\DataCommander.Application.csproj",
+      "DataCommander\\DataCommander\\DataCommander.csproj",
+      "DataCommander\\Providers\\DataCommander.Providers.OleDb\\DataCommander.Providers.OleDb.csproj",
+      "DataCommander\\Providers\\DataCommander.Providers.PostgreSql\\DataCommander.Providers.PostgreSql.csproj",
+      "DataCommander\\Providers\\DataCommander.Providers.SQLite\\DataCommander.Providers.SQLite.csproj",
+      "DataCommander\\Providers\\DataCommander.Providers.SqlServer\\DataCommander.Providers.SqlServer.csproj",
+      "Foundation\\Assertions.Test\\Foundation.Assertions.Test.csproj",
+      "Foundation\\Assertions\\Foundation.Assertions.csproj",
+      "Foundation\\Collections\\Foundation.Collections.csproj",
+      "Foundation\\Configuration\\Foundation.Configuration.csproj",
+      "Foundation\\Core.Tests\\Foundation.Core.Tests.csproj",
+      "Foundation\\Core\\Foundation.Core.csproj",
+      "Foundation\\Data.SqlClient\\Foundation.Data.SqlClient.csproj",
+      "Foundation\\Data\\Foundation.Data.csproj",
+      "Foundation\\DefaultLog\\Foundation.DefaultLog.csproj",
+      "Foundation\\Deployment\\Foundation.Deployment.csproj",
+      "Foundation\\Diagnostics.Benchmarks\\Foundation.Diagnostics.Benchmarks.csproj",
+      "Foundation\\Diagnostics.Test\\Foundation.Diagnostics.Test.csproj",
+      "Foundation\\Diagnostics\\Foundation.Diagnostics.csproj",
+      "Foundation\\InternalLog\\Foundation.InternalLog.csproj",
+      "Foundation\\IO\\Foundation.IO.csproj",
+      "Foundation\\Linq\\Foundation.Linq.csproj",
+      "Foundation\\Log\\Foundation.Log.csproj",
+      "Foundation\\Text\\Foundation.Text.csproj",
+      "Foundation\\Threading\\Foundation.Threading.csproj",
+      "Foundation\\Windows.Forms.Tests\\Foundation.Windows.Forms.Tests.csproj",
+      "Foundation\\Windows.Forms\\Foundation.Windows.Forms.csproj",
+      "Foundation\\Xml\\Foundation.Xml.csproj"
+    ]
+  }
+}
