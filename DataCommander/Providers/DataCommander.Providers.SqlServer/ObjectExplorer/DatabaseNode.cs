@@ -84,10 +84,10 @@ use [{0}]
 select
     f.name,
     f.physical_name,
-	convert(decimal(15),f.size * 8096.0 / 1000000000)						as [Total Size (GB)],
-	convert(decimal(15),fileproperty(f.name, 'SpaceUsed') * 8096.0 / 1000000000)		as [Used (GB)],
-	convert(decimal(15,2),convert(float,fileproperty(name, 'SpaceUsed')) * 100.0 / size)	as [Used%],
-	convert(decimal(15,2),(f.size-fileproperty(name, 'SpaceUsed')) * 8096.0 / 1000000000)	as [Free (GB)]
+    convert(decimal(15,2),f.size * 8192.00 / 1000000000) as [Total Size (GB)],
+	convert(decimal(15,2),fileproperty(f.name, 'SpaceUsed') * 8192.00 / 1000000000) as [Used (GB)],
+	convert(decimal(15,2),convert(float,fileproperty(name, 'SpaceUsed')) * 100.0 / size) as [Used%],
+	convert(decimal(15,2),(f.size-fileproperty(name, 'SpaceUsed')) * 8192.00 / 1000000000) as [Free (GB)]
 from	[{0}].sys.database_files f", name);
         var queryForm = (IQueryForm)sender!;
         DataSet? dataSet = null;
