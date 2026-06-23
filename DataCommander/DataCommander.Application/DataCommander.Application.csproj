@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="ADODB" Version="7.10.3077" />
-    <PackageReference Include="EPPlus" Version="8.6.0" />
+    <PackageReference Include="EPPlus" Version="8.6.1" />
     <PackageReference Include="HtmlTextWriter" Version="3.0.2" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.9" />
     <PackageReference Include="Microsoft.Office.Interop.Word" Version="15.0.4797.1004" />
