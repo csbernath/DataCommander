@@ -664,7 +664,7 @@ Please wait...";
 
         var tableName = command.CommandType == CommandType.StoredProcedure ? command.CommandText : sqlStatement.FindTableName();
         var createTable = new StringBuilder();
-        createTable.AppendFormat("create table [{0}]\r\n(\r\n", tableName);
+        createTable.Append($"create table [{tableName}]\r\n(\r\n");
         var stringTable = new StringTable(3);
         var last = schemaTable!.Rows.Count - 1;
 

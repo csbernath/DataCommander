@@ -6,26 +6,6 @@ namespace Foundation.Core;
 
 public struct StopwatchTimeSpan(long ticks)
 {
-    private static readonly long[] Power10 =
-    [
-        1,
-        10,
-        100,
-        1000,
-        10000,
-        100000,
-        1000000,
-        10000000,
-        100000000,
-        1000000000,
-        10000000000,
-        100000000000,
-        1000000000000,
-        10000000000000,
-        100000000000000,
-        1000000000000000
-    ];
-
     public StopwatchTimeSpan(TimeSpan timeSpan) : this(ToTicks(timeSpan))
     {
     }
@@ -60,7 +40,7 @@ public struct StopwatchTimeSpan(long ticks)
         var multiplier = Pow10(scale);
         var fraction = (double)multiplier * fractionTicks / StopwatchConstants.TicksPerSecond;
         fraction = Math.Round(fraction);
-        var fractionInt64 = (long)fraction;
+        var fractionInt64 = (ulong)fraction;
         if (fractionInt64 == multiplier)
         {
             fractionInt64 = 0;
@@ -111,5 +91,5 @@ public struct StopwatchTimeSpan(long ticks)
 
     public string ToString(int scale) => ToString(Ticks, scale);
     public override string ToString() => ToString(Ticks, 9);
-    private static long Pow10(int pow) => Power10[pow];
+    private static ulong Pow10(int pow) => PowersOf10.Array[pow];
 }
