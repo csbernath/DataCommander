@@ -92,7 +92,7 @@ internal class FoundationMessageBoxForm : Form
 
         var bottomPanel = new Panel
         {
-            BackColor = SystemColors.ControlLight,
+            // BackColor = SystemColors.ControlLight,
             Dock = DockStyle.Bottom,
             Height = 42
         };
@@ -235,7 +235,7 @@ internal class FoundationMessageBoxForm : Form
             Size = new Size(75, 24),            
             Text = buttonInfo.TextWithMnemonic,
             UseMnemonic = buttonInfo.UseMnemonic,
-            UseVisualStyleBackColor = true
+            // UseVisualStyleBackColor = true
         };
     }
 

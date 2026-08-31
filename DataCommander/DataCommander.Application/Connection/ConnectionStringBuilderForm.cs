@@ -37,7 +37,7 @@ internal partial class ConnectionStringBuilderForm : Form
         oleDbProviderLabel.Visible = false;
         oleDbProvidersComboBox.Visible = false;
 
-        colorTheme?.Apply(this);
+        // colorTheme?.Apply(this);
 
         _providers = ProviderInfoRepository.GetProviderInfos()
             .OrderBy(i => i.Name)

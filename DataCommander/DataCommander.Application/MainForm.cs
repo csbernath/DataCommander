@@ -115,32 +115,32 @@ public class MainForm : Form
 
         if (_colorTheme != null)
         {
-            ForeColor = _colorTheme.ForeColor!.Value;
-            BackColor = _colorTheme.BackColor!.Value;
-
-            foreach (Control control in Controls)
-            {
-                control.ForeColor = _colorTheme.ForeColor.Value;
-                control.BackColor = _colorTheme.BackColor.Value;
-            }
-
-            _toolStripPanel!.BackColor = _colorTheme.BackColor.Value;
-
-            _mainMenu!.ForeColor = _colorTheme.ForeColor.Value;
-            _mainMenu.BackColor = _colorTheme.BackColor.Value;
-
-            foreach (var menuItem in _mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
-            foreach (ToolStripItem x in menuItem.DropDownItems)
-                _colorTheme.Apply(x);
-
-            _toolStrip!.BackColor = _colorTheme.BackColor.Value;
-            _toolStrip.ForeColor = _colorTheme.ForeColor.Value;
-
-            foreach (ToolStripItem item in _toolStrip.Items)
-                _colorTheme.Apply(item);
-
-            foreach (ToolStripItem item in _statusBar!.Items)
-                _colorTheme.Apply(item);
+            // ForeColor = _colorTheme.ForeColor!.Value;
+            // BackColor = _colorTheme.BackColor!.Value;
+            //
+            // foreach (Control control in Controls)
+            // {
+            //     control.ForeColor = _colorTheme.ForeColor.Value;
+            //     control.BackColor = _colorTheme.BackColor.Value;
+            // }
+            //
+            // _toolStripPanel!.BackColor = _colorTheme.BackColor.Value;
+            //
+            // _mainMenu!.ForeColor = _colorTheme.ForeColor.Value;
+            // _mainMenu.BackColor = _colorTheme.BackColor.Value;
+            //
+            // foreach (var menuItem in _mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
+            // foreach (ToolStripItem x in menuItem.DropDownItems)
+            //     _colorTheme.Apply(x);
+            //
+            // _toolStrip!.BackColor = _colorTheme.BackColor.Value;
+            // _toolStrip.ForeColor = _colorTheme.ForeColor.Value;
+            //
+            // foreach (ToolStripItem item in _toolStrip.Items)
+            //     _colorTheme.Apply(item);
+            //
+            // foreach (ToolStripItem item in _statusBar!.Items)
+            //     _colorTheme.Apply(item);
         }
 
         UpdateTotalMemory();
@@ -161,9 +161,7 @@ public class MainForm : Form
         var text = BytesToText(totalMemory);
         _managedMemoryToolStripStatusLabel.Text = text;
         _managedMemoryToolStripStatusLabel.ForeColor = totalMemory <= 256 * 1000 * 1000
-            ? _colorTheme != null
-                ? _colorTheme.ForeColor.Value
-                : SystemColors.ControlText
+            ? SystemColors.ControlText
             : _colorTheme!.ProviderKeyWordColor;
         _managedMemoryToolStripStatusLabel.ToolTipText = $@"Managed memory: {text} ({totalMemory:N0} bytes)
 GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.CollectionCount(2)} gen2";

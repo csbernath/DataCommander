@@ -95,6 +95,9 @@ internal static class EntryPoint
 
         if (colorMode != SystemColorMode.System)
             System.Windows.Forms.Application.SetColorMode(colorMode);
+        
+        System.Windows.Forms.Application.SetDefaultVisualStylesMode(VisualStylesMode.Net11);
+        System.Windows.Forms.Application.SetDefaultFormRevealMode(FormRevealMode.Deferred);        
 
         if (initializeApplicationConfiguration)
             ApplicationConfiguration.Initialize();
@@ -104,6 +107,7 @@ internal static class EntryPoint
             // ? (IMessageBox)new TestMessageBox()
             : new SystemMessageBox();
         DataCommanderMessageBox.Set(messageBox);
+        
         using var methodLog = LogFactory.Instance.GetCurrentMethodLog();
         methodLog.Write(LogLevel.Trace, "fileName: {0}", fileName);
         var dataCommanderApplication = DataCommanderApplication.Instance;

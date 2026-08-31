@@ -159,31 +159,31 @@ Please wait...";
         SettingsChanged(null, EventArgs.Empty);
         Settings.Changed += SettingsChanged;
 
-        colorTheme?.Apply(this);
-
-        if (colorTheme != null)
-        {
-            PreOrderTreeTraversal.ForEach(
-                (object)_mainMenu,
-                @object =>
-                {
-                    if (@object == _mainMenu)
-                        return _mainMenu!.Items.Cast<object>();
-                    if (@object is ToolStripDropDownItem toolStripDropDownItem)
-                        return toolStripDropDownItem.DropDownItems.Cast<object>();
-                    if (@object is ToolStripDropDown toolStripDropDown)
-                        return toolStripDropDown.Items.Cast<object>();
-                    else
-                        return [];
-                },
-                @object =>
-                {
-                    if (@object is MenuStrip menuStrip)
-                        _colorTheme!.Apply(menuStrip);
-                    else if (@object is ToolStripItem toolStripItem)
-                        _colorTheme!.Apply(toolStripItem);
-                });
-        }
+        // colorTheme?.Apply(this);
+        //
+        // if (colorTheme != null)
+        // {
+        //     PreOrderTreeTraversal.ForEach(
+        //         (object)_mainMenu,
+        //         @object =>
+        //         {
+        //             if (@object == _mainMenu)
+        //                 return _mainMenu!.Items.Cast<object>();
+        //             if (@object is ToolStripDropDownItem toolStripDropDownItem)
+        //                 return toolStripDropDownItem.DropDownItems.Cast<object>();
+        //             if (@object is ToolStripDropDown toolStripDropDown)
+        //                 return toolStripDropDown.Items.Cast<object>();
+        //             else
+        //                 return [];
+        //         },
+        //         @object =>
+        //         {
+        //             if (@object is MenuStrip menuStrip)
+        //                 _colorTheme!.Apply(menuStrip);
+        //             else if (@object is ToolStripItem toolStripItem)
+        //                 _colorTheme!.Apply(toolStripItem);
+        //         });
+        // }
 
         Log.Trace(CallerInformation.Create(), "Queryform.ctor finished.");
     }
@@ -1455,8 +1455,8 @@ Please wait...";
                         _resultSetsTabControl.TabPages.Add(resultSetTabPage);
                         _resultSetsTabControl.SelectedTab = resultSetTabPage;
 
-                        if (_colorTheme != null)
-                            _colorTheme.Apply(resultSetTabPage);
+                        // if (_colorTheme != null)
+                        //     _colorTheme.Apply(resultSetTabPage);
 
                         var textWriter = new TextBoxWriter(textBox);
                         resultWriter = new TextResultWriter(AddInfoMessage, textWriter, this);

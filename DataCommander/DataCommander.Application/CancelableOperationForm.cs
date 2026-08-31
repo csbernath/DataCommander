@@ -31,7 +31,7 @@ public sealed partial class CancelableOperationForm : Form, ICancelableOperation
         _cancellationTokenSource = cancellationTokenSource;
         _showDialogDelay = showDialogDelay;
         InitializeComponent();
-        colorTheme?.Apply(this);
+        // colorTheme?.Apply(this);
         Text = formText;
         textBox.AppendText(textBoxText);
         ActiveControl = cancelButton;
