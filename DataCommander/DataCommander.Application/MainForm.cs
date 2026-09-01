@@ -283,7 +283,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         _saveAllToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
         _saveAllToolStripMenuItem.Size = new Size(191, 26);
         _saveAllToolStripMenuItem.Text = "Save All";
-        _saveAllToolStripMenuItem.Click += saveAllToolStripMenuItem_Click;
+        _saveAllToolStripMenuItem.Click += SaveAllToolStripMenuItem_Click;
         // 
         // _mnuRecentFileList
         // 
@@ -337,7 +337,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         _contentsToolStripMenuItem.ShortcutKeys = Keys.F1;
         _contentsToolStripMenuItem.Size = new Size(198, 22);
         _contentsToolStripMenuItem.Text = "Contents";
-        _contentsToolStripMenuItem.Click += contentsToolStripMenuItem_Click;
+        _contentsToolStripMenuItem.Click += ContentsToolStripMenuItem_Click;
         // 
         // _checkForToolStripMenuItem
         // 
@@ -595,7 +595,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         var menuItem = (ToolStripMenuItem)sender!;
         var index = _mnuRecentFileList!.DropDownItems.IndexOf(menuItem);
         var count = _recentFileList.Count;
-        var path = _recentFileList[count - index - 1];
+        var path = _recentFileList[count - index - 1]!;
         LoadFiles([path]);
     }
 
@@ -848,7 +848,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
                 MdiParent = this,
                 Font = SelectedFont
             };
-            queryForm.Show();
+            await queryForm.ShowAsync();
         }
     }
 
@@ -863,7 +863,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         Process.Start(processStartInfo);
     }
 
-    private void contentsToolStripMenuItem_Click(object? sender, EventArgs e) => ShowContents();
+    private void ContentsToolStripMenuItem_Click(object? sender, EventArgs e) => ShowContents();
 
     protected override void OnMdiChildActivate(EventArgs e)
     {
@@ -940,7 +940,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         Cursor = Cursors.Default;
     }
 
-    private void saveAllToolStripMenuItem_Click(object? sender, EventArgs e) => SaveAll();
+    private void SaveAllToolStripMenuItem_Click(object? sender, EventArgs e) => SaveAll();
 
     private ToolStripTextBox _activeMdiChildToolStripTextBox;
     public ToolStripTextBox ActiveMdiChildToolStripTextBox => _activeMdiChildToolStripTextBox!;

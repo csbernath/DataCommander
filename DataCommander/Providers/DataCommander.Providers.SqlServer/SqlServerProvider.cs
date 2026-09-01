@@ -556,7 +556,8 @@ internal sealed class SqlServerProvider : IProvider
                 }
 
                 var allowDbNull = dataColumnSchema.AllowDbNull.GetValueOrDefault();
-                if (!allowDbNull) stringBuilder.Append(" not null");
+                if (!allowDbNull)
+                    stringBuilder.Append(" not null");
 
                 table.Rows.Add(columnOrdinal + columnOrdinalAddition, primaryKey, dataColumnSchema.ColumnName, columnSize, stringBuilder.ToString(),
                     dataColumnSchema.DataType);

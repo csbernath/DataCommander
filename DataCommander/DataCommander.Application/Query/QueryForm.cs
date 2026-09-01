@@ -83,11 +83,11 @@ public sealed partial class QueryForm : Form, IQueryForm
 
         InitializeComponent();
         GarbageMonitor.Default.Add("queryForm._toolStrip", _toolStrip!);
-        _mnuFind!.Click += mnuFind_Click;
-        _mnuFindNext!.Click += mnuFindNext_Click;
-        _mnuPaste!.Click += mnuPaste_Click;
-        _mnuGoTo!.Click += mnuGoTo_Click;
-        _mnuClearCache!.Click += mnuClearCache_Click;
+        _mnuFind!.Click += MnuFind_Click;
+        _mnuFindNext!.Click += MnuFindNext_Click;
+        _mnuPaste!.Click += MnuPaste_Click;
+        _mnuGoTo!.Click += MnuGoTo_Click;
+        _mnuClearCache!.Click += MnuClearCache_Click;
 
         var sqlReservedWords = SqlReservedWordsRepository.Get();
         var providerKeyWords = provider.KeyWords;
@@ -209,7 +209,7 @@ Please wait...";
                     {
                         Tag = hotTab
                     });
-                    contextMenu.Items.Add(new ToolStripMenuItem("Close all", null, mnuCloseAllTabPages_Click, Keys.Control | Keys.Shift | Keys.F4));
+                    contextMenu.Items.Add(new ToolStripMenuItem("Close all", null, MnuCloseAllTabPages_Click, Keys.Control | Keys.Shift | Keys.F4));
                     contextMenu.Show(_resultSetsTabControl, e.Location);
                 }
 
@@ -372,7 +372,7 @@ Please wait...";
         _mnuSave.ShortcutKeys = ((Keys)((Keys.Control | Keys.S)));
         _mnuSave.Size = new Size(230, 22);
         _mnuSave.Text = "&Save";
-        _mnuSave.Click += new EventHandler(mnuSave_Click);
+        _mnuSave.Click += new EventHandler(MnuSave_Click);
         // 
         // _mnuSaveAs
         // 
@@ -381,7 +381,7 @@ Please wait...";
         _mnuSaveAs.Name = "_mnuSaveAs";
         _mnuSaveAs.Size = new Size(230, 22);
         _mnuSaveAs.Text = "Save &As";
-        _mnuSaveAs.Click += new EventHandler(mnuSaveAs_Click);
+        _mnuSaveAs.Click += new EventHandler(MnuSaveAs_Click);
         // 
         // _mnuDuplicateConnection
         // 
@@ -391,7 +391,7 @@ Please wait...";
         _mnuDuplicateConnection.ShortcutKeys = ((Keys)((Keys.Control | Keys.Q)));
         _mnuDuplicateConnection.Size = new Size(230, 22);
         _mnuDuplicateConnection.Text = "Duplicate connection";
-        _mnuDuplicateConnection.Click += new EventHandler(mnuDuplicateConnection_Click);
+        _mnuDuplicateConnection.Click += new EventHandler(MnuDuplicateConnection_Click);
         // 
         // _menuItem8
         // 
@@ -455,7 +455,7 @@ Please wait...";
         _mnuListMembers.ShortcutKeys = ((Keys)((Keys.Control | Keys.J)));
         _mnuListMembers.Size = new Size(211, 22);
         _mnuListMembers.Text = "&List Members";
-        _mnuListMembers.Click += new EventHandler(mnuListMembers_Click);
+        _mnuListMembers.Click += new EventHandler(MnuListMembers_Click);
         // 
         // _mnuClearCache
         // 
@@ -548,7 +548,7 @@ Please wait...";
         _mnuCommandTypeText.Name = "_mnuCommandTypeText";
         _mnuCommandTypeText.Size = new Size(165, 22);
         _mnuCommandTypeText.Text = "Text";
-        _mnuCommandTypeText.Click += new EventHandler(mnuCommandTypeText_Click);
+        _mnuCommandTypeText.Click += new EventHandler(MnuCommandTypeText_Click);
         // 
         // _mnuCommandTypeStoredProcedure
         // 
@@ -556,7 +556,7 @@ Please wait...";
         _mnuCommandTypeStoredProcedure.Name = "_mnuCommandTypeStoredProcedure";
         _mnuCommandTypeStoredProcedure.Size = new Size(165, 22);
         _mnuCommandTypeStoredProcedure.Text = "Stored Procedure";
-        _mnuCommandTypeStoredProcedure.Click += new EventHandler(mnuCommandTypeStoredProcedure_Click);
+        _mnuCommandTypeStoredProcedure.Click += new EventHandler(MnuCommandTypeStoredProcedure_Click);
         // 
         // _mnuDescribeParameters
         // 
@@ -578,7 +578,7 @@ Please wait...";
         _mnuShowShemaTable.Name = "_mnuShowShemaTable";
         _mnuShowShemaTable.Size = new Size(298, 22);
         _mnuShowShemaTable.Text = "Show SchemaTable";
-        _mnuShowShemaTable.Click += new EventHandler(mnuShowShemaTable_Click);
+        _mnuShowShemaTable.Click += new EventHandler(MnuShowShemaTable_Click);
         // 
         // _executeQueryToolStripMenuItem
         // 
@@ -595,7 +595,7 @@ Please wait...";
         _mnuExecuteQuerySingleRow.ShortcutKeys = ((Keys)((Keys.Control | Keys.D1)));
         _mnuExecuteQuerySingleRow.Size = new Size(298, 22);
         _mnuExecuteQuerySingleRow.Text = "Execute Query (SingleRow)";
-        _mnuExecuteQuerySingleRow.Click += new EventHandler(mnuSingleRow_Click);
+        _mnuExecuteQuerySingleRow.Click += new EventHandler(MnuSingleRow_Click);
         // 
         // _mnuExecuteQuerySchemaOnly
         // 
@@ -604,7 +604,7 @@ Please wait...";
         _mnuExecuteQuerySchemaOnly.ShortcutKeys = ((Keys)((Keys.Control | Keys.R)));
         _mnuExecuteQuerySchemaOnly.Size = new Size(298, 22);
         _mnuExecuteQuerySchemaOnly.Text = "Execute Query (Schema only)";
-        _mnuExecuteQuerySchemaOnly.Click += new EventHandler(mnuResultSchema_Click);
+        _mnuExecuteQuerySchemaOnly.Click += new EventHandler(MnuResultSchema_Click);
         // 
         // _mnuExecuteQueryKeyInfo
         // 
@@ -613,7 +613,7 @@ Please wait...";
         _mnuExecuteQueryKeyInfo.ShortcutKeys = ((Keys)((Keys.Control | Keys.K)));
         _mnuExecuteQueryKeyInfo.Size = new Size(298, 22);
         _mnuExecuteQueryKeyInfo.Text = "Execute Query (&KeyInfo)";
-        _mnuExecuteQueryKeyInfo.Click += new EventHandler(mnuKeyInfo_Click);
+        _mnuExecuteQueryKeyInfo.Click += new EventHandler(MnuKeyInfo_Click);
         // 
         // _mnuExecuteQueryXml
         // 
@@ -623,7 +623,7 @@ Please wait...";
                                                     | Keys.X)));
         _mnuExecuteQueryXml.Size = new Size(298, 22);
         _mnuExecuteQueryXml.Text = "Execute Query (XML)";
-        _mnuExecuteQueryXml.Click += new EventHandler(mnuXml_Click);
+        _mnuExecuteQueryXml.Click += new EventHandler(MnuXml_Click);
         // 
         // _mnuOpenTable
         // 
@@ -684,7 +684,7 @@ Please wait...";
         _mnuText.ShortcutKeys = ((Keys)((Keys.Control | Keys.T)));
         _mnuText.Size = new Size(162, 22);
         _mnuText.Text = "&Text";
-        _mnuText.Click += new EventHandler(mnuText_Click);
+        _mnuText.Click += new EventHandler(MnuText_Click);
         // 
         // _mnuDataGrid
         // 
@@ -693,7 +693,7 @@ Please wait...";
         _mnuDataGrid.ShortcutKeys = ((Keys)((Keys.Control | Keys.D)));
         _mnuDataGrid.Size = new Size(162, 22);
         _mnuDataGrid.Text = "&DataGrid";
-        _mnuDataGrid.Click += new EventHandler(mnuDataGrid_Click);
+        _mnuDataGrid.Click += new EventHandler(MnuDataGrid_Click);
         // 
         // _mnuHtml
         // 
@@ -701,7 +701,7 @@ Please wait...";
         _mnuHtml.Name = "_mnuHtml";
         _mnuHtml.Size = new Size(162, 22);
         _mnuHtml.Text = "&Html";
-        _mnuHtml.Click += new EventHandler(mnuHtml_Click);
+        _mnuHtml.Click += new EventHandler(MnuHtml_Click);
         // 
         // _mnuRtf
         // 
@@ -717,7 +717,7 @@ Please wait...";
         _mnuListView.ShortcutKeys = ((Keys)((Keys.Control | Keys.L)));
         _mnuListView.Size = new Size(162, 22);
         _mnuListView.Text = "&ListView";
-        _mnuListView.Click += new EventHandler(mnuListView_Click);
+        _mnuListView.Click += new EventHandler(MnuListView_Click);
         // 
         // _mnuExcel
         // 
@@ -733,14 +733,14 @@ Please wait...";
         _menuResultModeFile.Name = "_menuResultModeFile";
         _menuResultModeFile.Size = new Size(162, 22);
         _menuResultModeFile.Text = "&File";
-        _menuResultModeFile.Click += new EventHandler(menuResultModeFile_Click);
+        _menuResultModeFile.Click += new EventHandler(MenuResultModeFile_Click);
         // 
         // _sQLiteDatabaseToolStripMenuItem
         // 
         _sQLiteDatabaseToolStripMenuItem.Name = "_sQLiteDatabaseToolStripMenuItem";
         _sQLiteDatabaseToolStripMenuItem.Size = new Size(162, 22);
         _sQLiteDatabaseToolStripMenuItem.Text = "SQLite database";
-        _sQLiteDatabaseToolStripMenuItem.Click += new EventHandler(sQLiteDatabaseToolStripMenuItem_Click);
+        _sQLiteDatabaseToolStripMenuItem.Click += new EventHandler(SQLiteDatabaseToolStripMenuItem_Click);
         // 
         // _insertScriptFileToolStripMenuItem
         // 
@@ -762,7 +762,7 @@ Please wait...";
                                                     | Keys.Q)));
         _mnuGotoQueryEditor.Size = new Size(298, 22);
         _mnuGotoQueryEditor.Text = "Goto &Query Editor";
-        _mnuGotoQueryEditor.Click += new EventHandler(mnuGotoQueryEditor_Click);
+        _mnuGotoQueryEditor.Click += new EventHandler(MnuGotoQueryEditor_Click);
         // 
         // _mnuGotoMessageTabPage
         // 
@@ -771,7 +771,7 @@ Please wait...";
         _mnuGotoMessageTabPage.ShortcutKeys = ((Keys)((Keys.Control | Keys.M)));
         _mnuGotoMessageTabPage.Size = new Size(298, 22);
         _mnuGotoMessageTabPage.Text = "Goto &Message TabPage";
-        _mnuGotoMessageTabPage.Click += new EventHandler(mnuGotoMessageTabPage_Click);
+        _mnuGotoMessageTabPage.Click += new EventHandler(MnuGotoMessageTabPage_Click);
         // 
         // _mnuCloseTabPage
         // 
@@ -779,7 +779,7 @@ Please wait...";
         _mnuCloseTabPage.Name = "_mnuCloseTabPage";
         _mnuCloseTabPage.Size = new Size(298, 22);
         _mnuCloseTabPage.Text = "Close Current &TabPage";
-        _mnuCloseTabPage.Click += new EventHandler(mnuCloseTabPage_Click);
+        _mnuCloseTabPage.Click += new EventHandler(MnuCloseTabPage_Click);
         // 
         // _mnuCloseAllTabPages
         // 
@@ -789,7 +789,7 @@ Please wait...";
                                                      | Keys.F4)));
         _mnuCloseAllTabPages.Size = new Size(298, 22);
         _mnuCloseAllTabPages.Text = "Close &All TabPages";
-        _mnuCloseAllTabPages.Click += new EventHandler(mnuCloseAllTabPages_Click);
+        _mnuCloseAllTabPages.Click += new EventHandler(MnuCloseAllTabPages_Click);
         // 
         // _mnuCreateInsert
         // 
@@ -798,7 +798,7 @@ Please wait...";
         _mnuCreateInsert.ShortcutKeys = ((Keys)((Keys.Control | Keys.I)));
         _mnuCreateInsert.Size = new Size(298, 22);
         _mnuCreateInsert.Text = "Create insert statements";
-        _mnuCreateInsert.Click += new EventHandler(mnuCreateInsert_Click);
+        _mnuCreateInsert.Click += new EventHandler(MnuCreateInsert_Click);
         // 
         // _mnuCreateInsertSelect
         // 
@@ -806,14 +806,14 @@ Please wait...";
         _mnuCreateInsertSelect.Name = "_mnuCreateInsertSelect";
         _mnuCreateInsertSelect.Size = new Size(298, 22);
         _mnuCreateInsertSelect.Text = "Create \'insert select\' statements";
-        _mnuCreateInsertSelect.Click += new EventHandler(mnuCreateInsertSelect_Click);
+        _mnuCreateInsertSelect.Click += new EventHandler(MnuCreateInsertSelect_Click);
         // 
         // _createSqlCeDatabaseToolStripMenuItem
         // 
         _createSqlCeDatabaseToolStripMenuItem.Name = "_createSqlCeDatabaseToolStripMenuItem";
         _createSqlCeDatabaseToolStripMenuItem.Size = new Size(298, 22);
         _createSqlCeDatabaseToolStripMenuItem.Text = "Create SQL Server Compact database";
-        _createSqlCeDatabaseToolStripMenuItem.Click += new EventHandler(createSqlCeDatabaseToolStripMenuItem_Click);
+        _createSqlCeDatabaseToolStripMenuItem.Click += new EventHandler(CreateSqlCeDatabaseToolStripMenuItem_Click);
         // 
         // _exportToolStripMenuItem
         // 
@@ -825,7 +825,7 @@ Please wait...";
         _beginTransactionToolStripMenuItem.Name = "_beginTransactionToolStripMenuItem";
         _beginTransactionToolStripMenuItem.Size = new Size(298, 22);
         _beginTransactionToolStripMenuItem.Text = "Begin Transaction";
-        _beginTransactionToolStripMenuItem.Click += new EventHandler(beginTransactionToolStripMenuItem_Click);
+        _beginTransactionToolStripMenuItem.Click += new EventHandler(BeginTransactionToolStripMenuItem_Click);
         // 
         // _commitTransactionToolStripMenuItem
         // 
@@ -833,7 +833,7 @@ Please wait...";
         _commitTransactionToolStripMenuItem.Name = "_commitTransactionToolStripMenuItem";
         _commitTransactionToolStripMenuItem.Size = new Size(298, 22);
         _commitTransactionToolStripMenuItem.Text = "Commit Transaction";
-        _commitTransactionToolStripMenuItem.Click += new EventHandler(commitTransactionToolStripMenuItem_Click);
+        _commitTransactionToolStripMenuItem.Click += new EventHandler(CommitTransactionToolStripMenuItem_Click);
         // 
         // _rollbackTransactionToolStripMenuItem
         // 
@@ -873,7 +873,7 @@ Please wait...";
         _mnuObjectExplorer.ShortcutKeys = Keys.F8;
         _mnuObjectExplorer.Size = new Size(229, 22);
         _mnuObjectExplorer.Text = "Object Explorer";
-        _mnuObjectExplorer.Click += new EventHandler(menuObjectExplorer_Click);
+        _mnuObjectExplorer.Click += new EventHandler(MenuObjectExplorer_Click);
         // 
         // _mnuRefreshObjectExplorer
         // 
@@ -950,9 +950,9 @@ Please wait...";
         _tvObjectExplorer.Name = "_tvObjectExplorer";
         _tvObjectExplorer.Size = new Size(300, 541);
         _tvObjectExplorer.TabIndex = 4;
-        _tvObjectExplorer.BeforeExpand += new TreeViewCancelEventHandler(tvObjectBrowser_BeforeExpand);
-        _tvObjectExplorer.ItemDrag += new ItemDragEventHandler(tvObjectBrowser_ItemDrag);
-        _tvObjectExplorer.DoubleClick += new EventHandler(tvObjectBrowser_DoubleClick);
+        _tvObjectExplorer.BeforeExpand += new TreeViewCancelEventHandler(TvObjectBrowser_BeforeExpand);
+        _tvObjectExplorer.ItemDrag += new ItemDragEventHandler(TvObjectBrowser_ItemDrag);
+        _tvObjectExplorer.DoubleClick += new EventHandler(TvObjectBrowser_DoubleClick);
         _tvObjectExplorer.MouseDown += new MouseEventHandler(TvObjectBrowser_MouseDown);
         _tvObjectExplorer.MouseUp += new MouseEventHandler(tvObjectExplorer_MouseUp);
         // 
@@ -1583,7 +1583,7 @@ Please wait...";
     private static IReadOnlyCollection<DbRequestParameter> ToDbQueryParameters(List<Token> tokens)
     {
         var declarations = GetDeclarations(tokens);
-        return declarations.Select(ToDbRequestParameter).ToArray();
+        return [.. declarations.Select(ToDbRequestParameter)];
     }
 
     private static List<List<Token>> GetDeclarations(List<Token> tokens)
@@ -1865,12 +1865,12 @@ Please wait...";
         }
     }
 
-    private void EndFill(IAsyncDataAdapter dataAdapter, Exception e)
+    private void EndFill(IAsyncDataAdapter dataAdapter, Exception? exception)
     {
         try
         {
-            if (e != null)
-                ShowMessage(e);
+            if (exception != null)
+                ShowMessage(exception);
 
             if (Connection!.State == ConnectionState.Open && Connection.Database != _database)
             {
@@ -1918,7 +1918,7 @@ Please wait...";
                     break;
             }
 
-            if (e != null || dataAdapter.TableCount == 0)
+            if (exception != null || dataAdapter.TableCount == 0)
                 _tabControl.SelectedTab = _messagesTabPage;
             else
             {
@@ -2032,70 +2032,88 @@ Please wait...";
 
         while (true)
         {
-            var hasElements = false;
-            while (!_infoMessages.IsEmpty && IsHandleCreated)
+            var @continue = ConsumeInfoMessages(waitHandles);
+            if (!@continue)
             {
-                hasElements = true;
-                var infoMessages = new InfoMessage[_infoMessages.Count];
-                var count = _infoMessages.Take(infoMessages);
-                try
-                {
-                    for (var i = 0; i < count; i++)
-                    {
-                        Invoke(() =>
-                        {
-                            var message = infoMessages[i];
-                            var color = _messagesTextBox.SelectionColor;
-
-                            switch (message.Severity)
-                            {
-                                case InfoMessageSeverity.Error:
-                                    _messagesTextBox.SelectionColor = _colorTheme?.ProviderKeyWordColor ?? Color.Red;
-                                    break;
-
-                                case InfoMessageSeverity.Information:
-                                    _messagesTextBox.SelectionColor = _colorTheme?.SqlKeyWordColor ?? Color.Blue;
-                                    break;
-                            }
-
-                            AppendMessageText(message.CreationTime, message.Severity, message.Header, message.Message);
-
-                            switch (message.Severity)
-                            {
-                                case InfoMessageSeverity.Error:
-                                case InfoMessageSeverity.Information:
-                                    _messagesTextBox.SelectionColor = color;
-                                    break;
-                            }
-                        });
-                    }
-                }
-                catch
-                {
-                }
+                break;
             }
+        }
+    }
 
-            if (hasElements)
+    private bool ConsumeInfoMessages(WaitHandle[] waitHandles)
+    {
+        var hasElements = false;
+        while (!_infoMessages.IsEmpty && IsHandleCreated)
+        {
+            hasElements = true;
+            var infoMessages = new InfoMessage[_infoMessages.Count];
+            var count = _infoMessages.Take(infoMessages);
+            try
             {
-                try
+                for (var i = 0; i < count; i++)
                 {
                     Invoke(() =>
                     {
-                        _messagesTextBox.ScrollToCaret();
-                        _messagesTextBox.Update();
+                        var message = infoMessages[i];
+                        AppendMessageText(message);
                     });
                 }
-                catch
-                {
-                }
             }
-
-            if (_infoMessages.IsEmpty)
+            catch
             {
-                var w = WaitHandle.WaitAny(waitHandles, 1000);
-                if (w == 1)
-                    break;
             }
+        }
+
+        if (hasElements)
+        {
+            try
+            {
+                Invoke(() =>
+                {
+                    _messagesTextBox.ScrollToCaret();
+                    _messagesTextBox.Update();
+                });
+            }
+            catch
+            {
+            }
+        }
+
+        var @continue = true;
+
+        if (_infoMessages.IsEmpty)
+        {
+            var w = WaitHandle.WaitAny(waitHandles, 1000);
+            if (w == 1)
+                @continue = false;
+        }
+
+        return @continue;
+    }
+
+    private void AppendMessageText(InfoMessage message)
+    {
+        var color = _messagesTextBox.SelectionColor;
+
+        switch (message.Severity)
+        {
+            case InfoMessageSeverity.Error:
+                _messagesTextBox.SelectionColor = _colorTheme?.ProviderKeyWordColor ?? Color.Red;
+                break;
+
+            case InfoMessageSeverity.Information:
+                _messagesTextBox.SelectionColor = _colorTheme?.SqlKeyWordColor ?? Color.Blue;
+                break;
+        }
+
+        AppendMessageText(message.CreationTime, message.Severity, message.Header, message.Message);
+
+        switch (message.Severity)
+        {
+            case InfoMessageSeverity.Error:
+            case InfoMessageSeverity.Information:
+                _messagesTextBox.SelectionColor = color;
+                break;
         }
     }
 

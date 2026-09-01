@@ -143,7 +143,7 @@ internal sealed class OleDbProvider : IProvider
         columns.Add("DataType", typeof(Type));
         columns.Add("ProviderType", typeof(int));
 
-        var schemaTable = dataReader.GetSchemaTable();
+        var schemaTable = dataReader.GetSchemaTable()!;
 
         for (var i = 0; i < schemaTable.Rows.Count; i++)
         {
@@ -162,7 +162,6 @@ internal sealed class OleDbProvider : IProvider
             var dbType = (OleDbType)row["ProviderType"];
             var allowDBNull = (bool)row["AllowDBNull"];
 
-            var dataTypeName = dataReader.GetDataTypeName(i);
             var stringBuilder = new StringBuilder();
             stringBuilder.Append(dataReader.GetDataTypeName(i));
 
@@ -256,7 +255,7 @@ internal sealed class OleDbProvider : IProvider
     {
     }
 
-    string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName) => null;
+    string? IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName) => null;
 
     void IProvider.CreateInsertCommand(
         DataTable sourceSchemaTable,

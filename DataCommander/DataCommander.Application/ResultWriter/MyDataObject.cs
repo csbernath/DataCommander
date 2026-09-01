@@ -9,9 +9,9 @@ namespace DataCommander.Application.ResultWriter;
 
 internal sealed class MyDataObject(DataView dataView, int[] columnIndexes) : IDataObject
 {
-    object IDataObject.GetData(Type format) => throw new NotImplementedException();
+    object? IDataObject.GetData(Type format) => throw new NotImplementedException();
 
-    object IDataObject.GetData(string format)
+    object? IDataObject.GetData(string format)
     {
         object? data;
 

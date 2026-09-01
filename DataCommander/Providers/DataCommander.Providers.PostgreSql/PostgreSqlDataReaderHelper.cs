@@ -34,15 +34,15 @@ internal sealed class PostgreSqlDataReaderHelper : IDataReaderHelper
     {
         IDataFieldReader dataFieldReader = npgsqlDbColumn.PostgresType switch
         {
-            PostgresArrayType postgresArrayType => new PostgresArrayDataFieldReader(npgsqlDataReader, npgsqlDbColumn.ColumnOrdinal.Value),
-            PostgresBaseType postgresBaseType => new DefaultDataFieldReader(npgsqlDataReader, npgsqlDbColumn.ColumnOrdinal.Value),
-            PostgresCompositeType postgresCompositeType => throw new NotImplementedException(),
-            PostgresDomainType postgresDomainType => throw new NotImplementedException(),
-            PostgresEnumType postgresEnumType => throw new NotImplementedException(),
-            PostgresMultirangeType postgresMultirangeType => throw new NotImplementedException(),
-            PostgresRangeType postgresRangeType => throw new NotImplementedException(),
-            UnknownBackendType unknownBackendType => new DefaultDataFieldReader(npgsqlDataReader, npgsqlDbColumn.ColumnOrdinal.Value),
-            _ => new DefaultDataFieldReader(npgsqlDataReader, npgsqlDbColumn.ColumnOrdinal.Value)
+            PostgresArrayType => new PostgresArrayDataFieldReader(npgsqlDataReader, npgsqlDbColumn.ColumnOrdinal!.Value),
+            PostgresBaseType => new DefaultDataFieldReader(npgsqlDataReader, npgsqlDbColumn.ColumnOrdinal!.Value),
+            PostgresCompositeType => throw new NotImplementedException(),
+            PostgresDomainType => throw new NotImplementedException(),
+            PostgresEnumType => throw new NotImplementedException(),
+            PostgresMultirangeType => throw new NotImplementedException(),
+            PostgresRangeType => throw new NotImplementedException(),
+            UnknownBackendType => new DefaultDataFieldReader(npgsqlDataReader, npgsqlDbColumn.ColumnOrdinal!.Value),
+            _ => new DefaultDataFieldReader(npgsqlDataReader, npgsqlDbColumn.ColumnOrdinal!.Value)
         };
 
         return dataFieldReader;

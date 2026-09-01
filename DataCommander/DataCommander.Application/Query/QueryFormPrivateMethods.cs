@@ -250,9 +250,7 @@ public sealed partial class QueryForm
 
     private ContextMenuStrip ToContextMenuStrip(ContextMenu contextMenu)
     {
-        ToolStripItem[] menuItems = contextMenu.MenuItems
-            .Select(ToToolStripMenuItem)
-            .ToArray();
+        ToolStripItem[] menuItems = [.. contextMenu.MenuItems.Select(ToToolStripMenuItem)];
 
         var contextMenuStrip = new ContextMenuStrip();
         contextMenuStrip.Items.AddRange(menuItems);

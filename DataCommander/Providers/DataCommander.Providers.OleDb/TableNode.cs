@@ -66,7 +66,7 @@ internal sealed class TableNode(SchemaNode schema, string? name) : ITreeNode
         using (var connection = ConnectionFactory.CreateConnection(schema.Catalog.CatalogsNode.ConnectionStringAndCredential))
         {
             connection.Open();
-            var restrictions = new object[] { schema.Catalog.Name, schema.Name, name };
+            var restrictions = new object?[] { schema.Catalog.Name, schema.Name, name };
             dataTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, restrictions)!;
         }
 

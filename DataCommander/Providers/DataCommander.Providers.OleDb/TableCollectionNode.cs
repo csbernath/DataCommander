@@ -22,7 +22,7 @@ internal sealed class TableCollectionNode(SchemaNode schema) : ITreeNode
 
         try
         {
-            object[] restrictions = null;
+            object[]? restrictions = null;
             var catalog = schema.Catalog.Name;
 
             if (catalog != null)
