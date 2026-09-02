@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,8 +11,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal sealed class ParameterCollectionNode(DatabaseNode databaseNode, int objectId) : ITreeNode
 {
-    private readonly DatabaseNode _databaseNode = databaseNode;
-
     public string? Name => "Parameters";
 
     public bool IsLeaf => false;
@@ -24,7 +23,7 @@ internal sealed class ParameterCollectionNode(DatabaseNode databaseNode, int obj
         var commandText = @$"select
     t.name,
     t.user_type_id
-from [{_databaseNode.Name}].sys.types t
+from [{databaseNode.Name}].sys.types t
 
 select
     p.name,
@@ -34,7 +33,7 @@ select
     p.scale,
     p.is_output,
     p.has_default_value
-from [{_databaseNode.Name}].sys.parameters p
+from [{databaseNode.Name}].sys.parameters p
 where
     p.object_id = {objectId}
 order by
@@ -45,27 +44,34 @@ order by
             new ExecuteReaderRequest(commandText),
             async (dataReader, _) =>
             {
-                var sysTypes = await dataReader.ReadResultAsync(128, dataRecord =>
-                {
-                    var name = dataRecord.GetString(0);
-                    var systemTypeId = dataRecord.GetInt32(1);
-                    return new SysType(name, systemTypeId);
-                }, cancellationToken);
+                var sysTypes = await dataReader.ReadResultAsync(128, ToSysType, cancellationToken);
                 var sysTypesByUserTypeId = sysTypes.ToDictionary(t => t.UserTypeId);
 
                 await dataReader.NextResultAsync(cancellationToken);
 
-                parameterNodes = await dataReader.ReadResultAsync(128, dataRecord =>
-                {
-                    var name = dataRecord.GetString(0);
-                    var userTypeId = dataRecord.GetInt32(1);
-                    var sysType = sysTypesByUserTypeId[userTypeId];
-                    var maxLength = dataRecord.GetInt16(2);
-                    var isOutput = dataRecord.GetBoolean(5);
-                    return new ParameterNode(name, sysType, maxLength, isOutput);
-                }, cancellationToken);
+                parameterNodes = await dataReader.ReadResultAsync(
+                    128,
+                    dataRecord => ToParameterNode(dataRecord, sysTypesByUserTypeId),
+                    cancellationToken);
             }, cancellationToken);
-        return parameterNodes;
+        return parameterNodes!;
+    }
+
+    private static SysType ToSysType(IDataRecord dataRecord)
+    {
+        var name = dataRecord.GetString(0);
+        var systemTypeId = dataRecord.GetInt32(1);
+        return new SysType(name, systemTypeId);
+    }
+
+    private static ParameterNode ToParameterNode(IDataRecord dataRecord, Dictionary<int, SysType> sysTypesByUserTypeId)
+    {
+        var name = dataRecord.GetString(0);
+        var userTypeId = dataRecord.GetInt32(1);
+        var sysType = sysTypesByUserTypeId[userTypeId];
+        var maxLength = dataRecord.GetInt16(2);
+        var isOutput = dataRecord.GetBoolean(5);
+        return new ParameterNode(name, sysType, maxLength, isOutput);
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];

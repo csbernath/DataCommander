@@ -29,7 +29,7 @@ internal sealed class StoredProcedureNode(DatabaseNode database, int objectId, s
 
     public bool Sortable => false;
 
-    public bool DynamicChildCount => true;
+    public bool DynamicChildCount => false;
 
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken)
     {

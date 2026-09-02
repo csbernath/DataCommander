@@ -34,7 +34,7 @@ internal sealed class ParameterNode(string name, SysType sysType, short maxLengt
             }
 
             stringBuilder.Append(", ");
-            stringBuilder.Append(isOutput ? "out" : "Input");
+            stringBuilder.Append(isOutput ? "Input/Output" : "Input");
             stringBuilder.Append(')');
 
             return stringBuilder.ToString();
