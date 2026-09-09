@@ -109,8 +109,8 @@ public sealed partial class QueryForm
     private bool _openTableMode;
     private readonly TabPage _messagesTabPage;
     private readonly RichTextBox _messagesTextBox;
-    private readonly TabPage _resultSetsTabPage;
-    private readonly TabControl _resultSetsTabControl;
+    private readonly TabPage _resultsTabPage;
+    private readonly TabControl _resultsTabControl;
     private ToolStrip? _toolStrip;
     private ToolStripSeparator? _toolStripSeparator4;
     private ToolStripSplitButton? _executeQuerySplitButton;

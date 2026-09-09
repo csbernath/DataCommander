@@ -141,6 +141,12 @@ public class MainForm : Form
             //
             // foreach (ToolStripItem item in _statusBar!.Items)
             //     _colorTheme.Apply(item);
+
+            if (_colorTheme.BackColor != null)
+            {
+                var mdiClient = Controls.OfType<MdiClient>().First();
+                mdiClient.BackColor = _colorTheme.BackColor.Value;
+            }
         }
 
         UpdateTotalMemory();

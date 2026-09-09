@@ -151,8 +151,8 @@ public sealed partial class QueryForm
             var resultSetTabPage = new TabPage(text);
             GarbageMonitor.Default.Add("resultSetTabPage", resultSetTabPage);
             resultSetTabPage.ToolTipText = null; // TODO
-            _resultSetsTabControl.TabPages.Add(resultSetTabPage);
-            _resultSetsTabControl.SelectedTab = resultSetTabPage;
+            _resultsTabControl.TabPages.Add(resultSetTabPage);
+            _resultsTabControl.SelectedTab = resultSetTabPage;
             if (dataSet.Tables.Count > 1)
             {
                 var tabControl = new TabControl { Dock = DockStyle.Fill };

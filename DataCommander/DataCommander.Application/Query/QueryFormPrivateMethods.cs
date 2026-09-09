@@ -36,7 +36,7 @@ public sealed partial class QueryForm
 
     private void CloseResultSetTabPage(TabPage tabPage)
     {
-        _resultSetsTabControl.TabPages.Remove(tabPage);
+        _resultsTabControl.TabPages.Remove(tabPage);
         var control = tabPage.Controls[0];
         if (control is TabControl tabControl)
         {
@@ -196,7 +196,7 @@ public sealed partial class QueryForm
 
     private void CloseResultSetTabPages()
     {
-        var tabPages = _resultSetsTabControl.TabPages.Cast<TabPage>().ToArray();
+        var tabPages = _resultsTabControl.TabPages.Cast<TabPage>().ToArray();
 
         foreach (var tabPage in tabPages)
             CloseResultSetTabPage(tabPage);
@@ -534,7 +534,7 @@ Please wait...";
                     } while (dataReader.NextResult());
 
                     ShowDataSet(dataSet!);
-                    _tabControl.SelectedTab = _resultSetsTabPage;
+                    _tabControl.SelectedTab = _resultsTabPage;
                 }
                 finally
                 {
@@ -608,7 +608,7 @@ Please wait...";
             }
 
             ShowDataSet(dataSet);
-            _tabControl.SelectedTab = _resultSetsTabPage;
+            _tabControl.SelectedTab = _resultsTabPage;
         }
         catch (Exception ex)
         {

@@ -107,14 +107,14 @@ public sealed partial class QueryForm : Form, IQueryForm
 
         SetText();
 
-        _resultSetsTabPage = new TabPage("Results");
-        _resultSetsTabControl = new TabControl();
-        _resultSetsTabControl.MouseUp += ResultSetsTabControl_MouseUp;
-        _resultSetsTabControl.Alignment = TabAlignment.Top;
-        _resultSetsTabControl.Dock = DockStyle.Fill;
-        _resultSetsTabPage.Controls.Add(_resultSetsTabControl);
+        _resultsTabPage = new TabPage("Results");
+        _resultsTabControl = new TabControl();
+        _resultsTabControl.MouseUp += ResultsTabControlMouseUp;
+        _resultsTabControl.Alignment = TabAlignment.Top;
+        _resultsTabControl.Dock = DockStyle.Fill;
+        _resultsTabPage.Controls.Add(_resultsTabControl);
 
-        _tabControl!.TabPages.Add(_resultSetsTabPage);
+        _tabControl!.TabPages.Add(_resultsTabPage);
         _tabControl.TabPages.Add(_messagesTabPage);
         _tabControl.SelectedTab = _messagesTabPage;
 
@@ -185,14 +185,23 @@ Please wait...";
         //         });
         // }
 
+        if (colorTheme != null)
+        {
+            if (colorTheme.BackColor != null)
+            {
+                _tvObjectExplorer.BackColor = colorTheme.BackColor.Value;
+                _messagesTextBox.BackColor = colorTheme.BackColor.Value;
+            }
+        }
+
         Log.Trace(CallerInformation.Create(), "Queryform.ctor finished.");
     }
 
-    private void ResultSetsTabControl_MouseUp(object? sender, MouseEventArgs e)
+    private void ResultsTabControlMouseUp(object? sender, MouseEventArgs e)
     {
         var hitTestInfo = new Tchittestinfo(e.X, e.Y);
-        var index = SendMessage(_resultSetsTabControl.Handle, TcmHittest, IntPtr.Zero, ref hitTestInfo);
-        var hotTab = index >= 0 ? _resultSetsTabControl.TabPages[index] : null;
+        var index = SendMessage(_resultsTabControl.Handle, TcmHittest, IntPtr.Zero, ref hitTestInfo);
+        var hotTab = index >= 0 ? _resultsTabControl.TabPages[index] : null;
 
         switch (e.Button)
         {
@@ -210,7 +219,7 @@ Please wait...";
                         Tag = hotTab
                     });
                     contextMenu.Items.Add(new ToolStripMenuItem("Close all", null, MnuCloseAllTabPages_Click, Keys.Control | Keys.Shift | Keys.F4));
-                    contextMenu.Show(_resultSetsTabControl, e.Location);
+                    contextMenu.Show(_resultsTabControl, e.Location);
                 }
 
                 break;
@@ -1452,8 +1461,8 @@ Please wait...";
 
                         var resultSetTabPage = new TabPage("TextResult");
                         resultSetTabPage.Controls.Add(textBox);
-                        _resultSetsTabControl.TabPages.Add(resultSetTabPage);
-                        _resultSetsTabControl.SelectedTab = resultSetTabPage;
+                        _resultsTabControl.TabPages.Add(resultSetTabPage);
+                        _resultsTabControl.SelectedTab = resultSetTabPage;
 
                         // if (_colorTheme != null)
                         //     _colorTheme.Apply(resultSetTabPage);
@@ -1894,8 +1903,8 @@ Please wait...";
                     {
                         ToolTipText = null // TODO
                     };
-                    _resultSetsTabControl.TabPages.Add(resultSetTabPage);
-                    _resultSetsTabControl.SelectedTab = resultSetTabPage;
+                    _resultsTabControl.TabPages.Add(resultSetTabPage);
+                    _resultsTabControl.SelectedTab = resultSetTabPage;
                     var tabControl = new TabControl
                     {
                         Dock = DockStyle.Fill
@@ -1931,7 +1940,7 @@ Please wait...";
                     case ResultWriterType.Rtf:
                     case ResultWriterType.SqLite:
                     case ResultWriterType.Text:
-                        _tabControl.SelectedTab = _resultSetsTabPage;
+                        _tabControl.SelectedTab = _resultsTabPage;
                         break;
                 }
             }

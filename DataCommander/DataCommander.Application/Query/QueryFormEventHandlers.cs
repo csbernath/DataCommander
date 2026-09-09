@@ -446,7 +446,7 @@ Please wait...";
                     }
 
                     var resultSetTabPage = new TabPage("Xml");
-                    _resultSetsTabControl.TabPages.Add(resultSetTabPage);
+                    _resultsTabControl.TabPages.Add(resultSetTabPage);
 
                     var htmlTextBox = new HtmlTextBox
                     {
@@ -456,8 +456,8 @@ Please wait...";
                     resultSetTabPage.Controls.Add(htmlTextBox);
 
                     htmlTextBox.Navigate(path);
-                    _resultSetsTabControl.SelectedTab = resultSetTabPage;
-                    _tabControl.SelectedTab = _resultSetsTabPage;
+                    _resultsTabControl.SelectedTab = resultSetTabPage;
+                    _tabControl.SelectedTab = _resultsTabPage;
                 }
 
                 if (!dataReader.NextResult())
@@ -879,7 +879,7 @@ Please wait...";
     {
         var tabPage = _tabControl.SelectedTab;
 
-        if (tabPage != null && tabPage != _messagesTabPage && tabPage != _resultSetsTabPage)
+        if (tabPage != null && tabPage != _messagesTabPage && tabPage != _resultsTabPage)
             CloseResultSetTabPage(tabPage);
     }
 
