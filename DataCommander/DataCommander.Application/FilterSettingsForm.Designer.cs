@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             dataGridView = new System.Windows.Forms.DataGridView();
-            okButton = new System.Windows.Forms.Button();
-            cancelButton = new System.Windows.Forms.Button();
             Property = new System.Windows.Forms.DataGridViewTextBoxColumn();
             Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            okButton = new System.Windows.Forms.Button();
+            cancelButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
             SuspendLayout();
             // 
@@ -49,27 +49,6 @@
             dataGridView.Size = new System.Drawing.Size(456, 150);
             dataGridView.TabIndex = 0;
             // 
-            // okButton
-            // 
-            okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            okButton.Location = new System.Drawing.Point(314, 168);
-            okButton.Name = "okButton";
-            okButton.Size = new System.Drawing.Size(75, 23);
-            okButton.TabIndex = 1;
-            okButton.Text = "OK";
-            okButton.UseVisualStyleBackColor = true;
-            okButton.Click += okButton_Click;
-            // 
-            // cancelButton
-            // 
-            cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            cancelButton.Location = new System.Drawing.Point(395, 168);
-            cancelButton.Name = "cancelButton";
-            cancelButton.Size = new System.Drawing.Size(75, 23);
-            cancelButton.TabIndex = 2;
-            cancelButton.Text = "Cancel";
-            cancelButton.UseVisualStyleBackColor = true;
-            // 
             // Property
             // 
             Property.HeaderText = "Property";
@@ -81,18 +60,38 @@
             Value.HeaderText = "Value";
             Value.Name = "Value";
             // 
+            // okButton
+            // 
+            okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            okButton.Location = new System.Drawing.Point(314, 168);
+            okButton.Name = "okButton";
+            okButton.Size = new System.Drawing.Size(75, 27);
+            okButton.TabIndex = 1;
+            okButton.Text = "OK";
+            okButton.UseVisualStyleBackColor = true;
+            okButton.Click += okButton_Click;
+            // 
+            // cancelButton
+            // 
+            cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            cancelButton.Location = new System.Drawing.Point(395, 168);
+            cancelButton.Name = "cancelButton";
+            cancelButton.Size = new System.Drawing.Size(75, 27);
+            cancelButton.TabIndex = 2;
+            cancelButton.Text = "Cancel";
+            cancelButton.UseVisualStyleBackColor = true;
+            // 
             // FilterSettingsForm
             // 
             AcceptButton = okButton;
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             CancelButton = cancelButton;
-            ClientSize = new System.Drawing.Size(480, 201);
+            ClientSize = new System.Drawing.Size(480, 199);
             Controls.Add(cancelButton);
             Controls.Add(okButton);
             Controls.Add(dataGridView);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            Name = "FilterSettingsForm";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             Text = "Filter Settings";
             ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
