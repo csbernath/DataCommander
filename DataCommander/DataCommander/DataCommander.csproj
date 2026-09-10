@@ -16,7 +16,7 @@
     <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="181.36.0" />
     <PackageReference Include="Microsoft.SqlServer.Types" Version="170.1000.7" />
     <PackageReference Include="Npgsql" Version="10.0.3" />
-    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.26.300" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.26.301" />
   </ItemGroup>
 
   <ItemGroup>
