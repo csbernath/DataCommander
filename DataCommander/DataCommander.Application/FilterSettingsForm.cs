@@ -17,7 +17,7 @@ namespace DataCommander.Application
             InitializeComponent();
             dataGridView.Font = new Font("Microsoft Sans Serif", 8);
 
-            colorTheme!.Apply(this);
+            // colorTheme!.Apply(this);
             colorTheme!.Apply(dataGridView);
 
             foreach (var filterableProperty in filterableProperties)
