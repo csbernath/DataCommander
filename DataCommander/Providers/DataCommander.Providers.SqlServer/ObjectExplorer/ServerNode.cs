@@ -26,7 +26,9 @@ internal sealed class ServerNode(
         {
             using var connection = CreateConnection();
             connection.Open();
-            return ConnectionNameProvider.GetConnectionName(connectionName, connection);
+
+            var userId = ConnectionStringAndCredential.Credential?.UserId;
+            return ConnectionNameProvider.GetConnectionName(connectionName, userId, connection);
         }
     }
 

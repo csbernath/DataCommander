@@ -5,24 +5,15 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal static class ConnectionNameProvider
 {
-    public static string GetConnectionName(string? connectionName, SqlConnection connection)
+    public static string GetConnectionName(string? connectionName, string? userId, SqlConnection connection)
     {
         string? serverVersion;
-        string? userId = null;
         var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connection.ConnectionString);
 
         if (string.IsNullOrEmpty(connectionName))
             connectionName = sqlConnectionStringBuilder.DataSource;
         
         var integratedSecurity = sqlConnectionStringBuilder.IntegratedSecurity;
-        if (!integratedSecurity)
-        {
-            userId = connection.Credential != null
-                ? connection.Credential.UserId
-                : sqlConnectionStringBuilder.UserID;
-        }
-
-        serverVersion = connection.ServerVersion;
         if (integratedSecurity)
         {
             var commanExecutor = connection.CreateCommandExecutor();
@@ -31,6 +22,8 @@ internal static class ConnectionNameProvider
             var scalar = commanExecutor.ExecuteScalar(createCommandRequest);
             userId = (string)scalar!;
         }
+        
+        serverVersion = connection.ServerVersion;        
 
         return $"{connectionName} (SQL Server {serverVersion} - {userId})";
     }

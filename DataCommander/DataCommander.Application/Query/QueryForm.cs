@@ -1245,7 +1245,8 @@ Please wait...";
 
     private void SetText()
     {
-        Text = Provider.GetConnectionName(_connectionInfo.ConnectionName, Connection!.Connection);
+        var userId = _connectionInfo.ConnectionStringAndCredential.Credential?.UserId;
+        Text = Provider.GetConnectionName(_connectionInfo.ConnectionName, userId, Connection!.Connection);
 
         // var mainForm = DataCommanderApplication.Instance.MainForm!;
         // mainForm.ActiveMdiChildToolStripTextBox.Text = connectionName;
@@ -2091,7 +2092,7 @@ Please wait...";
 
         if (_infoMessages.IsEmpty)
         {
-            var w = WaitHandle.WaitAny(waitHandles, 1000);
+            var w = WaitHandle.WaitAny(waitHandles, 10000);
             if (w == 1)
                 @continue = false;
         }

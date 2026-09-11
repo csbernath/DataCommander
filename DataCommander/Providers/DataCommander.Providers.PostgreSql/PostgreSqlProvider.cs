@@ -41,7 +41,7 @@ internal sealed class PostgreSqlProvider : IProvider
     void IProvider.ClearCompletionCache() => throw new NotImplementedException();
     string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
     
-    public string? GetConnectionName(string? connectionName, IDbConnection connection)
+    public string? GetConnectionName(string? connectionName, string? userId, IDbConnection connection)
     {
         var npgsqlConnection = (NpgsqlConnection)connection;
         return $"{npgsqlConnection.Database}/{npgsqlConnection.UserName}@{npgsqlConnection.Host}:{npgsqlConnection.Port}";

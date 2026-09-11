@@ -56,10 +56,10 @@ internal sealed class SqlServerProvider : IProvider
     string IProvider.Identifier => ProviderIdentifier.SqlServer;
     DbProviderFactory IProvider.DbProviderFactory => SqlClientFactory.Instance;
 
-    public string? GetConnectionName(string? connectionName, IDbConnection connection)
+    public string? GetConnectionName(string? connectionName, string? userId, IDbConnection connection)
     {
         var sqlConnection = (SqlConnection)connection;
-        return ConnectionNameProvider.GetConnectionName(connectionName, sqlConnection);
+        return ConnectionNameProvider.GetConnectionName(connectionName, userId, sqlConnection);
     }
 
     ConnectionBase IProvider.CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(connectionStringAndCredential);
