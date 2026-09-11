@@ -5,13 +5,15 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
 internal static class ConnectionNameProvider
 {
-    public static string GetConnectionName(SqlConnection connection)
+    public static string GetConnectionName(string? connectionName, SqlConnection connection)
     {
-        string dataSource;
         string? serverVersion;
         string? userId = null;
         var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connection.ConnectionString);
-        dataSource = sqlConnectionStringBuilder.DataSource;
+
+        if (string.IsNullOrEmpty(connectionName))
+            connectionName = sqlConnectionStringBuilder.DataSource;
+        
         var integratedSecurity = sqlConnectionStringBuilder.IntegratedSecurity;
         if (!integratedSecurity)
         {
@@ -30,6 +32,6 @@ internal static class ConnectionNameProvider
             userId = (string)scalar!;
         }
 
-        return $"{dataSource}(SQL Server {serverVersion} - {userId})";
+        return $"{connectionName} (SQL Server {serverVersion} - {userId})";
     }
 }

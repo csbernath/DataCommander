@@ -230,7 +230,7 @@ internal sealed class OleDbProvider : IProvider
     GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string? tableName) => throw new NotImplementedException();
     List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
 
-    public string? GetConnectionName(IDbConnection connection)
+    public string? GetConnectionName(string? connectionName, IDbConnection connection)
     {
         return null;
     }

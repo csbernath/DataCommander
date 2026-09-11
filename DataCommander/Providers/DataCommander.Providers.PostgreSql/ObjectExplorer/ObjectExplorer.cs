@@ -26,7 +26,7 @@ internal sealed class ObjectExplorer : IObjectExplorer
         return ConnectionFactory.CreateConnection(connectionStringAndCredential);
     }
 
-    public void SetConnectionStringAndCredential(ConnectionStringAndCredential connectionStringAndCredential) =>
+    public void SetConnectionStringAndCredential(string? connectionName, ConnectionStringAndCredential connectionStringAndCredential) =>
         _connectionStringAndCredential = connectionStringAndCredential;
 
     public Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>

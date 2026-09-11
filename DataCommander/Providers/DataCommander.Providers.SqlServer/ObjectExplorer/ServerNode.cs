@@ -11,7 +11,10 @@ using Microsoft.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 
-internal sealed class ServerNode(ConnectionStringAndCredential connectionStringAndCredential) : ITreeNode
+internal sealed class ServerNode(
+    string? connectionName,
+    ConnectionStringAndCredential connectionStringAndCredential)
+    : ITreeNode
 {
     public readonly ConnectionStringAndCredential ConnectionStringAndCredential = connectionStringAndCredential;
 
@@ -23,7 +26,7 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
         {
             using var connection = CreateConnection();
             connection.Open();
-            return ConnectionNameProvider.GetConnectionName(connection);
+            return ConnectionNameProvider.GetConnectionName(connectionName, connection);
         }
     }
 
@@ -148,7 +151,7 @@ internal sealed class ServerNode(ConnectionStringAndCredential connectionStringA
 // drop table #SVer";
 
         var commandText = @$"select
-    serverproperty('MachineName') as Name,
+    serverproperty('ServerName') as Name,
     serverproperty('ProductVersion') as Version,
     serverproperty('Collation') as [Server Collation]
 
@@ -167,7 +170,7 @@ end";
         var dataTable = new DataTable();
         dataTable.Columns.Add("Name");
         dataTable.Columns.Add("Value");
-        
+
         Db.ExecuteReader(CreateConnection, new ExecuteReaderRequest(commandText), dataReader =>
         {
             while (dataReader.Read())
@@ -186,12 +189,12 @@ end";
                 while (dataReader.Read())
                 {
                     var maxServerMemoryMB = (int)dataReader[0];
-                    var maxServerMemoryB = maxServerMemoryMB * PowersOf1024.Power2; 
+                    var maxServerMemoryB = maxServerMemoryMB * PowersOf1024.Power2;
                     var s = MeasurementUnit.ToBinaryMetricString(maxServerMemoryB, 2, UnitSymbol.Byte);
                     dataTable.Rows.Add("Maximum server memory", s);
                 }
             }
-            
+
             nextResult = dataReader.NextResult();
             if (nextResult)
             {
@@ -202,7 +205,7 @@ end";
 
                     var total_physical_memory_b = total_physical_memory_kb * PowersOf1024.Power1;
                     var available_physical_memory_b = available_physical_memory_kb * PowersOf1024.Power1;
-                    
+
                     dataTable.Rows.Add("Total physical memory", MeasurementUnit.ToBinaryMetricString(total_physical_memory_b, 2, UnitSymbol.Byte));
                     dataTable.Rows.Add("Available physical memory", MeasurementUnit.ToBinaryMetricString(available_physical_memory_b, 2, UnitSymbol.Byte));
                 }

@@ -10,7 +10,8 @@ internal sealed class ObjectExplorer : IObjectExplorer
 {
     private ConnectionStringAndCredential? _connectionStringAndCredential;
 
-    public void SetConnectionStringAndCredential(ConnectionStringAndCredential connectionStringAndCredential) => _connectionStringAndCredential = connectionStringAndCredential;
+    public void SetConnectionStringAndCredential(string? connectionName, ConnectionStringAndCredential connectionStringAndCredential) =>
+        _connectionStringAndCredential = connectionStringAndCredential;
 
     public Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
         Task.FromResult<IEnumerable<ITreeNode>>(

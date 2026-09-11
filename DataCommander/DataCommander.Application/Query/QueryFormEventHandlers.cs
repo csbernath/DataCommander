@@ -183,7 +183,7 @@ Please wait...";
             using (new CursorManager(Cursors.WaitCursor))
             {
                 var startTimestamp = Stopwatch.GetTimestamp();
-                objectExplorer.SetConnectionStringAndCredential(_connectionInfo.ConnectionStringAndCredential);
+                objectExplorer.SetConnectionStringAndCredential(_connectionInfo.ConnectionName, _connectionInfo.ConnectionStringAndCredential);
                 var cancellationTokenSource = new CancellationTokenSource();
                 const string textBoxText = @"Getting children...
 

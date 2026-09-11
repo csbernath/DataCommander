@@ -22,7 +22,7 @@ public sealed class SQLiteProvider : IProvider
 
     public string Identifier => ProviderIdentifier.SqLite;
 
-    public string? GetConnectionName(IDbConnection connection) => connection.Database;
+    public string? GetConnectionName(string? connectionName, IDbConnection connection) => connection.Database;
 
     public ConnectionBase CreateConnection(ConnectionStringAndCredential connectionStringAndCredential) => new Connection(connectionStringAndCredential);
 

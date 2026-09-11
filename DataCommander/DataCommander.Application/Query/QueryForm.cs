@@ -126,7 +126,7 @@ public sealed partial class QueryForm : Form, IQueryForm
         if (objectExplorer != null)
         {
             var startTimestamp = Stopwatch.GetTimestamp();
-            objectExplorer.SetConnectionStringAndCredential(_connectionInfo.ConnectionStringAndCredential);
+            objectExplorer.SetConnectionStringAndCredential(_connectionInfo.ConnectionName, _connectionInfo.ConnectionStringAndCredential);
             var cancellationTokenSource = new CancellationTokenSource();
             const string textBoxText = @"Getting children...
 
@@ -1245,8 +1245,7 @@ Please wait...";
 
     private void SetText()
     {
-        var connectionName = Provider.GetConnectionName(Connection!.Connection);
-        Text = $"{_connectionInfo.ConnectionName} - {connectionName}";
+        Text = Provider.GetConnectionName(_connectionInfo.ConnectionName, Connection!.Connection);
 
         // var mainForm = DataCommanderApplication.Instance.MainForm!;
         // mainForm.ActiveMdiChildToolStripTextBox.Text = connectionName;

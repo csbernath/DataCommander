@@ -20,7 +20,7 @@ public interface IProvider
     IObjectExplorer? CreateObjectExplorer();
     void ClearCompletionCache();
     string CommandToString(IDbCommand command);
-    string? GetConnectionName(IDbConnection connection);    
+    string? GetConnectionName(string? connectionName, IDbConnection connection);    
     ConnectionBase CreateConnection(ConnectionStringAndCredential connectionStringAndCredential);
     IDbConnectionStringBuilder CreateConnectionStringBuilder();
     IDataReaderHelper CreateDataReaderHelper(IDataReader dataReader);
