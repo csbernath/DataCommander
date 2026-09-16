@@ -100,6 +100,6 @@ public static class DataRowExtensions
     }
 
     private static T? GetNullableValue<T>(object value) where T : struct => value == DBNull.Value
-        ? (T?)null
+        ? null
         : (T)value;
 }

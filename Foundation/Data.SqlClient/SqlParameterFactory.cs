@@ -97,5 +97,5 @@ public static class SqlParameterFactory
 
     public static SqlParameter CreateXml(string parameterName, string value) => Create(parameterName, SqlDbType.Xml, value);
 
-    private static object ToParameterValue<T>(T? value) where T : struct => value != null ? (object)value.Value : DBNull.Value;
+    private static object ToParameterValue<T>(T? value) where T : struct => value != null ? value.Value : DBNull.Value;
 }

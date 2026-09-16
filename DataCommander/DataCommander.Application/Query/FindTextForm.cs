@@ -150,7 +150,7 @@ public class FindTextForm : Form
             _btnCancel,
             _btnOk,
             _cbText]);
-        Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((Byte)(238)));
+        Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 238);
         FormBorderStyle = FormBorderStyle.FixedToolWindow;
         Name = "FindTextForm";
         ShowInTaskbar = false;

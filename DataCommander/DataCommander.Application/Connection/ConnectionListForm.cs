@@ -152,7 +152,7 @@ internal sealed class ConnectionListForm : Form
         // newButton
         // 
         _newButton.Anchor =
-            ((AnchorStyles)(AnchorStyles.Bottom | AnchorStyles.Left));
+            AnchorStyles.Bottom | AnchorStyles.Left;
         _newButton.Location = new Point(12, 637);
         _newButton.Name = "_newButton";
         _newButton.Size = new Size(75, 24);
@@ -163,9 +163,9 @@ internal sealed class ConnectionListForm : Form
         // dataGrid
         // 
         _dataGrid.AllowUserToAddRows = false;
-        _dataGrid.Anchor = ((AnchorStyles)(((AnchorStyles.Top | AnchorStyles.Bottom)
-                                                                       | AnchorStyles.Left)
-                                                                      | AnchorStyles.Right));
+        _dataGrid.Anchor = ((AnchorStyles.Top | AnchorStyles.Bottom)
+                            | AnchorStyles.Left)
+                           | AnchorStyles.Right;
         _dataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         _dataGrid.Location = new Point(8, 8);
         _dataGrid.Name = "_dataGrid";

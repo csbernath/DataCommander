@@ -100,7 +100,7 @@ internal sealed class MemberListBox : UserControl, IKeyboardHandler
         // 
         ListBox.Dock = DockStyle.Fill;
         ListBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point,
-            ((Byte)(238)));
+            238);
         ListBox.Name = "ListBox";
         ListBox.Size = new System.Drawing.Size(180, 134);
         ListBox.TabIndex = 0;

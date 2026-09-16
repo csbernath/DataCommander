@@ -19,7 +19,7 @@ public static class IDataRecordExtensions
         {
             ArgumentNullException.ThrowIfNull(dataRecord);
             return dataRecord.IsDBNull(fieldIndex)
-                ? (bool?)null
+                ? null
                 : dataRecord.GetBoolean(fieldIndex);
         }
 
@@ -43,7 +43,7 @@ public static class IDataRecordExtensions
         {
             ArgumentNullException.ThrowIfNull(dataRecord);
             return dataRecord.IsDBNull(fieldIndex)
-                ? (DateTime?)null
+                ? null
                 : dataRecord.GetDateTime(fieldIndex);
         }
 
@@ -51,7 +51,7 @@ public static class IDataRecordExtensions
         {
             ArgumentNullException.ThrowIfNull(dataRecord);
             return dataRecord.IsDBNull(fieldIndex)
-                ? (decimal?)null
+                ? null
                 : dataRecord.GetDecimal(fieldIndex);
         }
 
@@ -59,7 +59,7 @@ public static class IDataRecordExtensions
         {
             ArgumentNullException.ThrowIfNull(dataRecord);
             return dataRecord.IsDBNull(fieldIndex)
-                ? (double?)null
+                ? null
                 : dataRecord.GetDouble(fieldIndex);
         }
 
@@ -67,7 +67,7 @@ public static class IDataRecordExtensions
         {
             ArgumentNullException.ThrowIfNull(dataRecord);
             return dataRecord.IsDBNull(fieldIndex)
-                ? (Guid?)null
+                ? null
                 : dataRecord.GetGuid(fieldIndex);
         }
 
@@ -75,7 +75,7 @@ public static class IDataRecordExtensions
         {
             ArgumentNullException.ThrowIfNull(dataRecord);
             return dataRecord.IsDBNull(fieldIndex)
-                ? (short?)null
+                ? null
                 : dataRecord.GetInt16(fieldIndex);
         }
 
@@ -83,7 +83,7 @@ public static class IDataRecordExtensions
         {
             ArgumentNullException.ThrowIfNull(dataRecord);
             return dataRecord.IsDBNull(fieldIndex)
-                ? (int?)null
+                ? null
                 : dataRecord.GetInt32(fieldIndex);
         }
 
@@ -91,7 +91,7 @@ public static class IDataRecordExtensions
         {
             ArgumentNullException.ThrowIfNull(dataRecord);
             return dataRecord.IsDBNull(fieldIndex)
-                ? (long?)null
+                ? null
                 : dataRecord.GetInt64(fieldIndex);
         }
 

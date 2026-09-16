@@ -153,7 +153,7 @@ public class MainForm : Form
 
         _timer = new System.Windows.Forms.Timer(components!)
         {
-            Interval = 5000, // 10 seconds
+            Interval = 5000, // 5 seconds
         };
         _timer.Tick += Timer_Tick;
         _timer.Start();
@@ -259,7 +259,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         // 
         // _mnuConnect
         // 
-        _mnuConnect.Image = (Image)resources.GetObject("_mnuConnect.Image");
+        _mnuConnect.Image = ((Image)resources.GetObject("_mnuConnect.Image"));
         _mnuConnect.MergeIndex = 0;
         _mnuConnect.Name = "_mnuConnect";
         _mnuConnect.ShortcutKeys = Keys.Control | Keys.N;
@@ -269,7 +269,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         // 
         // _mnuOpen
         // 
-        _mnuOpen.Image = (Image)resources.GetObject("_mnuOpen.Image");
+        _mnuOpen.Image = ((Image)resources.GetObject("_mnuOpen.Image"));
         _mnuOpen.MergeIndex = 1;
         _mnuOpen.Name = "_mnuOpen";
         _mnuOpen.ShortcutKeys = Keys.Control | Keys.O;
@@ -286,7 +286,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         // _saveAllToolStripMenuItem
         // 
         _saveAllToolStripMenuItem.Name = "_saveAllToolStripMenuItem";
-        _saveAllToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
+        _saveAllToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.Shift) | Keys.S;
         _saveAllToolStripMenuItem.Size = new Size(191, 26);
         _saveAllToolStripMenuItem.Text = "Save All";
         _saveAllToolStripMenuItem.Click += SaveAllToolStripMenuItem_Click;
@@ -368,22 +368,17 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         _toolStrip.Items.AddRange(new ToolStripItem[] { _btnConnect, _openButton, _saveButton, _toolStripSeparator1, _helpButton, _toolStripSeparator2, _activeMdiChildToolStripTextBox });
         _toolStrip.Location = new Point(3, 24);
         _toolStrip.Name = "_toolStrip";
-        _toolStrip.Size = new Size(558, 27);
+        _toolStrip.Size = new Size(589, 27);
         _toolStrip.TabIndex = 2;
         // 
         // _imageList
         // 
-        _imageList.ColorDepth = ColorDepth.Depth8Bit;
-        _imageList.ImageStream = (ImageListStreamer)resources.GetObject("_imageList.ImageStream");
+        _imageList.ImageStream = ((ImageListStreamer)resources.GetObject("_imageList.ImageStream"));
         _imageList.TransparentColor = Color.Transparent;
-        _imageList.Images.SetKeyName(0, "");
-        _imageList.Images.SetKeyName(1, "");
-        _imageList.Images.SetKeyName(2, "");
-        _imageList.Images.SetKeyName(3, "");
         // 
         // _btnConnect
         // 
-        _btnConnect.Image = (Image)resources.GetObject("_btnConnect.Image");
+        _btnConnect.Image = ((Image)resources.GetObject("_btnConnect.Image"));
         _btnConnect.Name = "_btnConnect";
         _btnConnect.Size = new Size(24, 24);
         _btnConnect.ToolTipText = "Connect to database";
@@ -392,7 +387,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         // _openButton
         // 
         _openButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        _openButton.Image = (Image)resources.GetObject("_openButton.Image");
+        _openButton.Image = ((Image)resources.GetObject("_openButton.Image"));
         _openButton.ImageTransparentColor = Color.Magenta;
         _openButton.Name = "_openButton";
         _openButton.Size = new Size(24, 24);
@@ -404,7 +399,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         // 
         _saveButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
         _saveButton.Enabled = false;
-        _saveButton.Image = (Image)resources.GetObject("_saveButton.Image");
+        _saveButton.Image = ((Image)resources.GetObject("_saveButton.Image"));
         _saveButton.ImageTransparentColor = Color.Magenta;
         _saveButton.Name = "_saveButton";
         _saveButton.Size = new Size(24, 24);
@@ -419,7 +414,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         // _helpButton
         // 
         _helpButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        _helpButton.Image = (Image)resources.GetObject("_helpButton.Image");
+        _helpButton.Image = ((Image)resources.GetObject("_helpButton.Image"));
         _helpButton.ImageTransparentColor = Color.Magenta;
         _helpButton.Name = "_helpButton";
         _helpButton.Size = new Size(24, 24);
@@ -432,7 +427,9 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         // 
         // _activeMdiChildToolStripTextBox
         // 
-        _activeMdiChildToolStripTextBox.Font = new Font("Segoe UI", 8.830189F);
+        _activeMdiChildToolStripTextBox.AutoSize = false;
+        _activeMdiChildToolStripTextBox.BorderStyle = BorderStyle.None;
+        _activeMdiChildToolStripTextBox.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 238);
         _activeMdiChildToolStripTextBox.Name = "_activeMdiChildToolStripTextBox";
         _activeMdiChildToolStripTextBox.ReadOnly = true;
         _activeMdiChildToolStripTextBox.Size = new Size(436, 27);
@@ -450,7 +447,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         // _toolStripStatusLabel
         // 
         _toolStripStatusLabel.Name = "_toolStripStatusLabel";
-        _toolStripStatusLabel.Size = new Size(827, 17);
+        _toolStripStatusLabel.Size = new Size(824, 17);
         _toolStripStatusLabel.Spring = true;
         _toolStripStatusLabel.TextAlign = ContentAlignment.MiddleLeft;
         // 
@@ -481,10 +478,9 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         Controls.Add(_toolStripPanel);
         Controls.Add(_statusBar);
         Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 238);
-        Icon = (Icon)resources.GetObject("$this.Icon");
+        Icon = ((Icon)resources.GetObject("$this.Icon"));
         IsMdiContainer = true;
         MainMenuStrip = _mainMenu;
-        Name = "MainForm";
         StartPosition = FormStartPosition.Manual;
         _mainMenu.ResumeLayout(false);
         _mainMenu.PerformLayout();
@@ -875,7 +871,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
     {
         base.OnMdiChildActivate(e);
 
-        _activeMdiChildToolStripTextBox!.Text = ActiveMdiChild?.Text;
+        _activeMdiChildToolStripTextBox.Text = ActiveMdiChild?.Text;
         _saveButton!.Enabled = ActiveMdiChild != null;
 
         if (ActiveMdiChild != null)
@@ -949,7 +945,6 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
     private void SaveAllToolStripMenuItem_Click(object? sender, EventArgs e) => SaveAll();
 
     private ToolStripTextBox _activeMdiChildToolStripTextBox;
-    public ToolStripTextBox ActiveMdiChildToolStripTextBox => _activeMdiChildToolStripTextBox!;
 
     private void CheckForToolStripMenuItem_Click(object? sender, EventArgs e)
     {

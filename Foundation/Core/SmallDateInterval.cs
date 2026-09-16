@@ -40,7 +40,7 @@ public readonly struct SmallDateInterval
         var intersects = start <= end;
         return intersects
             ? new SmallDateInterval(start, end)
-            : (SmallDateInterval?) null;
+            : null;
     }
 
     [Pure]

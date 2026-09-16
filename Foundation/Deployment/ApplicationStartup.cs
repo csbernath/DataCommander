@@ -108,7 +108,7 @@ public sealed class ApplicationStartup(
             if (localVersion < remoteVersion)
             {
                 eventHandler(new DownloadingNewVersionStarted(remoteVersion));
-                var address1 = new Uri(string.Format(address, (object)remoteVersion));
+                var address1 = new Uri(string.Format(address, remoteVersion));
                 var guid = Guid.NewGuid();
                 var updaterDirectory = Path.Combine(Path.GetTempPath(), guid.ToString());
                 var zipFileName = Path.Combine(updaterDirectory, "Updater.zip");

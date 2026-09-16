@@ -378,7 +378,7 @@ Please wait...";
         _mnuSave.MergeAction = MergeAction.Insert;
         _mnuSave.MergeIndex = 2;
         _mnuSave.Name = "_mnuSave";
-        _mnuSave.ShortcutKeys = ((Keys)((Keys.Control | Keys.S)));
+        _mnuSave.ShortcutKeys = Keys.Control | Keys.S;
         _mnuSave.Size = new Size(230, 22);
         _mnuSave.Text = "&Save";
         _mnuSave.Click += new EventHandler(MnuSave_Click);
@@ -397,7 +397,7 @@ Please wait...";
         _mnuDuplicateConnection.MergeAction = MergeAction.Insert;
         _mnuDuplicateConnection.MergeIndex = 4;
         _mnuDuplicateConnection.Name = "_mnuDuplicateConnection";
-        _mnuDuplicateConnection.ShortcutKeys = ((Keys)((Keys.Control | Keys.Q)));
+        _mnuDuplicateConnection.ShortcutKeys = Keys.Control | Keys.Q;
         _mnuDuplicateConnection.Size = new Size(230, 22);
         _mnuDuplicateConnection.Text = "Duplicate connection";
         _mnuDuplicateConnection.Click += new EventHandler(MnuDuplicateConnection_Click);
@@ -425,7 +425,7 @@ Please wait...";
         _mnuPaste.Image = ((Image)(resources.GetObject("_mnuPaste.Image")));
         _mnuPaste.MergeIndex = 0;
         _mnuPaste.Name = "_mnuPaste";
-        _mnuPaste.ShortcutKeys = ((Keys)((Keys.Control | Keys.V)));
+        _mnuPaste.ShortcutKeys = Keys.Control | Keys.V;
         _mnuPaste.Size = new Size(166, 22);
         _mnuPaste.Text = "&Paste";
         // 
@@ -434,7 +434,7 @@ Please wait...";
         _mnuFind.Image = ((Image)(resources.GetObject("_mnuFind.Image")));
         _mnuFind.MergeIndex = 1;
         _mnuFind.Name = "_mnuFind";
-        _mnuFind.ShortcutKeys = ((Keys)((Keys.Control | Keys.F)));
+        _mnuFind.ShortcutKeys = Keys.Control | Keys.F;
         _mnuFind.Size = new Size(166, 22);
         _mnuFind.Text = "&Find";
         // 
@@ -461,7 +461,7 @@ Please wait...";
         // 
         _mnuListMembers.MergeIndex = 0;
         _mnuListMembers.Name = "_mnuListMembers";
-        _mnuListMembers.ShortcutKeys = ((Keys)((Keys.Control | Keys.J)));
+        _mnuListMembers.ShortcutKeys = Keys.Control | Keys.J;
         _mnuListMembers.Size = new Size(211, 22);
         _mnuListMembers.Text = "&List Members";
         _mnuListMembers.Click += new EventHandler(MnuListMembers_Click);
@@ -470,8 +470,8 @@ Please wait...";
         // 
         _mnuClearCache.MergeIndex = 1;
         _mnuClearCache.Name = "_mnuClearCache";
-        _mnuClearCache.ShortcutKeys = ((Keys)(((Keys.Control | Keys.Shift)
-                                               | Keys.C)));
+        _mnuClearCache.ShortcutKeys = (Keys.Control | Keys.Shift)
+                                      | Keys.C;
         _mnuClearCache.Size = new Size(211, 22);
         _mnuClearCache.Text = "&Clear Cache";
         // 
@@ -479,14 +479,14 @@ Please wait...";
         // 
         _mnuGoTo.MergeIndex = 4;
         _mnuGoTo.Name = "_mnuGoTo";
-        _mnuGoTo.ShortcutKeys = ((Keys)((Keys.Control | Keys.G)));
+        _mnuGoTo.ShortcutKeys = Keys.Control | Keys.G;
         _mnuGoTo.Size = new Size(166, 22);
         _mnuGoTo.Text = "Go To...";
         // 
         // undoToolStripMenuItem
         // 
         undoToolStripMenuItem.Name = "undoToolStripMenuItem";
-        undoToolStripMenuItem.ShortcutKeys = ((Keys)((Keys.Control | Keys.Z)));
+        undoToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Z;
         undoToolStripMenuItem.Size = new Size(166, 22);
         undoToolStripMenuItem.Text = "Undo";
         undoToolStripMenuItem.Click += new EventHandler(UndoToolStripMenuItem_Click);
@@ -494,7 +494,7 @@ Please wait...";
         // redoToolStripMenuItem
         // 
         redoToolStripMenuItem.Name = "redoToolStripMenuItem";
-        redoToolStripMenuItem.ShortcutKeys = ((Keys)((Keys.Control | Keys.Y)));
+        redoToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Y;
         redoToolStripMenuItem.Size = new Size(166, 22);
         redoToolStripMenuItem.Text = "Redo";
         redoToolStripMenuItem.Click += new EventHandler(redoToolStripMenuItem_Click);
@@ -571,7 +571,7 @@ Please wait...";
         // 
         _mnuDescribeParameters.MergeIndex = 1;
         _mnuDescribeParameters.Name = "_mnuDescribeParameters";
-        _mnuDescribeParameters.ShortcutKeys = ((Keys)((Keys.Control | Keys.P)));
+        _mnuDescribeParameters.ShortcutKeys = Keys.Control | Keys.P;
         _mnuDescribeParameters.Size = new Size(298, 22);
         _mnuDescribeParameters.Text = "Describe &Parameters";
         _mnuDescribeParameters.Click += new EventHandler(MnuDescribeParameters_Click);
@@ -592,7 +592,7 @@ Please wait...";
         // _executeQueryToolStripMenuItem
         // 
         _executeQueryToolStripMenuItem.Name = "_executeQueryToolStripMenuItem";
-        _executeQueryToolStripMenuItem.ShortcutKeys = ((Keys)((Keys.Control | Keys.E)));
+        _executeQueryToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.E;
         _executeQueryToolStripMenuItem.Size = new Size(298, 22);
         _executeQueryToolStripMenuItem.Text = "Execute Query";
         _executeQueryToolStripMenuItem.Click += new EventHandler(ToolStripMenuItem1_Click);
@@ -601,7 +601,7 @@ Please wait...";
         // 
         _mnuExecuteQuerySingleRow.MergeIndex = 6;
         _mnuExecuteQuerySingleRow.Name = "_mnuExecuteQuerySingleRow";
-        _mnuExecuteQuerySingleRow.ShortcutKeys = ((Keys)((Keys.Control | Keys.D1)));
+        _mnuExecuteQuerySingleRow.ShortcutKeys = Keys.Control | Keys.D1;
         _mnuExecuteQuerySingleRow.Size = new Size(298, 22);
         _mnuExecuteQuerySingleRow.Text = "Execute Query (SingleRow)";
         _mnuExecuteQuerySingleRow.Click += new EventHandler(MnuSingleRow_Click);
@@ -610,7 +610,7 @@ Please wait...";
         // 
         _mnuExecuteQuerySchemaOnly.MergeIndex = 7;
         _mnuExecuteQuerySchemaOnly.Name = "_mnuExecuteQuerySchemaOnly";
-        _mnuExecuteQuerySchemaOnly.ShortcutKeys = ((Keys)((Keys.Control | Keys.R)));
+        _mnuExecuteQuerySchemaOnly.ShortcutKeys = Keys.Control | Keys.R;
         _mnuExecuteQuerySchemaOnly.Size = new Size(298, 22);
         _mnuExecuteQuerySchemaOnly.Text = "Execute Query (Schema only)";
         _mnuExecuteQuerySchemaOnly.Click += new EventHandler(MnuResultSchema_Click);
@@ -619,7 +619,7 @@ Please wait...";
         // 
         _mnuExecuteQueryKeyInfo.MergeIndex = 8;
         _mnuExecuteQueryKeyInfo.Name = "_mnuExecuteQueryKeyInfo";
-        _mnuExecuteQueryKeyInfo.ShortcutKeys = ((Keys)((Keys.Control | Keys.K)));
+        _mnuExecuteQueryKeyInfo.ShortcutKeys = Keys.Control | Keys.K;
         _mnuExecuteQueryKeyInfo.Size = new Size(298, 22);
         _mnuExecuteQueryKeyInfo.Text = "Execute Query (&KeyInfo)";
         _mnuExecuteQueryKeyInfo.Click += new EventHandler(MnuKeyInfo_Click);
@@ -628,8 +628,8 @@ Please wait...";
         // 
         _mnuExecuteQueryXml.MergeIndex = 9;
         _mnuExecuteQueryXml.Name = "_mnuExecuteQueryXml";
-        _mnuExecuteQueryXml.ShortcutKeys = ((Keys)(((Keys.Control | Keys.Shift)
-                                                    | Keys.X)));
+        _mnuExecuteQueryXml.ShortcutKeys = (Keys.Control | Keys.Shift)
+                                           | Keys.X;
         _mnuExecuteQueryXml.Size = new Size(298, 22);
         _mnuExecuteQueryXml.Text = "Execute Query (XML)";
         _mnuExecuteQueryXml.Click += new EventHandler(MnuXml_Click);
@@ -638,8 +638,8 @@ Please wait...";
         // 
         _mnuOpenTable.MergeIndex = 10;
         _mnuOpenTable.Name = "_mnuOpenTable";
-        _mnuOpenTable.ShortcutKeys = ((Keys)(((Keys.Control | Keys.Shift)
-                                              | Keys.O)));
+        _mnuOpenTable.ShortcutKeys = (Keys.Control | Keys.Shift)
+                                     | Keys.O;
         _mnuOpenTable.Size = new Size(298, 22);
         _mnuOpenTable.Text = "Edit Rows";
         _mnuOpenTable.Click += new EventHandler(EditRows_Click);
@@ -649,7 +649,7 @@ Please wait...";
         _mnuCancel.Enabled = false;
         _mnuCancel.MergeIndex = 11;
         _mnuCancel.Name = "_mnuCancel";
-        _mnuCancel.ShortcutKeys = ((Keys)((Keys.Alt | Keys.Pause)));
+        _mnuCancel.ShortcutKeys = Keys.Alt | Keys.Pause;
         _mnuCancel.Size = new Size(298, 22);
         _mnuCancel.Text = "&Cancel Executing Query";
         _mnuCancel.Click += new EventHandler(MnuCancel_Click);
@@ -657,7 +657,7 @@ Please wait...";
         // _parseToolStripMenuItem
         // 
         _parseToolStripMenuItem.Name = "_parseToolStripMenuItem";
-        _parseToolStripMenuItem.ShortcutKeys = ((Keys)((Keys.Control | Keys.F5)));
+        _parseToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.F5;
         _parseToolStripMenuItem.Size = new Size(298, 22);
         _parseToolStripMenuItem.Text = "Parse";
         _parseToolStripMenuItem.Click += new EventHandler(ParseToolStripMenuItem_Click);
@@ -690,7 +690,7 @@ Please wait...";
         // 
         _mnuText.MergeIndex = 0;
         _mnuText.Name = "_mnuText";
-        _mnuText.ShortcutKeys = ((Keys)((Keys.Control | Keys.T)));
+        _mnuText.ShortcutKeys = Keys.Control | Keys.T;
         _mnuText.Size = new Size(162, 22);
         _mnuText.Text = "&Text";
         _mnuText.Click += new EventHandler(MnuText_Click);
@@ -699,7 +699,7 @@ Please wait...";
         // 
         _mnuDataGrid.MergeIndex = 1;
         _mnuDataGrid.Name = "_mnuDataGrid";
-        _mnuDataGrid.ShortcutKeys = ((Keys)((Keys.Control | Keys.D)));
+        _mnuDataGrid.ShortcutKeys = Keys.Control | Keys.D;
         _mnuDataGrid.Size = new Size(162, 22);
         _mnuDataGrid.Text = "&DataGrid";
         _mnuDataGrid.Click += new EventHandler(MnuDataGrid_Click);
@@ -723,7 +723,7 @@ Please wait...";
         // 
         _mnuListView.MergeIndex = 4;
         _mnuListView.Name = "_mnuListView";
-        _mnuListView.ShortcutKeys = ((Keys)((Keys.Control | Keys.L)));
+        _mnuListView.ShortcutKeys = Keys.Control | Keys.L;
         _mnuListView.Size = new Size(162, 22);
         _mnuListView.Text = "&ListView";
         _mnuListView.Click += new EventHandler(MnuListView_Click);
@@ -767,8 +767,8 @@ Please wait...";
         // 
         _mnuGotoQueryEditor.MergeIndex = 15;
         _mnuGotoQueryEditor.Name = "_mnuGotoQueryEditor";
-        _mnuGotoQueryEditor.ShortcutKeys = ((Keys)(((Keys.Control | Keys.Shift)
-                                                    | Keys.Q)));
+        _mnuGotoQueryEditor.ShortcutKeys = (Keys.Control | Keys.Shift)
+                                           | Keys.Q;
         _mnuGotoQueryEditor.Size = new Size(298, 22);
         _mnuGotoQueryEditor.Text = "Goto &Query Editor";
         _mnuGotoQueryEditor.Click += new EventHandler(MnuGotoQueryEditor_Click);
@@ -777,7 +777,7 @@ Please wait...";
         // 
         _mnuGotoMessageTabPage.MergeIndex = 16;
         _mnuGotoMessageTabPage.Name = "_mnuGotoMessageTabPage";
-        _mnuGotoMessageTabPage.ShortcutKeys = ((Keys)((Keys.Control | Keys.M)));
+        _mnuGotoMessageTabPage.ShortcutKeys = Keys.Control | Keys.M;
         _mnuGotoMessageTabPage.Size = new Size(298, 22);
         _mnuGotoMessageTabPage.Text = "Goto &Message TabPage";
         _mnuGotoMessageTabPage.Click += new EventHandler(MnuGotoMessageTabPage_Click);
@@ -794,8 +794,8 @@ Please wait...";
         // 
         _mnuCloseAllTabPages.MergeIndex = 18;
         _mnuCloseAllTabPages.Name = "_mnuCloseAllTabPages";
-        _mnuCloseAllTabPages.ShortcutKeys = ((Keys)(((Keys.Control | Keys.Shift)
-                                                     | Keys.F4)));
+        _mnuCloseAllTabPages.ShortcutKeys = (Keys.Control | Keys.Shift)
+                                            | Keys.F4;
         _mnuCloseAllTabPages.Size = new Size(298, 22);
         _mnuCloseAllTabPages.Text = "Close &All TabPages";
         _mnuCloseAllTabPages.Click += new EventHandler(MnuCloseAllTabPages_Click);
@@ -804,7 +804,7 @@ Please wait...";
         // 
         _mnuCreateInsert.MergeIndex = 19;
         _mnuCreateInsert.Name = "_mnuCreateInsert";
-        _mnuCreateInsert.ShortcutKeys = ((Keys)((Keys.Control | Keys.I)));
+        _mnuCreateInsert.ShortcutKeys = Keys.Control | Keys.I;
         _mnuCreateInsert.Size = new Size(298, 22);
         _mnuCreateInsert.Text = "Create insert statements";
         _mnuCreateInsert.Click += new EventHandler(MnuCreateInsert_Click);
@@ -856,8 +856,8 @@ Please wait...";
         // 
         createCCommandQueryToolStripMenuItem.Name = "createCCommandQueryToolStripMenuItem";
         createCCommandQueryToolStripMenuItem.ShortcutKeys =
-            ((Keys)(((Keys.Control | Keys.Shift)
-                     | Keys.Q)));
+            (Keys.Control | Keys.Shift)
+            | Keys.Q;
         createCCommandQueryToolStripMenuItem.Size = new Size(298, 22);
         createCCommandQueryToolStripMenuItem.Text = "Create C# Command/Query";
         createCCommandQueryToolStripMenuItem.Click += new EventHandler(createCCommandQueryToolStripMenuItem_Click);
@@ -954,7 +954,7 @@ Please wait...";
         // 
         _tvObjectExplorer.Dock = DockStyle.Left;
         _tvObjectExplorer.Font =
-            new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(238)));
+            new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 238);
         _tvObjectExplorer.Location = new Point(0, 24);
         _tvObjectExplorer.Name = "_tvObjectExplorer";
         _tvObjectExplorer.Size = new Size(300, 541);
@@ -1071,7 +1071,7 @@ Please wait...";
         // _queryTextBox
         // 
         _queryTextBox.Dock = DockStyle.Top;
-        _queryTextBox.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(238)));
+        _queryTextBox.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point, 238);
         _queryTextBox.Location = new Point(303, 24);
         _queryTextBox.Name = "_queryTextBox";
         _queryTextBox.Size = new Size(713, 279);
@@ -1090,7 +1090,7 @@ Please wait...";
         Controls.Add(_statusBar);
         Controls.Add(_tvObjectExplorer);
         Controls.Add(_mainMenu);
-        Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(238)));
+        Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point, 238);
         Icon = ((Icon)(resources.GetObject("$this.Icon")));
         MainMenuStrip = _mainMenu;
         Name = "QueryForm";

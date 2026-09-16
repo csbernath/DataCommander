@@ -84,7 +84,7 @@ internal sealed class SqLiteResultWriter(TextWriter messageWriter, string? name)
             stringTableRow[1] = columnName;
             insertStatement += columnName;
             insertValues.Append('?');
-            var columnSize = (int)schemaRow.ColumnSize;
+            var columnSize = schemaRow.ColumnSize;
             var dataType = schemaRow.DataType;
             var typeCode = Type.GetTypeCode(dataType);
             string typeName;

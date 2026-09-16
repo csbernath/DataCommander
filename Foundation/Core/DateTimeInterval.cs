@@ -29,7 +29,7 @@ public readonly struct DateTimeInterval
         var intersects = start < end;
         return intersects
             ? new DateTimeInterval(start, end)
-            : (DateTimeInterval?) null;
+            : null;
     }
 
     [Pure]

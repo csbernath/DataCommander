@@ -39,7 +39,7 @@ public readonly struct DateOnlyInterval
         var intersects = start <= end;
         return intersects
             ? new DateOnlyInterval(start, end)
-            : (DateOnlyInterval?) null;
+            : null;
     }
 
     [Pure]

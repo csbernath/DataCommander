@@ -20,14 +20,14 @@ public static class FoundationDbColumnFactory
         var column = columns[SchemaTableColumn.NumericPrecision];
         if (column != null)
             numericPrecision = schemaTableRow.IsNull(column)
-                ? (short?)null
+                ? null
                 : Convert.ToInt16(schemaTableRow[column]);
 
         short? numericScale = null;
         column = columns[SchemaTableColumn.NumericScale];
         if (column != null)
             numericScale = schemaTableRow.IsNull(column)
-                ? (short?)null
+                ? null
                 : Convert.ToInt16(schemaTableRow[column]);
 
         var isUnique = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.IsUnique);

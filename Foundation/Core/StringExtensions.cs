@@ -48,26 +48,26 @@ public static class StringExtensions
             return result;
         }
 
-        public DateTime? ParseToNullableDateTime() => string.IsNullOrEmpty(source) ? (DateTime?)null : DateTime.Parse(source);
+        public DateTime? ParseToNullableDateTime() => string.IsNullOrEmpty(source) ? null : DateTime.Parse(source);
 
         public DateTime? ParseToNullableDateTime(IFormatProvider provider) =>
-            string.IsNullOrEmpty(source) ? (DateTime?)null : DateTime.Parse(source, provider);
+            string.IsNullOrEmpty(source) ? null : DateTime.Parse(source, provider);
 
         public DateTime? ParseToNullableDateTime(IFormatProvider provider, DateTimeStyles styles) =>
-            string.IsNullOrEmpty(source) ? (DateTime?)null : DateTime.Parse(source, provider, styles);
+            string.IsNullOrEmpty(source) ? null : DateTime.Parse(source, provider, styles);
 
         public DateTime? ParseExactToNullableDateTime(string format, IFormatProvider provider) =>
-            string.IsNullOrEmpty(source) ? (DateTime?)null : DateTime.ParseExact(source, format, provider);
+            string.IsNullOrEmpty(source) ? null : DateTime.ParseExact(source, format, provider);
 
-        public decimal? ParseToNullableDecimal() => string.IsNullOrEmpty(source) ? (decimal?)null : decimal.Parse(source);
+        public decimal? ParseToNullableDecimal() => string.IsNullOrEmpty(source) ? null : decimal.Parse(source);
 
         public decimal? ParseToNullableDecimal(IFormatProvider provider) =>
-            string.IsNullOrEmpty(source) ? (decimal?)null : decimal.Parse(source, provider);
+            string.IsNullOrEmpty(source) ? null : decimal.Parse(source, provider);
 
         public decimal? ParseToNullableDecimal(NumberStyles style, IFormatProvider provider) =>
-            string.IsNullOrEmpty(source) ? (decimal?)null : decimal.Parse(source, style, provider);
+            string.IsNullOrEmpty(source) ? null : decimal.Parse(source, style, provider);
 
-        public int? ParseToNullableInt32() => string.IsNullOrEmpty(source) ? (int?)null : int.Parse(source);
+        public int? ParseToNullableInt32() => string.IsNullOrEmpty(source) ? null : int.Parse(source);
 
         private string Indent(string indentString, int indentCount)
         {
