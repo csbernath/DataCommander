@@ -68,10 +68,10 @@ internal sealed class DataSetResultWriter(Action<InfoMessage> addInfoMessage, bo
     {
         var tableName = schemaTable.TableName;
         if (tableName == "SchemaTable")
-            tableName = $"Table {_tableIndex}";
+            tableName = $"Table {_tableIndex + 1}";
         if (showShemaTable)
         {
-            schemaTable.TableName = $"Schema {_tableIndex}";
+            schemaTable.TableName = $"Schema {_tableIndex + 1}";
             DataSet!.Tables.Add(schemaTable);
         }
 
