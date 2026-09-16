@@ -7,7 +7,6 @@ internal static class ConnectionNameProvider
 {
     public static string GetConnectionName(string? connectionName, string? userId, SqlConnection connection)
     {
-        string? serverVersion;
         var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connection.ConnectionString);
 
         if (string.IsNullOrEmpty(connectionName))
@@ -23,7 +22,7 @@ internal static class ConnectionNameProvider
             userId = (string)scalar!;
         }
         
-        serverVersion = connection.ServerVersion;        
+        var serverVersion = connection.ServerVersion;        
 
         return $"{connectionName} (SQL Server {serverVersion} - {userId})";
     }
