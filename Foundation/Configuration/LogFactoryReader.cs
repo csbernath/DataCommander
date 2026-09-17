@@ -13,7 +13,7 @@ public static class LogFactoryReader
         var currentLog = LogFactory.Instance.GetTypeLog(typeof(LogFactory));
         GarbageMonitor.Default.Add(nameof(InternalLogFactory), currentLog);
         
-        currentLog.Trace("Reading LogFactory configuration...");
+        currentLog.LogTrace("Reading LogFactory configuration...");
         var node = Settings.SelectCurrentType();
         if (node != null)
         {
@@ -29,6 +29,6 @@ public static class LogFactoryReader
             currentLog = LogFactory.Instance.GetLog(null);
         }
 
-        currentLog.Trace("LogFactory configuration has been read successfully.");
+        currentLog.LogTrace("LogFactory configuration has been read successfully.");
     }
 }

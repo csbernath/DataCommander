@@ -50,7 +50,7 @@ public class FoundationMessageBox : IMessageBox
         MessageBoxOptions options,
         bool showHelp)
     {
-        Log.Trace(CallerInformation.Create(), $"Caption: {caption}, Text: {text}");
+        Log.LogTrace(CallerInformation.Create(), $"Caption: {caption}, Text: {text}");
 
         MessageBoxBuilder.Beep(messageBoxIcon);
         var foundationMessageBoxForm = new FoundationMessageBoxForm(owner, text, caption, messageBoxButtons, messageBoxIcon, defaultButton, options, showHelp);

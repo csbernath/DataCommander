@@ -132,7 +132,7 @@ internal sealed class LogResultWriter : IResultWriter
 
         if (_showSchemaTable)
         {
-            Log.Trace($"SchemaTable of table[{_tableCount - 1}], {schemaTable.TableName}:\r\n{schemaTable.ToStringTableString()}");
+            Log.LogTrace($"SchemaTable of table[{_tableCount - 1}], {schemaTable.TableName}:\r\n{schemaTable.ToStringTableString()}");
 
             if (_provider.Identifier == ProviderIdentifier.SqlServer)
             {

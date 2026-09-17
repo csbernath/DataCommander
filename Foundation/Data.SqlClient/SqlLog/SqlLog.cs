@@ -148,7 +148,7 @@ public sealed class SqlLog
                 var seconds = (double)ticks / Stopwatch.Frequency;
                 var speed = (int)(array.Length / seconds);
 
-                Log.Trace(
+                Log.LogTrace(
                     "SqlLog.Flush() called. Count: {0}, Elapsed: {1}, Speed: {2} item/sec\r\n{3}",
                     array.Length,
                     StopwatchTimeSpan.ToString(ticks, 3),
@@ -195,7 +195,7 @@ public sealed class SqlLog
 
         Flush();
 
-        Log.Trace("queue.Count: {0}", _queue.Count);
+        Log.LogTrace("queue.Count: {0}", _queue.Count);
     }
 
     public int ApplicationStart(string name, DateTime startDate, bool safe)
@@ -217,7 +217,7 @@ public sealed class SqlLog
 
         var executor = _connection.CreateCommandExecutor();
         var applicationId = (int)executor.ExecuteScalar(new CreateCommandRequest(commandText))!;
-        Log.Trace("SqlLog.ApplicationStart({0})", applicationId);
+        Log.LogTrace("SqlLog.ApplicationStart({0})", applicationId);
         Dictionary<string, SqLoglCommandExecution> commands = [];
 
         lock (_applications)
@@ -338,7 +338,7 @@ public sealed class SqlLog
             }
 
             var trace = new StackTrace(2, true).ToString();
-            Log.Trace("LoggedSqlConnection.Open() succeeded. ConnectionNo: {0}\r\n{1}", connectionNo, trace);
+            Log.LogTrace("LoggedSqlConnection.Open() succeeded. ConnectionNo: {0}\r\n{1}", connectionNo, trace);
 
             Enqueue(sqlLogConnection);
         }

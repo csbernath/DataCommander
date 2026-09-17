@@ -120,7 +120,7 @@ internal sealed class SqlLogWriter : ILogWriter
         }
         catch (Exception e)
         {
-            Log.Error(e.ToString());
+            Log.LogError(e.ToString());
         }
     }
 }

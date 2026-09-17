@@ -78,7 +78,7 @@ public static class LogFactoryExtensions
 
             stringBuilder.Append(')');
             var message = stringBuilder.ToString();
-            log.Trace(message);
+            log.LogTrace(message);
         }
 
         return log;

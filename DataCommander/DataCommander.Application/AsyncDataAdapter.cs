@@ -128,7 +128,7 @@ internal sealed class AsyncDataAdapter(
 
             if (i != rowBlockSize)
             {
-                Log.Trace("resultWriter.WriteRows(rows,i);");
+                Log.LogTrace("resultWriter.WriteRows(rows,i);");
                 resultWriter.WriteRows(rows, i);
             }
 
@@ -212,7 +212,7 @@ internal sealed class AsyncDataAdapter(
                     var schemaTable = await dataReader.GetSchemaTableAsync(cancellationToken);
                     if (schemaTable != null)
                     {
-                        Log.Trace($"schemaTable:\r\n{schemaTable.ToStringTableString()}");
+                        Log.LogTrace($"schemaTable:\r\n{schemaTable.ToStringTableString()}");
                         if (asyncDataAdapterCommand.Query != null)
                         {
                             Parser.ParseResult(asyncDataAdapterCommand.Query.Results[tableIndex], out var name, out var fieldName);

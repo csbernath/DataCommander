@@ -117,7 +117,7 @@ TempPath:               {Path.GetTempPath()}");
                 }
                 catch (Exception e)
                 {
-                    Log.Error("{0}\t\n{1}", assembly, e);
+                    Log.LogError("{0}\t\n{1}", assembly, e);
                 }
             }
 
@@ -168,7 +168,7 @@ TempPath:               {Path.GetTempPath()}");
         }
         catch (Exception e)
         {
-            Log.Trace($"exception:\r\n{e}");
+            Log.LogTrace($"exception:\r\n{e}");
         }
 
         return fileVersion;

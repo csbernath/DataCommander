@@ -32,7 +32,7 @@ public sealed class ConfigurationReader
     private static Stream OpenStream(string configFileName)
     {
         var log = LogFactory.Instance.GetTypeLog<ConfigurationReader>();
-        log.Trace("ConfigurationReader.OpenStream({0})...", configFileName);
+        log.LogTrace("ConfigurationReader.OpenStream({0})...", configFileName);
         Stream? stream = null;
 
         if (true)
@@ -46,13 +46,13 @@ public sealed class ConfigurationReader
                     if (File.Exists(configFileName))
                         stream = File.OpenRead(configFileName);
                     else
-                        log.Trace("{0} not found.", configFileName);
+                        log.LogTrace("{0} not found.", configFileName);
 
                     break;
                 }
                 catch (FileNotFoundException e)
                 {
-                    log.Trace(e.ToString());
+                    log.LogTrace(e.ToString());
                     break;
                 }
                 catch (Exception e)
@@ -425,7 +425,7 @@ public sealed class ConfigurationReader
     public ConfigurationNode Read(XmlReader xmlReader, string? configFilename, string? sectionName, StringCollection? fileNames)
     {
         var log =LogFactory.Instance.GetTypeLog<ConfigurationReader>();
-        log.Trace("ConfigurationReader.Read({0},{1})...", configFilename, sectionName);
+        log.LogTrace("ConfigurationReader.Read({0},{1})...", configFilename, sectionName);
         var startTick = Stopwatch.GetTimestamp();
         _xmlReader = xmlReader;
         _fileName = configFilename!;

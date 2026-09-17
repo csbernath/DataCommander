@@ -76,7 +76,7 @@ public sealed class FileSystemMonitor : LoopThread, ILoopable
                     {
                         var message = string.Format(CultureInfo.InvariantCulture,
                             "FileSystemMonitor({0}).Created: {1}", Thread!.ManagedThreadId, file);
-                        Log.Trace(message);
+                        Log.LogTrace(message);
 
                         var fileName = Path.GetFileName(file);
                         var e = new FileSystemEventArgs(WatcherChangeTypes.Created, _path,
@@ -92,7 +92,7 @@ public sealed class FileSystemMonitor : LoopThread, ILoopable
 
                     if (index < 0)
                     {
-                        Log.Trace("{0}.Deleted: {1}", Thread!.Name, file);
+                        Log.LogTrace("{0}.Deleted: {1}", Thread!.Name, file);
                     }
                 }
             }
@@ -100,7 +100,7 @@ public sealed class FileSystemMonitor : LoopThread, ILoopable
             {
                 for (var i = 0; i < current.Length; i++)
                 {
-                    Log.Trace("FileSystemMonitor.current[{0}]: {1}", i, current[i]);
+                    Log.LogTrace("FileSystemMonitor.current[{0}]: {1}", i, current[i]);
                 }
             }
 

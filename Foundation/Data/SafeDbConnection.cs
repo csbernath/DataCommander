@@ -74,7 +74,7 @@ public class SafeDbConnection : IDbConnection
                 stopwatch.Stop();
                 if (stopwatch.ElapsedMilliseconds >= 100)
                 {
-                    Log.Trace("SafeDbConnection.Open() finished. {0}, count: {1}, elapsed: {2}",
+                    Log.LogTrace("SafeDbConnection.Open() finished. {0}, count: {1}, elapsed: {2}",
                         Connection.ConnectionString, count, stopwatch.Elapsed);
                 }
 

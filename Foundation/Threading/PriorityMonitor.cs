@@ -80,7 +80,7 @@ public sealed class PriorityMonitor<T>
         Assert.IsTrue(lockRequest.Monitor == this);
         Assert.IsTrue(lockRequest == CurrentLockRequest);
 
-        Log.Trace("Exiting lockRequest... monitoredObject: {0}, priority: {1}", MonitoredObject, lockRequest.Priority);
+        Log.LogTrace("Exiting lockRequest... monitoredObject: {0}, priority: {1}", MonitoredObject, lockRequest.Priority);
 
         lock (_lockRequests)
         {
@@ -120,7 +120,7 @@ public sealed class PriorityMonitor<T>
 
         internal void Initialize(bool isCompleted)
         {
-            Log.Trace("Initializing lockRequest... monitoredObject: {0}, priority: {1}, isCompleted: {2}", Monitor!.MonitoredObject, Priority,
+            Log.LogTrace("Initializing lockRequest... monitoredObject: {0}, priority: {1}, isCompleted: {2}", Monitor!.MonitoredObject, Priority,
                 isCompleted);
 
             if (isCompleted)
@@ -131,7 +131,7 @@ public sealed class PriorityMonitor<T>
 
         internal void Complete()
         {
-            Log.Trace("Completing lockRequest... monitoredObject: {0}, priority:{1}, asyncWaitHandle != null: {2}", Monitor!.MonitoredObject,
+            Log.LogTrace("Completing lockRequest... monitoredObject: {0}, priority:{1}, asyncWaitHandle != null: {2}", Monitor!.MonitoredObject,
                 Priority, _asyncWaitHandle != null);
 
             IsCompleted = true;

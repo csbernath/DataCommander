@@ -50,7 +50,7 @@ internal static class EntryPoint
         {
             var message = e.ToString();
             var log = LogFactory.Instance.GetCurrentMethodLog();
-            log.Error(message);
+            log.LogError(message);
             var text = $@"Fatal Application Error in Data Commander!
 
 {message}";

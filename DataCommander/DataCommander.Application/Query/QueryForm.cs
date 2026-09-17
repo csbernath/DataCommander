@@ -43,7 +43,7 @@ public sealed partial class QueryForm : Form, IQueryForm
     public QueryForm(MainForm mainForm, ProviderInfo providerInfo, IProvider provider, ConnectionInfo connectionInfo, ConnectionBase connection,
         StatusStrip parentStatusBar, ColorTheme? colorTheme)
     {
-        Log.Trace(CallerInformation.Create(), "Queryform.ctor...");
+        Log.LogTrace(CallerInformation.Create(), "Queryform.ctor...");
         GarbageMonitor.Default.Add("QueryForm", this);
 
         ArgumentNullException.ThrowIfNull(providerInfo);
@@ -194,7 +194,7 @@ Please wait...";
             }
         }
 
-        Log.Trace(CallerInformation.Create(), "Queryform.ctor finished.");
+        Log.LogTrace(CallerInformation.Create(), "Queryform.ctor finished.");
     }
 
     private void ResultsTabControlMouseUp(object? sender, MouseEventArgs e)
@@ -1308,19 +1308,19 @@ Please wait...";
             if (string.IsNullOrWhiteSpace(query))
                 return;
 
-            Log.Trace("ExecuteQuery...");
+            Log.LogTrace("ExecuteQuery...");
 
             Cursor = Cursors.AppStarting;
             SetGui(CommandState.Cancel);
 
             if (_dataAdapter != null)
-                Log.Error("this.dataAdapter == null failed");
+                Log.LogError("this.dataAdapter == null failed");
 
             Assert.IsTrue(_dataAdapter == null);
 
-            Log.Trace("ThreadMonitor:\r\n{0}", ThreadMonitor.ToStringTableString());
+            Log.LogTrace("ThreadMonitor:\r\n{0}", ThreadMonitor.ToStringTableString());
             ThreadMonitor.Join(0);
-            Log.Trace(GarbageMonitor.Default.State);
+            Log.LogTrace(GarbageMonitor.Default.State);
             _openTableMode = false;
             _cancel = false;
 
@@ -2014,7 +2014,7 @@ Please wait...";
         _mnuExecuteQueryKeyInfo.Enabled = ok;
         _mnuExecuteQueryXml!.Enabled = ok;
 
-        Log.Trace("this.executeQuerySplitButton.Enabled = {0};", ok);
+        Log.LogTrace("this.executeQuerySplitButton.Enabled = {0};", ok);
         _executeQuerySplitButton!.Enabled = ok;
         _cancelQueryButton!.Enabled = cancel;
     }

@@ -10,33 +10,33 @@ public static class LogExtensions
         return log.IsEnabled(LogLevel.Trace);
     }
 
-    public static void Error(this ILog log, string message)
+    public static void LogError(this ILog log, string message)
     {
         ArgumentNullException.ThrowIfNull(log);
         log.Write(LogLevel.Error, message);
     }
 
-    public static void Error(this ILog log, string format, params object[] args)
+    public static void LogError(this ILog log, string format, params object[] args)
     {
         ArgumentNullException.ThrowIfNull(log);
         var message = string.Format(format, args);
-        log.Error(message);
+        log.LogError(message);
     }
 
-    public static void Trace(this ILog log, string message)
+    public static void LogTrace(this ILog log, string message)
     {
         ArgumentNullException.ThrowIfNull(log);
         log.Write(LogLevel.Trace, message);
     }
 
-    public static void Trace(this ILog log, string format, params object?[] args)
+    public static void LogTrace(this ILog log, string format, params object?[] args)
     {
         ArgumentNullException.ThrowIfNull(log);
         var message = string.Format(format, args);
-        log.Trace(message);
+        log.LogTrace(message);
     }
 
-    public static void Trace(this ILog log, CallerInformation callerInformation, string message)
+    public static void LogTrace(this ILog log, CallerInformation callerInformation, string message)
     {
         ArgumentNullException.ThrowIfNull(log);
         ArgumentNullException.ThrowIfNull(callerInformation);
@@ -44,15 +44,15 @@ public static class LogExtensions
         var messageWithCallerInformation =
             $"CallerInformation: {callerInformation.CallerMemberName},{callerInformation.CallerFilePath},{callerInformation.CallerLineNumber}\r\n{message}";
 
-        log.Trace(messageWithCallerInformation);
+        log.LogTrace(messageWithCallerInformation);
     }
 
-    public static void Trace(this ILog log, CallerInformation callerInformation, string format, params object[] args)
+    public static void LogTrace(this ILog log, CallerInformation callerInformation, string format, params object[] args)
     {
         ArgumentNullException.ThrowIfNull(log);
         ArgumentNullException.ThrowIfNull(callerInformation);
         var message = string.Format(format, args);
-        log.Trace(callerInformation, message);
+        log.LogTrace(callerInformation, message);
     }
 
     public static void Write(this ILog log, LogLevel logLevel, string format, params object?[] args)

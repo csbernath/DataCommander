@@ -482,8 +482,8 @@ internal sealed class SqlServerProvider : IProvider
 
         if (schemaTable != null)
         {
-            Log.Trace(CallerInformation.Create(), schemaTable.ToStringTableString());
-            Log.Trace(CallerInformation.Create(), "{0}", schemaTable.TableName);
+            Log.LogTrace(CallerInformation.Create(), schemaTable.ToStringTableString());
+            Log.LogTrace(CallerInformation.Create(), "{0}", schemaTable.TableName);
 
             table = new DataTable("SchemaTable");
             var columns = table.Columns;

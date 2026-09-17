@@ -109,7 +109,7 @@ public class MainForm : Form
 
         var message = $"Application loaded in {new StopwatchTimeSpan(elapsed).ToString(3)} seconds.";
         _toolStripStatusLabel!.Text = message;
-        Log.Trace(message);
+        Log.LogTrace(message);
 
         SetColorTheme(DataCommanderApplication.Instance.ColorMode);
 
@@ -519,7 +519,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
 
             if (connectionForm.ShowDialog() == DialogResult.OK)
             {
-                Log.Trace(CallerInformation.Create(), "connectionForm.ShowDialog() finished.");
+                Log.LogTrace(CallerInformation.Create(), "connectionForm.ShowDialog() finished.");
                 var connectionInfo = connectionForm.ConnectionInfo;
                 var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
                 var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
@@ -984,7 +984,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         stringBuilder.Append(ThreadMonitor.ToStringTableString());
         stringBuilder.AppendLine();
         stringBuilder.Append(AppDomainMonitor.GetCurrentDomainState());
-        Log.Trace(stringBuilder.ToString());
+        Log.LogTrace(stringBuilder.ToString());
 
         ThreadMonitor.Join(0);
     }

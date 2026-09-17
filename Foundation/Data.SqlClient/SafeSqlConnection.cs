@@ -112,7 +112,7 @@ public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
         if (handled)
         {
             stringBuilder.AppendFormat("\r\nWaiting {0}...", TimeSpan.FromMilliseconds(timeout));
-            Log.Error(stringBuilder.ToString());
+            Log.LogError(stringBuilder.ToString());
 
             if (timeout > 0)
                 cancellationToken.WaitHandle.WaitOne(timeout);
@@ -159,7 +159,7 @@ public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
             }
         }
 
-        Log.Error(stringBuilder.ToString());
+        Log.LogError(stringBuilder.ToString());
 
         if (handled)
             cancellationToken.WaitHandle.WaitOne(1 * 60 * 1000); // 1 minutes
