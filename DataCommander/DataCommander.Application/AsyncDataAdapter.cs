@@ -22,7 +22,7 @@ internal sealed class AsyncDataAdapter(
     Action<IAsyncDataAdapter> writeEnd)
     : IAsyncDataAdapter
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
 
     private AsyncDataAdapterCommand? _command;
     private long _rowCount;
@@ -128,11 +128,11 @@ internal sealed class AsyncDataAdapter(
 
             if (i != rowBlockSize)
             {
-                Log.LogTrace("resultWriter.WriteRows(rows,i);");
+                Logger.LogTrace("resultWriter.WriteRows(rows,i);");
                 resultWriter.WriteRows(rows, i);
             }
 
-            Log.Write(LogLevel.Trace, "resultWriter.WriteTableEnd(rowCount);");
+            Logger.Write(LogLevel.Trace, "resultWriter.WriteTableEnd(rowCount);");
             resultWriter.WriteTableEnd();
 
             if (_rowCount > 0)
@@ -212,7 +212,7 @@ internal sealed class AsyncDataAdapter(
                     var schemaTable = await dataReader.GetSchemaTableAsync(cancellationToken);
                     if (schemaTable != null)
                     {
-                        Log.LogTrace($"schemaTable:\r\n{schemaTable.ToStringTableString()}");
+                        Logger.LogTrace($"schemaTable:\r\n{schemaTable.ToStringTableString()}");
                         if (asyncDataAdapterCommand.Query != null)
                         {
                             Parser.ParseResult(asyncDataAdapterCommand.Query.Results[tableIndex], out var name, out var fieldName);

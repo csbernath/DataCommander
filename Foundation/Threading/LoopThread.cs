@@ -23,7 +23,7 @@ namespace Foundation.Threading;
 /// </remarks>
 public class LoopThread
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
     private ILoopable? _loopable;
 
     /// <summary>
@@ -79,7 +79,7 @@ public class LoopThread
             catch (Exception e)
             {
                 exception = e;
-                Log.Write(LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", Thread!.Name,
+                Logger.Write(LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", Thread!.Name,
                     Thread.ManagedThreadId, e.ToString());
             }
         }
@@ -90,7 +90,7 @@ public class LoopThread
         }
         catch (Exception e)
         {
-            Log.Write(LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", Thread.Name,
+            Logger.Write(LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", Thread.Name,
                 Thread.ManagedThreadId, e.ToString());
         }
     }

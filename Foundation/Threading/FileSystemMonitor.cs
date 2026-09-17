@@ -15,7 +15,7 @@ namespace Foundation.Threading;
 /// </remarks>
 public sealed class FileSystemMonitor : LoopThread, ILoopable
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
     private readonly string _path;
     private readonly string _searchPattern;
     private readonly int _period;
@@ -76,7 +76,7 @@ public sealed class FileSystemMonitor : LoopThread, ILoopable
                     {
                         var message = string.Format(CultureInfo.InvariantCulture,
                             "FileSystemMonitor({0}).Created: {1}", Thread!.ManagedThreadId, file);
-                        Log.LogTrace(message);
+                        Logger.LogTrace(message);
 
                         var fileName = Path.GetFileName(file);
                         var e = new FileSystemEventArgs(WatcherChangeTypes.Created, _path,
@@ -92,7 +92,7 @@ public sealed class FileSystemMonitor : LoopThread, ILoopable
 
                     if (index < 0)
                     {
-                        Log.LogTrace("{0}.Deleted: {1}", Thread!.Name, file);
+                        Logger.LogTrace("{0}.Deleted: {1}", Thread!.Name, file);
                     }
                 }
             }
@@ -100,7 +100,7 @@ public sealed class FileSystemMonitor : LoopThread, ILoopable
             {
                 for (var i = 0; i < current.Length; i++)
                 {
-                    Log.LogTrace("FileSystemMonitor.current[{0}]: {1}", i, current[i]);
+                    Logger.LogTrace("FileSystemMonitor.current[{0}]: {1}", i, current[i]);
                 }
             }
 
@@ -108,7 +108,7 @@ public sealed class FileSystemMonitor : LoopThread, ILoopable
         }
         catch (Exception e)
         {
-            Log.Write(LogLevel.Error, e.ToString());
+            Logger.Write(LogLevel.Error, e.ToString());
         }
 
         Thread!.WaitForStop(_period);

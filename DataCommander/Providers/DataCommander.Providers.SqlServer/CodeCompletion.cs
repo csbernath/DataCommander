@@ -16,7 +16,7 @@ namespace DataCommander.Providers.SqlServer;
 
 internal static class CodeCompletion
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
     
     public static string? GetTableViewFunctionCommandText(SqlObject sqlObject)
     {
@@ -195,7 +195,7 @@ from
         List<IObjectName>? array = null;        
         if (commandText != null)
         {
-            Log.Write(LogLevel.Trace, "commandText:\r\n{0}", commandText);
+            Logger.Write(LogLevel.Trace, "commandText:\r\n{0}", commandText);
             List<IObjectName> list = [];
             try
             {

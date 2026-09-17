@@ -43,7 +43,7 @@ public sealed partial class QueryForm : Form, IQueryForm
     public QueryForm(MainForm mainForm, ProviderInfo providerInfo, IProvider provider, ConnectionInfo connectionInfo, ConnectionBase connection,
         StatusStrip parentStatusBar, ColorTheme? colorTheme)
     {
-        Log.LogTrace(CallerInformation.Create(), "Queryform.ctor...");
+        Logger.LogTrace(CallerInformation.Create(), "Queryform.ctor...");
         GarbageMonitor.Default.Add("QueryForm", this);
 
         ArgumentNullException.ThrowIfNull(providerInfo);
@@ -194,7 +194,7 @@ Please wait...";
             }
         }
 
-        Log.LogTrace(CallerInformation.Create(), "Queryform.ctor finished.");
+        Logger.LogTrace(CallerInformation.Create(), "Queryform.ctor finished.");
     }
 
     private void ResultsTabControlMouseUp(object? sender, MouseEventArgs e)
@@ -1308,19 +1308,19 @@ Please wait...";
             if (string.IsNullOrWhiteSpace(query))
                 return;
 
-            Log.LogTrace("ExecuteQuery...");
+            Logger.LogTrace("ExecuteQuery...");
 
             Cursor = Cursors.AppStarting;
             SetGui(CommandState.Cancel);
 
             if (_dataAdapter != null)
-                Log.LogError("this.dataAdapter == null failed");
+                Logger.LogError("this.dataAdapter == null failed");
 
             Assert.IsTrue(_dataAdapter == null);
 
-            Log.LogTrace("ThreadMonitor:\r\n{0}", ThreadMonitor.ToStringTableString());
+            Logger.LogTrace("ThreadMonitor:\r\n{0}", ThreadMonitor.ToStringTableString());
             ThreadMonitor.Join(0);
-            Log.LogTrace(GarbageMonitor.Default.State);
+            Logger.LogTrace(GarbageMonitor.Default.State);
             _openTableMode = false;
             _cancel = false;
 
@@ -1328,7 +1328,7 @@ Please wait...";
             {
                 SetStatusbarPanelText("Executing query...");
                 var statements = Provider.GetStatements(query);
-                Log.Write(LogLevel.Trace, "Query:\r\n{0}", query);
+                Logger.Write(LogLevel.Trace, "Query:\r\n{0}", query);
                 IReadOnlyCollection<AsyncDataAdapterCommand> commands;
 
                 if (statements.Count == 1)
@@ -2014,7 +2014,7 @@ Please wait...";
         _mnuExecuteQueryKeyInfo.Enabled = ok;
         _mnuExecuteQueryXml!.Enabled = ok;
 
-        Log.LogTrace("this.executeQuerySplitButton.Enabled = {0};", ok);
+        Logger.LogTrace("this.executeQuerySplitButton.Enabled = {0};", ok);
         _executeQuerySplitButton!.Enabled = ok;
         _cancelQueryButton!.Enabled = cancel;
     }
@@ -2028,7 +2028,7 @@ Please wait...";
             InfoMessageSeverity.Verbose => LogLevel.Trace,
             _ => throw new ArgumentException(),
         };
-        Log.Write(logLevel, infoMessage.Message);
+        Logger.Write(logLevel, infoMessage.Message);
     }
 
     private void ConsumeInfoMessages()

@@ -12,7 +12,7 @@ namespace Foundation.DefaultLog;
 /// </summary>
 public class FileLogWriter : ILogWriter
 {
-    private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(FileLogWriter));
+    private static readonly ILogger Logger = InternalLogFactory.Instance.GetTypeLog(typeof(FileLogWriter));
     private readonly bool _async;
     private readonly ILogFile _logFile;
     private readonly Lock _logFileLock = new();
@@ -40,7 +40,7 @@ public class FileLogWriter : ILogWriter
         }
         catch (Exception e)
         {
-            Log.Write(LogLevel.Error, e.ToString());
+            Logger.Write(LogLevel.Error, e.ToString());
         }
     }
 
@@ -62,7 +62,7 @@ public class FileLogWriter : ILogWriter
         }
         catch (Exception e)
         {
-            Log.Write(LogLevel.Error, e.ToString());
+            Logger.Write(LogLevel.Error, e.ToString());
         }
     }
 
@@ -74,7 +74,7 @@ public class FileLogWriter : ILogWriter
         }
         catch (Exception e)
         {
-            Log.Write(LogLevel.Error, e.ToString());
+            Logger.Write(LogLevel.Error, e.ToString());
         }
     }
 
@@ -86,7 +86,7 @@ public class FileLogWriter : ILogWriter
         }
         catch (Exception e)
         {
-            Log.Write(LogLevel.Error, e.ToString());
+            Logger.Write(LogLevel.Error, e.ToString());
         }
     }
 

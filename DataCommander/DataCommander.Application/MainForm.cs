@@ -29,7 +29,7 @@ namespace DataCommander.Application;
 
 public class MainForm : Form
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
     private readonly StringCollection _recentFileList = [];
 
     private MenuStrip? _mainMenu;
@@ -109,7 +109,7 @@ public class MainForm : Form
 
         var message = $"Application loaded in {new StopwatchTimeSpan(elapsed).ToString(3)} seconds.";
         _toolStripStatusLabel!.Text = message;
-        Log.LogTrace(message);
+        Logger.LogTrace(message);
 
         SetColorTheme(DataCommanderApplication.Instance.ColorMode);
 
@@ -519,7 +519,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
 
             if (connectionForm.ShowDialog() == DialogResult.OK)
             {
-                Log.LogTrace(CallerInformation.Create(), "connectionForm.ShowDialog() finished.");
+                Logger.LogTrace(CallerInformation.Create(), "connectionForm.ShowDialog() finished.");
                 var connectionInfo = connectionForm.ConnectionInfo;
                 var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
                 var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
@@ -745,7 +745,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         }
         catch (Exception ex)
         {
-            Log.Write(LogLevel.Error, ex.ToLogString());
+            Logger.Write(LogLevel.Error, ex.ToLogString());
             DataCommanderMessageBox.MessageBox.Show(this, ex.ToString());
         }
     }
@@ -919,7 +919,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
     {
         Cursor = Cursors.WaitCursor;
         _toolStripStatusLabel!.Text = "Saving all items...";
-        Log.Write(LogLevel.Trace, "Saving all items...");
+        Logger.Write(LogLevel.Trace, "Saving all items...");
 
         var fileNamePrefix = Path.GetTempPath() + "DataCommander.SaveAll." + '[' + DateTime.Now.ToString("yyyyMMddHHmmss.fff") + ']';
         var index = 1;
@@ -984,7 +984,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         stringBuilder.Append(ThreadMonitor.ToStringTableString());
         stringBuilder.AppendLine();
         stringBuilder.Append(AppDomainMonitor.GetCurrentDomainState());
-        Log.LogTrace(stringBuilder.ToString());
+        Logger.LogTrace(stringBuilder.ToString());
 
         ThreadMonitor.Join(0);
     }

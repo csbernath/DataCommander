@@ -6,7 +6,7 @@ namespace Foundation.Log;
 
 public static class LogFactoryExtensions
 {
-    public static ILog GetTypeLog(this ILogFactory logFactory, Type? type)
+    public static ILogger GetTypeLog(this ILogFactory logFactory, Type? type)
     {
         ArgumentNullException.ThrowIfNull(logFactory);
         ArgumentNullException.ThrowIfNull(type);
@@ -16,21 +16,21 @@ public static class LogFactoryExtensions
         return log;
     }
 
-    public static ILog GetTypeLog<T>(this ILogFactory logFactory)
+    public static ILogger GetTypeLog<T>(this ILogFactory logFactory)
     {
         var name = typeof(T).FullName;
         var log = logFactory.GetLog(name);
         return log;
     }
 
-    public static ILog GetCurrentTypeLog(this ILogFactory applicationLog)
+    public static ILogger GetCurrentTypeLog(this ILogFactory applicationLog)
     {
         var stackFrame = new StackFrame(1, false);
         var type = stackFrame.GetMethod()!.DeclaringType;
         return applicationLog.GetTypeLog(type);
     }
 
-    public static ILog GetCurrentTypeSectionLog(this ILogFactory applicationLog, string sectionName)
+    public static ILogger GetCurrentTypeSectionLog(this ILogFactory applicationLog, string sectionName)
     {
         var stackFrame = new StackFrame(1, false);
         var type = stackFrame.GetMethod()!.DeclaringType!;
@@ -42,7 +42,7 @@ public static class LogFactoryExtensions
         return log;
     }
 
-    public static ILog GetCurrentMethodLog(this ILogFactory applicationLog, params object[] parameters)
+    public static ILogger GetCurrentMethodLog(this ILogFactory applicationLog, params object[] parameters)
     {
         var stackFrame = new StackFrame(1, false);
         var method = stackFrame.GetMethod()!;

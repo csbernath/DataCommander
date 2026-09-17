@@ -15,7 +15,7 @@ namespace DataCommander.Application.ResultWriter;
 
 internal sealed class SqlBulkCopyResultWriter : IResultWriter
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
     private readonly IResultWriter _logResultWriter;
     private readonly Action<InfoMessage> _addInfoMessage;
     private readonly IProvider _destinationProvider;
@@ -182,7 +182,7 @@ internal sealed class SqlBulkCopyResultWriter : IResultWriter
         }
         catch (Exception e)
         {
-            Log.Write(LogLevel.Error, e.ToLogString());
+            Logger.Write(LogLevel.Error, e.ToLogString());
         }
     }
 

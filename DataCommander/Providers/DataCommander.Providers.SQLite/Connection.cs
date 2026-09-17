@@ -9,7 +9,7 @@ namespace DataCommander.Providers.SQLite;
 
 internal sealed class Connection : ConnectionBase
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
     private readonly SqliteConnection _sqliteConnection;
 
     public Connection(ConnectionStringAndCredential connectionStringAndCredential)

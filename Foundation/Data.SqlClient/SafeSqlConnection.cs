@@ -14,7 +14,7 @@ namespace Foundation.Data.SqlClient;
 /// </summary>
 public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
 {
-    private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(SafeSqlConnection));
+    private static readonly ILogger Logger = LogFactory.Instance.GetTypeLog(typeof(SafeSqlConnection));
     private readonly CancellationToken _cancellationToken = CancellationToken.None;
     private short _id;
 
@@ -44,7 +44,7 @@ public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
         }
         catch (Exception e)
         {
-            Log.Write(LogLevel.Error, "Exception:\r\n{0}", e.ToLogString());
+            Logger.Write(LogLevel.Error, "Exception:\r\n{0}", e.ToLogString());
         }
 
         return id;
@@ -112,7 +112,7 @@ public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
         if (handled)
         {
             stringBuilder.AppendFormat("\r\nWaiting {0}...", TimeSpan.FromMilliseconds(timeout));
-            Log.LogError(stringBuilder.ToString());
+            Logger.LogError(stringBuilder.ToString());
 
             if (timeout > 0)
                 cancellationToken.WaitHandle.WaitOne(timeout);
@@ -159,7 +159,7 @@ public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
             }
         }
 
-        Log.LogError(stringBuilder.ToString());
+        Logger.LogError(stringBuilder.ToString());
 
         if (handled)
             cancellationToken.WaitHandle.WaitOne(1 * 60 * 1000); // 1 minutes

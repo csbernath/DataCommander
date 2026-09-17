@@ -7,7 +7,7 @@ namespace Foundation.Data.LoggedDbConnection;
 
 internal sealed class DbConnectionLogger
 {
-    private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(DbConnectionLogger));
+    private static readonly ILogger Logger = LogFactory.Instance.GetTypeLog(typeof(DbConnectionLogger));
     private readonly LoggedDbConnection _connection;
     private BeforeOpenDbConnectionEventArgs? _beforeOpen;
     private BeforeExecuteCommandEventArgs? _beforeExecuteReader;
@@ -34,7 +34,7 @@ internal sealed class DbConnectionLogger
             dbConnectionStringBuilder["Password"] = "<not logged here>";
         }
 
-        Log.LogTrace("Opening connection {0}...", dbConnectionStringBuilder.ConnectionString);
+        Logger.LogTrace("Opening connection {0}...", dbConnectionStringBuilder.ConnectionString);
 
         _beforeOpen = e;
     }
@@ -43,10 +43,10 @@ internal sealed class DbConnectionLogger
     {
         var duration = e.Timestamp - _beforeOpen!.Timestamp;
         if (e.Exception != null)
-            Log.Write(LogLevel.Error, "Opening connection finished in {0} seconds. Exception:\r\n{1}", StopwatchTimeSpan.ToString(duration, 3),
+            Logger.Write(LogLevel.Error, "Opening connection finished in {0} seconds. Exception:\r\n{1}", StopwatchTimeSpan.ToString(duration, 3),
                 e.Exception.ToLogString());
         else
-            Log.LogTrace("Opening connection finished in {0} seconds.", StopwatchTimeSpan.ToString(duration, 3));
+            Logger.LogTrace("Opening connection finished in {0} seconds.", StopwatchTimeSpan.ToString(duration, 3));
 
         _beforeOpen = null;
     }
@@ -61,16 +61,16 @@ internal sealed class DbConnectionLogger
         var duration = e.Timestamp - _beforeExecuteReader!.Timestamp;
         if (e.Exception != null)
         {
-            Log.Write(LogLevel.Error, "{0}\r\nException:\r\n{1}", ToString(e.Command, duration), e.Exception.ToLogString());
+            Logger.Write(LogLevel.Error, "{0}\r\nException:\r\n{1}", ToString(e.Command, duration), e.Exception.ToLogString());
             _beforeExecuteReader = null;
         }
         else
-            Log.LogTrace("{0}", ToString(e.Command, duration));
+            Logger.LogTrace("{0}", ToString(e.Command, duration));
     }
 
     private void ConnectionAfterRead(object? sender, AfterReadEventArgs e)
     {
         var duration = e.Timestamp - _beforeExecuteReader!.Timestamp;
-        Log.LogTrace("{0} row(s) read in {1} seconds.", e.RowCount, StopwatchTimeSpan.ToString(duration, 3));
+        Logger.LogTrace("{0} row(s) read in {1} seconds.", e.RowCount, StopwatchTimeSpan.ToString(duration, 3));
     }
 }

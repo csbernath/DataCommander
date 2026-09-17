@@ -4,15 +4,15 @@ using Foundation.Log;
 
 namespace Foundation.InternalLog;
 
-internal sealed class InternalLog(ILogWriter logWriter, IDateTimeProvider dateTimeProvider, string? logName) : ILog
+internal sealed class InternalLogger(ILogWriter logWriter, IDateTimeProvider dateTimeProvider, string? logName) : ILogger
 {
     void IDisposable.Dispose()
     {
     }
 
-    bool ILog.IsEnabled(LogLevel logLevel) => throw new NotImplementedException();
+    bool ILogger.IsEnabled(LogLevel logLevel) => throw new NotImplementedException();
 
-    void ILog.Write(LogLevel logLevel, string message)
+    void ILogger.Write(LogLevel logLevel, string message)
     {
         var now = dateTimeProvider.Now;
         var logEntry = LogEntryFactory.Create(logName, now, message, logLevel);

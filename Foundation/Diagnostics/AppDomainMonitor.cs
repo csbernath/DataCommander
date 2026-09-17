@@ -15,7 +15,7 @@ namespace Foundation.Diagnostics;
 
 public static class AppDomainMonitor
 {
-    private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(AppDomainMonitor));
+    private static readonly ILogger Logger = LogFactory.Instance.GetTypeLog(typeof(AppDomainMonitor));
 
     private static readonly StringTableColumnInfo<AssemblyInfo>[] Columns =
     [
@@ -117,7 +117,7 @@ TempPath:               {Path.GetTempPath()}");
                 }
                 catch (Exception e)
                 {
-                    Log.LogError("{0}\t\n{1}", assembly, e);
+                    Logger.LogError("{0}\t\n{1}", assembly, e);
                 }
             }
 
@@ -127,7 +127,7 @@ TempPath:               {Path.GetTempPath()}");
         }
         catch (Exception exception)
         {
-            Log.Write(LogLevel.Error, exception.ToString());
+            Logger.Write(LogLevel.Error, exception.ToString());
         }
     }
 
@@ -168,7 +168,7 @@ TempPath:               {Path.GetTempPath()}");
         }
         catch (Exception e)
         {
-            Log.LogTrace($"exception:\r\n{e}");
+            Logger.LogTrace($"exception:\r\n{e}");
         }
 
         return fileVersion;

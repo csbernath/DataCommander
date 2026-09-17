@@ -19,7 +19,7 @@ namespace DataCommander.Application.Connection;
 
 internal sealed class ConnectionListForm : Form
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
     private readonly List<ConnectionInfo> _connectionInfos;
     private ConnectionInfo? _connectionInfo;
     private ConnectionBase? _connection;
@@ -489,7 +489,7 @@ internal sealed class ConnectionListForm : Form
                 var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
                 var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
                 var textBoxText = OpenConnectionFormHelper.CreateOpenConnectionFormText(connectionInfo, providerInfo, provider);
-                Log.LogTrace(CallerInformation.Create(), textBoxText);
+                Logger.LogTrace(CallerInformation.Create(), textBoxText);
                 var connection = provider.CreateConnection(connectionInfo.ConnectionStringAndCredential);
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationToken = cancellationTokenSource.Token;
@@ -536,7 +536,7 @@ internal sealed class ConnectionListForm : Form
 
     private void dataGrid_KeyDown(object? sender, KeyEventArgs e)
     {
-        Log.Write(LogLevel.Trace, "e.KeyCode: {0}\r\ne.KeyData: {1}", e.KeyCode, e.KeyData);
+        Logger.Write(LogLevel.Trace, "e.KeyCode: {0}\r\ne.KeyData: {1}", e.KeyCode, e.KeyData);
 
         if (e.KeyData == (Keys.Alt | Keys.Up))
         {

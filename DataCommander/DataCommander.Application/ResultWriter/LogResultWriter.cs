@@ -21,7 +21,7 @@ namespace DataCommander.Application.ResultWriter;
 
 internal sealed class LogResultWriter : IResultWriter
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
     private readonly Action<InfoMessage> _addInfoMessage;
     private readonly bool _showSchemaTable;
     private IProvider _provider;
@@ -132,7 +132,7 @@ internal sealed class LogResultWriter : IResultWriter
 
         if (_showSchemaTable)
         {
-            Log.LogTrace($"SchemaTable of table[{_tableCount - 1}], {schemaTable.TableName}:\r\n{schemaTable.ToStringTableString()}");
+            Logger.LogTrace($"SchemaTable of table[{_tableCount - 1}], {schemaTable.TableName}:\r\n{schemaTable.ToStringTableString()}");
 
             if (_provider.Identifier == ProviderIdentifier.SqlServer)
             {

@@ -23,7 +23,7 @@ namespace DataCommander.Providers.SqlServer;
 
 internal sealed class SqlServerProvider : IProvider
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
 
     static SqlServerProvider()
     {
@@ -482,8 +482,8 @@ internal sealed class SqlServerProvider : IProvider
 
         if (schemaTable != null)
         {
-            Log.LogTrace(CallerInformation.Create(), schemaTable.ToStringTableString());
-            Log.LogTrace(CallerInformation.Create(), "{0}", schemaTable.TableName);
+            Logger.LogTrace(CallerInformation.Create(), schemaTable.ToStringTableString());
+            Logger.LogTrace(CallerInformation.Create(), "{0}", schemaTable.TableName);
 
             table = new DataTable("SchemaTable");
             var columns = table.Columns;

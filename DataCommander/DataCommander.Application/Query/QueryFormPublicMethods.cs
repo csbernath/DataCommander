@@ -87,7 +87,7 @@ public sealed partial class QueryForm
 
         using (var reader = new StreamReader(path, Encoding.Default, true))
         {
-            Log.Write(LogLevel.Trace, "reader.CurrentEncoding.EncodingName: {0}", reader.CurrentEncoding.EncodingName);
+            Logger.Write(LogLevel.Trace, "reader.CurrentEncoding.EncodingName: {0}", reader.CurrentEncoding.EncodingName);
             text = reader.ReadToEnd();
         }
 
@@ -227,7 +227,7 @@ public sealed partial class QueryForm
         {
             try
             {
-                Log.Write(LogLevel.Trace, "Query:\r\n{0}", query);
+                Logger.Write(LogLevel.Trace, "Query:\r\n{0}", query);
                 _sqlStatement = new SqlParser(query);
                 _commandType = CommandType.Text;
                 _openTableMode = true;

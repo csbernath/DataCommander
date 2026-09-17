@@ -12,7 +12,7 @@ namespace Foundation.Data;
 /// </summary>
 public class SafeDbConnection : IDbConnection
 {
-    private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(SafeDbConnection));
+    private static readonly ILogger Logger = LogFactory.Instance.GetTypeLog(typeof(SafeDbConnection));
     private ISafeDbConnection? _safeDbConnection;
 
     protected SafeDbConnection()
@@ -74,7 +74,7 @@ public class SafeDbConnection : IDbConnection
                 stopwatch.Stop();
                 if (stopwatch.ElapsedMilliseconds >= 100)
                 {
-                    Log.LogTrace("SafeDbConnection.Open() finished. {0}, count: {1}, elapsed: {2}",
+                    Logger.LogTrace("SafeDbConnection.Open() finished. {0}, count: {1}, elapsed: {2}",
                         Connection.ConnectionString, count, stopwatch.Elapsed);
                 }
 
@@ -127,7 +127,7 @@ public class SafeDbConnection : IDbConnection
 
                 var state = Connection.State;
 
-                Log.Write(
+                Logger.Write(
                     LogLevel.Error,
                     "command.CommandText: {0}\r\nExecution time: {1}, command.CommandTimeout: {2}, connection.State: {3}\r\n{4}",
                     command.CommandText,
@@ -170,7 +170,7 @@ public class SafeDbConnection : IDbConnection
             }
             catch (Exception e)
             {
-                Log.Write(LogLevel.Error, e.ToLogString());
+                Logger.Write(LogLevel.Error, e.ToLogString());
 
                 if (Connection.State == ConnectionState.Open)
                 {
@@ -203,7 +203,7 @@ public class SafeDbConnection : IDbConnection
             }
             catch (Exception e)
             {
-                Log.Write(LogLevel.Error, e.ToLogString());
+                Logger.Write(LogLevel.Error, e.ToLogString());
 
                 if (Connection.State == ConnectionState.Open)
                     _safeDbConnection!.HandleException(e, command);

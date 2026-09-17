@@ -17,7 +17,7 @@ internal sealed class LogFile(
     DateTimeKind dateTimeKind)
     : ILogFile
 {
-    private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(LogFile));
+    private static readonly ILogger Logger = InternalLogFactory.Instance.GetTypeLog(typeof(LogFile));
     private DateTime _date;
     private FileStream? _fileStream;
     private string? _fileName;
@@ -43,14 +43,14 @@ internal sealed class LogFile(
         }
         catch (Exception e)
         {
-            Log.Write(LogLevel.Error, e.ToString());
+            Logger.Write(LogLevel.Error, e.ToString());
 
             var directory = Path.GetTempPath();
             var fileName = Path.GetFileName(path);
             path = Path.Combine(directory, fileName);
             _fileStream = Open(path, dateTime);
 
-            Log.Write(LogLevel.Error, $"LogFile path: {FileName}");
+            Logger.Write(LogLevel.Error, $"LogFile path: {FileName}");
         }
 
         if (_fileStream.Length == 0)

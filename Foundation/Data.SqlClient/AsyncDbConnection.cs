@@ -12,7 +12,7 @@ namespace Foundation.Data.SqlClient;
 
 public sealed class AsyncDbConnection : IDbConnection
 {
-    private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(AsyncDbConnection));
+    private static readonly ILogger Logger = LogFactory.Instance.GetTypeLog(typeof(AsyncDbConnection));
     private readonly IDbConnection _cloneableConnection;
     private readonly ICloneable _cloneable;
     private readonly List<string> _commands = [];
@@ -184,7 +184,7 @@ public sealed class AsyncDbConnection : IDbConnection
                 if (exception != null)
                 {
                     var message = exception.ToLogString();
-                    Log.Write(LogLevel.Error, message);
+                    Logger.Write(LogLevel.Error, message);
                 }
             }
         }

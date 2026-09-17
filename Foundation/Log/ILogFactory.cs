@@ -6,6 +6,6 @@ namespace Foundation.Log;
 public interface ILogFactory : IDisposable
 {
     string? FileName { get; }
-    ILog GetLog(string? name);
+    ILogger GetLog(string? name);
     void Write(IReadOnlyCollection<LogEntry> logEntries);
 }

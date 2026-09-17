@@ -13,7 +13,7 @@ namespace DataCommander.Application.ResultWriter;
 /// </summary>
 internal sealed class HtmlTextBox : UserControl
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
     private WebBrowser _webBrowser;
     private string _fileName;
 
@@ -71,7 +71,7 @@ internal sealed class HtmlTextBox : UserControl
                 }
                 catch (Exception e)
                 {
-                    Log.Write(LogLevel.Error, e.ToString());
+                    Logger.Write(LogLevel.Error, e.ToString());
                 }
             }
 

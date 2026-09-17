@@ -5,7 +5,7 @@ namespace Foundation.Windows.Forms;
 
 public class FoundationMessageBox : IMessageBox
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
 
     public DialogResult Show(string? text) =>
         ShowCore(null, text, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
@@ -50,7 +50,7 @@ public class FoundationMessageBox : IMessageBox
         MessageBoxOptions options,
         bool showHelp)
     {
-        Log.LogTrace(CallerInformation.Create(), $"Caption: {caption}, Text: {text}");
+        Logger.LogTrace(CallerInformation.Create(), $"Caption: {caption}, Text: {text}");
 
         MessageBoxBuilder.Beep(messageBoxIcon);
         var foundationMessageBoxForm = new FoundationMessageBoxForm(owner, text, caption, messageBoxButtons, messageBoxIcon, defaultButton, options, showHelp);

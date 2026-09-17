@@ -64,7 +64,7 @@ internal sealed class LogFactory : ILogFactory
         }
     }
 
-    ILog ILogFactory.GetLog(string? name) => new Log(this, name!);
+    ILogger ILogFactory.GetLog(string? name) => new Logger(this, name!);
 
     void ILogFactory.Write(IReadOnlyCollection<LogEntry> logEntries)
     {
@@ -79,31 +79,31 @@ internal sealed class LogFactory : ILogFactory
             _multipeLog.Dispose();
     }
 
-    internal void Write(Log log, LogLevel logLevel, string message)
+    internal void Write(Logger logger, LogLevel logLevel, string message)
     {
         if (_multipeLog != null)
         {
-            var logEntry = LogEntryFactory.Create(log.LoggedName, _dateTimeProvider.Now, message, logLevel);
+            var logEntry = LogEntryFactory.Create(logger.LoggedName, _dateTimeProvider.Now, message, logLevel);
             _multipeLog.Write(logEntry);
         }
     }
 
-    internal void Write(Log log, LogLevel logLevel, string format, params object[] args)
+    internal void Write(Logger logger, LogLevel logLevel, string format, params object[] args)
     {
         if (_multipeLog != null)
         {
             var message = string.Format(format, args);
-            var logEntry = LogEntryFactory.Create(log.LoggedName, _dateTimeProvider.Now, message, logLevel);
+            var logEntry = LogEntryFactory.Create(logger.LoggedName, _dateTimeProvider.Now, message, logLevel);
             _multipeLog.Write(logEntry);
         }
     }
 
-    internal void Write(Log log, LogLevel logLevel, Func<string> getMessage)
+    internal void Write(Logger logger, LogLevel logLevel, Func<string> getMessage)
     {
         if (_multipeLog != null)
         {
             var message = getMessage();
-            var logEntry = LogEntryFactory.Create(log.LoggedName, _dateTimeProvider.Now, message, logLevel);
+            var logEntry = LogEntryFactory.Create(logger.LoggedName, _dateTimeProvider.Now, message, logLevel);
             _multipeLog.Write(logEntry);
         }
     }

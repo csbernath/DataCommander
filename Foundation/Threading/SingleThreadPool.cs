@@ -7,7 +7,7 @@ namespace Foundation.Threading;
 
 public sealed class SingleThreadPool
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
     private readonly Queue<Tuple<WaitCallback, object>> _workItems = new();
     private readonly EventWaitHandle _enqueueEvent = new(false, EventResetMode.AutoReset);
     private int _queuedItemCount;
@@ -57,7 +57,7 @@ public sealed class SingleThreadPool
             }
             catch (Exception e)
             {
-                Log.Write(LogLevel.Error, "Executing task failed. callback: {0}, state: {1}\r\n{2}", callback, state, e);
+                Logger.Write(LogLevel.Error, "Executing task failed. callback: {0}, state: {1}\r\n{2}", callback, state, e);
             }
 
             Interlocked.Decrement(ref _queuedItemCount);

@@ -206,7 +206,7 @@ public sealed partial class QueryForm
 
     private void CancelCommandQuery()
     {
-        Log.LogTrace(ThreadMonitor.ToStringTableString());
+        Logger.LogTrace(ThreadMonitor.ToStringTableString());
         const string message = "Canceling query...";
         AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, message));
         SetStatusbarPanelText(message);

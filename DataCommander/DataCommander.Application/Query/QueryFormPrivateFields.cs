@@ -18,7 +18,7 @@ namespace DataCommander.Application.Query;
 
 public sealed partial class QueryForm
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
     private readonly MainForm _mainForm;
     private MenuStrip _mainMenu;
     private ToolStripMenuItem _menuItem1;

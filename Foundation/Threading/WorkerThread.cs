@@ -10,7 +10,7 @@ namespace Foundation.Threading;
 
 public class WorkerThread
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
     private readonly Thread _thread;
     private ThreadStart? _start;
     private readonly WorkerEvent _stopRequest = new(WorkerEventState.NonSignaled);
@@ -51,10 +51,10 @@ public class WorkerThread
             if (isStopRequested && !field)
             {
                 field = true;
-                if (Log.IsTraceEnabled())
+                if (Logger.IsTraceEnabled())
                 {
                     var stackTrace = new StackTrace(1, true);
-                    Log.LogTrace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) accepted stop request.\r\n{stackTrace}");
+                    Logger.LogTrace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) accepted stop request.\r\n{stackTrace}");
                 }
             }
 
@@ -93,34 +93,34 @@ public class WorkerThread
 
     public void Start()
     {
-        Log.LogTrace($"Starting WorkerThread({Thread.Name})...");
+        Logger.LogTrace($"Starting WorkerThread({Thread.Name})...");
         StartTime = LocalTime.Default.Now;
         Thread.Start();
     }
 
     public void Stop()
     {
-        Log.LogTrace($"Stopping WorkerThread({Thread.Name},{Thread.ManagedThreadId})...");
+        Logger.LogTrace($"Stopping WorkerThread({Thread.Name},{Thread.ManagedThreadId})...");
         StopTime = LocalTime.Default.Now;
         _stopRequest.Set();
     }
 
     public void Pause()
     {
-        Log.LogTrace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) is requested to pause.");
+        Logger.LogTrace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) is requested to pause.");
         _pauseRequest.Set();
     }
 
     public void Continue()
     {
-        Log.LogTrace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) is requested to continue.");
+        Logger.LogTrace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) is requested to continue.");
         _pauseRequest.Reset();
         _continueRequest.Set();
     }
 
     public void WaitForStopOrContinue()
     {
-        Log.Write(LogLevel.Error, $"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) is waiting for stop or continue request...");
+        Logger.Write(LogLevel.Error, $"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) is waiting for stop or continue request...");
         var ticks = Stopwatch.GetTimestamp();
         WaitHandle[] waitHandles = [_stopRequest, _continueRequest];
         var index = WaitHandle.WaitAny(waitHandles);
@@ -131,7 +131,7 @@ public class WorkerThread
             1 => "continue",
             _ => "unknown",
         };
-        Log.LogTrace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) accepted {request} request in {StopwatchTimeSpan.ToString(ticks, 6)} seconds.");
+        Logger.LogTrace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) accepted {request} request in {StopwatchTimeSpan.ToString(ticks, 6)} seconds.");
     }
 
     public void Join() => Thread.Join();
@@ -154,7 +154,7 @@ public class WorkerThread
         var now = LocalTime.Default.Now;
         var elapsed = now - StartTime;
 
-        Log.LogTrace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) started in {elapsed} seconds.");
+        Logger.LogTrace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) started in {elapsed} seconds.");
 
         Thread.CurrentUICulture = CultureInfo.InvariantCulture;
 
@@ -167,7 +167,7 @@ public class WorkerThread
         }
         catch (Exception e)
         {
-            Log.Write(LogLevel.Error, $"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) unhandled exception:\r\n{e}");
+            Logger.Write(LogLevel.Error, $"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) unhandled exception:\r\n{e}");
         }
 
         now = LocalTime.Default.Now;
@@ -178,7 +178,7 @@ public class WorkerThread
 
         StopTime = now;
 
-        Log.LogTrace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) stopped in {elapsed} seconds.");
+        Logger.LogTrace($"WorkerThread({Thread.Name},{Thread.ManagedThreadId}) stopped in {elapsed} seconds.");
 
         if (_stopped != null)
             _stopped(this, EventArgs.Empty);

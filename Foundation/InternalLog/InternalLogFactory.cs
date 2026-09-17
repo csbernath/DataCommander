@@ -20,7 +20,7 @@ public sealed class InternalLogFactory : ILogFactory
 
     string? ILogFactory.FileName => null;
 
-    ILog ILogFactory.GetLog(string? name) => new InternalLog(InternalLogWriter, LocalTime.Default, name);
+    ILogger ILogFactory.GetLog(string? name) => new InternalLogger(InternalLogWriter, LocalTime.Default, name);
     
     void ILogFactory.Write(IReadOnlyCollection<LogEntry> logEntries)
     {

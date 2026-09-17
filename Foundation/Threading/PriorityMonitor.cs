@@ -9,7 +9,7 @@ namespace Foundation.Threading;
 
 public sealed class PriorityMonitor<T>
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
     private readonly IndexableCollection<LockRequest> _lockRequests;
     private readonly NonUniqueIndex<int, LockRequest> _priorityIndex;
 
@@ -80,7 +80,7 @@ public sealed class PriorityMonitor<T>
         Assert.IsTrue(lockRequest.Monitor == this);
         Assert.IsTrue(lockRequest == CurrentLockRequest);
 
-        Log.LogTrace("Exiting lockRequest... monitoredObject: {0}, priority: {1}", MonitoredObject, lockRequest.Priority);
+        Logger.LogTrace("Exiting lockRequest... monitoredObject: {0}, priority: {1}", MonitoredObject, lockRequest.Priority);
 
         lock (_lockRequests)
         {
@@ -120,7 +120,7 @@ public sealed class PriorityMonitor<T>
 
         internal void Initialize(bool isCompleted)
         {
-            Log.LogTrace("Initializing lockRequest... monitoredObject: {0}, priority: {1}, isCompleted: {2}", Monitor!.MonitoredObject, Priority,
+            Logger.LogTrace("Initializing lockRequest... monitoredObject: {0}, priority: {1}, isCompleted: {2}", Monitor!.MonitoredObject, Priority,
                 isCompleted);
 
             if (isCompleted)
@@ -131,7 +131,7 @@ public sealed class PriorityMonitor<T>
 
         internal void Complete()
         {
-            Log.LogTrace("Completing lockRequest... monitoredObject: {0}, priority:{1}, asyncWaitHandle != null: {2}", Monitor!.MonitoredObject,
+            Logger.LogTrace("Completing lockRequest... monitoredObject: {0}, priority:{1}, asyncWaitHandle != null: {2}", Monitor!.MonitoredObject,
                 Priority, _asyncWaitHandle != null);
 
             IsCompleted = true;

@@ -13,7 +13,7 @@ public sealed class NullLogFactory : ILogFactory
 
     string? ILogFactory.FileName => null;
 
-    ILog ILogFactory.GetLog(string? name) => NullLog.Instance;
+    ILogger ILogFactory.GetLog(string? name) => NullLogger.Instance;
     
     void ILogFactory.Write(IReadOnlyCollection<LogEntry> logEntries) => throw new NotImplementedException();
 

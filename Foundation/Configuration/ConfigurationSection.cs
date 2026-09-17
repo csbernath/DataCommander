@@ -87,7 +87,7 @@ namespace Foundation.Configuration;
 /// </remarks>
 public sealed class ConfigurationSection
 {
-    private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog<ConfigurationSection>();
+    private static readonly ILogger Logger = InternalLogFactory.Instance.GetTypeLog<ConfigurationSection>();
     private int _changed;
 
     /// <summary>
@@ -216,7 +216,7 @@ public sealed class ConfigurationSection
         }
         catch (Exception e)
         {
-            Log.Write(LogLevel.Error, e.ToString());
+            Logger.Write(LogLevel.Error, e.ToString());
         }
 
         if (fileNames != null)
@@ -237,14 +237,14 @@ public sealed class ConfigurationSection
             }
             catch (Exception e)
             {
-                Log.Write(LogLevel.Error, e.ToString());
+                Logger.Write(LogLevel.Error, e.ToString());
             }
         }
     }
 
     private void OnChanged(object? sender, FileSystemEventArgs e)
     {
-        Log.LogTrace("Settings.OnChanged. FileName: " + e.FullPath);
+        Logger.LogTrace("Settings.OnChanged. FileName: " + e.FullPath);
         Interlocked.Increment(ref _changed);
 
         if (Changed != null)

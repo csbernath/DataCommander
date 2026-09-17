@@ -23,7 +23,7 @@ internal sealed class CopyResultWriter(
     CancellationToken cancellationToken)
     : IResultWriter
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
     private readonly IResultWriter _logResultWriter = new LogResultWriter(addInfoMessage, false);
     private DbTransaction? _transaction;
     private IDbCommand? _insertCommand;
@@ -116,7 +116,7 @@ internal sealed class CopyResultWriter(
             }
             catch (Exception e)
             {
-                Log.Write(LogLevel.Error, "CommandText:\r\n{0}\r\nException:{1}", commandText, e.ToLogString());
+                Logger.Write(LogLevel.Error, "CommandText:\r\n{0}\r\nException:{1}", commandText, e.ToLogString());
                 throw;
             }
         }
@@ -168,7 +168,7 @@ internal sealed class CopyResultWriter(
         }
         catch (Exception e)
         {
-            Log.Write(LogLevel.Error, e.ToLogString());
+            Logger.Write(LogLevel.Error, e.ToLogString());
         }
     }
 
@@ -215,7 +215,7 @@ internal sealed class CopyResultWriter(
         while (!cancellationToken.IsCancellationRequested && _queue.Count > 5)
         {
             _waitMilliseconds += 500;
-            Log.Write(LogLevel.Trace, "this.waitMilliseconds: {0}", _waitMilliseconds);
+            Logger.Write(LogLevel.Trace, "this.waitMilliseconds: {0}", _waitMilliseconds);
 
             cancellationToken.WaitHandle.WaitOne(500);
         }

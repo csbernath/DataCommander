@@ -24,7 +24,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer;
 internal sealed class TableNode(DatabaseNode databaseNode, string owner, string name, int id, TemporalType type)
     : ITreeNode
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
 
     public DatabaseNode DatabaseNode { get; } = databaseNode;
 
@@ -199,7 +199,7 @@ exec sp_MShelpcolumns N'{1}.[{2}]', @orderby = 'id'
 exec sp_MStablekeys N'{1}.[{2}]', null, 14
 exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, owner, name);
 
-        Log.Write(LogLevel.Trace, commandText);
+        Logger.Write(LogLevel.Trace, commandText);
         DataSet dataSet;
         using (var connection = DatabaseNode.Databases.Server.CreateConnection())
         {
@@ -434,7 +434,7 @@ where
 	s.name = '{owner}'
 	and o.name = '{name}'
 order by c.column_id";
-        Log.Write(LogLevel.Trace, commandText);
+        Logger.Write(LogLevel.Trace, commandText);
         var columns = Db.ExecuteReader(
             DatabaseNode.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),

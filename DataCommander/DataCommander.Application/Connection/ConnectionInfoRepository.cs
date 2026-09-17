@@ -13,7 +13,7 @@ namespace DataCommander.Application.Connection;
 
 public static class ConnectionInfoRepository
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
 
     public static IEnumerable<ConnectionInfo> Get()
     {

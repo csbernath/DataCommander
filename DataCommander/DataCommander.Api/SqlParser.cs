@@ -14,7 +14,7 @@ namespace DataCommander.Api;
 
 public sealed class SqlParser
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
     private readonly string _text;
     private readonly Table[] _allTables;
 
@@ -26,7 +26,7 @@ public sealed class SqlParser
         _allTables = allTables;
 
         foreach (var value in Tables.Values)
-            Log.Write(LogLevel.Trace, value);
+            Logger.Write(LogLevel.Trace, value);
     }
 
     public IDictionary<string, string> Tables { get; }

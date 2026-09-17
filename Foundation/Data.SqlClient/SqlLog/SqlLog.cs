@@ -61,7 +61,7 @@ namespace Foundation.Data.SqlClient.SqlLog;
 /// </remarks>
 public sealed class SqlLog
 {
-    private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(SqlLog));
+    private static readonly ILogger Logger = LogFactory.Instance.GetTypeLog(typeof(SqlLog));
     private static readonly IInternalConnectionHelper InternalConnectionHelper;
     private int _connectionCounter;
     private readonly SafeSqlConnection _connection;
@@ -141,14 +141,14 @@ public sealed class SqlLog
             }
             catch (Exception e)
             {
-                Log.Write(LogLevel.Error, e.ToString());
+                Logger.Write(LogLevel.Error, e.ToString());
             }
             finally
             {
                 var seconds = (double)ticks / Stopwatch.Frequency;
                 var speed = (int)(array.Length / seconds);
 
-                Log.LogTrace(
+                Logger.LogTrace(
                     "SqlLog.Flush() called. Count: {0}, Elapsed: {1}, Speed: {2} item/sec\r\n{3}",
                     array.Length,
                     StopwatchTimeSpan.ToString(ticks, 3),
@@ -195,7 +195,7 @@ public sealed class SqlLog
 
         Flush();
 
-        Log.LogTrace("queue.Count: {0}", _queue.Count);
+        Logger.LogTrace("queue.Count: {0}", _queue.Count);
     }
 
     public int ApplicationStart(string name, DateTime startDate, bool safe)
@@ -217,7 +217,7 @@ public sealed class SqlLog
 
         var executor = _connection.CreateCommandExecutor();
         var applicationId = (int)executor.ExecuteScalar(new CreateCommandRequest(commandText))!;
-        Log.LogTrace("SqlLog.ApplicationStart({0})", applicationId);
+        Logger.LogTrace("SqlLog.ApplicationStart({0})", applicationId);
         Dictionary<string, SqLoglCommandExecution> commands = [];
 
         lock (_applications)
@@ -338,7 +338,7 @@ public sealed class SqlLog
             }
 
             var trace = new StackTrace(2, true).ToString();
-            Log.LogTrace("LoggedSqlConnection.Open() succeeded. ConnectionNo: {0}\r\n{1}", connectionNo, trace);
+            Logger.LogTrace("LoggedSqlConnection.Open() succeeded. ConnectionNo: {0}\r\n{1}", connectionNo, trace);
 
             Enqueue(sqlLogConnection);
         }

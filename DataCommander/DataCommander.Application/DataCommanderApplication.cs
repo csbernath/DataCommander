@@ -14,7 +14,7 @@ namespace DataCommander.Application;
 
 public sealed class DataCommanderApplication
 {
-    private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+    private static readonly ILogger Logger = LogFactory.Instance.GetCurrentTypeLog();
     private string? _sectionName;
     private readonly bool _updaterStarted = false;
     private SystemColorMode _colorMode;
@@ -56,7 +56,7 @@ public sealed class DataCommanderApplication
             MainForm = new MainForm();
 
             Task.Delay(1000).ContinueWith(_ =>
-                Log.Write(LogLevel.Trace, "{0}\r\n{1}", AppDomainMonitor.GetEnvironmentInfo(), AppDomainMonitor.GetCurrentDomainState()));
+                Logger.Write(LogLevel.Trace, "{0}\r\n{1}", AppDomainMonitor.GetEnvironmentInfo(), AppDomainMonitor.GetCurrentDomainState()));
 
             System.Windows.Forms.Application.Run(MainForm);
         }
@@ -67,7 +67,7 @@ public sealed class DataCommanderApplication
         var tempFileName = ApplicationDataFileName + ".temp";
         ApplicationData.Save(tempFileName, _sectionName!);
         var succeeded = NativeMethods.MoveFileEx(tempFileName, ApplicationDataFileName!, NativeMethods.MoveFileExFlags.ReplaceExisiting);
-        Log.Write(LogLevel.Trace, "MoveFileEx succeeded: {0}", succeeded);
+        Logger.Write(LogLevel.Trace, "MoveFileEx succeeded: {0}", succeeded);
     }
 
     public void SetApplicationData(ApplicationData applicationData, string fileName, string sectionName)
@@ -89,7 +89,7 @@ public sealed class DataCommanderApplication
 
     private static void SystemEvents_SessionEnding(object? sender, SessionEndingEventArgs e)
     {
-        Log.Write(LogLevel.Trace, "Reason: {0}", e.Reason);
+        Logger.Write(LogLevel.Trace, "Reason: {0}", e.Reason);
         var mainForm = Instance.MainForm!;
         mainForm.SaveAll();
     }

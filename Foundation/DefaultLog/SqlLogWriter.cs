@@ -11,7 +11,7 @@ namespace Foundation.DefaultLog;
 
 internal sealed class SqlLogWriter : ILogWriter
 {
-    private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(SqlLogWriter));
+    private static readonly ILogger Logger = InternalLogFactory.Instance.GetTypeLog(typeof(SqlLogWriter));
     private const int Period = 10000;
     private readonly Func<IDbConnection> _createConnection;
     private readonly Func<LogEntry, string> _logEntryToCommandText;
@@ -120,7 +120,7 @@ internal sealed class SqlLogWriter : ILogWriter
         }
         catch (Exception e)
         {
-            Log.LogError(e.ToString());
+            Logger.LogError(e.ToString());
         }
     }
 }
