@@ -299,7 +299,7 @@ internal sealed class ConnectionListForm : Form
             var s = Clipboard.GetText();
             var connectionDtos = JsonConvert.DeserializeObject<ConnectionDto[]>(s);
             var connectionPropertiesList = connectionDtos
-                .Select(connectionDto => connectionDto.ToConnectionProperties());
+                .Select(connectionDto => connectionDto.ToConnectionInfo());
             foreach (var connectionProperties in connectionPropertiesList)
                 Add(connectionProperties);
         }

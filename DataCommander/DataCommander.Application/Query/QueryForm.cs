@@ -121,6 +121,24 @@ public sealed partial class QueryForm : Form, IQueryForm
         _standardOutput = new StandardOutput(new TextBoxWriter(_messagesTextBox), this);
 
         _textBoxWriter = new TextBoxWriter(_messagesTextBox);
+        
+        if (colorTheme != null)
+        {
+            if (colorTheme.BackColor != null)
+            {
+                _tvObjectExplorer!.BackColor = colorTheme.BackColor.Value;
+                _messagesTextBox.BackColor = colorTheme.BackColor.Value;
+            }
+        }
+        
+        if (_connectionInfo.BackColor != null)
+        {
+            _statusBar!.BackColor = _connectionInfo.BackColor.Value;
+            _statusBar.ForeColor = _connectionInfo.BackColor.Value.GetReadableForeColor();
+
+            // _sbPanelText!.BackColor = _connectionInfo.BackColor.Value;
+            // _sbPanelText.ForeColor = _connectionInfo.BackColor.Value.GetReadableForeColor();
+        }
 
         var objectExplorer = provider.CreateObjectExplorer();
         if (objectExplorer != null)
@@ -184,15 +202,6 @@ Please wait...";
         //                 _colorTheme!.Apply(toolStripItem);
         //         });
         // }
-
-        if (colorTheme != null)
-        {
-            if (colorTheme.BackColor != null)
-            {
-                _tvObjectExplorer.BackColor = colorTheme.BackColor.Value;
-                _messagesTextBox.BackColor = colorTheme.BackColor.Value;
-            }
-        }
 
         Logger.LogTrace(CallerInformation.Create(), "Queryform.ctor finished.");
     }
@@ -2191,10 +2200,10 @@ Please wait...";
     [DllImport("user32.dll")]
     private static extern int SendMessage(IntPtr hwnd, int msg, IntPtr wParam, ref Tchittestinfo lParam);
 
-    private void SetStatusbarPanelText(string? text, Color color)
+    private void SetStatusbarPanelText(string? text, Color foreColor)
     {
         _sbPanelText.Text = text;
-        _sbPanelText.ForeColor = color;
+        // _sbPanelText.ForeColor = foreColor;
     }
 
     public ICancelableOperationForm CreateCancelableOperationForm(

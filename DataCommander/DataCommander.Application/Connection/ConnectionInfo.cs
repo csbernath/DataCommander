@@ -1,10 +1,16 @@
-﻿using DataCommander.Api.Connection;
+﻿using System.Drawing;
+using DataCommander.Api.Connection;
 
 namespace DataCommander.Application.Connection;
 
-public sealed class ConnectionInfo(string? connectionName, string providerIdentifier, ConnectionStringAndCredential connectionStringAndCredential)
+public sealed class ConnectionInfo(
+    string? connectionName,
+    string providerIdentifier,
+    ConnectionStringAndCredential connectionStringAndCredential,
+    Color? backColor)
 {
     public readonly string? ConnectionName = connectionName;
     public readonly string ProviderIdentifier = providerIdentifier;
     public readonly ConnectionStringAndCredential ConnectionStringAndCredential = connectionStringAndCredential;
+    public readonly Color? BackColor = backColor;
 }

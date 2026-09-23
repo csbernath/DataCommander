@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
+using DataCommander.Application.Query;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Linq;
@@ -26,6 +28,7 @@ internal partial class ConnectionStringBuilderForm : Form
     private DataTable? _dataSources;
     private List<string>? _initialCatalogs;
     private List<OleDbProviderInfo>? _oleDbProviders;
+    private Color? _backColor;
     private readonly ColorTheme? _colorTheme;
 
     public ConnectionStringBuilderForm(ColorTheme? colorTheme)
@@ -45,6 +48,18 @@ internal partial class ConnectionStringBuilderForm : Form
 
         foreach (var provider in _providers)
             providersComboBox.Items.Add(provider.Name);
+
+        var items = new BackColorDropdownItem[]
+        {
+            new("<default>", null),
+            new("Red", Color.Red),
+            new("Green", Color.Green),
+            new("Blue", Color.Blue),
+            new("Yellow", Color.Yellow),
+            new("Orange", Color.Orange)
+        };
+
+        backColorComboBox.Items.AddRange(items);
     }
 
     public ConnectionInfo? ConnectionInfo
@@ -83,6 +98,9 @@ internal partial class ConnectionStringBuilderForm : Form
 
             if (connectionStringBuilder.IsKeywordSupportedAndTryGetValue(ConnectionStringKeyword.TrustServerCertificate, out bool trustServerCertificate))
                 trustServerCertificateCheckBox.Checked = trustServerCertificate;
+
+            SetBackColor(_connectionInfo.BackColor);
+            UpdateBackColorDropDownItems();
         }
     }
 
@@ -126,7 +144,7 @@ internal partial class ConnectionStringBuilderForm : Form
 
             if (connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.Database))
                 initialCatalogLabel.Text = $"{ConnectionStringKeyword.Database}:";
-            
+
             integratedSecurityCheckBox.Enabled = connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity);
             trustServerCertificateCheckBox.Enabled = connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.TrustServerCertificate);
         }
@@ -285,7 +303,7 @@ internal partial class ConnectionStringBuilderForm : Form
         var connectionStringBuilder = provider.CreateConnectionStringBuilder();
         var connectionStringAndCredential = SaveDialogToConnectionStringAndCredential(provider.Identifier, connectionStringBuilder);
         var connectionName = connectionNameTextBox.Text;
-        var connectionInfo = new ConnectionInfo(connectionName, providerInfo.Identifier, connectionStringAndCredential);
+        var connectionInfo = new ConnectionInfo(connectionName, providerInfo.Identifier, connectionStringAndCredential, _backColor);
         return connectionInfo;
     }
 
@@ -313,7 +331,7 @@ internal partial class ConnectionStringBuilderForm : Form
 
             if (connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity))
                 connectionStringBuilder.SetValue(ConnectionStringKeyword.IntegratedSecurity, integratedSecurityCheckBox.Checked);
-            
+
             if (connectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.TrustServerCertificate))
                 connectionStringBuilder.SetValue(ConnectionStringKeyword.TrustServerCertificate, trustServerCertificateCheckBox.Checked);
         }
@@ -392,8 +410,70 @@ internal partial class ConnectionStringBuilderForm : Form
 
     private void HandlePasswordTextBoxTextChanged(object? sender, EventArgs e) => _passwordChanged = true;
 
+    private void backColorButton_Click(object sender, EventArgs e)
+    {
+        var colorDialog = new ColorDialog();
+        if (colorDialog.ShowDialog() == DialogResult.OK)
+        {
+            SetBackColor(colorDialog.Color);
+            UpdateBackColorDropDownItems();
+        }
+    }
+
+    private void UpdateBackColorDropDownItems()
+    {
+        var backColorDropdownItem = backColorComboBox.Items
+            .Cast<BackColorDropdownItem>()
+            .FirstOrDefault(i=>i.Color == _backColor);
+        if (backColorDropdownItem != null)
+        {
+            backColorComboBox.SelectedItem = backColorDropdownItem;
+        }
+        else
+        {
+            var customColorDropdownItem = new BackColorDropdownItem("Custom Color", _backColor);
+            backColorComboBox.Items.Add(customColorDropdownItem);
+            backColorComboBox.SelectedItem = customColorDropdownItem;
+        }
+    }
+
     private sealed class OleDbProviderInfo(string name)
     {
         public readonly string Name = name;
+    }
+
+    private void backColorComboBox_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        var backColorDropdownItem = (BackColorDropdownItem)backColorComboBox.SelectedItem!;
+        SetBackColor(backColorDropdownItem.Color);
+    }
+
+    private void SetBackColor(Color? backColor)
+    {
+        _backColor = backColor;
+        if (_backColor != null)
+        {
+            sampleTextLabel.BackColor = _backColor!.Value;
+            sampleTextLabel.ForeColor = _backColor.Value.GetReadableForeColor();
+        }
+        else
+        {
+            sampleTextLabel.BackColor = SystemColors.Control;            
+            sampleTextLabel.ForeColor = SystemColors.ControlText;
+        }
+    }
+
+    private sealed class BackColorDropdownItem
+    {
+        public readonly string Name;
+        public readonly Color? Color;
+
+        public BackColorDropdownItem(string name, Color? color)
+        {
+            Name = name;
+            Color = color;
+        }
+
+        public override string ToString() => Name;
     }
 }

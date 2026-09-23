@@ -727,7 +727,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
                     var connectionStringAndCredential = new ConnectionStringAndCredential(connectionString, null);
                     var connection = provider.CreateConnection(connectionStringAndCredential);
                     await connection.OpenAsync(CancellationToken.None);
-                    var connectionInfo = new ConnectionInfo(null, provider.Identifier, connectionStringAndCredential);
+                    var connectionInfo = new ConnectionInfo(null, provider.Identifier, connectionStringAndCredential, null);
 
                     var connectionInfos = ConnectionInfoRepository.Get().ToList();
                     connectionInfos.Add(connectionInfo);
@@ -840,7 +840,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
             ArgumentNullException.ThrowIfNull(provider);
 
             var connectionStringAndCredential = new ConnectionStringAndCredential(connectionString, null);
-            var connectionInfo = new ConnectionInfo(null, providerIdentifier, connectionStringAndCredential);
+            var connectionInfo = new ConnectionInfo(null, providerIdentifier, connectionStringAndCredential, null);
             var connection = provider.CreateConnection(connectionStringAndCredential);
             await connection.OpenAsync(CancellationToken.None);
             

@@ -52,6 +52,10 @@ namespace DataCommander.Application.Connection
             oleDbProvidersComboBox = new System.Windows.Forms.ComboBox();
             oleDbProviderLabel = new System.Windows.Forms.Label();
             trustServerCertificateCheckBox = new System.Windows.Forms.CheckBox();
+            label2 = new System.Windows.Forms.Label();
+            customBackColorButton = new System.Windows.Forms.Button();
+            backColorComboBox = new System.Windows.Forms.ComboBox();
+            sampleTextLabel = new System.Windows.Forms.Label();
             SuspendLayout();
             // 
             // providersComboBox
@@ -157,7 +161,7 @@ namespace DataCommander.Application.Connection
             // 
             // okButton
             // 
-            okButton.Location = new System.Drawing.Point(479, 308);
+            okButton.Location = new System.Drawing.Point(479, 340);
             okButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             okButton.Name = "okButton";
             okButton.Size = new System.Drawing.Size(88, 31);
@@ -169,7 +173,7 @@ namespace DataCommander.Application.Connection
             // cancelButton
             // 
             cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            cancelButton.Location = new System.Drawing.Point(575, 308);
+            cancelButton.Location = new System.Drawing.Point(575, 340);
             cancelButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             cancelButton.Name = "cancelButton";
             cancelButton.Size = new System.Drawing.Size(88, 31);
@@ -220,7 +224,7 @@ namespace DataCommander.Application.Connection
             // 
             // testButton
             // 
-            testButton.Location = new System.Drawing.Point(127, 308);
+            testButton.Location = new System.Drawing.Point(127, 340);
             testButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             testButton.Name = "testButton";
             testButton.Size = new System.Drawing.Size(88, 31);
@@ -261,13 +265,60 @@ namespace DataCommander.Application.Connection
             trustServerCertificateCheckBox.Text = "Trust server certificate";
             trustServerCertificateCheckBox.UseVisualStyleBackColor = true;
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new System.Drawing.Point(5, 306);
+            label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(65, 15);
+            label2.TabIndex = 20;
+            label2.Text = "Back color:";
+            // 
+            // customBackColorButton
+            // 
+            customBackColorButton.Location = new System.Drawing.Point(316, 298);
+            customBackColorButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            customBackColorButton.Name = "customBackColorButton";
+            customBackColorButton.Size = new System.Drawing.Size(88, 31);
+            customBackColorButton.TabIndex = 21;
+            customBackColorButton.Text = "Custom";
+            customBackColorButton.UseVisualStyleBackColor = true;
+            customBackColorButton.Click += backColorButton_Click;
+            // 
+            // backColorComboBox
+            // 
+            backColorComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            backColorComboBox.FormattingEnabled = true;
+            backColorComboBox.Location = new System.Drawing.Point(127, 303);
+            backColorComboBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            backColorComboBox.Name = "backColorComboBox";
+            backColorComboBox.Size = new System.Drawing.Size(182, 23);
+            backColorComboBox.TabIndex = 22;
+            backColorComboBox.SelectedIndexChanged += backColorComboBox_SelectedIndexChanged;
+            // 
+            // sampleTextLabel
+            // 
+            sampleTextLabel.AutoSize = true;
+            sampleTextLabel.Location = new System.Drawing.Point(412, 306);
+            sampleTextLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            sampleTextLabel.Name = "sampleTextLabel";
+            sampleTextLabel.Padding = new System.Windows.Forms.Padding(2);
+            sampleTextLabel.Size = new System.Drawing.Size(119, 19);
+            sampleTextLabel.TabIndex = 23;
+            sampleTextLabel.Text = "This is a sample text.";
+            // 
             // ConnectionStringBuilderForm
             // 
             AcceptButton = okButton;
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             CancelButton = cancelButton;
-            ClientSize = new System.Drawing.Size(668, 348);
+            ClientSize = new System.Drawing.Size(668, 377);
+            Controls.Add(sampleTextLabel);
+            Controls.Add(backColorComboBox);
+            Controls.Add(customBackColorButton);
+            Controls.Add(label2);
             Controls.Add(trustServerCertificateCheckBox);
             Controls.Add(oleDbProviderLabel);
             Controls.Add(oleDbProvidersComboBox);
@@ -298,6 +349,14 @@ namespace DataCommander.Application.Connection
             PerformLayout();
         }
 
+        private System.Windows.Forms.Label sampleTextLabel;
+
+        private System.Windows.Forms.ComboBox backColorComboBox;
+
+        private System.Windows.Forms.Button customBackColorButton;
+
+        private System.Windows.Forms.Label label2;
+
         #endregion
 
         private ComboBox providersComboBox;
@@ -310,13 +369,13 @@ namespace DataCommander.Application.Connection
         private Label label4;
         private ComboBox initialCatalogComboBox;
         private Label initialCatalogLabel;
-        private Button okButton;
-        private Button cancelButton;
+        private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.Button cancelButton;
         private CheckBox integratedSecurityCheckBox;
         private Button refreshButton;
         private TextBox connectionNameTextBox;
         private Label label6;
-        private Button testButton;
+        private System.Windows.Forms.Button testButton;
         private ComboBox oleDbProvidersComboBox;
         private Label oleDbProviderLabel;
         private CheckBox trustServerCertificateCheckBox;
