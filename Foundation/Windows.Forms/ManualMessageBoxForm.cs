@@ -13,8 +13,8 @@ namespace Foundation.Windows.Forms
 
             Text = caption;
 
-            var icon = MessageBoxBuilder.GetIcon(messageBoxIcon);
-            pictureBox.Image = icon.ToBitmap();
+            var stockIconId = MessageBoxBuilder.ToStockIconId(messageBoxIcon);
+            pictureBox.Image = StockIconBitmapRepository.GetStockIconBitmap(stockIconId);
         }
 
         private void button1_Click(object sender, System.EventArgs e)

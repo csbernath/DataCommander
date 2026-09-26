@@ -27,6 +27,7 @@ public sealed partial class QueryForm
     private ToolStripMenuItem _mnuCloseTabPage;
     private ToolStripMenuItem _mnuCancel;
     private ToolStripStatusLabel _sbPanelText;
+    private StatusbarPanelTextIcon? _statusbarPanelTextIcon;
     private ToolStripStatusLabel _sbPanelTimer;
     private ToolStripStatusLabel _sbPanelRows;
     private ToolStripMenuItem _menuItem2;

@@ -97,12 +97,7 @@ public sealed partial class QueryForm
         SetStatusbarPanelText($"File {_fileName} loaded successfully.");
     }
 
-    public void SetStatusbarPanelText(string? text)
-    {
-        // var color = _colorTheme != null ? _colorTheme.ForeColor.Value : SystemColors.ControlText;
-        var color = SystemColors.ControlText;
-        SetStatusbarPanelText(text, color);
-    }
+    public void SetStatusbarPanelText(string? text) => SetStatusbarPanelText(text, StatusbarPanelTextIcon.Info);
 
     [AllowNull]
     public override Font Font
@@ -196,7 +191,7 @@ public sealed partial class QueryForm
 
         _tabControl.SelectedTab = _messagesTabPage;
 
-        SetStatusbarPanelText("Query batch completed with errors.", _colorTheme != null ? _colorTheme.ProviderKeyWordColor : Color.Red);
+        SetStatusbarPanelText("Query batch completed with errors.", StatusbarPanelTextIcon.Warning);
         _sbPanelRows.Text = null;
     }
 

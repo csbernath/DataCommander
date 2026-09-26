@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DataCommander.Api;
-using DataCommander.Application.Connection;
 using Foundation.Core;
 using Foundation.Windows.Forms;
 

@@ -194,10 +194,10 @@ internal class FoundationMessageBoxForm : Form
 
     private static PictureBox CreatePictureBox(MessageBoxIcon messageBoxIcon)
     {
-        var icon = MessageBoxBuilder.GetIcon(messageBoxIcon);
+        var stockIconId = MessageBoxBuilder.ToStockIconId(messageBoxIcon);
         var pictureBox = new PictureBox
         {
-            Image = icon.ToBitmap(),
+            Image = StockIconBitmapRepository.GetStockIconBitmap(stockIconId),
             SizeMode = PictureBoxSizeMode.AutoSize
         };
         return pictureBox;

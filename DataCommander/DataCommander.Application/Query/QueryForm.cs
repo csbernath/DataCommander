@@ -18,7 +18,6 @@ using DataCommander.Api;
 using DataCommander.Api.Connection;
 using DataCommander.Api.Query;
 using Foundation.Assertions;
-using Foundation.Collections;
 using Foundation.Collections.ReadOnly;
 using Foundation.Configuration;
 using Foundation.Core;
@@ -29,6 +28,7 @@ using Foundation.Diagnostics;
 using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Threading;
+using Foundation.Windows.Forms;
 using Newtonsoft.Json;
 
 namespace DataCommander.Application.Query;
@@ -915,6 +915,7 @@ Please wait...";
         _statusBar.Name = "_statusBar";
         _statusBar.Size = new Size(716, 22);
         _statusBar.TabIndex = 2;
+        _statusBar.RenderMode = ToolStripRenderMode.ManagerRenderMode;
         // 
         // _sbPanelText
         // 
@@ -923,6 +924,9 @@ Please wait...";
         _sbPanelText.Size = new Size(231, 17);
         _sbPanelText.Spring = true;
         _sbPanelText.TextAlign = ContentAlignment.MiddleLeft;
+        _sbPanelText.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+        _sbPanelText.TextImageRelation = TextImageRelation.ImageBeforeText;
+        _sbPanelText.ImageAlign = ContentAlignment.MiddleLeft;
         // 
         // _sbPanelTableStyle
         // 
@@ -1981,7 +1985,7 @@ Please wait...";
             if (_errorCount == 0)
                 SetStatusbarPanelText("Query executed successfully.");
             else
-                SetStatusbarPanelText("Query completed with errors.", _colorTheme != null ? _colorTheme.ProviderKeyWordColor : Color.Red);
+                SetStatusbarPanelText("Query completed with errors.", StatusbarPanelTextIcon.Warning);
         }
 
         _dataAdapter = null;
@@ -2200,10 +2204,21 @@ Please wait...";
     [DllImport("user32.dll")]
     private static extern int SendMessage(IntPtr hwnd, int msg, IntPtr wParam, ref Tchittestinfo lParam);
 
-    private void SetStatusbarPanelText(string? text, Color foreColor)
+    private void SetStatusbarPanelText(string? text, StatusbarPanelTextIcon statusbarPanelTextIcon)
     {
         _sbPanelText.Text = text;
-        // _sbPanelText.ForeColor = foreColor;
+
+        if (_statusbarPanelTextIcon == null || _statusbarPanelTextIcon.Value != statusbarPanelTextIcon)
+        {
+            _sbPanelText.Image = statusbarPanelTextIcon switch
+            {
+                StatusbarPanelTextIcon.Info => StockIconBitmapRepository.GetStockIconBitmap(StockIconId.Info),
+                StatusbarPanelTextIcon.Warning => StockIconBitmapRepository.GetStockIconBitmap(StockIconId.Warning),
+                _ => throw new ArgumentOutOfRangeException(nameof(statusbarPanelTextIcon), statusbarPanelTextIcon, null)
+            };
+
+            _statusbarPanelTextIcon = statusbarPanelTextIcon;
+        }
     }
 
     public ICancelableOperationForm CreateCancelableOperationForm(

@@ -167,7 +167,7 @@ namespace DataCommander.Application.Connection
             okButton.Size = new System.Drawing.Size(88, 31);
             okButton.TabIndex = 9;
             okButton.Text = "OK";
-            okButton.UseVisualStyleBackColor = true;
+            // okButton.UseVisualStyleBackColor = true;
             okButton.Click += HandleOKClicked;
             // 
             // cancelButton
@@ -179,7 +179,7 @@ namespace DataCommander.Application.Connection
             cancelButton.Size = new System.Drawing.Size(88, 31);
             cancelButton.TabIndex = 10;
             cancelButton.Text = "Cancel";
-            cancelButton.UseVisualStyleBackColor = true;
+            // cancelButton.UseVisualStyleBackColor = true;
             // 
             // integratedSecurityCheckBox
             // 
@@ -190,7 +190,7 @@ namespace DataCommander.Application.Connection
             integratedSecurityCheckBox.Size = new System.Drawing.Size(124, 19);
             integratedSecurityCheckBox.TabIndex = 5;
             integratedSecurityCheckBox.Text = "Integrated security";
-            integratedSecurityCheckBox.UseVisualStyleBackColor = true;
+            // integratedSecurityCheckBox.UseVisualStyleBackColor = true;
             integratedSecurityCheckBox.CheckedChanged += HandleIntegratedSecurityCheckBoxCheckedChanged;
             // 
             // refreshButton
@@ -201,7 +201,7 @@ namespace DataCommander.Application.Connection
             refreshButton.Size = new System.Drawing.Size(88, 31);
             refreshButton.TabIndex = 4;
             refreshButton.Text = "&Refresh";
-            refreshButton.UseVisualStyleBackColor = true;
+            // refreshButton.UseVisualStyleBackColor = true;
             refreshButton.Click += HandleRefreshButtonClicked;
             // 
             // connectionNameTextBox
@@ -230,7 +230,7 @@ namespace DataCommander.Application.Connection
             testButton.Size = new System.Drawing.Size(88, 31);
             testButton.TabIndex = 16;
             testButton.Text = "&Test";
-            testButton.UseVisualStyleBackColor = true;
+            // testButton.UseVisualStyleBackColor = true;
             testButton.Click += HandleTestButtonClicked;
             // 
             // oleDbProvidersComboBox
@@ -263,7 +263,7 @@ namespace DataCommander.Application.Connection
             trustServerCertificateCheckBox.Size = new System.Drawing.Size(141, 19);
             trustServerCertificateCheckBox.TabIndex = 19;
             trustServerCertificateCheckBox.Text = "Trust server certificate";
-            trustServerCertificateCheckBox.UseVisualStyleBackColor = true;
+            // trustServerCertificateCheckBox.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
@@ -283,7 +283,7 @@ namespace DataCommander.Application.Connection
             customBackColorButton.Size = new System.Drawing.Size(88, 31);
             customBackColorButton.TabIndex = 21;
             customBackColorButton.Text = "Custom";
-            customBackColorButton.UseVisualStyleBackColor = true;
+            // customBackColorButton.UseVisualStyleBackColor = true;
             customBackColorButton.Click += backColorButton_Click;
             // 
             // backColorComboBox

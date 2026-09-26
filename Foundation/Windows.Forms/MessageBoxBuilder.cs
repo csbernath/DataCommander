@@ -38,7 +38,7 @@ namespace Foundation.Windows.Forms
             new(MessageBoxButtonId.Yes, "Yes", true, "&Yes", DialogResult.Yes)
         }.ToDictionary(i => i.ButtonId);
 
-        public static Icon GetIcon(MessageBoxIcon messageBoxIcon)
+        public static StockIconId ToStockIconId(MessageBoxIcon messageBoxIcon)
         {
             var stockIconId = messageBoxIcon switch
             {
@@ -48,8 +48,7 @@ namespace Foundation.Windows.Forms
                 MessageBoxIcon.Question => StockIconId.Help,
                 _ => throw new ArgumentOutOfRangeException(nameof(messageBoxIcon), messageBoxIcon, null)
             };
-            var icon = SystemIcons.GetStockIcon(stockIconId);
-            return icon;
+            return stockIconId;
         }
 
         public static MessageBoxButtonId[] GetButtonIds(MessageBoxButtons messageBoxButtons)
