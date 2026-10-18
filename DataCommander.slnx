@@ -21,7 +21,7 @@
     <Project Path="Foundation/Threading/Foundation.Threading.csproj" />
     <Project Path="Foundation/Windows.Forms/Foundation.Windows.Forms.csproj" />
     <Project Path="Foundation/Xml/Foundation.Xml.csproj" />
-    <Project Path="Foundation\Windows.Forms.Tests\Foundation.Windows.Forms.Tests.csproj" Type="Classic C#" />
+    <Project Path="Foundation\Windows.Forms.Tests\Foundation.Windows.Forms.Tests.csproj" />
     <File Path="Foundation/README.md" />
   </Folder>
   <Folder Name="/Providers/">
