@@ -389,9 +389,9 @@ Please wait...";
 
     private void MnuClearCache_Click(object? sender, EventArgs e) => Provider.ClearCompletionCache();
 
-    private async void MnuResultSchema_Click(object? sender, EventArgs e) => await ExecuteReader(CommandBehavior.SchemaOnly);
+    private async void MnuResultSchema_Click(object? sender, EventArgs e) => await ExecuteReader(CommandBehavior.SchemaOnly, CancellationToken.None);
 
-    private async void MnuKeyInfo_Click(object? sender, EventArgs e) => await ExecuteReader(CommandBehavior.KeyInfo);
+    private async void MnuKeyInfo_Click(object? sender, EventArgs e) => await ExecuteReader(CommandBehavior.KeyInfo, CancellationToken.None);
 
     private void MnuSingleRow_Click(object? sender, EventArgs e) => ExecuteQuerySingleRow();
 

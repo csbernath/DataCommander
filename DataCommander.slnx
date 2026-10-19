@@ -25,6 +25,7 @@
     <File Path="Foundation/README.md" />
   </Folder>
   <Folder Name="/Providers/">
+    <Project Path="DataCommander/Providers/DataCommander.Providers.MongoDB/DataCommander.Providers.MongoDB.csproj" />
     <Project Path="DataCommander/Providers/DataCommander.Providers.Msi/DataCommander.Providers.Msi.csproj" />
     <Project Path="DataCommander/Providers/DataCommander.Providers.MySql/DataCommander.Providers.MySql.csproj" />
     <Project Path="DataCommander/Providers/DataCommander.Providers.Odp/DataCommander.Providers.Odp.csproj" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -34,6 +35,11 @@ internal sealed class ObjectExplorer : IObjectExplorer
         [
             new DatabaseCollectionNode(this)
         ]);
+
+    public void InitializeCommand(IDbCommand command)
+    {
+        throw new NotImplementedException();
+    }
 
     bool IObjectExplorer.Sortable => false;
 }

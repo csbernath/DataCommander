@@ -75,6 +75,7 @@ public sealed partial class QueryForm
     private readonly IContainer components = new Container();
     private readonly ProviderInfo _providerInfo;
     private readonly ConnectionInfo _connectionInfo;
+    private IObjectExplorer? _objectExplorer;
     private DbTransaction? _transaction;
     private SqlParser _sqlStatement;
     private DbCommand? _command;

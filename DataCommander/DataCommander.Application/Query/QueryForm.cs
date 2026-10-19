@@ -140,11 +140,11 @@ public sealed partial class QueryForm : Form, IQueryForm
             // _sbPanelText.ForeColor = _connectionInfo.BackColor.Value.GetReadableForeColor();
         }
 
-        var objectExplorer = provider.CreateObjectExplorer();
-        if (objectExplorer != null)
+        _objectExplorer = provider.CreateObjectExplorer();
+        if (_objectExplorer != null)
         {
             var startTimestamp = Stopwatch.GetTimestamp();
-            objectExplorer.SetConnectionStringAndCredential(_connectionInfo.ConnectionName, _connectionInfo.ConnectionStringAndCredential);
+            _objectExplorer.SetConnectionStringAndCredential(_connectionInfo.ConnectionName, _connectionInfo.ConnectionStringAndCredential);
             var cancellationTokenSource = new CancellationTokenSource();
             const string textBoxText = @"Getting children...
 
@@ -153,8 +153,8 @@ Please wait...";
                 MessageBoxCaption.Value, textBoxText, colorTheme);
             var cancellationToken = cancellationTokenSource.Token;
             var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() =>
-                objectExplorer.GetChildren([], true, cancellationToken).Result));
-            AddNodes(null, _tvObjectExplorer!.Nodes, children, objectExplorer.Sortable, startTimestamp);
+                _objectExplorer.GetChildren([], true, cancellationToken).Result));
+            AddNodes(null, _tvObjectExplorer!.Nodes, children, _objectExplorer.Sortable, startTimestamp);
         }
         else
         {
@@ -1294,7 +1294,7 @@ Please wait...";
                 connection.InfoMessage += Connection_InfoMessage;
                 connection.DatabaseChanged += Connection_DatabaseChanged;
 
-                Connection.Connection.Dispose();
+                Connection.Connection?.Dispose();
                 Connection = connection;
 
                 AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Opening connection succeeded."));
@@ -1372,13 +1372,16 @@ Please wait...";
                 }
                 else
                     commands =
-                        (
-                            from statement in statements
-                            select new AsyncDataAdapterCommand(null, statement.LineIndex,
-                                Connection!.Connection.CreateCommand(new CreateCommandRequest(statement.CommandText, null, CommandType.Text, _commandTimeout,
-                                    _transaction)), null, null, null)
-                        )
-                        .ToArray();
+                    [
+                        .. from statement in statements
+                        select new AsyncDataAdapterCommand(null, statement.LineIndex,
+                            Connection!.Connection.CreateCommand(new CreateCommandRequest(statement.CommandText, null, CommandType.Text, _commandTimeout,
+                                _transaction)), null, null, null)
+                    ];
+
+                if (_objectExplorer != null)
+                    foreach (var command in commands)
+                        _objectExplorer.InitializeCommand(command.Command);
 
                 int maxRecords;
                 IResultWriter? resultWriter = null;

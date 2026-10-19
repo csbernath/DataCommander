@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -24,5 +25,10 @@ internal sealed class ObjectExplorer(IProvider provider) : IObjectExplorer
             new CatalogsNode(_connectionStringAndCredential)
         };
         return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
+    }
+
+    public void InitializeCommand(IDbCommand command)
+    {
+        throw new System.NotImplementedException();
     }
 }

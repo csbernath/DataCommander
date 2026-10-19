@@ -159,11 +159,18 @@ public sealed partial class QueryForm
 
         if (Connection != null)
         {
-            var dataSource = Connection.DataSource;
-            _parentStatusBar.Items[0].Text = $"Closing connection to data source {dataSource}'....";
-            Connection!.Connection!.Close();
-            _parentStatusBar.Items[0].Text = $"Connection to data source {dataSource} closed.";
-            Connection!.Connection.Dispose();
+            var dbConnection = Connection.Connection;
+            if (dbConnection != null)
+            {
+                var dataSource = Connection.DataSource;
+                _parentStatusBar.Items[0].Text = $"Closing connection to data source {dataSource}'....";
+
+                dbConnection.Close();
+
+                _parentStatusBar.Items[0].Text = $"Connection to data source {dataSource} closed.";
+                dbConnection.Dispose();
+            }
+
             Connection = null;
         }
 
@@ -481,7 +488,7 @@ Please wait...";
         return response;
     }
 
-    private async Task ExecuteReader(CommandBehavior commandBehavior)
+    private async Task ExecuteReader(CommandBehavior commandBehavior, CancellationToken cancellationToken)
     {
         try
         {
@@ -499,7 +506,7 @@ Please wait...";
                     {
                         try
                         {
-                            dataReader = _command.ExecuteReader(commandBehavior);
+                            dataReader = await _command.ExecuteReaderAsync(commandBehavior, cancellationToken);
                             break;
                         }
                         catch

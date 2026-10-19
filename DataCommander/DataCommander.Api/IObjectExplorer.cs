@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api.Connection;
@@ -10,4 +11,5 @@ public interface IObjectExplorer
     bool Sortable { get; }
     void SetConnectionStringAndCredential(string? connectionName, ConnectionStringAndCredential connectionStringAndCredential);
     Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken);
+    void InitializeCommand(IDbCommand command);
 }

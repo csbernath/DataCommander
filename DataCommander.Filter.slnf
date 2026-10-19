@@ -5,6 +5,7 @@
       "DataCommander\\DataCommander.Api\\DataCommander.Api.csproj",
       "DataCommander\\DataCommander.Application\\DataCommander.Application.csproj",
       "DataCommander\\DataCommander\\DataCommander.csproj",
+      "DataCommander\\Providers\\DataCommander.Providers.MongoDB\\DataCommander.Providers.MongoDB.csproj",
       "DataCommander\\Providers\\DataCommander.Providers.OleDb\\DataCommander.Providers.OleDb.csproj",
       "DataCommander\\Providers\\DataCommander.Providers.PostgreSql\\DataCommander.Providers.PostgreSql.csproj",
       "DataCommander\\Providers\\DataCommander.Providers.SQLite\\DataCommander.Providers.SQLite.csproj",

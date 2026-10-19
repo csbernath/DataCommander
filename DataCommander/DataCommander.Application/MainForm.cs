@@ -515,15 +515,15 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
     {
         try
         {
-            var connectionForm = new ConnectionListForm(_colorTheme);
+            var connectionListForm = new ConnectionListForm(_colorTheme);
 
-            if (connectionForm.ShowDialog() == DialogResult.OK)
+            if (connectionListForm.ShowDialog() == DialogResult.OK)
             {
                 Logger.LogTrace(CallerInformation.Create(), "connectionForm.ShowDialog() finished.");
-                var connectionInfo = connectionForm.ConnectionInfo;
+                var connectionInfo = connectionListForm.ConnectionInfo;
                 var providerInfo = ProviderInfoRepository.GetProviderInfos().First(i => i.Identifier == connectionInfo.ProviderIdentifier);
                 var provider = ProviderFactory.CreateProvider(connectionInfo.ProviderIdentifier);
-                var queryForm = new QueryForm(this, providerInfo, provider, connectionInfo, connectionForm.Connection, _statusBar, _colorTheme)
+                var queryForm = new QueryForm(this, providerInfo, provider, connectionInfo, connectionListForm.Connection, _statusBar, _colorTheme)
                 {
                     MdiParent = this
                 };
@@ -548,8 +548,8 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
                 }
 
                 var connectionStringBuilder = provider.CreateConnectionStringBuilder();
-                var connection = connectionForm.Connection;
-                QueryFormStaticMethods.AddConnectionOpenedInfoMessageToQueryForm(queryForm, connectionForm.ElapsedTicks, connectionInfo, providerInfo.Name,
+                var connection = connectionListForm.Connection;
+                QueryFormStaticMethods.AddConnectionOpenedInfoMessageToQueryForm(queryForm, connectionListForm.ElapsedTicks, connectionInfo, providerInfo.Name,
                     connectionStringBuilder, connection);
                 queryForm.Show();
 

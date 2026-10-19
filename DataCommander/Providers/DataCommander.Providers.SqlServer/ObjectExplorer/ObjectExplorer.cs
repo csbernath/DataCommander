@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -20,6 +21,11 @@ internal sealed class ObjectExplorer : IObjectExplorer
     Task<IEnumerable<ITreeNode>> IObjectExplorer.
         GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
         Task.FromResult<IEnumerable<ITreeNode>>([new ServerNode(_connectionName, _connectionStringAndCredential!)]);
+
+    public void InitializeCommand(IDbCommand command)
+    {
+        throw new System.NotImplementedException();
+    }
 
     bool IObjectExplorer.Sortable => false;
 }
