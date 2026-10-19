@@ -2,7 +2,7 @@
 
 namespace DataCommander.Providers.MongoDB;
 
-public class MongoDbConnectionStringBuilder : IDbConnectionStringBuilder
+public class MongoConnectionStringBuilder : IDbConnectionStringBuilder
 {
     public string ConnectionString
     {

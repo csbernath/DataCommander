@@ -2,6 +2,6 @@
 
 namespace DataCommander.Providers.MongoDB;
 
-public class MongoDbProviderFactory : DbProviderFactory
+public class MongoProviderFactory : DbProviderFactory
 {
 }

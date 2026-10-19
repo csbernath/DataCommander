@@ -12,11 +12,11 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.MongoDB;
 
-public class MongoDBProvider : IProvider
+public class MongoProvider : IProvider
 {
     public string Identifier => "MongoDB";
 
-    public DbProviderFactory DbProviderFactory => new MongoDbProviderFactory();
+    public DbProviderFactory DbProviderFactory => new MongoProviderFactory();
 
     public IReadOnlySet<string> KeyWords => ReadOnlySet<string>.Empty;
 
@@ -24,7 +24,7 @@ public class MongoDBProvider : IProvider
 
     public bool IsCommandCancelable => throw new NotImplementedException();
 
-    public IObjectExplorer? CreateObjectExplorer() => new MongoDBObjectExplorer();
+    public IObjectExplorer? CreateObjectExplorer() => new MongoObjectExplorer();
 
     public void ClearCompletionCache()
     {
@@ -37,15 +37,15 @@ public class MongoDBProvider : IProvider
 
     public ConnectionBase CreateConnection(ConnectionStringAndCredential connectionStringAndCredential)
     {
-        return new MongoDBConnection(connectionStringAndCredential);
+        return new MongoConnection(connectionStringAndCredential);
     }
 
-    public IDbConnectionStringBuilder CreateConnectionStringBuilder() => new MongoDbConnectionStringBuilder();
+    public IDbConnectionStringBuilder CreateConnectionStringBuilder() => new MongoConnectionStringBuilder();
 
     public IDataReaderHelper CreateDataReaderHelper(IDataReader dataReader)
     {
-        var mongoDbDataReader = (MongoDbDataReader)dataReader;
-        return new MongoDBDataReaderHelper(mongoDbDataReader);
+        var mongoDbDataReader = (MongoDataReader)dataReader;
+        return new MongoDataReaderHelper(mongoDbDataReader);
 }
 
     public void CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationConnection, string? destinationTableName,

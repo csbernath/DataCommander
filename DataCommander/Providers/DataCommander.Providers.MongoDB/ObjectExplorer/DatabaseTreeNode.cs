@@ -7,10 +7,10 @@ using MongoDB.Driver;
 
 namespace DataCommander.Providers.MongoDB.ObjectExplorer;
 
-public class DatabaseTreeNode(MongoDBObjectExplorer mongoDbObjectExplorer, string databaseName)
+public class DatabaseTreeNode(MongoObjectExplorer mongoObjectExplorer, string databaseName)
     : ITreeNode
 {
-    public MongoDBObjectExplorer MongoDbObjectExplorer => mongoDbObjectExplorer;
+    public MongoObjectExplorer MongoObjectExplorer => mongoObjectExplorer;
     
     public string Name => databaseName;
 
@@ -23,7 +23,7 @@ public class DatabaseTreeNode(MongoDBObjectExplorer mongoDbObjectExplorer, strin
         bool refresh,
         CancellationToken cancellationToken)
     {
-        using var mongoClient = new MongoClient(mongoDbObjectExplorer.ConnectionStringAndCredential.ConnectionString);
+        using var mongoClient = new MongoClient(mongoObjectExplorer.ConnectionStringAndCredential.ConnectionString);
         var database = mongoClient.GetDatabase(databaseName);
         var cursor = await database.ListCollectionsAsync(null, cancellationToken);
         var collections = await cursor.ToListAsync(cancellationToken);

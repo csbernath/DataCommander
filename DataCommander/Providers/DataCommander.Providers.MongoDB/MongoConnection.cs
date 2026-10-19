@@ -5,11 +5,11 @@ using DataCommander.Api.Connection;
 
 namespace DataCommander.Providers.MongoDB;
 
-public class MongoDBConnection : ConnectionBase
+public class MongoConnection : ConnectionBase
 {
     private readonly ConnectionStringAndCredential _connectionStringAndCredential;
 
-    public MongoDBConnection(ConnectionStringAndCredential connectionStringAndCredential)
+    public MongoConnection(ConnectionStringAndCredential connectionStringAndCredential)
     {
         _connectionStringAndCredential = connectionStringAndCredential;
     }
@@ -18,7 +18,7 @@ public class MongoDBConnection : ConnectionBase
 
     public override Task OpenAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-    public override DbCommand CreateCommand() => new MongoDbCommand(this);
+    public override DbCommand CreateCommand() => new MongoCommand(this);
 
     public override string DataSource => null;
 

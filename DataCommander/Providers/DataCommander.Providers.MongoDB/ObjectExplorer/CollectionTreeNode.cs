@@ -37,5 +37,5 @@ public class CollectionTreeNode(
     }
 
     private void SetAsCurrentCollectionMenuItemClicked(object? sender, EventArgs e) =>
-        databaseTreeNode.MongoDbObjectExplorer.SetCurrentDatabaseAndCollectionName(databaseTreeNode.Name, name);
+        databaseTreeNode.MongoObjectExplorer.SetCurrentDatabaseAndCollectionName(databaseTreeNode.Name, name);
 }

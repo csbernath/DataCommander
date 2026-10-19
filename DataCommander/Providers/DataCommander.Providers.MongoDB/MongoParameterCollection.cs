@@ -4,7 +4,7 @@ using System.Data.Common;
 
 namespace DataCommander.Providers.MongoDB;
 
-public class MongoDbParameterCollection : DbParameterCollection
+public class MongoParameterCollection : DbParameterCollection
 {
     public override int Add(object value) => throw new NotImplementedException();
 

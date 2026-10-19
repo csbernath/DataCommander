@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DataCommander.Providers.MongoDB;
 
-public class MongoDbDataReader(MongoDbCommand command) : DbDataReader
+public class MongoDataReader(MongoCommand command) : DbDataReader
 {
     private IAsyncCursor<BsonDocument>? _asyncCursor;
     private IEnumerator<BsonDocument>? _enumerator;

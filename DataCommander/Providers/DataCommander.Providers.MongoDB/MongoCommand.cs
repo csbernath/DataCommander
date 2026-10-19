@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace DataCommander.Providers.MongoDB;
 
-public class MongoDbCommand(MongoDBConnection connection) : DbCommand
+public class MongoCommand(MongoConnection connection) : DbCommand
 {
     private string _databaseName;
     private string _collectionName;
     private string? _commandText;
-    private MongoDbParameterCollection _parameters = new();
+    private MongoParameterCollection _parameters = new();
 
     public void SetDatabaseAndCollectionName(string databaseName, string collectionName)
     {
@@ -23,7 +23,7 @@ public class MongoDbCommand(MongoDBConnection connection) : DbCommand
     
     public string? CollectionName => _collectionName;
 
-    public MongoDBConnection Connection => connection;
+    public MongoConnection Connection => connection;
 
     public override void Cancel()
     {
@@ -90,7 +90,7 @@ public class MongoDbCommand(MongoDBConnection connection) : DbCommand
 
     protected override async Task<DbDataReader> ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
     {
-        var mongoDbDataReader = new MongoDbDataReader(this);
+        var mongoDbDataReader = new MongoDataReader(this);
         await mongoDbDataReader.Execute(cancellationToken);
         return mongoDbDataReader;
     }

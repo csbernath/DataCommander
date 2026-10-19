@@ -9,7 +9,7 @@ using MongoDB.Driver;
 
 namespace DataCommander.Providers.MongoDB.ObjectExplorer;
 
-public class MongoDBObjectExplorer : IObjectExplorer
+public class MongoObjectExplorer : IObjectExplorer
 {
     private ConnectionStringAndCredential _connectionStringAndCredential;
     private string? _currentDatabaseName;
@@ -51,7 +51,7 @@ public class MongoDBObjectExplorer : IObjectExplorer
     {
         if (_currentDatabaseName != null && _currentCollectionName != null)
         {
-            var mongoDbCommand = (MongoDbCommand)command;
+            var mongoDbCommand = (MongoCommand)command;
             mongoDbCommand.SetDatabaseAndCollectionName(_currentDatabaseName, _currentCollectionName);
         }
     }
