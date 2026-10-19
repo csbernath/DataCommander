@@ -24,7 +24,6 @@ internal sealed class ObjectExplorer : IObjectExplorer
 
     public void InitializeCommand(IDbCommand command)
     {
-        throw new System.NotImplementedException();
     }
 
     bool IObjectExplorer.Sortable => false;

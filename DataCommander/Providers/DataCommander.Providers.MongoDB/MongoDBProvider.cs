@@ -72,7 +72,7 @@ public class MongoDBProvider : IProvider
 
     public DataTable GetParameterTable(IDataParameterCollection parameters) => throw new NotImplementedException();
 
-    public DataTable? GetSchemaTable(IDataReader dataReader) => throw new NotImplementedException();
+    public DataTable? GetSchemaTable(IDataReader dataReader) => dataReader.GetSchemaTable();
 
     public List<Statement> GetStatements(string commandText) => [new(0, commandText)];
 

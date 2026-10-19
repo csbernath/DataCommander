@@ -495,6 +495,7 @@ Please wait...";
             Cursor = Cursors.WaitCursor;
             _sqlStatement = new SqlParser(Query);
             _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
+            _objectExplorer?.InitializeCommand(_command);
 
             if (_command != null)
             {
@@ -511,14 +512,16 @@ Please wait...";
                         }
                         catch
                         {
-                            if (Connection.State != ConnectionState.Open)
+                            if (Connection.Connection == null || (Connection.Connection != null && Connection.Connection.State == ConnectionState.Open))
+                            {
+                                throw;
+                            }
+                            else
                             {
                                 AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Opening connection..."));
                                 await Connection.OpenAsync(CancellationToken.None);
                                 AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Connection opened successfully."));
                             }
-                            else
-                                throw;
                         }
                     }
 

@@ -76,7 +76,7 @@ public class MongoDbDataReader(MongoDbCommand command) : DbDataReader
 
     public override object this[string name] => throw new NotImplementedException();
 
-    public override int RecordsAffected => 0;
+    public override int RecordsAffected => -1;
 
     public override bool HasRows => throw new NotImplementedException();
 
