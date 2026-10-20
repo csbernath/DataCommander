@@ -23,7 +23,8 @@ public class DatabaseTreeNode(MongoObjectExplorer mongoObjectExplorer, string da
         bool refresh,
         CancellationToken cancellationToken)
     {
-        using var mongoClient = new MongoClient(mongoObjectExplorer.ConnectionStringAndCredential.ConnectionString);
+        var connectionString = MongoConnectionStringFactory.Create(mongoObjectExplorer.ConnectionStringAndCredential);
+        using var mongoClient = new MongoClient(connectionString);
         var database = mongoClient.GetDatabase(databaseName);
         var cursor = await database.ListCollectionsAsync(null, cancellationToken);
         var collections = await cursor.ToListAsync(cancellationToken);

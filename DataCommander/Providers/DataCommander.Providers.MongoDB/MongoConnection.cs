@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api.Connection;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace DataCommander.Providers.MongoDB;
@@ -31,7 +32,19 @@ public class MongoConnection : ConnectionBase
         }
     }
 
-    public override string ServerVersion => null;
+    public override string ServerVersion
+    {
+        get
+        {
+            var connectionString = MongoConnectionStringFactory.Create(_connectionStringAndCredential);
+            using var client = new MongoClient(connectionString);
+            var adminDatabase = client.GetDatabase("admin");
+            var command = new BsonDocument("buildInfo", 1);
+            var result = adminDatabase.RunCommand<BsonDocument>(command);
+            var serverVersion = result["version"].AsString;
+            return serverVersion;
+        }
+    }
 
     public override string? ConnectionInformation => null;
 
