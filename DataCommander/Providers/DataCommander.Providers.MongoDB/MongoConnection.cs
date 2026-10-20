@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api.Connection;
+using MongoDB.Driver;
 
 namespace DataCommander.Providers.MongoDB;
 
@@ -20,7 +21,15 @@ public class MongoConnection : ConnectionBase
 
     public override DbCommand CreateCommand() => new MongoCommand(this);
 
-    public override string DataSource => null;
+    public override string DataSource
+    {
+        get
+        {
+            var mongoConnectionStringBuilder = new MongoConnectionStringBuilder(_connectionStringAndCredential.ConnectionString);
+            mongoConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSource);
+            return (string)dataSource!;
+        }
+    }
 
     public override string ServerVersion => null;
 

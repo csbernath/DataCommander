@@ -32,7 +32,8 @@ public class MongoObjectExplorer : IObjectExplorer
 
     public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyList<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
-        using var mongoClient = new MongoClient(_connectionStringAndCredential.ConnectionString);
+        var connectionString = MongoConnectionStringFactory.Create(ConnectionStringAndCredential);
+        using var mongoClient = new MongoClient(connectionString);
         var listDatabasesAsyncCursor = await mongoClient.ListDatabasesAsync(cancellationToken);
         var databases = await listDatabasesAsyncCursor.ToListAsync(cancellationToken);
         ITreeNode[] children =

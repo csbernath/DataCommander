@@ -8,6 +8,7 @@ using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
+using DataCommander.Api.Connection;
 
 namespace DataCommander.Providers.MongoDB;
 
@@ -134,7 +135,8 @@ public class MongoDataReader(MongoCommand command) : DbDataReader
 
     public async Task Execute(CancellationToken cancellationToken)
     {
-        var mongoClient = new MongoClient(command.Connection.ConnectionStringAndCredential.ConnectionString);
+        var connectionString = MongoConnectionStringFactory.Create(command.Connection.ConnectionStringAndCredential);
+        var mongoClient = new MongoClient(connectionString);
         var database = mongoClient.GetDatabase(command.DatabaseName);
         var collection = database.GetCollection<BsonDocument>(command.CollectionName);
         FilterDefinition<BsonDocument> filter = command.CommandText;

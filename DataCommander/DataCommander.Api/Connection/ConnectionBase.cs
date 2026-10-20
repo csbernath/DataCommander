@@ -32,7 +32,7 @@ public abstract class ConnectionBase : IDisposable, IAsyncDisposable
     public event InfoMessageEventHandler? InfoMessage;
     public event EventHandler<DatabaseChangedEventArgs>? DatabaseChanged;
 
-    public void Dispose() => Connection!.Dispose();
+    public void Dispose() => Connection?.Dispose();
 
     public async ValueTask DisposeAsync() => await Connection!.DisposeAsync();
 }

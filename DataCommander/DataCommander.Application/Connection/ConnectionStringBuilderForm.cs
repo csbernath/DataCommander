@@ -346,7 +346,11 @@ internal partial class ConnectionStringBuilderForm : Form
                 credential = new Credential(userIdTextBox.Text, password);
             }
             else if (_connectionInfo != null)
+            {
                 credential = _connectionInfo.ConnectionStringAndCredential.Credential;
+                if (credential!.UserId != userIdTextBox.Text)
+                    credential = new Credential(userIdTextBox.Text, credential.Password);
+            }
             else
                 credential = null;
         }
