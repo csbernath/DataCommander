@@ -559,7 +559,7 @@ GCs count: {GC.CollectionCount(0)} gen0, {GC.CollectionCount(1)} gen1, {GC.Colle
         }
         catch (Exception exception)
         {
-            DataCommanderMessageBox.MessageBox.Show(this, exception.Message);
+            DataCommanderMessageBox.MessageBox.Show(this, exception.Message, MessageBoxCaption.Value);
         }
     }
 

@@ -105,9 +105,9 @@ public sealed partial class QueryForm
     private bool AskUserToCommitTransactions()
     {
         var cancel = false;
-        var caption = MessageBoxCaption.Value;
         const string text = "There are uncommitted transaction(s). Do you wish to commit these transaction(s) before closing the window?";
-        var result = DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+        var result = DataCommanderMessageBox.MessageBox.Show(this, text, MessageBoxCaption.Value, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question,
+            MessageBoxDefaultButton.Button1);
         switch (result)
         {
             case DialogResult.Yes:
@@ -417,7 +417,7 @@ public sealed partial class QueryForm
         if (!found)
         {
             var message = $"The specified text was not found.\r\n\r\nText: {text}\r\nControl: {control.Name}";
-            DataCommanderMessageBox.MessageBox.Show(this, message, DataCommanderApplication.Instance.Name);
+            DataCommanderMessageBox.MessageBox.Show(this, message, MessageBoxCaption.Value);
         }
     }
 

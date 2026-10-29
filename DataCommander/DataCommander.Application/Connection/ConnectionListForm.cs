@@ -158,7 +158,7 @@ internal sealed class ConnectionListForm : Form
         _newButton.Size = new Size(75, 24);
         _newButton.TabIndex = 8;
         _newButton.Text = "&New";
-        _newButton.Click += new EventHandler(NewButton_Click);
+        _newButton.Click += new EventHandler(HandleNewButtonClicked);
         // 
         // dataGrid
         // 
@@ -173,9 +173,9 @@ internal sealed class ConnectionListForm : Form
         _dataGrid.ReadOnly = true;
         _dataGrid.Size = new Size(944, 621);
         _dataGrid.TabIndex = 6;
-        _dataGrid.UserDeletingRow += new DataGridViewRowCancelEventHandler(DataGrid_UserDeletingRow);
-        _dataGrid.DoubleClick += new EventHandler(DataGrid_DoubleClick);
-        _dataGrid.KeyDown += new KeyEventHandler(dataGrid_KeyDown);
+        _dataGrid.UserDeletingRow += new DataGridViewRowCancelEventHandler(HandleDataGridUserDeletingRow);
+        _dataGrid.DoubleClick += new EventHandler(HandleDataGridDoubleClicked);
+        _dataGrid.KeyDown += new KeyEventHandler(HandleDataGridKeyDownPressed);
         _dataGrid.MouseClick += new MouseEventHandler(dataGrid_MouseClick);
         // 
         // ConnectionListForm
@@ -305,19 +305,17 @@ internal sealed class ConnectionListForm : Form
         }
         catch (Exception ex)
         {
-            var caption = MessageBoxCaption.Value;
             var text = ex.ToString();
-            DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            DataCommanderMessageBox.MessageBox.Show(this, text, MessageBoxCaption.Value, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
     private void Delete()
     {
-        var caption = MessageBoxCaption.Value;
         const string text = "Do you want to delete the selected item(s)?";
-        
-        if (DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) ==
-            DialogResult.Yes)
+
+        if (DataCommanderMessageBox.MessageBox.Show(this, text, MessageBoxCaption.Value, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question,
+                MessageBoxDefaultButton.Button2) == DialogResult.Yes)
         {
             var index = SelectedIndex;
             _connectionInfos.RemoveAt(index);
@@ -508,15 +506,14 @@ internal sealed class ConnectionListForm : Form
         }
         catch (Exception exception)
         {
-            var caption = MessageBoxCaption.Value;
             var text = $@"Opening connection failed.
 
 {exception.Message}";
-            DataCommanderMessageBox.MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            DataCommanderMessageBox.MessageBox.Show(this, text, MessageBoxCaption.Value, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
-    private void DataGrid_DoubleClick(object? sender, EventArgs e)
+    private void HandleDataGridDoubleClicked(object? sender, EventArgs e)
     {
         var position = _dataGrid!.PointToClient(Cursor.Position);
         var hitTestInfo = _dataGrid.HitTest(position.X, position.Y);
@@ -534,7 +531,7 @@ internal sealed class ConnectionListForm : Form
         }
     }
 
-    private void dataGrid_KeyDown(object? sender, KeyEventArgs e)
+    private void HandleDataGridKeyDownPressed(object? sender, KeyEventArgs e)
     {
         Logger.Write(LogLevel.Trace, "e.KeyCode: {0}\r\ne.KeyData: {1}", e.KeyCode, e.KeyData);
 
@@ -585,18 +582,18 @@ internal sealed class ConnectionListForm : Form
         _isDirty = true;
     }
 
-    private void NewButton_Click(object? sender, EventArgs e)
+    private void HandleNewButtonClicked(object? sender, EventArgs e)
     {
         var form = new ConnectionStringBuilderForm(_colorTheme);
 
         if (form.ShowDialog() == DialogResult.OK)
         {
-            var connectionProperties = form.ConnectionInfo;
+            var connectionProperties = form.ConnectionInfo!;
             Add(connectionProperties);
         }
     }
 
-    private void DataGrid_UserDeletingRow(object? sender, DataGridViewRowCancelEventArgs e)
+    private void HandleDataGridUserDeletingRow(object? sender, DataGridViewRowCancelEventArgs e)
     {
         Delete();
         e.Cancel = true;
