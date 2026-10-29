@@ -27,15 +27,12 @@ public class DatabaseTreeNode(MongoObjectExplorer mongoObjectExplorer, string da
         using var mongoClient = new MongoClient(connectionString);
         var database = mongoClient.GetDatabase(databaseName);
         var cursor = await database.ListCollectionsAsync(null, cancellationToken);
-        var collections = await cursor.ToListAsync(cancellationToken);
-        ITreeNode[] children =
-        [
-            .. collections.Select(collection =>
-            {
-                var collectionName = collection["name"].AsString;
-                return new CollectionTreeNode(this, collectionName);
-            })
-        ];
+        var asyncEnumerable = cursor.ToAsyncEnumerable();
+        var children = await asyncEnumerable.Select(collection =>
+        {
+            var collectionName = collection["name"].AsString;
+            return new CollectionTreeNode(this, collectionName);
+        }).ToArrayAsync(cancellationToken);
         return children;
     }
 

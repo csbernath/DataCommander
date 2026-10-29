@@ -35,16 +35,12 @@ public class MongoObjectExplorer : IObjectExplorer
         var connectionString = MongoConnectionStringFactory.Create(ConnectionStringAndCredential);
         using var mongoClient = new MongoClient(connectionString);
         var listDatabasesAsyncCursor = await mongoClient.ListDatabasesAsync(cancellationToken);
-        var databases = await listDatabasesAsyncCursor.ToListAsync(cancellationToken);
-        ITreeNode[] children =
-        [
-            .. databases
-                .Select(database =>
-                {
-                    var name = database["name"].AsString;
-                    return new DatabaseTreeNode(this, name);
-                })
-        ];
+        var listDatabasesAsyncEnumerable = listDatabasesAsyncCursor.ToAsyncEnumerable();
+        var children = await listDatabasesAsyncEnumerable.Select(database =>
+        {
+            var name = database["name"].AsString;
+            return new DatabaseTreeNode(this, name);
+        }).ToArrayAsync(cancellationToken);
         return children;
     }
 

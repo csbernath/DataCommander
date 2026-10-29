@@ -14,18 +14,18 @@ public class CollectionTreeNode(
 
     public bool IsLeaf => true;
 
-    public IReadOnlyCollection<string> GetFilterableProperties() => throw new System.NotImplementedException();
+    public IReadOnlyCollection<string> GetFilterableProperties() => throw new NotImplementedException();
 
     public Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     public bool Sortable => false;
 
-    public bool DynamicChildCount => throw new System.NotImplementedException();
+    public bool DynamicChildCount => throw new NotImplementedException();
 
-    public Task<string?> GetQuery(CancellationToken cancellationToken) => throw new System.NotImplementedException();
+    public Task<string?> GetQuery(CancellationToken cancellationToken) => throw new NotImplementedException();
 
     public ContextMenu? GetContextMenu()
     {

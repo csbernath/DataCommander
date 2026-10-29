@@ -96,5 +96,5 @@ public class MongoConnectionStringBuilder : IDbConnectionStringBuilder
         return contains;
     }
 
-    public bool Remove(string keyword) => throw new System.NotImplementedException();
+    public bool Remove(string keyword) => throw new NotImplementedException();
 }
