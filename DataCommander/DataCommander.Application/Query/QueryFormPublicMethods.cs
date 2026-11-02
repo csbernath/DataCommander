@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
@@ -234,7 +235,8 @@ public sealed partial class QueryForm
                 _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
                 var resultWriter = _dataSetResultWriter;
                 _dataAdapter = new AsyncDataAdapter(Provider, maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
-                _dataAdapter.Start([new AsyncDataAdapterCommand(null, 0, _command, null, null, null)]);
+                _dataAdapterCancellationTokenSource = new CancellationTokenSource();
+                _dataAdapter.Start([new AsyncDataAdapterCommand(null, 0, _command, null, null, null)], _dataAdapterCancellationTokenSource.Token);
             }
             catch (Exception ex)
             {

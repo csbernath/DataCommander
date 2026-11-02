@@ -1329,7 +1329,7 @@ Please wait...";
             if (_dataAdapter != null)
                 Logger.LogError("this.dataAdapter == null failed");
 
-            Assert.IsTrue(_dataAdapter == null);
+            Assert.IsNull(_dataAdapter);
 
             Logger.LogTrace("ThreadMonitor:\r\n{0}", ThreadMonitor.ToStringTableString());
             ThreadMonitor.Join(0);
@@ -1494,7 +1494,9 @@ Please wait...";
 
                 _errorCount = 0;
                 _dataAdapter = new AsyncDataAdapter(Provider, maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
-                _dataAdapter.Start(commands);
+                Assert.IsNull(_dataAdapterCancellationTokenSource);
+                _dataAdapterCancellationTokenSource = new  CancellationTokenSource();
+                _dataAdapter.Start(commands, _dataAdapterCancellationTokenSource.Token);
             }
             catch (Exception ex)
             {
@@ -1978,9 +1980,8 @@ Please wait...";
 
         if (_cancel)
         {
-            const string message = "Query was canceled by user.";
-            AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, message));
-            SetStatusbarPanelText(message);
+            AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Query was canceled by user."));
+            SetStatusbarPanelText("Query canceled.");
             _cancel = false;
         }
         else
@@ -1992,6 +1993,11 @@ Please wait...";
         }
 
         _dataAdapter = null;
+        
+        Assert.IsNotNull(_dataAdapterCancellationTokenSource);
+        _dataAdapterCancellationTokenSource!.Dispose();
+        _dataAdapterCancellationTokenSource = null;
+
         _dataSetResultWriter = null;
 
         SetGui(CommandState.Execute);

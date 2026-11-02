@@ -219,6 +219,8 @@ public sealed partial class QueryForm
         SetStatusbarPanelText(message);
         _cancel = true;
         SetGui(CommandState.None);
+        
+        _dataAdapterCancellationTokenSource!.Cancel();
         _dataAdapter!.Cancel();
     }
 
@@ -729,7 +731,8 @@ Please wait...";
             _stopwatch.Start();
             _timer.Start();
             _dataAdapter = new AsyncDataAdapter(Provider, maxRecords, rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
-            _dataAdapter.Start([new AsyncDataAdapterCommand(null, 0, _command, null, null, null)]);
+            _dataAdapterCancellationTokenSource = new CancellationTokenSource();
+            _dataAdapter.Start([new AsyncDataAdapterCommand(null, 0, _command, null, null, null)], _dataAdapterCancellationTokenSource.Token);
         }
         else
             AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Please open a destination connection."));

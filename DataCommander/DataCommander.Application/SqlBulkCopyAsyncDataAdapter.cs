@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
 using DataCommander.Api.Connection;
@@ -52,7 +53,7 @@ internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
     long IAsyncDataAdapter.RowCount => _rowCount;
     int IAsyncDataAdapter.TableCount => 1;
 
-    void IAsyncDataAdapter.Start(IEnumerable<AsyncDataAdapterCommand>? commands) => Task.Factory.StartNew(Fill);
+    void IAsyncDataAdapter.Start(IEnumerable<AsyncDataAdapterCommand>? commands, CancellationToken cancellationToken) => Task.Factory.StartNew(Fill);
 
     void IAsyncDataAdapter.Cancel()
     {

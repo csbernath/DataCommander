@@ -81,6 +81,7 @@ public sealed partial class QueryForm
     private DbCommand? _command;
     private CommandType _commandType = CommandType.Text;
     private IAsyncDataAdapter? _dataAdapter;
+    private CancellationTokenSource? _dataAdapterCancellationTokenSource;
     private bool _cancel;
     private readonly Timer _timer = new();
     private readonly Stopwatch _stopwatch = new();

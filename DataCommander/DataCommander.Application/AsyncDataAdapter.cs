@@ -26,19 +26,16 @@ internal sealed class AsyncDataAdapter(
 
     private AsyncDataAdapterCommand? _command;
     private long _rowCount;
-    private CancellationTokenSource? _cancellationTokenSource;
     private int _tableCount;
 
     IResultWriter IAsyncDataAdapter.ResultWriter => resultWriter;
     long IAsyncDataAdapter.RowCount => _rowCount;
     int IAsyncDataAdapter.TableCount => _tableCount;
 
-    public void Start(IEnumerable<AsyncDataAdapterCommand>? commands)
+    public void Start(IEnumerable<AsyncDataAdapterCommand>? commands, CancellationToken cancellationToken)
     {
         if (commands != null)
         {
-            _cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = _cancellationTokenSource.Token;
             var task = new Task(async () => await Fill(commands, cancellationToken), cancellationToken, TaskCreationOptions.LongRunning);
             task.Start();
         }
@@ -50,7 +47,6 @@ internal sealed class AsyncDataAdapter(
     {
         using (LogFactory.Instance.GetCurrentMethodLog())
         {
-            _cancellationTokenSource!.Cancel();
             if (provider.IsCommandCancelable)
             {
                 var task = new Task(() => { _command!.Command.Cancel(); });
