@@ -13,7 +13,7 @@ public static class DataViewExtensions
         {
             ArgumentNullException.ThrowIfNull(dataView);
 
-            var rows = dataView.Cast<DataRowView>()!.Select((dataRowView, rowIndex) => dataRowView.Row);
+            var rows = dataView.Cast<DataRowView>().Select((dataRowView, _) => dataRowView.Row);
             var columns = dataView.Table!.Columns.Cast<DataColumn>()!.Select(DataTableExtensions.ToStringTableColumnInfo).ToArray();
             return rows.ToString(columns);
         }

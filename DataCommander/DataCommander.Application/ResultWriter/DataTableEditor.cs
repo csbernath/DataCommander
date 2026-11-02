@@ -575,8 +575,8 @@ internal class DataTableEditor : UserControl
         {
             Title = "Save table",
             Filter =
-                "HTML (*.htm)|*.htm|Fixed Width Columns (*.txt)|*.txt|Tab Separated Values (*.tsv)|*.tsv|XML Spreadsheet 2007(*.xlsx)|*.xlsx",
-            FilterIndex = 5,
+                "HTML (*.htm)|*.htm|Markdown (*.md)|*.md|Fixed Width Columns (*.txt)|*.txt|Tab Separated Values (*.tsv)|*.tsv|XML Spreadsheet 2007(*.xlsx)|*.xlsx",
+            FilterIndex = 6,
             AddExtension = true,
             OverwritePrompt = true
         };
@@ -605,15 +605,23 @@ internal class DataTableEditor : UserControl
 
                         case 2:
                             using (var streamWriter = new StreamWriter(path, false, Encoding.UTF8))
+                            {
+                                var markdownWriter = new MarkdownWriter(streamWriter);
+                                Write(_dataTable.DefaultView, markdownWriter);
+                            }
+                            break;
+                        
+                        case 3:
+                            using (var streamWriter = new StreamWriter(path, false, Encoding.UTF8))
                                 streamWriter.Write(_dataTable.DefaultView.ToStringTableString());
                             break;
 
-                        case 3:
+                        case 4:
                             using (var streamWriter = new StreamWriter(path, false, Encoding.UTF8))
                                 Writer.Write(_dataTable.DefaultView, '\t', "\r\n", streamWriter);
                             break;
 
-                        case 4: // XML Spreadsheet 2007(*.xlsx)
+                        case 5: // XML Spreadsheet 2007(*.xlsx)
                             var fileInfo = new FileInfo(path);
                             using (var excelPackage = new ExcelPackage(fileInfo))
                             {
@@ -677,6 +685,21 @@ internal class DataTableEditor : UserControl
                     Cursor = Cursors.Default;
                 }
             });
+        }
+    }
+
+    private static void Write(DataView dataView, MarkdownWriter markdownWriter)
+    {
+        var columnNames = dataView.Table!.Columns.Cast<DataColumn>().Select(column => column.ColumnName).ToArray()!;
+        var columnCount = dataView.Table.Columns.Count;
+        markdownWriter.BeginTable(columnNames);
+        for (var rowIndex = 0; rowIndex < dataView.Count; ++rowIndex)
+        {
+            var row = dataView[rowIndex];
+            var values = new string?[columnCount];
+            for (var columnIndex = 0; columnIndex < columnCount; ++columnIndex)
+                values[columnIndex] = row[columnIndex].ToString();
+            markdownWriter.WriteRow(values);
         }
     }
 
