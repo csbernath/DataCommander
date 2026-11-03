@@ -31,41 +31,40 @@ namespace DataCommander.Application
         /// </summary>
         private void InitializeComponent()
         {
-            webBrowser1 = new WebBrowser();
+            webBrowser1 = new System.Windows.Forms.WebBrowser();
             SuspendLayout();
             // 
             // webBrowser1
             // 
-            webBrowser1.Dock = DockStyle.Fill;
+            webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
             webBrowser1.Location = new System.Drawing.Point(0, 0);
-            webBrowser1.Margin = new Padding(4);
+            webBrowser1.Margin = new System.Windows.Forms.Padding(4);
             webBrowser1.MinimumSize = new System.Drawing.Size(23, 26);
             webBrowser1.Name = "webBrowser1";
             webBrowser1.ScrollBarsEnabled = false;
-            webBrowser1.Size = new System.Drawing.Size(584, 519);
+            webBrowser1.Size = new System.Drawing.Size(584, 521);
             webBrowser1.TabIndex = 0;
             webBrowser1.Navigating += webBrowser1_Navigating;
             // 
             // AboutForm
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(584, 569);
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(584, 521);
             Controls.Add(webBrowser1);
-            Margin = new Padding(4);
+            Margin = new System.Windows.Forms.Padding(4);
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "AboutForm";
             ShowIcon = false;
             ShowInTaskbar = false;
-            StartPosition = FormStartPosition.CenterParent;
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             Text = "About Data Commander";
             ResumeLayout(false);
         }
 
         #endregion
 
-        private WebBrowser webBrowser1;
+        private System.Windows.Forms.WebBrowser webBrowser1;
 
     }
 }
