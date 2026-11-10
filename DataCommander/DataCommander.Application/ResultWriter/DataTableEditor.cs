@@ -76,12 +76,12 @@ internal class DataTableEditor : UserControl
             {
                 if (!_dataGrid!.ReadOnly)
                 {
-                    _dataTable.RowDeleting += dataTable_RowDeleting;
-                    _dataTable.RowChanging += dataTable_RowChanging;
-                    _dataGrid.DataError += DataGrid_DataError;
+                    _dataTable.RowDeleting += HandleDataRowDeleting;
+                    _dataTable.RowChanging += HandleDataRowChanging;
+                    _dataGrid.DataError += HandleDataGridDataError;
                 }
 
-                _dataGrid.CellFormatting += DataGrid_CellFormatting;
+                _dataGrid.CellFormatting += HandleDataGridCellFormatting;
 
                 var graphics = CreateGraphics();
                 var font = _dataGrid.Font;
@@ -268,7 +268,7 @@ internal class DataTableEditor : UserControl
         _dataGrid.RowsDefaultCellStyle = dataGridViewCellStyle1;
         _dataGrid.Size = new Size(424, 208);
         _dataGrid.TabIndex = 0;
-        _dataGrid.MouseDown += new MouseEventHandler(DataGrid_MouseDown);
+        _dataGrid.MouseDown += new MouseEventHandler(HandleDataGridMouseDown);
         // 
         // DataTableViewer
         // 
@@ -280,7 +280,7 @@ internal class DataTableEditor : UserControl
 
     }
 
-    private void DataGrid_DataError(object? sender, DataGridViewDataErrorEventArgs e)
+    private void HandleDataGridDataError(object? sender, DataGridViewDataErrorEventArgs e)
     {
         DataCommanderMessageBox.MessageBox.Show(this, e.Exception!.ToString(), MessageBoxCaption.Value, MessageBoxButtons.OK,
             MessageBoxIcon.Error);
@@ -367,7 +367,7 @@ internal class DataTableEditor : UserControl
                 stringBuilder.AppendFormat("{0} {1} {2}", quotedColumnName, operatorString, valueString);
             }
             else
-                stringBuilder.AppendFormat("/* the column {0} is part of the primary key but it is missing from the query. */", columnName);
+                stringBuilder.Append($"/* the column {columnName} is part of the primary key but it is missing from the query. */");
         }
 
         return stringBuilder.ToString();
@@ -517,7 +517,7 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void dataTable_RowChanging(object? sender, DataRowChangeEventArgs e)
+    private void HandleDataRowChanging(object? sender, DataRowChangeEventArgs e)
     {
         switch (e.Action)
         {
@@ -531,7 +531,7 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void dataTable_RowDeleting(object? sender, DataRowChangeEventArgs e)
+    private void HandleDataRowDeleting(object? sender, DataRowChangeEventArgs e)
     {
         if (_statementStringBuilder == null)
             _statementStringBuilder = new StringBuilder();
@@ -622,50 +622,7 @@ internal class DataTableEditor : UserControl
                             break;
 
                         case 5: // XML Spreadsheet 2007(*.xlsx)
-                            var fileInfo = new FileInfo(path);
-                            using (var excelPackage = new ExcelPackage(fileInfo))
-                            {
-                                var worksheet = excelPackage.Workbook.Worksheets.Add($"Worksheet {LocalTime.Default.Now:yyyy-MM-dd HHmmss}");
-                                worksheet.View.FreezePanes(2, 1);
-
-                                var dataView = _dataTable.DefaultView;
-                                var rowCount = dataView.Count;
-                                var columnCount = _dataTable.Columns.Count;
-
-                                for (var columnIndex = 0; columnIndex < columnCount; columnIndex++)
-                                {
-                                    var cell = worksheet.Cells[1, columnIndex + 1];
-                                    cell.Value = _dataTable.Columns[columnIndex].ColumnName;
-                                    cell.Style.Font.Bold = true;
-                                    // cell.Style.Border.Bottom.Style = ExcelBorderStyle.Medium;
-                                }
-
-                                for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                                {
-                                    var dataRow = dataView[rowIndex];
-                                    for (var columnIndex = 0; columnIndex < columnCount; columnIndex++)
-                                    {
-                                        var value = dataRow[columnIndex];
-                                        var cell = worksheet.Cells[rowIndex + 2, columnIndex + 1];
-                                        cell.Value = value;
-
-                                        var type = value.GetType();
-                                        var typeCode = Type.GetTypeCode(type);
-                                        switch (typeCode)
-                                        {
-                                            case TypeCode.DateTime:
-                                                cell.Style.Numberformat.Format = "mm-dd-yy";
-                                                break;
-
-                                            default:
-                                                break;
-                                        }
-                                    }
-                                }
-
-                                excelPackage.Save();
-                            }
-
+                            SaveResultAsExcel(path);
                             break;
 
                         default:
@@ -685,6 +642,53 @@ internal class DataTableEditor : UserControl
                     Cursor = Cursors.Default;
                 }
             });
+        }
+    }
+
+    private void SaveResultAsExcel(string path)
+    {
+        var fileInfo = new FileInfo(path);
+        using (var excelPackage = new ExcelPackage(fileInfo))
+        {
+            var worksheet = excelPackage.Workbook.Worksheets.Add($"Worksheet {LocalTime.Default.Now:yyyy-MM-dd HHmmss}");
+            worksheet.View.FreezePanes(2, 1);
+
+            var dataView = _dataTable.DefaultView;
+            var rowCount = dataView.Count;
+            var columnCount = _dataTable.Columns.Count;
+
+            for (var columnIndex = 0; columnIndex < columnCount; columnIndex++)
+            {
+                var cell = worksheet.Cells[1, columnIndex + 1];
+                cell.Value = _dataTable.Columns[columnIndex].ColumnName;
+                cell.Style.Font.Bold = true;
+                // cell.Style.Border.Bottom.Style = ExcelBorderStyle.Medium;
+            }
+
+            for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                var dataRow = dataView[rowIndex];
+                for (var columnIndex = 0; columnIndex < columnCount; columnIndex++)
+                {
+                    var value = dataRow[columnIndex];
+                    var cell = worksheet.Cells[rowIndex + 2, columnIndex + 1];
+                    cell.Value = value;
+
+                    var type = value.GetType();
+                    var typeCode = Type.GetTypeCode(type);
+                    switch (typeCode)
+                    {
+                        case TypeCode.DateTime:
+                            cell.Style.Numberformat.Format = "mm-dd-yy";
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            excelPackage.Save();
         }
     }
 
@@ -905,7 +909,7 @@ internal class DataTableEditor : UserControl
         ApplyRowFilter(rowFilter);
     }
 
-    private void Find_Click(object? sender, EventArgs e)
+    private void HandleFindClicked(object? sender, EventArgs e)
     {
         var form = new FindTextForm
         {
@@ -933,13 +937,13 @@ internal class DataTableEditor : UserControl
         Clipboard.SetText(stringBuilder.ToString());
     }
 
-    private void HideColumn_Click(object? sender, EventArgs e)
+    private void HandleHideColumnClicked(object? sender, EventArgs e)
     {
         var column = _dataGrid!.Columns[_columnIndex];
         column.Visible = false;
     }
 
-    private void UnhideAllColumns_Click(object? sender, EventArgs e)
+    private void HandleUnhideAllColumnsClicked(object? sender, EventArgs e)
     {
         foreach (var column in _dataGrid!.Columns.Cast<DataGridViewColumn>().Where(c => !c.Visible))
         {
@@ -947,7 +951,7 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void CopyTableAsXml_Click(object? sender, EventArgs e)
+    private void HandleCopyTableAsXmlClicked(object? sender, EventArgs e)
     {
         using (new CursorManager(Cursors.WaitCursor))
         {
@@ -1061,13 +1065,13 @@ internal class DataTableEditor : UserControl
         }
     }
 
-    private void UnhideRows_Click(object? sender, EventArgs e)
+    private void HandleUnhideAllRowsClicked(object? sender, EventArgs e)
     {
         foreach (var row in _dataGrid!.Rows.Cast<DataGridViewRow>().Where(r => !r.Visible))
             row.Visible = true;
     }
 
-    private void DataGrid_MouseDown(object? sender, MouseEventArgs e)
+    private void HandleDataGridMouseDown(object? sender, MouseEventArgs e)
     {
         if (e.Button == MouseButtons.Right)
         {
@@ -1122,7 +1126,7 @@ internal class DataTableEditor : UserControl
             _columnName = $"[{_columnName}]";
         }
 
-        menuItem = new ToolStripMenuItem("&Find", null, Find_Click);
+        menuItem = new ToolStripMenuItem("&Find", null, HandleFindClicked);
         menu.Items.Add(menuItem);
 
         _cellValue = dataRow[columnNumber];
@@ -1256,7 +1260,7 @@ internal class DataTableEditor : UserControl
         _columnName = _dataTable.Columns[_columnIndex].ColumnName;
         menuItem = new ToolStripMenuItem($"Copy column name '{_columnName}'", null, CopyColumnName_Click);
         menu.Items.Add(menuItem);
-        menuItem = new ToolStripMenuItem("Hide column", null, HideColumn_Click);
+        menuItem = new ToolStripMenuItem("Hide column", null, HandleHideColumnClicked);
         menu.Items.Add(menuItem);
     }
 
@@ -1272,7 +1276,7 @@ internal class DataTableEditor : UserControl
         menuItem = new ToolStripMenuItem("&Copy table", null, CopyTable_Click);
         menu.Items.Add(menuItem);
 
-        menuItem = new ToolStripMenuItem("Copy table as XML", null, CopyTableAsXml_Click);
+        menuItem = new ToolStripMenuItem("Copy table as XML", null, HandleCopyTableAsXmlClicked);
         menu.Items.Add(menuItem);
 
         menuItem = new ToolStripMenuItem("Edit dataview properties", null, EditDataViewProperties_Click);
@@ -1281,19 +1285,19 @@ internal class DataTableEditor : UserControl
         var any = _dataGrid!.Columns.Cast<DataGridViewColumn>().Any(c => !c.Visible);
         if (any)
         {
-            menuItem = new ToolStripMenuItem("Unhide all columns", null, UnhideAllColumns_Click);
+            menuItem = new ToolStripMenuItem("Unhide all columns", null, HandleUnhideAllColumnsClicked);
             menu.Items.Add(menuItem);
         }
 
         any = _dataGrid.Rows.Cast<DataGridViewRow>().Any(r => !r.Visible);
         if (any)
         {
-            menuItem = new ToolStripMenuItem("Unhide all rows", null, UnhideRows_Click);
+            menuItem = new ToolStripMenuItem("Unhide all rows", null, HandleUnhideAllRowsClicked);
             menu.Items.Add(menuItem);
         }
     }
 
-    private void DataGrid_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
+    private void HandleDataGridCellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
     {
         if (e.Value == DBNull.Value)
             e.CellStyle.BackColor = Color.FromArgb(67, 53, 25);
