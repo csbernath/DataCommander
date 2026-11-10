@@ -569,11 +569,11 @@ internal class DataTableEditor : UserControl
             orderby c.DisplayIndex
             select c.Index).ToArray();
 
-    private void SaveTableAs_Click(object? sender, EventArgs e)
+    private void HandleSaveResultAsClicked(object? sender, EventArgs e)
     {
         var saveFileDialog = new SaveFileDialog
         {
-            Title = "Save table",
+            Title = "Save Result",
             Filter =
                 "HTML (*.htm)|*.htm|Markdown (*.md)|*.md|Fixed Width Columns (*.txt)|*.txt|Tab Separated Values (*.tsv)|*.tsv|XML Spreadsheet 2007(*.xlsx)|*.xlsx",
             FilterIndex = 6,
@@ -587,7 +587,7 @@ internal class DataTableEditor : UserControl
 
             var path = saveFileDialog.FileName;
 
-            _queryForm.SetStatusbarPanelText("Saving table...");
+            _queryForm.SetStatusbarPanelText("Saving Result...");
 
             Task.Factory.StartNew(() =>
             {
@@ -1266,7 +1266,7 @@ internal class DataTableEditor : UserControl
         menuItem = new ToolStripMenuItem("Copy column names", null, CopyColumnNames_Click);
         menu.Items.Add(menuItem);
 
-        menuItem = new ToolStripMenuItem("&Save table as", null, SaveTableAs_Click);
+        menuItem = new ToolStripMenuItem("&Save Result As...", null, HandleSaveResultAsClicked);
         menu.Items.Add(menuItem);
 
         menuItem = new ToolStripMenuItem("&Copy table", null, CopyTable_Click);
