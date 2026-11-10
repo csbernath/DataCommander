@@ -698,7 +698,22 @@ internal class DataTableEditor : UserControl
             var row = dataView[rowIndex];
             var values = new string?[columnCount];
             for (var columnIndex = 0; columnIndex < columnCount; ++columnIndex)
-                values[columnIndex] = row[columnIndex].ToString();
+            {
+                var dataType = dataView.Table.Columns[columnIndex].DataType;
+                string value;
+                if (dataType == typeof(bool))
+                {
+                    var boolValue = (bool)row[columnIndex];
+                    value = boolValue.ToSqlConstant();
+                }
+                else
+                {
+                    value = row[columnIndex].ToString();
+                }
+
+                values[columnIndex] = value;
+            }
+
             markdownWriter.WriteRow(values);
         }
     }

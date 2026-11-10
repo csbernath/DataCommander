@@ -24,7 +24,7 @@ public class MarkdownWriter(TextWriter textWriter)
         {
             if (colunIndex == 0)
                 textWriter.Write('|');
-            textWriter.Write("-|");
+            textWriter.Write("---|");
         }
 
         textWriter.WriteLine();
