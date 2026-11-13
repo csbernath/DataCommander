@@ -17,7 +17,7 @@ internal sealed class ColumnCollectionNode(TableNode tableNode) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+    IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
         CancellationToken cancellationToken)
     {
         var schemaNode = TableNode.SchemaNode;
@@ -32,10 +32,9 @@ where
 	attnum >= 1
 order by attnum";
 
-        return await Db.ExecuteReaderAsync(
+        return Db.ExecuteReaderAsync(
             schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection,
             new ExecuteReaderRequest(commandText),
-            128,
             ReadRecord,
             cancellationToken);
     }

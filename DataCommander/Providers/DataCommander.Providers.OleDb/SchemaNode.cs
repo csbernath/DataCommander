@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -24,13 +26,13 @@ internal sealed class SchemaNode(CatalogNode catalog, string name) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    async IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(
+        IReadOnlyCollection<FilterCriterion> filterCriteria, 
+        bool refresh, 
+        [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var treeNodes = new ITreeNode[2];
-        treeNodes[0] = new TableCollectionNode(this);
-        treeNodes[1] = new ProcedureCollectionNode(this);
-
-        return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
+        yield return new TableCollectionNode(this);
+        yield return new ProcedureCollectionNode(this);
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
@@ -43,5 +45,5 @@ internal sealed class SchemaNode(CatalogNode catalog, string name) : ITreeNode
     public CatalogNode Catalog { get; } = catalog;
     public string Name { get; } = name;
 
-    public ContextMenu? GetContextMenu() => throw new System.NotImplementedException();
+    public ContextMenu? GetContextMenu() => throw new NotImplementedException();
 }

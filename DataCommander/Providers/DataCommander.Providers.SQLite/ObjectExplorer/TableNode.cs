@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -20,11 +21,10 @@ internal sealed class TableNode(DatabaseNode databaseNode, string? name) : ITree
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    public async IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var treeNodes = new ITreeNode[1];
-        treeNodes[0] = new IndexCollectionNode(this);
-        return Task.FromResult<IEnumerable<ITreeNode>>(treeNodes);
+        yield return new IndexCollectionNode(this);
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];

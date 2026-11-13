@@ -21,16 +21,14 @@ internal sealed class DatabaseCollectionNode(ObjectExplorer objectExplorer) : IT
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public async IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
-        CancellationToken cancellationToken)
+    public IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         const string commandText = @"select datname
 from pg_database
 order by 1";
-        var databaseNodes = await Db.ExecuteReaderAsync(
+        var databaseNodes = Db.ExecuteReaderAsync(
             () => ObjectExplorer.CreateConnection(),
             new ExecuteReaderRequest(commandText),
-            128,
             dataRecord =>
             {
                 var name = dataRecord.GetString(0);
@@ -40,6 +38,6 @@ order by 1";
 
         return databaseNodes;
     }
-    
+
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];    
 }

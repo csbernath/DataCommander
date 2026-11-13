@@ -17,11 +17,10 @@ internal sealed class TableNode(SchemaNode schemaNode, uint oid, string? name) :
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>(
-        [
-            new ColumnCollectionNode(this)
-        ]);
+    public async IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    {
+        yield return new ColumnCollectionNode(this);
+    }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 

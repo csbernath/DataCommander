@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -15,7 +17,7 @@ internal sealed class ProcedureCollectionNode(SchemaNode schema) : ITreeNode
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
     async IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
-        CancellationToken cancellationToken)
+        [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var restrictions = new object[] { schema.Catalog.Name!, schema.Name };
         DataTable dataTable;
@@ -35,7 +37,8 @@ internal sealed class ProcedureCollectionNode(SchemaNode schema) : ITreeNode
             treeNodes[i] = new ProcedureNode(name);
         }
 
-        return treeNodes;
+        foreach (var node in treeNodes)
+            yield return node;
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
@@ -46,5 +49,5 @@ internal sealed class ProcedureCollectionNode(SchemaNode schema) : ITreeNode
 
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
-    public ContextMenu? GetContextMenu() => throw new System.NotImplementedException();
+    public ContextMenu? GetContextMenu() => throw new NotImplementedException();
 }

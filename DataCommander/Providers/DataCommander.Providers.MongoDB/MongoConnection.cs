@@ -1,4 +1,5 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api.Connection;
@@ -48,5 +49,5 @@ public class MongoConnection : ConnectionBase
 
     public override string? ConnectionInformation => null;
 
-    public override Task<int> GetTransactionCountAsync(CancellationToken cancellationToken) => throw new System.NotImplementedException();
+    public override Task<int> GetTransactionCountAsync(CancellationToken cancellationToken) => throw new NotImplementedException();
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Threading;
@@ -50,7 +51,8 @@ internal sealed class TableCollectionNode(SchemaNode schema) : ITreeNode
             treeNodes = [new TableNode(schema, null)];
         }
 
-        return treeNodes;
+        foreach (var treeNode in treeNodes)
+            yield return treeNode;
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
@@ -61,5 +63,5 @@ internal sealed class TableCollectionNode(SchemaNode schema) : ITreeNode
 
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
-    public ContextMenu? GetContextMenu() => throw new System.NotImplementedException();
+    public ContextMenu? GetContextMenu() => throw new NotImplementedException();
 }

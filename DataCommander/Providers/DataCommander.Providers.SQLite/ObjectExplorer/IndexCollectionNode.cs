@@ -22,21 +22,19 @@ internal sealed class IndexCollectionNode : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public async IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
-        CancellationToken cancellationToken)
+    public IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var commandText = $"PRAGMA index_list({_tableNode.Name});";
-        var list = await Db.ExecuteReaderAsync(
+        var list = Db.ExecuteReaderAsync(
             () => ConnectionFactory.CreateConnection(_tableNode.DatabaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
             new ExecuteReaderRequest(commandText),
-            128,
             dataRecord =>
             {
                 var name = dataRecord.GetString(0);
                 return new IndexNode(_tableNode, name);
             },
             cancellationToken);
-        return list!;
+        return list;
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];

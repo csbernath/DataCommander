@@ -9,7 +9,7 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer;
 internal sealed class SchemaCollectionNode(DatabaseNode databaseNode) : ITreeNode
 {
     public readonly DatabaseNode DatabaseNode = databaseNode;
-    
+
     bool ITreeNode.IsLeaf => false;
     string ITreeNode.Name => "Schemas";
 
@@ -24,7 +24,7 @@ internal sealed class SchemaCollectionNode(DatabaseNode databaseNode) : ITreeNod
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public async IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+    public IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
         CancellationToken cancellationToken)
     {
         const string commandText = @"select
@@ -34,10 +34,9 @@ from pg_namespace
 where
     nspname not in('information_schema','pg_catalog','pg_toast')
 order by nspname";
-        var databaseNodes = await Db.ExecuteReaderAsync(
+        var databaseNodes = Db.ExecuteReaderAsync(
             DatabaseNode.CreateConnection,
             new ExecuteReaderRequest(commandText),
-            128,
             dataRecord =>
             {
                 var oid = dataRecord.GetUInt32(0);

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -7,14 +9,9 @@ using DataCommander.Api.Connection;
 
 namespace DataCommander.Providers.OleDb;
 
-internal class CatalogsNode : ITreeNode
+internal class CatalogsNode(ConnectionStringAndCredential connectionStringAndCredential) : ITreeNode
 {
-    public readonly ConnectionStringAndCredential ConnectionStringAndCredential;
-
-    public CatalogsNode(ConnectionStringAndCredential connectionStringAndCredential)
-    {
-        ConnectionStringAndCredential = connectionStringAndCredential;
-    }
+    public readonly ConnectionStringAndCredential ConnectionStringAndCredential = connectionStringAndCredential;
 
     public string? Name => "Catalogs";
 
@@ -22,8 +19,10 @@ internal class CatalogsNode : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
-        CancellationToken cancellationToken)
+    async IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(
+        IReadOnlyCollection<FilterCriterion> filterCriteria,
+        bool refresh,
+        [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         ITreeNode[] treeNodes;
 
@@ -42,7 +41,8 @@ internal class CatalogsNode : ITreeNode
             }
         }
 
-        return treeNodes;
+        foreach (var treeNode in treeNodes)
+            yield return treeNode;
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
@@ -53,5 +53,5 @@ internal class CatalogsNode : ITreeNode
 
     Task<string?> ITreeNode.GetQuery(CancellationToken cancellationToken) => Task.FromResult<string?>(null);
 
-    public ContextMenu? GetContextMenu() => throw new System.NotImplementedException();
+    public ContextMenu? GetContextMenu() => throw new NotImplementedException();
 }

@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
@@ -27,16 +28,16 @@ public class MongoCommand(MongoConnection connection) : DbCommand
 
     public override void Cancel()
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
-    public override int ExecuteNonQuery() => throw new System.NotImplementedException();
+    public override int ExecuteNonQuery() => throw new NotImplementedException();
 
-    public override object? ExecuteScalar() => throw new System.NotImplementedException();
+    public override object? ExecuteScalar() => throw new NotImplementedException();
 
     public override void Prepare()
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     [AllowNull]
@@ -48,45 +49,45 @@ public class MongoCommand(MongoConnection connection) : DbCommand
 
     public override int CommandTimeout
     {
-        get => throw new System.NotImplementedException();
+        get => throw new NotImplementedException();
         set { }
     }
 
     public override CommandType CommandType
     {
-        get => throw new System.NotImplementedException();
+        get => throw new NotImplementedException();
         set { }
     }
 
     public override UpdateRowSource UpdatedRowSource
     {
-        get => throw new System.NotImplementedException();
-        set => throw new System.NotImplementedException();
+        get => throw new NotImplementedException();
+        set => throw new NotImplementedException();
     }
 
     protected override DbConnection? DbConnection
     {
-        get => throw new System.NotImplementedException();
-        set => throw new System.NotImplementedException();
+        get => throw new NotImplementedException();
+        set => throw new NotImplementedException();
     }
 
     protected override DbParameterCollection DbParameterCollection => _parameters;
 
     protected override DbTransaction? DbTransaction
     {
-        get => throw new System.NotImplementedException();
+        get => throw new NotImplementedException();
         set { }
     }
 
     public override bool DesignTimeVisible
     {
-        get => throw new System.NotImplementedException();
-        set => throw new System.NotImplementedException();
+        get => throw new NotImplementedException();
+        set => throw new NotImplementedException();
     }
 
-    protected override DbParameter CreateDbParameter() => throw new System.NotImplementedException();
+    protected override DbParameter CreateDbParameter() => throw new NotImplementedException();
 
-    protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior) => throw new System.NotImplementedException();
+    protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior) => throw new NotImplementedException();
 
     protected override async Task<DbDataReader> ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
     {

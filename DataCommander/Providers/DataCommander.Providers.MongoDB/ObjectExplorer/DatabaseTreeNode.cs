@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -16,23 +17,26 @@ public class DatabaseTreeNode(MongoObjectExplorer mongoObjectExplorer, string da
 
     public bool IsLeaf => false;
 
-    public IReadOnlyCollection<string> GetFilterableProperties() => throw new System.NotImplementedException();
+    public IReadOnlyCollection<string> GetFilterableProperties() => throw new NotImplementedException();
 
-    public async IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria,
+    public async IAsyncEnumerable<ITreeNode> GetChildren(
+        IReadOnlyCollection<FilterCriterion> filterCriteria,
         bool refresh,
-        CancellationToken cancellationToken)
+        [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var connectionString = MongoConnectionStringFactory.Create(mongoObjectExplorer.ConnectionStringAndCredential);
         using var mongoClient = new MongoClient(connectionString);
         var database = mongoClient.GetDatabase(databaseName);
         var cursor = await database.ListCollectionsAsync(null, cancellationToken);
-        var asyncEnumerable = cursor.ToAsyncEnumerable();
-        var children = await asyncEnumerable.Select(collection =>
+
+        while (await cursor.MoveNextAsync(cancellationToken))
         {
-            var collectionName = collection["name"].AsString;
-            return new CollectionTreeNode(this, collectionName);
-        }).ToArrayAsync(cancellationToken);
-        return children;
+            foreach (var collection in cursor.Current)
+            {
+                var collectionName = collection["name"].AsString;
+                yield return new CollectionTreeNode(this, collectionName);
+            }
+        }
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
@@ -41,7 +45,7 @@ public class DatabaseTreeNode(MongoObjectExplorer mongoObjectExplorer, string da
 
     public bool DynamicChildCount => false;
 
-    public Task<string?> GetQuery(CancellationToken cancellationToken) => throw new System.NotImplementedException();
+    public Task<string?> GetQuery(CancellationToken cancellationToken) => throw new NotImplementedException();
 
-    public ContextMenu? GetContextMenu() => throw new System.NotImplementedException();
+    public ContextMenu? GetContextMenu() => throw new NotImplementedException();
 }

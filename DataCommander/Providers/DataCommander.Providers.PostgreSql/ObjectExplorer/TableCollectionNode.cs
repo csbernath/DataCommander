@@ -16,7 +16,7 @@ internal sealed class TableCollectionNode(SchemaNode schemaNode) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public async IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+    public IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
         CancellationToken cancellationToken)
     {
         var commandText = $@"select
@@ -28,10 +28,9 @@ where
 	relkind = 'r'
 order by relname";
 
-        var tableNodes = await Db.ExecuteReaderAsync(
+        var tableNodes = Db.ExecuteReaderAsync(
             SchemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection,
             new ExecuteReaderRequest(commandText),
-            128,
             dataRecord =>
             {
                 var oid = dataRecord.GetUInt32(0);

@@ -16,17 +16,18 @@ internal sealed class ViewCollectionNode(SchemaNode schemaNode) : ITreeNode
 
     public IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
-        using var connection = schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection();
-        connection.Open();
-        var executor = connection.CreateCommandExecutor();
-        return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(new ExecuteReaderRequest($@"select table_name
+        return Db.ExecuteReaderAsync(
+            schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection,
+            new ExecuteReaderRequest($@"select table_name
 from information_schema.views
 where table_schema = '{schemaNode.Name}'
-order by table_name"), 128, dataReader =>
-        {
-            var name = dataReader.GetString(0);
-            return new ViewNode(name);
-        }));
+order by table_name"),
+            dataReader =>
+            {
+                var name = dataReader.GetString(0);
+                return new ViewNode(name);
+            },
+            cancellationToken);
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];

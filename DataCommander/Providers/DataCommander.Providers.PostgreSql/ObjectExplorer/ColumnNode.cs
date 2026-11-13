@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ internal sealed class ColumnNode(
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
     IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>([]);
+        AsyncEnumerable.Empty<ITreeNode>();
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 

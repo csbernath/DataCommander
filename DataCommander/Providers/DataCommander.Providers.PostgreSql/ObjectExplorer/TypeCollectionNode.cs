@@ -16,7 +16,7 @@ internal sealed class TypeCollectionNode(SchemaNode schemaNode) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public async IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+    public IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
         CancellationToken cancellationToken)
     {
         var commandText = $@"select
@@ -30,10 +30,9 @@ where
 order by
 	t.typname";
 
-        var typeNodes = await Db.ExecuteReaderAsync(
+        var typeNodes = Db.ExecuteReaderAsync(
             schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection,
             new ExecuteReaderRequest(commandText),
-            128,
             dataRecord =>
             {
                 var name = dataRecord.GetString(0);

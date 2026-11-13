@@ -19,20 +19,19 @@ internal sealed class DatabaseCollectionNode(ConnectionStringAndCredential conne
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public async IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
-        CancellationToken cancellationToken)
+    public IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         const string commandText = "PRAGMA database_list;";
 
-        return await Db.ExecuteReaderAsync(
+        return Db.ExecuteReaderAsync(
             () => ConnectionFactory.CreateConnection(connectionStringAndCredential),
             new ExecuteReaderRequest(commandText),
-            1,
             dataRecord =>
             {
                 var name = dataRecord.GetString(1);
                 return new DatabaseNode(this, name);
-            }, cancellationToken);
+            },
+            cancellationToken);
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -17,16 +18,16 @@ internal sealed class SchemaNode(SchemaCollectionNode schemaCollectionNode, uint
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>(
-        [
-            new FunctionCollectionNode(this),
-            new ProcedureCollectionNode(this),
-            new SequenceCollectionNode(this),
-            new TableCollectionNode(this),
-            new TypeCollectionNode(this),
-            new ViewCollectionNode(this)
-        ]);
+    public async IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        yield return new FunctionCollectionNode(this);
+        yield return new ProcedureCollectionNode(this);
+        yield return new SequenceCollectionNode(this);
+        yield return new TableCollectionNode(this);
+        yield return new TypeCollectionNode(this);
+        yield return new ViewCollectionNode(this);
+    }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 

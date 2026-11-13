@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -40,8 +41,10 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public async IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
-        CancellationToken cancellationToken)
+    public async IAsyncEnumerable<ITreeNode> GetChildren(
+        IReadOnlyCollection<FilterCriterion> filterCriteria,
+        bool refresh,
+        [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         await using (var connection = CreateConnection())
         {
@@ -51,10 +54,7 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
             await InitializeTypes(executor, cancellationToken);
         }
 
-        return
-        [
-            new SchemaCollectionNode(this)
-        ];
+        yield return new SchemaCollectionNode(this);
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];

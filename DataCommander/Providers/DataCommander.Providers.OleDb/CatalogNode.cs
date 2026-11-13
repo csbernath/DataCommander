@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -30,8 +31,10 @@ internal class CatalogNode(CatalogsNode catalogsNode, string? name) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
-        CancellationToken cancellationToken)
+    async IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(
+        IReadOnlyCollection<FilterCriterion> filterCriteria,
+        bool refresh,
+        [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         ITreeNode[] treeNodes;
 
@@ -61,7 +64,8 @@ internal class CatalogNode(CatalogsNode catalogsNode, string? name) : ITreeNode
             treeNodes[0] = new SchemaNode(this, null);
         }
 
-        return treeNodes;
+        foreach (var treeNode in treeNodes)
+            yield return treeNode;
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];

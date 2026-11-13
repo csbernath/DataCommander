@@ -12,7 +12,7 @@ public interface ITreeNode
     IReadOnlyCollection<string> GetFilterableProperties();
     IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken);
     IReadOnlyCollection<FilterCriterion> GetFilterCriteria();
-    
+
     bool Sortable { get; }
     bool DynamicChildCount { get; }
     Task<string?> GetQuery(CancellationToken cancellationToken);

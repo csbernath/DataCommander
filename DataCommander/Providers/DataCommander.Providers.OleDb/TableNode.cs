@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -28,7 +29,7 @@ internal sealed class TableNode(SchemaNode schema, string? name) : ITreeNode
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
     IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>([]);
+        AsyncEnumerable.Empty<ITreeNode>();
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 

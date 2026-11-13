@@ -16,8 +16,7 @@ internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public async IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
-        CancellationToken cancellationToken)
+    public IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var commandText = $@"select	name
 from
@@ -30,14 +29,13 @@ from
 ) t
 order by name collate nocase";
 
-        var list = await Db.ExecuteReaderAsync(
+        var list = Db.ExecuteReaderAsync(
             () => ConnectionFactory.CreateConnection(databaseNode.DatabaseCollectionNode.ConnectionStringAndCredential),
             new ExecuteReaderRequest(commandText),
-            128,
             dataRecord =>
             {
                 var name = dataRecord.GetString(0);
-                return (ITreeNode)new TableNode(databaseNode, name);
+                return new TableNode(databaseNode, name);
             },
             cancellationToken);
         return list;
