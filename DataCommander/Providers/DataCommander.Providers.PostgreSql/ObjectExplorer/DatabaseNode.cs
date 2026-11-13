@@ -40,7 +40,7 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+    public async IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
         CancellationToken cancellationToken)
     {
         await using (var connection = CreateConnection())

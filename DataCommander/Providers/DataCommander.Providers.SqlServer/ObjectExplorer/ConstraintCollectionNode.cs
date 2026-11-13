@@ -15,8 +15,7 @@ internal sealed class ConstraintCollectionNode(DatabaseNode databaseNode, int id
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
-        CancellationToken cancellationToken)
+    IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var cb = new SqlCommandBuilder();
 
@@ -33,10 +32,9 @@ order by 1";
         var parameters = new SqlParameterCollectionBuilder();
         parameters.Add("object_id", id);
         var request = new ExecuteReaderRequest(commandText, parameters.ToArray());
-        var executor = new SqlCommandExecutor(databaseNode.Databases.Server.CreateConnection);
-        return await executor.ExecuteReaderAsync(
+        return Db.ExecuteReaderAsync(
+            databaseNode.Databases.Server.CreateConnection,
             request,
-            128,
             dataRecord =>
             {
                 var name = dataRecord.GetStringOrDefault(0);

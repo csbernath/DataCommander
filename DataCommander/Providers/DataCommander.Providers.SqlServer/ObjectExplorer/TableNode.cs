@@ -51,7 +51,7 @@ internal sealed class TableNode(DatabaseNode databaseNode, string owner, string 
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+    async IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
         CancellationToken cancellationToken)
     {
         List<ITreeNode> treeNodes = [];
@@ -99,7 +99,8 @@ where
             new StatisticsCollectionNode(DatabaseNode, Id)
         ]);
 
-        return treeNodes;
+        foreach (var treeNode in treeNodes)
+            yield return treeNode;
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];

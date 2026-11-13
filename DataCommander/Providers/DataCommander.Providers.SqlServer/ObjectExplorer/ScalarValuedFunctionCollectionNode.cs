@@ -14,14 +14,12 @@ internal sealed class ScalarValuedFunctionCollectionNode(DatabaseNode database) 
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
-        CancellationToken cancellationToken)
+    IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
-        return await Db.ExecuteReaderAsync(
+        return Db.ExecuteReaderAsync(
             database.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
-            128,
             ReadRecord,
             cancellationToken);
     }

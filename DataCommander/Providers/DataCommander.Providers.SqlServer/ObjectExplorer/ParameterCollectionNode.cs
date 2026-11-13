@@ -17,7 +17,7 @@ internal sealed class ParameterCollectionNode(DatabaseNode databaseNode, int obj
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public async Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+    public async IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
         CancellationToken cancellationToken)
     {
         var commandText = @$"select
@@ -54,7 +54,11 @@ order by
                     dataRecord => ToParameterNode(dataRecord, sysTypesByUserTypeId),
                     cancellationToken);
             }, cancellationToken);
-        return parameterNodes!;
+
+        foreach (var item in parameterNodes)
+        {
+            yield return item;
+        }
     }
 
     private static SysType ToSysType(IDataRecord dataRecord)

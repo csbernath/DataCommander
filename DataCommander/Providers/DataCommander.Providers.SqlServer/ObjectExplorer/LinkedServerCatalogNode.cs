@@ -22,7 +22,7 @@ internal sealed class LinkedServerCatalogNode : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) => throw new NotImplementedException();
+    IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) => throw new NotImplementedException();
     
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 

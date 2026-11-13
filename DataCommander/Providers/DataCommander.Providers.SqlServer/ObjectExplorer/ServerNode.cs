@@ -36,13 +36,12 @@ internal sealed class ServerNode(
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    async IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
-        var node = new DatabaseCollectionNode(this);
-        var securityNode = new SecurityNode(this);
-        var serverObjectCollectionNode = new ServerObjectCollectionNode(this);
-        var jobCollectionNode = new JobCollectionNode(this);
-        return Task.FromResult<IEnumerable<ITreeNode>>([node, securityNode, serverObjectCollectionNode, jobCollectionNode]);
+        yield return new DatabaseCollectionNode(this);
+        yield return new SecurityNode(this);
+        yield return new ServerObjectCollectionNode(this);
+        yield return new JobCollectionNode(this);
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];

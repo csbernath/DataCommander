@@ -750,19 +750,26 @@ Please wait...";
 
     private void RefreshTreeNode(TreeNode treeNodeV, IReadOnlyCollection<FilterCriterion> filterCriteria)
     {
-        var treeNode = (ITreeNode)treeNodeV.Tag!;
-        treeNodeV.Nodes.Clear();
+        try
+        {
+            var treeNode = (ITreeNode)treeNodeV.Tag!;
+            treeNodeV.Nodes.Clear();
 
-        var startTimestamp = Stopwatch.GetTimestamp();
-        var cancellationTokenSource = new CancellationTokenSource();
-        var cancellationToken = cancellationTokenSource.Token;
-        const string textBoxText = @"Getting tree node children...
+            var startTimestamp = Stopwatch.GetTimestamp();
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = cancellationTokenSource.Token;
+            const string textBoxText = @"Getting tree node children...
 
 Please wait...";
-        var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
-            textBoxText, _colorTheme);
-        var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() =>
-            treeNode.GetChildren(filterCriteria, true, cancellationToken).Result));
-        AddNodes(treeNodeV, treeNodeV.Nodes, children, treeNode.Sortable, startTimestamp);
+            var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
+                textBoxText, _colorTheme);
+            var children = cancelableOperationForm.Execute(new Task<ITreeNode[]>(() =>
+                treeNode.GetChildren(filterCriteria, true, cancellationToken).ToArrayAsync(cancellationToken).Result));
+            AddNodes(treeNodeV, treeNodeV.Nodes, children, treeNode.Sortable, startTimestamp);
+        }
+        catch (Exception exception)
+        {
+            ShowMessage(exception);
+        }
     }
 }

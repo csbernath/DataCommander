@@ -118,8 +118,8 @@ Parent node name: {treeNode2.Name}
 Please wait...";
                         var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1),
                             MessageBoxCaption.Value, textBoxText, _colorTheme);
-                        var children = cancelableOperationForm.Execute(new Task<IEnumerable<ITreeNode>>(() =>
-                            treeNode2.GetChildren(filterCriteria, false, cancellationToken).Result));
+                        var children = cancelableOperationForm.Execute(new Task<ITreeNode[]>(() =>
+                            treeNode2.GetChildren(filterCriteria, false, cancellationToken).ToArrayAsync(cancellationToken).Result));
                         treeNode.Nodes.Clear();
                         AddNodes(treeNode, treeNode.Nodes, children, treeNode2.Sortable, startTimestamp);
                     }
@@ -175,28 +175,35 @@ Please wait...";
         }
     }
 
-    private void MnuRefreshObjectExplorer_Click(object? sender, EventArgs e)
+    private void HandleRefreshObjectExplorerMenuItemClicked(object? sender, EventArgs e)
     {
-        var objectExplorer = Provider.CreateObjectExplorer();
-        if (objectExplorer != null)
+        try
         {
-            using (new CursorManager(Cursors.WaitCursor))
+            var objectExplorer = Provider.CreateObjectExplorer();
+            if (objectExplorer != null)
             {
-                var startTimestamp = Stopwatch.GetTimestamp();
-                objectExplorer.SetConnectionStringAndCredential(_connectionInfo.ConnectionName, _connectionInfo.ConnectionStringAndCredential);
-                var cancellationTokenSource = new CancellationTokenSource();
-                const string textBoxText = @"Getting children...
+                using (new CursorManager(Cursors.WaitCursor))
+                {
+                    var startTimestamp = Stopwatch.GetTimestamp();
+                    objectExplorer.SetConnectionStringAndCredential(_connectionInfo.ConnectionName, _connectionInfo.ConnectionStringAndCredential);
+                    var cancellationTokenSource = new CancellationTokenSource();
+                    const string textBoxText = @"Getting children...
 
 Please wait...";
-                var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
-                    textBoxText, _colorTheme);
-                var cancellationToken = cancellationTokenSource.Token;
-                var children = cancelableOperationForm.Execute(
-                    new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren([], true, cancellationToken).Result));
-                var rootNodes = _tvObjectExplorer.Nodes;
-                rootNodes.Clear();
-                AddNodes(null, _tvObjectExplorer.Nodes, children, objectExplorer.Sortable, startTimestamp);
+                    var cancelableOperationForm = new CancelableOperationForm(this, cancellationTokenSource, TimeSpan.FromSeconds(1), MessageBoxCaption.Value,
+                        textBoxText, _colorTheme);
+                    var cancellationToken = cancellationTokenSource.Token;
+                    var children = cancelableOperationForm.Execute(
+                        new Task<IEnumerable<ITreeNode>>(() => objectExplorer.GetChildren([], true, cancellationToken).Result));
+                    var rootNodes = _tvObjectExplorer.Nodes;
+                    rootNodes.Clear();
+                    AddNodes(null, _tvObjectExplorer.Nodes, children, objectExplorer.Sortable, startTimestamp);
+                }
             }
+        }
+        catch (Exception exception)
+        {
+            ShowMessage(exception);
         }
     }
 

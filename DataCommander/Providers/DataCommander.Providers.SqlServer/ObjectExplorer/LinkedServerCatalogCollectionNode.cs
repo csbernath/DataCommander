@@ -23,7 +23,7 @@ internal sealed class LinkedServerCatalogCollectionNode : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         const string commandText = @"declare @provider nvarchar(128)
 select  @provider = s.provider
@@ -57,17 +57,16 @@ end
 
 drop table #catalog";
 
-        using var connection = _linkedServer.LinkedServers.Server.CreateConnection();
-        connection.Open();
-
         var parameters = new SqlParameterCollectionBuilder();
         parameters.Add("@name", _linkedServer.Name!);
         parameters.Add("@getSystemCatalogs", false);
 
-        var executor = connection.CreateCommandExecutor();
         var executeReaderRequest = new ExecuteReaderRequest(commandText, parameters.ToArray());
-        return Task.FromResult<IEnumerable<ITreeNode>>(executor.ExecuteReader(executeReaderRequest, 128,
-            dataRecord => new LinkedServerCatalogNode(_linkedServer, dataRecord.GetString(0))));
+        return Db.ExecuteReaderAsync(
+            _linkedServer.LinkedServers.Server.CreateConnection,
+            executeReaderRequest,
+            dataRecord => new LinkedServerCatalogNode(_linkedServer, dataRecord.GetString(0)),
+            cancellationToken);
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];

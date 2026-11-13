@@ -14,13 +14,10 @@ internal sealed class ViewCollectionNode(DatabaseNode database) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+    async IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
         CancellationToken cancellationToken)
     {
-        List<ITreeNode> treeNodes =
-        [
-            new SystemViewCollectionNode(database)
-        ];
+        yield return new SystemViewCollectionNode(database);
 
         var databaseName = new SqlCommandBuilder().QuoteIdentifier(database.Name);
         var commandText = $@"select
@@ -31,21 +28,20 @@ from {databaseName}.sys.schemas s (nolock)
 join {databaseName}.sys.views v (nolock)
     on s.schema_id = v.schema_id
 order by 1,2";
-        await Db.ExecuteReaderAsync(
+        var items = Db.ExecuteReaderAsync(
             database.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
-            async (dataReader, _) =>
+            dataReader =>
             {
-                while (await dataReader.ReadAsync(cancellationToken))
-                {
-                    var schema = dataReader.GetString(0);
-                    var name = dataReader.GetString(1);
-                    var id = dataReader.GetInt32(2);
-                    treeNodes.Add(new ViewNode(database, id, schema, name));
-                }
+                var schema = dataReader.GetString(0);
+                var name = dataReader.GetString(1);
+                var id = dataReader.GetInt32(2);
+                return new ViewNode(database, id, schema, name);
             },
             cancellationToken);
-        return treeNodes;
+
+        await foreach (var item in items)
+            yield return item;
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];

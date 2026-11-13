@@ -24,14 +24,12 @@ internal sealed class SystemDatabaseCollectionNode : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
-        CancellationToken cancellationToken)
+    IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
-        return await Db.ExecuteReaderAsync(
+        return Db.ExecuteReaderAsync(
             _databaseCollectionNode.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
-            128,
             ReadRecord,
             cancellationToken);
     }

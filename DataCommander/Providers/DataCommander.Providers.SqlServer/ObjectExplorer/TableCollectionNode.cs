@@ -21,7 +21,7 @@ internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [FilterableProperty.Name, FilterableProperty.Schema];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+    async IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
         CancellationToken cancellationToken)
     {
         string? schemaContains = null;
@@ -36,8 +36,10 @@ internal sealed class TableCollectionNode(DatabaseNode databaseNode) : ITreeNode
         var tableNodes = await GetTableNodes(schemaContains, nameContains, cancellationToken);
         var childNodes = new ITreeNode[] { new SystemTableCollectionNode(DatabaseNode) }
             .Concat(tableNodes);
-        _filterCriteria = filterCriteria;        
-        return childNodes;
+        _filterCriteria = filterCriteria;
+        
+        foreach (var childNode in childNodes)
+            yield return childNode;
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => _filterCriteria;

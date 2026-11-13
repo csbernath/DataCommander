@@ -22,8 +22,10 @@ internal sealed class SecurityNode : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>([new LoginCollectionNode(_server)]);
+    async IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    {
+        yield return new LoginCollectionNode(_server);
+    }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 

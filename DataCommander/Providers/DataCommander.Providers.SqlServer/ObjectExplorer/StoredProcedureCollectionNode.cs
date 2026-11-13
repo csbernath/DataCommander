@@ -21,7 +21,7 @@ internal sealed class StoredProcedureCollectionNode(DatabaseNode database, bool 
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [FilterableProperty.Name, FilterableProperty.Schema];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+    async IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
         CancellationToken cancellationToken)
     {
         List<ITreeNode> treeNodes = [];
@@ -54,7 +54,8 @@ internal sealed class StoredProcedureCollectionNode(DatabaseNode database, bool 
 
         _filterCriteria = filterCriteria;
 
-        return treeNodes;
+        foreach (var treeNode in treeNodes)
+            yield return treeNode;
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => _filterCriteria;

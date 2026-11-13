@@ -16,7 +16,7 @@ public class CollectionTreeNode(
 
     public IReadOnlyCollection<string> GetFilterableProperties() => throw new NotImplementedException();
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
+    public IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
         throw new NotImplementedException();
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];

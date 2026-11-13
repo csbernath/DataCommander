@@ -45,7 +45,7 @@ internal sealed class ParameterNode(string name, SysType sysType, short maxLengt
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) => throw new System.NotImplementedException();
+    public IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) => throw new System.NotImplementedException();
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 
     public bool Sortable => false;

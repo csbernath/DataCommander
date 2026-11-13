@@ -17,10 +17,10 @@ internal sealed class UserDefinedTableTypeNode(DatabaseNode database, int id, st
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>(
-        [
-            new ColumnCollectionNode(database, id)
-        ]);
+    async IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    {
+        yield return new ColumnCollectionNode(database, id);
+    }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 

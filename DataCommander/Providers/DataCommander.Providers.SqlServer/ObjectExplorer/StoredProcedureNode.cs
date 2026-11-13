@@ -16,13 +16,10 @@ internal sealed class StoredProcedureNode(DatabaseNode database, int objectId, s
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    async IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+        CancellationToken cancellationToken)
     {
-        ITreeNode[] children =
-        [
-            new ParameterCollectionNode(database, objectId)
-        ];
-        return Task.FromResult<IEnumerable<ITreeNode>>(children);
+        yield return new ParameterCollectionNode(database, objectId);
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];

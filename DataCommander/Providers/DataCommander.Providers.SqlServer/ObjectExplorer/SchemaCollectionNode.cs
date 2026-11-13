@@ -15,17 +15,14 @@ internal sealed class SchemaCollectionNode(DatabaseNode database) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
-        CancellationToken cancellationToken)
+    IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
-        var treeNodes = await Db.ExecuteReaderAsync(
+        return Db.ExecuteReaderAsync(
             database.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
-            128,
             ReadRecord,
             cancellationToken);
-        return treeNodes;
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];

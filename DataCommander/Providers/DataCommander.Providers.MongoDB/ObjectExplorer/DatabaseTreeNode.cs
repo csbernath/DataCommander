@@ -18,8 +18,7 @@ public class DatabaseTreeNode(MongoObjectExplorer mongoObjectExplorer, string da
 
     public IReadOnlyCollection<string> GetFilterableProperties() => throw new System.NotImplementedException();
 
-    public async Task<IEnumerable<ITreeNode>> GetChildren(
-        IReadOnlyCollection<FilterCriterion> filterCriteria,
+    public async IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria,
         bool refresh,
         CancellationToken cancellationToken)
     {

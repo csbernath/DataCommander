@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -17,7 +18,9 @@ internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : 
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+    async IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(
+        IReadOnlyCollection<FilterCriterion> filterCriteria,
+        bool refresh,
         CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
@@ -46,7 +49,9 @@ internal sealed class ColumnCollectionNode(DatabaseNode databaseNode, int id) : 
                 }
             },
             cancellationToken);
-        return columnNodes!.Values;
+
+        foreach (var columnNode in columnNodes!.Values)
+            yield return columnNode;
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];

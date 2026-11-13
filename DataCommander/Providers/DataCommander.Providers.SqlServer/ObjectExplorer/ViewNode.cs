@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -15,12 +16,16 @@ internal sealed class ViewNode(DatabaseNode database, int id, string? schema, st
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) => Task.FromResult<IEnumerable<ITreeNode>>(
+    IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    {
+        ITreeNode[] children =
         [
             new ColumnCollectionNode(database, id),
             new TriggerCollectionNode(database, id),
             new IndexCollectionNode(database, id)
-        ]);
+        ];
+        return children.ToAsyncEnumerable();
+    }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 

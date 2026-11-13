@@ -15,8 +15,7 @@ internal sealed class IndexCollectionNode(DatabaseNode databaseNode, int id) : I
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
-        CancellationToken cancellationToken)
+    IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var sqlCommandBuilder = new SqlCommandBuilder();
         var database = sqlCommandBuilder.QuoteIdentifier(databaseNode.Name);
@@ -39,10 +38,9 @@ order by i.name";
         var parameters = new SqlParameterCollectionBuilder();
         parameters.Add("object_id", id);
         var request = new ExecuteReaderRequest(commandText, parameters.ToArray());
-        var executor = new SqlCommandExecutor(databaseNode.Databases.Server.CreateConnection);
-        return await executor.ExecuteReaderAsync(
+        return Db.ExecuteReaderAsync(
+            databaseNode.Databases.Server.CreateConnection,
             request,
-            128,
             dataRecord =>
             {
                 var name = dataRecord.GetString(0);

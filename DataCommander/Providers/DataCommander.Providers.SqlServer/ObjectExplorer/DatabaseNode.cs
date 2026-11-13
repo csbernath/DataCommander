@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var children = new ITreeNode[]
         {
@@ -45,8 +46,7 @@ internal sealed class DatabaseNode(DatabaseCollectionNode databaseCollectionNode
             new ProgrammabilityNode(this),
             new DatabaseSecurityNode(this)
         };
-
-        return Task.FromResult<IEnumerable<ITreeNode>>(children);
+        return children.ToAsyncEnumerable();
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];

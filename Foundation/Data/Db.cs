@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Foundation.Collections.ReadOnly;
@@ -29,6 +31,20 @@ public static class Db
         connection.Open();
         var executor = connection.CreateCommandExecutor();
         executor.ExecuteReader(request, readResults);
+    }
+
+    public static async IAsyncEnumerable<T> ExecuteReaderAsync<T>(
+        Func<DbConnection> createConnection,
+        ExecuteReaderRequest executeReaderRequest,
+        Func<IDataRecord, T> readRecord,
+        [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        await using var connection = createConnection();
+        await connection.OpenAsync(cancellationToken);
+        await using var command = connection.CreateCommand(executeReaderRequest.CreateCommandRequest);
+        await using var dataReader = await command.ExecuteReaderAsync(executeReaderRequest.CommandBehavior, cancellationToken);
+        while (await dataReader.ReadAsync(cancellationToken))
+            yield return readRecord(dataReader);
     }
 
     public static async Task<ReadOnlySegmentLinkedList<T>> ExecuteReaderAsync<T>(

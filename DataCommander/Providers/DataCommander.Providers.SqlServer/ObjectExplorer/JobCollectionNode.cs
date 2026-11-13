@@ -22,16 +22,14 @@ internal sealed class JobCollectionNode : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
-        CancellationToken cancellationToken)
+    IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         const string commandText = @"select  j.name
 from    msdb.dbo.sysjobs j (nolock)
 order by j.name";
-        return await Db.ExecuteReaderAsync(
+        return Db.ExecuteReaderAsync(
             Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
-            128,
             dataRecord =>
             {
                 var name = dataRecord.GetString(0);

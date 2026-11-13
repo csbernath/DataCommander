@@ -14,7 +14,7 @@ internal sealed class SequenceCollectionNode(SchemaNode schemaNode) : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    public IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         using var connection = schemaNode.SchemaCollectionNode.DatabaseNode.CreateConnection();
         connection.Open();

@@ -899,7 +899,7 @@ Please wait...";
         _mnuRefreshObjectExplorer.Name = "_mnuRefreshObjectExplorer";
         _mnuRefreshObjectExplorer.Size = new Size(229, 22);
         _mnuRefreshObjectExplorer.Text = "Refresh Object Explorer\'s root";
-        _mnuRefreshObjectExplorer.Click += new EventHandler(MnuRefreshObjectExplorer_Click);
+        _mnuRefreshObjectExplorer.Click += new EventHandler(HandleRefreshObjectExplorerMenuItemClicked);
         // 
         // _statusBar
         // 

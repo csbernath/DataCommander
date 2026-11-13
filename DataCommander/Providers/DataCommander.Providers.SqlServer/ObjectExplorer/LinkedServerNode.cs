@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Api;
@@ -22,8 +23,14 @@ internal sealed class LinkedServerNode : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
-        Task.FromResult<IEnumerable<ITreeNode>>([new LinkedServerCatalogCollectionNode(this)]);
+    IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    {
+        ITreeNode[] children =
+        [
+            new LinkedServerCatalogCollectionNode(this)
+        ];
+        return children.ToAsyncEnumerable();
+    }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 

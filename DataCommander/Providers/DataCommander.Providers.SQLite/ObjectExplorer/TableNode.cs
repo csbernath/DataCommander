@@ -20,7 +20,7 @@ internal sealed class TableNode(DatabaseNode databaseNode, string? name) : ITree
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    public Task<IEnumerable<ITreeNode>> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    public IAsyncEnumerable<ITreeNode> GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var treeNodes = new ITreeNode[1];
         treeNodes[0] = new IndexCollectionNode(this);

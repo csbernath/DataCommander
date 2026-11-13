@@ -46,7 +46,8 @@ internal sealed class IndexNode(DatabaseNode databaseNode, int parentId, int id,
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) => Task.FromResult(Enumerable.Empty<ITreeNode>());
+    IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken) =>
+        AsyncEnumerable.Empty<ITreeNode>();
     
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];
 

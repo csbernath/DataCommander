@@ -16,14 +16,12 @@ internal sealed class SystemTableCollectionNode(DatabaseNode databaseNode) : ITr
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
-        CancellationToken cancellationToken)
+    IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
-        var tableNodes = await Db.ExecuteReaderAsync(
+        return Db.ExecuteReaderAsync(
             DatabaseNode.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
-            128,
             dataRecord =>
             {
                 var schema = dataRecord.GetString(0);
@@ -33,7 +31,6 @@ internal sealed class SystemTableCollectionNode(DatabaseNode databaseNode) : ITr
                 return new TableNode(DatabaseNode, schema, name, id, temporalType);
             },
             cancellationToken);
-        return tableNodes;
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];

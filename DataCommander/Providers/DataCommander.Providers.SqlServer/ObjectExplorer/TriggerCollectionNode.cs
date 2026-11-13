@@ -16,14 +16,12 @@ internal sealed class TriggerCollectionNode(DatabaseNode databaseNode, int id) :
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
-        CancellationToken cancellationToken)
+    IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
         var commandText = CreateCommandText();
-        return await Db.ExecuteReaderAsync(
+        return Db.ExecuteReaderAsync(
             databaseNode.Databases.Server.CreateConnection,
             new ExecuteReaderRequest(commandText),
-            128,
             ReadRecord,
             cancellationToken);
     }

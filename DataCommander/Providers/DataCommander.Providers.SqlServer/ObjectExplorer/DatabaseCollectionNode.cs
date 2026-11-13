@@ -24,24 +24,16 @@ internal sealed class DatabaseCollectionNode : ITreeNode
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    async Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
+    async IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh,
         CancellationToken cancellationToken)
     {
-        List<ITreeNode> list =
-        [
-            new SystemDatabaseCollectionNode(this),
-            new DatabaseSnapshotCollectionNode(this)
-        ];
+        yield return new SystemDatabaseCollectionNode(this);
+        yield return new DatabaseSnapshotCollectionNode(this);
 
         var commandText = CreateCommandText();
-        var databaseNodes = await Db.ExecuteReaderAsync(
-            Server.CreateConnection,
-            new ExecuteReaderRequest(commandText),
-            128,
-            ReadRecord,
-            cancellationToken);
-        list.AddRange(databaseNodes);
-        return list;
+        var databaseNodes = Db.ExecuteReaderAsync(Server.CreateConnection, new ExecuteReaderRequest(commandText), ReadRecord, cancellationToken);
+        await foreach (var item in databaseNodes)
+            yield return item;
     }
 
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];

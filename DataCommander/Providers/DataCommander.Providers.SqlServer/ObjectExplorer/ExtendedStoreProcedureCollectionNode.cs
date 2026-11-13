@@ -21,9 +21,8 @@ internal sealed class ExtendedStoreProcedureCollectionNode(DatabaseNode database
 
     public IReadOnlyCollection<string> GetFilterableProperties() => [];
 
-    Task<IEnumerable<ITreeNode>> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
+    IAsyncEnumerable<ITreeNode> ITreeNode.GetChildren(IReadOnlyCollection<FilterCriterion> filterCriteria, bool refresh, CancellationToken cancellationToken)
     {
-        var executor = new SqlCommandExecutor(database.Databases.Server.CreateConnection);
         var commandText = @"select
     s.name,
     o.name
@@ -33,14 +32,17 @@ join sys.schemas s
 where o.type = 'X'
 order by 1,2";
         var request = new ExecuteReaderRequest(commandText);
-        var childNodes = executor.ExecuteReader(request, 128, dataRecord =>
-        {
-            var schema = dataRecord.GetString(0);
-            var name = dataRecord.GetString(1);
-            return new ExtendedStoreProcedureNode(database, schema, name);
-        });
-        return Task.FromResult<IEnumerable<ITreeNode>>(childNodes);
+        return Db.ExecuteReaderAsync(
+            database.Databases.Server.CreateConnection,
+            request,
+            dataRecord =>
+            {
+                var schema = dataRecord.GetString(0);
+                var name = dataRecord.GetString(1);
+                return new ExtendedStoreProcedureNode(database, schema, name);
+            },
+            cancellationToken);
     }
-    
+
     public IReadOnlyCollection<FilterCriterion> GetFilterCriteria() => [];    
 }
