@@ -712,7 +712,7 @@ order by c.column_id";
             })
             .ToArray();
 
-        var classWithProperties = DataTransferObjectWithPropertiesFactory.Create(name, dataTransferObjectFields).ToIndentedString("    ");
+        var classWithProperties = DataTransferObjectClassWithPropertiesFactory.Create(name, dataTransferObjectFields).ToIndentedString("    ");
 
         var queryForm = (IQueryForm)sender!;
         queryForm.SetClipboardText(classWithProperties);

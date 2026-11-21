@@ -3,7 +3,7 @@ using Foundation.Text;
 
 namespace Foundation.Data.SqlClient.DbQueryBuilding;
 
-public static class DataTransferObjectWithPropertiesFactory
+public static class DataTransferObjectClassWithPropertiesFactory
 {
     public static IReadOnlyCollection<Line> Create(string name, IReadOnlyCollection<DataTransferObjectField> fields)
     {

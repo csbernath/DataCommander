@@ -142,8 +142,13 @@ internal sealed class LogResultWriter : IResultWriter
             }
 
             var dataTransferObjectFields = dbColumns.Select(ToDataTransferObjectField).ToArray();
-            var dataTransferObject = DataTransferObjectWithPropertiesFactory.Create(schemaTable.TableName, dataTransferObjectFields);
-            message = $"\r\n{dataTransferObject.ToIndentedString("    ")}";
+            var dataTransferObjectClassWithProperties = DataTransferObjectClassWithPropertiesFactory.Create(schemaTable.TableName, dataTransferObjectFields);
+            var dataTransferObjectRecord = DataTransferObjectRecordFactory.Create(schemaTable.TableName, dataTransferObjectFields);
+            message = @$"
+{dataTransferObjectClassWithProperties.ToIndentedString("    ")}
+
+{dataTransferObjectRecord.ToIndentedString("    ")}
+";
             _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, string.Empty, message));
         }
 
