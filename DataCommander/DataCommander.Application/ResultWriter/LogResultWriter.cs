@@ -249,34 +249,9 @@ internal sealed class LogResultWriter : IResultWriter
         else
             cSharpType = CSharpTypeArray.CSharpTypes.First(t => t.Type == dbColumn.DataType);
 
-        var stringBuilder = new StringBuilder();
-        stringBuilder.Append(cSharpType.Name);
+        var allowNull = dbColumn.AllowDbNull == true;
 
-        if (dbColumn.AllowDbNull == true)
-        {
-            if (cSharpType.Name is
-                CSharpTypeName.Boolean or
-                CSharpTypeName.DateTime or
-                CSharpTypeName.DateTimeOffset or
-                CSharpTypeName.Decimal or
-                CSharpTypeName.Double or
-                CSharpTypeName.Guid or
-                CSharpTypeName.Int16 or
-                CSharpTypeName.Int32 or
-                CSharpTypeName.Int64 or
-                CSharpTypeName.Single or
-                CSharpTypeName.String)
-                stringBuilder.Append('?');
-            else
-                Debug.WriteLine("");
-        }
-
-        if (isArray)
-            stringBuilder.Append("[]");
-
-        var type = stringBuilder.ToString();
-        
-        return new DataTransferObjectField(name, type);
+        return new DataTransferObjectField(name, cSharpType, allowNull, isArray);
     }
 
     void IResultWriter.FirstRowReadBegin() => _firstRowReadBeginTimestamp = Stopwatch.GetTimestamp();

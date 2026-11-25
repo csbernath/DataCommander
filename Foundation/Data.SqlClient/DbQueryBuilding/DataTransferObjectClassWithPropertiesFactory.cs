@@ -11,7 +11,7 @@ public static class DataTransferObjectClassWithPropertiesFactory
         textBuilder.Add($"public class {name}");
         using (textBuilder.AddCSharpBlock())
             foreach (var field in fields)
-                textBuilder.Add($"public {field.Type} {field.Name} {{ get; set; }}");
+                textBuilder.Add($"public {field.GetTypeName()} {field.Name} {{ get; set; }}");
         return textBuilder.ToLines();
     }
 }

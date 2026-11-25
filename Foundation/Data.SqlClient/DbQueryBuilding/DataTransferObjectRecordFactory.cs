@@ -19,7 +19,7 @@ public static class DataTransferObjectRecordFactory
                 else
                     textBuilder.AddToLastLine(",");
 
-                textBuilder.Add($"{field.Type} {field.Name}");
+                textBuilder.Add($"{field.GetTypeName()} {field.Name}");
             }
         }
 

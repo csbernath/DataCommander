@@ -15,7 +15,7 @@ public static class DataTransferObjectFactory
         using (textBuilder.AddCSharpBlock())
         {
             foreach (var field in fields)
-                textBuilder.Add($"public readonly {field.Type} {field.Name};");
+                textBuilder.Add($"public readonly {field.GetTypeName()} {field.Name};");
 
             textBuilder.Add(Line.Empty);
             var constructor = GetConstructor(name, fields);
@@ -30,7 +30,7 @@ public static class DataTransferObjectFactory
     {
         var textBuilder = new TextBuilder();
 
-        var parameters = fields.Select(field => $"{field.Type} {field.Name!.ToCamelCase()}").Join(", ");
+        var parameters = fields.Select(field => $"{field.GetTypeName()} {field.Name!.ToCamelCase()}").Join(", ");
         textBuilder.Add($"public {name}({parameters})");
         using (textBuilder.AddCSharpBlock())
         {
